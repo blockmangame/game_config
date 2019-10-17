@@ -39,3 +39,52 @@ ADD_MONEY
     ShowRewardCD(player = $obj1, time = $cdTime)
     $obj1.isReadyReward = true
 }
+
+STATE_HUNGER_EVENT
+{
+    Test("HUNGER")
+    ShowBubbleMsg(textKey = "HUNGER", entity = $obj1)
+
+
+    --todo 加buff
+}
+
+STATE_THIRSTY_EVENT
+{
+    Test("THIRSTY")
+    ShowBubbleMsg(textKey = "THIRSTY", entity = $obj1)
+
+    --todo 加buff
+}
+
+STATE_DIRTY_EVENT
+{
+    Test("DIRTY")
+    ShowBubbleMsg(textKey = "DIRTY", entity = $obj1)
+
+    --todo 加buff
+}
+
+STATE_FATIGUE_EVENT
+{
+    Test("FATIGUE")
+    ShowBubbleMsg(textKey = "FATIGUE", entity = $obj1)
+
+    --todo 加buff
+}
+
+STATE_ILL_EVENT
+{
+    Test("ILL")
+    ShowBubbleMsg(textKey = "ILL", entity = $obj1)
+
+    --todo 加buff
+}
+
+STATE_REGION_EVENT
+{
+    Test("REGION")
+    ShowBubbleMsg(textKey = "REGION", entity = $obj1)
+
+    --todo 加buff
+}

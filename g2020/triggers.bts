@@ -1,4 +1,75 @@
 GAME_INIT
 {
-    
+    @Generate_State_InitInfo = [
+        ["STATE_HUNGER_EVENT",  2, 3, 4, 5, 55],
+        ["STATE_THIRSTY_EVENT", 3, 6,  7, 12, 59],
+        ["STATE_DIRTY_EVENT",   4, 8,  10, 20, 29],
+        ["STATE_FATIGUE_EVENT", 5, 6, 30, 45, 50],
+        ["STATE_ILL_EVENT",     13, 15, 21, 27, 49],
+        ["STATE_REGION_EVENT",  15, 18, 26, 28, 36]
+    ]
+    CallTrigger(event = "FUNC_GENERATE_STATE_STARTTIME")
 }
+
+
+FUNC_GENERATE_STATE_STARTTIME
+{
+    $curMinute = GetMinuteOfHour(time = GetTime())
+    Test($curMinute) --todo log
+
+    ForLoop (from = 1, to = ArraySize(array = @Generate_State_InitInfo), key = "row")
+    {
+        $arrInfo = ArrayGet(array = @Generate_State_InitInfo, index = $row)
+
+        $timeArr = []
+        ForLoop (from = 2, to = ArraySize(array = $arrInfo), key = "idx")
+        {
+            $time = ArrayGet(array = $arrInfo, index = $idx)
+            $newTime = ($curMinute + $time) % 60
+            ArrayAppend(array = $timeArr, value = $newTime)
+        }
+        Test($timeArr) --todo log 
+        StartTimer( 
+            rep = false,
+            column = 1,
+            timeArr = $timeArr,
+            event = "FUNC_CHANGE_STATE", 
+            size = ArraySize(array = $timeArr),
+            eventName = ArrayGet(array = $arrInfo, index = 1), 
+            time = (ArrayGet(array = $timeArr, index = 1) - $curMinute) * 60 * 20
+        )
+    }
+}
+
+FUNC_CHANGE_STATE
+{
+    Foreach(array = GetAllPlayers(), key = "player"){
+        --todo 判断玩家是否有家庭
+        CallTrigger(object = $player, event = $eventName)
+	}
+
+    --todo get new cdTime
+    $curTime = GetMinuteOfHour(time = GetTime())
+    $column = $column + 1
+    If($column > $size)
+    {
+        $column = 1
+    }
+    $endTime = ArrayGet(array = $timeArr, index = $column)
+    $cdTime = $endTime - $curTime
+    If($cdTime < 0)
+    {
+        $cdTime = 60 - $curTime + $endTime
+    }
+
+    StartTimer(
+        rep = false, 
+        size = $size,
+        event = $event,
+        column = $column,
+        timeArr = $timeArr,
+        eventName = $eventName, 
+        time = $cdTime * 60 * 20
+    )
+}
+
