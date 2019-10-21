@@ -3,9 +3,10 @@ ENTITY_ENTER
     If(IsPlayer(entity = $obj1))
     {
         $obj1.isReadyReward = false
+        $obj1.role = "adult"    -- 待定
         CallTrigger(event = "ADD_MONEY", object = $obj1)
-
-        $obj1.canequipBuff = AddEntityBuff(cfg = "myplugin/canequip", entity = $obj1)
+        ShowSelectRole(player = $obj1)
+		$obj1.canequipBuff = AddEntityBuff(cfg = "myplugin/canequip", entity = $obj1)
     }
 }
 
@@ -32,7 +33,7 @@ ADD_MONEY
     If($obj1.isReadyReward)
     {
         AddCurrency(count = $money, coinName = "green_currency", entity = $obj1)
-        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = $money, entity = $obj1)
+        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
         $obj1.rewardCounts = $obj1.rewardCounts + 1
     }
     StartTimer(rep = false, time = $cdTime, object = $obj1, event = "ADD_MONEY")
@@ -40,10 +41,72 @@ ADD_MONEY
     $obj1.isReadyReward = true
 }
 
+CHANGE_PLAYER_SCALE
+{
+    If($scale == 1)
+    {
+        SetScale(entity = $obj1, scale = {x = 0.65, y = 0.65, z = 0.65})
+        $obj1.role = "child"
+    }
+    Else
+    {
+        SetScale(entity = $obj1, scale = {x = 1, y = 1, z = 1})
+        $obj1.role = "adult"
+    }
+}
+
+STATE_HUNGER_EVENT
+{
+    Test("HUNGER")
+    ShowBubbleMsg(textKey = "HUNGER", entity = $obj1)
+
+
+    --todo 加buff
+}
+
+STATE_THIRSTY_EVENT
+{
+    Test("THIRSTY")
+    ShowBubbleMsg(textKey = "THIRSTY", entity = $obj1)
+
+    --todo 加buff
+}
+
+STATE_DIRTY_EVENT
+{
+    Test("DIRTY")
+    ShowBubbleMsg(textKey = "DIRTY", entity = $obj1)
+
+    --todo 加buff
+}
+
+STATE_FATIGUE_EVENT
+{
+    Test("FATIGUE")
+    ShowBubbleMsg(textKey = "FATIGUE", entity = $obj1)
+
+    --todo 加buff
+}
+
+STATE_ILL_EVENT
+{
+    Test("ILL")
+    ShowBubbleMsg(textKey = "ILL", entity = $obj1)
+
+    --todo 加buff
+}
+
+STATE_REGION_EVENT
+{
+    Test("REGION")
+    ShowBubbleMsg(textKey = "REGION", entity = $obj1)
+
+    --todo 加buff
+}
+
 ENTITY_JUMP {
     CallTrigger(obj1 = $owner, event = "ENTITY_REMOVE_INTERACTION")
 }
-
 
 ENTITY_REMOVE_INTERACTION {
     If($obj1.interactionObjId){
@@ -57,4 +120,3 @@ ENTITY_REMOVE_INTERACTION {
         RemoveEntityBuff(buff = $obj1.interactionBuff, entity = $obj1)
     }
 }
-

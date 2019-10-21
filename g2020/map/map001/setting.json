@@ -1,7 +1,5 @@
 {
     "canAttack": true,
-    "canBreak": true,
-    "placeTestBlock": "myplugin/stone",
     "region": {
         "store_01": {
             "regionCfg": "myplugin/store_01",
@@ -24,11 +22,21 @@
             "cfg": "myplugin/store_item_wing_01",
             "pitch": 0,
             "pos": {
-                "x": 1666,
+                "x": 1654,
                 "y": 13,
                 "z": -560
             },
-            "ry": 0
+            "ry": 90
+        },
+        {
+            "cfg": "myplugin/npc_change_role",
+            "pitch": 0,
+            "pos": {
+                "x": 1653,
+                "y": 13,
+                "z": -555
+            },
+            "ry": 90
         }
     ]
 }
