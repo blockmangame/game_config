@@ -5,7 +5,7 @@ ENTITY_ENTER
         $obj1.isReadyReward = false
         CallTrigger(event = "ADD_MONEY", object = $obj1)
 
-        AddEntityBuff(cfg = "myplugin/canequip", entity = $obj1)
+        $obj1.canequipBuff = AddEntityBuff(cfg = "myplugin/canequip", entity = $obj1)
     }
 }
 
@@ -39,3 +39,22 @@ ADD_MONEY
     ShowRewardCD(player = $obj1, time = $cdTime)
     $obj1.isReadyReward = true
 }
+
+ENTITY_JUMP {
+    CallTrigger(obj1 = $owner, event = "ENTITY_REMOVE_INTERACTION")
+}
+
+
+ENTITY_REMOVE_INTERACTION {
+    If($obj1.interactionObjId){
+        $target = GetObject(objID = $obj1.interactionObjId)
+        If($target && $target.interactionBuff) {
+            RemoveEntityBuff(buff = $target.interactionBuff, entity = $target)
+        }
+    }
+
+    If($obj1.interactionBuff){
+        RemoveEntityBuff(buff = $obj1.interactionBuff, entity = $obj1)
+    }
+}
+
