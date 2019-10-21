@@ -3,9 +3,11 @@ ENTITY_ENTER
     If(IsPlayer(entity = $obj1))
     {
         $obj1.isReadyReward = false
+        $obj1.role = "adult"    -- 待定
         CallTrigger(event = "ADD_MONEY", object = $obj1)
 
         AddEntityBuff(cfg = "myplugin/canequip", entity = $obj1)
+        ShowSelectRole(player = $obj1)
     }
 }
 
@@ -32,12 +34,26 @@ ADD_MONEY
     If($obj1.isReadyReward)
     {
         AddCurrency(count = $money, coinName = "green_currency", entity = $obj1)
-        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = $money, entity = $obj1)
+        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
         $obj1.rewardCounts = $obj1.rewardCounts + 1
     }
     StartTimer(rep = false, time = $cdTime, object = $obj1, event = "ADD_MONEY")
     ShowRewardCD(player = $obj1, time = $cdTime)
     $obj1.isReadyReward = true
+}
+
+CHANGE_PLAYER_SCALE
+{
+    If($scale == 1)
+    {
+        SetScale(entity = $obj1, scale = {x = 0.65, y = 0.65, z = 0.65})
+        $obj1.role = "child"
+    }
+    Else
+    {
+        SetScale(entity = $obj1, scale = {x = 1, y = 1, z = 1})
+        $obj1.role = "adult"
+    }
 }
 
 STATE_HUNGER_EVENT
