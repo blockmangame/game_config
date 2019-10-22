@@ -6,7 +6,6 @@ ENTITY_ENTER
         $obj1.role = "adult"    -- 待定
         CallTrigger(event = "ADD_MONEY", object = $obj1)
         ShowSelectRole(player = $obj1)
-		$obj1.canequipBuff = AddEntityBuff(cfg = "myplugin/canequip", entity = $obj1)
     }
 }
 
