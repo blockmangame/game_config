@@ -1,6 +1,6 @@
 REGION_ENTER {
-    Sequence {
-        IsPlayer(entity = $obj1)
+    If(IsPlayer(entity = $obj1))
+    {
         $player = $obj1
         $tip = GetRegionConfig(key = "tip", region = $region)
         ShowRegionTip(player = $player, cfg = $tip, isShow = true)
@@ -8,10 +8,10 @@ REGION_ENTER {
 }
 
 REGION_LEAVE {
-    Sequence {
-		IsPlayer(entity = $obj1)
-		$player = $obj1
+    If(IsPlayer(entity = $obj1))
+    {
+        $player = $obj1
 		$tip = GetRegionConfig(key = "tip", region = $region)
         ShowRegionTip(player = $player, cfg = $tip, isShow = false)
-	}
+    }
 }
