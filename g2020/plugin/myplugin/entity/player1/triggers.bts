@@ -56,16 +56,22 @@ CHANGE_PLAYER_SCALE
 
 STATE_HUNGER_EVENT
 {
-    Test("HUNGER")
-    ShowBubbleMsg(textKey = "HUNGER", entity = $obj1)
-
-
-    --todo 加buff
+    If($obj1.isHunger)
+    {
+        Return()
+    }
+    $obj1.isHunger = true
+    ShowBubbleMsg(entity = $obj1, textKey = "I'm hungery!")
+    AddEntityBuff(entity = $obj1, cfg = "myplugin/state_hunger_buff")
 }
 
 STATE_THIRSTY_EVENT
 {
-    Test("THIRSTY")
+    If($obj1.isThirsty)
+    {
+        Return()
+    }
+    $obj1.isThirsty = true
     ShowBubbleMsg(textKey = "THIRSTY", entity = $obj1)
 
     --todo 加buff
@@ -73,7 +79,11 @@ STATE_THIRSTY_EVENT
 
 STATE_DIRTY_EVENT
 {
-    Test("DIRTY")
+    If($obj1.isDirty)
+    {
+        Return()
+    }
+    $obj1.isDirty = true
     ShowBubbleMsg(textKey = "DIRTY", entity = $obj1)
 
     --todo 加buff
@@ -81,7 +91,11 @@ STATE_DIRTY_EVENT
 
 STATE_FATIGUE_EVENT
 {
-    Test("FATIGUE")
+    If($obj1.isFatigue)
+    {
+        Return()
+    }
+    $obj1.isFatigue = true
     ShowBubbleMsg(textKey = "FATIGUE", entity = $obj1)
 
     --todo 加buff
@@ -89,7 +103,11 @@ STATE_FATIGUE_EVENT
 
 STATE_ILL_EVENT
 {
-    Test("ILL")
+    If($obj1.isIll)
+    {
+        Return()
+    }
+    $obj1.isIll = true
     ShowBubbleMsg(textKey = "ILL", entity = $obj1)
 
     --todo 加buff
@@ -97,10 +115,22 @@ STATE_ILL_EVENT
 
 STATE_REGION_EVENT
 {
-    Test("REGION")
+    If($obj1.isRegion)
+    {
+        Return()
+    }
+    $obj1.isRegion = true
     ShowBubbleMsg(textKey = "REGION", entity = $obj1)
 
     --todo 加buff
+}
+
+
+FUNC_EVENT_TEST
+{
+    Test("============ FUNC_EVENT_TEST ============")
+    Test($opt)
+    Test($key)
 }
 
 ENTITY_JUMP {

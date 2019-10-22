@@ -1,12 +1,13 @@
 GAME_INIT
 {
     @Generate_State_InitInfo = [
-        ["STATE_HUNGER_EVENT",  2, 3, 4, 5, 55],
-        ["STATE_THIRSTY_EVENT", 3, 6,  7, 12, 59],
-        ["STATE_DIRTY_EVENT",   4, 8,  10, 20, 29],
-        ["STATE_FATIGUE_EVENT", 5, 6, 30, 45, 50],
-        ["STATE_ILL_EVENT",     13, 15, 21, 27, 49],
-        ["STATE_REGION_EVENT",  15, 18, 26, 28, 36]
+        --["EVENTNAME", s1（消除状态需要的时间 >=0）, t1, t2, t3, ..., tn]
+        ["STATE_HUNGER_EVENT",  0,  2,  10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
+        ["STATE_THIRSTY_EVENT", 0,  4,   8, 12, 16, 20, 28, 32, 36, 40, 44, 48, 52],
+        ["STATE_DIRTY_EVENT",   1,  6,  12, 18, 24, 30, 36, 42, 48, 54],
+        ["STATE_FATIGUE_EVENT", 2,  5,   6, 30, 45, 50],
+        ["STATE_ILL_EVENT",     3, 28, 58],
+        ["STATE_REGION_EVENT",  4,  9,  19, 25, 28, 39, 48, 55, 59]
     ]
     CallTrigger(event = "FUNC_GENERATE_STATE_STARTTIME")
 }
@@ -22,7 +23,7 @@ FUNC_GENERATE_STATE_STARTTIME
         $arrInfo = ArrayGet(array = @Generate_State_InitInfo, index = $row)
 
         $timeArr = []
-        ForLoop (from = 2, to = ArraySize(array = $arrInfo), key = "idx")
+        ForLoop (from = 3, to = ArraySize(array = $arrInfo), key = "idx")
         {
             $time = ArrayGet(array = $arrInfo, index = $idx)
             $newTime = ($curMinute + $time) % 60
@@ -35,8 +36,9 @@ FUNC_GENERATE_STATE_STARTTIME
             timeArr = $timeArr,
             event = "FUNC_CHANGE_STATE", 
             size = ArraySize(array = $timeArr),
+            duration = ArrayGet(array = $arrInfo, index = 2),
             eventName = ArrayGet(array = $arrInfo, index = 1), 
-            time = (ArrayGet(array = $timeArr, index = 1) - $curMinute) * 60 * 20
+            time = ArrayGet(array = $arrInfo, index = 3) * 60 * 20,
         )
     }
 }
@@ -44,11 +46,9 @@ FUNC_GENERATE_STATE_STARTTIME
 FUNC_CHANGE_STATE
 {
     Foreach(array = GetAllPlayers(), key = "player"){
-        --todo 判断玩家是否有家庭
-        CallTrigger(object = $player, event = $eventName)
+        CallTrigger(object = $player, event = $eventName, duration = $duration)
 	}
 
-    --todo get new cdTime
     $curTime = GetMinuteOfHour(time = GetTime())
     $column = $column + 1
     If($column > $size)
@@ -68,6 +68,7 @@ FUNC_CHANGE_STATE
         event = $event,
         column = $column,
         timeArr = $timeArr,
+        duration = $duration,
         eventName = $eventName, 
         time = $cdTime * 60 * 20
     )
