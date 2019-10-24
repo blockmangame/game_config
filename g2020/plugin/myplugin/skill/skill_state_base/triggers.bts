@@ -1,0 +1,10 @@
+SKILL_CAST(debug = false) {
+    If(not IsPlayer(entity = $obj1))
+    {
+        Return()
+    }
+    SetGuidePostion(entity = $obj1)
+    $gps = GetGlobalVar(key = Concat(p1 = $fullName, p2 = "GPS"))
+    SetGuidePostion(entity = $obj1, pos = $gps)
+    AddSkill(entity = $obj1, name = "myplugin/close_gps")
+}

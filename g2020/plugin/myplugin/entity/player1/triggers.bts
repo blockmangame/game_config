@@ -54,83 +54,19 @@ CHANGE_PLAYER_SCALE
     }
 }
 
-STATE_HUNGER_EVENT
+FUNC_GENERATE_STATE
 {
-    If($obj1.isHunger)
+    $keyStr = Concat(p1 = "is", p2 = $stateName)
+    If(GetObjectVar(obj = $obj1, key = $keyStr))
     {
         Return()
     }
-    $obj1.isHunger = true
-    ShowBubbleMsg(entity = $obj1, textKey = "I'm hungery!")
-    AddEntityBuff(entity = $obj1, cfg = "myplugin/state_hunger_buff")
-}
-
-STATE_THIRSTY_EVENT
-{
-    If($obj1.isThirsty)
+    SetObjectVar(obj = $obj1, key = $keyStr, value = true)
+    If($obj1.ishunger)
     {
-        Return()
+        Test("$obj1.ishunger is true")
     }
-    $obj1.isThirsty = true
-    ShowBubbleMsg(textKey = "THIRSTY", entity = $obj1)
-
-    --todo 加buff
-}
-
-STATE_DIRTY_EVENT
-{
-    If($obj1.isDirty)
-    {
-        Return()
-    }
-    $obj1.isDirty = true
-    ShowBubbleMsg(textKey = "DIRTY", entity = $obj1)
-
-    --todo 加buff
-}
-
-STATE_FATIGUE_EVENT
-{
-    If($obj1.isFatigue)
-    {
-        Return()
-    }
-    $obj1.isFatigue = true
-    ShowBubbleMsg(textKey = "FATIGUE", entity = $obj1)
-
-    --todo 加buff
-}
-
-STATE_ILL_EVENT
-{
-    If($obj1.isIll)
-    {
-        Return()
-    }
-    $obj1.isIll = true
-    ShowBubbleMsg(textKey = "ILL", entity = $obj1)
-
-    --todo 加buff
-}
-
-STATE_REGION_EVENT
-{
-    If($obj1.isRegion)
-    {
-        Return()
-    }
-    $obj1.isRegion = true
-    ShowBubbleMsg(textKey = "REGION", entity = $obj1)
-
-    --todo 加buff
-}
-
-
-FUNC_EVENT_TEST
-{
-    Test("============ FUNC_EVENT_TEST ============")
-    Test($opt)
-    Test($key)
+    AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
 }
 
 ENTITY_JUMP {
@@ -147,5 +83,20 @@ ENTITY_REMOVE_INTERACTION {
 
     If($obj1.interactionBuff){
         RemoveEntityBuff(buff = $obj1.interactionBuff, entity = $obj1)
+    }
+}
+
+FUNC_REGION_OPERATION 
+{
+    $keyStr = Concat(p1 = "is", p2 = $key)
+    If($opt == "ENTER" and GetObjectVar(obj = $obj1, key = $keyStr))
+    {
+        Test("In")
+        SetGuidePostion(entity = $obj1)
+        SetObjectVar(obj = $obj1, key = $keyStr, value = false)
+        RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+        RemoveSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $key))
+
+        --todo 消除状态
     }
 }

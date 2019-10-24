@@ -1,44 +1,13 @@
 REGION_ENTER {
-    Sequence {
-        IsPlayer(entity = $obj1)
-        Test("===== REGION ENTER CALLTRIGGER =====")
+    If(IsPlayer(entity = $obj1))
+    {
         CallTrigger(event = "FUNC_REGION_OPERATION", object = $obj1, opt = "ENTER", key = $inRegionKey)
-        CallTrigger(event = "FUNC_EVENT_TEST", object = $obj1, opt = "ENTER", key = $inRegionKey)
     }
 }
 
 REGION_LEAVE {
-    Sequence {
-        IsPlayer(entity = $obj1)
-        Test("===== REGION LEAVE CALLTRIGGER =====")
+    If(IsPlayer(entity = $obj1))
+    {
         CallTrigger(event = "FUNC_REGION_OPERATION", object = $obj1, opt = "LEAVE", key = $inRegionKey)
-        CallTrigger(event = "FUNC_EVENT_TEST", object = $obj1, opt = "LEAVE", key = $inRegionKey)
-    }
-}
-
-FUNC_REGION_OPERATION 
-{
-    Test("============ FUNC_REGION_OPERATION ============")
-    Test($opt)
-    Test($key)
-    If($obj1.isHunger and $key == "region_state_hunger")
-    {
-        
-    }
-    ElseIf($obj1.isThirsty and $key == "region_state_thirsty")
-    {
-        
-    }
-    ElseIf($obj1.isDirty and $key == "region_state_isDirty")
-    {
-        
-    }
-    ElseIf($obj1.isFatigue and $key == "region_state_isFatigue")
-    {
-        
-    }
-    ElseIf($obj1.isIll and $key == "region_state_ill")
-    {
-        
     }
 }

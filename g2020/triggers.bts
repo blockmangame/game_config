@@ -1,13 +1,14 @@
 GAME_INIT
 {
     @Generate_State_InitInfo = [
-        --["EVENTNAME", s1（消除状态需要的时间 >=0）, t1, t2, t3, ..., tn]
-        ["STATE_HUNGER_EVENT",  0,  2,  10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
-        ["STATE_THIRSTY_EVENT", 0,  4,   8, 12, 16, 20, 28, 32, 36, 40, 44, 48, 52],
-        ["STATE_DIRTY_EVENT",   1,  6,  12, 18, 24, 30, 36, 42, 48, 54],
-        ["STATE_FATIGUE_EVENT", 2,  5,   6, 30, 45, 50],
-        ["STATE_ILL_EVENT",     3, 28, 58],
-        ["STATE_REGION_EVENT",  4,  9,  19, 25, 28, 39, 48, 55, 59]
+        --["EVENTNAME(勿改)", s1（消除状态需要的时间 >=0）, t1, t2, t3, ..., tn]
+
+        ["hunger",  0,  0.3,  0.5, 15, 20, 25, 30, 35, 40, 45, 50, 55],
+        ["thirsty", 0,  0.3,  0.5, 12, 16, 20, 28, 32, 36, 40, 44, 48, 52],
+        ["dirty",   1,  0.3,  0.5, 18, 24, 30, 36, 42, 48, 54],
+        ["fatigue", 2,  0.3,  0.5, 30, 45, 50],
+        ["ill",     3,  0.3,  0.5],
+        --["region",  4,  0.3,  0.5, 25, 28, 39, 48, 55, 59]
     ]
     CallTrigger(event = "FUNC_GENERATE_STATE_STARTTIME")
 }
@@ -16,13 +17,10 @@ GAME_INIT
 FUNC_GENERATE_STATE_STARTTIME
 {
     $curMinute = GetMinuteOfHour(time = GetTime())
-    Test($curMinute) --todo log
-
     ForLoop (from = 1, to = ArraySize(array = @Generate_State_InitInfo), key = "row")
     {
-        $arrInfo = ArrayGet(array = @Generate_State_InitInfo, index = $row)
-
         $timeArr = []
+        $arrInfo = ArrayGet(array = @Generate_State_InitInfo, index = $row)
         ForLoop (from = 3, to = ArraySize(array = $arrInfo), key = "idx")
         {
             $time = ArrayGet(array = $arrInfo, index = $idx)
@@ -37,7 +35,7 @@ FUNC_GENERATE_STATE_STARTTIME
             event = "FUNC_CHANGE_STATE", 
             size = ArraySize(array = $timeArr),
             duration = ArrayGet(array = $arrInfo, index = 2),
-            eventName = ArrayGet(array = $arrInfo, index = 1), 
+            stateName = ArrayGet(array = $arrInfo, index = 1), 
             time = ArrayGet(array = $arrInfo, index = 3) * 60 * 20,
         )
     }
@@ -46,10 +44,11 @@ FUNC_GENERATE_STATE_STARTTIME
 FUNC_CHANGE_STATE
 {
     Foreach(array = GetAllPlayers(), key = "player"){
-        CallTrigger(object = $player, event = $eventName, duration = $duration)
+        CallTrigger(object = $player, event = "FUNC_GENERATE_STATE", duration = $duration, stateName = $stateName)
 	}
 
     $curTime = GetMinuteOfHour(time = GetTime())
+    Test("curTime", $curTime)
     $column = $column + 1
     If($column > $size)
     {
@@ -57,10 +56,12 @@ FUNC_CHANGE_STATE
     }
     $endTime = ArrayGet(array = $timeArr, index = $column)
     $cdTime = $endTime - $curTime
+    Test("cdTime start", $cdTime)
     If($cdTime < 0)
     {
         $cdTime = 60 - $curTime + $endTime
     }
+    Test("cdTime end", $cdTime)
 
     StartTimer(
         rep = false, 
@@ -69,7 +70,7 @@ FUNC_CHANGE_STATE
         column = $column,
         timeArr = $timeArr,
         duration = $duration,
-        eventName = $eventName, 
+        stateName = $stateName, 
         time = $cdTime * 60 * 20
     )
 }
