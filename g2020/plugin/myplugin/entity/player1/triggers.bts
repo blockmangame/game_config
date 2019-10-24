@@ -62,10 +62,6 @@ FUNC_GENERATE_STATE
         Return()
     }
     SetObjectVar(obj = $obj1, key = $keyStr, value = true)
-    If($obj1.ishunger)
-    {
-        Test("$obj1.ishunger is true")
-    }
     AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
 }
 
