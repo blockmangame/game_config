@@ -109,7 +109,6 @@ FUNC_REGION_OPERATION
     $keyStr = Concat(p1 = "is", p2 = $key)
     If($opt == "ENTER" and GetObjectVar(obj = $obj1, key = $keyStr))
     {
-        Test("In")
         SetGuidePostion(entity = $obj1)
         SetObjectVar(obj = $obj1, key = $keyStr, value = false)
         RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
