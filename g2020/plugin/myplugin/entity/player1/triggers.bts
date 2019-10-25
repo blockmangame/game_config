@@ -40,6 +40,28 @@ ADD_MONEY
     $obj1.isReadyReward = true
 }
 
+CREATE_FAMILY
+{
+    If(IsPlayer(entity = $obj1))
+    {
+        $familyId = GetEntityTeam(entity = $obj1)
+        If($familyId and $familyId ~= 0)
+        {
+            Return()
+        }
+        SetEntityTeam(entity = $obj1, teamId = @familyIndex)
+        @familyIndex = @familyIndex + 1
+    }
+}
+
+QUIT_FAMILY
+{
+    If(IsPlayer(entity = $obj1))
+    {
+        SetEntityTeam(entity = $obj1, teamId = 0)
+    }
+}
+
 CHANGE_PLAYER_SCALE
 {
     If($scale == 1)
