@@ -2,5 +2,90 @@
     "canClick": true,
     "actorName": "boy.actor",
     "canMove": true,
-    "hideHp": true
+    "hideHp": true,
+    "ridePos": [
+        {
+            "yaw": 180,
+            "pos": {
+                "y": 0,
+                "z": 0.21,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0.5
+            },
+            "rideAction" : {
+              "idle" : "double_hug"
+            },
+            "passengerAction": {
+              "double_hug" : "double_hug"
+            },
+            "ctrl": false,
+            "view": false
+        },
+        {
+            "yaw": 180,
+            "pos": {
+                "y": 0,
+                "z": 1.06,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0.5
+            },
+            "rideAction" : {
+                "idle" : "double_clap"
+            },
+            "passengerAction": {
+                "double_clap" : "double_clap"
+            },
+            "ctrl": false,
+            "view": false
+        },
+        {
+            "yaw": 180,
+            "pos": {
+                "y": 0,
+                "z": 1.78,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0.5
+            },
+            "rideAction" : {
+                "idle" : "double_handshake"
+            },
+            "passengerAction": {
+                "action_handshake" : "double_handshake"
+            },
+            "ctrl": false,
+            "view": false
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": 1.19,
+                "z": -0.11,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0.5
+            },
+            "passengerAction": {
+                "idle" : "double_ride",
+                "run" : "double_ride",
+                "jump2" : "double_ride"
+            },
+            "ctrl": false,
+            "view": false
+        }
+    ]
 }

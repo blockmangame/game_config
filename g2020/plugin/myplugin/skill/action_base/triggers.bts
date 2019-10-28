@@ -1,38 +1,16 @@
 SKILL_CAST(debug = false) {
-
-    $yaw = GetSkillVar(fullName = $fullName, key = "yaw")
-    $bodyYaw = GetSkillVar(fullName = $fullName, key = "bodyYaw")
-    $interval = GetSkillVar(fullName = $fullName, key = "interval")
-    $targetYaw = GetSkillVar(fullName = $fullName, key = "targetYaw")
-    $targetBodyYaw = GetSkillVar(fullName = $fullName, key = "targetBodyYaw")
-
     $buffName = GetSkillVar(fullName = $fullName, key = "buffName")
-    $castAction = GetSkillVar(fullName = $fullName, key = "castAction")
+    $rideIndex = GetSkillVar(fullName = $fullName, key = "rideIndex")
     $castActionTime = GetSkillVar(fullName = $fullName, key = "castActionTime")
 
-    If ($castAction == nil || $castActionTime == nil || $interval == nil || $yaw == nil ||
-     $bodyYaw == nil || $targetYaw == nil || $targetBodyYaw == nil || $buffName == nil ||
-     $obj1.interactionBuff ~= nil || $obj2 == nil || $obj2.interactionBuff ~= nil)
-    {
-        PlayAction(entity = $obj1, actionName = "idle", actionTime = -1, includeSelf = true)
-    } Else {
-        $obj1Pos = GetEntityPosition(entity = $obj1)
-        $obj2Pos = $obj1Pos + V3( 0, 0 , $interval)
-        SetEntityPosition(entity = $obj1, pos = $obj1Pos, ry = $yaw, rp = 0)
-        SetEntityPosition(entity = $obj2, pos = $obj2Pos, ry = $targetYaw, rp = 0)
+    If($obj1.interactionBuff == nil && $obj2 ~= nil && $obj2.interactionBuff == nil && $rideIndex ~= nil
+     && GetRideOn(entity = $obj1) == nil && GetRideOn(entity = $obj2) == nil) {
+        RideOn(ctrl = false, entity = $obj1, target = $obj2, targetIndex = $rideIndex)
 
-        SetBodyYaw(entity = $obj1, yaw = $bodyYaw)
-        SetBodyYaw(entity = $obj2, yaw = $targetBodyYaw)
-
-        $obj1.interactionBuff =  AddEntityBuff(cfg = $buffName, entity = $obj1, buffTime = $castActionTime)
-        $obj2.interactionBuff =  AddEntityBuff(cfg = $buffName, entity = $obj2, buffTime = $castActionTime)
-
-        PlayAction(entity = $obj1, actionName = $castAction, actionTime = $castActionTime, includeSelf = true)
-        PlayAction(entity = $obj2, actionName = $castAction, actionTime = $castActionTime, includeSelf = true)
+        $obj1.interactionBuff = AddEntityBuff(cfg = $buffName, entity = $obj1, buffTime = $castActionTime)
+        $obj2.interactionBuff = AddEntityBuff(cfg = $buffName, entity = $obj2, buffTime = $castActionTime)
 
         $obj1.interactionObjId = GetObjectID(object = $obj2)
         $obj2.interactionObjId = GetObjectID(object = $obj1)
     }
-
 }
-
