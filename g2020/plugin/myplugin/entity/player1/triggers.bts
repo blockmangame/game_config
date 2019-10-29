@@ -64,14 +64,14 @@ QUIT_FAMILY
 
 CHANGE_PLAYER_SCALE
 {
-    If($scale == 1)
+    If($scale == "child")
     {
-        SetScale(entity = $obj1, scale = {x = 0.65, y = 0.65, z = 0.65})
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
         $obj1.role = "child"
     }
-    Else
+    ElseIf($scale == "adult")
     {
-        SetScale(entity = $obj1, scale = {x = 1, y = 1, z = 1})
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
         $obj1.role = "adult"
     }
 }
