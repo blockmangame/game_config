@@ -33,12 +33,12 @@
             "iconPath": "set:main_page.json image:shop_icon.png",
             "list": 2
         },
-		{
+        {
             "name": "dressArchive",
             "iconPath": "set:main_page.json image:welfare_icon.png",
             "list": 2
         },
-		{
+        {
             "name": "dance",
             "iconPath": "set:main_page.json image:welfare_icon.png",
             "list": 2
@@ -48,11 +48,24 @@
         "global": [
             {
                 "key": "CDReward",
-                "value":[
-                    [200, 100],
-                    [400, 200],
-                    [600, 300]
+                "value": [
+                    [
+                        200,
+                        100
+                    ],
+                    [
+                        400,
+                        200
+                    ],
+                    [
+                        600,
+                        300
+                    ]
                 ]
+            },
+            {
+                "key": "familyIndex",
+                "value": 1
             }
         ],
         "entity": [
@@ -66,30 +79,54 @@
                 "value": "0",
                 "save": true
             },
-            { "key": "isRegion",        "value": "", "save": false },
-            { "key": "ishunger",        "value": false, "save": false },
-            { "key": "isthirsty",       "value": false, "save": false },
-            { "key": "isdirty",         "value": false, "save": false },
-            { "key": "isfatigue",       "value": false, "save": false },
-            { "key": "isill",           "value": false, "save": false }
+            {
+                "key": "isRegion",
+                "value": "",
+                "save": false
+            },
+            {
+                "key": "ishunger",
+                "value": false,
+                "save": false
+            },
+            {
+                "key": "isthirsty",
+                "value": false,
+                "save": false
+            },
+            {
+                "key": "isdirty",
+                "value": false,
+                "save": false
+            },
+            {
+                "key": "isfatigue",
+                "value": false,
+                "save": false
+            },
+            {
+                "key": "isill",
+                "value": false,
+                "save": false
+            }
         ]
     },
-	"danceList": [
-		{
-			"key": 1,
-			"value": "myplugin/dance_1"
-		},
-		{
-			"key": 2,
-			"value": "myplugin/dance_2"
-		},
-		{
-			"key": 3,
-			"value": "myplugin/dance_3"
-		},
-		{
-			"key": 4,
-			"value": "myplugin/dance_4"
-		}
-	]
+    "danceList": [
+        {
+            "key": 1,
+            "value": "myplugin/dance_1"
+        },
+        {
+            "key": 2,
+            "value": "myplugin/dance_2"
+        },
+        {
+            "key": 3,
+            "value": "myplugin/dance_3"
+        },
+        {
+            "key": 4,
+            "value": "myplugin/dance_4"
+        }
+    ]
 }
