@@ -1,0 +1,32 @@
+ENTITY_CLICK
+{
+    $infos = GetCfg(type = "entity", fullName = "myplugin/test_actor")
+    $actorGender = GetObjectVar(obj = $infos, key = "sex")
+    $gender = GetEntityMainData(entity = $obj2, key = "sex")
+
+    If ($gender ~= $actorGender)
+    {
+        Return()
+    }
+
+    $wing = GetSkin(entity = $obj2, skinName = "custom_wing")
+    $scarf = GetSkin(entity = $obj2, skinName = "custom_scarf")
+    $tops = GetSkin(entity = $obj2, skinName = "clothes_tops")
+    $shoes = GetSkin(entity = $obj2, skinName = "custom_shoes")
+    $pants = GetSkin(entity = $obj2, skinName = "clothes_pants")
+    $hair = GetSkin(entity = $obj2, skinName = "custom_hair")
+    $face = GetSkin(entity = $obj2, skinName = "custom_face")
+    $glasses = GetSkin(entity = $obj2, skinName = "custom_glasses")
+    $hat = GetSkin(entity = $obj2, skinName = "custom_hat")
+
+    SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = $wing)
+    SetSkin(entity = $obj1, skinName = "custom_scarf", skinValue = $scarf)
+    SetSkin(entity = $obj1, skinName = "clothes_tops", skinValue = $tops)
+    SetSkin(entity = $obj1, skinName = "custom_shoes", skinValue = $shoes)
+    SetSkin(entity = $obj1, skinName = "clothes_pants", skinValue = $pants)
+    SetSkin(entity = $obj1, skinName = "custom_hair", skinValue = $hair)
+    SetSkin(entity = $obj1, skinName = "custom_face", skinValue = $face)
+    SetSkin(entity = $obj1, skinName = "custom_glasses", skinValue = $glasses)
+    SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = $hat)
+
+}

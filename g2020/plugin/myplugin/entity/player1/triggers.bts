@@ -5,9 +5,20 @@ ENTITY_ENTER
         $obj1.isReadyReward = false
         $obj1.role = "adult"
         $obj1.scaleBuff = nil
-        
+
         CallTrigger(event = "ADD_MONEY", object = $obj1)
         ShowSelectRole(player = $obj1)
+
+        -- test data
+        SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = 25)
+        SetSkin(entity = $obj1, skinName = "custom_scarf", skinValue = 3)
+        SetSkin(entity = $obj1, skinName = "clothes_tops", skinValue = 20)
+        SetSkin(entity = $obj1, skinName = "custom_shoes", skinValue = 40)
+        SetSkin(entity = $obj1, skinName = "clothes_pants", skinValue = 35)
+        SetSkin(entity = $obj1, skinName = "custom_hair", skinValue = 5)
+        SetSkin(entity = $obj1, skinName = "custom_face", skinValue = 5)
+        SetSkin(entity = $obj1, skinName = "custom_glasses", skinValue = 3)
+        SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = 5)
     }
 }
 
