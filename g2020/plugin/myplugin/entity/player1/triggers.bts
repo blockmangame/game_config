@@ -3,7 +3,9 @@ ENTITY_ENTER
     If(IsPlayer(entity = $obj1))
     {
         $obj1.isReadyReward = false
-        $obj1.role = "adult"    -- 待定
+        $obj1.role = "adult"
+        $obj1.scaleBuff = nil
+        
         CallTrigger(event = "ADD_MONEY", object = $obj1)
         ShowSelectRole(player = $obj1)
     }
@@ -64,14 +66,25 @@ QUIT_FAMILY
 
 CHANGE_PLAYER_SCALE
 {
+    If($obj1.role == $scale)
+    {
+        Return()
+    }
+
+    If($obj1.scaleBuff)
+    {
+        RemoveEntityBuff(entity = $obj1, buff = $obj1.scaleBuff)
+        $obj1.scaleBuff = nil
+    }
+
     If($scale == "child")
     {
-        AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
+        $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
         $obj1.role = "child"
     }
     ElseIf($scale == "adult")
     {
-        AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
+        $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
         $obj1.role = "adult"
     }
 }
