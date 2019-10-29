@@ -64,6 +64,7 @@ CREATE_FAMILY
         }
         SetEntityTeam(entity = $obj1, teamId = @familyIndex)
         @familyIndex = @familyIndex + 1
+        ShowTip(entity = $obj1, tipType = 2,textKey = "Create Family Success", time = 40)
     }
 }
 
@@ -72,6 +73,7 @@ QUIT_FAMILY
     If(IsPlayer(entity = $obj1))
     {
         SetEntityTeam(entity = $obj1, teamId = 0)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "Quit Family Success", time = 40)
     }
 }
 
