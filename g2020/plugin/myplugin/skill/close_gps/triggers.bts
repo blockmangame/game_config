@@ -1,0 +1,8 @@
+SKILL_CAST(debug = false) {
+    If(not IsPlayer(entity = $obj1))
+    {
+        Return()
+    }
+    SetGuidePostion(entity = $obj1)
+    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+}

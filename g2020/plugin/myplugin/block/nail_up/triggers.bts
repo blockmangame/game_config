@@ -1,0 +1,6 @@
+BLOCK_TOUCH(debug = true){
+	CallTrigger(entity = $obj1, pos = $pos, event = "DO_DAMAGE_ON_TOUCH")
+}
+BLOCK_APART {
+	$obj1.blockHurtFlag = 0
+}

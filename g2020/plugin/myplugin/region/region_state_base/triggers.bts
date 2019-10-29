@@ -1,0 +1,19 @@
+REGION_ENTER {
+    If(IsPlayer(entity = $obj1))
+    {
+        CallTrigger(
+            event = "FUNC_REGION_OPERATION", 
+            object = $obj1, 
+            opt = "ENTER", 
+            key = $inRegionKey, 
+            type = GetRegionConfig(region = $region, key = "type")
+        )
+    }
+}
+
+REGION_LEAVE {
+    If(IsPlayer(entity = $obj1))
+    {
+        CallTrigger(event = "FUNC_REGION_OPERATION", object = $obj1, opt = "LEAVE", key = $inRegionKey)
+    }
+}
