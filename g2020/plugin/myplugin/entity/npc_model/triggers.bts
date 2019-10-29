@@ -1,6 +1,6 @@
 ENTITY_CLICK
 {
-    $infos = GetCfg(type = "entity", fullName = "myplugin/test_actor")
+    $infos = GetCfg(type = "entity", fullName = "myplugin/npc_model")
     $actorGender = GetObjectVar(obj = $infos, key = "sex")
     $gender = GetEntityMainData(entity = $obj2, key = "sex")
 
