@@ -1,5 +1,7 @@
 ENTITY_BUFF_REMOVE {
-    PlayAction(entity = $entity, actionName = "idle", actionTime = -1, includeSelf = true)
+    If (GetRideOn(entity = $entity)){
+        ClearRide(entity = $entity)
+    }
     $entity.interactionObjId = nil
     $entity.interactionBuff = nil
 }

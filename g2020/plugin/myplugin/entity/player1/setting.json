@@ -41,6 +41,7 @@
                 "idle" : "double_clap"
             },
             "passengerAction": {
+                "base" : "double_clap",
                 "double_clap" : "double_clap"
             },
             "ctrl": false,
@@ -62,7 +63,7 @@
                 "idle" : "double_handshake"
             },
             "passengerAction": {
-                "action_handshake" : "double_handshake"
+                "double_handshake" : "double_handshake"
             },
             "ctrl": false,
             "view": false
@@ -80,12 +81,59 @@
                 "x": 0.5
             },
             "passengerAction": {
-                "idle" : "double_ride",
-                "run" : "double_ride",
-                "jump2" : "double_ride"
+                "base" : "double_ride"
             },
             "ctrl": false,
             "view": false
         }
-    ]
+    ],
+    "interactionUI": {
+        "topUI": {
+            "expand": {
+                "image": "set:add_sub.json image:add",
+                "text": "expandUI_text"
+            },
+            "shrink": {
+                "image": "set:add_sub.json image:sub",
+                "text": "shrink_text"
+            }
+        },
+        "btns": [
+            {
+                "text": "1",
+                "image": "set:add_sub.json image:add",
+                "eventIndex": 1
+            },
+            {
+                "text": "2",
+                "image": "set:add_sub.json image:add",
+                "eventIndex": 2
+            },
+            {
+                "text": "3",
+                "image": "set:add_sub.json image:add",
+                "eventIndex": 3
+            },
+            {
+                "text": "4",
+                "image": "set:add_sub.json image:add",
+                "eventIndex": 4
+            }
+        ],
+        "events": [
+            "INTERACTION_1",
+            "INTERACTION_2",
+            "INTERACTION_3",
+            "INTERACTION_4"
+        ]
+    },
+    "canInteract":true,
+    "interaction":{
+        "radius": 5,
+        "offset":{
+            "x": 0,
+            "y": -1,
+            "z": 2
+        }
+    }
 }

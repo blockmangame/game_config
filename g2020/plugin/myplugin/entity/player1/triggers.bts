@@ -103,6 +103,22 @@ STATE_REGION_EVENT
     --todo 加buff
 }
 
+INTERACTION_1 {
+    CastSkill(skill = "myplugin/action_clap", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+}
+
+INTERACTION_2 {
+    CastSkill(skill = "myplugin/action_hug", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+}
+
+INTERACTION_3 {
+    CastSkill(skill = "myplugin/action_handshake", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+}
+
+INTERACTION_4 {
+    CastSkill(skill = "myplugin/action_ride", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+}
+
 ENTITY_JUMP {
     CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
 }
@@ -112,16 +128,10 @@ ENTITY_REMOVE_INTERACTION {
         $target = GetObject(objID = $obj1.interactionObjId)
         If($target && $target.interactionBuff) {
             RemoveEntityBuff(buff = $target.interactionBuff, entity = $target)
-            If (GetRideOn(entity = $target)){
-                ClearRide(entity = $target)
-            }
         }
     }
 
     If($obj1.interactionBuff){
-        If (GetRideOn(entity = $obj1)) {
-            ClearRide(entity = $obj1)
-        }
         RemoveEntityBuff(buff = $obj1.interactionBuff, entity = $obj1)
     }
 }
