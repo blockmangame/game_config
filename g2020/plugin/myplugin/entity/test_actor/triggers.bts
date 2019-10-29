@@ -9,24 +9,87 @@ ENTITY_CLICK
         Return()
     }
 
+    If($obj1.role ~= $obj2.role)
+    {
+
+        If($obj1.scaleBuff)
+        {
+            RemoveEntityBuff(entity = $obj1, buff = $obj1.scaleBuff)
+            $obj1.scaleBuff = nil
+        }
+
+        If($obj2.role == "child")
+        {
+            $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
+            $obj1.role = $obj2.role
+        }
+        ElseIf($obj2.role == "adult")
+        {
+            $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
+            $obj1.role = $obj2.role
+        }
+    }
+
     $wing = GetSkin(entity = $obj2, skinName = "custom_wing")
+    If($wing ~= $obj1.wing)
+    {
+        SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = $wing)
+        $obj1.wing = $wing
+    }
+
     $scarf = GetSkin(entity = $obj2, skinName = "custom_scarf")
+    If($scarf ~= $obj1.scarf)
+    {
+        SetSkin(entity = $obj1, skinName = "custom_scarf", skinValue = $scarf)
+        $obj1.scarf = $scarf
+    }
+
     $tops = GetSkin(entity = $obj2, skinName = "clothes_tops")
+    If($tops ~= $obj1.tops)
+    {
+        SetSkin(entity = $obj1, skinName = "clothes_tops", skinValue = $tops)
+        $obj1.tops = $tops
+    }
+
     $shoes = GetSkin(entity = $obj2, skinName = "custom_shoes")
+    If($shoes ~= $obj1.shoes)
+    {
+        SetSkin(entity = $obj1, skinName = "custom_shoes", skinValue = $shoes)
+        $obj1.shoes = $shoes
+    }
+
     $pants = GetSkin(entity = $obj2, skinName = "clothes_pants")
+    If($pants ~= $obj1.pants)
+    {
+        SetSkin(entity = $obj1, skinName = "clothes_pants", skinValue = $pants)
+        $obj1.pants = $pants
+    }
+
     $hair = GetSkin(entity = $obj2, skinName = "custom_hair")
+    If($hair ~= $obj1.hair)
+    {
+        SetSkin(entity = $obj1, skinName = "custom_hair", skinValue = $hair)
+        $obj1.hair = $hair
+    }
+
     $face = GetSkin(entity = $obj2, skinName = "custom_face")
+    If($face ~= $obj1.face)
+    {
+        SetSkin(entity = $obj1, skinName = "custom_face", skinValue = $face)
+        $obj1.face = $face
+    }
+
     $glasses = GetSkin(entity = $obj2, skinName = "custom_glasses")
+    If($glasses ~= $obj1.glasses)
+    {
+        SetSkin(entity = $obj1, skinName = "custom_glasses", skinValue = $glasses)
+        $obj1.glasses = $glasses
+    }
+
     $hat = GetSkin(entity = $obj2, skinName = "custom_hat")
-
-    SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = $wing)
-    SetSkin(entity = $obj1, skinName = "custom_scarf", skinValue = $scarf)
-    SetSkin(entity = $obj1, skinName = "clothes_tops", skinValue = $tops)
-    SetSkin(entity = $obj1, skinName = "custom_shoes", skinValue = $shoes)
-    SetSkin(entity = $obj1, skinName = "clothes_pants", skinValue = $pants)
-    SetSkin(entity = $obj1, skinName = "custom_hair", skinValue = $hair)
-    SetSkin(entity = $obj1, skinName = "custom_face", skinValue = $face)
-    SetSkin(entity = $obj1, skinName = "custom_glasses", skinValue = $glasses)
-    SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = $hat)
-
+    If($hat ~= $obj1.hat)
+    {
+        SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = $hat)
+        $obj1.hat = $hat
+    }
 }
