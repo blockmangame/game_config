@@ -10,7 +10,8 @@ ENTITY_ENTER
         $obj1.inviteFamilyPlayer = nil
 
         CallTrigger(event = "ADD_MONEY", object = $obj1)
-        ShowSelectRole(player = $obj1)
+        CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)    
+
 
         -- test data
         --SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = 25)
@@ -77,31 +78,6 @@ QUIT_FAMILY
     {
         SetEntityTeam(entity = $obj1, teamId = 0)
         ShowTip(entity = $obj1, tipType = 2,textKey = "Quit Family Success", time = 40)
-    }
-}
-
-CHANGE_PLAYER_SCALE
-{
-    If($obj1.role == $scale)
-    {
-        Return()
-    }
-
-    If($obj1.scaleBuff)
-    {
-        RemoveEntityBuff(entity = $obj1, buff = $obj1.scaleBuff)
-        $obj1.scaleBuff = nil
-    }
-
-    If($scale == @child)
-    {
-        $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
-        $obj1.role = @child
-    }
-    ElseIf($scale == @adult)
-    {
-        $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
-        $obj1.role = @adult
     }
 }
 
@@ -262,7 +238,7 @@ REQUEST_JOIN_FAMILY
             entity = $obj1,
             textP1 = "Hahahaha",
             tittleKey = "I Want Join Family"
-        )
+    )
 }
 
 INVITE_JOIN_FAMILY
@@ -289,5 +265,5 @@ INVITE_JOIN_FAMILY
             entity = $obj1,
             textP1 = "Hahahaha",
             tittleKey = "Do you want Join My Family"
-        )
+    )
 }

@@ -70,6 +70,20 @@ FUNC_CHANGE_STATE
     )
 }
 
+SHOW_SELECT_ROLE
+{
+    ShowNotice(
+        buttonType = 2,
+        content = "Do you want be a adult ?",
+        eventYes = "CHANGE_PLAYER_SCALE_ADULT",
+        eventNo = "CHANGE_PLAYER_SCALE_CHILD",
+        entity = $obj1,
+        textP1 = "Hahahaha",
+        tittleKey = "Do you want be adult"
+    )
+}
+
+
 REQUEST_JOIN_FAMILY_YES
 {
     If(not $obj1.requestFamilyPlayer)
@@ -136,4 +150,28 @@ INVITE_JOIN_FAMILY_NO
     }
 
     $obj1.inviteFamilyPlayer = nil
+}
+
+CHANGE_PLAYER_SCALE_ADULT
+{
+    If($obj1.scaleBuff)
+    {
+        RemoveEntityBuff(entity = $obj1, buff = $obj1.scaleBuff)
+        $obj1.scaleBuff = nil
+    }
+
+    $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
+    $obj1.role = @adult
+}
+
+CHANGE_PLAYER_SCALE_CHILD
+{
+    If($obj1.scaleBuff)
+    {
+        RemoveEntityBuff(entity = $obj1, buff = $obj1.scaleBuff)
+        $obj1.scaleBuff = nil
+    }
+
+    $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
+    $obj1.role = @child
 }
