@@ -164,6 +164,10 @@ ENTITY_JUMP {
     CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
 }
 
+ENTITY_DIE {
+	CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
+}
+
 ENTITY_REMOVE_INTERACTION {
     If($obj1.interactionObjId){
         $target = GetObject(objID = $obj1.interactionObjId)
