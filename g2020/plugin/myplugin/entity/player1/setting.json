@@ -29,7 +29,7 @@
             "yaw": 180,
             "pos": {
                 "y": 0,
-                "z": 1.06,
+                "z": 0.689,
                 "x": 0
             },
             "out": {
@@ -85,6 +85,50 @@
             },
             "ctrl": false,
             "view": false
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": -2,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0.5
+            },
+            "passengerAction": {
+                "base" : ""
+            },
+            "ctrl": false,
+            "view": false
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": -0.7
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0.5
+            },
+            "rideAction" : {
+                "idle" : "double_handinhand_left_idle",
+                "run" : "double_handinhand_left_run",
+                "sneak" : "double_handinhand_left_idle",
+                "walk" : "double_handinhand_left_walk"
+            },
+            "passengerAction": {
+                "double_handinhand_left_idle" : "double_handinhand_right_idle",
+                "double_handinhand_left_run" : "double_handinhand_right_run",
+                "double_handinhand_left_walk" : "double_handinhand_right_walk"
+            },
+            "ctrl": false,
+            "view": false
         }
     ],
     "interactionUI": {
@@ -117,14 +161,16 @@
             {
                 "text": "4",
                 "image": "set:add_sub.json image:add",
-                "eventIndex": 4
+                "eventIndex": 6
             }
         ],
         "events": [
-            "INTERACTION_1",
-            "INTERACTION_2",
-            "INTERACTION_3",
-            "INTERACTION_4"
+            "INTERACTION_CLAP",
+            "INTERACTION_HUG",
+            "INTERACTION_HANDSHAKE",
+            "INTERACTION_RIDE",
+            "INTERACTION_FOLLOW",
+            "INTERACTION_HAND_IN_HAND"
         ]
     },
     "canInteract":true,

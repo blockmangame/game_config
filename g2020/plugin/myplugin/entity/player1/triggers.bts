@@ -3,7 +3,7 @@ ENTITY_ENTER
     If(IsPlayer(entity = $obj1))
     {
         $obj1.isReadyReward = false
-        $obj1.role = "adult"
+        $obj1.role = @adult
         $obj1.scaleBuff = nil
 
         CallTrigger(event = "ADD_MONEY", object = $obj1)
@@ -90,15 +90,15 @@ CHANGE_PLAYER_SCALE
         $obj1.scaleBuff = nil
     }
 
-    If($scale == "child")
+    If($scale == @child)
     {
         $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
-        $obj1.role = "child"
+        $obj1.role = @child
     }
-    ElseIf($scale == "adult")
+    ElseIf($scale == @adult)
     {
         $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
-        $obj1.role = "adult"
+        $obj1.role = @adult
     }
 }
 
@@ -113,20 +113,42 @@ FUNC_GENERATE_STATE
     AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
 }
 
-INTERACTION_1 {
-    CastSkill(skill = "myplugin/action_clap", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+INTERACTION_CLAP { --拍手 小孩和小孩
+    If($obj2.role == @child && $obj1.role == @child) {
+        CastSkill(skill = "myplugin/action_clap", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+    }
 }
 
-INTERACTION_2 {
-    CastSkill(skill = "myplugin/action_hug", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+INTERACTION_HUG { --拥抱 小孩和小孩 or 大人和大人
+    If($obj2.role == @child && $obj1.role == @child) {
+        CastSkill(skill = "myplugin/action_hug", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+    }
+
+    If($obj2.role == @adult && $obj1.role == @adult) {
+        CastSkill(skill = "myplugin/action_hug", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+    }
 }
 
-INTERACTION_3 {
-    CastSkill(skill = "myplugin/action_handshake", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+INTERACTION_HANDSHAKE { --握手 大人和大人
+    If($obj2.role == @adult && $obj1.role == @adult) {
+        CastSkill(skill = "myplugin/action_handshake", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+    }
 }
 
-INTERACTION_4 {
-    CastSkill(skill = "myplugin/action_ride", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+INTERACTION_RIDE { --骑乘 小孩和大人
+    If($obj2.role == @child && $obj1.role == @adult) {
+        CastSkill(skill = "myplugin/action_ride", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+    }
+}
+
+INTERACTION_HAND_IN_HAND { --手拉手 小孩和大人
+    If($obj2.role == @child && $obj1.role == @child) {
+        CastSkill(skill = "myplugin/action_handinhand", from = $obj1, packet = {targetID = GetObjectID(object = $obj2)})
+    }
+}
+
+INTERACTION_FOLLOW { --跟随
+    CastSkill(skill = "myplugin/action_follow", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
 }
 
 ENTITY_JUMP {

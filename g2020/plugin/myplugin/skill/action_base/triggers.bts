@@ -2,6 +2,9 @@ SKILL_CAST(debug = false) {
     $buffName = GetSkillVar(fullName = $fullName, key = "buffName")
     $rideIndex = GetSkillVar(fullName = $fullName, key = "rideIndex")
     $castActionTime = GetSkillVar(fullName = $fullName, key = "castActionTime")
+    If($castActionTime && $castActionTime == 0) {
+        $castActionTime = nil
+    }
 
     If($obj1.interactionBuff == nil && $obj2 ~= nil && $obj2.interactionBuff == nil && $rideIndex ~= nil
      && GetRideOn(entity = $obj1) == nil && GetRideOn(entity = $obj2) == nil) {
