@@ -70,3 +70,70 @@ FUNC_CHANGE_STATE
     )
 }
 
+REQUEST_JOIN_FAMILY_YES
+{
+    If(not $obj1.requestFamilyPlayer)
+    {
+        Return()
+    }
+
+    $teamID = GetEntityTeam(entity = $obj1)
+    If(not $teamID or $teamID == 0)
+    {
+        Return()
+    }
+
+    $playerCount = GetTeamInfo(teamId = $teamID, key = "playerCount")
+    If(not $playerCount or $playerCount >= 4)
+    {
+        Return()
+    }
+
+    SetEntityTeam(entity = $obj1.requestFamilyPlayer, teamId = $teamID)
+    ShowTip(entity = $obj1.requestFamilyPlayer, tipType = 2,textKey = "You Are In Family", time = 40)
+    $obj1.requestFamilyPlayer = nil
+}
+
+REQUEST_JOIN_FAMILY_NO
+{
+    If($obj1.requestFamilyPlayer)
+    {
+        ShowTip(entity = $obj1.requestFamilyPlayer, tipType = 2,textKey = "Sorry, I Can't Accept You Request.", time = 40)
+    }
+
+    $obj1.requestFamilyPlayer = nil
+}
+
+INVITE_JOIN_FAMILY_YES
+{
+    If(not $obj1.inviteFamilyPlayer)
+    {
+        Return()
+    }
+
+    $teamID = GetEntityTeam(entity = $obj1.inviteFamilyPlayer)
+    If(not $teamID or $teamID == 0)
+    {
+        Return()
+    }
+
+    $playerCount = GetTeamInfo(teamId = $teamID, key = "playerCount")
+    If(not $playerCount or $playerCount >= 4)
+    {
+        Return()
+    }
+
+    SetEntityTeam(entity = $obj1, teamId = $teamID)
+    ShowTip(entity = $obj1, tipType = 2,textKey = "You Are In Family", time = 40)
+    $obj1.inviteFamilyPlayer = nil
+}
+
+INVITE_JOIN_FAMILY_NO
+{
+    If($obj1.inviteFamilyPlayer)
+    {
+        ShowTip(entity = $obj1.inviteFamilyPlayer, tipType = 2,textKey = "Sorry, I Don't Want Join Family.", time = 40)
+    }
+
+    $obj1.inviteFamilyPlayer = nil
+}

@@ -6,6 +6,9 @@ ENTITY_ENTER
         $obj1.role = @adult
         $obj1.scaleBuff = nil
 
+        $obj1.requestFamilyPlayer = nil
+        $obj1.inviteFamilyPlayer = nil
+
         CallTrigger(event = "ADD_MONEY", object = $obj1)
         ShowSelectRole(player = $obj1)
 
@@ -241,4 +244,50 @@ FUNC_REGION_STATE_RELEASE
     Test("FUNC_REGION_STATE_RELEASE")
 
     --todo 区域状态奖励...
+}
+
+REQUEST_JOIN_FAMILY
+{
+    $targetFamilyID = GetEntityTeam(entity = $obj1)
+    If(not $targetFamilyID or $targetFamilyID == 0)
+    {
+        Return()
+    }
+    $obj1.requestFamilyPlayer = $obj2
+    ShowNotice(
+            buttonType = 2,
+            content = "I Want Join Family",
+            eventYes = "REQUEST_JOIN_FAMILY_YES",
+            eventNo = "REQUEST_JOIN_FAMILY_NO",
+            entity = $obj1,
+            textP1 = "Hahahaha",
+            tittleKey = "I Want Join Family"
+        )
+}
+
+INVITE_JOIN_FAMILY
+{
+    $myFamilyID = GetEntityTeam(entity = $obj2)
+    If(not $myFamilyID or $myFamilyID == 0)
+    {
+        Return()
+    }
+
+    $playerCount = GetTeamInfo(teamId = $myFamilyID, key = "playerCount")
+    If(not $playerCount or $playerCount >= 4)
+    {
+        Return()
+    }
+
+    $obj1.inviteFamilyPlayer = $obj2
+
+    ShowNotice(
+            buttonType = 2,
+            content = "Do you want Join My Family",
+            eventYes = "INVITE_JOIN_FAMILY_YES",
+            eventNo = "INVITE_JOIN_FAMILY_NO",
+            entity = $obj1,
+            textP1 = "Hahahaha",
+            tittleKey = "Do you want Join My Family"
+        )
 }
