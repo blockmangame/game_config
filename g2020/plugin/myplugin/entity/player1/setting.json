@@ -80,8 +80,16 @@
                 "z": 0,
                 "x": 0.5
             },
+            "rideAction" : {
+                "idle" : "double_ride_adult_idle",
+                "run" : "double_ride_adult_run",
+                "sneak" : "double_ride_adult_idle",
+                "walk" : "double_ride_adult_walk"
+            },
             "passengerAction": {
-                "base" : "double_ride"
+                "double_ride_adult_idle" : "double_ride_kid_idle",
+                "double_ride_adult_run" : "double_ride_kid_run",
+                "double_ride_adult_walk" : "double_ride_kid_walk"
             },
             "ctrl": false,
             "view": false
@@ -161,7 +169,7 @@
             {
                 "text": "4",
                 "image": "set:add_sub.json image:add",
-                "eventIndex": 6
+                "eventIndex": 4
             }
         ],
         "events": [
