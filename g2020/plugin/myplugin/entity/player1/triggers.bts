@@ -105,11 +105,13 @@ CHANGE_PLAYER_SCALE
 FUNC_GENERATE_STATE
 {
     $keyStr = Concat(p1 = "is", p2 = $stateName)
-    If(GetObjectVar(obj = $obj1, key = $keyStr))
+    If(GetObjectVar(obj = $obj1, key = $keyStr) && ($stateName ~= "region" || $obj1.regionRTime > 0))
     {
         Return()
     }
+    SetGuidePostion(entity = $obj1)
     SetObjectVar(obj = $obj1, key = $keyStr, value = true)
+    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
     AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
 }
 
@@ -175,16 +177,64 @@ ENTITY_REMOVE_INTERACTION {
     }
 }
 
-FUNC_REGION_OPERATION 
+FUNC_REGION_STATE_OPERATION 
 {
-    $keyStr = Concat(p1 = "is", p2 = $key)
-    If($opt == "ENTER" and GetObjectVar(obj = $obj1, key = $keyStr))
+    If($type == "B" && $obj1.isregion)
     {
-        SetGuidePostion(entity = $obj1)
-        SetObjectVar(obj = $obj1, key = $keyStr, value = false)
-        RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
-        RemoveSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $key))
+        $location = ArrayGet(
+            array = GetSkillVar(
+                fullName = "myplugin/skill_state_region",
+                key = "locations"
+            ),
+            index = $obj1.regionIdx
+        )
+        If($location ~= $key)
+        {
+            Return()
+        }
 
-        --todo 消除状态
+        If($opt == "ENTER")
+        {
+            If($obj1.regionRTime == 0)
+            {
+                $obj1.regionRTime = $duration
+            }
+
+            $obj1.regionSTime = GetTime()
+            ShowProgressFollowObj(
+                isOpen = true,
+                entity = $obj1,
+                name = $location,
+                totalTime = $duration * 20,
+                rTime = $obj1.regionRTime * 20,
+            )
+
+            $obj1.REGION_TIMER = StartTimer(
+                rep = false,
+                object = $obj1,
+                time = $obj1.regionRTime * 20,
+                event = "FUNC_REGION_STATE_RELEASE",
+            )
+        }
+        Else
+        {
+            StopTimer(timer = $obj1.REGION_TIMER)
+            ShowProgressFollowObj(entity = $obj1, isOpen = false)
+            $obj1.regionRTime = $obj1.regionRTime - GetTime() + $obj1.regionSTime
+        }
     }
+}
+
+FUNC_REGION_STATE_RELEASE
+{
+    $obj1.regionRTime = 0
+    $obj1.isregion = false
+
+    SetGuidePostion(entity = $obj1)
+    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+    RemoveSkill(entity = $obj1, name = "myplugin/skill_state_region")
+    ShowProgressFollowObj(entity = $obj1, isOpen = false)
+    Test("FUNC_REGION_STATE_RELEASE")
+
+    --todo 区域状态奖励...
 }

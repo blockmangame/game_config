@@ -39,6 +39,10 @@ FUNC_GENERATE_STATE_STARTTIME
 FUNC_CHANGE_STATE
 {
     Foreach(array = GetAllPlayers(), key = "player"){
+        If($stateName == "region" && $player.regionRTime == 0)
+        {
+            $player.regionIdx = $column
+        }
         CallTrigger(object = $player, event = "FUNC_GENERATE_STATE", stateName = $stateName)
 	}
 

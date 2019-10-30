@@ -2,11 +2,12 @@ REGION_ENTER {
     If(IsPlayer(entity = $obj1))
     {
         CallTrigger(
-            event = "FUNC_REGION_OPERATION", 
+            event = "FUNC_REGION_STATE_OPERATION", 
             object = $obj1, 
             opt = "ENTER", 
             key = $inRegionKey, 
-            type = GetRegionConfig(region = $region, key = "type")
+            type = GetRegionConfig(region = $region, key = "stateType"),
+            duration = GetRegionConfig(region = $region, key = "duration")
         )
     }
 }
@@ -14,6 +15,13 @@ REGION_ENTER {
 REGION_LEAVE {
     If(IsPlayer(entity = $obj1))
     {
-        CallTrigger(event = "FUNC_REGION_OPERATION", object = $obj1, opt = "LEAVE", key = $inRegionKey)
+        CallTrigger(
+            event = "FUNC_REGION_STATE_OPERATION",
+            object = $obj1,
+            opt = "LEAVE",
+            key = $inRegionKey,
+            type = GetRegionConfig(region = $region, key = "stateType"),
+            duration = GetRegionConfig(region = $region, key = "duration")
+        )
     }
 }
