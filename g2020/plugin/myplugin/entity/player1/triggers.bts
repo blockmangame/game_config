@@ -10,15 +10,15 @@ ENTITY_ENTER
         ShowSelectRole(player = $obj1)
 
         -- test data
-        SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = 25)
-        SetSkin(entity = $obj1, skinName = "custom_scarf", skinValue = 3)
-        SetSkin(entity = $obj1, skinName = "clothes_tops", skinValue = 20)
-        SetSkin(entity = $obj1, skinName = "custom_shoes", skinValue = 40)
-        SetSkin(entity = $obj1, skinName = "clothes_pants", skinValue = 35)
-        SetSkin(entity = $obj1, skinName = "custom_hair", skinValue = 5)
-        SetSkin(entity = $obj1, skinName = "custom_face", skinValue = 5)
-        SetSkin(entity = $obj1, skinName = "custom_glasses", skinValue = 3)
-        SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = 5)
+        --SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = 25)
+        --SetSkin(entity = $obj1, skinName = "custom_scarf", skinValue = 3)
+        --SetSkin(entity = $obj1, skinName = "clothes_tops", skinValue = 20)
+        --SetSkin(entity = $obj1, skinName = "custom_shoes", skinValue = 40)
+        --SetSkin(entity = $obj1, skinName = "clothes_pants", skinValue = 35)
+        --SetSkin(entity = $obj1, skinName = "custom_hair", skinValue = 5)
+        --SetSkin(entity = $obj1, skinName = "custom_face", skinValue = 5)
+        --SetSkin(entity = $obj1, skinName = "custom_glasses", skinValue = 3)
+        --SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = 5)
     }
 }
 
@@ -149,6 +149,13 @@ INTERACTION_HAND_IN_HAND { --手拉手 小孩和大人
 
 INTERACTION_FOLLOW { --跟随
     CastSkill(skill = "myplugin/action_follow", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+}
+
+
+INTERACTION_PICK {
+    If($obj2.role == @adult && $obj1.role == @child) {
+        CastSkill(skill = "myplugin/action_pickup", from = $obj1, packet = {targetID = GetObjectID(object = $obj2)})
+    }
 }
 
 ENTITY_JUMP {

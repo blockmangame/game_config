@@ -137,6 +137,32 @@
             },
             "ctrl": false,
             "view": false
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": 0.85,
+                "z": 0.1,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0.5
+            },
+            "rideAction" : {
+                "idle" : "double_pickup_idle",
+                "run" : "double_pickup_run",
+                "sneak" : "double_pickup_idle",
+                "walk" : "double_pickup_walk"
+            },
+            "passengerAction": {
+                "double_pickup_idle" : "double_pickuped_idle",
+                "double_pickup_run" : "double_pickuped_run",
+                "double_pickup_walk" : "double_pickuped_walk"
+            },
+            "ctrl": false,
+            "view": false
         }
     ],
     "interactionUI": {
@@ -169,7 +195,7 @@
             {
                 "text": "4",
                 "image": "set:add_sub.json image:add",
-                "eventIndex": 4
+                "eventIndex": 7
             }
         ],
         "events": [
@@ -178,7 +204,8 @@
             "INTERACTION_HANDSHAKE",
             "INTERACTION_RIDE",
             "INTERACTION_FOLLOW",
-            "INTERACTION_HAND_IN_HAND"
+            "INTERACTION_HAND_IN_HAND",
+            "INTERACTION_PICK"
         ]
     },
     "canInteract":true,
