@@ -18,12 +18,12 @@ ENTITY_CLICK
             $obj1.scaleBuff = nil
         }
 
-        If($obj2.role == "child")
+        If($obj2.role == @child)
         {
             $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
             $obj1.role = $obj2.role
         }
-        ElseIf($obj2.role == "adult")
+        ElseIf($obj2.role == @adult)
         {
             $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
             $obj1.role = $obj2.role
