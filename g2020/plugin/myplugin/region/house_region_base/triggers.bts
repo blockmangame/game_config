@@ -1,0 +1,17 @@
+REGION_ENTER { 
+    Test(" open the door ??!!! ")
+    $house = GetRegionOwner(region = $region)
+    If(not $house){
+        Return()
+    }
+    CallTrigger(object = $house, event = "OPEN_THE_DOOR", player = $obj1)
+}
+
+REGION_LEAVE {
+    Test(" close the door ??!!! ")
+    $house = GetRegionOwner(region = $region)
+    If(not $house){
+        Return()
+    }
+    CallTrigger(object = $house, event = "CLOSE_THE_DOOR", player = $obj1)
+}

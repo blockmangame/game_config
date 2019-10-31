@@ -1,0 +1,137 @@
+ENTITY_ENTER
+{
+    CallTrigger(object = $obj1, event = "CREATR_SUBSIDIARY")
+}
+
+CREATR_SUBSIDIARY{
+    ------------------------------------------ 创建邮箱
+    ------------------------------------------ 房子 <house-------mail> 邮箱
+    $mail = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "mail"))
+    SetEntityPosition(entity = $mail, pos = 
+        ComputeV3(p1 = GetEntityPosition(entity = $obj1), p2 = GetConfigVar(obj = $obj1, key = "mailPos") or {x = 0,y = 0, z = 0}, op = "add"))
+    SetObjectVar(obj = $mail, key = "house", value = $obj1)
+    SetObjectVar(obj = $obj1, key = "mail", value = $mail)
+
+    ------------------------------------------ 创建房门，房门播放开门的
+    ------------------------------------------ 房子 <house-------door> 房门
+    $door = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "door"))
+    SetEntityPosition(entity = $door, pos = 
+        ComputeV3(p1 = GetEntityPosition(entity = $obj1), p2 = GetConfigVar(obj = $obj1, key = "doorPos") or {x = 0,y = 0, z = 0}, op = "add"))
+    SetObjectVar(obj = $door, key = "house", value = $obj1)
+    SetObjectVar(obj = $obj1, key = "door", value = $door)
+
+    ------------------------------------------ 创建内部房子（创建动态地图）
+    ------------------------------------------ 房子 -------houseInsideMap> 内部房子
+    $map = CreateMap(name = GetConfigVar(obj = $obj1, key = "insideMap"))
+    SetObjectVar(obj = $obj1, key = "houseInsideMap", value = $map)
+    CallTrigger(object = $obj1, event = "CREATR_HOUSE_INSIDE_SUBSIDIARY")
+}
+
+CREATR_HOUSE_INSIDE_SUBSIDIARY{
+    $curSelectHouse = {}
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
+    Foreach(array = $houseVars, key = "house"){
+        If(ArrayGet(array = $house, index = 5) == "enable"){
+            $curSelectHouse = $house
+            Break()
+        }
+    }
+    ------------------------------------------ 内部各区域的颜色，没有则默认颜色，vars里面取，此处的颜色是替换方块
+    $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
+    $allRegion = GetAllRegion(map = $map)
+    -- //获取当前房子的内部regionColor 即存进数据库的
+    $regionColor = ArrayGet(array = $curSelectHouse, index = 4) or {}
+    Foreach(array = $allRegion, key = "region"){
+        $block = GetRegionConfig(region = $region, key = "defaultBlock")
+        $regionkey = GetRegionConfig(region = $region, key = "regionkey")
+        Foreach(array = $regionColor, key = "regionColorTb"){
+            If(ArrayGet(array = $regionColorTb, index = 1) == $regionkey){
+                $block = ArrayGet(array = $regionColorTb, index = 2)
+                Break()
+            }
+        }
+        FillBlocksInRegion(map = $map, region = $region, block = $block)
+    }
+    ------------------------------------------ 内部各个家具
+    $furnishings = ArrayGet(array = $curSelectHouse, index = 3) or {}
+    Foreach(array = $furnishings, key = "furnishing"){
+        $npc = CreateNpc(map = $map, cfgName = ArrayGet(array = $furnishing, index = 3), 
+            pos = ArrayGet(array = $furnishing, index = 1), ry = ArrayGet(array = $furnishing, index = 2))
+        SetObjectVar(obj = $furnishing, key = "furnishingId", value = ArrayGet(array = $furnishing, index = 4))
+    }
+}
+
+CHANGE_HOUSE_REGION_COLOR{
+    ------------------------------------------ 更改内部各区域的颜色，改变后需要保存进数据库
+    $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
+    $allRegion = GetAllRegion(map = $map)
+    Foreach(array = $allRegion, key = "region"){
+        If(GetRegionConfig(region = $region, key = "regionkey") == $regionkey){
+            FillBlocksInRegion(map = $map, region = $region, block = $block)
+        }
+    }
+    $curSelectHouse = {}
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
+    Foreach(array = $houseVars, key = "house"){
+        If(ArrayGet(array = $house, index = 5) == "enable"){
+            $curSelectHouse = $house
+            Break()
+        }
+    }
+    $regionColor = ArrayGet(array = $curSelectHouse, index = 4) or {}
+    Foreach(array = $regionColor, key = "regionColorTb"){
+        If(ArrayGet(array = $regionColorTb, index = 1) == $regionkey){
+            ArraySet(array = $regionColorTb, index = 2, value = $block)
+            Break()
+        }
+    }
+}
+
+ENTITY_CLICK{
+    If(not IsPlayer(entity = $obj2)){
+        Return()
+    }
+    If(GetObjectVar(obj = $obj1, key = "isLock")){
+        Test(" don't touch me ! ")
+        ShowTip(entity = $obj2, tipType = 1, textKey = "house_lock")
+        Return()
+    }
+    Test(" come in ! ")
+}
+
+OPEN_THE_DOOR{
+    If(not IsPlayer(entity = $player)){
+        Return()
+    }
+    If(GetObjectVar(obj = $obj1, key = "isLock")){
+        Return()
+    }
+    -- 此处门entity播放动作即可？房子entity不播放？
+    PlayAction(entity = GetObjectVar(obj = $obj1, key = "door"), target = $player, actionName = "attack", actionTime = -1)
+    Test(" yes sir ! ")
+}
+
+CLOSE_THE_DOOR{
+    If(not IsPlayer(entity = $player)){
+        Return()
+    }
+    If(GetObjectVar(obj = $obj1, key = "isLock")){
+        Return()
+    }
+    -- 此处门entity播放动作即可？房子entity不播放？
+    PlayAction(entity = GetObjectVar(obj = $obj1, key = "door"), target = $player, actionName = "attack", actionTime = -1)
+    Test(" yes madan ! ")
+}
+
+ENTITY_DIE{
+    $outsideDoor = GetObjectVar(obj = $obj1, key = "door")
+    $outsideDoorPos = GetEntityPosition(entity = $outsideDoor)
+    $outsideDoorMap = GetEntityMap(entity = $outsideDoor)
+    KillEntity(entity = GetObjectVar(obj = $obj1, key = "mail"))
+    KillEntity(entity = $outsideDoor)
+
+    ------------------------------------------ 销毁内部房子
+    $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
+    MoveMapPlayerTo(map = $map, newmap = $outsideDoorMap, pos = ComputeV3(p1 = $outsideDoorPos, p2 = Table(x = 0, y = 0.1, z = 5), op = "add"))
+    CloseMap(map = $map)
+}

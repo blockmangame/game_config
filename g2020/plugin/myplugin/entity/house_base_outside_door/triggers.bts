@@ -1,0 +1,16 @@
+ENTITY_ENTER
+{
+}
+
+ENTITY_TOUCH_ALL{
+    If(not IsPlayer(entity = $obj2) or GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "isLock")){
+        Return()
+    }
+    Test(" please in !! ")
+    ------------------------------------------ 设置出来的门的位置
+    SetObjectVar(obj = $obj2, key = "returnDoor", value = $obj1)
+    ------------------------------------------ 传送进内部房子
+    $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
+    SetEntityPosition(map = $map, entity = $obj2, 
+        pos = GetMapInitPos(map = $map) or GetEntityPosition(entity = $obj2))
+}

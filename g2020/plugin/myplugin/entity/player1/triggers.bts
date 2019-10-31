@@ -24,7 +24,373 @@ ENTITY_ENTER
         --SetSkin(entity = $obj1, skinName = "custom_glasses", skinValue = 3)
         --SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = 5)
     }
+------------------------------------------------------------------------------------------------------------------------------ 分割线
+    ------------------------------------------ 当前选择存档 $curSelectHouse
+    $curSelectHouse = {}
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    If(not $houseVars or ArraySize(array = $houseVars) == 0){ -- 第一次进入游戏的玩家
+        Test("----------------------- first in")
+        $houseVars = Table([
+                "myplugin/house_default",
+                "myplugin/house_color_buff_1",
+                [],
+                [],
+                "enable",
+                "Sakura NeNe",
+                "houseType",
+                "1s"
+            ],[
+                "myplugin/house_default",
+                "myplugin/house_color_buff_1",
+                [],
+                [],
+                "disable",
+                "Sakura NeNe2",
+                "houseType",
+                "2s"
+            ])
+        SetObjectVar(obj = $obj1, key = "houseVars", value = $houseVars)
+    }
+    Foreach(array = $houseVars, key = "house"){
+        If(ArrayGet(array = $house, index = 5) == "enable"){
+            $curSelectHouse = $house
+            Break()
+        }
+    }
+    ------------------------------------------ 获得当前地图上的空出的区域，创建房子 * 
+    -- 区域 <region------owner> 房子 <house-------owner> 玩家，可通过区域获取区域上的房子，通过房子获得所属玩家。 反向同理
+    $regions = GetAllRegion(map = GetEntityMap(entity = $obj1))
+    Foreach(array = $regions, key = "region"){
+        If(not GetRegionOwner(region = $region) and GetRegionConfig(region = $region, key = "isHouseRegion")){
+            CallTrigger(object = $obj1, event = "CREATE_HOUSE_OUTSIDE", region = $region, 
+                houseCfg = ArrayGet(array = $curSelectHouse, index = 1),
+                houseColor = ArrayGet(array = $curSelectHouse, index = 2))
+            Break()
+        }
+    }
+    ------------------------------------------ 玩家进入游戏就进入自己房间
+    $house = GetObjectVar(obj = $obj1, key = "house")
+    $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+    SetObjectVar(obj = $obj1, key = "returnDoor", value = GetObjectVar(obj = $house, key = "door"))
+    SetEntityPosition(map = $houseInsideMap, entity = $obj1, 
+        pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
+------------------------------------------------------------------------------------------------------------------------------ 分割线
 }
+
+------------------------------------------------------------------------------------------------------------------------------ 分割线
+TEST_DATA{ -- 保存进数据库的数据伪代码
+    Table(
+        houseVars = [ -- all house 当前entity的所有房子
+            [ --   arr[1] = houseCfg, arr[2] = houseSelectColor, 
+                -- arr[3] = houseInsideFurnishing, arr[4] = houseInsideRegionColors, arr[5] = enable 当前选中房子标识/ disable 未选中
+                -- arr[6] = curHouseName, arr[7] = curHouseType, arr[8] = ID
+                "myplugin/xxx...", -- houseCfg 
+                "myplugin/xxx...", -- houseSelectColor，是buff来着 -- 外部颜色不影响内部
+                [ -- houseInsideFurnishing , 房子内部物品摆放
+                    -- pos是相对坐标，每个map都有一个initPos，坐标都是这个initPos+pos
+                    -- 绝对坐标也行
+                    [{x = "xx", y = "xx", z = "xx"},180,"myplugin/xxx...","id","true/false"],
+                    [{x = "xx", y = "xx", z = "xx"},180,"myplugin/xxx...","id","true/false"]
+                    -- {pos,yaw,cfg,全局唯一id:furnishingId,是否是旧家具，下线后则会将当前玩家全部房子的全部家具设置成true，即是旧家具}
+                ],
+                [ -- houseInsideRegionColors 房子内部区域颜色
+                    ["regionkey", "myplugin/xxx..."], -- regionkey, color 此处的颜色是替换方块
+                    ["regionkey2", "myplugin/xxx..."]
+                ],
+                "enable", -- cur select house 有这个标志就是 当前选择/出生的房子
+                "houseName", -- 当前房子的名字
+                "houseType", -- 当前房子的类型
+                "houseKey" -- 房子唯一ID，当玩家获得该房子时通过时间计算或者其他的生成的唯一ID
+            ],
+            [
+                -- ... 同上，不是当前选择则第五个参数为disable
+            ]
+        ]
+    )
+    Table(Demo = [[[],[]],[[],[]]])
+}
+
+CREATE_HOUSE_OUTSIDE{
+    $house = CreateNpc(pos = GetRegionCenter(region = $region), map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
+    AddEntityBuff(entity = $house, cfg = GetConfigVar(obj = $house, key = "houseCreateBuff"), buffTime = 200)
+    -- 改变房子外部颜色，通过加buff
+    AddEntityBuff(entity = $house, cfg = $houseColor)
+    ------------------------------------------ TestCode
+    -- SetObjectVar(obj = $house, key = "isLock", value = true) -- 给房门上锁
+
+    SetRegionOwner(region = $region, owner = $house)
+    SetObjectVar(obj = $house, key = "owner", value = $obj1)
+
+    SetObjectVar(obj = $obj1, key = "house", value = $house)
+    SetObjectVar(obj = $house, key = "region", value = $region)
+}
+
+REMOVE_HOUSE_OUTSIDE{
+    $house = GetObjectVar(obj = $obj1, key = "house")
+    $region = GetObjectVar(obj = $house, key = "region")
+    SetRegionOwner(region = $region, owner = nil)
+    KillEntity(entity = $house)
+}
+
+ENTITY_LEAVE{ 
+    ------------------------------------------ 玩家退出，清掉房子 邮箱 门，重置区域owner为nil
+    CallTrigger(object = $obj1, event = "REMOVE_HOUSE_OUTSIDE")
+}
+
+UPDATE_HOUSE{
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $houseVar = ArrayGet(array = $houseVars, index = $index)
+        If(ArrayGet(array = $houseVar, index = 5) ~= "enable" and $houseKey == ArrayGet(array = $houseVar, index = 8)){
+            $newHouseVar = $houseVar   
+        }
+        If(ArrayGet(array = $houseVar, index = 5) == "enable"){
+            $curHouseVar = $houseVar
+        }
+    }
+    If(not $newHouseVar){
+        ArraySet(array = $curHouseVar, index = 2, value = $curSelectKey)
+        CallTrigger(object = $obj1, event = "CHANGE_HOUSE_COLOR", oldHouseColor = $oldSelectKey, houseColor = $curSelectKey)
+    }Else{
+        ArraySet(array = $curHouseVar, index = 5, value = "disable")
+        ArraySet(array = $newHouseVar, index = 5, value = "enable")
+        ArraySet(array = $newHouseVar, index = 2, value = $curSelectKey)
+        CallTrigger(object = $obj1, event = "CHANGE_HOUSE", 
+            newHouse = ArrayGet(array = $newHouseVar, index = 1), houseColor = $curSelectKey)
+    }
+    ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
+}
+
+CHANGE_HOUSE_COLOR{ -- 换色
+    $curHouse = GetObjectVar(obj = $obj1, key = "house")
+    $oldBuff = GetEntityTypeBuff(entity = $curHouse, key = "fullName", value = $oldHouseColor)
+    If($oldBuff){
+        RemoveEntityBuff(entity = $curHouse, buff = $oldBuff)
+    }
+    AddEntityBuff(entity = $curHouse, cfg = $houseColor) -- 通过buff换skin
+}
+
+CHANGE_HOUSE{ -- 换房子/存档
+    $region = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "region")
+    ------------------------------------------ 改变房子(actor)，直接杀掉原来的，新建新的
+    CallTrigger(object = $obj1, event = "REMOVE_HOUSE_OUTSIDE")
+    ShowTip(entity = $obj1, tipType = 1, textKey = "house_change")
+
+    CallTrigger(object = $obj1, event = "CREATE_HOUSE_OUTSIDE", region = $region, houseCfg = $newHouse, houseColor = $houseColor)
+}
+
+
+
+-------------------------------------- ui/btn/event
+HOUSE_TAB_EVENT{
+    Test("---------HOUSE_TAB_EVENT")
+    If(not $key or "0" == $key){
+        Test("--------- u need buy")
+        ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
+        $listInfoTb = [
+            {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", text = "xxxxx", context = {money = 100, houseCfg = "myplugin/house_default"}},
+            {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", text = "yyyyy", context = {money = 200, houseCfg = "myplugin/house_default"}},
+        ]
+        $btnList = [
+            {text = "ui_cancle", trigger = "CANCLE_BUY_HOUSE"},
+            {text = "ui_sure", trigger = "SURE_BUY_HOUSE"}
+        ]
+        $infoTb = {
+            titleTb = {text = "ui_house_store"},
+            listInfo = {
+                infoTb = $listInfoTb
+            },
+            btnInfo = {btnList = $btnList}
+        }
+        ShowGenericListDisplayBox3(entity = $obj1, infoTb = $infoTb)
+        Return()
+    }
+    Test("--------- u need show")
+    $curSelectHouse = nil
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    Foreach(array = $houseVars, key = "houseVar"){
+        If(ArrayGet(array = $houseVar, index = 8) == $key){
+            $curSelectHouse = $houseVar
+            Break()
+        }
+    }
+    If(not $curSelectHouse){
+        Return()
+    }
+    -- color
+    $selectGvInfo = {}
+    $worldAllColor = GetWorldVar(key = "allColor")
+    $curHouseColor = GetEntityCfg(fullName = ArrayGet(array = $curSelectHouse, index = 1), key = "allColor")
+    Foreach(array = $curHouseColor, key = "entity_color"){
+        Foreach(array = $worldAllColor, key = "world_color"){
+            If(ArrayGet(array = $entity_color, index = 1) == ArrayGet(array = $world_color, index = 1)){
+                ArrayAppend(array = $selectGvInfo, value = {
+                    rightImg = ArrayGet(array = $world_color, index = 3),
+                    leftImg = ArrayGet(array = $entity_color, index = 2),
+                    key = ArrayGet(array = $world_color, index = 2),
+                    curSelect = ArrayGet(array = $world_color, index = 2) == ArrayGet(array = $curSelectHouse, index = 2)
+                        and true or false
+                })
+            }
+        }
+    }
+    -- btn
+    $btnList = [
+        {text = "ui_house_sell_house", trigger = "SELL_HOUSE", context = { houseKey = $key} },
+        {text = "ui_house_use_house", trigger = "UPDATE_HOUSE", context = { houseKey = $key} }
+    ]
+    $infoTb = {
+        uiWin = "genericListDisplayBox2",
+        infoTb = {
+            upperLayerKey = $key,
+            titleTb = {text = ArrayGet(array = $houseVar, index = 6), trigger = "EDIT_HOUSE_NAME"},
+            selectInfo = {
+                selectTitleText = "ui_house_choice_color",
+                selectButtomText = ArrayGet(array = $houseVar, index = 7),
+                selectGvInfo = $selectGvInfo
+            },
+            btnInfo = {
+                btnType = 2,
+                btnList = $btnList
+            }
+        }
+    }
+    ShowGenericListDisplayBox(entity = $obj1, infoTb = $infoTb, isOpenChild = true)
+}
+
+EDIT_HOUSE_NAME{
+    Test("EDIT_HOUSE_NAME")
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    Foreach(array = $houseVars, key = "houseVar"){
+        If(ArrayGet(array = $houseVar, index = 8) == $upperLayerKey){
+            $curSelectHouse = $houseVar
+            Break()
+        }
+    }
+}
+
+CANCLE_BUY_HOUSE{
+    ShowGenericListDisplayBox3(entity = $obj1, closeWin = true)
+}
+
+SURE_BUY_HOUSE{
+    Test("SURE_BUY_HOUSE",$houseCfg, $money)
+    If(not $houseCfg){
+        --此处判断是否购买失败，失败直接返回
+        ShowTip(entity = $obj1, tipType = 1, textKey = "ui_buy_failure")
+        Return()
+    }
+
+    -------------
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    $houseVar = Table([ -- 购买成功后拼接一个新的房子数据放进entity的houseVars中
+        $houseCfg,
+        GetEntityCfg(fullName = $houseCfg, key = "defaultColor") or "",
+        [],
+        [],
+        "disable",
+        "",
+        "",
+        ""
+    ])
+    -------------
+
+    ShowTip(entity = $obj1, tipType = 1, textKey = "ui_buy_success")
+    ShowGenericListDisplayBox3(entity = $obj1, closeWin = true)
+}
+
+SELL_HOUSE{
+    Test("SELL_HOUSE",$houseKey)
+    $curSelectHouse = nil
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    Foreach(array = $houseVars, key = "houseVar"){
+        If(ArrayGet(array = $houseVar, index = 8) == $houseKey){
+            $curSelectHouse = $houseVar
+            Break()
+        }
+    }
+    If(not $curSelectHouse){
+        Return()
+    }
+    -- showImage
+    $worldAllColor = GetWorldVar(key = "allColor")
+    $curHouseColor = GetEntityCfg(fullName = ArrayGet(array = $curSelectHouse, index = 1), key = "allColor")
+    Foreach(array = $curHouseColor, key = "entity_color"){
+        Foreach(array = $worldAllColor, key = "world_color"){
+            If(ArrayGet(array = $world_color, index = 2) == ArrayGet(array = $curSelectHouse, index = 2) and 
+                ArrayGet(array = $world_color, index = 1) == ArrayGet(array = $entity_color, index = 1)){
+                Test(ArrayGet(array = $world_color, index = 2),ArrayGet(array = $curSelectHouse, index = 2))
+                $showImage = ArrayGet(array = $entity_color, index = 2)
+                Break()
+            }
+        }
+    }
+    -- showTextTb
+    $showTextTb = {textWeightList = [
+        {keyText = "ui_house_sell_house_money", valueText = "123456678"},
+        {keyText = "ui_house_sell_house_type", valueText = "yesssssssssssss"}
+    ]}
+    -- btn
+    $btnList = [
+        {text = "ui_sure", trigger = "SELL_HOUSE_SURE", context = { houseKey = $houseKey} },
+        {text = "ui_cancle", trigger = "HOUSE_TAB_EVENT", context = { key = $houseKey} }
+    ]
+    $infoTb = {
+        uiWin = "genericShowPage",
+        infoTb = {
+            upperLayerKey = $houseKey,
+            titleTb = {text = ArrayGet(array = $curSelectHouse, index = 6)},
+            showImage = $showImage,
+            showTextTb = $showTextTb,
+            btnInfo = {
+                btnType = 2,
+                btnList = $btnList
+            }
+        }
+    }
+    ShowGenericListDisplayBox(entity = $obj1, infoTb = $infoTb, isOpenChild = true)
+}
+
+SELL_HOUSE_SURE{
+    $curSelectHouse = nil
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    Test($houseVars ,ArraySize(array = $houseVars))
+    If(ArraySize(array = $houseVars) <= 1){ -- 最后一套房不能出售
+        ShowTip(entity = $obj1, tipType = 1, textKey = "ui_house_sell_cant_sell")
+        Return()
+    }
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        If(ArrayGet(array = ArrayGet(array = $houseVars, index = $index), index = 8) == $houseKey){
+            $curSelectHouse = $houseVar
+            ArrayRemove(array = $houseVars, index = $index)
+            Break()
+        }
+    }
+    $newHouseVar = ArrayGet(array = $houseVars, index = 1)
+    ArraySet(array = $newHouseVar, index = 5, value = "enable")
+    CallTrigger(object = $obj1, event = "CHANGE_HOUSE", 
+            newHouse = ArrayGet(array = $newHouseVar, index = 1), houseColor = ArrayGet(array = $newHouseVar, index = 2))
+    --- 出售成功，给玩家钱
+    ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
+}
+
+BUY_STORE{ -- TODO UPDATE
+    Test("BUY_STORE",$storeKey,$cfg,"---------购买后直接出现在场景里的逻辑 createNpc..xxx")
+    $dec = CreateNpc(pos = GetMapInitPos(map =  GetEntityMap(entity = $obj1)), 
+        map = GetEntityMap(entity = $obj1), cfgName = $cfg)
+
+}
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------ 分割线
 
 ADD_MONEY
 {  
