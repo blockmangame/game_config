@@ -376,9 +376,8 @@ SELL_HOUSE_SURE{
 
 BUY_STORE{ -- TODO UPDATE
     Test("BUY_STORE",$storeKey,$cfg,"---------购买后直接出现在场景里的逻辑 createNpc..xxx")
-    $dec = CreateNpc(pos = GetMapInitPos(map =  GetEntityMap(entity = $obj1)), 
-        map = GetEntityMap(entity = $obj1), cfgName = $cfg)
-
+    $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
+    CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg)
 }
 
 
