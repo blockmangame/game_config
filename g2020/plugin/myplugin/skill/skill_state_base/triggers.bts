@@ -11,13 +11,15 @@ SKILL_CAST(debug = false) {
         $str = ArrayGet(array = $locations, index = $obj1.regionIdx)
     }
 
-    SetGuidePostion(entity = $obj1)
-    AddSkill(entity = $obj1, name = "myplugin/close_gps")
-
     $reg = GetRegionByName(
         map = GetEntityMap(entity = $obj1),
         name = $str 
     )
+    If(not $reg)
+    {
+        Return()
+    }
+
     SetGuidePostion(
         pos = GetRegionCfgVar(
             region = $reg, 
@@ -25,4 +27,5 @@ SKILL_CAST(debug = false) {
         ), 
         entity = $obj1
     )
+    AddSkill(entity = $obj1, name = "myplugin/close_gps")
 }

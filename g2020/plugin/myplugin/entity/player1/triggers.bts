@@ -543,6 +543,11 @@ FUNC_GENERATE_B_STATE
         name = $locStr 
     )
 
+    If(not $reg)
+    {
+        Return()
+    }
+
     If(IfEntityInArea(
         region = {
             min = GetRegionMin(region = $reg),
