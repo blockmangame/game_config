@@ -1,0 +1,63 @@
+{
+    "canAttack": false,
+    "canBreak": false,
+    "initPos": {
+        "x": 1641,
+        "y": 14,
+        "z": -574
+    },
+    "region": {
+        "house_default_inside_map_wall": {
+            "regionCfg": "myplugin/house_default_inside_map_wall",
+            "box": {
+                "min": {
+                    "x": 1620,
+                    "y": 13,
+                    "z": -574
+                },
+                "max": {
+                    "x": 1640,
+                    "y": 13,
+                    "z": -560
+                }
+            }
+        },
+        "house_default_inside_map_floor": {
+            "regionCfg": "myplugin/house_default_inside_map_floor",
+            "box": {
+                "min": {
+                    "x": 1620,
+                    "y": 13,
+                    "z": -594
+                },
+                "max": {
+                    "x": 1621,
+                    "y": 19,
+                    "z": -574
+                }
+            }
+        }
+    },
+    "entity": [
+        {
+            "cfg": "myplugin/house_default_inside_door",
+            "pitch": 0,
+            "pos": {
+                "x": 1643,
+                "y": 13,
+                "z": -574
+            },
+            "ry": 0
+        },
+        {
+            "cfg": "myplugin/test_open_dec_store_entity",
+            "pitch": 0,
+            "pos": {
+                "x": 1648,
+                "y": 13,
+                "z": -574
+            },
+            "ry": 0
+        }
+    ]
+}

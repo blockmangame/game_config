@@ -1,0 +1,26 @@
+ENTITY_ENTER
+{
+}
+
+ENTITY_CLICK{
+    If((not IsPlayer(entity = $obj2)) or 
+        (GetObjectID(object = GetObjectVar(obj = GetObjectVar(obj = $obj2, key = "house"), key = "mail")) ~= GetObjectID(object = $obj1))){
+        Test(" get out ! ")
+        Return()
+    }
+    Test(" open the mail ! ")
+    ------------------------------------------ 打开换色换房子操作界面/存档
+    -- infoTb是拼出来的
+    $btnList = [{text = "ui_house_get_more", trigger = "HOUSE_TAB_EVENT", context = { key = "0" }}]
+    $houseVars = GetObjectVar(obj = $obj2, key = "houseVars")
+    Foreach(array = $houseVars, key = "houseVar"){
+        ArraySet(array = $btnList, index = ArraySize(array = $btnList) + 1, value = 
+            {text = ArrayGet(array = $houseVar, index = 6), trigger = "HOUSE_TAB_EVENT", context = { key = ArrayGet(array = $houseVar, index = 8) }})
+    }
+    $infoTb = {
+        titleTb = {text = "ui_house_my_home"},
+        btnInfo = {btnList = $btnList}
+    }
+    ShowGenericListDisplayBox(entity = $obj2, infoTb = $infoTb)
+    CallTrigger(object = $obj1, event = "HOUSE_TAB_EVENT", key = ArrayGet(array = ArrayGet(array = $houseVars, index = 1), index = 8))
+}

@@ -70,3 +70,108 @@ FUNC_CHANGE_STATE
     )
 }
 
+SHOW_SELECT_ROLE
+{
+    ShowNotice(
+        buttonType = 2,
+        content = "Do you want be a adult ?",
+        eventYes = "CHANGE_PLAYER_SCALE_ADULT",
+        eventNo = "CHANGE_PLAYER_SCALE_CHILD",
+        entity = $obj1,
+        textP1 = "Hahahaha",
+        tittleKey = "Do you want be adult"
+    )
+}
+
+
+REQUEST_JOIN_FAMILY_YES
+{
+    If(not $obj1.requestFamilyPlayer)
+    {
+        Return()
+    }
+
+    $teamID = GetEntityTeam(entity = $obj1)
+    If(not $teamID or $teamID == 0)
+    {
+        Return()
+    }
+
+    $playerCount = GetTeamInfo(teamId = $teamID, key = "playerCount")
+    If(not $playerCount or $playerCount >= 4)
+    {
+        Return()
+    }
+
+    SetEntityTeam(entity = $obj1.requestFamilyPlayer, teamId = $teamID)
+    ShowTip(entity = $obj1.requestFamilyPlayer, tipType = 2,textKey = "You Are In Family", time = 40)
+    $obj1.requestFamilyPlayer = nil
+}
+
+REQUEST_JOIN_FAMILY_NO
+{
+    If($obj1.requestFamilyPlayer)
+    {
+        ShowTip(entity = $obj1.requestFamilyPlayer, tipType = 2,textKey = "Sorry, I Can't Accept You Request.", time = 40)
+    }
+
+    $obj1.requestFamilyPlayer = nil
+}
+
+INVITE_JOIN_FAMILY_YES
+{
+    If(not $obj1.inviteFamilyPlayer)
+    {
+        Return()
+    }
+
+    $teamID = GetEntityTeam(entity = $obj1.inviteFamilyPlayer)
+    If(not $teamID or $teamID == 0)
+    {
+        Return()
+    }
+
+    $playerCount = GetTeamInfo(teamId = $teamID, key = "playerCount")
+    If(not $playerCount or $playerCount >= 4)
+    {
+        Return()
+    }
+
+    SetEntityTeam(entity = $obj1, teamId = $teamID)
+    ShowTip(entity = $obj1, tipType = 2,textKey = "You Are In Family", time = 40)
+    $obj1.inviteFamilyPlayer = nil
+}
+
+INVITE_JOIN_FAMILY_NO
+{
+    If($obj1.inviteFamilyPlayer)
+    {
+        ShowTip(entity = $obj1.inviteFamilyPlayer, tipType = 2,textKey = "Sorry, I Don't Want Join Family.", time = 40)
+    }
+
+    $obj1.inviteFamilyPlayer = nil
+}
+
+CHANGE_PLAYER_SCALE_ADULT
+{
+    If($obj1.scaleBuff)
+    {
+        RemoveEntityBuff(entity = $obj1, buff = $obj1.scaleBuff)
+        $obj1.scaleBuff = nil
+    }
+
+    $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
+    $obj1.role = @adult
+}
+
+CHANGE_PLAYER_SCALE_CHILD
+{
+    If($obj1.scaleBuff)
+    {
+        RemoveEntityBuff(entity = $obj1, buff = $obj1.scaleBuff)
+        $obj1.scaleBuff = nil
+    }
+
+    $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
+    $obj1.role = @child
+}
