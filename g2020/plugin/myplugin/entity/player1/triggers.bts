@@ -446,19 +446,6 @@ QUIT_FAMILY
     }
 }
 
-FUNC_GENERATE_STATE
-{
-    $keyStr = Concat(p1 = "is", p2 = $stateName)
-    If(GetObjectVar(obj = $obj1, key = $keyStr) && ($stateName ~= "region" || $obj1.regionRTime > 0))
-    {
-        Return()
-    }
-    SetGuidePostion(entity = $obj1)
-    SetObjectVar(obj = $obj1, key = $keyStr, value = true)
-    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
-    AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
-}
-
 INTERACTION_CLAP { --拍手 小孩和小孩
     If($obj2.role == @child && $obj1.role == @child) {
         CastSkill(skill = "myplugin/action_clap", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
@@ -529,51 +516,98 @@ ENTITY_REMOVE_INTERACTION {
     }
 }
 
+FUNC_GENERATE_A_STATE
+{
+    $keyStr = Concat(p1 = "is", p2 = $stateName)
+    If(GetObjectVar(obj = $obj1, key = $keyStr))
+    {
+        Return()
+    }
+    SetObjectVar(obj = $obj1, key = $keyStr, value = true)
+    AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
+}
+
+FUNC_GENERATE_B_STATE
+{
+    $obj1.isregion = true
+    $skillName = "myplugin/skill_state_region"
+    $locations = GetSkillVar(fullName = $skillName, key = "locations")
+    $locStr = ArrayGet(array = $locations, index = $obj1.regionIdx)
+
+    SetGuidePostion(entity = $obj1)
+    AddSkill(entity = $obj1, name = $skillName)
+    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+
+    $reg = GetRegionByName(
+        map = GetEntityMap(entity = $obj1),
+        name = $locStr 
+    )
+
+    If(IfEntityInArea(
+        region = {
+            min = GetRegionMin(region = $reg),
+            max = GetRegionMax(region = $reg)
+        }, entity = $obj1)
+    )
+    {
+        CallTrigger(
+            opt = "INNER",
+            object = $obj1,
+            key = GetRegionKey(region = $reg),
+            event = "FUNC_REGION_STATE_OPERATION",
+            type = GetRegionCfgVar(region = $reg, key = "stateType"),
+            duration = GetRegionCfgVar(region = $reg, key = "duration")
+        )
+    }
+}
+
 FUNC_REGION_STATE_OPERATION 
 {
     If($type == "B" && $obj1.isregion)
     {
-        $location = ArrayGet(
-            array = GetSkillVar(
-                fullName = "myplugin/skill_state_region",
-                key = "locations"
-            ),
-            index = $obj1.regionIdx
-        )
-        If($location ~= $key)
+        If($opt ~= "INNER")
         {
-            Return()
-        }
-
-        If($opt == "ENTER")
-        {
-            If($obj1.regionRTime == 0)
+            $location = ArrayGet(
+                array = GetSkillVar(
+                    fullName = "myplugin/skill_state_region",
+                    key = "locations"
+                ),
+                index = $obj1.regionIdx
+            )
+            If($location ~= $key)
             {
-                $obj1.regionRTime = $duration
+                Return()
             }
-
-            $obj1.regionSTime = GetTime()
-            ShowProgressFollowObj(
-                isOpen = true,
-                entity = $obj1,
-                name = $location,
-                totalTime = $duration * 20,
-                rTime = $obj1.regionRTime * 20,
-            )
-
-            $obj1.REGION_TIMER = StartTimer(
-                rep = false,
-                object = $obj1,
-                time = $obj1.regionRTime * 20,
-                event = "FUNC_REGION_STATE_RELEASE",
-            )
         }
-        Else
+
+        If($opt == "LEAVE")
         {
             StopTimer(timer = $obj1.REGION_TIMER)
             ShowProgressFollowObj(entity = $obj1, isOpen = false)
             $obj1.regionRTime = $obj1.regionRTime - GetTime() + $obj1.regionSTime
+            Return()
         }
+
+        If($obj1.regionRTime == 0)
+        {
+            $obj1.regionRTime = $duration
+        }
+        $obj1.regionSTime = GetTime()
+
+        ShowProgressFollowObj(
+            isOpen = true,
+            pgName = $key,
+            entity = $obj1,
+            totalTime = $duration * 20,
+            rTime = $obj1.regionRTime * 20,
+        )
+
+        $obj1.REGION_TIMER = StartTimer(
+            rep = false,
+            object = $obj1,
+            time = $obj1.regionRTime * 20,
+            event = "FUNC_REGION_STATE_RELEASE",
+        )
     }
 }
 
