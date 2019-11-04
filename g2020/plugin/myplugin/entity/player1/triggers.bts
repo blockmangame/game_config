@@ -641,3 +641,20 @@ INVITE_JOIN_FAMILY
 
     ShowBubbleMsg(entity = $obj2, textKey = "Do you want Join My Family")
 }
+
+STORE_ITEM_STATUS_CHANGE {
+    If($item.storeId == 2)
+    {
+        Foreach(array = $data, key = "dance")
+        {
+
+        }
+    }
+
+
+
+
+    Test($data)
+    Test($item)
+    Test($status)
+}
