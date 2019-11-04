@@ -19,7 +19,7 @@ FUNC_GENERATE_STATE_STARTTIME
             rep = false,
             timeArr = $timeInfo,
             stateName = $stateName,
-            time = $cdTime * 60 * 20,
+            time = ($cdTime * 1200) // 1,
             event = "FUNC_CHANGE_STATE",
             size = ArraySize(array = $timeInfo),
         )
@@ -60,7 +60,7 @@ FUNC_CHANGE_STATE
         column = $column,
         timeArr = $timeArr,
         stateName = $stateName, 
-        time = $cdTime * 60 * 20
+        time = ($cdTime * 1200) // 1
     )
 }
 
