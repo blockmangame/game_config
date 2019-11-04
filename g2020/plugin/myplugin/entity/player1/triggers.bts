@@ -543,12 +543,7 @@ FUNC_GENERATE_B_STATE
         name = $locStr 
     )
 
-    If(not $reg)
-    {
-        Return()
-    }
-
-    If(IfEntityInArea(
+    If($reg && IfEntityInArea(
         region = {
             min = GetRegionMin(region = $reg),
             max = GetRegionMax(region = $reg)
@@ -610,24 +605,73 @@ FUNC_REGION_STATE_OPERATION
         $obj1.REGION_TIMER = StartTimer(
             rep = false,
             object = $obj1,
-            time = $obj1.regionRTime * 20,
-            event = "FUNC_REGION_STATE_RELEASE",
+            stateName = "region",
+            time = ($obj1.regionRTime * 20) // 1,
+            event = "FUNC_STATE_RELEASE_AND_REWARD",
         )
     }
 }
 
-FUNC_REGION_STATE_RELEASE
+FUNC_STATE_ADD_INTERACTLIST
 {
-    $obj1.regionRTime = 0
-    $obj1.isregion = false
+    Foreach(array = @Generate_State_List, key = "stateName")
+    {
+        If(not GetObjectVar(obj = $obj1, key = Concat(p1 = "is", p2 = $stateName)))
+        {
+            Continue()
+        }
+        $listName = Concat(p1 = $stateName, p2 = "InteractList")
+        If(not GetObjectVar(obj = $obj1, key = $listName))
+        {
+            SetObjectVar(obj = $obj1, key = $listName, value = [])
+        }
+        If(not ArrayFind(array = GetObjectVar(obj = $obj1, key = $listName), value = $targetID))
+        {
+            ArrayAppend(array = GetObjectVar(obj = $obj1, key = $listName), value = $targetID)
+        }
+    }
+}
 
-    SetGuidePostion(entity = $obj1)
+FUNC_STATE_RELEASE_AND_REWARD
+{
+    $hadState = Concat(p1 = "is", p2 = $stateName)
+    If(not GetObjectVar(obj = $obj1, key = $hadState))
+    {
+        Return()
+    }
+    SetObjectVar(obj = $obj1, key = $hadState, value = false)
+
+    If($stateName == "region")
+    {
+        $obj1.regionRTime = 0
+    }
+
+    $skillName = Concat(p1 = "myplugin/skill_state_", p2 = $stateName)
     RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
-    RemoveSkill(entity = $obj1, name = "myplugin/skill_state_region")
     ShowProgressFollowObj(entity = $obj1, isOpen = false)
-    Test("FUNC_REGION_STATE_RELEASE")
+    RemoveSkill(entity = $obj1, name = $skillName)
+    SetGuidePostion(entity = $obj1)
 
-    --todo 区域状态奖励...
+    $rewardSelf = GetSkillVar(fullName = $skillName, key = "rewardSelf")
+    $rewardOther = GetSkillVar(fullName = $skillName, key = "rewardOther")
+    AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardSelf)
+
+    $listName = Concat(p1 = $stateName, p2 = "InteractList")
+    If(not GetObjectVar(obj = $obj1, key = $listName))
+    {
+        Return()
+    }
+    Foreach(array = GetObjectVar(obj = $obj1, key = $listName), key = "objID")
+    {
+        $player = GetObject(objID = $objID)
+        If(not IsPlayer(entity = $player))
+        {
+            Continue()
+        }
+        AddCurrency(coinName = "green_currency", entity = $player, count = $rewardOther)
+    }
+    
+    SetObjectVar(obj = $obj1, key = $listName, value = nil)
 }
 
 REQUEST_JOIN_FAMILY
