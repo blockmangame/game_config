@@ -7,46 +7,40 @@ GAME_INIT
 
 FUNC_GENERATE_STATE_STARTTIME
 {
-    $curMinute = GetMinuteOfHour(time = GetTime())
     ForLoop(from = 1, to = ArraySize(array = @Generate_State_List), key = "idx")
     {
         $stateName = ArrayGet(array = @Generate_State_List, index = $idx)
         $keyStr = Concat(p1 = "myplugin/skill_state_", p2 = $stateName)
         $timeInfo = GetSkillVar(fullName = $keyStr, key = "generateTime")
 
-        $timeArr = []
-        ForLoop(from = 1, to = ArraySize(array = $timeInfo), key = "col")
-        {
-            $time = ArrayGet(array = $timeInfo, index = $col)
-            $newTime = ($curMinute + $time) % 60
-            ArrayAppend(array = $timeArr, value = $newTime)
-        }
-
         $cdTime = ArrayGet(array = $timeInfo, index = 1)
         StartTimer(
             column = 1,
             rep = false,
-            timeArr = $timeArr,
+            timeArr = $timeInfo,
             stateName = $stateName,
             time = $cdTime * 60 * 20,
             event = "FUNC_CHANGE_STATE",
-            size = ArraySize(array = $timeArr),
+            size = ArraySize(array = $timeInfo),
         )
     }
-
 }
 
 FUNC_CHANGE_STATE
 {
     Foreach(array = GetAllPlayers(), key = "player"){
-        If($stateName == "region" && $player.regionRTime == 0)
+        If($stateName ~= "region")
+        {
+            CallTrigger(object = $player, event = "FUNC_GENERATE_A_STATE", stateName = $stateName)
+        }
+        ElseIf($player.regionRTime == 0)
         {
             $player.regionIdx = $column
+            CallTrigger(object = $player, event = "FUNC_GENERATE_B_STATE")
         }
-        CallTrigger(object = $player, event = "FUNC_GENERATE_STATE", stateName = $stateName)
 	}
 
-    $curTime = GetMinuteOfHour(time = GetTime())
+    $curTime = ArrayGet(array = $timeArr, index = $column)
     $column = $column + 1
     If($column > $size)
     {

@@ -376,9 +376,8 @@ SELL_HOUSE_SURE{
 
 BUY_STORE{ -- TODO UPDATE
     Test("BUY_STORE",$storeKey,$cfg,"---------购买后直接出现在场景里的逻辑 createNpc..xxx")
-    $dec = CreateNpc(pos = GetMapInitPos(map =  GetEntityMap(entity = $obj1)), 
-        map = GetEntityMap(entity = $obj1), cfgName = $cfg)
-
+    $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
+    CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg)
 }
 
 
@@ -445,19 +444,6 @@ QUIT_FAMILY
         SetEntityTeam(entity = $obj1, teamId = 0)
         ShowTip(entity = $obj1, tipType = 2,textKey = "Quit Family Success", time = 40)
     }
-}
-
-FUNC_GENERATE_STATE
-{
-    $keyStr = Concat(p1 = "is", p2 = $stateName)
-    If(GetObjectVar(obj = $obj1, key = $keyStr) && ($stateName ~= "region" || $obj1.regionRTime > 0))
-    {
-        Return()
-    }
-    SetGuidePostion(entity = $obj1)
-    SetObjectVar(obj = $obj1, key = $keyStr, value = true)
-    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
-    AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
 }
 
 INTERACTION_CLAP { --拍手 小孩和小孩
@@ -530,51 +516,103 @@ ENTITY_REMOVE_INTERACTION {
     }
 }
 
+FUNC_GENERATE_A_STATE
+{
+    $keyStr = Concat(p1 = "is", p2 = $stateName)
+    If(GetObjectVar(obj = $obj1, key = $keyStr))
+    {
+        Return()
+    }
+    SetObjectVar(obj = $obj1, key = $keyStr, value = true)
+    AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
+}
+
+FUNC_GENERATE_B_STATE
+{
+    $obj1.isregion = true
+    $skillName = "myplugin/skill_state_region"
+    $locations = GetSkillVar(fullName = $skillName, key = "locations")
+    $locStr = ArrayGet(array = $locations, index = $obj1.regionIdx)
+
+    SetGuidePostion(entity = $obj1)
+    AddSkill(entity = $obj1, name = $skillName)
+    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+
+    $reg = GetRegionByName(
+        map = GetEntityMap(entity = $obj1),
+        name = $locStr 
+    )
+
+    If(not $reg)
+    {
+        Return()
+    }
+
+    If(IfEntityInArea(
+        region = {
+            min = GetRegionMin(region = $reg),
+            max = GetRegionMax(region = $reg)
+        }, entity = $obj1)
+    )
+    {
+        CallTrigger(
+            opt = "INNER",
+            object = $obj1,
+            key = GetRegionKey(region = $reg),
+            event = "FUNC_REGION_STATE_OPERATION",
+            type = GetRegionCfgVar(region = $reg, key = "stateType"),
+            duration = GetRegionCfgVar(region = $reg, key = "duration")
+        )
+    }
+}
+
 FUNC_REGION_STATE_OPERATION 
 {
     If($type == "B" && $obj1.isregion)
     {
-        $location = ArrayGet(
-            array = GetSkillVar(
-                fullName = "myplugin/skill_state_region",
-                key = "locations"
-            ),
-            index = $obj1.regionIdx
-        )
-        If($location ~= $key)
+        If($opt ~= "INNER")
         {
-            Return()
-        }
-
-        If($opt == "ENTER")
-        {
-            If($obj1.regionRTime == 0)
+            $location = ArrayGet(
+                array = GetSkillVar(
+                    fullName = "myplugin/skill_state_region",
+                    key = "locations"
+                ),
+                index = $obj1.regionIdx
+            )
+            If($location ~= $key)
             {
-                $obj1.regionRTime = $duration
+                Return()
             }
-
-            $obj1.regionSTime = GetTime()
-            ShowProgressFollowObj(
-                isOpen = true,
-                entity = $obj1,
-                name = $location,
-                totalTime = $duration * 20,
-                rTime = $obj1.regionRTime * 20,
-            )
-
-            $obj1.REGION_TIMER = StartTimer(
-                rep = false,
-                object = $obj1,
-                time = $obj1.regionRTime * 20,
-                event = "FUNC_REGION_STATE_RELEASE",
-            )
         }
-        Else
+
+        If($opt == "LEAVE")
         {
             StopTimer(timer = $obj1.REGION_TIMER)
             ShowProgressFollowObj(entity = $obj1, isOpen = false)
             $obj1.regionRTime = $obj1.regionRTime - GetTime() + $obj1.regionSTime
+            Return()
         }
+
+        If($obj1.regionRTime == 0)
+        {
+            $obj1.regionRTime = $duration
+        }
+        $obj1.regionSTime = GetTime()
+
+        ShowProgressFollowObj(
+            isOpen = true,
+            pgName = $key,
+            entity = $obj1,
+            totalTime = $duration * 20,
+            rTime = $obj1.regionRTime * 20,
+        )
+
+        $obj1.REGION_TIMER = StartTimer(
+            rep = false,
+            object = $obj1,
+            time = $obj1.regionRTime * 20,
+            event = "FUNC_REGION_STATE_RELEASE",
+        )
     }
 }
 
