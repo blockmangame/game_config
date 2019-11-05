@@ -422,28 +422,18 @@ ADD_MONEY
     $obj1.isReadyReward = true
 }
 
-CREATE_FAMILY
-{
-    If(IsPlayer(entity = $obj1))
-    {
-        $familyId = GetEntityTeam(entity = $obj1)
-        If($familyId and $familyId ~= 0)
-        {
-            Return()
-        }
-        SetEntityTeam(entity = $obj1, teamId = @familyIndex)
-        @familyIndex = @familyIndex + 1
-        ShowTip(entity = $obj1, tipType = 2,textKey = "Create Family Success", time = 40)
-    }
-}
 
-QUIT_FAMILY
+FUNC_GENERATE_STATE
 {
-    If(IsPlayer(entity = $obj1))
+    $keyStr = Concat(p1 = "is", p2 = $stateName)
+    If(GetObjectVar(obj = $obj1, key = $keyStr) && ($stateName ~= "region" || $obj1.regionRTime > 0))
     {
-        SetEntityTeam(entity = $obj1, teamId = 0)
-        ShowTip(entity = $obj1, tipType = 2,textKey = "Quit Family Success", time = 40)
+        Return()
     }
+    SetGuidePostion(entity = $obj1)
+    SetObjectVar(obj = $obj1, key = $keyStr, value = true)
+    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+    AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
 }
 
 INTERACTION_CLAP { --拍手 小孩和小孩
@@ -674,6 +664,31 @@ FUNC_STATE_RELEASE_AND_REWARD
     SetObjectVar(obj = $obj1, key = $listName, value = nil)
 }
 
+CREATE_FAMILY
+{
+    If(IsPlayer(entity = $obj1))
+    {
+        $familyId = GetEntityTeam(entity = $obj1)
+        If($familyId and $familyId ~= 0)
+        {
+            Return()
+        }
+        SetEntityTeam(entity = $obj1, teamId = @familyIndex)
+        @familyIndex = @familyIndex + 1
+        ShowTip(entity = $obj1, tipType = 2,textKey = "Create Family Success", time = 40)
+    }
+}
+
+QUIT_FAMILY
+{
+    If(IsPlayer(entity = $obj1))
+    {
+        SetEntityTeam(entity = $obj1, teamId = 0)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "Quit Family Success", time = 40)
+        CallTrigger(event = "INIT_TEAM_UI", obj1 = $obj1, show = false)
+    }
+}
+
 REQUEST_JOIN_FAMILY
 {
     $targetFamilyID = GetEntityTeam(entity = $obj1)
@@ -722,4 +737,41 @@ INVITE_JOIN_FAMILY
     )
 
     ShowBubbleMsg(entity = $obj2, textKey = "Do you want Join My Family")
+}
+
+INIT_TEAM_UI
+{
+    $title = {
+        name = "My Family Hahaha"
+    }
+
+    $content = {
+        showHeadPic = true,
+        showGender = true,
+        showScale = true,
+        showNickName = true
+    }
+    
+    $buttons = [
+        {
+            event = "QUIT_FAMILY",
+            normalImage = "set:new_gui_task.json image:yellow_btn.png",
+            pushedImage = "set:new_gui_task.json image:yellow_btn.png",
+            name = "Quit Family"
+        }
+    ]
+
+    $closeBtn = {
+        disableClose = false
+    }
+
+
+    $info = {
+        title = $title,
+        content = $content,
+        buttons = $buttons,
+        closeBtn = $closeBtn
+    }
+
+    ShowTeam(entity = $obj1, show = $show, info = $info)   
 }
