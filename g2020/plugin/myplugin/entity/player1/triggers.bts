@@ -186,23 +186,25 @@ HOUSE_TAB_EVENT{
     Test("---------HOUSE_TAB_EVENT")
     If(not $key or "0" == $key){
         Test("--------- u need buy")
-        ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
         $listInfoTb = [
-            {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", text = "xxxxx", context = {money = 100, houseCfg = "myplugin/house_default"}},
-            {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", text = "yyyyy", context = {money = 200, houseCfg = "myplugin/house_default"}},
+            {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", text = "xxxxx", 
+                btnShowText = 100, context = {money = 100, houseCfg = "myplugin/house_default"}},
+            {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", text = "yyyyy", 
+                btnShowText = 200, context = {money = 200, houseCfg = "myplugin/house_default"}},
         ]
-        $btnList = [
-            {text = "ui_cancle", trigger = "CANCLE_BUY_HOUSE"},
-            {text = "ui_sure", trigger = "SURE_BUY_HOUSE"}
-        ]
-        $infoTb = {
-            titleTb = {text = "ui_house_store"},
-            listInfo = {
-                infoTb = $listInfoTb
-            },
-            btnInfo = {btnList = $btnList}
+        $childInfo = {
+            uiWin = "genericListDisplayBox3",
+            infoTb = {
+                listInfo = {
+                    infoTb = $listInfoTb
+                },
+                btnInfo = {
+                    btnText = "ui_house_buy_house",
+                    btnTrigger = "SURE_BUY_HOUSE"
+                }
+            }
         }
-        ShowGenericListDisplayBox3(entity = $obj1, infoTb = $infoTb)
+        ShowGenericListDisplayBox(entity = $obj1, infoTb = $childInfo, isOpenChild = true)
         Return()
     }
     Test("--------- u need show")
@@ -269,10 +271,6 @@ EDIT_HOUSE_NAME{
     }
 }
 
-CANCLE_BUY_HOUSE{
-    ShowGenericListDisplayBox3(entity = $obj1, closeWin = true)
-}
-
 SURE_BUY_HOUSE{
     Test("SURE_BUY_HOUSE",$houseCfg, $money)
     If(not $houseCfg){
@@ -296,7 +294,7 @@ SURE_BUY_HOUSE{
     -------------
 
     ShowTip(entity = $obj1, tipType = 1, textKey = "ui_buy_success")
-    ShowGenericListDisplayBox3(entity = $obj1, closeWin = true)
+    -- ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
 }
 
 SELL_HOUSE{
