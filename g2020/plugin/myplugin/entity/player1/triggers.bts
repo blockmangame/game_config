@@ -512,6 +512,11 @@ FUNC_GENERATE_A_STATE
         Return()
     }
     SetObjectVar(obj = $obj1, key = $keyStr, value = true)
+    SetObjectVar(
+        obj = $obj1,
+        value = nil,
+        key = Concat(p1 = $stateName, p2 = "InteractList")
+    )
     AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
 }
 
@@ -525,6 +530,7 @@ FUNC_GENERATE_B_STATE
     SetGuidePostion(entity = $obj1)
     AddSkill(entity = $obj1, name = $skillName)
     RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+    SetObjectVar(obj = $obj1, key = "regionInteractList", value = nil)
 
     $reg = GetRegionByName(
         map = GetEntityMap(entity = $obj1),
@@ -609,14 +615,21 @@ FUNC_STATE_ADD_INTERACTLIST
             Continue()
         }
         $listName = Concat(p1 = $stateName, p2 = "InteractList")
-        If(not GetObjectVar(obj = $obj1, key = $listName))
+        $interactList = GetObjectVar(obj = $obj1, key = $listName)
+        $targetID = GetObjectVar(obj = $obj1, key = "interactionObjId")
+        If(not IsPlayer(entity = GetObject(objID = $targetID)))
         {
-            SetObjectVar(obj = $obj1, key = $listName, value = [])
+            Return()
         }
-        If(not ArrayFind(array = GetObjectVar(obj = $obj1, key = $listName), value = $targetID))
+        If(not $interactList)
         {
-            ArrayAppend(array = GetObjectVar(obj = $obj1, key = $listName), value = $targetID)
+            $interactList = []
         }
+        If(not ArrayFind(array = $interactList, value = $targetID))
+        {
+            ArrayAppend(array = $interactList, value = $targetID)
+        }
+        SetObjectVar(obj = $obj1, key = $listName, value = $interactList)
     }
 }
 
@@ -642,24 +655,35 @@ FUNC_STATE_RELEASE_AND_REWARD
 
     $rewardSelf = GetSkillVar(fullName = $skillName, key = "rewardSelf")
     $rewardOther = GetSkillVar(fullName = $skillName, key = "rewardOther")
-    AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardSelf)
+    $rewardDis = GetSkillVar(fullName = $skillName, key = "rewardDis")
 
     $listName = Concat(p1 = $stateName, p2 = "InteractList")
     If(not GetObjectVar(obj = $obj1, key = $listName))
     {
+        CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardSelf)
         Return()
     }
     Foreach(array = GetObjectVar(obj = $obj1, key = $listName), key = "objID")
     {
         $player = GetObject(objID = $objID)
-        If(not IsPlayer(entity = $player))
+        If(not IsPlayer(entity = $player) || GetObjectDistance(obj1 = $obj1, obj2 = $player) > $rewardDis)
         {
             Continue()
         }
-        AddCurrency(coinName = "green_currency", entity = $player, count = $rewardOther)
+        CallTrigger(object = $player, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardOther)
     }
-    
+    CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardOther)
     SetObjectVar(obj = $obj1, key = $listName, value = nil)
+}
+
+FUNC_STATE_REWARD_AND_TIP
+{
+    AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardCount)
+    ShowRewardRollTip(
+        entity = $obj1,
+        image = "set:jail_break.json image:jail_break_currency",
+        text = Concat(p1 = "+", p2 = $rewardCount, p3 = "(照顾加成)"),
+    )
 }
 
 CREATE_FAMILY
