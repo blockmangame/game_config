@@ -24,18 +24,19 @@ CREATR_SUBSIDIARY{
     ------------------------------------------ 房子 -------houseInsideMap> 内部房子
     $map = CreateMap(name = GetConfigVar(obj = $obj1, key = "insideMap"))
     SetObjectVar(obj = $obj1, key = "houseInsideMap", value = $map)
-    CallTrigger(object = $obj1, event = "CREATR_HOUSE_INSIDE_SUBSIDIARY")
+    StartTimer(time = 1, object = $obj1, event = "CREATR_HOUSE_INSIDE_SUBSIDIARY") -- 延迟一帧是因为需要用到上一帧创建完才设置的owner
 }
 
 CREATR_HOUSE_INSIDE_SUBSIDIARY{
     $curSelectHouse = {}
-    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
+    $houseVars = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "owner"), key = "houseVars") or {}
     Foreach(array = $houseVars, key = "house"){
         If(ArrayGet(array = $house, index = 5) == "enable"){
             $curSelectHouse = $house
             Break()
         }
     }
+    Test("$curSelectHouse",$curSelectHouse)
     ------------------------------------------ 内部各区域的颜色，没有则默认颜色，vars里面取，此处的颜色是替换方块
     $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
     $allRegion = GetAllRegion(map = $map)
@@ -52,13 +53,15 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
         }
         FillBlocksInRegion(map = $map, region = $region, block = $block)
     }
+    Test("$regionColor",$regionColor)
     ------------------------------------------ 内部各个家具
     $furnishings = ArrayGet(array = $curSelectHouse, index = 3) or {}
     Foreach(array = $furnishings, key = "furnishing"){
         $npc = CreateNpc(map = $map, cfgName = ArrayGet(array = $furnishing, index = 3), 
             pos = ArrayGet(array = $furnishing, index = 1), ry = ArrayGet(array = $furnishing, index = 2))
-        SetObjectVar(obj = $furnishing, key = "furnishingId", value = ArrayGet(array = $furnishing, index = 4))
+        SetObjectVar(obj = $npc, key = "furnishingId", value = ArrayGet(array = $furnishing, index = 4))
     }
+    Test("$furnishings",$furnishings)
 }
 
 CHANGE_HOUSE_REGION_COLOR{
@@ -71,7 +74,7 @@ CHANGE_HOUSE_REGION_COLOR{
         }
     }
     $curSelectHouse = {}
-    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
+    $houseVars = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "owner"), key = "houseVars") or {}
     Foreach(array = $houseVars, key = "house"){
         If(ArrayGet(array = $house, index = 5) == "enable"){
             $curSelectHouse = $house

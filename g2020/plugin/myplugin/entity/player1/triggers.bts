@@ -37,7 +37,10 @@ ENTITY_ENTER
         $houseVars = Table([
                 "myplugin/house_default",
                 "myplugin/house_color_buff_1",
-                [],
+                [   
+                    [{x = 1648,y=13,z=-574},180,"myplugin/test_dec_entity1","ddss1","true"],
+                    [{x = 1650,y=13,z=-574},180,"myplugin/test_dec_entity2","dds2s","true"]
+                ],
                 [],
                 "enable",
                 "Sakura NeNe",
@@ -46,7 +49,12 @@ ENTITY_ENTER
             ],[
                 "myplugin/house_default",
                 "myplugin/house_color_buff_1",
-                [],
+                [
+                    [{x = 1648,y=13,z=-574},180,"myplugin/test_dec_entity1","dds3s","true"],
+                    [{x = 1650,y=13,z=-574},180,"myplugin/test_dec_entity2","dd4ss","true"],
+                    [{x = 1652,y=13,z=-574},180,"myplugin/test_dec_entity1","dd5ss","true"],
+                    [{x = 1654,y=13,z=-574},180,"myplugin/test_dec_entity2","d6dss","true"]
+                ],
                 [],
                 "disable",
                 "Sakura NeNe2",
@@ -273,6 +281,9 @@ EDIT_HOUSE_NAME{
             Break()
         }
     }
+
+
+
 }
 
 SURE_BUY_HOUSE{
@@ -298,7 +309,7 @@ SURE_BUY_HOUSE{
     -------------
 
     ShowTip(entity = $obj1, tipType = 1, textKey = "ui_buy_success")
-    -- ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
+    ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
 }
 
 SELL_HOUSE{
@@ -321,7 +332,6 @@ SELL_HOUSE{
         Foreach(array = $worldAllColor, key = "world_color"){
             If(ArrayGet(array = $world_color, index = 2) == ArrayGet(array = $curSelectHouse, index = 2) and 
                 ArrayGet(array = $world_color, index = 1) == ArrayGet(array = $entity_color, index = 1)){
-                Test(ArrayGet(array = $world_color, index = 2),ArrayGet(array = $curSelectHouse, index = 2))
                 $showImage = ArrayGet(array = $entity_color, index = 2)
                 Break()
             }
@@ -356,7 +366,6 @@ SELL_HOUSE{
 SELL_HOUSE_SURE{
     $curSelectHouse = nil
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
-    Test($houseVars ,ArraySize(array = $houseVars))
     If(ArraySize(array = $houseVars) <= 1){ -- 最后一套房不能出售
         ShowTip(entity = $obj1, tipType = 1, textKey = "ui_house_sell_cant_sell")
         Return()
@@ -380,6 +389,10 @@ BUY_STORE{ -- TODO UPDATE
     Test("BUY_STORE",$storeKey,$cfg,"---------购买后直接出现在场景里的逻辑 createNpc..xxx")
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
     CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg)
+
+
+
+
 }
 
 

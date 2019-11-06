@@ -22,5 +22,5 @@ ENTITY_CLICK{
         btnInfo = {btnList = $btnList}
     }
     ShowGenericListDisplayBox(entity = $obj2, infoTb = $infoTb)
-    CallTrigger(object = $obj1, event = "HOUSE_TAB_EVENT", key = ArrayGet(array = ArrayGet(array = $houseVars, index = 1), index = 8))
+    -- CallTrigger(object = $obj1, event = "HOUSE_TAB_EVENT", key = ArrayGet(array = ArrayGet(array = $houseVars, index = 1), index = 8))
 }
