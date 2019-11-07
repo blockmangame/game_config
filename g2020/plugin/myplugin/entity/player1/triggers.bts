@@ -805,8 +805,8 @@ STORE_ITEM_STATUS_CHANGE {
     $dictItem = NewDictionary($item)
     $storeId = DictionaryGet(dict = $dictItem, key = "storeId")
     $itemIndex = DictionaryGet(dict = $dictItem, key = "index")
-
-    If($storeId == $obj1.danceStoreId && $targetIndex > 0)
+    $danceStoreId = GetWorldVar(key = "danceStoreId")
+    If($storeId == $danceStoreId && $targetIndex > 0)
     {
         $newDance = {}
         $oldIndex = 0
@@ -841,7 +841,7 @@ STORE_ITEM_STATUS_CHANGE {
             $dictValue = NewDictionary($value)
             $dictStoreId = DictionaryGet(dict = $dictValue, key = "storeId")
             $dictStoreItemIndex = DictionaryGet(dict = $dictValue, key = "itemIndex")
-            If ($dictStoreId == $obj1.danceStoreId)
+            If ($dictStoreId == $danceStoreId)
             {
                 DictionarySet(dict = $dictValue, key = "status", value = 1)
             }
@@ -856,7 +856,7 @@ STORE_ITEM_STATUS_CHANGE {
             {
                 $dictStoreId = DictionaryGet(dict = $dictValue, key = "storeId")
                 $dictItemIndex = DictionaryGet(dict = $dictValue, key = "itemIndex")
-                If($dictItemIndex == $value && $dictStoreId == $obj1.danceStoreId)
+                If($dictItemIndex == $value && $dictStoreId == $danceStoreId)
                 {
                     $isChange = true
                     DictionarySet(dict = $dictValue, key = "status", value = 2)
@@ -868,7 +868,7 @@ STORE_ITEM_STATUS_CHANGE {
                 $dictValue = NewDictionary({})
                 DictionarySet(dict = $dictValue, key = "status", value = 2)
                 DictionarySet(dict = $dictValue, key = "itemIndex", value = $value)
-                DictionarySet(dict = $dictValue, key = "storeId", value = $obj1.danceStoreId)
+                DictionarySet(dict = $dictValue, key = "storeId", value = $danceStoreId)
             }
         }
         
@@ -889,11 +889,12 @@ STORE_ITEM_STATUS_CHANGE {
 
 CHANGE_DANCE_SKILL
 {
+    $danceStoreId = GetWorldVar(key = "danceStoreId")
     If($oldSkill)
     {
         Foreach(array = $oldSkill, key = "value")
         {
-            $skillName = GetStoreItemName(storeId= $obj1.danceStoreId , index = $value)
+            $skillName = GetStoreItemName(storeId= $danceStoreId , index = $value)
             ForgetSkill(entity = $obj1, name = $skillName)
         }
     }
@@ -904,7 +905,7 @@ CHANGE_DANCE_SKILL
 
         Foreach(array = $newSkill, key = "value")
         {
-            $skillName = GetStoreItemName(storeId= $obj1.danceStoreId , index = $value)
+            $skillName = GetStoreItemName(storeId= $danceStoreId , index = $value)
             LearnSkill(entity = $obj1, name = $skillName)
             EquipSkill(entity = $obj1, name = $skillName)
         }
