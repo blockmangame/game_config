@@ -187,23 +187,25 @@ HOUSE_TAB_EVENT{
     Test("---------HOUSE_TAB_EVENT")
     If(not $key or "0" == $key){
         Test("--------- u need buy")
-        ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
         $listInfoTb = [
-            {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", text = "xxxxx", context = {money = 100, houseCfg = "myplugin/house_default"}},
-            {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", text = "yyyyy", context = {money = 200, houseCfg = "myplugin/house_default"}},
+            {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", text = "xxxxx", 
+                btnShowText = 100, context = {money = 100, houseCfg = "myplugin/house_default"}},
+            {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", text = "yyyyy", 
+                btnShowText = 200, context = {money = 200, houseCfg = "myplugin/house_default"}},
         ]
-        $btnList = [
-            {text = "ui_cancle", trigger = "CANCLE_BUY_HOUSE"},
-            {text = "ui_sure", trigger = "SURE_BUY_HOUSE"}
-        ]
-        $infoTb = {
-            titleTb = {text = "ui_house_store"},
-            listInfo = {
-                infoTb = $listInfoTb
-            },
-            btnInfo = {btnList = $btnList}
+        $childInfo = {
+            uiWin = "genericListDisplayBox3",
+            infoTb = {
+                listInfo = {
+                    infoTb = $listInfoTb
+                },
+                btnInfo = {
+                    btnText = "ui_house_buy_house",
+                    btnTrigger = "SURE_BUY_HOUSE"
+                }
+            }
         }
-        ShowGenericListDisplayBox3(entity = $obj1, infoTb = $infoTb)
+        ShowGenericListDisplayBox(entity = $obj1, infoTb = $childInfo, isOpenChild = true)
         Return()
     }
     Test("--------- u need show")
@@ -270,10 +272,6 @@ EDIT_HOUSE_NAME{
     }
 }
 
-CANCLE_BUY_HOUSE{
-    ShowGenericListDisplayBox3(entity = $obj1, closeWin = true)
-}
-
 SURE_BUY_HOUSE{
     Test("SURE_BUY_HOUSE",$houseCfg, $money)
     If(not $houseCfg){
@@ -297,7 +295,7 @@ SURE_BUY_HOUSE{
     -------------
 
     ShowTip(entity = $obj1, tipType = 1, textKey = "ui_buy_success")
-    ShowGenericListDisplayBox3(entity = $obj1, closeWin = true)
+    -- ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
 }
 
 SELL_HOUSE{
@@ -423,28 +421,18 @@ ADD_MONEY
     $obj1.isReadyReward = true
 }
 
-CREATE_FAMILY
-{
-    If(IsPlayer(entity = $obj1))
-    {
-        $familyId = GetEntityTeam(entity = $obj1)
-        If($familyId and $familyId ~= 0)
-        {
-            Return()
-        }
-        SetEntityTeam(entity = $obj1, teamId = @familyIndex)
-        @familyIndex = @familyIndex + 1
-        ShowTip(entity = $obj1, tipType = 2,textKey = "Create Family Success", time = 40)
-    }
-}
 
-QUIT_FAMILY
+FUNC_GENERATE_STATE
 {
-    If(IsPlayer(entity = $obj1))
+    $keyStr = Concat(p1 = "is", p2 = $stateName)
+    If(GetObjectVar(obj = $obj1, key = $keyStr) && ($stateName ~= "region" || $obj1.regionRTime > 0))
     {
-        SetEntityTeam(entity = $obj1, teamId = 0)
-        ShowTip(entity = $obj1, tipType = 2,textKey = "Quit Family Success", time = 40)
+        Return()
     }
+    SetGuidePostion(entity = $obj1)
+    SetObjectVar(obj = $obj1, key = $keyStr, value = true)
+    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+    AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
 }
 
 INTERACTION_CLAP { --拍手 小孩和小孩
@@ -525,6 +513,11 @@ FUNC_GENERATE_A_STATE
         Return()
     }
     SetObjectVar(obj = $obj1, key = $keyStr, value = true)
+    SetObjectVar(
+        obj = $obj1,
+        value = nil,
+        key = Concat(p1 = $stateName, p2 = "InteractList")
+    )
     AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
 }
 
@@ -538,18 +531,14 @@ FUNC_GENERATE_B_STATE
     SetGuidePostion(entity = $obj1)
     AddSkill(entity = $obj1, name = $skillName)
     RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+    SetObjectVar(obj = $obj1, key = "regionInteractList", value = nil)
 
     $reg = GetRegionByName(
         map = GetEntityMap(entity = $obj1),
         name = $locStr 
     )
 
-    If(not $reg)
-    {
-        Return()
-    }
-
-    If(IfEntityInArea(
+    If($reg && IfEntityInArea(
         region = {
             min = GetRegionMin(region = $reg),
             max = GetRegionMax(region = $reg)
@@ -611,24 +600,116 @@ FUNC_REGION_STATE_OPERATION
         $obj1.REGION_TIMER = StartTimer(
             rep = false,
             object = $obj1,
-            time = $obj1.regionRTime * 20,
-            event = "FUNC_REGION_STATE_RELEASE",
+            stateName = "region",
+            time = ($obj1.regionRTime * 20) // 1,
+            event = "FUNC_STATE_RELEASE_AND_REWARD",
         )
     }
 }
 
-FUNC_REGION_STATE_RELEASE
+FUNC_STATE_ADD_INTERACTLIST
 {
-    $obj1.regionRTime = 0
-    $obj1.isregion = false
+    Foreach(array = @Generate_State_List, key = "stateName")
+    {
+        If(not GetObjectVar(obj = $obj1, key = Concat(p1 = "is", p2 = $stateName)))
+        {
+            Continue()
+        }
+        $listName = Concat(p1 = $stateName, p2 = "InteractList")
+        $interactList = GetObjectVar(obj = $obj1, key = $listName)
+        $targetID = GetObjectVar(obj = $obj1, key = "interactionObjId")
+        If(not IsPlayer(entity = GetObject(objID = $targetID)))
+        {
+            Return()
+        }
+        If(not $interactList)
+        {
+            $interactList = []
+        }
+        If(not ArrayFind(array = $interactList, value = $targetID))
+        {
+            ArrayAppend(array = $interactList, value = $targetID)
+        }
+        SetObjectVar(obj = $obj1, key = $listName, value = $interactList)
+    }
+}
 
-    SetGuidePostion(entity = $obj1)
+FUNC_STATE_RELEASE_AND_REWARD
+{
+    $hadState = Concat(p1 = "is", p2 = $stateName)
+    If(not GetObjectVar(obj = $obj1, key = $hadState))
+    {
+        Return()
+    }
+    SetObjectVar(obj = $obj1, key = $hadState, value = false)
+
+    If($stateName == "region")
+    {
+        $obj1.regionRTime = 0
+    }
+
+    $skillName = Concat(p1 = "myplugin/skill_state_", p2 = $stateName)
     RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
-    RemoveSkill(entity = $obj1, name = "myplugin/skill_state_region")
     ShowProgressFollowObj(entity = $obj1, isOpen = false)
-    Test("FUNC_REGION_STATE_RELEASE")
+    RemoveSkill(entity = $obj1, name = $skillName)
+    SetGuidePostion(entity = $obj1)
 
-    --todo 区域状态奖励...
+    $rewardSelf = GetSkillVar(fullName = $skillName, key = "rewardSelf")
+    $rewardOther = GetSkillVar(fullName = $skillName, key = "rewardOther")
+    $rewardDis = GetSkillVar(fullName = $skillName, key = "rewardDis")
+
+    $listName = Concat(p1 = $stateName, p2 = "InteractList")
+    If(not GetObjectVar(obj = $obj1, key = $listName))
+    {
+        CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardSelf)
+        Return()
+    }
+    Foreach(array = GetObjectVar(obj = $obj1, key = $listName), key = "objID")
+    {
+        $player = GetObject(objID = $objID)
+        If(not IsPlayer(entity = $player) || GetObjectDistance(obj1 = $obj1, obj2 = $player) > $rewardDis)
+        {
+            Continue()
+        }
+        CallTrigger(object = $player, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardOther)
+    }
+    CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardOther)
+    SetObjectVar(obj = $obj1, key = $listName, value = nil)
+}
+
+FUNC_STATE_REWARD_AND_TIP
+{
+    AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardCount)
+    ShowRewardRollTip(
+        entity = $obj1,
+        image = "set:jail_break.json image:jail_break_currency",
+        text = Concat(p1 = "+", p2 = $rewardCount, p3 = "(照顾加成)"),
+    )
+}
+
+CREATE_FAMILY
+{
+    If(IsPlayer(entity = $obj1))
+    {
+        $familyId = GetEntityTeam(entity = $obj1)
+        If($familyId and $familyId ~= 0)
+        {
+            Return()
+        }
+        SetEntityTeam(entity = $obj1, teamId = @familyIndex)
+        @familyIndex = @familyIndex + 1
+        ShowTip(entity = $obj1, tipType = 2,textKey = "Create Family Success", time = 40)
+    }
+}
+
+QUIT_FAMILY
+{
+    If(IsPlayer(entity = $obj1))
+    {
+        SetEntityTeam(entity = $obj1, teamId = 0)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "Quit Family Success", time = 40)
+        CallTrigger(event = "INIT_TEAM_UI", obj1 = $obj1, show = false)
+    }
 }
 
 REQUEST_JOIN_FAMILY
@@ -679,6 +760,43 @@ INVITE_JOIN_FAMILY
     )
 
     ShowBubbleMsg(entity = $obj2, textKey = "Do you want Join My Family")
+}
+
+INIT_TEAM_UI
+{
+    $title = {
+        name = "My Family Hahaha"
+    }
+
+    $content = {
+        showHeadPic = true,
+        showGender = true,
+        showScale = true,
+        showNickName = true
+    }
+    
+    $buttons = [
+        {
+            event = "QUIT_FAMILY",
+            normalImage = "set:new_gui_task.json image:yellow_btn.png",
+            pushedImage = "set:new_gui_task.json image:yellow_btn.png",
+            name = "Quit Family"
+        }
+    ]
+
+    $closeBtn = {
+        disableClose = false
+    }
+
+
+    $info = {
+        title = $title,
+        content = $content,
+        buttons = $buttons,
+        closeBtn = $closeBtn
+    }
+
+    ShowTeam(entity = $obj1, show = $show, info = $info)
 }
 
 STORE_ITEM_STATUS_CHANGE {

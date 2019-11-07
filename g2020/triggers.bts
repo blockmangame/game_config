@@ -19,7 +19,7 @@ FUNC_GENERATE_STATE_STARTTIME
             rep = false,
             timeArr = $timeInfo,
             stateName = $stateName,
-            time = $cdTime * 60 * 20,
+            time = ($cdTime * 1200) // 1,
             event = "FUNC_CHANGE_STATE",
             size = ArraySize(array = $timeInfo),
         )
@@ -60,21 +60,30 @@ FUNC_CHANGE_STATE
         column = $column,
         timeArr = $timeArr,
         stateName = $stateName, 
-        time = $cdTime * 60 * 20
+        time = ($cdTime * 1200) // 1
     )
 }
 
 SHOW_SELECT_ROLE
 {
-    ShowNotice(
-        buttonType = 2,
-        content = "Do you want be a adult ?",
-        eventYes = "CHANGE_PLAYER_SCALE_ADULT",
-        eventNo = "CHANGE_PLAYER_SCALE_CHILD",
-        entity = $obj1,
-        textP1 = "Hahahaha",
-        tittleKey = "Do you want be adult"
-    )
+    $options = [
+        {
+            image = "set:gui_sign_in.json image:content_bg",
+            name = "child",
+            event = "CHANGE_PLAYER_SCALE_CHILD"
+        },
+        {
+            image = "set:gui_sign_in.json image:content_bg",
+            name = "adult",
+            event = "CHANGE_PLAYER_SCALE_ADULT"
+        }
+    ]
+
+    $title = "Select your character"
+    $detail = ""
+    $canClose = false
+    $showMask = true
+    ShowOptionsView(entity = $obj1, options = $options, title = $title,  detail = $detail, canClose = $canClose, showMask = $showMask)
 }
 
 
