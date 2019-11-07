@@ -68,12 +68,12 @@ SHOW_SELECT_ROLE
 {
     $options = [
         {
-            image = "set:gui_sign_in.json image:content_bg",
+            image = "set:dance.json image:have_bg",
             name = "child",
             event = "CHANGE_PLAYER_SCALE_CHILD"
         },
         {
-            image = "set:gui_sign_in.json image:content_bg",
+            image = "set:dance.json image:choose_bg",
             name = "adult",
             event = "CHANGE_PLAYER_SCALE_ADULT"
         }
@@ -83,7 +83,7 @@ SHOW_SELECT_ROLE
     $detail = ""
     $canClose = false
     $showMask = true
-    ShowOptionsView(entity = $obj1, options = $options, title = $title,  detail = $detail, canClose = $canClose, showMask = $showMask)
+    ShowCardOptionsView(entity = $obj1, options = $options, showMask = true)
 }
 
 
