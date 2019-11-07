@@ -12,6 +12,7 @@ ENTITY_ENTER
         CallTrigger(event = "ADD_MONEY", object = $obj1)
         CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)    
 
+        UpdateUIData(player = $obj1, ui = "win_dance", data = $obj1.danceUseItem)
 
         -- test data
         --SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = 25)
@@ -681,18 +682,93 @@ INVITE_JOIN_FAMILY
 }
 
 STORE_ITEM_STATUS_CHANGE {
-    If($item.storeId == 2)
+
+    $dictItem = NewDictionary($item)
+    $storeId = DictionaryGet(dict = $dictItem, key = "storeId")
+    $itemIndex = DictionaryGet(dict = $dictItem, key = "index")
+
+    If($storeId == $obj1.danceStoreId && $targetIndex > 0)
     {
-        Foreach(array = $data, key = "dance")
+        $newDance = {}
+        $oldIndex = 0
+        $oldValue = 0
+        $danceIndex = 1
+
+        Foreach(array = $obj1.danceUseItem, key = "value")
         {
+            If($value == $itemIndex)
+            {
+                $oldIndex = $danceIndex
+            }
 
+            If ($danceIndex == $targetIndex)
+            {
+                $oldValue = $value
+                ArraySet(array = $newDance, index = $danceIndex , value = $itemIndex)
+            } Else {
+                ArraySet(array = $newDance, index = $danceIndex , value = $value)
+            }
+
+            $danceIndex = $danceIndex + 1
         }
+
+        If ($oldIndex > 0) {
+            ArraySet(array = $newDance, index = $oldIndex , value = $oldValue)
+        }
+
+        $newData = {}
+        $dataIndex = 1
+        Foreach(array = $data, key = "value")
+        {
+            $dictValue = NewDictionary($value)
+            $dictStoreId = DictionaryGet(dict = $dictValue, key = "storeId")
+            If ($dictStoreId == $obj1.danceStoreId)
+            {
+                DictionarySet(dict = $dictValue, key = "status", value = 1)
+            }
+            ArraySet(array = $newData, index = $dataIndex , value = $dictValue)
+            $dataIndex = $dataIndex + 1
+        }
+        
+        Foreach(array = $newDance, key = "value")
+        {
+            $isChange = false
+            Foreach(array = $newData, key = "dictValue")
+            {
+                $dictStoreId = DictionaryGet(dict = $dictValue, key = "storeId")
+                $dictItemIndex = DictionaryGet(dict = $dictValue, key = "itemIndex")
+                If($dictItemIndex == $value && $dictStoreId == $obj1.danceStoreId)
+                {
+                    DictionarySet(dict = $dictValue, key = "status", value = 2)
+                    $isChange = true
+                    Break()
+                }
+            }
+            If ($isChange == false)
+            {
+                $dictValue = NewDictionary({})
+                DictionarySet(dict = $dictValue, key = "status", value = 2)
+                DictionarySet(dict = $dictValue, key = "itemIndex", value = $value)
+                DictionarySet(dict = $dictValue, key = "storeId", value = $obj1.danceStoreId)
+                ArrayAppend(array = $newData, value = $dictValue)
+            }
+        }
+        
+        $dataIndex = 1
+        $dataRestore = {}
+        Foreach(array = $newData, key = "dictValue")
+        {
+            ArraySet(array = $dataRestore, index = $dataIndex , value = DictionaryToTable(dict = $dictValue))
+            $dataIndex = $dataIndex + 1
+        }
+
+        $obj1.danceUseItem = $newDance
+        $data = $dataRestore
+        $def = false
+
+        Test($obj1.danceUseItem)
+        Test($dataRestore)
+        Test("==============================================================2")
+        UpdateUIData(player = $obj1, ui = "win_dance", data = $obj1.danceUseItem)
     }
-
-
-
-
-    Test($data)
-    Test($item)
-    Test($status)
 }
