@@ -970,7 +970,7 @@ SET_DRESS_ARCHIVE
 
     ArrayAppend(array = $dressArchive, value = $bmDressInfo)
 
-    UpdateUIData(entity = $obj1, ui = "dressArchive", data = $dressArchive)
+    UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $dressArchive)
 
 }
 
@@ -1022,7 +1022,7 @@ ADD_DRESS_ARCHIVE
 
         ArrayInsert(array = $dressArchive, index = 1, value = $addDressInfo)
 
-        UpdateUIData(entity = $obj1, ui = "dressArchive", data = $dressArchive)
+        UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $dressArchive)
     }
 }
 
@@ -1036,7 +1036,7 @@ DELETE_DRESS_ARCHIVE
         ArrayRemove(array = $dressArchive, index = $index)
     }
     
-    UpdateUIData(entity = $obj1, ui = "dressArchive", data = $dressArchive)
+    UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $dressArchive)
 }
 
 RENAME_DRESS_ARCHIVE
@@ -1051,5 +1051,5 @@ RENAME_DRESS_ARCHIVE
         }
     }
     
-    UpdateUIData(entity = $obj1, ui = "dressArchive", data = $dressArchive) 
+    UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $dressArchive) 
 }
