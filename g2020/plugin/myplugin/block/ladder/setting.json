@@ -5,51 +5,41 @@
     ],
     "blockObjectOnCollision": false,
     "breakTime": 20,
-    "climbSpeed": null,
-    "collisionBoxes": [
-        {
-            "max": {
-                "x": 1,
-                "y": 0.2,
-                "z": 1
-            },
-            "min": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            }
-        }
-    ],
+    "climbSpeed": 0.1,
+    "collisionBoxes": [],
     "isOpaqueFullCube": false,
     "maxSpeed": null,
     "quads": [
         {
             "pos": [
-                {
-                    "x": 1,
-                    "y": 0,
-                    "z": 0
-                },
-                {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                },
-                {
-                    "x": 0,
-                    "y": 0,
-                    "z": 1
-                },
-                {
-                    "x": 1,
-                    "y": 0,
-                    "z": 1
-                }
+{
+                "x": 0,
+                "y": 0,
+                "z": 0
+               },
+               {
+                "x": 0,
+                "y": 1,
+                "z": 0 
+               },
+               {
+                "x": 0,
+                "y": 1,
+                "z": 1
+               },
+               {
+                "x": 0,
+                "y": 0,
+                "z": 1
+               }
+
             ],
             "texture": "ladder.png"
         }
     ],
     "renderPass": 4,
+	"abutAgainstCollision": true,
+	"inBuff": "myplugin/climbing",
     "triggers": null,
     "base": "base_block"
 }
