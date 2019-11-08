@@ -15,6 +15,8 @@ ENTITY_ENTER
 		CallTrigger(event = "SET_DRESS_ARCHIVE", object = $obj1)
 
 
+        CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, newSkill = $obj1.danceUseItem)
+
         -- test data
         --SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = 25)
         --SetSkin(entity = $obj1, skinName = "custom_scarf", skinValue = 3)
@@ -514,6 +516,11 @@ FUNC_GENERATE_A_STATE
         Return()
     }
     SetObjectVar(obj = $obj1, key = $keyStr, value = true)
+    SetObjectVar(
+        obj = $obj1,
+        value = nil,
+        key = Concat(p1 = $stateName, p2 = "InteractList")
+    )
     AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
 }
 
@@ -527,6 +534,7 @@ FUNC_GENERATE_B_STATE
     SetGuidePostion(entity = $obj1)
     AddSkill(entity = $obj1, name = $skillName)
     RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+    SetObjectVar(obj = $obj1, key = "regionInteractList", value = nil)
 
     $reg = GetRegionByName(
         map = GetEntityMap(entity = $obj1),
@@ -611,14 +619,21 @@ FUNC_STATE_ADD_INTERACTLIST
             Continue()
         }
         $listName = Concat(p1 = $stateName, p2 = "InteractList")
-        If(not GetObjectVar(obj = $obj1, key = $listName))
+        $interactList = GetObjectVar(obj = $obj1, key = $listName)
+        $targetID = GetObjectVar(obj = $obj1, key = "interactionObjId")
+        If(not IsPlayer(entity = GetObject(objID = $targetID)))
         {
-            SetObjectVar(obj = $obj1, key = $listName, value = [])
+            Return()
         }
-        If(not ArrayFind(array = GetObjectVar(obj = $obj1, key = $listName), value = $targetID))
+        If(not $interactList)
         {
-            ArrayAppend(array = GetObjectVar(obj = $obj1, key = $listName), value = $targetID)
+            $interactList = []
         }
+        If(not ArrayFind(array = $interactList, value = $targetID))
+        {
+            ArrayAppend(array = $interactList, value = $targetID)
+        }
+        SetObjectVar(obj = $obj1, key = $listName, value = $interactList)
     }
 }
 
@@ -644,24 +659,35 @@ FUNC_STATE_RELEASE_AND_REWARD
 
     $rewardSelf = GetSkillVar(fullName = $skillName, key = "rewardSelf")
     $rewardOther = GetSkillVar(fullName = $skillName, key = "rewardOther")
-    AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardSelf)
+    $rewardDis = GetSkillVar(fullName = $skillName, key = "rewardDis")
 
     $listName = Concat(p1 = $stateName, p2 = "InteractList")
     If(not GetObjectVar(obj = $obj1, key = $listName))
     {
+        CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardSelf)
         Return()
     }
     Foreach(array = GetObjectVar(obj = $obj1, key = $listName), key = "objID")
     {
         $player = GetObject(objID = $objID)
-        If(not IsPlayer(entity = $player))
+        If(not IsPlayer(entity = $player) || GetObjectDistance(obj1 = $obj1, obj2 = $player) > $rewardDis)
         {
             Continue()
         }
-        AddCurrency(coinName = "green_currency", entity = $player, count = $rewardOther)
+        CallTrigger(object = $player, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardOther)
     }
-    
+    CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardOther)
     SetObjectVar(obj = $obj1, key = $listName, value = nil)
+}
+
+FUNC_STATE_REWARD_AND_TIP
+{
+    AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardCount)
+    ShowRewardRollTip(
+        entity = $obj1,
+        image = "set:jail_break.json image:jail_break_currency",
+        text = Concat(p1 = "+", p2 = $rewardCount, p3 = "(照顾加成)"),
+    )
 }
 
 CREATE_FAMILY
@@ -773,7 +799,119 @@ INIT_TEAM_UI
         closeBtn = $closeBtn
     }
 
-    ShowTeam(entity = $obj1, show = $show, info = $info)   
+    ShowTeam(entity = $obj1, show = $show, info = $info)
+}
+
+STORE_ITEM_STATUS_CHANGE {
+
+    $dictItem = NewDictionary($item)
+    $storeId = DictionaryGet(dict = $dictItem, key = "storeId")
+    $itemIndex = DictionaryGet(dict = $dictItem, key = "index")
+    $danceStoreId = GetWorldVar(key = "danceStoreId")
+    If($storeId == $danceStoreId && $targetIndex > 0)
+    {
+        $newDance = {}
+        $oldIndex = 0
+        $oldValue = 0
+        $danceIndex = 1
+        Foreach(array = $obj1.danceUseItem, key = "value")
+        {
+            If($value == $itemIndex)
+            {
+                $oldIndex = $danceIndex
+            }
+
+            If ($danceIndex == $targetIndex)
+            {
+                $oldValue = $value
+                ArraySet(array = $newDance, index = $danceIndex , value = $itemIndex)
+            } Else {
+                ArraySet(array = $newDance, index = $danceIndex , value = $value)
+            }
+
+            $danceIndex = $danceIndex + 1
+        }
+
+        If ($oldIndex > 0) {
+            ArraySet(array = $newDance, index = $oldIndex , value = $oldValue)
+        }
+
+        $newData = {}
+        $dataIndex = 1
+        Foreach(array = $data, key = "value")
+        {
+            $dictValue = NewDictionary($value)
+            $dictStoreId = DictionaryGet(dict = $dictValue, key = "storeId")
+            $dictStoreItemIndex = DictionaryGet(dict = $dictValue, key = "itemIndex")
+            If ($dictStoreId == $danceStoreId)
+            {
+                DictionarySet(dict = $dictValue, key = "status", value = 1)
+            }
+            ArraySet(array = $newData, index = $dataIndex , value = $dictValue)
+            $dataIndex = $dataIndex + 1
+        }
+        
+        Foreach(array = $newDance, key = "value")
+        {
+            $isChange = false
+            Foreach(array = $newData, key = "dictValue")
+            {
+                $dictStoreId = DictionaryGet(dict = $dictValue, key = "storeId")
+                $dictItemIndex = DictionaryGet(dict = $dictValue, key = "itemIndex")
+                If($dictItemIndex == $value && $dictStoreId == $danceStoreId)
+                {
+                    $isChange = true
+                    DictionarySet(dict = $dictValue, key = "status", value = 2)
+                    Break()
+                }
+            }
+            If ($isChange == false)
+            {
+                $dictValue = NewDictionary({})
+                DictionarySet(dict = $dictValue, key = "status", value = 2)
+                DictionarySet(dict = $dictValue, key = "itemIndex", value = $value)
+                DictionarySet(dict = $dictValue, key = "storeId", value = $danceStoreId)
+            }
+        }
+        
+        $dataIndex = 1
+        $dataRestore = {}
+        Foreach(array = $newData, key = "dictValue")
+        {
+            ArraySet(array = $dataRestore, index = $dataIndex , value = DictionaryToTable(dict = $dictValue))
+            $dataIndex = $dataIndex + 1
+        }
+
+        CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, oldSkill = $obj1.danceUseItem , newSkill = $newDance)
+        $obj1.danceUseItem = $newDance
+        $data = $dataRestore
+        $def = false
+    }
+}
+
+CHANGE_DANCE_SKILL
+{
+    $danceStoreId = GetWorldVar(key = "danceStoreId")
+    If($oldSkill)
+    {
+        Foreach(array = $oldSkill, key = "value")
+        {
+            $skillName = GetStoreItemName(storeId= $danceStoreId , index = $value)
+            ForgetSkill(entity = $obj1, name = $skillName)
+        }
+    }
+
+    If($newSkill)
+    {
+        UpdateUIData(player = $obj1, ui = "win_dance", data = $newSkill)
+
+        Foreach(array = $newSkill, key = "value")
+        {
+            $skillName = GetStoreItemName(storeId= $danceStoreId , index = $value)
+            LearnSkill(entity = $obj1, name = $skillName)
+            EquipSkill(entity = $obj1, name = $skillName)
+        }
+    }
 }
 
 SET_DRESS_ARCHIVE
