@@ -11,6 +11,8 @@ ENTITY_ENTER
 
         CallTrigger(event = "ADD_MONEY", object = $obj1)
         CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)    
+		
+		CallTrigger(event = "SET_DRESS_ARCHIVE", object = $obj1)
 
 
         -- test data
@@ -772,4 +774,144 @@ INIT_TEAM_UI
     }
 
     ShowTeam(entity = $obj1, show = $show, info = $info)   
+}
+
+SET_DRESS_ARCHIVE
+{
+    $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
+    If(not $dressArchive)
+    {
+        Return()
+    }
+
+    $testData = {
+        vars = {
+            custom_face = 5,
+            custom_hair = 5,
+            clothes_tops = 20,
+            clothes_pants = 35,
+            custom_shoes = 40,
+            custom_glasses = 3,
+            custom_scarf = 3,
+            custom_wing = 25,
+            custom_hat = 5,
+            custom_tail = 5
+        }
+    }
+
+    $testInfo = {
+        vars = {
+            name = "123456",
+            data = $testData
+        }
+    }
+
+    ArrayAppend(array = $dressArchive, value = $testInfo)
+
+    $bmDressData = {
+        vars = {
+            custom_face = GetSkin(entity = $obj1, skinName = "custom_face"),
+            custom_hair = GetSkin(entity = $obj1, skinName = "custom_hair"),
+            clothes_tops = GetSkin(entity = $obj1, skinName = "clothes_tops"),
+            clothes_pants = GetSkin(entity = $obj1, skinName = "clothes_pants"),
+            custom_shoes = GetSkin(entity = $obj1, skinName = "custom_shoes"),
+            custom_glasses = GetSkin(entity = $obj1, skinName = "custom_glasses"),
+            custom_scarf = GetSkin(entity = $obj1, skinName = "custom_scarf"),
+            custom_wing = GetSkin(entity = $obj1, skinName = "custom_wing"),
+            custom_hat = GetSkin(entity = $obj1, skinName = "custom_hat"),
+            custom_tail = GetSkin(entity = $obj1, skinName = "custom_tail")
+        }
+    }
+
+    $bmDressInfo = {
+        vars = {
+            name = "ui_dress_archive_app_dress",
+            data = $bmDressData
+        }
+    }
+
+    ArrayAppend(array = $dressArchive, value = $bmDressInfo)
+
+    UpdateUIData(entity = $obj1, ui = "dressArchive", data = $dressArchive)
+
+}
+
+OPERATE_DRESS_ARCHIVE
+{
+    If($type == 1)
+    {
+        CallTrigger(event = "ADD_DRESS_ARCHIVE", object = $obj1, name = $name)
+    }
+
+    If($type == 2)
+    {
+        CallTrigger(event = "DELETE_DRESS_ARCHIVE", object = $obj1, index = $index)
+    }
+
+    If($type == 3)
+    {
+        CallTrigger(event = "RENAME_DRESS_ARCHIVE", object = $obj1, name = $name, index = $index)
+    }
+}
+
+ADD_DRESS_ARCHIVE
+{
+    $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
+    If((ArraySize(array = $dressArchive) - 1) <= GetWorldVar(key = "dressArchiveNum"))
+    {
+        $addDressData = {
+            vars = {
+                custom_face = GetSkin(entity = $obj1, skinName = "custom_face"),
+                custom_hair = GetSkin(entity = $obj1, skinName = "custom_hair"),
+                clothes_tops = GetSkin(entity = $obj1, skinName = "clothes_tops"),
+                clothes_pants = GetSkin(entity = $obj1, skinName = "clothes_pants"),
+                custom_shoes = GetSkin(entity = $obj1, skinName = "custom_shoes"),
+                custom_glasses = GetSkin(entity = $obj1, skinName = "custom_glasses"),
+                custom_scarf = GetSkin(entity = $obj1, skinName = "custom_scarf"),
+                custom_wing = GetSkin(entity = $obj1, skinName = "custom_wing"),
+                custom_hat = GetSkin(entity = $obj1, skinName = "custom_hat"),
+                custom_tail = GetSkin(entity = $obj1, skinName = "custom_tail")
+            }
+        }
+
+        $addDressInfo = {
+            vars = {
+                name = $name,
+                data = $addDressData,
+                isSelect = false
+            }
+        }
+
+        ArrayInsert(array = $dressArchive, index = 1, value = $addDressInfo)
+
+        UpdateUIData(entity = $obj1, ui = "dressArchive", data = $dressArchive)
+    }
+}
+
+DELETE_DRESS_ARCHIVE
+{
+    
+    $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
+
+    If($index <= ArraySize(array = $dressArchive) and $index > 0)
+    {
+        ArrayRemove(array = $dressArchive, index = $index)
+    }
+    
+    UpdateUIData(entity = $obj1, ui = "dressArchive", data = $dressArchive)
+}
+
+RENAME_DRESS_ARCHIVE
+{
+    $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
+    If($index <= ArraySize(array = $dressArchive) and $index > 0)
+    {
+        $archive = ArrayGet(array = $dressArchive, index = $index)
+        If($archive)
+        {
+            SetObjectVar(obj = $archive, key = "name", value = $name)
+        }
+    }
+    
+    UpdateUIData(entity = $obj1, ui = "dressArchive", data = $dressArchive) 
 }
