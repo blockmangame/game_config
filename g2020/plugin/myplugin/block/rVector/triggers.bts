@@ -1,8 +1,0 @@
-BLOCK_TOUCH_TOP {
-	Sequence
-	{
-		VectorBlockSpaw(pos = $pos, player=$obj1)
-		$map = GetEntityMap(entity = $obj1)
-		CreateBlock(map = $map, block = "myplugin/rVector_empty", pos = $pos)
-	}
-}
