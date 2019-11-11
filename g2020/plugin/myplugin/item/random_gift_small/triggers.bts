@@ -1,0 +1,59 @@
+USE_ITEM
+{
+    $randomPool = GetItemCfg(fullName = "myplugin/random_gift_small", key = "randomPool")
+
+    $totalWeigh = 0
+    ForLoop(from = 1, to = ArraySize(array = $randomPool), key = "index")
+    {
+        $totalWeigh = $totalWeigh + ArrayGet(index = $index, array = $randomPool)
+    }
+
+    If($totalWeigh <= 0)
+    {
+        Return()
+    }
+
+    $weigh = Random(min = 1, max = $totalWeigh)
+    
+
+    $curWeigh = 0
+    $curIndex = 1
+    ForLoop(from = 1, to = ArraySize(array = $randomPool), key = "index")
+    {
+        $curWeigh = $curWeigh + ArrayGet(index = $index, array = $randomPool)
+        If($curWeigh >= $weigh)
+        {
+            $curIndex = $index
+            Break()
+        }
+    }
+    
+
+    $randomItems = GetItemCfg(fullName = "myplugin/random_gift_base", key = "ramdomItem")
+    $items = ArrayGet(array = $randomItems, index = $curIndex)
+    
+    $itemWeigh = 0
+    ForeachDictionary(dict = NewDictionary($items), keyName = "key", valueName = "value")
+    {
+        $itemWeigh = $itemWeigh + $value
+    }
+
+    If($itemWeigh <= 0)
+    {
+        Return()
+    }
+
+    $weigh = Random(min = 1, max = $itemWeigh)
+    $curWeigh = 0
+
+    ForeachDictionary(dict = NewDictionary($items), keyName = "key", valueName = "value")
+    {
+        $curWeigh = $curWeigh + $value
+        If($curWeigh >= $weigh)
+        {
+            AddItem(entity = $obj1, cfg = $key, count = 1)
+            Break()
+        }
+    }
+    
+}
