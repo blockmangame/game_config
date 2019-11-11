@@ -86,6 +86,8 @@ ENTITY_ENTER
     SetObjectVar(obj = $obj1, key = "returnDoor", value = GetObjectVar(obj = $house, key = "door"))
     SetEntityPosition(map = $houseInsideMap, entity = $obj1, 
         pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
+
+    CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 }
 
@@ -127,8 +129,6 @@ CREATE_HOUSE_OUTSIDE{
     AddEntityBuff(entity = $house, cfg = GetConfigVar(obj = $house, key = "houseCreateBuff"), buffTime = 200)
     -- 改变房子外部颜色，通过加buff
     AddEntityBuff(entity = $house, cfg = $houseColor)
-    ------------------------------------------ TestCode
-    -- SetObjectVar(obj = $house, key = "isLock", value = true) -- 给房门上锁
 
     SetRegionOwner(region = $region, owner = $house)
     SetObjectVar(obj = $house, key = "owner", value = $obj1)
@@ -386,23 +386,208 @@ SELL_HOUSE_SURE{
 }
 
 BUY_STORE{ -- TODO UPDATE
-    Test("BUY_STORE",$storeKey,$cfg,"---------购买后直接出现在场景里的逻辑 createNpc..xxx")
+    Test("BUY_STORE",$storeMoneyKey,$cfg,"---------购买后直接出现在场景里的逻辑 createNpc..xxx")
+    ShowGenericActorShowStore(entity = $obj1, infoTb = {}, closeWin =true)
+    
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
     CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg)
 
 
 
-
 }
 
+SHOW_TITLE_BAR{
+    Test("SHOW_TITLE_BAR")
+    $editBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/edit_house_buff")
+    If($editBuff){
+        RemoveEntityBuff(entity = $obj1, buff = $editBuff)
+    }
+    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
+    $infoTb = {
+        btnInfo = {
+            btnType = 2,
+            btnList = [
+                {text = "ui_edit", trigger = "EDIT_HOUSE"},
+                {text = "ui_lock", trigger = "HOUSE_LOCK"}
+            ]
+        }
+    }
+    ShowTitleBarPage(entity = $obj1, infoTb = $infoTb)
+}
 
+EDIT_HOUSE{
+    Test("EDIT_HOUSE")
+    ShowGenericActorShowStore(entity = $obj1, infoTb = {}, closeWin =true)
+    $editBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/edit_house_buff")
+    If(not $editBuff){
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/edit_house_buff")
+    }
+    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
+    $infoTb = {
+        btnInfo = {
+            btnType = 2,
+            btnList = [
+                {text = "ui_dec_shop", trigger = "SHOW_DEC_STORE"},
+                {text = "ui_cancle", trigger = "SHOW_TITLE_BAR" }
+            ]
+        }
+    }
+    ShowTitleBarPage(entity = $obj1, infoTb = $infoTb)
+}
 
+HOUSE_LOCK{
+    Test("HOUSE_LOCK")
+    $house = GetObjectVar(obj = $obj1, key = "house")
+    $isLock = GetObjectVar(obj = $house, key = "isLock")
+    SetObjectVar(obj = $house, key = "isLock", value = not $isLock) -- 给房门上锁
+    ShowTip(entity = $obj1, tipType = 2,textKey = "house_lock", time = 40)
+    If($isLock){ -- 上锁状态则重置为未上锁状态
+        ShowTip(entity = $obj1, tipType = 2,textKey = "house_unlock", time = 40)
+        CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
+    }
+}
 
+SHOW_DEC_STORE{
+    Test("SHOW_DEC_STORE")
+    Test(" 买东西测试代码 ， 以及逻辑") -- TODO UPDATE
+    ShowGenericActorShowStore(entity = $obj1, infoTb = {})
+    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
+    If(not $titleKey){
+        $titleKey = "allDec"
+    }
 
+    $btnListTb = {}
+    ArraySet(array = $btnListTb, index = 1, value = {
+        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+    })
+    ArraySet(array = $btnListTb, index = 2, value = {
+        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+    })
 
+    $listInfoTb = {}
+    If($titleKey == "allDec"){
+        ArraySet(array = $listInfoTb, index = 1, value = {
+            text = "111", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", trigger = "SHOW_DEC_STORE_A", context = {titleKey = "allDec"}
+        })
+        ArraySet(array = $listInfoTb, index = 2, value = {
+            text = "222", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", trigger = "SHOW_DEC_STORE_B", context = {titleKey = "allDec"}
+        })
+    }
 
+    If($titleKey == "allEdit"){
+        ArraySet(array = $listInfoTb, index = 1, value = {
+            text = "333", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_4.png", trigger = "EDIT_FLOOR", context = {titleKey = "allEdit"}
+        })
+        ArraySet(array = $listInfoTb, index = 2, value = {
+            text = "444", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", trigger = "EDIT_WAR", context = {titleKey = "allEdit"}
+        })
+    }
 
+    $infoTb = {
+        btnInfo = {
+            btnType = 2,
+            btnList = $btnListTb
+        },
+        listInfo = {
+            uiType = 3,
+            infoTb = $listInfoTb
+        },
+        eventInfo = {
+            closeEventInfo = {trigger = "EDIT_HOUSE"}
+        }
+    }
+    ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
+}
 
+SHOW_DEC_STORE_A{
+    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
+    If(not $titleKey){
+        $titleKey = "allDec"
+    }
+
+    $btnListTb = {}
+    ArraySet(array = $btnListTb, index = 1, value = {
+        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+    })
+    ArraySet(array = $btnListTb, index = 2, value = {
+        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+    })
+
+    $listInfoTb = {}
+    ArraySet(array = $listInfoTb, index = 1, value = {
+        text = "111122wwasd", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", 
+        cfg = "myplugin/test_dec_entity1", trigger = "BUY_STORE", context = {storeMoneyKey = 12324, cfg = "myplugin/test_dec_entity1"}
+    })
+    ArraySet(array = $listInfoTb, index = 2, value = {
+        text = "222aaa", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_6.png", 
+        cfg = "myplugin/test_dec_entity2", trigger = "BUY_STORE", context = {storeMoneyKey = 12231324, cfg = "myplugin/test_dec_entity2"}
+    })
+
+    $infoTb = {
+        btnInfo = {
+            btnType = 2,
+            btnList = $btnListTb
+        },
+        listInfo = {
+            uiType = 2,
+            infoTb = $listInfoTb
+        },
+        eventInfo = {
+            closeEventInfo = {trigger = "EDIT_HOUSE"},
+            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}},
+            rightEventInfo = {trigger = "SHOW_DEC_STORE_B"}
+        }
+    }
+    ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
+}
+
+SHOW_DEC_STORE_B{  
+    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
+    If(not $titleKey){
+        $titleKey = "allDec"
+    }
+
+    $btnListTb = {}
+    ArraySet(array = $btnListTb, index = 1, value = {
+        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+    })
+    ArraySet(array = $btnListTb, index = 2, value = {
+        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+    })
+
+    $listInfoTb = {}
+    ArraySet(array = $listInfoTb, index = 1, value = {
+        text = "111122wwad", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", 
+        cfg = "myplugin/test_dec_entity1", trigger = "BUY_STORE", context = {storeMoneyKey = 12324, cfg = "myplugin/test_dec_entity1"}
+    })
+
+    $infoTb = {
+        btnInfo = {
+            btnType = 2,
+            btnList = $btnListTb
+        },
+        listInfo = {
+            uiType = 2,
+            infoTb = $listInfoTb
+        },
+        eventInfo = {
+            closeEventInfo = {trigger = "EDIT_HOUSE"},
+            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}},
+            rightEventInfo = {trigger = "SHOW_DEC_STORE_A"}
+        }
+    }
+    ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
+}
+
+EDIT_FLOOR{
+    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
+    Test("EDIT_FLOOR")
+}
+
+EDIT_WAR{
+    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
+    Test("EDIT_WAR")
+}
 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 

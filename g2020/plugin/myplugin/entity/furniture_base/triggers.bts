@@ -1,0 +1,27 @@
+ENTITY_ENTER
+{
+}
+
+ENTITY_TOUCH_ALL{
+}
+
+ENTITY_CLICK{
+    $editBuff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/edit_house_buff") -- 不在编辑状态下玩家不能编辑房子的家具
+    If(not $editBuff){
+        Return()
+    }
+    Test("1-*-----------------------------------------")
+
+
+
+
+
+}   
+
+DEC_INTERACTION_TEST{
+    Test("DEC_INTERACTION_TEST")
+
+
+
+
+}

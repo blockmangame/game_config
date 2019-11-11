@@ -36,7 +36,6 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
             Break()
         }
     }
-    Test("$curSelectHouse",$curSelectHouse)
     ------------------------------------------ 内部各区域的颜色，没有则默认颜色，vars里面取，此处的颜色是替换方块
     $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
     $allRegion = GetAllRegion(map = $map)
@@ -53,7 +52,6 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
         }
         FillBlocksInRegion(map = $map, region = $region, block = $block)
     }
-    Test("$regionColor",$regionColor)
     ------------------------------------------ 内部各个家具
     $furnishings = ArrayGet(array = $curSelectHouse, index = 3) or {}
     Foreach(array = $furnishings, key = "furnishing"){
@@ -61,7 +59,6 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
             pos = ArrayGet(array = $furnishing, index = 1), ry = ArrayGet(array = $furnishing, index = 2))
         SetObjectVar(obj = $npc, key = "furnishingId", value = ArrayGet(array = $furnishing, index = 4))
     }
-    Test("$furnishings",$furnishings)
 }
 
 CHANGE_HOUSE_REGION_COLOR{
