@@ -165,7 +165,14 @@ CHANGE_PLAYER_SCALE_ADULT
         $obj1.scaleBuff = nil
     }
 
+    If($obj1.boundingBuff)
+    {
+        RemoveEntityBuff(entity = $obj1, buff = $obj1.boundingBuff)
+        $obj1.boundingBuff = nil
+    }
+
     $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
+    $obj1.boundingBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/bounding_adult")
     $obj1.role = @adult
 }
 
@@ -177,6 +184,13 @@ CHANGE_PLAYER_SCALE_CHILD
         $obj1.scaleBuff = nil
     }
 
+    If($obj1.boundingBuff)
+    {
+         RemoveEntityBuff(entity = $obj1, buff = $obj1.boundingBuff)
+         $obj1.boundingBuff = nil
+    }
+
     $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
+    $obj1.boundingBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/bounding_child")
     $obj1.role = @child
 }
