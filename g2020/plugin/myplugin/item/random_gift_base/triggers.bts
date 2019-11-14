@@ -1,6 +1,6 @@
 USE_ITEM
 {
-    $randomPool = GetItemCfg(fullName = "myplugin/random_gift_middle", key = "randomPool")
+    $randomPool = GetItemCfg(fullName = $itemName, key = "randomPool")
 
     $totalWeigh = 0
     ForLoop(from = 1, to = ArraySize(array = $randomPool), key = "index")
