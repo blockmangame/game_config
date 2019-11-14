@@ -59,6 +59,12 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
             pos = ArrayGet(array = $furnishing, index = 1), ry = ArrayGet(array = $furnishing, index = 2))
         SetObjectVar(obj = $npc, key = "furnishingId", value = ArrayGet(array = $furnishing, index = 4))
     }
+    ------------------------------------------ 内部门
+    ------------------------------------------ 房子 <house-------insideDoor> 内部门
+    $insideDoor = CreateNpc(map = $map, cfgName = GetConfigVar(obj = $obj1, key = "insideDoor"))
+    SetEntityPosition(map = $map, entity = $insideDoor, pos = GetConfigVar(obj = $obj1, key = "insideDoorPos") or {x = 0,y = 0, z = 0})
+    SetObjectVar(obj = $insideDoor, key = "house", value = $obj1)
+    SetObjectVar(obj = $obj1, key = "insideDoor", value = $insideDoor)
 }
 
 CHANGE_HOUSE_REGION_COLOR{
