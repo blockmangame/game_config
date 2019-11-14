@@ -2,5 +2,65 @@
     "actorName": "",
     "hpBarColor": 0,
     "collision": true,
-    "name": ""
+    "name": "",
+    "canClick": true,
+    "canInteract":true,
+    "interactionUI": {
+        "topUI": {
+            "expand": {
+                "image": "set:add_sub.json image:add",
+                "text": "expandUI_text"
+            },
+            "shrink": {
+                "image": "set:add_sub.json image:sub",
+                "text": "shrink_text"
+            }
+        },
+        "btns": [
+            {
+
+                "text": "1",
+                "image": "set:add_sub.json image:add",
+                "eventIndex": 1
+            }
+        ],
+        "events": [
+            "DEC_INTERACTION_TEST"
+        ]
+    },
+    "editUI": {
+        "uis": {
+            "center": {
+                "image": "set:add_sub.json image:add",
+                "touchUI": {
+                    "isCanMove": true,
+                    "touchBeginEventIndex": 1,
+                    "touchEndEventIndex":1
+                }
+            },
+            "other": [
+                {
+                    "image": "set:add_sub.json image:add",
+                    "clickUI":{
+                        "eventIndex": 1
+                    }
+                },
+                {
+                    "image": "set:add_sub.json image:add",
+                    "clickUI":{
+                        "eventIndex": 1
+                    }
+                },
+                {
+                    "image": "set:add_sub.json image:add",
+                    "clickUI":{
+                        "eventIndex": 1
+                    }
+                }
+            ]
+        },
+        "events": [
+            "DEC_INTERACTION_TEST"
+        ]
+    }
 }
