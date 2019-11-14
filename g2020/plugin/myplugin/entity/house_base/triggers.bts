@@ -135,7 +135,9 @@ ENTITY_DIE{
     $outsideDoorMap = GetEntityMap(entity = $outsideDoor)
     KillEntity(entity = GetObjectVar(obj = $obj1, key = "mail"))
     KillEntity(entity = $outsideDoor)
-
+    $insideDoor = GetObjectVar(obj = $obj1, key = "insideDoor")
+    KillEntity(entity = $insideDoor)
+    
     ------------------------------------------ 销毁内部房子
     $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
     MoveMapPlayerTo(map = $map, newmap = $outsideDoorMap, pos = ComputeV3(p1 = $outsideDoorPos, p2 = Table(x = 0, y = 0.1, z = 5), op = "add"))
