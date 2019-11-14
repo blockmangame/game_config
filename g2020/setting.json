@@ -150,11 +150,15 @@
         ["COLOR_7","myplugin/house_color_buff_7", "plugin/myplugin/image/COLOR_7.png"],
         ["COLOR_8","myplugin/house_color_buff_8", "plugin/myplugin/image/COLOR_8.png"]
     ],
-    "skillJack" : {
-        "curveRadius" : 240,
-        "fixedSequenceSkillBar" : true,
-        "curveSkillBar" : true,
-        "jackNum" : 4
+    "skillJack": {
+        "txOffset": 0,
+        "tyOffset": 180,
+        "mxOffset": -50,
+        "myOffset": -50,
+        "jackNum": 4,
+        "curveRadius": 180,
+        "iconSize": 60,
+        "imageHolder": "set:endless_main.json image:skill_hole.png"
     },
     "danceStoreId" : 2,
 	"dressArchiveNum": 10,
