@@ -4,28 +4,24 @@ SKILL_CAST(debug = false) {
         Return()
     }
 
-    $str = GetSkillVar(fullName = $fullName, key = "stateName")
-    If($str == "region")
-    {
-        $locations = GetSkillVar(fullName = $fullName, key = "locations")
-        $str = ArrayGet(array = $locations, index = $obj1.regionIdx)
-    }
-
-    $reg = GetRegionByName(
-        map = GetEntityMap(entity = $obj1),
-        name = $str 
-    )
-    If(not $reg)
-    {
-        Return()
-    }
-
-    SetGuidePostion(
-        pos = GetRegionCfgVar(
-            region = $reg, 
-            key = "gps"
-        ), 
-        entity = $obj1
-    )
-    AddSkill(entity = $obj1, name = "myplugin/close_gps")
+    --$str = GetSkillVar(fullName = $fullName, key = "stateName")
+    --
+    ----TODO 完善详情界面的传输数据
+    --$percent = 0
+    --If($str == "region")
+    --{
+    --    --$percent = NumberFloor(p1 = ($obj1.regionRTime / $duration * 100))
+    --    $str = ArrayGet(
+    --                array = GetSkillVar(fullName = $fullName, key = "locations"),
+    --                index = $obj1.regionIdx
+    --            )
+    --}
+--
+    --TestShowStateDetails(
+    --    entity = $obj1,
+    --    fullName = Concat(p1 = "myplugin/", p2 = $str, p3 = "Detail"),
+    --    uiArea = [
+--
+    --    ]
+    --)
 }

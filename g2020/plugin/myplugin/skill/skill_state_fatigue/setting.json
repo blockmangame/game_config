@@ -2,17 +2,13 @@
     "type": "base",
     "base": "skill_state_base",
     "icon":"fatigue.png",
-    "iconArea":{
-        "HA": 235,
-        "HAlign": "LEFT",
-        "VA": 100,
-        "VAlign": "TOP",
-        "width": 40,
-        "height": 40
-    },    
+
     "stateName": "fatigue",
-    "generateTime":[1,  3, 30, 45, 50],
+    "generateTime":[0.3,  3, 30, 45, 50],
     "rewardSelf": 20000,
     "rewardOther": 1000,
-    "rewardDis": 5
+    "rewardDis": 5,
+    "duration": 0,
+    "siteType": "selfHouse",
+    "pos": "top"
 }

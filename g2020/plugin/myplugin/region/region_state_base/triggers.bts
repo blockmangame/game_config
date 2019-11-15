@@ -6,8 +6,7 @@ REGION_ENTER {
             object = $obj1, 
             opt = "ENTER", 
             key = $inRegionKey, 
-            type = GetRegionConfig(region = $region, key = "stateType"),
-            duration = GetRegionConfig(region = $region, key = "duration")
+            type = GetRegionConfig(region = $region, key = "stateType")
         )
     }
 }
@@ -20,8 +19,7 @@ REGION_LEAVE {
             object = $obj1,
             opt = "LEAVE",
             key = $inRegionKey,
-            type = GetRegionConfig(region = $region, key = "stateType"),
-            duration = GetRegionConfig(region = $region, key = "duration")
+            type = GetRegionConfig(region = $region, key = "stateType")
         )
     }
 }

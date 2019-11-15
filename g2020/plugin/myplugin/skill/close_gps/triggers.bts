@@ -3,6 +3,5 @@ SKILL_CAST(debug = false) {
     {
         Return()
     }
-    SetGuidePostion(entity = $obj1)
-    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
 }

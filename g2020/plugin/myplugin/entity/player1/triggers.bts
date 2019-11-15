@@ -626,15 +626,58 @@ ADD_MONEY
 
 FUNC_GENERATE_STATE
 {
-    $keyStr = Concat(p1 = "is", p2 = $stateName)
-    If(GetObjectVar(obj = $obj1, key = $keyStr) && ($stateName ~= "region" || $obj1.regionRTime > 0))
+    $hadState = Concat(p1 = "is", p2 = $state)
+    If(GetObjectVar(obj = $obj1, key = $hadState) && ($state ~= "region" || $obj1.regionRTime > 0))
     {
         Return()
     }
-    SetGuidePostion(entity = $obj1)
-    SetObjectVar(obj = $obj1, key = $keyStr, value = true)
-    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
-    AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "InteractList"), value = nil)
+    SetObjectVar(obj = $obj1, key = $hadState, value = true)
+    --CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS") --TODO 待考虑放在哪里合适
+    CallTrigger(object = $obj1, event = "FUNC_STATE_ADD_SKILL", state = $state)
+}
+
+FUNC_STATE_ADD_SKILL
+{
+    $p1 = "myplugin/skill_state_"
+    $skill = Concat(p1 = $p1, p2 = $state)
+    AddSkill(entity = $obj1, name = $skill)
+    
+    $state = $state ~= "region" and $state or ArrayGet(
+                                                array = GetSkillVar(
+                                                    fullName = $skill,
+                                                    key = "locations"
+                                                ),
+                                                index = $obj1.regionIdx
+                                            ) 
+    
+    CallTrigger(object = $obj1, event = "FUNC_STATE_IS_IN_REGION", state = $state)
+}
+
+FUNC_STATE_IS_IN_REGION --判断状态生成时是否就已经在区域里面了
+{   
+    $reg = GetRegionByName(
+        map = GetEntityMap(entity = $obj1),
+        name = $state 
+    )
+
+    If($reg && IfEntityInArea(
+                    entity = $obj1,
+                    region = {
+                        min = GetRegionMin(region = $reg),
+                        max = GetRegionMax(region = $reg) + V3(1, 1, 1)
+                    }
+                )
+    )
+    {
+        CallTrigger(
+            opt = "INNER",
+            object = $obj1,
+            key = GetRegionKey(region = $reg),
+            event = "FUNC_REGION_STATE_OPERATION",
+            type = GetRegionCfgVar(region = $reg, key = "stateType")
+        )
+    }
 }
 
 INTERACTION_CLAP { --拍手 小孩和小孩
@@ -707,88 +750,44 @@ ENTITY_REMOVE_INTERACTION {
     }
 }
 
-FUNC_GENERATE_A_STATE
-{
-    $keyStr = Concat(p1 = "is", p2 = $stateName)
-    If(GetObjectVar(obj = $obj1, key = $keyStr))
-    {
-        Return()
-    }
-    SetObjectVar(obj = $obj1, key = $keyStr, value = true)
-    SetObjectVar(
-        obj = $obj1,
-        value = nil,
-        key = Concat(p1 = $stateName, p2 = "InteractList")
-    )
-    AddSkill(entity = $obj1, name = Concat(p1 = "myplugin/skill_state_", p2 = $stateName))
-}
-
-FUNC_GENERATE_B_STATE
-{
-    $obj1.isregion = true
-    $skillName = "myplugin/skill_state_region"
-    $locations = GetSkillVar(fullName = $skillName, key = "locations")
-    $locStr = ArrayGet(array = $locations, index = $obj1.regionIdx)
-
-    SetGuidePostion(entity = $obj1)
-    AddSkill(entity = $obj1, name = $skillName)
-    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
-    SetObjectVar(obj = $obj1, key = "regionInteractList", value = nil)
-
-    $reg = GetRegionByName(
-        map = GetEntityMap(entity = $obj1),
-        name = $locStr 
-    )
-
-    If($reg && IfEntityInArea(
-        region = {
-            min = GetRegionMin(region = $reg),
-            max = GetRegionMax(region = $reg)
-        }, entity = $obj1)
-    )
-    {
-        CallTrigger(
-            opt = "INNER",
-            object = $obj1,
-            key = GetRegionKey(region = $reg),
-            event = "FUNC_REGION_STATE_OPERATION",
-            type = GetRegionCfgVar(region = $reg, key = "stateType"),
-            duration = GetRegionCfgVar(region = $reg, key = "duration")
-        )
-    }
-}
-
 FUNC_REGION_STATE_OPERATION 
 {
+    If($key == GetObjectVar(obj = $obj1, key = "gpsDestination"))
+    {
+        ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
+        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+    }
+
+    $skill = Concat(p1 = "myplugin/skill_state_", p2 = $key)
+    $duration = GetSkillVar(fullName = $skill, key = "duration")
+    --Test($duration, "FUNC_REGION_STATE_OPERATION", $key, $type) --TODO LOG
+
     If($type == "B" && $obj1.isregion)
     {
         If($opt ~= "INNER")
         {
             $location = ArrayGet(
                 array = GetSkillVar(
-                    fullName = "myplugin/skill_state_region",
+                    fullName = $skill,
                     key = "locations"
                 ),
                 index = $obj1.regionIdx
             )
+            --Test($location, "ArrayGet locations") --TODO LOG
             If($location ~= $key)
             {
                 Return()
             }
         }
-
         If($opt == "LEAVE")
         {
-            StopTimer(timer = $obj1.REGION_TIMER)
             ShowProgressFollowObj(entity = $obj1, isOpen = false)
-            $obj1.regionRTime = $obj1.regionRTime - GetTime() + $obj1.regionSTime
+            If($obj1.REGION_TIMER){StopTimer(timer = $obj1.REGION_TIMER)}
+            If($obj1.regionSTime){$obj1.regionRTime = $obj1.regionRTime - GetTime() + $obj1.regionSTime}
             Return()
         }
 
-        If($obj1.regionRTime == 0)
-        {
-            $obj1.regionRTime = $duration
-        }
+        $obj1.regionRTime = $obj1.regionRTime == 0 and $duration or $obj1.regionRTime
         $obj1.regionSTime = GetTime()
 
         ShowProgressFollowObj(
@@ -889,6 +888,69 @@ FUNC_STATE_REWARD_AND_TIP
     )
 }
 
+FUNC_STATE_OPEN_GPS
+{
+    If(not $rtVal)
+    {
+        Return()
+    }
+
+    --TODO 完善状态的GPS导航
+    $map = GetEntityMap(entity = $obj1)
+    $mapName = GetEntityName(entity = $map)
+    Test($mapName, "FUNC_STATE_OPEN_GPS") --TODO LOG
+    
+    $regObj = GetCfg(type = "region", fullName = Concat(p1 = "myplugin/region_state_", p2 = $rtVal))
+    $type = GetObjectVar(obj = $regObj, key = "siteType")
+    $gps = { x = 0, y = 0, z = 0 }
+    If($mapName == "map001")
+    {
+        If($type == "publicArea")
+        {
+            $region = GetRegionByName(map = $map, name = $rtVal)
+            If(not $region)
+            {
+                Return()
+            }
+            $tmpReg = {
+                min = GetRegionMin(region = $region),
+                max = GetRegionMax(region = $region) + V3(1, 1, 1)
+            }
+            If(IfEntityInArea(entity = $obj1, region = $tmpReg))
+            {
+                ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
+                CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+                Return()
+            }
+            $gps = GetRegionCfgVar(region = $region, key = "gps")
+        }
+        ElseIf($type == "selfHouse")
+        {
+            $house = GetObjectVar(obj = $obj1, key = "house")
+            $gps = ComputeV3(p1 = GetEntityPosition(entity = $house), p2 = GetConfigVar(obj = $house, key = "doorPos"), op = "add")
+        }
+    }
+
+    ElseIf($mapName == "house_default_inside_map")
+    {
+        $house = GetObjectVar(obj = $obj1, key = "house")
+        $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+        $gps = GetConfigVar(obj = $house, key = "insideDoorPos")
+        If($map == $houseInsideMap && $type == "selfHouse")
+        {
+            ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
+            CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+            Return()
+        }
+    }
+
+    CallTrigger(
+        object = $obj1,
+        event = "FUNC_OPEN_GPS",
+        destination = $rtVal,
+        pos = $gps
+    )
+}
 CREATE_FAMILY
 {
     If(IsPlayer(entity = $obj1))

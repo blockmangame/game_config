@@ -13,4 +13,6 @@ ENTITY_TOUCH_ALL{
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
     SetEntityPosition(map = $map, entity = $obj2, 
         pos = GetMapInitPos(map = $map) or GetEntityPosition(entity = $obj2))
+
+    CallTrigger(object = $obj2, event = "FUNC_STATE_OPEN_GPS", rtVal = $obj2.gpsDestination)--如果有导航则继续导航
 }
