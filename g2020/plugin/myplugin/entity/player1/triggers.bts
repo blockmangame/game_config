@@ -14,6 +14,7 @@ ENTITY_ENTER
         CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)    
 		
 		CallTrigger(event = "SET_DRESS_ARCHIVE", object = $obj1)
+        CallTrigger(event = "INIT_PLAYER_DRESS", object = $obj1)
 
 
         CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, newSkill = $obj1.danceUseItem)
@@ -148,6 +149,12 @@ REMOVE_HOUSE_OUTSIDE{
 ENTITY_LEAVE{ 
     ------------------------------------------ 玩家退出，清掉房子 邮箱 门，重置区域owner为nil
     CallTrigger(object = $obj1, event = "REMOVE_HOUSE_OUTSIDE")
+
+    ----------------------------------------- 玩家退出，保存身上穿搭
+    CallTrigger(object = $obj1, event = "SAVE_PLAYER_DRESS")
+
+    ---------------------------------------玩家退出，删除掉暂存在数据库“dressArchive”字段中的bm装扮信息
+    CallTrigger(object = $obj1, event = "REMOVE_BM_DRESS")
 }
 
 UPDATE_HOUSE{
@@ -1121,30 +1128,6 @@ SET_DRESS_ARCHIVE
         Return()
     }
 
-    $testData = {
-        vars = {
-            custom_face = 5,
-            custom_hair = 5,
-            clothes_tops = 20,
-            clothes_pants = 35,
-            custom_shoes = 40,
-            custom_glasses = 3,
-            custom_scarf = 3,
-            custom_wing = 25,
-            custom_hat = 5,
-            custom_tail = 5
-        }
-    }
-
-    $testInfo = {
-        vars = {
-            name = "123456",
-            data = $testData
-        }
-    }
-
-    ArrayAppend(array = $dressArchive, value = $testInfo)
-
     $bmDressData = {
         vars = {
             custom_face = GetSkin(entity = $obj1, skinName = "custom_face"),
@@ -1194,6 +1177,11 @@ OPERATE_DRESS_ARCHIVE
 ADD_DRESS_ARCHIVE
 {
     $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
+    If(not $dressArchive)
+    {
+        Return()
+    }
+
     If((ArraySize(array = $dressArchive) - 1) <= GetWorldVar(key = "dressArchiveNum"))
     {
         $addDressData = {
@@ -1229,6 +1217,10 @@ DELETE_DRESS_ARCHIVE
 {
     
     $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
+    If(not $dressArchive)
+    {
+        Return()
+    }
 
     If($index <= ArraySize(array = $dressArchive) and $index > 0)
     {
@@ -1241,6 +1233,11 @@ DELETE_DRESS_ARCHIVE
 RENAME_DRESS_ARCHIVE
 {
     $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
+    If(not $dressArchive)
+    {
+        Return()
+    }
+
     If($index <= ArraySize(array = $dressArchive) and $index > 0)
     {
         $archive = ArrayGet(array = $dressArchive, index = $index)
@@ -1251,4 +1248,55 @@ RENAME_DRESS_ARCHIVE
     }
     
     UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $dressArchive) 
+}
+
+REMOVE_BM_DRESS
+{
+    $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
+    If(not $dressArchive)
+    {
+        Return()
+    }
+
+    ArrayRemove(array = $dressArchive, index = ArraySize(array = $dressArchive))
+}
+
+INIT_PLAYER_DRESS
+{
+    $gameDress = GetObjectVar(obj = $obj1, key = "gameDress")
+    If(not $gameDress)
+    {
+        Return()
+    }
+
+    If($gameDress ~= "")
+    {
+        $dressDict = NewDictionary($gameDress)
+        ForeachDictionary(dict = $dressDict, keyName = "skinName", valueName = "skinValue")
+        {
+            SetSkin(entity = $obj1, skinName = $skinName, skinValue = $skinValue)
+        }
+    }
+}
+
+SAVE_PLAYER_DRESS
+{
+    $gameDress = GetObjectVar(obj = $obj1, key = "gameDress")
+    If(not $gameDress)
+    {
+        Return()
+    }
+
+    $gameDress = {
+        custom_face = GetSkin(entity = $obj1, skinName = "custom_face"),
+        custom_hair = GetSkin(entity = $obj1, skinName = "custom_hair"),
+        clothes_tops = GetSkin(entity = $obj1, skinName = "clothes_tops"),
+        clothes_pants = GetSkin(entity = $obj1, skinName = "clothes_pants"),
+        custom_shoes = GetSkin(entity = $obj1, skinName = "custom_shoes"),
+        custom_glasses = GetSkin(entity = $obj1, skinName = "custom_glasses"),
+        custom_scarf = GetSkin(entity = $obj1, skinName = "custom_scarf"),
+        custom_wing = GetSkin(entity = $obj1, skinName = "custom_wing"),
+        custom_hat = GetSkin(entity = $obj1, skinName = "custom_hat"),
+        custom_tail = GetSkin(entity = $obj1, skinName = "custom_tail")
+    }
 }
