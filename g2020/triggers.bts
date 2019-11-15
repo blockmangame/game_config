@@ -29,15 +29,17 @@ FUNC_GENERATE_STATE_STARTTIME
 FUNC_CHANGE_STATE
 {
     Foreach(array = GetAllPlayers(), key = "player"){
-        If($stateName ~= "region")
-        {
-            CallTrigger(object = $player, event = "FUNC_GENERATE_A_STATE", stateName = $stateName)
-        }
-        ElseIf($player.regionRTime == 0)
+        --TODO 完善状态的生成
+        --If(player in party)
+        --{
+        --    Continue()
+        --}
+
+        If($stateName == "region" && $player.regionRTime == 0)
         {
             $player.regionIdx = $column
-            CallTrigger(object = $player, event = "FUNC_GENERATE_B_STATE")
         }
+        CallTrigger(object = $player, event = "FUNC_GENERATE_STATE", state = $stateName)
 	}
 
     $curTime = ArrayGet(array = $timeArr, index = $column)
@@ -193,4 +195,19 @@ CHANGE_PLAYER_SCALE_CHILD
     $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
     $obj1.boundingBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/bounding_child")
     $obj1.role = @child
+}
+
+FUNC_CLOSE_GPS
+{
+    SetGuidePostion(entity = $obj1)
+    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+    SetObjectVar(obj = $obj1, key = "gpsDestination", value = nil)
+}
+
+FUNC_OPEN_GPS
+{
+    SetGuidePostion(pos = $pos, entity = $obj1)
+    AddSkill(entity = $obj1, name = "myplugin/close_gps")
+    SetObjectVar(obj = $obj1, key = "gpsDestination", value = $destination)
+    ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
 }

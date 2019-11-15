@@ -1,4 +1,25 @@
 {
     "actorName": "",
-    "hideHp": true
+    "hideHp": true,
+    "interactionUI": {
+        "btns": [
+            {
+                "text": "500$",
+                "image": "set:add_sub.json image:add",
+                "eventIndex": 1
+            }
+        ],
+        "events": [
+            "ENTITY_STORE_BUY_ITEM"
+        ]
+    },
+    "canInteract":true,
+    "interaction":{
+        "radius": 5,
+        "offset":{
+            "x": 0,
+            "y": -1,
+            "z": 0
+        }
+    }
 }

@@ -1,7 +1,11 @@
 ENTITY_CLICK {
-	RideOn(ctrl = true, entity = $obj2, target = $obj1)
+    Test("=========================================================================================")
+	$store = GetConfigVar(key = "openStore", obj = $obj1)
+	ShowStore(player = $obj2, store = $store)
 }
 
-ENTITY_JUMP {
-	ClearRide(entity = $owner)
+ENTITY_STORE_BUY_ITEM {
+    Test("=========================================================================================")
+    $store = GetConfigVar(key = "openStore", obj = $obj1)
+    ShowStore(player = $obj2, store = $store)
 }

@@ -2,15 +2,7 @@
     "type": "base",
     "base": "skill_state_base",
     "icon":"region.png",
-    "iconArea":{
-        "HA": 325,
-        "HAlign": "LEFT",
-        "VA": 100,
-        "VAlign": "TOP",
-        "width": 40,
-        "height": 40
-    },
-    "generateTime":[0.2,  0.3, 0.4, 0.9, 1.5, 1.7, 1.8, 3],
+    "generateTime":[0.2,  2, 4, 5.5, 7.5, 8.7, 9.8, 11.3],
     "locations": [
         "camp",
         "playground",
@@ -24,5 +16,8 @@
     "stateName": "region",
     "rewardSelf": 10000,
     "rewardOther": 5000,
-    "rewardDis": 5
+    "rewardDis": 5,
+    "duration": 20,
+    "siteType": "publicArea",
+    "pos": "top"
 }
