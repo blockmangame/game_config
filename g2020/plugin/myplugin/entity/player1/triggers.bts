@@ -44,7 +44,9 @@ ENTITY_ENTER
                     [{x = 1648,y=13,z=-574},180,"myplugin/test_dec_entity1","ddss1","true"],
                     [{x = 1650,y=13,z=-574},180,"myplugin/test_dec_entity2","dds2s","true"]
                 ],
-                [],
+                [
+                    ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]]
+                ],
                 "enable",
                 "Sakura NeNe",
                 "houseType",
@@ -72,6 +74,7 @@ ENTITY_ENTER
             Break()
         }
     }
+    SetObjectVar(obj = $obj1, key = "curSelectHouseVars", value = $curSelectHouse)
     ------------------------------------------ 获得当前地图上的空出的区域，创建房子 * 
     -- 区域 <region------owner> 房子 <house-------owner> 玩家，可通过区域获取区域上的房子，通过房子获得所属玩家。 反向同理
     $regions = GetAllRegion(map = GetEntityMap(entity = $obj1))
@@ -111,8 +114,9 @@ TEST_DATA{ -- 保存进数据库的数据伪代码
                     -- {pos,yaw,cfg,全局唯一id:furnishingId,是否是旧家具，下线后则会将当前玩家全部房子的全部家具设置成true，即是旧家具}
                 ],
                 [ -- houseInsideRegionColors 房子内部区域颜色
-                    ["regionkey", "myplugin/xxx..."], -- regionkey, color 此处的颜色是替换方块
-                    ["regionkey2", "myplugin/xxx..."]
+                    ["regionkey", ["myplugin/xxx...","myplugin/xxx...","myplugin/xxx..."]], -- 第一个key是对应的region key，通过这个key获取这个区域region/获取到配置
+                    ["regionkey", ["myplugin/xxx...","myplugin/xxx...","myplugin/xxx..."]] -- 第二个数组对应的是上面获取到的region的childRegionKey属性中对应
+                                                                                        -- 该region的子region使用的方块！
                 ],
                 "enable", -- cur select house 有这个标志就是 当前选择/出生的房子
                 "houseName", -- 当前房子的名字
@@ -178,6 +182,7 @@ UPDATE_HOUSE{
         ArraySet(array = $newHouseVar, index = 2, value = $curSelectKey)
         CallTrigger(object = $obj1, event = "CHANGE_HOUSE", 
             newHouse = ArrayGet(array = $newHouseVar, index = 1), houseColor = $curSelectKey)
+        SetObjectVar(obj = $obj1, key = "curSelectHouseVars", value = $newHouseVar)
     }
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
 }
@@ -260,7 +265,7 @@ HOUSE_TAB_EVENT{
     -- btn
     $btnList = [
         {text = "ui_house_sell_house", trigger = "SELL_HOUSE", context = { houseKey = $key} },
-        {text = "ui_house_use_house", trigger = "UPDATE_HOUSE", context = { houseKey = $key} }
+        {text = "ui_house_use_house", trigger = "UPDATE_HOUSE", curSelect = ArrayGet(array = $curSelectHouse, index = 5) == "enable",context = { houseKey = $key} }
     ]
     $infoTb = {
         uiWin = "genericListDisplayBox2",
@@ -283,13 +288,7 @@ HOUSE_TAB_EVENT{
 
 EDIT_HOUSE_NAME{
     Test("EDIT_HOUSE_NAME")
-    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
-    Foreach(array = $houseVars, key = "houseVar"){
-        If(ArrayGet(array = $houseVar, index = 8) == $upperLayerKey){
-            $curSelectHouse = $houseVar
-            Break()
-        }
-    }
+    $houseVars = GetObjectVar(obj = $obj1, key = "curSelectHouseVars") or {}
 
 
 
@@ -488,7 +487,10 @@ SHOW_DEC_STORE{
             text = "333", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_4.png", trigger = "EDIT_FLOOR", context = {titleKey = "allEdit"}
         })
         ArraySet(array = $listInfoTb, index = 2, value = {
-            text = "444", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", trigger = "EDIT_WAR", context = {titleKey = "allEdit"}
+            text = "444", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", trigger = "EDIT_WALL", context = {titleKey = "allEdit"}
+        })
+        ArraySet(array = $listInfoTb, index = 3, value = {
+            text = "555", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_3.png", trigger = "EDIT_CEILING", context = {titleKey = "allEdit"}
         })
     }
 
@@ -589,15 +591,164 @@ SHOW_DEC_STORE_B{
 }
 
 EDIT_FLOOR{
-    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
     Test("EDIT_FLOOR")
-}
-
-EDIT_WAR{
     ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
-    Test("EDIT_WAR")
+    If(not $titleKey){
+        $titleKey = "allEdit"
+    }
+
+    $btnListTb = {}
+    ArraySet(array = $btnListTb, index = 1, value = {
+        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+    })
+    ArraySet(array = $btnListTb, index = 2, value = {
+        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+    })
+
+    $listInfoTb = {}
+    ArraySet(array = $listInfoTb, index = 1, value = {
+        text = "asda", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", 
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12324, childRegionKey = "floorRegion", colorBlock = "myplugin/wool_1"}
+    })
+    ArraySet(array = $listInfoTb, index = 2, value = {
+        text = "gfdgh", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", 
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12224, childRegionKey = "floorRegion", colorBlock = "myplugin/wool_2"}
+    })
+
+    $infoTb = {
+        btnInfo = {
+            btnType = 2,
+            btnList = $btnListTb
+        },
+        listInfo = {
+            uiType = 2,
+            infoTb = $listInfoTb
+        },
+        eventInfo = {
+            closeEventInfo = {trigger = "EDIT_HOUSE"},
+            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = $titleKey}},
+            rightEventInfo = {trigger = "EDIT_WALL"}
+        }
+    }
+    ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
 }
 
+EDIT_WALL{
+    Test("EDIT_WALL")
+    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
+    If(not $titleKey){
+        $titleKey = "allEdit"
+    }
+
+    $btnListTb = {}
+    ArraySet(array = $btnListTb, index = 1, value = {
+        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+    })
+    ArraySet(array = $btnListTb, index = 2, value = {
+        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+    })
+
+    $listInfoTb = {}
+    ArraySet(array = $listInfoTb, index = 1, value = {
+        text = "fggg", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_3.png", 
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12324, childRegionKey = "wallRegion", colorBlock = "myplugin/wool_3"}
+    })
+
+    $infoTb = {
+        btnInfo = {
+            btnType = 2,
+            btnList = $btnListTb
+        },
+        listInfo = {
+            uiType = 2,
+            infoTb = $listInfoTb
+        },
+        eventInfo = {
+            closeEventInfo = {trigger = "EDIT_HOUSE"},
+            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = $titleKey}},
+            rightEventInfo = {trigger = "EDIT_CEILING"}
+        }
+    }
+    ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
+}
+
+EDIT_CEILING{
+    Test("EDIT_CEILING")
+    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
+    If(not $titleKey){
+        $titleKey = "allEdit"
+    }
+
+    $btnListTb = {}
+    ArraySet(array = $btnListTb, index = 1, value = {
+        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+    })
+    ArraySet(array = $btnListTb, index = 2, value = {
+        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+    })
+
+    $listInfoTb = {}
+    ArraySet(array = $listInfoTb, index = 1, value = {
+        text = "hhhh", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_4.png", 
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12324, childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_4"}
+    })
+    ArraySet(array = $listInfoTb, index = 2, value = {
+        text = "jjjj", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", 
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12224, childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_5"}
+    })
+
+    $infoTb = {
+        btnInfo = {
+            btnType = 2,
+            btnList = $btnListTb
+        },
+        listInfo = {
+            uiType = 2,
+            infoTb = $listInfoTb
+        },
+        eventInfo = {
+            closeEventInfo = {trigger = "EDIT_HOUSE"},
+            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = $titleKey}},
+            rightEventInfo = {trigger = "EDIT_FLOOR"}
+        }
+    }
+    ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
+}
+
+BUY_HOUSE_REGION_COLOR{
+    Test("BUY_HOUSE_REGION_COLOR", $storeMoneyKey, $childRegionKey, $colorBlock)
+    -- TODO 购买
+    $curInsideRegion = GetObjectVar(obj = $obj1, key = "curInsideRegion")
+    If(not $curInsideRegion){
+        Return()
+    }
+    
+    $curInsideRegionKey = GetRegionKey(region = $curInsideRegion)
+    $curInsideRegionChildReionArr = GetRegionConfig(region = $curInsideRegion, key = "childRegionKey")
+    ForLoop(from = 1, to = ArraySize(array = $curInsideRegionChildReionArr), key = "index"){
+        If(ArrayGet(array = $curInsideRegionChildReionArr, index = $index) == $childRegionKey){
+            $curInsideRegionChildReionIndex = $index
+            Break()
+        }
+    }
+    If(not $curInsideRegionChildReionIndex){
+        Return()
+    }
+    $childRegionArr = GetRegionConfig(region = $curInsideRegion, key = $childRegionKey) or {}
+    
+    Foreach(array = $childRegionArr, key = "cRegion"){
+        FillBlocksInRegion(map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap"), region = $cRegion, 
+            block = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
+    }
+
+    $curSelectHouse = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "owner"), key = "curSelectHouseVars") or {}
+    $curSelectHouseRegionColor = ArrayGet(array = $curSelectHouse, index = 4) or {}
+    Foreach(array = $curSelectHouseRegionColor, key = "childRegionColorArr"){
+        If(ArrayGet(array = $childRegionColorArr, index = 1) == $curInsideRegionKey){
+            ArraySet(array = ArrayGet(array = $childRegionColorArr, index = 2), index = $curInsideRegionChildReionIndex, value = $colorBlock)
+        }
+    }
+}
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 
 ADD_MONEY
