@@ -1,0 +1,70 @@
+{
+    "actorName": "fish02.actor",
+    "canInteract":true,
+    "deadInRed":false,
+    "destroyTime":40,
+    "interactionUI":{
+        "cfgKey": "interactionUI",
+        "followParams":{
+            "followScenePos":false
+        },
+        "centerBtns":[
+            {
+                "text":"000",
+                "widgetFileName":"widget_button",
+                "image":"set:add_sub.json image:add",
+                "event": "TEST_SHOW_NEW_UI"
+            }
+        ]
+    },
+    "interactionUI_1":{
+        "cfgKey": "interactionUI_1",
+        "aroundParams":{
+            "deltaAngle":20,
+            "startAngle": 270,
+                "radius": 100
+        },
+        "followParams":{
+            "followScenePos":true,
+            "showRange":2
+        },
+        "centerBtns":[
+            {
+                "text":"111",
+                "image":"set:add_sub.json image:add",
+                "event": "INTERACTION_CENTER"
+            }
+        ],
+        "aroundBtns":[
+            {
+                "text":"1",
+                "image":"set:add_sub.json image:add",
+                "event": "INTERACTION_1",
+                "disable": true
+            },
+            {
+                "text":"2",
+                "image":"set:add_sub.json image:add",
+                "event": "INTERACTION_2"
+            },
+            {
+                "text":"3",
+                "image":"set:add_sub.json image:add",
+                "event": "INTERACTION_3"
+            },
+            {
+                "text":"4",
+                "image":"set:add_sub.json image:add",
+                "event": "INTERACTION_4"
+            }
+        ]
+    },
+    "interaction":{
+      "radius": 1,
+      "offset":{
+          "x": 0,
+          "y": -1,
+          "z": 2
+      }
+    }
+}
