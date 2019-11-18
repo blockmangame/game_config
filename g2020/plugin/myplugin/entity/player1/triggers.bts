@@ -906,9 +906,7 @@ FUNC_STATE_OPEN_GPS
     $map = GetEntityMap(entity = $obj1)
     $mapName = GetEntityName(entity = $map)
     Test($mapName, "FUNC_STATE_OPEN_GPS") --TODO LOG
-    
-    $regObj = GetCfg(type = "region", fullName = Concat(p1 = "myplugin/region_state_", p2 = $rtVal))
-    $type = GetObjectVar(obj = $regObj, key = "siteType")
+    $type = GetConfigValue(type = "region", fullName = Concat(p1 = "myplugin/region_state_", p2 = $rtVal), key = "siteType")
     $gps = { x = 0, y = 0, z = 0 }
     If($mapName == "map001")
     {
