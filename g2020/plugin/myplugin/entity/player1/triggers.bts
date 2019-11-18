@@ -1070,8 +1070,8 @@ INIT_TEAM_UI
     ShowTeam(entity = $obj1, show = $show, info = $info)
 }
 
-STORE_ITEM_STATUS_CHANGE {
-
+STORE_ITEM_STATUS_CHANGE
+{
     $dictItem = NewDictionary($item)
     $storeId = DictionaryGet(dict = $dictItem, key = "storeId")
     $itemIndex = DictionaryGet(dict = $dictItem, key = "index")
@@ -1079,33 +1079,37 @@ STORE_ITEM_STATUS_CHANGE {
     If($storeId == $danceStoreId && $targetIndex > 0)
     {
         $newDance = {}
-        $oldIndex = 0
-        $oldValue = 0
         $danceIndex = 1
+        $oldUseIndex = 0
+        $oldItemIndex = 0
         Foreach(array = $obj1.danceUseItem, key = "value")
         {
             If($value == $itemIndex)
             {
-                $oldIndex = $danceIndex
+                $oldUseIndex = $danceIndex
             }
 
             If ($danceIndex == $targetIndex)
             {
-                $oldValue = $value
+                $oldItemIndex = $value
                 ArraySet(array = $newDance, index = $danceIndex , value = $itemIndex)
-            } Else {
+            }
+            Else
+            {
                 ArraySet(array = $newDance, index = $danceIndex , value = $value)
             }
 
             $danceIndex = $danceIndex + 1
         }
 
-        If ($oldIndex > 0) {
-            ArraySet(array = $newDance, index = $oldIndex , value = $oldValue)
+        If ($oldUseIndex > 0)
+        {
+            ArraySet(array = $newDance, index = $oldUseIndex , value = $oldItemIndex)
         }
 
         $newData = {}
         $dataIndex = 1
+        $hasOldValue = false
         Foreach(array = $data, key = "value")
         {
             $dictValue = NewDictionary($value)
@@ -1115,8 +1119,23 @@ STORE_ITEM_STATUS_CHANGE {
             {
                 DictionarySet(dict = $dictValue, key = "status", value = 1)
             }
+
+            If($dictStoreItemIndex == $oldItemIndex)
+            {
+                $hasOldValue = true
+            }
+
             ArraySet(array = $newData, index = $dataIndex , value = $dictValue)
             $dataIndex = $dataIndex + 1
+        }
+
+        If($hasOldValue == false)
+        {
+            $dictValue = NewDictionary({})
+            DictionarySet(dict = $dictValue, key = "status", value = 1)
+            DictionarySet(dict = $dictValue, key = "itemIndex", value = $oldItemIndex)
+            DictionarySet(dict = $dictValue, key = "storeId", value = $danceStoreId)
+            ArrayAppend(array = $newData, value = $dictValue)
         }
         
         Foreach(array = $newDance, key = "value")
@@ -1139,9 +1158,10 @@ STORE_ITEM_STATUS_CHANGE {
                 DictionarySet(dict = $dictValue, key = "status", value = 2)
                 DictionarySet(dict = $dictValue, key = "itemIndex", value = $value)
                 DictionarySet(dict = $dictValue, key = "storeId", value = $danceStoreId)
+                ArrayAppend(array = $newData, value = $dictValue)
             }
         }
-        
+
         $dataIndex = 1
         $dataRestore = {}
         Foreach(array = $newData, key = "dictValue")
