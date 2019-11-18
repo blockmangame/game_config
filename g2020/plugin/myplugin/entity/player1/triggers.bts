@@ -1109,7 +1109,7 @@ STORE_ITEM_STATUS_CHANGE
 
         $newData = {}
         $dataIndex = 1
-        $hasOldValue = false
+        $hasOldItemIndex = false
         Foreach(array = $data, key = "value")
         {
             $dictValue = NewDictionary($value)
@@ -1122,14 +1122,14 @@ STORE_ITEM_STATUS_CHANGE
 
             If($dictStoreItemIndex == $oldItemIndex)
             {
-                $hasOldValue = true
+                $hasOldItemIndex = true
             }
 
             ArraySet(array = $newData, index = $dataIndex , value = $dictValue)
             $dataIndex = $dataIndex + 1
         }
 
-        If($hasOldValue == false)
+        If($hasOldItemIndex == false)
         {
             $dictValue = NewDictionary({})
             DictionarySet(dict = $dictValue, key = "status", value = 1)
