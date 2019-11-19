@@ -1382,3 +1382,14 @@ SAVE_PLAYER_DRESS
         custom_tail = GetSkin(entity = $obj1, skinName = "custom_tail")
     }
 }
+
+MESSAGE_BOARD_LEAVE_MESSAGE
+{
+    Test($msg)
+    LeaveMessage(player = $obj1, graffitiId = 1, msg = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", event = "HTTP_TEST")
+}
+
+HTTP_TEST
+{
+    Test($response)
+}
