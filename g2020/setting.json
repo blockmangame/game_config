@@ -155,15 +155,25 @@
         ["COLOR_7","myplugin/house_color_buff_7", "plugin/myplugin/image/COLOR_7.png"],
         ["COLOR_8","myplugin/house_color_buff_8", "plugin/myplugin/image/COLOR_8.png"]
     ],
-    "skillJack": {
-        "txOffset": 0,
-        "tyOffset": 180,
-        "mxOffset": -50,
-        "myOffset": -50,
-        "jackNum": 4,
-        "curveRadius": 180,
-        "iconSize": 60,
-        "imageHolder": "set:endless_main.json image:skill_hole.png"
+    "skillJack":{
+        "jackList":[
+            {
+                "jackNum":4,
+                "radius":250,
+                "jackSize":86,
+                "startAngle":280,
+                "deltaAngle":35
+            }
+        ],
+        "topJackSize":60,
+        "txOffset":0,
+        "tyOffset":100,
+        "mxOffset":-50,
+        "myOffset":0,
+        "midJackSize":60,
+        "imageHolder":"set:endless_main.json image:skill_hole.png",
+        "AJackArea":[[0, -105], [0, -95], [0, 189], [0, 189]],
+        "BJackArea":[[0, -41], [0, -34], [0, 100], [0, 100]]
     },
     "danceStoreId" : 2,
 	"dressArchiveNum": 10,
