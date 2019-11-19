@@ -34,6 +34,7 @@ FUNC_CHANGE_STATE
         --{
         --    Continue()
         --}
+        SetObjectVar(obj = $player, value = 0, key = Concat(p1 = $stateBase, p2 = "RewardCount"))
 
         $regUTime = GetObjectVar(obj = $player, key = "regionUseTime")
         $hadState = Concat(p1 = "is", p2 = $stateBase)

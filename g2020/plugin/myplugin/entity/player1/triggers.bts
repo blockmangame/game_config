@@ -774,60 +774,73 @@ FUNC_STATE_CLOSE_PROGRESS_FOLLOW_OBJ --params: isOpen, state
     }
 }
 
-FUNC_STATE_RELEASE_AND_REWARD
+FUNC_STATE_RELEASE_AND_REWARD --params: state
 {
     $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
-
+    
     $hadState = Concat(p1 = "is", p2 = $stateBase)
     If(not GetObjectVar(obj = $obj1, key = $hadState))
     {
         Return()
     }
 
+    RemoveSkill(entity = $obj1, name = $skill)
     If($stateBase == "region")
     {
-        SetObjectVar(obj = $obj1, key = "regionUseTime", value = nil)
+        SetObjectVar(obj = $obj1, value = nil, key = "regionUseTime")
     }
-    
-    RemoveSkill(entity = $obj1, name = $skill)
-    SetObjectVar(obj = $obj1, key = $interactList, value = nil)
-    SetObjectVar(obj = $obj1, key = $hadState, value = false)
-    
+
     CallTrigger(object = $obj1, event = "FUNC_STATE_CLOSE_PROGRESS_FOLLOW_OBJ", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_CLOSE_GPS", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_CLOSE_DETAILS_UI", state = $state)
 
     $rewardSelf = GetSkillVar(fullName = $skill, key = "rewardSelf")
     $rewardOther = GetSkillVar(fullName = $skill, key = "rewardOther")
+    $rewardFamily = GetSkillVar(fullName = $skill, key = "rewardFamily")
     $rewardDis = GetSkillVar(fullName = $skill, key = "rewardDis")
+    $rewardCount = GetSkillVar(fullName = $skill, key = "rewardCount")
 
+    CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardSum = $rewardSelf, textKey = "reward_takeCare")
     $interactList = Concat(p1 = $stateBase, p2 = "InteractList")
-    If(not GetObjectVar(obj = $obj1, key = $interactList))
+    If(GetObjectVar(obj = $obj1, key = $interactList))
     {
-        CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardSelf)
-        Return()
-    }
-
-    Foreach(array = GetObjectVar(obj = $obj1, key = $interactList), key = "objID")
-    {
-        $player = GetObject(objID = $objID)
-        If(not IsPlayer(entity = $player) || GetObjectDistance(obj1 = $obj1, obj2 = $player) > $rewardDis)
+        $teamId = GetEntityTeam(entity = $obj1)
+        $rewardSum = 0
+        $textKey = ""
+        Foreach(array = GetObjectVar(obj = $obj1, key = $interactList), key = "objID")
         {
-            Continue()
+            $entity = GetObject(objID = $objID)
+            If(not IsPlayer(entity = $entity))
+            {
+                Continue()
+            }
+            
+            $countKey = Concat(p1 = $stateBase, p2 = "RewardCount")
+            $count = GetObjectVar(obj = $entity, key = $countKey)
+            $dis = GetObjectDistance(obj1 = $obj1, obj2 = $entity)
+            $myTeamId =  GetEntityTeam(entity = $entity)
+
+            If($count < $rewardCount && $dis < $rewardDis)
+            {
+                SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
+                $rewardSum = $myTeamId == $teamId and $rewardFamily or $rewardOther
+                $textKey = $myTeamId == $teamId and "reward_family" or "reward_takeCare"
+                CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardSum = $rewardSum, textKey = $textKey)
+            }
         }
-        CallTrigger(object = $player, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardOther)
+        SetObjectVar(obj = $obj1, key = $interactList, value = nil)  
     }
-    CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardOther)
+    SetObjectVar(obj = $obj1, key = $hadState, value = false)
 }
 
-FUNC_STATE_REWARD_AND_TIP
+FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey
 {
-    AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardCount)
+    AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardSum)
     ShowRewardRollTip(
         entity = $obj1,
         image = "set:jail_break.json image:jail_break_currency",
-        text = Concat(p1 = "+", p2 = $rewardCount, p3 = "(照顾加成)"),
+        text = Concat(p1 = "+", p2 = $rewardSum, p3 = $textKey),
     )
 }
 
