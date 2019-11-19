@@ -47,6 +47,10 @@ FUNC_CHANGE_STATE
         {
             Continue()
         }
+        ElseIf($statebase == "dirty" || $stateBase == "fatigue")
+        {
+            SetObjectVar(obj = $player, value = 0, key = Concat(p1 = $stateBase, p2 = "UseTime"))
+        }
 
         SetObjectVar(obj = $player, key = $hadState, value = true)
         CallTrigger(object = $player, event = "FUNC_GENERATE_STATE", stateBase = $stateBase)

@@ -679,7 +679,7 @@ FUNC_STATE_IS_IN_REGION --params: state
     }
 }
 
-FUNC_REGION_STATE_OPERATION
+FUNC_REGION_STATE_OPERATION --parmas: opt, key
 {
     If($key == GetObjectVar(obj = $obj1, key = "gpsDestination"))
     {
@@ -689,7 +689,6 @@ FUNC_REGION_STATE_OPERATION
 
     $skill = Concat(p1 = "myplugin/skill_state_", p2 = $key)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
-    $duration = GetSkillVar(fullName = $skill, key = "duration")
 
     If($stateBase == "region" && GetObjectVar(obj = $obj1, key = "isregion"))
     {
@@ -709,45 +708,74 @@ FUNC_REGION_STATE_OPERATION
             }
         }
 
-        $regUseTime = GetObjectVar(obj = $obj1, key = "regionUseTime")
-        $regUseTime = not $regUseTime and 0 or $regUseTime
-
-        If($opt == "LEAVE")
-        {
-            CallTrigger(
-                object = $obj1,
-                event = "FUNC_STATE_CLOSE_PROGRESS_FOLLOW_OBJ",
-                state = $key
-            )
-            If($obj1.REGION_TIMER){
-                StopTimer(timer = $obj1.REGION_TIMER)
-            }
-            If($obj1.regionSTime){
-                SetObjectVar(obj = $obj1, key = "regionUseTime", value = GetTime() - $obj1.regionSTime + $regUseTime)
-            }
-            Return()
-        }
-
-        $rTime = $duration - $regUseTime
-        SetObjectVar(obj = $obj1, key = "regionSTime", value = GetTime())
-        SetObjectVar(obj = $obj1, key = "regionUseTime", value = $regUseTime)
-
         CallTrigger(
             object = $obj1,
-            event = "FUNC_STATE_SHOW_PROGRESS_FOLLOW_OBJ",
             state = $key,
-            totalTime = $duration,
-            rTime = $rTime
-        )
-
-        $obj1.REGION_TIMER = StartTimer(
-            rep = false,
-            object = $obj1,
-            state = $key,
-            time = ($rTime * 20) // 1,
-            event = "FUNC_STATE_RELEASE_AND_REWARD",
+            event = $opt ~= "LEAVE" and "FUNC_STATE_STARTTIMER_SHOWPROGRESS" or "FUNC_STATE_STOPTIMER_CLOSEPROGRESS"
         )
     }
+}
+
+FUNC_STATE_STOPTIMER_CLOSEPROGRESS --params: state
+{
+    CallTrigger(
+        object = $obj1,
+        state = $state,
+        event = "FUNC_STATE_CLOSE_PROGRESS_FOLLOW_OBJ"
+    )
+    $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
+    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
+
+    $timer = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "_TIMER"))
+    If($timer)
+    {
+        StopTimer(timer = $timer)
+    }
+
+    $sTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "STime"))
+    $useTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UseTime")) or 0
+    If($sTime)
+    {
+        SetObjectVar(
+            obj = $obj1,
+            key = Concat(p1 = $stateBase, p2 = "UseTime"),
+            value = GetTime() - $sTime + $useTime
+        )
+    }
+}
+
+FUNC_STATE_STARTTIMER_SHOWPROGRESS --params: state
+{
+    $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
+    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
+    $duration = GetSkillVar(fullName = $skill, key = "duration")
+
+    $useTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UseTime")) or 0
+
+    SetObjectVar(obj = $obj1, value = GetTime(), key = Concat(p1 = $stateBase, p2 = "STime"))
+    SetObjectVar(obj = $obj1, value = $useTime, key = Concat(p1 = $stateBase, p2 = "UseTime"))
+
+    $rTime = $duration - $useTime
+
+    CallTrigger(
+        object = $obj1,
+        state = $state,
+        totalTime = $duration,
+        rTime = $rTime,
+        event = "FUNC_STATE_SHOW_PROGRESS_FOLLOW_OBJ"
+    )
+
+    SetObjectVar(
+        obj = $obj1,
+        key = Concat(p1 = $stateBase, p2 = "_TIMER"),
+        value = StartTimer(
+            rep = false,
+            object =$obj1,
+            state = $state,
+            time = ($rTime * 20) // 1,
+            event = "FUNC_STATE_RELEASE_AND_REWARD"
+        )
+    )
 }
 
 FUNC_STATE_SHOW_PROGRESS_FOLLOW_OBJ --params: state, totalTime, rTime
