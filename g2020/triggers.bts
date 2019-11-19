@@ -9,8 +9,8 @@ FUNC_GENERATE_STATE_STARTTIME
 {
     ForLoop(from = 1, to = ArraySize(array = @Generate_State_List), key = "idx")
     {
-        $stateName = ArrayGet(array = @Generate_State_List, index = $idx)
-        $keyStr = Concat(p1 = "myplugin/skill_state_", p2 = $stateName)
+        $stateBase = ArrayGet(array = @Generate_State_List, index = $idx)
+        $keyStr = Concat(p1 = "myplugin/skill_state_", p2 = $stateBase)
         $timeInfo = GetSkillVar(fullName = $keyStr, key = "generateTime")
 
         $cdTime = ArrayGet(array = $timeInfo, index = 1)
@@ -18,7 +18,7 @@ FUNC_GENERATE_STATE_STARTTIME
             column = 1,
             rep = false,
             timeArr = $timeInfo,
-            stateName = $stateName,
+            stateBase = $stateBase,
             time = ($cdTime * 1200) // 1,
             event = "FUNC_CHANGE_STATE",
             size = ArraySize(array = $timeInfo),
@@ -35,11 +35,20 @@ FUNC_CHANGE_STATE
         --    Continue()
         --}
 
-        If($stateName == "region" && $player.regionRTime == 0)
+        $regUTime = GetObjectVar(obj = $player, key = "regionUseTime")
+        $hadState = Concat(p1 = "is", p2 = $stateBase)
+        
+        If($stateBase == "region" && not $regUTime)
         {
-            $player.regionIdx = $column
+            SetObjectVar(obj = $player, key = "regionIdx", value = $column)
         }
-        CallTrigger(object = $player, event = "FUNC_GENERATE_STATE", state = $stateName)
+        ElseIf(GetObjectVar(obj = $player, key =$hadState))
+        {
+            Continue()
+        }
+
+        SetObjectVar(obj = $player, key = $hadState, value = true)
+        CallTrigger(object = $player, event = "FUNC_GENERATE_STATE", stateBase = $stateBase)
 	}
 
     $curTime = ArrayGet(array = $timeArr, index = $column)
@@ -61,7 +70,7 @@ FUNC_CHANGE_STATE
         event = $event,
         column = $column,
         timeArr = $timeArr,
-        stateName = $stateName, 
+        stateBase = $stateBase,
         time = ($cdTime * 1200) // 1
     )
 }

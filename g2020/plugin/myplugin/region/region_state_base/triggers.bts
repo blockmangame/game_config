@@ -5,8 +5,7 @@ REGION_ENTER {
             event = "FUNC_REGION_STATE_OPERATION", 
             object = $obj1, 
             opt = "ENTER", 
-            key = $inRegionKey, 
-            type = GetRegionConfig(region = $region, key = "stateType")
+            key = $inRegionKey,
         )
     }
 }
@@ -19,7 +18,6 @@ REGION_LEAVE {
             object = $obj1,
             opt = "LEAVE",
             key = $inRegionKey,
-            type = GetRegionConfig(region = $region, key = "stateType")
         )
     }
 }
