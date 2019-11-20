@@ -225,3 +225,27 @@ FUNC_OPEN_GPS
     SetObjectVar(obj = $obj1, key = "gpsDestination", value = $destination)
     ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
 }
+
+FUNC_SHOW_PROGRESS_FOLLOW_OBJ --params: pgName, totalTime, rTime
+{
+    ShowProgressFollowObj(
+        isOpen = true,
+        pgName = $pgName,
+        entity = $obj1,
+        totalTime = $totalTime * 20,
+        rTime = $rTime * 20,
+    )
+    SetObjectVar(obj = $obj1, key = "progress", value = $pgName)
+}
+
+FUNC_CLOSE_PROGRESS_FOLLOW_OBJ --params: pgName
+{
+    If($pgName == GetObjectVar(obj = $obj1, key = "progress"))
+    {
+        ShowProgressFollowObj(
+            entity = $obj1,
+            isOpen = false
+        )
+        SetObjectVar(obj = $obj1, key = "progress", value = nil)
+    }
+}

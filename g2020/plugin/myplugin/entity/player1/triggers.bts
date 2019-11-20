@@ -870,8 +870,8 @@ FUNC_STATE_STOPTIMER_CLOSEPROGRESS --params: state
 {
     CallTrigger(
         object = $obj1,
-        state = $state,
-        event = "FUNC_STATE_CLOSE_PROGRESS_FOLLOW_OBJ"
+        pgName = $state,
+        event = "FUNC_CLOSE_PROGRESS_FOLLOW_OBJ"
     )
     $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
@@ -909,10 +909,10 @@ FUNC_STATE_STARTTIMER_SHOWPROGRESS --params: state
 
     CallTrigger(
         object = $obj1,
-        state = $state,
+        pgName = $state,
         totalTime = $duration,
         rTime = $rTime,
-        event = "FUNC_STATE_SHOW_PROGRESS_FOLLOW_OBJ"
+        event = "FUNC_SHOW_PROGRESS_FOLLOW_OBJ"
     )
 
     SetObjectVar(
@@ -926,30 +926,6 @@ FUNC_STATE_STARTTIMER_SHOWPROGRESS --params: state
             event = "FUNC_STATE_RELEASE_AND_REWARD"
         )
     )
-}
-
-FUNC_STATE_SHOW_PROGRESS_FOLLOW_OBJ --params: state, totalTime, rTime
-{
-    ShowProgressFollowObj(
-        isOpen = true,
-        pgName = $state,
-        entity = $obj1,
-        totalTime = $totalTime * 20,
-        rTime = $rTime * 20,
-    )
-    SetObjectVar(obj = $obj1, key = "stateProgress", value = $state)
-}
-
-FUNC_STATE_CLOSE_PROGRESS_FOLLOW_OBJ --params: isOpen, state
-{
-    If($state == GetObjectVar(obj = $obj1, key = "stateProgress"))
-    {
-        ShowProgressFollowObj(
-            entity = $obj1,
-            isOpen = false
-        )
-        SetObjectVar(obj = $obj1, key = "stateProgress", value = nil)
-    }
 }
 
 FUNC_STATE_RELEASE_AND_REWARD --params: state
@@ -969,7 +945,7 @@ FUNC_STATE_RELEASE_AND_REWARD --params: state
         SetObjectVar(obj = $obj1, value = nil, key = "regionUseTime")
     }
 
-    CallTrigger(object = $obj1, event = "FUNC_STATE_CLOSE_PROGRESS_FOLLOW_OBJ", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_PROGRESS_FOLLOW_OBJ", pgName = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_CLOSE_GPS", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_CLOSE_DETAILS_UI", state = $state)
 
