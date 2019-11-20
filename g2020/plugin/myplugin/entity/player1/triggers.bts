@@ -1015,10 +1015,17 @@ FUNC_STATE_RELEASE_AND_REWARD --params: state
 FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey
 {
     AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardSum)
+    
     ShowRewardRollTip(
         entity = $obj1,
         image = "set:jail_break.json image:jail_break_currency",
-        text = Concat(p1 = "+", p2 = $rewardSum, p3 = $textKey),
+        text = Concat(p1 = "+", p2 = $rewardSum),
+    )
+
+    ShowTip(
+        entity = $obj1,
+        tipType = 3,
+        textKey = $textKey
     )
 }
 
