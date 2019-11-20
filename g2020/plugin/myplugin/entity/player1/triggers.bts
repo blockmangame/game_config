@@ -740,8 +740,7 @@ BUY_HOUSE_REGION_COLOR{
         FillBlocksInRegion(map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap"), region = $cRegion, 
             block = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
     }
-
-    $curSelectHouse = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "owner"), key = "curSelectHouseVars") or {}
+    $curSelectHouse = GetObjectVar(obj = $obj1, key = "curSelectHouseVars") or {}
     $curSelectHouseRegionColor = ArrayGet(array = $curSelectHouse, index = 4) or {}
     Foreach(array = $curSelectHouseRegionColor, key = "childRegionColorArr"){
         If(ArrayGet(array = $childRegionColorArr, index = 1) == $curInsideRegionKey){
