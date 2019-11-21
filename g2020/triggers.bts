@@ -207,7 +207,7 @@ CHANGE_PLAYER_SCALE_CHILD
 
 FUNC_CLOSE_GPS --params: destination
 {
-    If(not $destination || $gps == GetObjectVar(obj = $obj1, key = "gpsDestination"))
+    If(not $destination || $destination == GetObjectVar(obj = $obj1, key = "gpsDestination"))
     {
         SetGuidePostion(entity = $obj1)
         RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
