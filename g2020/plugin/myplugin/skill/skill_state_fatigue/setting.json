@@ -2,12 +2,14 @@
     "type": "base",
     "base": "skill_state_base",
     "icon":"fatigue.png",
-    "stateBase": "A",
+    "stateBase": "fatigue",
     "state": "fatigue",
     "generateTime":[0.3,  3, 30, 45, 50],
     "rewardSelf": 20000,
     "rewardOther": 1000,
+    "rewardFamily": 1000,
     "rewardDis": 5,
-    "duration": 0,
-    "siteType": "selfHouse" 
+    "duration": 30,
+    "siteType": "selfHouse",
+    "rewardCount": 3
 }

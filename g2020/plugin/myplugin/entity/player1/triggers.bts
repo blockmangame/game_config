@@ -19,6 +19,8 @@ ENTITY_ENTER
 
         CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, newSkill = $obj1.danceUseItem)
 
+        LoadPlayerAppDress(player = $obj1, event = "CALLBACK_APP_DRESS_DATA")
+
         -- test data
         --SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = 25)
         --SetSkin(entity = $obj1, skinName = "custom_scarf", skinValue = 3)
@@ -29,6 +31,7 @@ ENTITY_ENTER
         --SetSkin(entity = $obj1, skinName = "custom_face", skinValue = 5)
         --SetSkin(entity = $obj1, skinName = "custom_glasses", skinValue = 3)
         --SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = 5)
+        --SetSkin(entity = $obj1, skinName = "custom_tail", skinValue = 5)
     }
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
     ------------------------------------------ 当前选择存档 $curSelectHouse
@@ -43,7 +46,9 @@ ENTITY_ENTER
                     [{x = 1648,y=13,z=-574},180,"myplugin/test_dec_entity1","ddss1","true"],
                     [{x = 1650,y=13,z=-574},180,"myplugin/test_dec_entity2","dds2s","true"]
                 ],
-                [],
+                [
+                    ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]]
+                ],
                 "enable",
                 "Sakura NeNe",
                 "houseType",
@@ -71,6 +76,7 @@ ENTITY_ENTER
             Break()
         }
     }
+    SetObjectVar(obj = $obj1, key = "curSelectHouseVars", value = $curSelectHouse)
     ------------------------------------------ 获得当前地图上的空出的区域，创建房子 * 
     -- 区域 <region------owner> 房子 <house-------owner> 玩家，可通过区域获取区域上的房子，通过房子获得所属玩家。 反向同理
     $regions = GetAllRegion(map = GetEntityMap(entity = $obj1))
@@ -110,8 +116,9 @@ TEST_DATA{ -- 保存进数据库的数据伪代码
                     -- {pos,yaw,cfg,全局唯一id:furnishingId,是否是旧家具，下线后则会将当前玩家全部房子的全部家具设置成true，即是旧家具}
                 ],
                 [ -- houseInsideRegionColors 房子内部区域颜色
-                    ["regionkey", "myplugin/xxx..."], -- regionkey, color 此处的颜色是替换方块
-                    ["regionkey2", "myplugin/xxx..."]
+                    ["regionkey", ["myplugin/xxx...","myplugin/xxx...","myplugin/xxx..."]], -- 第一个key是对应的region key，通过这个key获取这个区域region/获取到配置
+                    ["regionkey", ["myplugin/xxx...","myplugin/xxx...","myplugin/xxx..."]] -- 第二个数组对应的是上面获取到的region的childRegionKey属性中对应
+                                                                                        -- 该region的子region使用的方块！
                 ],
                 "enable", -- cur select house 有这个标志就是 当前选择/出生的房子
                 "houseName", -- 当前房子的名字
@@ -177,6 +184,7 @@ UPDATE_HOUSE{
         ArraySet(array = $newHouseVar, index = 2, value = $curSelectKey)
         CallTrigger(object = $obj1, event = "CHANGE_HOUSE", 
             newHouse = ArrayGet(array = $newHouseVar, index = 1), houseColor = $curSelectKey)
+        SetObjectVar(obj = $obj1, key = "curSelectHouseVars", value = $newHouseVar)
     }
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
 }
@@ -259,7 +267,7 @@ HOUSE_TAB_EVENT{
     -- btn
     $btnList = [
         {text = "ui_house_sell_house", trigger = "SELL_HOUSE", context = { houseKey = $key} },
-        {text = "ui_house_use_house", trigger = "UPDATE_HOUSE", context = { houseKey = $key} }
+        {text = "ui_house_use_house", trigger = "UPDATE_HOUSE", curSelect = ArrayGet(array = $curSelectHouse, index = 5) == "enable",context = { houseKey = $key} }
     ]
     $infoTb = {
         uiWin = "genericListDisplayBox2",
@@ -282,13 +290,7 @@ HOUSE_TAB_EVENT{
 
 EDIT_HOUSE_NAME{
     Test("EDIT_HOUSE_NAME")
-    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
-    Foreach(array = $houseVars, key = "houseVar"){
-        If(ArrayGet(array = $houseVar, index = 8) == $upperLayerKey){
-            $curSelectHouse = $houseVar
-            Break()
-        }
-    }
+    $houseVars = GetObjectVar(obj = $obj1, key = "curSelectHouseVars") or {}
 
 
 
@@ -487,7 +489,10 @@ SHOW_DEC_STORE{
             text = "333", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_4.png", trigger = "EDIT_FLOOR", context = {titleKey = "allEdit"}
         })
         ArraySet(array = $listInfoTb, index = 2, value = {
-            text = "444", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", trigger = "EDIT_WAR", context = {titleKey = "allEdit"}
+            text = "444", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", trigger = "EDIT_WALL", context = {titleKey = "allEdit"}
+        })
+        ArraySet(array = $listInfoTb, index = 3, value = {
+            text = "555", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_3.png", trigger = "EDIT_CEILING", context = {titleKey = "allEdit"}
         })
     }
 
@@ -588,15 +593,163 @@ SHOW_DEC_STORE_B{
 }
 
 EDIT_FLOOR{
-    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
     Test("EDIT_FLOOR")
-}
-
-EDIT_WAR{
     ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
-    Test("EDIT_WAR")
+    If(not $titleKey){
+        $titleKey = "allEdit"
+    }
+
+    $btnListTb = {}
+    ArraySet(array = $btnListTb, index = 1, value = {
+        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+    })
+    ArraySet(array = $btnListTb, index = 2, value = {
+        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+    })
+
+    $listInfoTb = {}
+    ArraySet(array = $listInfoTb, index = 1, value = {
+        text = "asda", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", 
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12324, childRegionKey = "floorRegion", colorBlock = "myplugin/wool_1"}
+    })
+    ArraySet(array = $listInfoTb, index = 2, value = {
+        text = "gfdgh", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", 
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12224, childRegionKey = "floorRegion", colorBlock = "myplugin/wool_2"}
+    })
+
+    $infoTb = {
+        btnInfo = {
+            btnType = 2,
+            btnList = $btnListTb
+        },
+        listInfo = {
+            uiType = 2,
+            infoTb = $listInfoTb
+        },
+        eventInfo = {
+            closeEventInfo = {trigger = "EDIT_HOUSE"},
+            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = $titleKey}},
+            rightEventInfo = {trigger = "EDIT_WALL"}
+        }
+    }
+    ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
 }
 
+EDIT_WALL{
+    Test("EDIT_WALL")
+    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
+    If(not $titleKey){
+        $titleKey = "allEdit"
+    }
+
+    $btnListTb = {}
+    ArraySet(array = $btnListTb, index = 1, value = {
+        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+    })
+    ArraySet(array = $btnListTb, index = 2, value = {
+        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+    })
+
+    $listInfoTb = {}
+    ArraySet(array = $listInfoTb, index = 1, value = {
+        text = "fggg", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_3.png", 
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12324, childRegionKey = "wallRegion", colorBlock = "myplugin/wool_3"}
+    })
+
+    $infoTb = {
+        btnInfo = {
+            btnType = 2,
+            btnList = $btnListTb
+        },
+        listInfo = {
+            uiType = 2,
+            infoTb = $listInfoTb
+        },
+        eventInfo = {
+            closeEventInfo = {trigger = "EDIT_HOUSE"},
+            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = $titleKey}},
+            rightEventInfo = {trigger = "EDIT_CEILING"}
+        }
+    }
+    ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
+}
+
+EDIT_CEILING{
+    Test("EDIT_CEILING")
+    ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
+    If(not $titleKey){
+        $titleKey = "allEdit"
+    }
+
+    $btnListTb = {}
+    ArraySet(array = $btnListTb, index = 1, value = {
+        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+    })
+    ArraySet(array = $btnListTb, index = 2, value = {
+        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+    })
+
+    $listInfoTb = {}
+    ArraySet(array = $listInfoTb, index = 1, value = {
+        text = "hhhh", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_4.png", 
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12324, childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_4"}
+    })
+    ArraySet(array = $listInfoTb, index = 2, value = {
+        text = "jjjj", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", 
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12224, childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_5"}
+    })
+
+    $infoTb = {
+        btnInfo = {
+            btnType = 2,
+            btnList = $btnListTb
+        },
+        listInfo = {
+            uiType = 2,
+            infoTb = $listInfoTb
+        },
+        eventInfo = {
+            closeEventInfo = {trigger = "EDIT_HOUSE"},
+            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = $titleKey}},
+            rightEventInfo = {trigger = "EDIT_FLOOR"}
+        }
+    }
+    ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
+}
+
+BUY_HOUSE_REGION_COLOR{
+    Test("BUY_HOUSE_REGION_COLOR", $storeMoneyKey, $childRegionKey, $colorBlock)
+    -- TODO 购买
+    $curInsideRegion = GetObjectVar(obj = $obj1, key = "curInsideRegion")
+    If(not $curInsideRegion){
+        Return()
+    }
+    
+    $curInsideRegionKey = GetRegionKey(region = $curInsideRegion)
+    $curInsideRegionChildReionArr = GetRegionConfig(region = $curInsideRegion, key = "childRegionKey")
+    ForLoop(from = 1, to = ArraySize(array = $curInsideRegionChildReionArr), key = "index"){
+        If(ArrayGet(array = $curInsideRegionChildReionArr, index = $index) == $childRegionKey){
+            $curInsideRegionChildReionIndex = $index
+            Break()
+        }
+    }
+    If(not $curInsideRegionChildReionIndex){
+        Return()
+    }
+    $childRegionArr = GetRegionConfig(region = $curInsideRegion, key = $childRegionKey) or {}
+    
+    Foreach(array = $childRegionArr, key = "cRegion"){
+        FillBlocksInRegion(map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap"), region = $cRegion, 
+            block = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
+    }
+    $curSelectHouse = GetObjectVar(obj = $obj1, key = "curSelectHouseVars") or {}
+    $curSelectHouseRegionColor = ArrayGet(array = $curSelectHouse, index = 4) or {}
+    Foreach(array = $curSelectHouseRegionColor, key = "childRegionColorArr"){
+        If(ArrayGet(array = $childRegionColorArr, index = 1) == $curInsideRegionKey){
+            ArraySet(array = ArrayGet(array = $childRegionColorArr, index = 2), index = $curInsideRegionChildReionIndex, value = $colorBlock)
+        }
+    }
+}
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 
 ADD_MONEY
@@ -630,8 +783,9 @@ ADD_MONEY
     $obj1.isReadyReward = true
 }
 
-FUNC_GENERATE_STATE
+FUNC_GENERATE_STATE --params: stateBase
 {  
+    SetObjectVar(obj = $obj1, key = Concat(p1 = "is", p2 = $stateBase), value = true)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
 
     $p1 = "myplugin/skill_state_"
@@ -641,18 +795,19 @@ FUNC_GENERATE_STATE
         $preRegState = GetObjectVar(obj = $obj1, key = "preRegState")
         RemoveSkill(entity = $obj1, name = Concat(p1 = $p1, p2 = $preRegState)) -- 关闭preRegState的状态
 
-        CallTrigger(object = $obj1, event = "FUNC_STATE_CLOSE_DETAILS_UI", state = $preRegState)
-        CallTrigger(object = $obj1, event = "FUNC_STATE_CLOSE_GPS", state = $preRegState)
+        CallTrigger(object = $obj1, event = "FUNC_CLOSE_DETAILS_UI", uiName = $preRegState)
+        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $preRegState)
         
         $idx = GetObjectVar(obj = $obj1, key = "regionIdx")
         $state = ArrayGet(array = GetSkillVar(fullName = Concat(p1 = $p1, p2 = $stateBase), key = "locations"), index = $idx)
         SetObjectVar(obj = $obj1, key = "preRegState", value = $state)
+        
+        CallTrigger(object = $obj1, event = "FUNC_STATE_IS_IN_REGION_AT_GENERATE", state = $state)
     }
     AddSkill(entity = $obj1, name = Concat(p1 = $p1, p2 = $state))
-    CallTrigger(object = $obj1, event = "FUNC_STATE_IS_IN_REGION", state = $state)
 }
 
-FUNC_STATE_IS_IN_REGION --params: state
+FUNC_STATE_IS_IN_REGION_AT_GENERATE --params: state
 {   
     -- 判断状态生成时是否就已经在区域里面了
     $reg = GetRegionByName(
@@ -678,7 +833,7 @@ FUNC_STATE_IS_IN_REGION --params: state
     }
 }
 
-FUNC_REGION_STATE_OPERATION
+FUNC_REGION_STATE_OPERATION --parmas: opt, key
 {
     If($key == GetObjectVar(obj = $obj1, key = "gpsDestination"))
     {
@@ -688,7 +843,6 @@ FUNC_REGION_STATE_OPERATION
 
     $skill = Concat(p1 = "myplugin/skill_state_", p2 = $key)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
-    $duration = GetSkillVar(fullName = $skill, key = "duration")
 
     If($stateBase == "region" && GetObjectVar(obj = $obj1, key = "isregion"))
     {
@@ -708,135 +862,158 @@ FUNC_REGION_STATE_OPERATION
             }
         }
 
-        $regUseTime = GetObjectVar(obj = $obj1, key = "regionUseTime")
-        $regUseTime = not $regUseTime and 0 or $regUseTime
-
-        If($opt == "LEAVE")
-        {
-            CallTrigger(
-                object = $obj1,
-                event = "FUNC_STATE_CLOSE_PROGRESS_FOLLOW_OBJ",
-                state = $key
-            )
-            If($obj1.REGION_TIMER){
-                StopTimer(timer = $obj1.REGION_TIMER)
-            }
-            If($obj1.regionSTime){
-                SetObjectVar(obj = $obj1, key = "regionUseTime", value = GetTime() - $obj1.regionSTime + $regUseTime)
-            }
-            Return()
-        }
-
-        $rTime = $duration - $regUseTime
-        SetObjectVar(obj = $obj1, key = "regionSTime", value = GetTime())
-        SetObjectVar(obj = $obj1, key = "regionUseTime", value = $regUseTime)
-
         CallTrigger(
             object = $obj1,
-            event = "FUNC_STATE_SHOW_PROGRESS_FOLLOW_OBJ",
             state = $key,
-            totalTime = $duration,
-            rTime = $rTime
-        )
-
-        $obj1.REGION_TIMER = StartTimer(
-            rep = false,
-            object = $obj1,
-            state = $key,
-            time = ($rTime * 20) // 1,
-            event = "FUNC_STATE_RELEASE_AND_REWARD",
+            event = $opt ~= "LEAVE" and "FUNC_STATE_START_INTERACT" or "FUNC_STATE_SUSPEND_INTERACT"
         )
     }
 }
 
-FUNC_STATE_SHOW_PROGRESS_FOLLOW_OBJ --params: state, totalTime, rTime
-{
-    ShowProgressFollowObj(
-        isOpen = true,
-        pgName = $state,
-        entity = $obj1,
-        totalTime = $totalTime * 20,
-        rTime = $rTime * 20,
-    )
-    SetObjectVar(obj = $obj1, key = "stateProgress", value = $state)
-}
-
-FUNC_STATE_CLOSE_PROGRESS_FOLLOW_OBJ --params: isOpen, state
-{
-    If($state == GetObjectVar(obj = $obj1, key = "stateProgress"))
-    {
-        ShowProgressFollowObj(
-            entity = $obj1,
-            isOpen = false
-        )
-        SetObjectVar(obj = $obj1, key = "stateProgress", value = nil)
-    }
-}
-
-FUNC_STATE_RELEASE_AND_REWARD
+FUNC_STATE_SUSPEND_INTERACT --params: state
 {
     $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
+    If(not GetObjectVar(obj = $obj1, key = Concat(p1 = "is", p2 = $stateBase)))
+    {
+        Return()
+    }
+    
+    CallTrigger(
+        object = $obj1,
+        pgName = $state,
+        event = "FUNC_CLOSE_PROGRESS_FOLLOW_OBJ"
+    )
 
+    $timer = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "_TIMER"))
+    If($timer)
+    {
+        StopTimer(timer = $timer)
+    }
+
+    $sTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "STime"))
+    $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime"))
+    If($sTime)
+    {
+        SetObjectVar(
+            obj = $obj1,
+            key = Concat(p1 = $stateBase, p2 = "UsedTime"),
+            value = GetTime() - $sTime + $usedTime
+        )
+    }
+}
+
+FUNC_STATE_START_INTERACT --params: state
+{
+    $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
+    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
+    If(not GetObjectVar(obj = $obj1, key = Concat(p1 = "is", p2 = $stateBase)))
+    {
+        Return()
+    }
+
+    $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime")) or 0
+    $duration = GetSkillVar(fullName = $skill, key = "duration")
+
+    SetObjectVar(obj = $obj1, value = GetTime(), key = Concat(p1 = $stateBase, p2 = "STime"))
+    SetObjectVar(obj = $obj1, value = $usedTime, key = Concat(p1 = $stateBase, p2 = "UsedTime"))
+
+    CallTrigger(
+        object = $obj1,
+        pgName = $state,
+        totalTime = $duration,
+        usedTime = $usedTime,
+        event = "FUNC_SHOW_PROGRESS_FOLLOW_OBJ"
+    )
+
+    SetObjectVar(
+        obj = $obj1,
+        key = Concat(p1 = $stateBase, p2 = "_TIMER"),
+        value = StartTimer(
+            rep = false,
+            object =$obj1,
+            state = $state,
+            time = (($duration - $usedTime) * 20) // 1,
+            event = "FUNC_STATE_RELEASE_AND_REWARD"
+        )
+    )
+}
+
+FUNC_STATE_RELEASE_AND_REWARD --params: state
+{
+    $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
+    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")  
     $hadState = Concat(p1 = "is", p2 = $stateBase)
     If(not GetObjectVar(obj = $obj1, key = $hadState))
     {
         Return()
     }
-
-    If($stateBase == "region")
-    {
-        SetObjectVar(obj = $obj1, key = "regionUseTime", value = nil)
-    }
-    
     RemoveSkill(entity = $obj1, name = $skill)
-    SetObjectVar(obj = $obj1, key = $interactList, value = nil)
-    SetObjectVar(obj = $obj1, key = $hadState, value = false)
-    
-    CallTrigger(object = $obj1, event = "FUNC_STATE_CLOSE_PROGRESS_FOLLOW_OBJ", state = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_CLOSE_GPS", state = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_CLOSE_DETAILS_UI", state = $state)
+
+    $uTimeKey = Concat(p1 = $stateBase, p2 = "UsedTime")
+    If(GetObjectVar(obj = $obj1, key = $uTimeKey))
+    {
+        SetObjectVar(obj = $obj1, key = $uTimeKey, value = nil)
+    }
 
     $rewardSelf = GetSkillVar(fullName = $skill, key = "rewardSelf")
     $rewardOther = GetSkillVar(fullName = $skill, key = "rewardOther")
+    $rewardFamily = GetSkillVar(fullName = $skill, key = "rewardFamily")
     $rewardDis = GetSkillVar(fullName = $skill, key = "rewardDis")
-
+    $rewardCount = GetSkillVar(fullName = $skill, key = "rewardCount")
     $interactList = Concat(p1 = $stateBase, p2 = "InteractList")
-    If(not GetObjectVar(obj = $obj1, key = $interactList))
-    {
-        CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardSelf)
-        Return()
-    }
 
-    Foreach(array = GetObjectVar(obj = $obj1, key = $interactList), key = "objID")
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state)
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_DETAILS_UI", uiName = $state)
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_PROGRESS_FOLLOW_OBJ", pgName = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardSum = $rewardSelf, textKey = "reward_takeCare")
+    
+    If(GetObjectVar(obj = $obj1, key = $interactList))
     {
-        $player = GetObject(objID = $objID)
-        If(not IsPlayer(entity = $player) || GetObjectDistance(obj1 = $obj1, obj2 = $player) > $rewardDis)
+        $teamId = GetEntityTeam(entity = $obj1)
+        $rewardSum = 0
+        $textKey = ""
+        Foreach(array = GetObjectVar(obj = $obj1, key = $interactList), key = "objID")
         {
-            Continue()
+            $entity = GetObject(objID = $objID)
+            If(not IsPlayer(entity = $entity))
+            {
+                Continue()
+            }
+            
+            $countKey = Concat(p1 = $stateBase, p2 = "RewardCount")
+            $count = GetObjectVar(obj = $entity, key = $countKey)
+            $dis = GetObjectDistance(obj1 = $obj1, obj2 = $entity)
+            $myTeamId =  GetEntityTeam(entity = $entity)
+
+            If($count < $rewardCount && $dis < $rewardDis)
+            {
+                SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
+                $rewardSum = $myTeamId == $teamId and $rewardFamily or $rewardOther
+                $textKey = $myTeamId == $teamId and "reward_family" or "reward_takeCare"
+                CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardSum = $rewardSum, textKey = $textKey)
+            }
         }
-        CallTrigger(object = $player, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardOther)
+        SetObjectVar(obj = $obj1, key = $interactList, value = nil)  
     }
-    CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardCount = $rewardOther)
+    SetObjectVar(obj = $obj1, key = $hadState, value = false)
 }
 
-FUNC_STATE_REWARD_AND_TIP
+FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey
 {
-    AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardCount)
+    AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardSum)
+    
     ShowRewardRollTip(
         entity = $obj1,
         image = "set:jail_break.json image:jail_break_currency",
-        text = Concat(p1 = "+", p2 = $rewardCount, p3 = "(照顾加成)"),
+        text = Concat(p1 = "+", p2 = $rewardSum),
     )
-}
 
-FUNC_STATE_CLOSE_DETAILS_UI -- params: state
-{
-    If($state && $state == GetObjectVar(obj = $obj1, key = "stateDetails"))
-    {
-        ShowDetails(entity = $obj1, isOpen = false)
-        SetObjectVar(obj = $obj1, key = "stateDetails", value = nil)
-    } 
+    ShowTip(
+        entity = $obj1,
+        tipType = 3,
+        textKey = $textKey
+    )
 }
 
 FUNC_STATE_SHOW_DETAILS_UI -- params: skill(fullName)
@@ -845,18 +1022,18 @@ FUNC_STATE_SHOW_DETAILS_UI -- params: skill(fullName)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
     $duration = GetSkillVar(fullName = $skill, key = "duration")
 
-    $useTime = GetObjectVar(obj = $obj1, key = "regionUseTime") or 0
-    $percent = $stateBase ~= "region" and 0 or NumberFloor(p1 = $useTime / $duration * 100)
+    $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime")) or 0
+    $percent = $stateBase ~= "region" and 0 or NumberFloor(p1 = $usedTime / $duration * 100)
 
-    ShowDetails(
-        entity = $obj1,
+    CallTrigger(
+        object = $obj1,
+        event = "FUNC_SHOW_DETAILS_UI",
+        uiName = $state,
         fullName = Concat(p1 = "myplugin/", p2 = $state, p3 = "Detail"),
-        isOpen = true,
         contents = {
             subtitleVal = Concat(p1 = $percent, p2 = "%")
         }
     )
-    SetObjectVar(obj = $obj1, key = "stateDetails", value = $state)
 }
 
 FUNC_STATE_OPEN_GPS --params: rtVal
@@ -917,15 +1094,6 @@ FUNC_STATE_OPEN_GPS --params: rtVal
         destination = $rtVal,
         pos = $gps
     )
-}
-
-FUNC_STATE_CLOSE_GPS -- params: state
-{
-    If($state and $state == GetObjectVar(obj = $obj1, key = "gpsDestination"))
-    {
-        Test("IN FUNC_STATE_CLOSE_GPS ready to close gps", "state = ", $state)
-        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
-    }
 }
 
 FUNC_STATE_ADD_INTERACTLIST
@@ -1479,4 +1647,35 @@ GET_WORKS_COMMENT_CALL_BACK
 HTTP_TEST
 {
     Test($response)
+}
+
+CALLBACK_APP_DRESS_DATA
+{
+    $responseDict = NewDictionary($response)
+    $dressStoreIds = GetWorldVar(key = "dressShopIds")
+    Foreach(array = $dressStoreIds, key = "storeId")
+    {
+        $storeItems = GetStoreById(storeId = $storeId)
+        Foreach(array = $storeItems, key = "item")
+        {
+            $itemDict = NewDictionary($item)
+            $itemType = DictionaryGet(dict = $itemDict, key = "itemType")
+            $itemName = DictionaryGet(dict = $itemDict, key = "itemName")
+            $itemId = DictionaryGet(dict = $itemDict, key = "index")
+            ForeachDictionary(dict = $responseDict, keyName = "type", valueName = "responseItems")
+            {
+                If($itemType == $type)
+                {
+                    Foreach(array = $responseItems, key = "responseItem")
+                    {
+                        If($itemName == ToString($responseItem))
+                        {
+                            ChangeItemStatus(storeId = $storeId, index = $itemId, status = 1, player = $obj1)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    SyncStore(player = $obj1)
 }

@@ -100,6 +100,13 @@ CHANGE_MODEL_SKIN()
         SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = $hat)
         $obj1.hat = $hat
     }
+
+    $tail = GetSkin(entity = $player, skinName = "custom_tail")
+    If($tail ~= $obj1.tail)
+    {
+        SetSkin(entity = $obj1, skinName = "custom_tail", skinValue = $tail)
+        $obj1.tail = $tail
+    }
 }
 
 CHANGE_PLAYER_SKIN
@@ -188,5 +195,11 @@ CHANGE_PLAYER_SKIN
         $player.hat = $hat
     }
 
+    $tail = GetSkin(entity = $obj1, skinName = "custom_tail") or 0
+    If($tail ~= $player.tail)
+    {
+        SetSkin(entity = $player, skinName = "custom_tail", skinValue = $tail)
+        $player.tail = $tail
+    }
 
 }

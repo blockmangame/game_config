@@ -28,29 +28,38 @@ CREATR_SUBSIDIARY{
 }
 
 CREATR_HOUSE_INSIDE_SUBSIDIARY{
-    $curSelectHouse = {}
-    $houseVars = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "owner"), key = "houseVars") or {}
-    Foreach(array = $houseVars, key = "house"){
-        If(ArrayGet(array = $house, index = 5) == "enable"){
-            $curSelectHouse = $house
-            Break()
-        }
-    }
+    $curSelectHouse = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "owner"), key = "curSelectHouseVars") or {}
     ------------------------------------------ 内部各区域的颜色，没有则默认颜色，vars里面取，此处的颜色是替换方块
     $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
     $allRegion = GetAllRegion(map = $map)
     -- //获取当前房子的内部regionColor 即存进数据库的
     $regionColor = ArrayGet(array = $curSelectHouse, index = 4) or {}
     Foreach(array = $allRegion, key = "region"){
-        $block = GetRegionConfig(region = $region, key = "defaultBlock")
+        $hadRegion = false
         $regionkey = GetRegionConfig(region = $region, key = "regionkey")
+        $childRegionKeyArr = GetRegionConfig(region = $region, key = "childRegionKey") or {}
         Foreach(array = $regionColor, key = "regionColorTb"){
             If(ArrayGet(array = $regionColorTb, index = 1) == $regionkey){
-                $block = ArrayGet(array = $regionColorTb, index = 2)
+                $hadRegion = true
+                $childRegionColorArr = ArrayGet(array = $regionColorTb, index = 2) or {}
+                ForLoop(from = 1, to = ArraySize(array = $childRegionKeyArr), key = "index"){
+                    $childRegionArr = GetRegionConfig(region = $region, key = ArrayGet(array = $childRegionKeyArr, index = $index)) or {}
+                    Foreach(array = $childRegionArr, key = "cRegion"){
+                        FillBlocksInRegion(map = $map, region = $cRegion, 
+                            block = ArrayGet(array = $childRegionColorArr, index = $index) or GetRegionConfig(region = $region, key = "defaultBlock"))
+                    }
+                }
                 Break()
             }
         }
-        FillBlocksInRegion(map = $map, region = $region, block = $block)
+        If(not $hadRegion){
+            Foreach(array = $childRegionKeyArr, key = "key"){
+                Foreach(array = GetRegionConfig(region = $region, key = $key) or {}, key = "cRegion"){
+                    FillBlocksInRegion(map = $map, region = $cRegion, 
+                        block = GetRegionConfig(region = $region, key = "defaultBlock"))
+                }
+            }
+        }
     }
     ------------------------------------------ 内部各个家具
     $furnishings = ArrayGet(array = $curSelectHouse, index = 3) or {}
@@ -65,32 +74,6 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
     SetEntityPosition(map = $map, entity = $insideDoor, pos = GetConfigVar(obj = $obj1, key = "insideDoorPos") or {x = 0,y = 0, z = 0})
     SetObjectVar(obj = $insideDoor, key = "house", value = $obj1)
     SetObjectVar(obj = $obj1, key = "insideDoor", value = $insideDoor)
-}
-
-CHANGE_HOUSE_REGION_COLOR{
-    ------------------------------------------ 更改内部各区域的颜色，改变后需要保存进数据库
-    $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
-    $allRegion = GetAllRegion(map = $map)
-    Foreach(array = $allRegion, key = "region"){
-        If(GetRegionConfig(region = $region, key = "regionkey") == $regionkey){
-            FillBlocksInRegion(map = $map, region = $region, block = $block)
-        }
-    }
-    $curSelectHouse = {}
-    $houseVars = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "owner"), key = "houseVars") or {}
-    Foreach(array = $houseVars, key = "house"){
-        If(ArrayGet(array = $house, index = 5) == "enable"){
-            $curSelectHouse = $house
-            Break()
-        }
-    }
-    $regionColor = ArrayGet(array = $curSelectHouse, index = 4) or {}
-    Foreach(array = $regionColor, key = "regionColorTb"){
-        If(ArrayGet(array = $regionColorTb, index = 1) == $regionkey){
-            ArraySet(array = $regionColorTb, index = 2, value = $block)
-            Break()
-        }
-    }
 }
 
 ENTITY_CLICK{
@@ -137,7 +120,7 @@ ENTITY_DIE{
     KillEntity(entity = $outsideDoor)
     $insideDoor = GetObjectVar(obj = $obj1, key = "insideDoor")
     KillEntity(entity = $insideDoor)
-    
+
     ------------------------------------------ 销毁内部房子
     $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
     MoveMapPlayerTo(map = $map, newmap = $outsideDoorMap, pos = ComputeV3(p1 = $outsideDoorPos, p2 = Table(x = 0, y = 0.1, z = 5), op = "add"))

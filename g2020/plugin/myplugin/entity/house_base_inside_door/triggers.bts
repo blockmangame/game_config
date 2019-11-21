@@ -12,6 +12,8 @@ ENTITY_TOUCH_ALL{
     SetEntityPosition(map = GetEntityMap(entity = $door),
         pos = ComputeV3(p1 = GetEntityPosition(entity = $door), p2 = Table(x = 0, y = 0.1, z = 3), op = "add"),
         entity = $obj2)
-
+    If(GetObjectID(object = GetObjectVar(obj = $obj2, key = "house")) == GetObjectID(object = GetObjectVar(obj = $obj1, key = "house"))){
+        ShowTitleBarPage(entity = $obj2, infoTb = {}, closeWin = true)
+    }
     CallTrigger(object = $obj2, event = "FUNC_STATE_OPEN_GPS", rtVal = $obj2.gpsDestination) --如果有导航则继续导航
 }

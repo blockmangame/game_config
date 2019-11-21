@@ -15,7 +15,8 @@ ENTITY_CLICK{
     $houseVars = GetObjectVar(obj = $obj2, key = "houseVars")
     Foreach(array = $houseVars, key = "houseVar"){
         ArraySet(array = $btnList, index = ArraySize(array = $btnList) + 1, value = 
-            {text = ArrayGet(array = $houseVar, index = 6), trigger = "HOUSE_TAB_EVENT", context = { key = ArrayGet(array = $houseVar, index = 8) }})
+            {text = ArrayGet(array = $houseVar, index = 6), curSelect = ArrayGet(array = $houseVar, index = 5) == "enable",
+                trigger = "HOUSE_TAB_EVENT", context = { key = ArrayGet(array = $houseVar, index = 8) }})
     }
     $infoTb = {
         titleTb = {text = "ui_house_my_home"},
