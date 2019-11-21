@@ -36,10 +36,9 @@ FUNC_CHANGE_STATE
         --}
         SetObjectVar(obj = $player, value = 0, key = Concat(p1 = $stateBase, p2 = "RewardCount"))
 
-        $regUTime = GetObjectVar(obj = $player, key = "regionUseTime")
         $hadState = Concat(p1 = "is", p2 = $stateBase)
         
-        If($stateBase == "region" && not $regUTime)
+        If($stateBase == "region" && not GetObjectVar(obj = $player, key = Concat(p1 = $stateBase, p2 = "UsedTime")))
         {
             SetObjectVar(obj = $player, key = "regionIdx", value = $column)
         }
@@ -47,12 +46,7 @@ FUNC_CHANGE_STATE
         {
             Continue()
         }
-        ElseIf($statebase == "dirty" || $stateBase == "fatigue")
-        {
-            SetObjectVar(obj = $player, value = 0, key = Concat(p1 = $stateBase, p2 = "UseTime"))
-        }
 
-        SetObjectVar(obj = $player, key = $hadState, value = true)
         CallTrigger(object = $player, event = "FUNC_GENERATE_STATE", stateBase = $stateBase)
 	}
 
@@ -211,17 +205,64 @@ CHANGE_PLAYER_SCALE_CHILD
     $obj1.role = @child
 }
 
-FUNC_CLOSE_GPS
+FUNC_CLOSE_GPS --params: destination
 {
-    SetGuidePostion(entity = $obj1)
-    RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
-    SetObjectVar(obj = $obj1, key = "gpsDestination", value = nil)
+    If(not $destination || $gps == GetObjectVar(obj = $obj1, key = "gpsDestination"))
+    {
+        SetGuidePostion(entity = $obj1)
+        RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
+        SetObjectVar(obj = $obj1, key = "gpsDestination", value = nil)
+    }
 }
 
-FUNC_OPEN_GPS
+FUNC_OPEN_GPS --params: destination
 {
     SetGuidePostion(pos = $pos, entity = $obj1)
     AddSkill(entity = $obj1, name = "myplugin/close_gps")
     SetObjectVar(obj = $obj1, key = "gpsDestination", value = $destination)
     ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
+}
+
+FUNC_SHOW_PROGRESS_FOLLOW_OBJ --params: pgName, totalTime, usedTime
+{
+    ShowProgressFollowObj(
+        isOpen = true,
+        pgName = $pgName,
+        entity = $obj1,
+        totalTime = $totalTime * 20,
+        usedTime = $usedTime * 20,
+    )
+    SetObjectVar(obj = $obj1, key = "progress", value = $pgName)
+}
+
+FUNC_CLOSE_PROGRESS_FOLLOW_OBJ --params: pgName
+{
+    If(not $pgName || $pgName == GetObjectVar(obj = $obj1, key = "progress"))
+    {
+        ShowProgressFollowObj(
+            entity = $obj1,
+            isOpen = false
+        )
+        SetObjectVar(obj = $obj1, key = "progress", value = nil)
+    }
+}
+
+FUNC_SHOW_DETAILS_UI --params: fullName, contents, uiName
+{
+    ShowDetails(
+        entity = $obj1,
+        fullName = $fullName,
+        isOpen = true,
+        contents = $contents
+    )
+    SetObjectVar(obj = $obj1, key = "detailsUI", value = $uiName)
+}
+
+FUNC_CLOSE_DETAILS_UI --params: uiName
+{
+    If(not $uiName || $uiName == GetObjectVar(obj = $obj1, key = "detailsUI"))
+    {
+        ShowDetails(entity = $obj1, isOpen = false)
+        SetObjectVar(obj = $obj1, key = "detailsUI", value = nil)
+    }
 }
