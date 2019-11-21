@@ -1450,10 +1450,30 @@ SAVE_PLAYER_DRESS
     }
 }
 
-MESSAGE_BOARD_LEAVE_MESSAGE
+COMMENT_WORKS
 {
     Test($msg)
-    LeaveMessage(player = $obj1, graffitiId = 1, msg = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", event = "HTTP_TEST")
+    CommentWorks(player = $obj1, id = $id, msg = $msg, event = "HTTP_TEST")
+}
+
+GET_WORKS_COMMENT
+{
+    GetWorksComments(player = $obj1, id = $id, event = "HTTP_GET_WORKS_COMMENT_CALL_BACK")
+}
+
+GET_WORKS_COMMENT_CALL_BACK
+{
+    $dictValue = NewDictionary($response)
+    $code = DictionaryGet(dict = $dictValue, key = "code")
+    If($code == 1)
+    {
+        $data = DictionaryGet(dict = $dictValue, key = "data")
+        UpdateUIData(player = $obj1, ui = "win_msgBoard", data = $data)
+    }
+    Else
+    {
+        UpdateUIData(player = $obj1, ui = "win_msgBoard", data = {})
+    }
 }
 
 HTTP_TEST
