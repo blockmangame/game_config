@@ -19,6 +19,8 @@ ENTITY_ENTER
 
         CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, newSkill = $obj1.danceUseItem)
 
+        LoadPlayerAppDress(player = $obj1, event = "CALLBACK_APP_DRESS_DATA")
+
         -- test data
         --SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = 25)
         --SetSkin(entity = $obj1, skinName = "custom_scarf", skinValue = 3)
@@ -1651,4 +1653,35 @@ MESSAGE_BOARD_LEAVE_MESSAGE
 HTTP_TEST
 {
     Test($response)
+}
+
+CALLBACK_APP_DRESS_DATA
+{
+    $responseDict = NewDictionary($response)
+    $dressStoreIds = GetWorldVar(key = "dressShopIds")
+    Foreach(array = $dressStoreIds, key = "storeId")
+    {
+        $storeItems = GetStoreById(storeId = $storeId)
+        Foreach(array = $storeItems, key = "item")
+        {
+            $itemDict = NewDictionary($item)
+            $itemType = DictionaryGet(dict = $itemDict, key = "itemType")
+            $itemName = DictionaryGet(dict = $itemDict, key = "itemName")
+            $itemId = DictionaryGet(dict = $itemDict, key = "index")
+            ForeachDictionary(dict = $responseDict, keyName = "type", valueName = "responseItems")
+            {
+                If($itemType == $type)
+                {
+                    Foreach(array = $responseItems, key = "responseItem")
+                    {
+                        If($itemName == ToString($responseItem))
+                        {
+                            ChangeItemStatus(storeId = $storeId, index = $itemId, status = 1, player = $obj1)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    SyncStore(player = $obj1)
 }
