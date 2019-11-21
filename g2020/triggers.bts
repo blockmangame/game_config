@@ -36,13 +36,11 @@ FUNC_CHANGE_STATE
         --}
         SetObjectVar(obj = $player, value = 0, key = Concat(p1 = $stateBase, p2 = "RewardCount"))
 
-        $hadState = Concat(p1 = "is", p2 = $stateBase)
-        
-        If($stateBase == "region" && not GetObjectVar(obj = $player, key = Concat(p1 = $stateBase, p2 = "UsedTime")))
+        If($stateBase == "region" && not GetObjectVar(obj = $player, key = "regionUsedTime"))
         {
             SetObjectVar(obj = $player, key = "regionIdx", value = $column)
         }
-        ElseIf(GetObjectVar(obj = $player, key =$hadState))
+        ElseIf(GetObjectVar(obj = $player, key = Concat(p1 = "is", p2 = $stateBase)))
         {
             Continue()
         }
@@ -223,18 +221,6 @@ FUNC_OPEN_GPS --params: destination
     ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
 }
 
-FUNC_SHOW_PROGRESS_FOLLOW_OBJ --params: pgName, totalTime, usedTime
-{
-    ShowProgressFollowObj(
-        isOpen = true,
-        pgName = $pgName,
-        entity = $obj1,
-        totalTime = $totalTime * 20,
-        usedTime = $usedTime * 20,
-    )
-    SetObjectVar(obj = $obj1, key = "progress", value = $pgName)
-}
-
 FUNC_CLOSE_PROGRESS_FOLLOW_OBJ --params: pgName
 {
     If(not $pgName || $pgName == GetObjectVar(obj = $obj1, key = "progress"))
@@ -247,17 +233,6 @@ FUNC_CLOSE_PROGRESS_FOLLOW_OBJ --params: pgName
     }
 }
 
-FUNC_SHOW_DETAILS_UI --params: fullName, contents, uiName
-{
-    ShowDetails(
-        entity = $obj1,
-        fullName = $fullName,
-        isOpen = true,
-        contents = $contents
-    )
-    SetObjectVar(obj = $obj1, key = "detailsUI", value = $uiName)
-}
-
 FUNC_CLOSE_DETAILS_UI --params: uiName
 {
     If(not $uiName || $uiName == GetObjectVar(obj = $obj1, key = "detailsUI"))
@@ -265,4 +240,24 @@ FUNC_CLOSE_DETAILS_UI --params: uiName
         ShowDetails(entity = $obj1, isOpen = false)
         SetObjectVar(obj = $obj1, key = "detailsUI", value = nil)
     }
+}
+
+FUNC_STOP_TIMER --params: timer
+{
+    If(not $timer)
+    {
+        Return()
+    }
+    StopTimer(timer = $timer)
+}
+
+FUNC_REMOVE_BUFF --params: buffStr
+{
+    $hadBuff = GetObjectVar(obj = $obj1, key = $buffStr)
+    If(not $hadBuff)
+    {
+        Return()
+    }
+    RemoveEntityBuff(entity = $obj1, buff = $hadBuff)
+    SetObjectVar(obj = $obj1, key = $buffStr, value = nil)
 }
