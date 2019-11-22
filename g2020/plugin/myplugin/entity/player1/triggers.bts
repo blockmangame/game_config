@@ -1753,3 +1753,11 @@ CALLBACK_APP_DRESS_DATA
     }
     SyncStore(player = $obj1)
 }
+
+PLAYER_ON_VISIT
+{
+    If ($obj1 and $obj2)
+    {
+        SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj2),pos = GetEntityPosition(entity = $obj2))
+    }
+}
