@@ -19,7 +19,7 @@ ENTITY_ENTER
 
         CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, newSkill = $obj1.danceUseItem)
 
-        LoadPlayerAppDress(player = $obj1, event = "CALLBACK_APP_DRESS_DATA")
+        LoadPlayerAppDress(player = $obj1, event = "HTTP_PURCHASED_DRESS_CALL_BACK")
 
         -- test data
         --SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = 25)
@@ -1727,7 +1727,7 @@ HTTP_TEST
     Test($response)
 }
 
-CALLBACK_APP_DRESS_DATA
+HTTP_PURCHASED_DRESS_CALL_BACK
 {
     $responseDict = NewDictionary($response)
     $dressStoreIds = GetWorldVar(key = "dressShopIds")
