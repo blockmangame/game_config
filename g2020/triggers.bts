@@ -242,13 +242,15 @@ FUNC_CLOSE_DETAILS_UI --params: uiName
     }
 }
 
-FUNC_STOP_TIMER --params: timer
+FUNC_STOP_TIMER --params: timerStr
 {
+    $timer = GetObjectVar(obj = $obj1, key = $timerStr)
     If(not $timer)
     {
         Return()
     }
     StopTimer(timer = $timer)
+    SetObjectVar(obj = $obj1, key = $timerStr, value = nil)
 }
 
 FUNC_REMOVE_BUFF --params: buffStr

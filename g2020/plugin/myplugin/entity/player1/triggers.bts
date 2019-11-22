@@ -860,7 +860,7 @@ FUNC_STATE_AFFECT_OTHER --params: state
     )
     Foreach(array = $entities or [], key = "entity")
     {
-        If(not IsPlayer(entity = $entity) || GetObjectVar(obj = $entity, key = Concat(p1 = "is", p2 = $state)))
+        If(not IsPlayer(entity = $entity) || $entity == $obj1 || GetObjectVar(obj = $entity, key = Concat(p1 = "is", p2 = $state)))
         {
             Continue()
         }
@@ -955,10 +955,7 @@ FUNC_STATE_SUSPEND_INTERACT --params: state
     CallTrigger(
         object = $obj1,
         event = "FUNC_STOP_TIMER",
-        timer = GetObjectVar(
-            obj = $obj1,
-            key = Concat(p1 = $stateBase, p2 = "_TIMER")
-        )
+        timerStr = Concat(p1 = $stateBase, p2 = "_TIMER")
     )
 
     $sTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "STime"))
@@ -1034,14 +1031,7 @@ FUNC_STATE_RELEASE_AND_REWARD --params: state
     CallTrigger(object = $obj1, event = "FUNC_CLOSE_DETAILS_UI", uiName = $state)
     CallTrigger(object = $obj1, event = "FUNC_CLOSE_PROGRESS_FOLLOW_OBJ", pgName = $state)
     CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = Concat(p1 = $state, p2 = "Effect"))
-    CallTrigger(
-        object = $obj1,
-        event = "FUNC_STOP_TIMER",
-        timer = GetObjectVar(
-            obj = $obj1,
-            key = Concat(p1 = $stateBase, p2 = "AFFECT_TIMER")
-        )
-    )
+    CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "AFFECT_TIMER"))
     If($stateBase == "ill")
     {
         Return()
