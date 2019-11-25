@@ -3,7 +3,8 @@ ENTITY_ENTER
 }
 
 ENTITY_TOUCH_ALL{
-    If(not IsPlayer(entity = $obj2) or GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "isLock")){
+    If(not IsPlayer(entity = $obj2) or (GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "isLock") 
+        and GetObjectID(obj = GetObjectVar(obj = $obj1, key = "house")) ~= GetObjectID(obj = GetObjectVar(obj = $obj2, key = "house")))){
         Return()
     }
     Test(" please in !! ")

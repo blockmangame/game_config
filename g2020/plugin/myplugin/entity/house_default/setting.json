@@ -1,6 +1,11 @@
 {
     "actorName": "boy.actor",
     "insideMap": "house_default_inside_map",
+    "houseDefaultInsideMapColorTb":[
+        ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
+        ["house_default_inside_map_area_2",["myplugin/cotton_stage_0","myplugin/dark_oak_stairs04","myplugin/acacia_door_10"]]
+    ], 
+    "defaultColor": "myplugin/house_color_buff_1",
     "allColor": [
         ["COLOR_1","plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png"],
         ["COLOR_2","plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png"],
@@ -10,6 +15,10 @@
         ["COLOR_6","plugin/myplugin/entity/house_default/HOUSE_COLOR_6.png"],
         ["COLOR_7","plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png"],
         ["COLOR_8","plugin/myplugin/entity/house_default/HOUSE_COLOR_6.png"]
+    ],
+    "houseDefaultFurniture":[
+        [{"x":1648, "y":13,"z":-574},0,"myplugin/test_dec_entity1","10001","false"],
+        [{"x":1650, "y":13,"z":-574},90,"myplugin/test_dec_entity2","10002","false"]
     ],
     "base": "house_base"
 }

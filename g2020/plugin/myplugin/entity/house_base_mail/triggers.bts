@@ -13,6 +13,7 @@ ENTITY_CLICK{
     -- infoTb是拼出来的
     $btnList = [{text = "ui_house_get_more", trigger = "HOUSE_TAB_EVENT", context = { key = "0" }}]
     $houseVars = GetObjectVar(obj = $obj2, key = "houseVars")
+    
     Foreach(array = $houseVars, key = "houseVar"){
         ArraySet(array = $btnList, index = ArraySize(array = $btnList) + 1, value = 
             {text = ArrayGet(array = $houseVar, index = 6), curSelect = ArrayGet(array = $houseVar, index = 5) == "enable",
