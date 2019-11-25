@@ -15,6 +15,7 @@ ENTITY_TOUCH_ALL{
     If(GetObjectID(object = GetObjectVar(obj = $obj2, key = "house")) == GetObjectID(object = GetObjectVar(obj = $obj1, key = "house"))){
         CallTrigger(object = $obj2, event = "SAVE_FURNITURE")
         ShowTitleBarPage(entity = $obj2, infoTb = {}, closeWin = true)
+        CallTrigger(object = $obj2, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = true)
     }
     CallTrigger(object = $obj2, event = "FUNC_STATE_OPEN_GPS", rtVal = $obj2.gpsDestination) --如果有导航则继续导航
 }

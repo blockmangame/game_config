@@ -2,10 +2,11 @@
     "type": "base",
     "base": "skill_state_base",
     "icon":"fatigue.png",
-    "stateBase": "fatigue",
+    
     "state": "fatigue",
-    "siteType": "selfHouse",
-    "interactToRelease": "true",
+    "generateType": "A",
+    "releaseType": "interact",
+    "hadReward": true,
 
     "generateTime":[0.3,  3, 30, 45, 50],
     "rewardSelf": 20000,

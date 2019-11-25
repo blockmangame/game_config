@@ -842,42 +842,47 @@ ADD_MONEY
     $obj1.isReadyReward = true
 }
 
-FUNC_GENERATE_STATE --params: stateBase
-{  
-    SetObjectVar(obj = $obj1, key = Concat(p1 = "is", p2 = $stateBase), value = true)
+FUNC_STATE_GENERATE --params: stateBase, col, skill
+{
+    $state = $stateBase
+    $subdivided = GetSkillVar(fullName = $skill, key = "subdivided")
+    If(ArraySize(array = $subdivided or []) > 0)
+    {
+        $preState = GetObjectVar(obj = $obj1, key = Concat(p1 = "pre", p2 = $stateBase))
+        If($preState)
+        {
+            RemoveSkill(entity = $obj1, name = Concat(p1 = @skillPath, p2 = $preState))
+            CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $preState)
+        }
+        $state = ArrayGet(array = $subdivided, index = $col)
+        SetObjectVar(obj = $obj1, value = $state, key = Concat(p1 = "pre", p2 = $stateBase))
+        SetObjectVar(obj = $obj1, value = $col, key = Concat(p1 = $stateBase, p2 = "Idx"))
+    }
+    CallTrigger(object = $obj1, event = "FUNC_STATE_ADD", state = $state)
+}
+
+FUNC_STATE_ADD --params: state
+{
+    $stateBase = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "stateBase") or $state
+    SetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase), value = true)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
 
-    $p1 = "myplugin/skill_state_"
-    $state = $stateBase
-
-    If($stateBase == "region")
-    {
-        $preRegState = GetObjectVar(obj = $obj1, key = "preRegState")
-        RemoveSkill(entity = $obj1, name = Concat(p1 = $p1, p2 = $preRegState)) -- 关闭preRegState的状态
-        CallTrigger(object = $obj1, event = "FUNC_CLOSE_DETAILS_UI", uiName = $preRegState)
-        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $preRegState)
-        
-        $idx = GetObjectVar(obj = $obj1, key = "regionIdx")
-        $state = ArrayGet(array = GetSkillVar(fullName = Concat(p1 = $p1, p2 = $stateBase), key = "locations"), index = $idx)
-        SetObjectVar(obj = $obj1, key = "preRegState", value = $state)
-        
-        CallTrigger(object = $obj1, event = "FUNC_STATE_IS_IN_REGION_AT_GENERATE", state = $state)
-    }
-    CallTrigger(object = $obj1, event = "FUNC_STATE_ADD_EFFECT", state = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_START_AFFECT", state = $state)
-    AddSkill(entity = $obj1, name = Concat(p1 = $p1, p2 = $state))
+    AddSkill(entity = $obj1, name = Concat(p1 = @skillPath, p2 = $state))
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA")
+    CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state)
 }
 
 FUNC_STATE_ADD_EFFECT --params: state
 {
-    $effect = GetSkillVar(fullName = Concat(p1 = "myplugin/skill_state_", p2 = $state), key = "effect")
+    $effect = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "effect")
     If(not $effect)
     {
         Return()
     }
     SetObjectVar(
         obj = $obj1,
-        key = Concat(p1 = $state, p2 = "Effect"),
+        key = $effectStr,
         value = AddEntityBuff(
             entity = $obj1,
             cfg = $effect
@@ -887,28 +892,30 @@ FUNC_STATE_ADD_EFFECT --params: state
 
 FUNC_STATE_START_AFFECT --params: state
 {
-    $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
-    If(not GetSkillVar(fullName = $skill, key = "canAffect"))
+    $skill = Concat(p1 = @skillPath, p2 = $state)
+    $timeSpan = GetSkillVar(fullName = $skill, key = "affectTimeSpanSec")
+    If(not $timeSpan || $timeSpan <= 0)
     {
         Return()
     }
 
     SetObjectVar(
         obj = $obj1,
-        key = Concat(p1 = $state, p2 = "AFFECT_TIMER"),
+        key = $timerStr,
         value = StartTimer(
             rep = true,
-            object =$obj1,
+            object = $obj1,
             state = $state,
             event = "FUNC_STATE_AFFECT_OTHER",
-            time = (GetSkillVar(fullName = $skill, key = "affectTimeSpanSec") * 20) // 1
+            time = ($timeSpan * 20) // 1
         )
     )
 }
 
 FUNC_STATE_AFFECT_OTHER --params: state
 {
-    $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
+    $skill = Concat(p1 = @skillPath, p2 = $state)
+    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
 
     $entities = GetNearbyEntities(
         entity = $obj1,
@@ -919,21 +926,26 @@ FUNC_STATE_AFFECT_OTHER --params: state
     )
     Foreach(array = $entities or [], key = "entity")
     {
-        If(not IsPlayer(entity = $entity) || $entity == $obj1 || GetObjectVar(obj = $entity, key = Concat(p1 = "is", p2 = $state)))
+        If(not IsPlayer(entity = $entity) || $entity == $obj1 || GetObjectVar(obj = $entity, key = Concat(p1 = "had", p2 = $stateBase)))
         {
             Continue()
         }
         CallTrigger(
             object = $entity,
-            event = "FUNC_GENERATE_STATE",
-            stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
+            event = "FUNC_STATE_ADD",
+            state = $state
         )
     }
 }
 
-FUNC_STATE_IS_IN_REGION_AT_GENERATE --params: state
+FUNC_STATE_IS_IN_REGION_BEGIN --params: state
 {   
     -- 判断状态生成时是否就已经在区域里面了
+    If("region" ~= GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "releaseType"))
+    {
+        Return()
+    }
+
     $reg = GetRegionByName(
         map = GetEntityMap(entity = $obj1),
         name = $state 
@@ -965,42 +977,48 @@ FUNC_REGION_STATE_OPERATION --parmas: opt, state
         CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
     }
 
-    $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
-    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
-
-    If($stateBase == "region" && GetObjectVar(obj = $obj1, key = "isregion"))
+    If($opt ~= "INNER")
     {
-        If($opt ~= "INNER")
+        $skill = Concat(p1 = @skillPath, p2 = $state)
+        $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
+        If("region" ~= GetSkillVar(fullName = $skill, key = "releaseType"))
         {
-            $location = ArrayGet(
-                array = GetSkillVar(
-                    fullName = $skill,
-                    key = "locations"
-                ),
-                index = $obj1.regionIdx
-            )
-            
-            If($location ~= $state)
+            Return()
+        }
+        ElseIf(GetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase)))
+        {
+            $subdivided = GetSkillVar(fullName = $skill, key = "subdivided")
+            If(ArraySize(array = $subdivided or []) > 0)
             {
-                Return()
+                $kind = ArrayGet(
+                    array = $subdivided,
+                    index = GetObjectVar(
+                        obj = $obj1,
+                        key = Concat(p1 = $stateBase, p2 = "Idx")
+                    )
+                )
+                If($kind ~= $state)
+                {
+                    Return()
+                }
             }
         }
-
-        CallTrigger(
-            object = $obj1,
-            state = $state,
-            event = $opt ~= "LEAVE" and "FUNC_STATE_START_INTERACT" or "FUNC_STATE_SUSPEND_INTERACT"
-        )
     }
+
+    CallTrigger(
+        object = $obj1,
+        state = $state,
+        event = $opt ~= "LEAVE" and "FUNC_STATE_START_PROGRESS" or "FUNC_STATE_SUSPEND_PROGRESS"
+    )
 }
 
-FUNC_STATE_SUSPEND_INTERACT --params: state
+FUNC_STATE_SUSPEND_PROGRESS --params: state
 {
-    $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
-    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
-    $interactToRelease = GetSkillVar(fullName = $skill, key = "interactToRelease")
+    $skill = Concat(p1 = @skillPath, p2 = $state)
+    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
+    $duration = GetSkillVar(fullName = $skill, key = "duration")
 
-    If(not $interactToRelease || not GetObjectVar(obj = $obj1, key = Concat(p1 = "is", p2 = $stateBase)))
+    If(not $duration || $duration <= 0 || not GetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase)))
     {
         Return()
     }
@@ -1019,7 +1037,7 @@ FUNC_STATE_SUSPEND_INTERACT --params: state
 
     $sTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "STime"))
     $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime"))
-    If($sTime)
+    If($sTime && $usedTime)
     {
         SetObjectVar(
             obj = $obj1,
@@ -1029,19 +1047,18 @@ FUNC_STATE_SUSPEND_INTERACT --params: state
     }
 }
 
-FUNC_STATE_START_INTERACT --params: state
+FUNC_STATE_START_PROGRESS --params: state
 {
-    $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
-    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
-    $interactToRelease = GetSkillVar(fullName = $skill, key = "interactToRelease")
+    $skill = Concat(p1 = @skillPath, p2 = $state)
+    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
+    $duration = GetSkillVar(fullName = $skill, key = "duration")
 
-    If(not $interactToRelease || not GetObjectVar(obj = $obj1, key = Concat(p1 = "is", p2 = $stateBase)))
+    If(not $duration || $duration <= 0 || not GetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase)))
     {
         Return()
     }
 
     $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime")) or 0
-    $duration = GetSkillVar(fullName = $skill, key = "duration")
 
     SetObjectVar(obj = $obj1, value = GetTime(), key = Concat(p1 = $stateBase, p2 = "STime"))
     SetObjectVar(obj = $obj1, value = $usedTime, key = Concat(p1 = $stateBase, p2 = "UsedTime"))
@@ -1075,23 +1092,24 @@ FUNC_STATE_START_INTERACT --params: state
 
 FUNC_STATE_RELEASE_AND_REWARD --params: state
 {
-    $skill = Concat(p1 = "myplugin/skill_state_", p2 = $state)
-    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")  
-    $hadState = Concat(p1 = "is", p2 = $stateBase)
+    $skill = Concat(p1 = @skillPath, p2 = $state)
+    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
+    $hadState = Concat(p1 = "had", p2 = $stateBase)
     If(not GetObjectVar(obj = $obj1, key = $hadState))
     {
         Return()
     }
+    $interactList = GetObjectVar(
+        obj = $obj1,
+        key = Concat(p1 = $stateBase, p2 = "InteractList")
+    )
 
-    SetObjectVar(obj = $obj1, key = $hadState, value = false)
-    SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime"), value = nil)
     RemoveSkill(entity = $obj1, name = $skill)
-    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state)
-    CallTrigger(object = $obj1, event = "FUNC_CLOSE_DETAILS_UI", uiName = $state)
-    CallTrigger(object = $obj1, event = "FUNC_CLOSE_PROGRESS_FOLLOW_OBJ", pgName = $state)
-    CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = Concat(p1 = $state, p2 = "Effect"))
-    CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "AFFECT_TIMER"))
-    If($stateBase == "ill")
+    SetObjectVar(obj = $obj1, key = $hadState, value = false)
+    CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
+
+    If(not GetSkillVar(fullName = $skill, key = "hadReward"))
     {
         Return()
     }
@@ -1101,12 +1119,11 @@ FUNC_STATE_RELEASE_AND_REWARD --params: state
     $rewardFamily = GetSkillVar(fullName = $skill, key = "rewardFamily")
     $rewardDis = GetSkillVar(fullName = $skill, key = "rewardDis")
     $rewardCount = GetSkillVar(fullName = $skill, key = "rewardCount")
-    $interactList = Concat(p1 = $stateBase, p2 = "InteractList")
     
     $teamId = GetEntityTeam(entity = $obj1)
     $rewardSum = 0
     $textKey = ""
-    Foreach(array = GetObjectVar(obj = $obj1, key = $interactList) or [], key = "objID")
+    Foreach(array = $interactList or [], key = "objID")
     {
         $entity = GetObject(objID = $objID)
         If(not IsPlayer(entity = $entity))
@@ -1128,7 +1145,6 @@ FUNC_STATE_RELEASE_AND_REWARD --params: state
         }
     }
     CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardSum = $rewardSelf, textKey = "reward_takeCare")
-    SetObjectVar(obj = $obj1, key = $interactList, value = nil)
 }
 
 FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey
@@ -1151,11 +1167,11 @@ FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey
 FUNC_STATE_SHOW_DETAILS_UI -- params: skill(fullName)
 {
     $state = GetSkillVar(fullName = $skill, key = "state")
-    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase")
+    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $duration = GetSkillVar(fullName = $skill, key = "duration")
 
     $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime")) or 0
-    $percent = $stateBase ~= "region" and 0 or NumberFloor(p1 = $usedTime / $duration * 100)
+    $percent = (not $duration or $duration <= 0) and 0 or NumberFloor(p1 = 100 * $usedTime / $duration)
     
     ShowDetails(
         entity = $obj1,
@@ -1178,7 +1194,6 @@ FUNC_STATE_OPEN_GPS --params: rtVal
 
     $map = GetEntityMap(entity = $obj1)
     $mapName = GetEntityName(entity = $map)
-    Test($mapName, "FUNC_STATE_OPEN_GPS") --TODO LOG
     $type = GetConfigValue(type = "region", fullName = Concat(p1 = "myplugin/region_state_", p2 = $rtVal), key = "siteType")
 
     $house = GetObjectVar(obj = $obj1, key = "house")
@@ -1233,7 +1248,7 @@ FUNC_STATE_ADD_INTERACTLIST
 {
     Foreach(array = @Generate_State_List, key = "stateBase")
     {
-        If(not GetObjectVar(obj = $obj1, key = Concat(p1 = "is", p2 = $stateBase)))
+        If(not GetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase)))
         {
             Continue()
         }
@@ -1254,6 +1269,53 @@ FUNC_STATE_ADD_INTERACTLIST
         }
         SetObjectVar(obj = $obj1, key = $listName, value = $interactList)
     }
+}
+
+FUNC_UPDATE_STATE_SKILL_JACK_AREA --params: up
+{
+    If($up == nil)
+    {
+        $map = GetEntityMap(entity = $obj1)
+        $houseInsideMap = GetObjectVar(
+            obj = GetObjectVar(
+                obj = $obj1,
+                key = "house"
+            ),
+            key = "houseInsideMap"
+        )
+        $up = $map ~= $houseInsideMap and true or false
+    }
+    UpdateSkillJackArea(
+        entity = $obj1,
+        info = {
+            pos = "top",
+            yOff = $up and @skillJackUp or @skillJackDown
+        }
+    )
+}
+
+FUNC_STATE_RESET_DATA --params: state
+{
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state)
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_DETAILS_UI", uiName = $state)
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_PROGRESS_FOLLOW_OBJ", pgName = $state)
+    CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = Concat(p1 = $state, p2 = "Effect"))
+    CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "AFFECT_TIMER"))
+}
+
+FUNC_STATEBASE_RESET_DATA -- params: stateBase
+{
+    SetObjectVar(obj = $obj1, key = Concat(p1 = "pre", p2 = $stateBase), value = nil)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "STime"), value = nil)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime"), value = nil)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
+}
+
+FUNC_STATE_ACTION --params: state
+{
+    CallTrigger(object = $obj1, event = "FUNC_STATE_ADD_EFFECT", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_START_AFFECT", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_IS_IN_REGION_BEGIN", state = $state)
 }
 
 INTERACTION_CLAP { --拍手 小孩和小孩

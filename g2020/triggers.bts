@@ -1,11 +1,12 @@
 GAME_INIT
 {
     @Generate_State_List = ["hunger", "thirsty", "dirty", "fatigue", "ill", "region"]
-    CallTrigger(event = "FUNC_GENERATE_STATE_STARTTIME")
+    @skillPath = "myplugin/skill_state_"
+    CallTrigger(event = "FUNC_STATE_STARTTIMER")
 }
 
 
-FUNC_GENERATE_STATE_STARTTIME
+FUNC_STATE_STARTTIMER
 {
     ForLoop(from = 1, to = ArraySize(array = @Generate_State_List), key = "idx")
     {
@@ -20,13 +21,12 @@ FUNC_GENERATE_STATE_STARTTIME
             timeArr = $timeInfo,
             stateBase = $stateBase,
             time = ($cdTime * 1200) // 1,
-            event = "FUNC_CHANGE_STATE",
-            size = ArraySize(array = $timeInfo),
+            event = "FUNC_BROADCAST_STATE",
         )
     }
 }
 
-FUNC_CHANGE_STATE
+FUNC_BROADCAST_STATE
 {
     Foreach(array = GetAllPlayers(), key = "player"){
         --TODO 完善状态的生成
@@ -36,21 +36,27 @@ FUNC_CHANGE_STATE
         --}
         SetObjectVar(obj = $player, value = 0, key = Concat(p1 = $stateBase, p2 = "RewardCount"))
 
-        If($stateBase == "region" && not GetObjectVar(obj = $player, key = "regionUsedTime"))
+        $skill = Concat(p1 = @skillPath, p2 = $stateBase)
+        $generateType = GetSkillVar(
+            fullName = $skill,
+            key = "generateType"
+        )
+        If($generateType == "A" && GetObjectVar(obj = $player, key = Concat(p1 = "had", p2 = $stateBase)))
         {
-            SetObjectVar(obj = $player, key = "regionIdx", value = $column)
+            Continue()
         }
-        ElseIf(GetObjectVar(obj = $player, key = Concat(p1 = "is", p2 = $stateBase)))
+        
+        If($generateType == "B" && GetObjectVar(obj = $player, key = Concat(p1 = $stateBase, p2 = "UsedTime")))
         {
             Continue()
         }
 
-        CallTrigger(object = $player, event = "FUNC_GENERATE_STATE", stateBase = $stateBase)
+        CallTrigger(object = $player, event = "FUNC_STATE_GENERATE", stateBase = $stateBase, col = $column, skill = $skill)
 	}
 
     $curTime = ArrayGet(array = $timeArr, index = $column)
     $column = $column + 1
-    If($column > $size)
+    If($column > ArraySize(array = $timeArr))
     {
         $column = 1
     }
@@ -63,7 +69,6 @@ FUNC_CHANGE_STATE
 
     StartTimer(
         rep = false, 
-        size = $size,
         event = $event,
         column = $column,
         timeArr = $timeArr,
