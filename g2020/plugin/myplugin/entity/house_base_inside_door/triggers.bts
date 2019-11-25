@@ -2,6 +2,10 @@ ENTITY_ENTER
 {
 }
 
+ENTITY_CLICK{
+    CallTrigger(object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "ENTITY_TOUCH_ALL")
+}
+
 ENTITY_TOUCH_ALL{
     Test("get out here !")
     $door = GetObjectVar(obj = $obj2, key = "returnDoor")
