@@ -136,6 +136,11 @@ TEST_DATA{ -- 保存进数据库的数据伪代码
 
 CREATE_HOUSE_OUTSIDE{
     $house = CreateNpc(pos = GetRegionCenter(region = $region), map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
+
+    $yaw = GetRegionConfig(region = $region, key = "regionHouseYaw")
+    SetEntityYaw(entity = $house, rotationYaw = $yaw)
+    SetBodyYaw(entity = $house, yaw = $yaw)
+
     AddEntityBuff(entity = $house, cfg = GetConfigVar(obj = $house, key = "houseCreateBuff"), buffTime = 200)
     -- 改变房子外部颜色，通过加buff
     AddEntityBuff(entity = $house, cfg = $houseColor)

@@ -13,6 +13,7 @@ CREATR_SUBSIDIARY{
     SetObjectVar(obj = $mail, key = "house", value = $obj1)
     SetObjectVar(obj = $obj1, key = "mail", value = $mail)
 
+    StartTimer(rep = false, time = 1, object = $obj1, mail = $mail, event = "CHANGE_MAIL_YAW")
     ------------------------------------------ 创建房门，房门播放开门的
     ------------------------------------------ 房子 <house-------door> 房门
     $door = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "door"))
@@ -21,11 +22,24 @@ CREATR_SUBSIDIARY{
     SetObjectVar(obj = $door, key = "house", value = $obj1)
     SetObjectVar(obj = $obj1, key = "door", value = $door)
 
+    StartTimer(rep = false, time = 1, object = $door, mail = $door, event = "CHANGE_DOOR_YAW")
     ------------------------------------------ 创建内部房子（创建动态地图）
     ------------------------------------------ 房子 -------houseInsideMap> 内部房子
     $map = CreateMap(name = GetConfigVar(obj = $obj1, key = "insideMap"))
     SetObjectVar(obj = $obj1, key = "houseInsideMap", value = $map)
     StartTimer(time = 1, object = $obj1, event = "CREATR_HOUSE_INSIDE_SUBSIDIARY") -- 延迟一帧是因为需要用到上一帧创建完才设置的owner
+}
+
+CHANGE_MAIL_YAW{
+    $yaw = GetEntityYaw(entity = $obj1)
+    SetEntityYaw(entity = $mail, rotationYaw = $yaw)
+    SetBodyYaw(entity = $mail, yaw = $yaw)
+}
+
+CHANGE_DOOR_YAW{
+    $yaw = GetEntityYaw(entity = $obj1)
+    SetEntityYaw(entity = $door, rotationYaw = $yaw)
+    SetBodyYaw(entity = $door, yaw = $yaw)
 }
 
 CREATR_HOUSE_INSIDE_SUBSIDIARY{
