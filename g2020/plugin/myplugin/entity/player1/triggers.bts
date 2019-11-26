@@ -2,6 +2,18 @@ ENTITY_ENTER
 {
     If(IsPlayer(entity = $obj1))
     {
+        $playerName = GetEntityName(entity = $obj1)
+
+        If($obj1.nickName == "defaultNickName")
+        {
+            $obj1.nickName = $playerName
+        }
+
+        If($obj1.nickName ~= $playerName)
+        {
+            SetEntityName(entity = $obj1, name = $nickName)
+        }
+
         $obj1.isReadyReward = false
         $obj1.role = @adult
         $obj1.scaleBuff = nil
