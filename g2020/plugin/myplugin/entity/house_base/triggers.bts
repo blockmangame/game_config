@@ -73,11 +73,9 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
             }
         }
     }
-    Test("CREATR_HOUSE_INSIDE_SUBSIDIARY_2")
     ------------------------------------------ 内部各个家具
     ------------------------------------------ 房子 <house------- 家具
     $furnitures = ArrayGet(array = $curSelectHouse, index = 3) or {}
-    Test(1,$curSelectHouse)
     Foreach(array = $furnitures, key = "furniture"){
         $temp = ArrayGet(array = $furniture, index = 1)
         $pos = {
