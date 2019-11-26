@@ -190,6 +190,13 @@ CHANGE_HOUSE_COLOR{ -- 换色
         RemoveEntityBuff(entity = $curHouse, buff = $oldBuff)
     }
     AddEntityBuff(entity = $curHouse, cfg = $houseColor) -- 通过buff换skin
+
+    -- 换色特效
+    $effectBuff = GetEntityTypeBuff(entity = $curHouse, key = "fullName", value = GetConfigVar(obj = $house, key = "houseCreateBuff"))
+    If($effectBuff){
+        RemoveEntityBuff(entity = $curHouse, buff = $effectBuff)
+    }
+    AddEntityBuff(entity = $curHouse, cfg = GetConfigVar(obj = $curHouse, key = "houseCreateBuff"), buffTime = 200)
 }
 
 CHANGE_HOUSE{ -- 换房子/存档
