@@ -44,8 +44,8 @@
         "moveWidget": {
             "text": "MOVE",
             "image": "set:add_sub.json image:add",
-            "touchBeginEvent": "DEC_INTERACTION_MOVE_TOUCH_BEGIN",
-            "touchEndEvent": "DEC_INTERACTION_MOVE_TOUCH_END",
+            "touchBeginEventIndex": 1,
+            "touchEndEventIndex": 2,
             "btnType": 2,
             "pos": {
                 "x": -50,
@@ -57,7 +57,7 @@
             {
                 "text": "SALE",
                 "image": "set:add_sub.json image:add",
-                "event": "DEC_INTERACTION_SALE",
+                "eventIndex": 3,
                 "btnType": 2,
                 "pos": {
                     "x": 50,
@@ -78,7 +78,7 @@
             {
                 "text": "LEFT_ROTATION",
                 "image": "set:add_sub.json image:add",
-                "event": "DEC_INTERACTION_LEFT_ROTATION",
+                "eventIndex": 4,
                 "btnType": 2,
                 "pos": {
                     "x": -100,
@@ -89,7 +89,7 @@
             {
                 "text": "RIGHT_ROTATION",
                 "image": "set:add_sub.json image:add",
-                "event": "DEC_INTERACTION_RIGHT_ROTATION",
+                "eventIndex": 5,
                 "btnType": 2,
                 "pos": {
                     "x": 0,
@@ -97,6 +97,13 @@
                 },
                 "context": {}
             }
+        ],
+        "events":[
+            "DEC_INTERACTION_MOVE_TOUCH_BEGIN",
+            "DEC_INTERACTION_MOVE_TOUCH_END",
+            "DEC_INTERACTION_SALE",
+            "DEC_INTERACTION_LEFT_ROTATION",
+            "DEC_INTERACTION_RIGHT_ROTATION"
         ]
     },
     "interaction": {
