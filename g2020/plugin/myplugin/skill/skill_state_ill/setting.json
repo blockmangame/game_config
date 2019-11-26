@@ -1,16 +1,19 @@
 {
+    "type":"Base",
     "base": "skill_state_base",
     "icon":"ill.png",
-    "siteType": "publicArea",
-    "type":"Base",
-    "state": "ill",
-    "stateBase": "ill",
-    "interactToRelease": "true",
-    "canAffect": true,
-    "effect": "myplugin/buff_state_ill_effect",
 
+    "state": "ill",
+    "generateType": "A",
+    "releaseType": "interact",
+    
     "affectDis": 5,
     "affectTimeSpanSec": 5,
-    "generateTime":[0.3, 5],
-    "duration": 0
+
+    "effect": "myplugin/buff_state_ill_effect",
+
+    "hadReward": false,
+    
+    "generateTime":[0.3, 55],
+    "duration": 20
 }
