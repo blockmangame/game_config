@@ -1927,6 +1927,7 @@ CHANGE_NAME_SURE
 {
     SetEntityName(entity = $obj1, name = $name)
     $obj1.nickName = $name
+    UpdateUIData(player = $obj1, ui = "win_dressArchiveName", data = $name)
 }
 
 COMMENT_WORKS
