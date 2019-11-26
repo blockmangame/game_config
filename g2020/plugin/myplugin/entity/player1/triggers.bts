@@ -1888,6 +1888,47 @@ SAVE_PLAYER_DRESS
     }
 }
 
+SHOW_CHANGE_NAME_INPUT_DIALOG
+{
+    $title = {
+        name = "ui_dress_change_name"
+    }
+
+    $inputTitle = {
+        name = "ui_dress_input_name"
+    }
+
+    $buttons = [
+        {
+            event = "CHANGE_NAME_SURE",
+            normalImage = "set:tip_dialog.json image:btn_big_green",
+            pushedImage = "set:tip_dialog.json image:btn_big_green",
+            name = "ui_dress_change_name_sure_btn"
+        },
+        {
+            event = "cancel",
+            normalImage = "set:tip_dialog.json image:btn_big_blue",
+            pushedImage = "set:tip_dialog.json image:btn_big_blue",
+            name = "ui_dress_change_name_cancel_btn"
+        }
+    ]
+
+    $contents = {
+        title = $title,
+        inputTitle = $inputTitle,
+        buttons = $buttons,
+        text = $obj1.nickName
+    }
+
+    ShowInputDialog(entity = $obj1, contents = $contents)
+}
+
+CHANGE_NAME_SURE
+{
+    SetEntityName(entity = $obj1, name = $name)
+    $obj1.nickName = $name
+}
+
 COMMENT_WORKS
 {
     Test($msg)
