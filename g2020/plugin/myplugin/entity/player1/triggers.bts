@@ -38,13 +38,13 @@ ENTITY_ENTER
     $curSelectHouse = {}
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     If(not $houseVars or ArraySize(array = $houseVars) == 0){ -- 第一次进入游戏的玩家
-        Test("----------------------- first in")
+        Test("----------------------- First Login")
         $houseVars = Table([
                 "myplugin/house_default",
                 "myplugin/house_color_buff_1",
-                [   
-                    [{x = 1648,y=13,z=-574},0,"myplugin/test_dec_entity1","ddss1","false"],
-                    [{x = 1650,y=13,z=-574},90,"myplugin/test_dec_entity2","dds2s","false"]
+                [
+                    [{x = 1648,y=13,z=-574},0,"myplugin/test_dec_entity1","11111","false"],
+                    [{x = 1650,y=13,z=-574},90,"myplugin/test_dec_entity2","222222","false"],
                 ],
                 [
                     ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
@@ -53,24 +53,7 @@ ENTITY_ENTER
                 "enable",
                 "Sakura NeNe",
                 "house_type_big_house",
-                "1s"
-            ],[
-                "myplugin/house_default",
-                "myplugin/house_color_buff_1",
-                [
-                    [{x = 1648,y=13,z=-574},180,"myplugin/test_dec_entity1","dds3s","false"],
-                    [{x = 1650,y=13,z=-574},180,"myplugin/test_dec_entity2","dd4ss","false"],
-                    [{x = 1652,y=13,z=-574},180,"myplugin/test_dec_entity1","dd5ss","false"],
-                    [{x = 1654,y=13,z=-574},180,"myplugin/test_dec_entity2","d6dss","false"]
-                ],
-                [
-                    ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
-                    ["house_default_inside_map_area_2",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]]
-                ],
-                "disable",
-                "Sakura NeNe2",
-                "house_type_big_house",
-                "2s"
+                "1234567"
             ])
         SetObjectVar(obj = $obj1, key = "houseVars", value = $houseVars)
     }
@@ -222,6 +205,7 @@ CHANGE_HOUSE{ -- 换房子/存档
 
 -------------------------------------- ui/btn/event
 HOUSE_TAB_EVENT{
+    -- TODO 更新出售的商品列表
     Test("---------HOUSE_TAB_EVENT")
     If(not $key or "0" == $key){
         Test("--------- u need buy")
@@ -315,19 +299,15 @@ EDIT_HOUSE_NAME{
 SURE_BUY_HOUSE{
     Test("SURE_BUY_HOUSE",$houseCfg, $money)
     If(not $houseCfg){
-        -- TODO 买房子 成功则关闭界面，失败则不关闭
-        -- 此处判断是否购买失败，失败直接返回
+        -- TODO 买房子 成功则关闭界面，失败则不关闭-- 此处判断是否购买失败，失败直接返回-- 达到房子上限也不给买
         ShowTip(entity = $obj1, tipType = 1, textKey = "ui_buy_failure")
         Return()
     }
-
-    -- TODO BE CHANGE BUY HOUSE
     ------------- 
     ArrayAppend(array = GetObjectVar(obj = $obj1, key = "houseVars"), value = [ -- 购买成功后拼接一个新的房子数据放进entity的houseVars中 -- TEST CODE
             $houseCfg,
             GetEntityCfg(fullName = $houseCfg, key = "defaultColor") or "",
             GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
-            -- TODO 区域的还没有配在默认属性里，涉及太广，需要等后面都配完了再配这个
             GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or [],
             "disable",
             GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
@@ -511,8 +491,9 @@ HOUSE_LOCK{
 }
 
 SHOW_DEC_STORE{
+    -- TODO 更新出售的商品列表
     Test("SHOW_DEC_STORE")
-    Test(" 买东西测试代码 ， 以及逻辑") -- TODO UPDATE
+    Test(" 买东西测试代码 ， 以及逻辑")
     ShowGenericActorShowStore(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
     If(not $titleKey){
@@ -566,6 +547,7 @@ SHOW_DEC_STORE{
 }
 
 SHOW_DEC_STORE_A{
+    -- TODO 更新出售的商品列表
     ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
     If(not $titleKey){
         $titleKey = "allDec"
@@ -582,11 +564,11 @@ SHOW_DEC_STORE_A{
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "111122wwasd", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", 
-        cfg = "myplugin/test_dec_entity1", trigger = "BUY_STORE", context = {storeMoneyKey = 12324, cfg = "myplugin/test_dec_entity1"}
+        cfg = "myplugin/test_dec_entity1", actorScale = 0.5, trigger = "BUY_STORE", context = {storeMoneyKey = 12324, cfg = "myplugin/test_dec_entity1"}
     })
     ArraySet(array = $listInfoTb, index = 2, value = {
         text = "222aaa", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_6.png", 
-        cfg = "myplugin/test_dec_entity2", trigger = "BUY_STORE", context = {storeMoneyKey = 12231324, cfg = "myplugin/test_dec_entity2"}
+        cfg = "myplugin/test_dec_entity2", actorScale = 0.4, trigger = "BUY_STORE", context = {storeMoneyKey = 12231324, cfg = "myplugin/test_dec_entity2"}
     })
 
     $infoTb = {
@@ -608,6 +590,7 @@ SHOW_DEC_STORE_A{
 }
 
 SHOW_DEC_STORE_B{  
+    -- TODO 更新出售的商品列表
     ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
     If(not $titleKey){
         $titleKey = "allDec"
@@ -624,7 +607,7 @@ SHOW_DEC_STORE_B{
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "111122wwad", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", 
-        cfg = "myplugin/test_dec_entity1", trigger = "BUY_STORE", context = {storeMoneyKey = 12324, cfg = "myplugin/test_dec_entity1"}
+        cfg = "myplugin/test_dec_entity1", actorScale = 0.3, trigger = "BUY_STORE", context = {storeMoneyKey = 12324, cfg = "myplugin/test_dec_entity1"}
     })
 
     $infoTb = {
@@ -646,6 +629,7 @@ SHOW_DEC_STORE_B{
 }
 
 EDIT_FLOOR{
+    -- TODO 更新出售的商品列表
     Test("EDIT_FLOOR")
     ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
     If(not $titleKey){
@@ -663,11 +647,11 @@ EDIT_FLOOR{
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "asda", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12324, childRegionKey = "floorRegion", colorBlock = "myplugin/wool_1"}
+        trigger = "BUY_HOUSE_REGION_COLOR", actorScale = 0.6, context = {storeMoneyKey = 12324, childRegionKey = "floorRegion", colorBlock = "myplugin/wool_1"}
     })
     ArraySet(array = $listInfoTb, index = 2, value = {
         text = "gfdgh", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12224, childRegionKey = "floorRegion", colorBlock = "myplugin/wool_2"}
+        trigger = "BUY_HOUSE_REGION_COLOR", actorScale = 0.7, context = {storeMoneyKey = 12224, childRegionKey = "floorRegion", colorBlock = "myplugin/wool_2"}
     })
 
     $infoTb = {
@@ -689,6 +673,7 @@ EDIT_FLOOR{
 }
 
 EDIT_WALL{
+    -- TODO 更新出售的商品列表
     Test("EDIT_WALL")
     ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
     If(not $titleKey){
@@ -728,6 +713,7 @@ EDIT_WALL{
 }
 
 EDIT_CEILING{
+    -- TODO 更新出售的商品列表
     Test("EDIT_CEILING")
     ShowTitleBarPage(entity = $obj1, infoTb = {}, closeWin = true)
     If(not $titleKey){
@@ -772,7 +758,7 @@ EDIT_CEILING{
 
 BUY_HOUSE_REGION_COLOR{
     Test("BUY_HOUSE_REGION_COLOR", $storeMoneyKey, $childRegionKey, $colorBlock)
-    -- TODO 购买
+    -- TODO 购买扣钱
     $curInsideRegion = GetObjectVar(obj = $obj1, key = "curInsideRegion")
     If(not $curInsideRegion){
         Return()
