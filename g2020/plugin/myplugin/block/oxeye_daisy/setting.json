@@ -1,7 +1,6 @@
 {
     "isOpaqueFullCube": false,
-    "quads":
-	[
+    "quads": [
         {
             "texture": "flower_oxeye_daisy.png",
             "pos": [
@@ -53,24 +52,22 @@
             ]
         }
     ],
-	"collisionBoxes":
-	[
-	    {
-            "max":
-			{
+    "collisionBoxes": [
+        {
+            "max": {
                 "x": 0,
                 "y": 0,
                 "z": 0
             },
-			"min":
-			{
+            "min": {
                 "x": 0,
                 "y": 0,
                 "z": 0
             }
-		}
-	],
+        }
+    ],
     "blockObjectOnCollision": false,
     "renderPass": 4,
-    "breakTime": 20
+    "breakTime": 20,
+    "base": "base_block"
 }

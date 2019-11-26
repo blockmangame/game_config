@@ -41,9 +41,9 @@ ENTITY_ENTER
         Test("----------------------- First Login")
         $houseVars = Table([
                 "myplugin/house_default",
-                "myplugin/house_color_buff_1",
+                "myplugin/house_color_buff_11",
                 [
-                    [{x = 1648,y=13,z=-574},0,"myplugin/test_dec_entity1","11111","false"],
+                    [{x = 1648,y=13,z=-574},0,"myplugin/test_dec_entity1","11111","true"],
                     [{x = 1650,y=13,z=-574},90,"myplugin/test_dec_entity2","222222","false"],
                 ],
                 [
@@ -54,6 +54,21 @@ ENTITY_ENTER
                 "Sakura NeNe",
                 "house_type_big_house",
                 "1234567"
+            ],[
+                "myplugin/house_default",
+                "myplugin/house_color_buff_11",
+                [
+                    [{x = 1648,y=13,z=-574},180,"myplugin/test_dec_entity1","11111","false"],
+                    [{x = 1650,y=13,z=-574},270,"myplugin/test_dec_entity2","222222","true"],
+                ],
+                [
+                    ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
+                    ["house_default_inside_map_area_2",["myplugin/cotton_stage_0","myplugin/dark_oak_stairs04","myplugin/acacia_door_10"]]
+                ],
+                "disable",
+                "Sakura NeNe 2",
+                "house_type_big_house",
+                "7654321"
             ])
         SetObjectVar(obj = $obj1, key = "houseVars", value = $houseVars)
     }
@@ -218,9 +233,9 @@ HOUSE_TAB_EVENT{
         Test("--------- u need buy")
         $listInfoTb = [
             {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", text = "xxxxx", 
-                btnShowText = 100, context = {money = 100, houseCfg = "myplugin/house_default"}},
+                btnShowText = 100, context = {houseCfg = "myplugin/house_default"}},
             {image = "plugin/myplugin/entity/house_default/g1047_chess_11.png", text = "house_type_test_house", 
-                btnShowText = 555, context = {money = 555, houseCfg = "myplugin/house_default"}},
+                btnShowText = 555, context = {houseCfg = "myplugin/house_default"}},
         ]
         $childInfo = {
             uiWin = "genericListDisplayBox3",
@@ -291,7 +306,8 @@ HOUSE_TAB_EVENT{
 }
 
 EDIT_HOUSE_NAME{
-    Test("EDIT_HOUSE_NAME") -- TODO BE CHANGE HOUSE NAME
+    -- TODO 房子改名
+    Test("EDIT_HOUSE_NAME")
     Foreach(array = GetObjectVar(obj = $obj1, key = "houseVars"), key = "house"){
         If(ArrayGet(array = $house, index = 8) == $houseKey){
             $curSelectHouse = $house
@@ -304,14 +320,22 @@ EDIT_HOUSE_NAME{
 }
 
 SURE_BUY_HOUSE{
-    Test("SURE_BUY_HOUSE",$houseCfg, $money)
-    If(not $houseCfg){
-        -- TODO 买房子 成功则关闭界面，失败则不关闭-- 此处判断是否购买失败，失败直接返回-- 达到房子上限也不给买
+    Test("SURE_BUY_HOUSE", $houseCfg)
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
+    If(not $houseCfg or ArraySize(array = $houseVars) >= (GetConfigVar(obj = $obj1, key = "maxHouseVarsSize") or 8)){
+        -- 买房子 成功则关闭界面，失败则不关闭 -- 达到房子上限也不给买
         ShowTip(entity = $obj1, tipType = 1, textKey = "ui_buy_failure")
         Return()
     }
-    ------------- 
-    ArrayAppend(array = GetObjectVar(obj = $obj1, key = "houseVars"), value = [ -- 购买成功后拼接一个新的房子数据放进entity的houseVars中 -- TEST CODE
+    ------------- 花钱买房 -- 此处判断是否购买失败，失败直接返回
+    $buyMoney = GetEntityCfg(fullName = $houseCfg, key = "buyMoney")
+    $coinName = GetEntityCfg(fullName = $houseCfg, key = "coinName")
+    If(not PayCurrency(entity = $obj1, coinName = $coinName, count = $buyMoney)){
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_not_enough_money", time = 40)
+        Return()
+    }
+    ------------- 给房子
+    ArrayAppend(array = $houseVars, value = [ -- 购买成功后拼接一个新的房子数据放进entity的houseVars中 -- TEST CODE
             $houseCfg,
             GetEntityCfg(fullName = $houseCfg, key = "defaultColor") or "",
             GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
@@ -351,9 +375,22 @@ SELL_HOUSE{
             }
         }
     }
+    $sellHouseMoney = 0
+    $sellHouseCfg = ArrayGet(array = $curSelectHouse, index = 1)
+    $sellHouseMoney = $sellHouseMoney + GetEntityCfg(fullName = $sellHouseCfg, key = "sellMoney")
+    $sellHouseFurnitures = ArrayGet(array = $curSelectHouse, index = 3) or {}
+    Foreach(array = $sellHouseFurnitures, key = "furniture"){
+        $cfg = ArrayGet(array = $furniture, index = 3)
+        $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
+        If(ArrayGet(array = $furniture, index = 5)){
+            $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
+        }
+        $sellHouseMoney = $sellHouseMoney + $sellMoney
+    }          
     -- showTextTb
+    -- TODO 更新出售的房子的信息
     $showTextTb = {textWeightList = [
-        {keyText = "ui_house_sell_house_money", valueText = "123456678"},
+        {keyText = "ui_house_sell_house_money", valueText = $sellHouseMoney},
         {keyText = "ui_house_sell_house_type", valueText = "yesssssssssssss"}
     ]}
     -- btn
@@ -386,7 +423,7 @@ SELL_HOUSE_SURE{
     }
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
         If(ArrayGet(array = ArrayGet(array = $houseVars, index = $index), index = 8) == $houseKey){
-            $curSelectHouse = $houseVar
+            $curSelectHouse = ArrayGet(array = $houseVars, index = $index) or {}
             ArrayRemove(array = $houseVars, index = $index)
             Break()
         }
@@ -395,16 +432,32 @@ SELL_HOUSE_SURE{
     ArraySet(array = $newHouseVar, index = 5, value = "enable")
     CallTrigger(object = $obj1, event = "CHANGE_HOUSE", 
             newHouse = ArrayGet(array = $newHouseVar, index = 1), houseColor = ArrayGet(array = $newHouseVar, index = 2))
-    -- TODO 出售成功，给玩家钱
-
+    -- 出售成功，给玩家钱
+    $sellHouseCfg = ArrayGet(array = $curSelectHouse, index = 1)
+    AddCurrency(entity = $obj1, coinName = GetEntityCfg(fullName = $sellHouseCfg, key = "coinName"), 
+        count = GetEntityCfg(fullName = $sellHouseCfg, key = "sellMoney"))
+    $sellHouseFurnitures = ArrayGet(array = $curSelectHouse, index = 3) or {}
+    Foreach(array = $sellHouseFurnitures, key = "furniture"){
+        $cfg = ArrayGet(array = $furniture, index = 3)
+        $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
+        If(ArrayGet(array = $furniture, index = 5)){
+            $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
+        }
+        $coinName = GetEntityCfg(fullName = $cfg, key = "coinName")
+        AddCurrency(entity = $obj1, coinName = $coinName, count = $sellMoney)
+    }
 
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
 }
 
 BUY_STORE{
-    -- TODO 买东西 成功则关闭界面，失败则不关闭
-
-    Test("BUY_STORE",$storeMoneyKey,$cfg,"---------购买后直接出现在场景里的逻辑 createNpc..xxx")
+    Test("BUY_STORE",$storeMoneyKey,$cfg)
+    $buyMoney = GetEntityCfg(fullName = $cfg, key = "buyMoney")
+    $coinName = GetEntityCfg(fullName = $cfg, key = "coinName")
+    If(not PayCurrency(entity = $obj1, coinName = $coinName, count = $buyMoney)){
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
+        Return()
+    }
     ShowGenericActorShowStore(entity = $obj1, infoTb = {}, closeWin =true)
     
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
@@ -738,11 +791,11 @@ EDIT_CEILING{
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "hhhh", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_4.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12324, childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_4"}
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 124, childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_4"}
     })
     ArraySet(array = $listInfoTb, index = 2, value = {
         text = "jjjj", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12224, childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_5"}
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 124, childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_5"}
     })
 
     $infoTb = {
@@ -765,7 +818,15 @@ EDIT_CEILING{
 
 BUY_HOUSE_REGION_COLOR{
     Test("BUY_HOUSE_REGION_COLOR", $storeMoneyKey, $childRegionKey, $colorBlock)
-    -- TODO 购买扣钱
+    -- 如果换了墙纸或者地板，原有的不保留，当你没买     如果你原来买了A墙纸，你又换成了B，那么你要再花一遍钱去把A换回来
+    If($colorBlock){
+        $buyMoney = GetBlockConfigByName(block = $colorBlock, key = "buyMoney")
+        $coinName = GetBlockConfigByName(block = $colorBlock, key = "coinName")
+        If(not PayCurrency(entity = $obj1, coinName = $coinName, count = $buyMoney)){
+            ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", time = 40)
+            Return()
+        }
+    }
     $curInsideRegion = GetObjectVar(obj = $obj1, key = "curInsideRegion")
     If(not $curInsideRegion){
         Return()

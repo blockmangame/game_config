@@ -1,50 +1,47 @@
 {
-	"isOpaqueFullCube":false,
-	"renderPass": 4,
+    "isOpaqueFullCube": false,
+    "renderPass": 4,
     "breakTime": 20,
-	"collisionBoxes":
-	[
-		{
-			
-			"min":
-			{	
-				"x":0,
-				"y":0,
-				"z":0
-			},
-			"max":
-			{
-				"x":1,
-				"y":1,
-				"z":0.2
-			}
-		}
-	],
-	"quads": [
+    "collisionBoxes": [
+        {
+            "min": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "max": {
+                "x": 1,
+                "y": 1,
+                "z": 0.2
+            }
+        }
+    ],
+    "quads": [
         {
             "pos": [
-               {
-                "x": 1,
-                "y": 0,
-                "z": 0
-               },
-               {
-                "x": 1,
-                "y": 1,
-                "z": 0
-               },
-               {
-                "x": 0,
-                "y": 1,
-                "z": 0
-               },
-               {
-                "x": 0,
-                "y": 0,
-                "z": 0
-               }
-             ],
+                {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                },
+                {
+                    "x": 1,
+                    "y": 1,
+                    "z": 0
+                },
+                {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                },
+                {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            ],
             "texture": "darkdoorfull.png"
         }
-    ]
+    ],
+    "base": "base_block"
 }

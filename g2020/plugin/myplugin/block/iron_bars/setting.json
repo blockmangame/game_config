@@ -1,47 +1,48 @@
 {
-	"isOpaqueFullCube":false,
-	"renderPass": 4,
+    "isOpaqueFullCube": false,
+    "renderPass": 4,
     "breakTime": 20,
-	"blockObjectOnCollision": false,
-	"collisionBoxes":
-	[
-	        {
-            "max":{
+    "blockObjectOnCollision": false,
+    "collisionBoxes": [
+        {
+            "max": {
                 "x": 0,
                 "y": 0,
                 "z": 0
-               },
-			    "min":{
+            },
+            "min": {
                 "x": 0,
                 "y": 0,
                 "z": 0
-               }
-	}],
-	"quads": [
+            }
+        }
+    ],
+    "quads": [
         {
             "pos": [
-               {
-                "x": 0,
-                "y": 0,
-                "z": 0
-               },
-               {
-                "x": 0,
-                "y": 1,
-                "z": 0
-               },
-               {
-                "x": 0,
-                "y": 1,
-                "z": 1
-               },
-               {
-                "x": 0,
-                "y": 0,
-                "z": 1
-               }
-             ],
+                {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                },
+                {
+                    "x": 0,
+                    "y": 1,
+                    "z": 1
+                },
+                {
+                    "x": 0,
+                    "y": 0,
+                    "z": 1
+                }
+            ],
             "texture": "iron_bars.png"
         }
-    ]
+    ],
+    "base": "base_block"
 }

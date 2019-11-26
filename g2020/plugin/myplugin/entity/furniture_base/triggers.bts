@@ -30,7 +30,6 @@ DEC_INTERACTION_MOVE_TOUCH_END{
 }
 
 DEC_INTERACTION_SALE{
-    -- TODO 卖东西 旧东西打折，卖东西后给玩家钱
     Test("----------------------------------DEC_INTERACTION_SALE", $objID)
     $owner = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "owner")
     $curSelectHouse = {}
@@ -42,9 +41,15 @@ DEC_INTERACTION_SALE{
     }
     $furnitures = ArrayGet(array = $curSelectHouse, index = 3)
     ForLoop(from = 1, to = ArraySize(array = $furnitures), key = "index"){
-        If(ArrayGet(array = ArrayGet(array = $furnitures, index = $index), index = 4) == $objID){
-            -- TODO 给玩家钱
-
+        $furniture = ArrayGet(array = $furnitures, index = $index)
+        If(ArrayGet(array = $furniture, index = 4) == $objID){
+            $cfg = ArrayGet(array = $furniture, index = 3)
+            $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
+            If(ArrayGet(array = $furniture, index = 5)){
+                $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
+            }
+            $coinName = GetEntityCfg(fullName = $cfg, key = "coinName")
+            AddCurrency(entity = $owner, coinName = $coinName, count = $sellMoney)
             ArrayRemove(array = $furnitures, index = $index)
             Break()
         }

@@ -1,72 +1,73 @@
 {
     "breakTime": 20,
-	"renderPass": 4,
-	"blockObjectOnCollision":false,
-	"isOpaqueFullCube":false,
-	"collisionBoxes":
-	[
-	        {
-            "max":{
+    "renderPass": 4,
+    "blockObjectOnCollision": false,
+    "isOpaqueFullCube": false,
+    "collisionBoxes": [
+        {
+            "max": {
                 "x": 0,
                 "y": 0,
                 "z": 0
-               },
-			    "min":{
+            },
+            "min": {
                 "x": 0,
                 "y": 0,
                 "z": 0
-               }
-	}],
+            }
+        }
+    ],
     "quads": [
         {
             "pos": [
-               {
-                "x": 0.5,
-                "y": 0,
-                "z": 0.5
-               },
-               {
-                "x": 1,
-                "y": 0.5,
-                "z": 0.5
-               },
-               {
-                "x": 0.5,
-                "y": 1,
-                "z": 0.5
-               },
-               {
-                "x": 0,
-                "y": 0.5,
-                "z": 0.5
-               }
-             ],
+                {
+                    "x": 0.5,
+                    "y": 0,
+                    "z": 0.5
+                },
+                {
+                    "x": 1,
+                    "y": 0.5,
+                    "z": 0.5
+                },
+                {
+                    "x": 0.5,
+                    "y": 1,
+                    "z": 0.5
+                },
+                {
+                    "x": 0,
+                    "y": 0.5,
+                    "z": 0.5
+                }
+            ],
             "texture": "redstone_torch_on.png"
         },
-		{
+        {
             "pos": [
-               {
-                "x": 0,
-                "y": 0,
-                "z": 1
-               },
-               {
-                "x": 1,
-                "y": 1,
-                "z": 1
-               },
-               {
-                "x": 1,
-                "y": 1,
-                "z": 0
-               },
-               {
-                "x": 0,
-                "y": 0,
-                "z": 0
-               }
-             ],
+                {
+                    "x": 0,
+                    "y": 0,
+                    "z": 1
+                },
+                {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                },
+                {
+                    "x": 1,
+                    "y": 1,
+                    "z": 0
+                },
+                {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            ],
             "texture": "redstone_torch_on.png"
         }
-    ]
+    ],
+    "base": "base_block"
 }
