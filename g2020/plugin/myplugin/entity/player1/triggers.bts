@@ -2007,7 +2007,7 @@ HTTP_TEST
 HTTP_PURCHASED_DRESS_CALL_BACK
 {
     $responseDict = NewDictionary($response)
-    $dressStoreIds = GetWorldVar(key = "dressShopIds")
+    $dressStoreIds = GetWorldVar(key = "dressStoreIds")
     Foreach(array = $dressStoreIds, key = "storeId")
     {
         $storeItems = GetStoreById(storeId = $storeId)
