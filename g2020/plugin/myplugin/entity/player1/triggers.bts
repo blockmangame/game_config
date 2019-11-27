@@ -1956,16 +1956,16 @@ SHOW_CHANGE_NAME_INPUT_DIALOG
 
     $buttons = [
         {
-            event = "CHANGE_PLAYER_NAME",
-            normalImage = "set:tip_dialog.json image:btn_big_green",
-            pushedImage = "set:tip_dialog.json image:btn_big_green",
-            name = "ui_dress_change_name_sure_btn"
-        },
-        {
             event = "cancel",
             normalImage = "set:tip_dialog.json image:btn_big_blue",
             pushedImage = "set:tip_dialog.json image:btn_big_blue",
             name = "ui_dress_change_name_cancel_btn"
+        },
+        {
+            event = "CHANGE_PLAYER_NAME",
+            normalImage = "set:tip_dialog.json image:btn_big_green",
+            pushedImage = "set:tip_dialog.json image:btn_big_green",
+            name = "ui_dress_change_name_sure_btn"
         }
     ]
 
