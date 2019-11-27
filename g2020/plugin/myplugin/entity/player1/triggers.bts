@@ -307,7 +307,8 @@ HOUSE_TAB_EVENT{
         uiWin = "genericListDisplayBox2",
         infoTb = {
             upperLayerKey = $key,
-            titleTb = {text = ArrayGet(array = $houseVar, index = 6), trigger = "EDIT_HOUSE_NAME", context = {houseKey = ArrayGet(array = $houseVar, index = 8)}},
+            titleTb = {text = ArrayGet(array = $houseVar, index = 6), trigger = "EDIT_HOUSE_NAME", 
+                context = {houseKey = ArrayGet(array = $houseVar, index = 8), houseName = ArrayGet(array = $houseVar, index = 6)}},
             selectInfo = {
                 selectTitleText = "ui_house_choice_color",
                 selectButtomText = ArrayGet(array = $houseVar, index = 7),
@@ -468,7 +469,10 @@ SELL_HOUSE_SURE{
 }
 
 BUY_STORE{
-    Test("BUY_STORE",$storeMoneyKey,$cfg)
+    Test("BUY_STORE", $cfg)
+    If(not $cfg){
+        Return()
+    }
     $buyMoney = GetEntityCfg(fullName = $cfg, key = "buyMoney")
     $coinName = GetEntityCfg(fullName = $cfg, key = "coinName")
     If(not PayCurrency(entity = $obj1, coinName = $coinName, count = $buyMoney)){
@@ -641,11 +645,11 @@ SHOW_DEC_STORE_A{
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "111122wwasd", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", 
-        cfg = "myplugin/test_dec_entity1", actorScale = 0.5, trigger = "BUY_STORE", context = {storeMoneyKey = 12324, cfg = "myplugin/test_dec_entity1"}
+        cfg = "myplugin/test_dec_entity1", actorScale = 0.5, trigger = "BUY_STORE", context = {cfg = "myplugin/test_dec_entity1"}
     })
     ArraySet(array = $listInfoTb, index = 2, value = {
         text = "222aaa", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_6.png", 
-        cfg = "myplugin/test_dec_entity2", actorScale = 0.4, trigger = "BUY_STORE", context = {storeMoneyKey = 12231324, cfg = "myplugin/test_dec_entity2"}
+        cfg = "myplugin/test_dec_entity2", actorScale = 0.4, trigger = "BUY_STORE", context = {cfg = "myplugin/test_dec_entity2"}
     })
 
     $infoTb = {
@@ -684,7 +688,7 @@ SHOW_DEC_STORE_B{
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "111122wwad", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", 
-        cfg = "myplugin/test_dec_entity1", actorScale = 0.3, trigger = "BUY_STORE", context = {storeMoneyKey = 12324, cfg = "myplugin/test_dec_entity1"}
+        cfg = "myplugin/test_dec_entity1", actorScale = 0.3, trigger = "BUY_STORE", context = {cfg = "myplugin/test_dec_entity1"}
     })
 
     $infoTb = {
@@ -724,11 +728,11 @@ EDIT_FLOOR{
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "asda", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", actorScale = 0.6, context = {storeMoneyKey = 12324, childRegionKey = "floorRegion", colorBlock = "myplugin/wool_1"}
+        trigger = "BUY_HOUSE_REGION_COLOR", actorScale = 0.6, context = {childRegionKey = "floorRegion", colorBlock = "myplugin/wool_1"}
     })
     ArraySet(array = $listInfoTb, index = 2, value = {
         text = "gfdgh", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", actorScale = 0.7, context = {storeMoneyKey = 12224, childRegionKey = "floorRegion", colorBlock = "myplugin/wool_2"}
+        trigger = "BUY_HOUSE_REGION_COLOR", actorScale = 0.7, context = {childRegionKey = "floorRegion", colorBlock = "myplugin/wool_2"}
     })
 
     $infoTb = {
@@ -768,7 +772,7 @@ EDIT_WALL{
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "fggg", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_3.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12324, childRegionKey = "wallRegion", colorBlock = "myplugin/wool_3"}
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {childRegionKey = "wallRegion", colorBlock = "myplugin/wool_3"}
     })
 
     $infoTb = {
@@ -808,11 +812,11 @@ EDIT_CEILING{
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "hhhh", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_4.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 124, childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_4"}
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_4"}
     })
     ArraySet(array = $listInfoTb, index = 2, value = {
         text = "jjjj", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 124, childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_5"}
+        trigger = "BUY_HOUSE_REGION_COLOR", context = {childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_5"}
     })
 
     $infoTb = {
@@ -834,7 +838,7 @@ EDIT_CEILING{
 }
 
 BUY_HOUSE_REGION_COLOR{
-    Test("BUY_HOUSE_REGION_COLOR", $storeMoneyKey, $childRegionKey, $colorBlock)
+    Test("BUY_HOUSE_REGION_COLOR", $childRegionKey, $colorBlock)
     -- 如果换了墙纸或者地板，原有的不保留，当你没买     如果你原来买了A墙纸，你又换成了B，那么你要再花一遍钱去把A换回来
     If($colorBlock){
         $buyMoney = GetBlockConfigByName(block = $colorBlock, key = "buyMoney")
