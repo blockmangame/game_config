@@ -1835,7 +1835,8 @@ SHOW_DELETE_DRESS_ARCHIVE_DIALOG
     ShowDialogTip(entity = $obj1, 
         p1 = "ui_dress_archive_delete_dialog_context",
         event = "DELETE_DRESS_ARCHIVE",
-        tipType = 2)
+        tipType = 2,
+        context = $options)
 }
 
 DELETE_DRESS_ARCHIVE
@@ -1852,8 +1853,6 @@ DELETE_DRESS_ARCHIVE
         Return()
     }
 
-    $optionsDict = NewDictionary($options)
-    $index = DictionaryGet(dict = $optionsDict, key = "index")
     If(not $index)
     {
         Return()
