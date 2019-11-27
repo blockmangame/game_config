@@ -1755,53 +1755,40 @@ SHOW_OPERATE_DRESS_ARCHIVE_INPUT_DIALOG
     }
 
     $buttons = [
-        {   
-            -- event = "RENAME_DRESS_ARCHIVE",
-            event = "CHANGE_DRESS_ARCHIVE_NAME",
-            normalImage = "set:tip_dialog.json image:btn_big_green",
-            pushedImage = "set:tip_dialog.json image:btn_big_green",
-            name = "ui_dress_archive_change_name_sure_btn"
-        },
-        {
-            event = "DELETE_DRESS_ARCHIVE",
-            normalImage = "set:tip_dialog.json image:btn_big_yellow",
-            pushedImage = "set:tip_dialog.json image:btn_big_yellow",
-            name = "ui_dress_archive_change_name_delete_btn"  
-        },
         {
             event = "cancel",
             normalImage = "set:tip_dialog.json image:btn_big_blue",
             pushedImage = "set:tip_dialog.json image:btn_big_blue",
             name = "ui_dress_archive_change_name_cancel_btn"
+        },
+        {
+            event = "SHOW_DELETE_DRESS_ARCHIVE_DIALOG",
+            normalImage = "set:tip_dialog.json image:btn_big_yellow",
+            pushedImage = "set:tip_dialog.json image:btn_big_yellow",
+            name = "ui_dress_archive_change_name_delete_btn",
+            clickAndShow = true
+        },
+        {
+            event = "RENAME_DRESS_ARCHIVE",
+            normalImage = "set:tip_dialog.json image:btn_big_green",
+            pushedImage = "set:tip_dialog.json image:btn_big_green",
+            name = "ui_dress_archive_change_name_sure_btn"
         }
     ]
+
+    $options = {
+        index = $index
+    }
 
     $contents = {
         title = $title,
         inputTitle = $inputTitle,
         buttons = $buttons,
-        text = $name
+        text = $name,
+        options = $options
     }
 
     ShowInputDialog(entity = $obj1, contents = $contents)
-}
-
-OPERATE_DRESS_ARCHIVE
-{
-    If($type == 1)
-    {
-        CallTrigger(event = "ADD_DRESS_ARCHIVE", object = $obj1, name = $name)
-    }
-
-    If($type == 2)
-    {
-        CallTrigger(event = "DELETE_DRESS_ARCHIVE", object = $obj1, index = $index)
-    }
-
-    If($type == 3)
-    {
-        CallTrigger(event = "RENAME_DRESS_ARCHIVE", object = $obj1, name = $name, index = $index)
-    }
 }
 
 ADD_DRESS_ARCHIVE
@@ -1812,7 +1799,7 @@ ADD_DRESS_ARCHIVE
         Return()
     }
 
-    If((ArraySize(array = $dressArchive) - 1) <= GetWorldVar(key = "dressArchiveNum"))
+    If((ArraySize(array = $dressArchive) - 1) < GetWorldVar(key = "dressArchiveNum"))
     {
         $addDressData = {
             vars = {
@@ -1843,11 +1830,31 @@ ADD_DRESS_ARCHIVE
     }
 }
 
+SHOW_DELETE_DRESS_ARCHIVE_DIALOG
+{
+    ShowDialogTip(entity = $obj1, 
+        p1 = "ui_dress_archive_delete_dialog_context",
+        event = "DELETE_DRESS_ARCHIVE",
+        tipType = 2)
+}
+
 DELETE_DRESS_ARCHIVE
 {
+    If(not $result)
+    {
+        Return()
+    }
     
+    ShowInputDialog(entity = $obj1, isClose = true)
     $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
     If(not $dressArchive)
+    {
+        Return()
+    }
+
+    $optionsDict = NewDictionary($options)
+    $index = DictionaryGet(dict = $optionsDict, key = "index")
+    If(not $index)
     {
         Return()
     }
@@ -1864,6 +1871,13 @@ RENAME_DRESS_ARCHIVE
 {
     $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
     If(not $dressArchive)
+    {
+        Return()
+    }
+
+    $optionsDict = NewDictionary($options)
+    $index = DictionaryGet(dict = $optionsDict, key = "index")
+    If(not $index)
     {
         Return()
     }
