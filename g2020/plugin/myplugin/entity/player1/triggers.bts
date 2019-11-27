@@ -326,16 +326,16 @@ HOUSE_TAB_EVENT{
 
 EDIT_HOUSE_NAME{
     -- TODO 房子改名
-    Test("EDIT_HOUSE_NAME")
+    Test("EDIT_HOUSE_NAME", $houseKey, $titleEditText)
+    If(not $titleEditText or not $houseKey){
+        Return()
+    }
     Foreach(array = GetObjectVar(obj = $obj1, key = "houseVars"), key = "house"){
         If(ArrayGet(array = $house, index = 8) == $houseKey){
-            $curSelectHouse = $house
+            ArraySet(array = $house, index = 6, value = $titleEditText)
             Break()
         }
     }
-
-
-
 }
 
 SURE_BUY_HOUSE{
