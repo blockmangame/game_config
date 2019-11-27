@@ -1,5 +1,5 @@
-
-{    "quads": [
+{
+    "quads": [
         {
             "pos": [
                 {
@@ -26,21 +26,23 @@
             "texture": "stone.png"
         }
     ],
-  "collisionBoxes":
-  [        {
-            "max":{
+    "collisionBoxes": [
+        {
+            "max": {
                 "x": 1,
                 "y": 0.2,
                 "z": 1
-               },
-          "min":{
+            },
+            "min": {
                 "x": 0,
                 "y": 0,
                 "z": 0
-               }
-  }],
+            }
+        }
+    ],
     "isOpaqueFullCube": false,
     "blockObjectOnCollision": false,
     "renderPass": 4,
-    "breakTime": 20
+    "breakTime": 20,
+    "base": "base_block"
 }

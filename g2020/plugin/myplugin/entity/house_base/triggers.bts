@@ -4,6 +4,7 @@ ENTITY_ENTER
 }
 
 CREATR_SUBSIDIARY{
+    Test("CREATR_SUBSIDIARY")
     ------------------------------------------ 创建邮箱
     ------------------------------------------ 房子 <house-------mail> 邮箱
     $mail = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "mail"))
@@ -12,6 +13,7 @@ CREATR_SUBSIDIARY{
     SetObjectVar(obj = $mail, key = "house", value = $obj1)
     SetObjectVar(obj = $obj1, key = "mail", value = $mail)
 
+    StartTimer(rep = false, time = 1, object = $obj1, mail = $mail, event = "CHANGE_MAIL_YAW")
     ------------------------------------------ 创建房门，房门播放开门的
     ------------------------------------------ 房子 <house-------door> 房门
     $door = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "door"))
@@ -20,6 +22,7 @@ CREATR_SUBSIDIARY{
     SetObjectVar(obj = $door, key = "house", value = $obj1)
     SetObjectVar(obj = $obj1, key = "door", value = $door)
 
+    StartTimer(rep = false, time = 1, object = $door, mail = $door, event = "CHANGE_DOOR_YAW")
     ------------------------------------------ 创建内部房子（创建动态地图）
     ------------------------------------------ 房子 -------houseInsideMap> 内部房子
     $map = CreateMap(name = GetConfigVar(obj = $obj1, key = "insideMap"))
@@ -27,8 +30,27 @@ CREATR_SUBSIDIARY{
     StartTimer(time = 1, object = $obj1, event = "CREATR_HOUSE_INSIDE_SUBSIDIARY") -- 延迟一帧是因为需要用到上一帧创建完才设置的owner
 }
 
+CHANGE_MAIL_YAW{
+    $yaw = GetEntityYaw(entity = $obj1)
+    SetEntityYaw(entity = $mail, rotationYaw = $yaw)
+    SetBodyYaw(entity = $mail, yaw = $yaw)
+}
+
+CHANGE_DOOR_YAW{
+    $yaw = GetEntityYaw(entity = $obj1)
+    SetEntityYaw(entity = $door, rotationYaw = $yaw)
+    SetBodyYaw(entity = $door, yaw = $yaw)
+}
+
 CREATR_HOUSE_INSIDE_SUBSIDIARY{
-    $curSelectHouse = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "owner"), key = "curSelectHouseVars") or {}
+    Test("CREATR_HOUSE_INSIDE_SUBSIDIARY")
+    $curSelectHouse = {}
+    Foreach(array = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "owner"), key = "houseVars"), key = "house"){
+        If(ArrayGet(array = $house, index = 5) == "enable"){
+            $curSelectHouse = $house
+            Break()
+        }
+    }
     ------------------------------------------ 内部各区域的颜色，没有则默认颜色，vars里面取，此处的颜色是替换方块
     $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
     $allRegion = GetAllRegion(map = $map)
@@ -38,6 +60,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
         $hadRegion = false
         $regionkey = GetRegionConfig(region = $region, key = "regionkey")
         $childRegionKeyArr = GetRegionConfig(region = $region, key = "childRegionKey") or {}
+        $defaultChildRegionBlock = GetRegionConfig(region = $region, key = "defaultChildRegionBlock") or {}
         Foreach(array = $regionColor, key = "regionColorTb"){
             If(ArrayGet(array = $regionColorTb, index = 1) == $regionkey){
                 $hadRegion = true
@@ -46,7 +69,10 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
                     $childRegionArr = GetRegionConfig(region = $region, key = ArrayGet(array = $childRegionKeyArr, index = $index)) or {}
                     Foreach(array = $childRegionArr, key = "cRegion"){
                         FillBlocksInRegion(map = $map, region = $cRegion, 
-                            block = ArrayGet(array = $childRegionColorArr, index = $index) or GetRegionConfig(region = $region, key = "defaultBlock"))
+                            block = ArrayGet(array = $childRegionColorArr, index = $index) or 
+                            ArrayGet(array = $defaultChildRegionBlock, index = $index) or 
+                            GetRegionConfig(region = $region, key = "defaultBlock")
+                        )
                     }
                 }
                 Break()
@@ -62,11 +88,31 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
         }
     }
     ------------------------------------------ 内部各个家具
-    $furnishings = ArrayGet(array = $curSelectHouse, index = 3) or {}
-    Foreach(array = $furnishings, key = "furnishing"){
-        $npc = CreateNpc(map = $map, cfgName = ArrayGet(array = $furnishing, index = 3), 
-            pos = ArrayGet(array = $furnishing, index = 1), ry = ArrayGet(array = $furnishing, index = 2))
-        SetObjectVar(obj = $npc, key = "furnishingId", value = ArrayGet(array = $furnishing, index = 4))
+    ------------------------------------------ 房子 <house------- 家具
+    $furnitures = ArrayGet(array = $curSelectHouse, index = 3) or {}
+    Foreach(array = $furnitures, key = "furniture"){
+        $temp = ArrayGet(array = $furniture, index = 1)
+        $pos = {
+            x = GetPosX(pos = $temp),
+            y = GetPosY(pos = $temp),
+            z = GetPosZ(pos = $temp)
+        } -- 这样拼接的原因是直接把pos传入会导致pos内部值多了个map，而这个是不需要的，故此处拼接一个临时的pos
+        $npc = CreateNpc(map = $map, cfgName = ArrayGet(array = $furniture, index = 3), 
+            pos = $pos, ry = ArrayGet(array = $furniture, index = 2))
+        $yaw = ArrayGet(array = $furniture, index = 2)
+        If($yaw and 0 ~= $yaw){
+            $ry = 90
+            If(90 == $yaw or -270 == $yaw){
+                $ry = 90
+            }ElseIf(180 == $yaw or -180 == $yaw){
+                $ry = 180
+            }ElseIf(270 == $yaw or -90 == $yaw){
+                $ry = 270
+            }
+            AddEntityBuff(entity = $npc, cfg = Concat(p1= "myplugin/rotate_bounding_box_buff_", p2 = $ry))
+        }
+        ArraySet(array = $furniture, index = 4, value = GetObjectID(object = $npc))
+        SetObjectVar(obj = $npc, key = "house", value = $obj1)
     }
     ------------------------------------------ 内部门
     ------------------------------------------ 房子 <house-------insideDoor> 内部门

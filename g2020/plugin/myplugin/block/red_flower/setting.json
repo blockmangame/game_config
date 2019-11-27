@@ -1,75 +1,73 @@
 {
-	"isOpaqueFullCube":false,
-	"renderPass": 4,
-	"blockObjectOnCollision": false,
+    "isOpaqueFullCube": false,
+    "renderPass": 4,
+    "blockObjectOnCollision": false,
     "breakTime": 20,
-	"quads": [
+    "quads": [
         {
             "pos": [
-               {
-                "x": 0,
-                "y": 0,
-                "z": 0
-               },
-               {
-                "x": 0,
-                "y": 1,
-                "z": 0
-               },
-               {
-                "x": 1,
-                "y": 1,
-                "z": 1
-               },
-               {
-                "x": 1,
-                "y": 0,
-                "z": 1
-               }
-             ],
+                {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                },
+                {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                },
+                {
+                    "x": 1,
+                    "y": 0,
+                    "z": 1
+                }
+            ],
             "texture": "flower_rose.png"
         },
-		  {
+        {
             "pos": [
-               {
-                "x": 1,
-                "y": 0,
-                "z": 0
-               },
-               {
-                "x": 1,
-                "y": 1,
-                "z": 0
-               },
-               {
-                "x": 0,
-                "y": 1,
-                "z": 1
-               },
-               {
-                "x": 0,
-                "y": 0,
-                "z": 1
-               }
-             ],
+                {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                },
+                {
+                    "x": 1,
+                    "y": 1,
+                    "z": 0
+                },
+                {
+                    "x": 0,
+                    "y": 1,
+                    "z": 1
+                },
+                {
+                    "x": 0,
+                    "y": 0,
+                    "z": 1
+                }
+            ],
             "texture": "flower_rose.png"
         }
     ],
-	"collisionBoxes":
-	[
-	    {
-            "max":
-			{
+    "collisionBoxes": [
+        {
+            "max": {
                 "x": 0,
                 "y": 0,
                 "z": 0
             },
-			"min":
-			{
+            "min": {
                 "x": 0,
                 "y": 0,
                 "z": 0
             }
-		}
-	]
+        }
+    ],
+    "base": "base_block"
 }

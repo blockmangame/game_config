@@ -1,5 +1,9 @@
 {
     "actorName": "",
+    "coinName": "green_currency",
+    "buyMoney": 0,
+    "sellMoney": 0,
+    "sellByDiscountMoney": 0,
     "hpBarColor": 0,
     "collision": true,
     "name": "",
@@ -28,39 +32,86 @@
             "DEC_INTERACTION_TEST"
         ]
     },
+    "canInteract": true,
+    "rotationYawModlus": 90,
+    "supportingForce": false,
+    "isStatic": true,
     "editUI": {
-        "uis": {
-            "center": {
-                "image": "set:add_sub.json image:add",
-                "touchUI": {
-                    "isCanMove": true,
-                    "touchBeginEventIndex": 1,
-                    "touchEndEventIndex":1
-                }
-            },
-            "other": [
-                {
-                    "image": "set:add_sub.json image:add",
-                    "clickUI":{
-                        "eventIndex": 1
-                    }
-                },
-                {
-                    "image": "set:add_sub.json image:add",
-                    "clickUI":{
-                        "eventIndex": 1
-                    }
-                },
-                {
-                    "image": "set:add_sub.json image:add",
-                    "clickUI":{
-                        "eventIndex": 1
-                    }
-                }
-            ]
+        "cfgKey": "editUI",
+        "followParams": {
+            "beginPos": 1
         },
-        "events": [
-            "DEC_INTERACTION_TEST"
+        "moveWidget": {
+            "text": "MOVE",
+            "image": "set:add_sub.json image:add",
+            "touchBeginEventIndex": 1,
+            "touchEndEventIndex": 2,
+            "btnType": 2,
+            "pos": {
+                "x": -50,
+                "y": 0
+            },
+            "context": {}
+        },
+        "aroundWidget": [
+            {
+                "text": "SALE",
+                "image": "set:add_sub.json image:add",
+                "eventIndex": 3,
+                "btnType": 2,
+                "pos": {
+                    "x": 50,
+                    "y": 0
+                },
+                "context": {}
+            },
+            {
+                "text": "COLOR",
+                "image": "set:add_sub.json image:add",
+                "btnType": 2,
+                "pos": {
+                    "x": -150,
+                    "y": 0
+                },
+                "context": {}
+            },
+            {
+                "text": "LEFT_ROTATION",
+                "image": "set:add_sub.json image:add",
+                "eventIndex": 4,
+                "btnType": 2,
+                "pos": {
+                    "x": -100,
+                    "y": 150
+                },
+                "context": {}
+            },
+            {
+                "text": "RIGHT_ROTATION",
+                "image": "set:add_sub.json image:add",
+                "eventIndex": 5,
+                "btnType": 2,
+                "pos": {
+                    "x": 0,
+                    "y": 150
+                },
+                "context": {}
+            }
+        ],
+        "events":[
+            "DEC_INTERACTION_MOVE_TOUCH_BEGIN",
+            "DEC_INTERACTION_MOVE_TOUCH_END",
+            "DEC_INTERACTION_SALE",
+            "DEC_INTERACTION_LEFT_ROTATION",
+            "DEC_INTERACTION_RIGHT_ROTATION"
         ]
+    },
+    "interaction": {
+        "radius": 0,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
     }
 }
