@@ -406,7 +406,8 @@ SELL_HOUSE{
         uiWin = "genericShowPage",
         infoTb = {
             upperLayerKey = $houseKey,
-            titleTb = {text = ArrayGet(array = $curSelectHouse, index = 6)},
+            titleTb = {text = ArrayGet(array = $curSelectHouse, index = 6), cfgKey = "uiEvents", index = 5, 
+                context = {houseKey = ArrayGet(array = $curSelectHouse, index = 8), houseName = ArrayGet(array = $curSelectHouse, index = 6)}},
             showImage = $showImage,
             showTextTb = $showTextTb,
             btnInfo = {
