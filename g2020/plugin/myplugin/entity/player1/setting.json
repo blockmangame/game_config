@@ -167,53 +167,73 @@
             "view": false
         }
     ],
-    "/interactionUI": {
-        "topUI": {
-            "expand": {
-                "image": "set:add_sub.json image:add",
-                "text": "expandUI_text"
-            },
-            "shrink": {
-                "image": "set:add_sub.json image:sub",
-                "text": "shrink_text"
-            }
-        },
-        "btns": [
+    "interactionUI":
+    {
+        "cfgKey": "interactionUI",
+        "centerBtns":[
             {
-                "text": "1",
-                "image": "set:add_sub.json image:add",
-                "eventIndex": 1
-            },
-            {
-                "text": "2",
-                "image": "set:add_sub.json image:add",
-                "eventIndex": 2
-            },
-            {
-                "text": "3",
-                "image": "set:add_sub.json image:add",
-                "eventIndex": 3
-            },
-            {
-                "text": "4",
-                "image": "set:add_sub.json image:add",
-                "eventIndex": 7
+                "text":"",
+                "image":"plugin/myplugin/image/hand_click.png",
+                "event": "PLAYER_INTERACTION"
             }
         ],
-        "events": [
-            "INTERACTION_CLAP",
-            "INTERACTION_HUG",
-            "INTERACTION_HANDSHAKE",
-            "INTERACTION_RIDE",
-            "INTERACTION_FOLLOW",
-            "INTERACTION_HAND_IN_HAND",
-            "INTERACTION_PICK",
-            "REQUEST_JOIN_FAMILY",
-            "INVITE_JOIN_FAMILY"
+        "followParams":{
+            "followScenePos": false
+        }
+    }
+,
+    "interaction_choices": {
+        "cfgKey": "interaction_choices",
+        "aroundParams":{
+            "startAngle": 0,
+            "endAngle": 360,
+            "radius": 100
+        },
+        "followParams":{
+            "followScenePos": false,
+            "resetWhenHide": true
+        },
+        "aroundBtns":[
+            {
+                "text":"",
+                "image":"plugin/myplugin/image/interaction_add_friend.png",
+                "event": "INTERACTION_ADD_FRIEND"
+            },
+            {
+                "text":"",
+                "image":"plugin/myplugin/image/interaction_feed.png",
+                "event": "INTERACTION_FEED"
+            },
+            {
+                "text":"",
+                "image":"plugin/myplugin/image/interaction_banish.png",
+                "event": "INTERACTION_BANISH"
+            },
+            {
+                "text":"",
+                "image":"plugin/myplugin/image/interaction_act.png",
+                "event": "INTERACTION_ACT"
+            },
+            {
+                "text":"",
+                "image":"plugin/myplugin/image/interaction_join_family.png",
+                "event": "INTERACTION_JOIN_FAMILY"
+            }
         ]
     },
-    "/canInteract":true,
-    "/interaction":{
+    "old_events":[
+        "INTERACTION_CLAP",
+        "INTERACTION_HUG",
+        "INTERACTION_HANDSHAKE",
+        "INTERACTION_RIDE",
+        "INTERACTION_FOLLOW",
+        "INTERACTION_HAND_IN_HAND",
+        "INTERACTION_PICK",
+        "REQUEST_JOIN_FAMILY",
+        "INVITE_JOIN_FAMILY"
+    ],
+    "canInteract":true,
+    "interaction":{
         "radius": 5,
         "offset":{
             "x": 0,

@@ -1,3 +1,9 @@
+PLAYER_INTERACTION(debug = false){
+    UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
+}
+INTERACTION_FEED(debug = true){
+    --TODO
+}
 ENTITY_ENTER
 {
     CallTrigger(event = "INIT_WORK_TASK", object = $obj1) --初始化打工任务
