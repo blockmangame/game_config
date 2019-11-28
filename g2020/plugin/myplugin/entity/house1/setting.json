@@ -12,6 +12,7 @@
     "houseType": "house_type_test_house",
     "houseDefaultName": "house_test_name_nothing",
     "defaultColor": "myplugin/house_color_buff_1",
+    "defaultColorImage":"plugin/myplugin/entity/house_default/g1047_chess_11.png",
     "allColor": [
         ["COLOR_1","plugin/myplugin/entity/house_default/g1047_chess_11.png"],
         ["COLOR_2","plugin/myplugin/entity/house_default/g1047_chess_12.png"]
@@ -24,6 +25,51 @@
         "x": 4,
         "y": 0.1,
         "z": 8
+    },
+    "collision": true,
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    -3.65,
+                    0,
+                    -3.4,
+                    3.65,
+                    4,
+                    3.65
+                ]
+            },
+            {
+                "type": "Box",
+                "params": [
+                    -3.65,
+                    4,
+                    -3.7,
+                    -1,
+                    0,
+                    0
+                ]
+            },
+            {
+                "type": "Box",
+                "params": [
+                    3.65,
+                    4,
+                    -3.7,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        ]
+    },
+    "door": "myplugin/house1_outside_door",
+    "doorPos":{
+        "x": 0,
+        "y": 0.1,
+        "z": 3.65
     },
     "base": "house_base"
 }
