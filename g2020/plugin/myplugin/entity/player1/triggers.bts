@@ -1765,20 +1765,20 @@ SHOW_OPERATE_DRESS_ARCHIVE_INPUT_DIALOG
             event = "cancel",
             normalImage = "set:tip_dialog.json image:btn_big_blue",
             pushedImage = "set:tip_dialog.json image:btn_big_blue",
-            name = "ui_dress_archive_change_name_cancel_btn"
+            name = "ui_cancel"
         },
         {
             event = "SHOW_DELETE_DRESS_ARCHIVE_DIALOG",
             normalImage = "set:tip_dialog.json image:btn_big_yellow",
             pushedImage = "set:tip_dialog.json image:btn_big_yellow",
-            name = "ui_dress_archive_change_name_delete_btn",
+            name = "ui_delete",
             clickAndShow = true
         },
         {
             event = "RENAME_DRESS_ARCHIVE",
             normalImage = "set:tip_dialog.json image:btn_big_green",
             pushedImage = "set:tip_dialog.json image:btn_big_green",
-            name = "ui_dress_archive_change_name_sure_btn"
+            name = "ui_sure"
         }
     ]
 
@@ -1963,13 +1963,13 @@ SHOW_CHANGE_NAME_INPUT_DIALOG
             event = "cancel",
             normalImage = "set:tip_dialog.json image:btn_big_blue",
             pushedImage = "set:tip_dialog.json image:btn_big_blue",
-            name = "ui_dress_change_name_cancel_btn"
+            name = "ui_cancle"
         },
         {
             event = "CHANGE_PLAYER_NAME",
             normalImage = "set:tip_dialog.json image:btn_big_green",
             pushedImage = "set:tip_dialog.json image:btn_big_green",
-            name = "ui_dress_change_name_sure_btn"
+            name = "ui_sure"
         }
     ]
 
@@ -1988,6 +1988,52 @@ CHANGE_PLAYER_NAME
     SetEntityName(entity = $obj1, name = $name)
     $obj1.nickName = $name
     UpdateUIData(player = $obj1, ui = "win_dressArchiveName", data = $name)
+}
+
+SHOW_OPERATE_DRESS_STORE_ITEM
+{   
+    If(not $storeId or not $itemIndex or not $targetIndex)
+    {
+        Return()
+    }
+
+    $item = GetStoreItem(storeId = $storeId, index = $itemIndex)
+    If(not $item)
+    {
+        Return()
+    }
+
+
+    $itemDic = NewDictionary($item)
+
+    $coinId = DictionaryGet(dict = $itemDic, key = "coinId")
+    $price = DictionaryGet(dict = $itemDic, key = "price")
+
+    If (not $coinId or not $price)
+    {
+        Return()
+    }
+
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = $coinId,
+        rightContent = $price
+    }
+    $context = {
+        storeId = $storeId,
+        itemIndex = $itemIndex,
+        targetIndex = $targetIndex
+    }
+    ShowDialogTip(entity = $obj1,tipType = 5, event = "DRESS_STORE_ITEM_BUY", p1 = "ui_tip", p2 = "ui_sure_to_pay", p3 = $btnInfo, context = $context)
+}
+
+DRESS_STORE_ITEM_BUY
+{
+    If($result)
+    {
+        StoreOperation(entity = $obj1, storeId = $storeId, itemIndex = $itemIndex, targetIndex = $targetIndex)
+    }
 }
 
 COMMENT_WORKS
