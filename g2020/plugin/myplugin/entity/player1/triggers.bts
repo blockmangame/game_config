@@ -392,10 +392,9 @@ SELL_HOUSE{
         $sellHouseMoney = $sellHouseMoney + $sellMoney
     }          
     -- showTextTb
-    -- TODO 更新出售的房子的信息
     $showTextTb = {textWeightList = [
         {keyText = "ui_house_sell_house_money", valueText = $sellHouseMoney},
-        {keyText = "ui_house_sell_house_type", valueText = "yesssssssssssss"}
+        {keyText = "ui_house_sell_house_type", valueText = ArrayGet(array = $curSelectHouse, index = 7)}
     ]}
     -- btn
     $btnList = [
