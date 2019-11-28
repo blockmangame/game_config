@@ -1,0 +1,34 @@
+{
+    "actorName": "fish03.actor",
+    "base":"cook_base",
+    "name": "cook.demo",
+    "interaction_choices":{
+        "cfgKey": "interaction_choices",
+        "aroundParams":{
+            "startAngle": 270,
+            "endAngle": 90,
+            "radius": 100
+        },
+        "followParams":{
+            "followScenePos": false,
+            "resetWhenHide": true
+        },
+        "aroundBtns":[
+            {
+                "text":"",
+                "image":"plugin/myplugin/image/pizza.png",
+                "event": "COOK_PIZZA"
+            },
+            {
+                "text":"",
+                "image":"plugin/myplugin/image/back.png",
+                "event": "COOK_SHOW_BACK"
+            },
+            {
+                "text":"",
+                "image":"plugin/myplugin/image/burger.png",
+                "event": "COOK_BURGER"
+            }
+        ]
+    }
+}
