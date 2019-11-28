@@ -1195,6 +1195,7 @@ FUNC_STATE_RELEASE_AND_REWARD --params: state
     $rewardFamily = GetSkillVar(fullName = $skill, key = "rewardFamily")
     $rewardDis = GetSkillVar(fullName = $skill, key = "rewardDis")
     $rewardCount = GetSkillVar(fullName = $skill, key = "rewardCount")
+    $rewardType = GetSkillVar(fullName = $skill, key = "rewardType")
     
     $teamId = GetEntityTeam(entity = $obj1)
     $rewardSum = 0
@@ -1217,15 +1218,27 @@ FUNC_STATE_RELEASE_AND_REWARD --params: state
             SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
             $rewardSum = $myTeamId == $teamId and $rewardFamily or $rewardOther
             $textKey = $myTeamId == $teamId and "reward_family" or "reward_takeCare"
-            CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardSum = $rewardSum, textKey = $textKey)
+            CallTrigger(
+                object = $obj1,
+                event = "FUNC_STATE_REWARD_AND_TIP",
+                rewardSum = $rewardSum,
+                textKey = $textKey,
+                rewardType = $rewardType
+            )
         }
     }
-    CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardSum = $rewardSelf, textKey = "reward_takeCare")
+    CallTrigger(
+        object = $obj1,
+        event = "FUNC_STATE_REWARD_AND_TIP",
+        rewardSum = $rewardSelf,
+        textKey = "reward_takeCare",
+        rewardType = $rewardType
+    )
 }
 
-FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey
+FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey, rewardType
 {
-    AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardSum)
+    AddCurrency(coinName = $rewardType or "green_currency", entity = $obj1, count = $rewardSum)
     
     ShowRewardRollTip(
         entity = $obj1,
@@ -1254,7 +1267,10 @@ FUNC_STATE_SHOW_DETAILS_UI -- params: skill(fullName)
         fullName = Concat(p1 = "myplugin/", p2 = $state, p3 = "Detail"),
         isOpen = true,
         contents = {
-            subtitleVal = Concat(p1 = $percent, p2 = "%")
+            isNeedUpdate = $state == GetObjectVar(obj = $obj1, key = "progress"),
+            subtitleVal = Concat(p1 = $percent, p2 = "%"),
+            commentsVal = GetSkillVar(fullName = $skill, key = "rewardSelf"),
+            commentsCurrencyIcon = GetSkillVar(fullName = $skill, key = "rewardType")
         }
     )
     
