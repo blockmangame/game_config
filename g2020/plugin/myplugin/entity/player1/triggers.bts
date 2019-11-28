@@ -399,7 +399,7 @@ SELL_HOUSE{
     -- btn
     $btnList = [
         {text = "ui_sure", cfgKey = "uiEvents", index = 6, context = { houseKey = $houseKey} },
-        {text = "ui_cancle", cfgKey = "uiEvents", index = 1, context = { key = $houseKey} }
+        {text = "ui_cancel", cfgKey = "uiEvents", index = 1, context = { key = $houseKey} }
     ]
     $infoTb = {
         uiWin = "genericShowPage",
@@ -538,7 +538,7 @@ EDIT_HOUSE{
             btnType = 2,
             btnList = [
                 {text = "ui_dec_shop", cfgKey = "uiEvents", index = 10},
-                {text = "ui_cancle", cfgKey = "uiEvents", index = 14 }
+                {text = "ui_cancel", cfgKey = "uiEvents", index = 14 }
             ]
         }
     }
@@ -1963,7 +1963,7 @@ SHOW_CHANGE_NAME_INPUT_DIALOG
             event = "cancel",
             normalImage = "set:tip_dialog.json image:btn_big_blue",
             pushedImage = "set:tip_dialog.json image:btn_big_blue",
-            name = "ui_cancle"
+            name = "ui_cancel"
         },
         {
             event = "CHANGE_PLAYER_NAME",
