@@ -3,6 +3,7 @@ GAME_INIT
     @Generate_State_List = ["hunger", "thirsty", "dirty", "fatigue", "ill", "region"]
     @skillPath = "myplugin/skill_state_"
     CallTrigger(event = "FUNC_STATE_STARTTIMER")
+
 }
 
 
@@ -267,4 +268,53 @@ FUNC_REMOVE_BUFF --params: buffStr
     }
     RemoveEntityBuff(entity = $obj1, buff = $hadBuff)
     SetObjectVar(obj = $obj1, key = $buffStr, value = nil)
+}
+
+FUNC_LOAD_NEW_WORKS {
+    $currentCount = 20
+    $othersCount = 20
+    $userIds = {}
+    Foreach(array = GetAllPlayers(), key = "player")
+    {
+        $userId = GetPlayerUserID(player = $player)
+        ArrayAppend(array = $userIds, value = $userId)
+    }
+    GetNewWorks(currentCount = $currentCount , othersCount = $othersCount, userIds = $userIds,  event = "LOAD_NEW_WORKS_RESPONSE" )
+}
+
+LOAD_NEW_WORKS_RESPONSE {
+    $info = {}
+    $dictValue = NewDictionary($response)
+    $code = DictionaryGet(dict = $dictValue, key = "code")
+
+    If($code == 1)
+    {
+        $info = DictionaryGet(dict = $dictValue, key = "data")
+    }
+
+    Foreach(array = GetAllPlayers(), key = "player")
+    {
+        UpdateUIData(player =$player, ui = "works_appreciate", data = $info)
+    }
+}
+
+FUNC_LOAD_EXCELLENT_WORKS {
+    $count = 180
+    GetExcellentWorks(count = $count, limit = 0, event = "LOAD_TOP_EXCELLENT_RESPONSE" )
+}
+
+LOAD_TOP_EXCELLENT_RESPONSE {
+    $info = {}
+    $dictValue = NewDictionary($response)
+    $code = DictionaryGet(dict = $dictValue, key = "code")
+
+    If($code == 1)
+    {
+        $info = DictionaryGet(dict = $dictValue, key = "data")
+    }
+
+    Foreach(array = GetAllPlayers(), key = "player")
+    {
+        UpdateUIData(player =$player, ui = "works_top", data = $info)
+    }
 }

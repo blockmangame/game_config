@@ -44,6 +44,9 @@ ENTITY_ENTER
         --SetSkin(entity = $obj1, skinName = "custom_glasses", skinValue = 3)
         --SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = 5)
         --SetSkin(entity = $obj1, skinName = "custom_tail", skinValue = 5)
+
+        CallTrigger(event = "FUNC_LOAD_NEW_WORKS")
+        CallTrigger(event = "FUNC_LOAD_EXCELLENT_WORKS")
     }
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
     ------------------------------------------ 当前选择存档 $curSelectHouse
@@ -2042,3 +2045,5 @@ PLAYER_ON_VISIT
         SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj2),pos = GetEntityPosition(entity = $obj2))
     }
 }
+
+
