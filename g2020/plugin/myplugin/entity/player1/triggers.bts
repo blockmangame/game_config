@@ -1790,11 +1790,10 @@ SHOW_OPERATE_DRESS_ARCHIVE_INPUT_DIALOG
         title = $title,
         inputTitle = $inputTitle,
         buttons = $buttons,
-        text = $name,
-        options = $options
+        text = $name
     }
 
-    ShowInputDialog(entity = $obj1, contents = $contents)
+    ShowInputDialog(entity = $obj1, contents = $contents, options = $options)
 }
 
 ADD_DRESS_ARCHIVE
@@ -1842,7 +1841,7 @@ SHOW_DELETE_DRESS_ARCHIVE_DIALOG
         p1 = "ui_dress_archive_delete_dialog_context",
         event = "DELETE_DRESS_ARCHIVE",
         tipType = 2,
-        context = $options)
+        context = { index = $index })
 }
 
 DELETE_DRESS_ARCHIVE
@@ -1852,8 +1851,9 @@ DELETE_DRESS_ARCHIVE
         Return()
     }
     
-    ShowInputDialog(entity = $obj1, isClose = true)
+    ShowInputDialog(entity = $obj1, contents = { isClose = true })
     $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
+
     If(not $dressArchive)
     {
         Return()
@@ -1880,8 +1880,6 @@ RENAME_DRESS_ARCHIVE
         Return()
     }
 
-    $optionsDict = NewDictionary($options)
-    $index = DictionaryGet(dict = $optionsDict, key = "index")
     If(not $index)
     {
         Return()
