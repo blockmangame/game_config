@@ -66,21 +66,6 @@ ENTITY_ENTER
                 "Sakura NeNe",
                 "house_type_big_house",
                 "1234567"
-            ],[
-                "myplugin/house_default",
-                "myplugin/house_color_buff_11",
-                [
-                    [{x = 1648,y=13,z=-574},180,"myplugin/test_dec_entity1","11111","false"],
-                    [{x = 1650,y=13,z=-574},270,"myplugin/test_dec_entity2","222222","true"],
-                ],
-                [
-                    ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
-                    ["house_default_inside_map_area_2",["myplugin/cotton_stage_0","myplugin/dark_oak_stairs04","myplugin/acacia_door_10"]]
-                ],
-                "disable",
-                "Sakura NeNe 2",
-                "house_type_big_house",
-                "7654321"
             ])
         SetObjectVar(obj = $obj1, key = "houseVars", value = $houseVars)
     }
@@ -252,7 +237,7 @@ HOUSE_TAB_EVENT{
             {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", text = "xxxxx", 
                 btnShowText = 100, context = {houseCfg = "myplugin/house_default"}},
             {image = "plugin/myplugin/entity/house_default/g1047_chess_11.png", text = "house_type_test_house", 
-                btnShowText = 555, context = {houseCfg = "myplugin/house_default"}},
+                btnShowText = 555, context = {houseCfg = "myplugin/house1"}},
         ]
         $childInfo = {
             uiWin = "genericListDisplayBox3",
