@@ -2035,16 +2035,17 @@ HTTP_PURCHASED_DRESS_CALL_BACK
             $itemDict = NewDictionary($item)
             $itemType = DictionaryGet(dict = $itemDict, key = "itemType")
             $itemName = DictionaryGet(dict = $itemDict, key = "itemName")
-            $itemId = DictionaryGet(dict = $itemDict, key = "index")
+            $itemId = GetConfigValue(type = "dress", fullName = $itemName, key = "itemId")
+            $itemIndex = DictionaryGet(dict = $itemDict, key = "index")
             ForeachDictionary(dict = $responseDict, keyName = "type", valueName = "responseItems")
             {
                 If($itemType == $type)
                 {
                     Foreach(array = $responseItems, key = "responseItem")
                     {
-                        If($itemName == ToString($responseItem))
+                        If($itemId == $responseItem)
                         {
-                            ChangeItemStatus(storeId = $storeId, index = $itemId, status = 1, player = $obj1)
+                            ChangeItemStatus(storeId = $storeId, index = $itemIndex, status = 1, player = $obj1)
                         }
                     }
                 }
