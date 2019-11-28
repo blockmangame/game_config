@@ -1,0 +1,4 @@
+SCENE_SHOP_BUY(debug = true){
+   $itemIndex = GetConfigVar(obj = $obj1, key = "itemIndex")
+   CallTrigger(event = "SCENE_SHOP_BUY", object = $obj2, itemIndex = $itemIndex)
+}

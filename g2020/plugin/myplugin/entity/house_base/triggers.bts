@@ -8,8 +8,6 @@ CREATR_SUBSIDIARY{
     ------------------------------------------ 创建邮箱
     ------------------------------------------ 房子 <house-------mail> 邮箱
     $mail = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "mail"))
-    SetEntityPosition(entity = $mail, pos = 
-        ComputeV3(p1 = GetEntityPosition(entity = $obj1), p2 = GetConfigVar(obj = $obj1, key = "mailPos") or {x = 0,y = 0, z = 0}, op = "add"))
     SetObjectVar(obj = $mail, key = "house", value = $obj1)
     SetObjectVar(obj = $obj1, key = "mail", value = $mail)
 
@@ -17,12 +15,10 @@ CREATR_SUBSIDIARY{
     ------------------------------------------ 创建房门，房门播放开门的
     ------------------------------------------ 房子 <house-------door> 房门
     $door = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "door"))
-    SetEntityPosition(entity = $door, pos = 
-        ComputeV3(p1 = GetEntityPosition(entity = $obj1), p2 = GetConfigVar(obj = $obj1, key = "doorPos") or {x = 0,y = 0, z = 0}, op = "add"))
     SetObjectVar(obj = $door, key = "house", value = $obj1)
     SetObjectVar(obj = $obj1, key = "door", value = $door)
 
-    StartTimer(rep = false, time = 1, object = $door, mail = $door, event = "CHANGE_DOOR_YAW")
+    StartTimer(rep = false, time = 1, object = $obj1, door = $door, event = "CHANGE_DOOR_YAW")
     ------------------------------------------ 创建内部房子（创建动态地图）
     ------------------------------------------ 房子 -------houseInsideMap> 内部房子
     $map = CreateMap(name = GetConfigVar(obj = $obj1, key = "insideMap"))
@@ -34,12 +30,16 @@ CHANGE_MAIL_YAW{
     $yaw = GetEntityYaw(entity = $obj1)
     SetEntityYaw(entity = $mail, rotationYaw = $yaw)
     SetBodyYaw(entity = $mail, yaw = $yaw)
+    SetEntityPosition(entity = $mail, map = GetEntityMap(entity = $obj1), 
+        pos = ComputeV3(p1 = GetEntityPosition(entity = $obj1), p2 = V3RotationYaw(vector = GetConfigVar(obj = $obj1, key = "mailPos") or {x = 0,y = 0, z = 0}, yaw = $yaw), op = "add"))
 }
 
 CHANGE_DOOR_YAW{
     $yaw = GetEntityYaw(entity = $obj1)
     SetEntityYaw(entity = $door, rotationYaw = $yaw)
     SetBodyYaw(entity = $door, yaw = $yaw)
+    SetEntityPosition(entity = $door, map = GetEntityMap(entity = $obj1), 
+        pos = ComputeV3(p1 = GetEntityPosition(entity = $obj1), p2 = V3RotationYaw(vector = GetConfigVar(obj = $obj1, key = "doorPos") or {x = 0,y = 0, z = 0}, yaw = $yaw), op = "add"))
 }
 
 CREATR_HOUSE_INSIDE_SUBSIDIARY{
@@ -142,7 +142,7 @@ OPEN_THE_DOOR{
         Return()
     }
     -- 此处门entity播放动作即可？房子entity不播放？
-    PlayAction(entity = GetObjectVar(obj = $obj1, key = "door"), target = $player, actionName = "attack", actionTime = -1)
+    PlayAction(entity = $obj1, target = $player, actionName = "openDoor", actionTime = -1)
     Test(" yes sir ! ")
 }
 
@@ -154,7 +154,7 @@ CLOSE_THE_DOOR{
         Return()
     }
     -- 此处门entity播放动作即可？房子entity不播放？
-    PlayAction(entity = GetObjectVar(obj = $obj1, key = "door"), target = $player, actionName = "attack", actionTime = -1)
+    PlayAction(entity = $obj1, target = $player, actionName = "closeDoor", actionTime = -1)
     Test(" yes madan ! ")
 }
 

@@ -1,0 +1,39 @@
+{
+    "boundingVolume": {
+        "type": "Box",
+        "params": [
+            1,
+            1,
+            1
+        ]
+    },
+    "canInteract":true,
+    "interactionUI":
+        {
+            "cfgKey": "interactionUI",
+            "aroundParams":{
+                "startAngle": 0,
+                "endAngle": 90,
+                "radius": 100
+            },
+            "centerBtns":[
+                {
+                    "text":"cook.guide",
+                    "image":"plugin/myplugin/image/hand_click.png",
+                    "event": "COOK_SHOW_CHOICES"
+                }
+            ],
+            "followParams":{
+                "followScenePos": false
+            }
+        }
+    ,
+    "interaction":{
+      "radius": 1,
+      "offset":{
+          "x": 0,
+          "y": -1,
+          "z": 2
+      }
+    }
+}

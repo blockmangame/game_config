@@ -1,0 +1,29 @@
+{
+    "actorName": "fish02.actor",
+    "canInteract":true,
+    "deadInRed":false,
+    "destroyTime":40,
+    "itemIndex": 1,
+    "interactionUI":{
+        "cfgKey": "interactionUI",
+        "followParams":{
+            "followScenePos":false
+        },
+        "centerBtns":[
+            {
+                "text":"鱼，购买鱼100￥",
+                "widgetFileName":"widget_button",
+                "image":"set:add_sub.json image:add",
+                "event": "SCENE_SHOP_BUY"
+            }
+        ]
+    },
+    "interaction":{
+      "radius": 1,
+      "offset":{
+          "x": 0,
+          "y": -1,
+          "z": 2
+      }
+    }
+}

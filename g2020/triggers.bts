@@ -188,6 +188,11 @@ CHANGE_PLAYER_SCALE_ADULT
     $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
     $obj1.boundingBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/bounding_adult")
     $obj1.role = @adult
+
+    If(IsPlayer(entity = $obj1))
+    {
+        UpdateUIData(player = $obj1, ui = "win_dressArchiveScale", data = 1)
+    }
 }
 
 CHANGE_PLAYER_SCALE_CHILD
@@ -207,6 +212,11 @@ CHANGE_PLAYER_SCALE_CHILD
     $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
     $obj1.boundingBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/bounding_child")
     $obj1.role = @child
+    
+    If(IsPlayer(entity = $obj1))
+    {
+        UpdateUIData(player = $obj1, ui = "win_dressArchiveScale", data = 0.65)
+    }
 }
 
 FUNC_CLOSE_GPS --params: destination

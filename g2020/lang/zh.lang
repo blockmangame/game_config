@@ -7,6 +7,8 @@ item.money_01.name=10000金钱
 item.money_02.name=20000金钱
 item.money_03.name=30000金钱
 item.money_04.name=40000金钱
+item.money_05.name=50000金钱
+item.money_06.name=60000金钱
 
 house_lock=门上锁了
 house_unlock=门解锁了
@@ -20,11 +22,15 @@ buy_store_not_enough_money=没钱的快爬！
 buy_house_not_enough_money=没钱的快爬！@@@
 buy_house_region_color_not_enough_money=没钱的快爬！@@@TTTTTTTTTTTTT
 
-ui_cancle=取消
+
 ui_sure=确定
+ui_cancel=取消
+ui_delete=删除
 ui_edit=编辑
 ui_dec_shop=装饰商店
 ui_lock=锁
+ui_tip=提示
+ui_sure_to_pay=确定要购买吗?
 
 ui_house_buy_house=购买
 ui_house_sell_house=出售
@@ -59,57 +65,47 @@ ui_dress_archive_mod_scale=修改年龄
 ui_dress_archive_app_dress=我的BM形象
 ui_family_not_in_family_tip=你还没有加入家庭
 ui_dance_shop = 舞蹈商店
+ui_dress_archive_title=换装
 ui_dress_change_name=修改昵称
 ui_dress_input_name=请输入你的昵称
-ui_dress_change_name_sure_btn=确定
-ui_dress_change_name_cancel_btn=取消
 ui_dress_archive_change_name=修改存档名字
 ui_dress_archive_input_name=请输入存档名字
-ui_dress_archive_change_name_sure_btn=确定
-ui_dress_archive_change_name_cancel_btn=取消
-ui_dress_archive_change_name_delete_btn=删除
+
+ui_dress_archive_can_not_add_more=▢FFFF0000你不能再增加存档了▢FFFFFFFF
+gui_dialog_common_tip=提示
+gui_dialog_tip_common_sure=确定
+gui_dialog_tip_common_cancel=取消
+ui_dress_archive_delete_dialog_context=确定要删除这个存档吗？
 
 ui_pick_child=▢FF68F1E8选择▢FFFFFFFF小孩\n▢FF68F1E8被人收养
 ui_pick_adult=▢FF68F1E8选择▢FFFFFFFF大人\n▢FF68F1E8收养一个孩子
 ui_title_select_role=选择一个角色
 npc_pig=选择体格
 npc_model=我是衣架
+food.demo=食物道具示例
+food.guide=获取食物
+interaction.demo=交互UI示例
+cook.demo=厨具示例
+cook.guide=烹饪
 
 state_hunger_title=饥饿
-state_hunger_descL=这是左描述
-state_hunger_descR=这是右描述
-
+state_hunger_contents=hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 state_thirsty_title=口渴
-state_thirsty_descL=左描述
-state_thirsty_descR=右描述吧
-
+state_thirsty_contents=tttttttttttttttttttttttttttttt
 state_dirty_title=洗澡
-state_dirty_descL=洗澡左描
-state_dirty_descR=洗澡右描
-
+state_dirty_contents=dddddddddddddddddddddddddddddddd
 state_fatigue_title=睡觉
-state_fatigue_descL=左描睡觉
-state_fatigue_descR=右描睡觉
-
+state_fatigue_contents=ffffffffffffffffffffffffffffff
 state_camp_title=露营
-state_camp_descL=露营左描
-state_camp_descR=露营描写
-
+state_camp_contents=ccccccccccccccccccccccccccccccccc
 state_school_title=学校
-state_school_descL=学校左描
-state_school_descR=学校右描
-
+state_school_contents=sssssssssssssssssssssssssssssss
 state_playground_title=操场
-state_playground_descL=操场左描
-state_playground_descR=操场右描
-
+state_playground_contents=ppppppppppppppppppppppppppp
 state_pool_title=泳池
-state_pool_descL=泳池左描
-state_pool_descR=泳池右描
-
+state_pool_contents=ooooooooooooooooooooooooooooooooo
 state_ill_title=生病
-state_ill_descL=生病左描
-state_ill_descR=生病右描
+state_ill_contents=iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
 
 state_btntext=打开GPS
 state_subtitle=进度: 
@@ -120,6 +116,7 @@ state_out_of_time=状态已超时
 
 reward_takeCare=照顾收益
 reward_family=家庭+照顾收益
+reward_tip=奖励:
 
 works_top=优秀作品
 works_person=个人作品

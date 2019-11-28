@@ -1,0 +1,12 @@
+COOK_SHOW_CHOICES(debug = true){
+    UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
+}
+COOK_SHOW_BACK(debug = true){
+    UpdateObjectInteractionUI(cfgKey = "interactionUI", player = $obj2, target = $obj1, show = true)
+}
+COOK_BURGER(debug = true){
+    AddItem(cfg = "myplugin/food_burger", count = 1, entity = $obj2)
+}
+COOK_PIZZA(debug = true){
+    AddItem(cfg = "myplugin/food_pizza", count = 1, entity = $obj2)
+}

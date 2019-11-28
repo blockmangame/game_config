@@ -1,5 +1,12 @@
+PLAYER_INTERACTION(debug = false){
+    UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
+}
+INTERACTION_FEED(debug = true){
+    --TODO
+}
 ENTITY_ENTER
 {
+    CallTrigger(event = "INIT_WORK_TASK", object = $obj1) --初始化打工任务
     If(IsPlayer(entity = $obj1))
     {
         $playerName = GetEntityName(entity = $obj1)
@@ -69,21 +76,6 @@ ENTITY_ENTER
                 "Sakura NeNe",
                 "house_type_big_house",
                 "1234567"
-            ],[
-                "myplugin/house_default",
-                "myplugin/house_color_buff_11",
-                [
-                    [{x = 1648,y=13,z=-574},180,"myplugin/test_dec_entity1","11111","false"],
-                    [{x = 1650,y=13,z=-574},270,"myplugin/test_dec_entity2","222222","true"],
-                ],
-                [
-                    ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
-                    ["house_default_inside_map_area_2",["myplugin/cotton_stage_0","myplugin/dark_oak_stairs04","myplugin/acacia_door_10"]]
-                ],
-                "disable",
-                "Sakura NeNe 2",
-                "house_type_big_house",
-                "7654321"
             ])
         SetObjectVar(obj = $obj1, key = "houseVars", value = $houseVars)
     }
@@ -255,7 +247,7 @@ HOUSE_TAB_EVENT{
             {image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", text = "xxxxx", 
                 btnShowText = 100, context = {houseCfg = "myplugin/house_default"}},
             {image = "plugin/myplugin/entity/house_default/g1047_chess_11.png", text = "house_type_test_house", 
-                btnShowText = 555, context = {houseCfg = "myplugin/house_default"}},
+                btnShowText = 555, context = {houseCfg = "myplugin/house1"}},
         ]
         $childInfo = {
             uiWin = "genericListDisplayBox3",
@@ -265,7 +257,8 @@ HOUSE_TAB_EVENT{
                 },
                 btnInfo = {
                     btnText = "ui_house_buy_house",
-                    btnTrigger = "SURE_BUY_HOUSE"
+                    cfgKey = "uiEvents", 
+                    index = 2
                 }
             }
         }
@@ -303,14 +296,15 @@ HOUSE_TAB_EVENT{
     }
     -- btn
     $btnList = [
-        {text = "ui_house_sell_house", trigger = "SELL_HOUSE", context = { houseKey = $key} },
-        {text = "ui_house_use_house", trigger = "UPDATE_HOUSE", curSelect = ArrayGet(array = $curSelectHouse, index = 5) == "enable",context = { houseKey = $key} }
+        {text = "ui_house_sell_house", cfgKey = "uiEvents", index = 3, context = { houseKey = $key} },
+        {text = "ui_house_use_house", cfgKey = "uiEvents", index = 4, curSelect = ArrayGet(array = $curSelectHouse, index = 5) == "enable",context = { houseKey = $key} }
     ]
     $infoTb = {
         uiWin = "genericListDisplayBox2",
         infoTb = {
             upperLayerKey = $key,
-            titleTb = {text = ArrayGet(array = $houseVar, index = 6), trigger = "EDIT_HOUSE_NAME", context = {houseKey = ArrayGet(array = $houseVar, index = 8)}},
+            titleTb = {text = ArrayGet(array = $houseVar, index = 6), cfgKey = "uiEvents", index = 5, 
+                context = {houseKey = ArrayGet(array = $houseVar, index = 8), houseName = ArrayGet(array = $houseVar, index = 6)}},
             selectInfo = {
                 selectTitleText = "ui_house_choice_color",
                 selectButtomText = ArrayGet(array = $houseVar, index = 7),
@@ -327,16 +321,16 @@ HOUSE_TAB_EVENT{
 
 EDIT_HOUSE_NAME{
     -- TODO 房子改名
-    Test("EDIT_HOUSE_NAME")
+    Test("EDIT_HOUSE_NAME", $houseKey, $titleEditText)
+    If(not $titleEditText or not $houseKey){
+        Return()
+    }
     Foreach(array = GetObjectVar(obj = $obj1, key = "houseVars"), key = "house"){
         If(ArrayGet(array = $house, index = 8) == $houseKey){
-            $curSelectHouse = $house
+            ArraySet(array = $house, index = 6, value = $titleEditText)
             Break()
         }
     }
-
-
-
 }
 
 SURE_BUY_HOUSE{
@@ -408,21 +402,21 @@ SELL_HOUSE{
         $sellHouseMoney = $sellHouseMoney + $sellMoney
     }          
     -- showTextTb
-    -- TODO 更新出售的房子的信息
     $showTextTb = {textWeightList = [
         {keyText = "ui_house_sell_house_money", valueText = $sellHouseMoney},
-        {keyText = "ui_house_sell_house_type", valueText = "yesssssssssssss"}
+        {keyText = "ui_house_sell_house_type", valueText = ArrayGet(array = $curSelectHouse, index = 7)}
     ]}
     -- btn
     $btnList = [
-        {text = "ui_sure", trigger = "SELL_HOUSE_SURE", context = { houseKey = $houseKey} },
-        {text = "ui_cancle", trigger = "HOUSE_TAB_EVENT", context = { key = $houseKey} }
+        {text = "ui_sure", cfgKey = "uiEvents", index = 6, context = { houseKey = $houseKey} },
+        {text = "ui_cancel", cfgKey = "uiEvents", index = 1, context = { key = $houseKey} }
     ]
     $infoTb = {
         uiWin = "genericShowPage",
         infoTb = {
             upperLayerKey = $houseKey,
-            titleTb = {text = ArrayGet(array = $curSelectHouse, index = 6)},
+            titleTb = {text = ArrayGet(array = $curSelectHouse, index = 6), cfgKey = "uiEvents", index = 5, 
+                context = {houseKey = ArrayGet(array = $curSelectHouse, index = 8), houseName = ArrayGet(array = $curSelectHouse, index = 6)}},
             showImage = $showImage,
             showTextTb = $showTextTb,
             btnInfo = {
@@ -471,7 +465,10 @@ SELL_HOUSE_SURE{
 }
 
 BUY_STORE{
-    Test("BUY_STORE",$storeMoneyKey,$cfg)
+    Test("BUY_STORE", $cfg)
+    If(not $cfg){
+        Return()
+    }
     $buyMoney = GetEntityCfg(fullName = $cfg, key = "buyMoney")
     $coinName = GetEntityCfg(fullName = $cfg, key = "coinName")
     If(not PayCurrency(entity = $obj1, coinName = $coinName, count = $buyMoney)){
@@ -530,8 +527,8 @@ SHOW_TITLE_BAR{
         btnInfo = {
             btnType = 2,
             btnList = [
-                {text = "ui_edit", trigger = "EDIT_HOUSE"},
-                {text = "ui_lock", trigger = "HOUSE_LOCK"}
+                {text = "ui_edit", cfgKey = "uiEvents", index = 7},
+                {text = "ui_lock", cfgKey = "uiEvents", index = 8}
             ]
         }
     }
@@ -550,8 +547,8 @@ EDIT_HOUSE{
         btnInfo = {
             btnType = 2,
             btnList = [
-                {text = "ui_dec_shop", trigger = "SHOW_DEC_STORE"},
-                {text = "ui_cancle", trigger = "SHOW_TITLE_BAR" }
+                {text = "ui_dec_shop", cfgKey = "uiEvents", index = 10},
+                {text = "ui_cancel", cfgKey = "uiEvents", index = 14 }
             ]
         }
     }
@@ -582,31 +579,31 @@ SHOW_DEC_STORE{
 
     $btnListTb = {}
     ArraySet(array = $btnListTb, index = 1, value = {
-        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+        text = "11112d", curSelect = $titleKey == "allDec", cfgKey = "uiEvents", index = 10, context = {titleKey = "allDec"}
     })
     ArraySet(array = $btnListTb, index = 2, value = {
-        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+        text = "2223123", curSelect = $titleKey == "allEdit", cfgKey = "uiEvents", index = 10, context = {titleKey = "allEdit"}
     })
 
     $listInfoTb = {}
     If($titleKey == "allDec"){
         ArraySet(array = $listInfoTb, index = 1, value = {
-            text = "111", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", trigger = "SHOW_DEC_STORE_A", context = {titleKey = "allDec"}
+            text = "111", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", cfgKey = "uiEvents", index = 11, context = {titleKey = "allDec"}
         })
         ArraySet(array = $listInfoTb, index = 2, value = {
-            text = "222", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", trigger = "SHOW_DEC_STORE_B", context = {titleKey = "allDec"}
+            text = "222", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", cfgKey = "uiEvents", index = 12, context = {titleKey = "allDec"}
         })
     }
 
     If($titleKey == "allEdit"){
         ArraySet(array = $listInfoTb, index = 1, value = {
-            text = "333", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_4.png", trigger = "EDIT_FLOOR", context = {titleKey = "allEdit"}
+            text = "333", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_4.png", cfgKey = "uiEvents", index = 15, context = {titleKey = "allEdit"}
         })
         ArraySet(array = $listInfoTb, index = 2, value = {
-            text = "444", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", trigger = "EDIT_WALL", context = {titleKey = "allEdit"}
+            text = "444", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", cfgKey = "uiEvents", index = 16, context = {titleKey = "allEdit"}
         })
         ArraySet(array = $listInfoTb, index = 3, value = {
-            text = "555", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_3.png", trigger = "EDIT_CEILING", context = {titleKey = "allEdit"}
+            text = "555", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_3.png", cfgKey = "uiEvents", index = 17, context = {titleKey = "allEdit"}
         })
     }
 
@@ -620,7 +617,7 @@ SHOW_DEC_STORE{
             infoTb = $listInfoTb
         },
         eventInfo = {
-            closeEventInfo = {trigger = "EDIT_HOUSE"}
+            closeEventInfo = {cfgKey = "uiEvents", index = 7}
         }
     }
     ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
@@ -635,20 +632,20 @@ SHOW_DEC_STORE_A{
 
     $btnListTb = {}
     ArraySet(array = $btnListTb, index = 1, value = {
-        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+        text = "11112d", curSelect = $titleKey == "allDec", cfgKey = "uiEvents", index = 10, context = {titleKey = "allDec"}
     })
     ArraySet(array = $btnListTb, index = 2, value = {
-        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+        text = "2223123", curSelect = $titleKey == "allEdit", cfgKey = "uiEvents", index = 10, context = {titleKey = "allEdit"}
     })
 
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "111122wwasd", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", 
-        cfg = "myplugin/test_dec_entity1", actorScale = 0.5, trigger = "BUY_STORE", context = {storeMoneyKey = 12324, cfg = "myplugin/test_dec_entity1"}
+        cfg = "myplugin/test_dec_entity1", actorScale = 0.5, cfgKey = "uiEvents", index = 13, context = {cfg = "myplugin/test_dec_entity1"}
     })
     ArraySet(array = $listInfoTb, index = 2, value = {
         text = "222aaa", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_6.png", 
-        cfg = "myplugin/test_dec_entity2", actorScale = 0.4, trigger = "BUY_STORE", context = {storeMoneyKey = 12231324, cfg = "myplugin/test_dec_entity2"}
+        cfg = "myplugin/test_dec_entity2", actorScale = 0.4, cfgKey = "uiEvents", index = 13, context = {cfg = "myplugin/test_dec_entity2"}
     })
 
     $infoTb = {
@@ -661,9 +658,9 @@ SHOW_DEC_STORE_A{
             infoTb = $listInfoTb
         },
         eventInfo = {
-            closeEventInfo = {trigger = "EDIT_HOUSE"},
-            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}},
-            rightEventInfo = {trigger = "SHOW_DEC_STORE_B"}
+            closeEventInfo = {cfgKey = "uiEvents", index = 7},
+            leftEventInfo = {cfgKey = "uiEvents", index = 10, context = {titleKey = "allDec"}},
+            rightEventInfo = {cfgKey = "uiEvents", index = 12}
         }
     }
     ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
@@ -678,16 +675,16 @@ SHOW_DEC_STORE_B{
 
     $btnListTb = {}
     ArraySet(array = $btnListTb, index = 1, value = {
-        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+        text = "11112d", curSelect = $titleKey == "allDec", cfgKey = "uiEvents", index = 10, context = {titleKey = "allDec"}
     })
     ArraySet(array = $btnListTb, index = 2, value = {
-        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+        text = "2223123", curSelect = $titleKey == "allEdit", cfgKey = "uiEvents", index = 10, context = {titleKey = "allEdit"}
     })
 
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "111122wwad", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", 
-        cfg = "myplugin/test_dec_entity1", actorScale = 0.3, trigger = "BUY_STORE", context = {storeMoneyKey = 12324, cfg = "myplugin/test_dec_entity1"}
+        cfg = "myplugin/test_dec_entity1", actorScale = 0.3, cfgKey = "uiEvents", index = 13, context = {cfg = "myplugin/test_dec_entity1"}
     })
 
     $infoTb = {
@@ -700,9 +697,9 @@ SHOW_DEC_STORE_B{
             infoTb = $listInfoTb
         },
         eventInfo = {
-            closeEventInfo = {trigger = "EDIT_HOUSE"},
-            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}},
-            rightEventInfo = {trigger = "SHOW_DEC_STORE_A"}
+            closeEventInfo = {cfgKey = "uiEvents", index = 7},
+            leftEventInfo = {cfgKey = "uiEvents", index = 10, context = {titleKey = "allDec"}},
+            rightEventInfo = {cfgKey = "uiEvents", index = 11}
         }
     }
     ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
@@ -718,20 +715,20 @@ EDIT_FLOOR{
 
     $btnListTb = {}
     ArraySet(array = $btnListTb, index = 1, value = {
-        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+        text = "11112d", curSelect = $titleKey == "allDec", cfgKey = "uiEvents", index = 10, context = {titleKey = "allDec"}
     })
     ArraySet(array = $btnListTb, index = 2, value = {
-        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+        text = "2223123", curSelect = $titleKey == "allEdit", cfgKey = "uiEvents", index = 10, context = {titleKey = "allEdit"}
     })
 
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "asda", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_1.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", actorScale = 0.6, context = {storeMoneyKey = 12324, childRegionKey = "floorRegion", colorBlock = "myplugin/wool_1"}
+        cfgKey = "uiEvents", index = 9, actorScale = 0.6, context = {childRegionKey = "floorRegion", colorBlock = "myplugin/wool_1"}
     })
     ArraySet(array = $listInfoTb, index = 2, value = {
         text = "gfdgh", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_2.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", actorScale = 0.7, context = {storeMoneyKey = 12224, childRegionKey = "floorRegion", colorBlock = "myplugin/wool_2"}
+        cfgKey = "uiEvents", index = 9, actorScale = 0.7, context = {childRegionKey = "floorRegion", colorBlock = "myplugin/wool_2"}
     })
 
     $infoTb = {
@@ -744,9 +741,9 @@ EDIT_FLOOR{
             infoTb = $listInfoTb
         },
         eventInfo = {
-            closeEventInfo = {trigger = "EDIT_HOUSE"},
-            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = $titleKey}},
-            rightEventInfo = {trigger = "EDIT_WALL"}
+            closeEventInfo = {cfgKey = "uiEvents", index = 7},
+            leftEventInfo = {cfgKey = "uiEvents", index = 10, context = {titleKey = $titleKey}},
+            rightEventInfo = {cfgKey = "uiEvents", index = 16}
         }
     }
     ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
@@ -762,16 +759,16 @@ EDIT_WALL{
 
     $btnListTb = {}
     ArraySet(array = $btnListTb, index = 1, value = {
-        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+        text = "11112d", curSelect = $titleKey == "allDec", cfgKey = "uiEvents", index = 10, context = {titleKey = "allDec"}
     })
     ArraySet(array = $btnListTb, index = 2, value = {
-        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+        text = "2223123", curSelect = $titleKey == "allEdit", cfgKey = "uiEvents", index = 10, context = {titleKey = "allEdit"}
     })
 
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "fggg", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_3.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 12324, childRegionKey = "wallRegion", colorBlock = "myplugin/wool_3"}
+        cfgKey = "uiEvents", index = 9, context = {childRegionKey = "wallRegion", colorBlock = "myplugin/wool_3"}
     })
 
     $infoTb = {
@@ -784,9 +781,9 @@ EDIT_WALL{
             infoTb = $listInfoTb
         },
         eventInfo = {
-            closeEventInfo = {trigger = "EDIT_HOUSE"},
-            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = $titleKey}},
-            rightEventInfo = {trigger = "EDIT_CEILING"}
+            closeEventInfo = {cfgKey = "uiEvents", index = 7},
+            leftEventInfo = {cfgKey = "uiEvents", index = 10, context = {titleKey = $titleKey}},
+            rightEventInfo = {cfgKey = "uiEvents", index = 17}
         }
     }
     ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
@@ -802,20 +799,20 @@ EDIT_CEILING{
 
     $btnListTb = {}
     ArraySet(array = $btnListTb, index = 1, value = {
-        text = "11112d", curSelect = $titleKey == "allDec", trigger = "SHOW_DEC_STORE", context = {titleKey = "allDec"}
+        text = "11112d", curSelect = $titleKey == "allDec", cfgKey = "uiEvents", index = 10, context = {titleKey = "allDec"}
     })
     ArraySet(array = $btnListTb, index = 2, value = {
-        text = "2223123", curSelect = $titleKey == "allEdit", trigger = "SHOW_DEC_STORE", context = {titleKey = "allEdit"}
+        text = "2223123", curSelect = $titleKey == "allEdit", cfgKey = "uiEvents", index = 10, context = {titleKey = "allEdit"}
     })
 
     $listInfoTb = {}
     ArraySet(array = $listInfoTb, index = 1, value = {
         text = "hhhh", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_4.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 124, childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_4"}
+        cfgKey = "uiEvents", index = 9, context = {childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_4"}
     })
     ArraySet(array = $listInfoTb, index = 2, value = {
         text = "jjjj", image = "plugin/myplugin/entity/house_default/HOUSE_COLOR_5.png", 
-        trigger = "BUY_HOUSE_REGION_COLOR", context = {storeMoneyKey = 124, childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_5"}
+        cfgKey = "uiEvents", index = 9, context = {childRegionKey = "ceilingRegion", colorBlock = "myplugin/wool_5"}
     })
 
     $infoTb = {
@@ -828,16 +825,16 @@ EDIT_CEILING{
             infoTb = $listInfoTb
         },
         eventInfo = {
-            closeEventInfo = {trigger = "EDIT_HOUSE"},
-            leftEventInfo = {trigger = "SHOW_DEC_STORE", context = {titleKey = $titleKey}},
-            rightEventInfo = {trigger = "EDIT_FLOOR"}
+            closeEventInfo = {cfgKey = "uiEvents", index = 7},
+            leftEventInfo = {cfgKey = "uiEvents", index = 10, context = {titleKey = $titleKey}},
+            rightEventInfo = {cfgKey = "uiEvents", index = 15}
         }
     }
     ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
 }
 
 BUY_HOUSE_REGION_COLOR{
-    Test("BUY_HOUSE_REGION_COLOR", $storeMoneyKey, $childRegionKey, $colorBlock)
+    Test("BUY_HOUSE_REGION_COLOR", $childRegionKey, $colorBlock)
     -- 如果换了墙纸或者地板，原有的不保留，当你没买     如果你原来买了A墙纸，你又换成了B，那么你要再花一遍钱去把A换回来
     If($colorBlock){
         $buyMoney = GetBlockConfigByName(block = $colorBlock, key = "buyMoney")
@@ -1193,6 +1190,7 @@ FUNC_STATE_RELEASE_AND_REWARD --params: state
     $rewardFamily = GetSkillVar(fullName = $skill, key = "rewardFamily")
     $rewardDis = GetSkillVar(fullName = $skill, key = "rewardDis")
     $rewardCount = GetSkillVar(fullName = $skill, key = "rewardCount")
+    $rewardType = GetSkillVar(fullName = $skill, key = "rewardType")
     
     $teamId = GetEntityTeam(entity = $obj1)
     $rewardSum = 0
@@ -1215,15 +1213,27 @@ FUNC_STATE_RELEASE_AND_REWARD --params: state
             SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
             $rewardSum = $myTeamId == $teamId and $rewardFamily or $rewardOther
             $textKey = $myTeamId == $teamId and "reward_family" or "reward_takeCare"
-            CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardSum = $rewardSum, textKey = $textKey)
+            CallTrigger(
+                object = $obj1,
+                event = "FUNC_STATE_REWARD_AND_TIP",
+                rewardSum = $rewardSum,
+                textKey = $textKey,
+                rewardType = $rewardType
+            )
         }
     }
-    CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD_AND_TIP", rewardSum = $rewardSelf, textKey = "reward_takeCare")
+    CallTrigger(
+        object = $obj1,
+        event = "FUNC_STATE_REWARD_AND_TIP",
+        rewardSum = $rewardSelf,
+        textKey = "reward_takeCare",
+        rewardType = $rewardType
+    )
 }
 
-FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey
+FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey, rewardType
 {
-    AddCurrency(coinName = "green_currency", entity = $obj1, count = $rewardSum)
+    AddCurrency(coinName = $rewardType or "green_currency", entity = $obj1, count = $rewardSum)
     
     ShowRewardRollTip(
         entity = $obj1,
@@ -1252,7 +1262,10 @@ FUNC_STATE_SHOW_DETAILS_UI -- params: skill(fullName)
         fullName = Concat(p1 = "myplugin/", p2 = $state, p3 = "Detail"),
         isOpen = true,
         contents = {
-            subtitleVal = Concat(p1 = $percent, p2 = "%")
+            isNeedUpdate = $state == GetObjectVar(obj = $obj1, key = "progress"),
+            subtitleVal = Concat(p1 = $percent, p2 = "%"),
+            commentsVal = GetSkillVar(fullName = $skill, key = "rewardSelf"),
+            commentsCurrencyIcon = GetSkillVar(fullName = $skill, key = "rewardType")
         }
     )
     
@@ -1758,26 +1771,30 @@ SHOW_OPERATE_DRESS_ARCHIVE_INPUT_DIALOG
     }
 
     $buttons = [
-        {   
-            -- event = "RENAME_DRESS_ARCHIVE",
-            event = "CHANGE_DRESS_ARCHIVE_NAME",
-            normalImage = "set:tip_dialog.json image:btn_big_green",
-            pushedImage = "set:tip_dialog.json image:btn_big_green",
-            name = "ui_dress_archive_change_name_sure_btn"
-        },
-        {
-            event = "DELETE_DRESS_ARCHIVE",
-            normalImage = "set:tip_dialog.json image:btn_big_yellow",
-            pushedImage = "set:tip_dialog.json image:btn_big_yellow",
-            name = "ui_dress_archive_change_name_delete_btn"  
-        },
         {
             event = "cancel",
             normalImage = "set:tip_dialog.json image:btn_big_blue",
             pushedImage = "set:tip_dialog.json image:btn_big_blue",
-            name = "ui_dress_archive_change_name_cancel_btn"
+            name = "ui_cancel"
+        },
+        {
+            event = "SHOW_DELETE_DRESS_ARCHIVE_DIALOG",
+            normalImage = "set:tip_dialog.json image:btn_big_yellow",
+            pushedImage = "set:tip_dialog.json image:btn_big_yellow",
+            name = "ui_delete",
+            clickAndShow = true
+        },
+        {
+            event = "RENAME_DRESS_ARCHIVE",
+            normalImage = "set:tip_dialog.json image:btn_big_green",
+            pushedImage = "set:tip_dialog.json image:btn_big_green",
+            name = "ui_sure"
         }
     ]
+
+    $options = {
+        index = $index
+    }
 
     $contents = {
         title = $title,
@@ -1786,25 +1803,7 @@ SHOW_OPERATE_DRESS_ARCHIVE_INPUT_DIALOG
         text = $name
     }
 
-    ShowInputDialog(entity = $obj1, contents = $contents)
-}
-
-OPERATE_DRESS_ARCHIVE
-{
-    If($type == 1)
-    {
-        CallTrigger(event = "ADD_DRESS_ARCHIVE", object = $obj1, name = $name)
-    }
-
-    If($type == 2)
-    {
-        CallTrigger(event = "DELETE_DRESS_ARCHIVE", object = $obj1, index = $index)
-    }
-
-    If($type == 3)
-    {
-        CallTrigger(event = "RENAME_DRESS_ARCHIVE", object = $obj1, name = $name, index = $index)
-    }
+    ShowInputDialog(entity = $obj1, contents = $contents, options = $options)
 }
 
 ADD_DRESS_ARCHIVE
@@ -1815,7 +1814,7 @@ ADD_DRESS_ARCHIVE
         Return()
     }
 
-    If((ArraySize(array = $dressArchive) - 1) <= GetWorldVar(key = "dressArchiveNum"))
+    If((ArraySize(array = $dressArchive) - 1) < GetWorldVar(key = "dressArchiveNum"))
     {
         $addDressData = {
             vars = {
@@ -1846,11 +1845,31 @@ ADD_DRESS_ARCHIVE
     }
 }
 
+SHOW_DELETE_DRESS_ARCHIVE_DIALOG
+{
+    ShowDialogTip(entity = $obj1, 
+        p1 = "ui_dress_archive_delete_dialog_context",
+        event = "DELETE_DRESS_ARCHIVE",
+        tipType = 2,
+        context = { index = $index })
+}
+
 DELETE_DRESS_ARCHIVE
 {
+    If(not $result)
+    {
+        Return()
+    }
     
+    ShowInputDialog(entity = $obj1, contents = { isClose = true })
     $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
+
     If(not $dressArchive)
+    {
+        Return()
+    }
+
+    If(not $index)
     {
         Return()
     }
@@ -1867,6 +1886,11 @@ RENAME_DRESS_ARCHIVE
 {
     $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
     If(not $dressArchive)
+    {
+        Return()
+    }
+
+    If(not $index)
     {
         Return()
     }
@@ -1946,16 +1970,16 @@ SHOW_CHANGE_NAME_INPUT_DIALOG
 
     $buttons = [
         {
-            event = "CHANGE_PLAYER_NAME",
-            normalImage = "set:tip_dialog.json image:btn_big_green",
-            pushedImage = "set:tip_dialog.json image:btn_big_green",
-            name = "ui_dress_change_name_sure_btn"
-        },
-        {
             event = "cancel",
             normalImage = "set:tip_dialog.json image:btn_big_blue",
             pushedImage = "set:tip_dialog.json image:btn_big_blue",
-            name = "ui_dress_change_name_cancel_btn"
+            name = "ui_cancel"
+        },
+        {
+            event = "CHANGE_PLAYER_NAME",
+            normalImage = "set:tip_dialog.json image:btn_big_green",
+            pushedImage = "set:tip_dialog.json image:btn_big_green",
+            name = "ui_sure"
         }
     ]
 
@@ -1974,6 +1998,52 @@ CHANGE_PLAYER_NAME
     SetEntityName(entity = $obj1, name = $name)
     $obj1.nickName = $name
     UpdateUIData(player = $obj1, ui = "win_dressArchiveName", data = $name)
+}
+
+SHOW_OPERATE_DRESS_STORE_ITEM
+{   
+    If(not $storeId or not $itemIndex or not $targetIndex)
+    {
+        Return()
+    }
+
+    $item = GetStoreItem(storeId = $storeId, index = $itemIndex)
+    If(not $item)
+    {
+        Return()
+    }
+
+
+    $itemDic = NewDictionary($item)
+
+    $coinId = DictionaryGet(dict = $itemDic, key = "coinId")
+    $price = DictionaryGet(dict = $itemDic, key = "price")
+
+    If (not $coinId or not $price)
+    {
+        Return()
+    }
+
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = $coinId,
+        rightContent = $price
+    }
+    $context = {
+        storeId = $storeId,
+        itemIndex = $itemIndex,
+        targetIndex = $targetIndex
+    }
+    ShowDialogTip(entity = $obj1,tipType = 5, event = "DRESS_STORE_ITEM_BUY", p1 = "ui_tip", p2 = "ui_sure_to_pay", p3 = $btnInfo, context = $context)
+}
+
+DRESS_STORE_ITEM_BUY
+{
+    If($result)
+    {
+        StoreOperation(entity = $obj1, storeId = $storeId, itemIndex = $itemIndex, targetIndex = $targetIndex)
+    }
 }
 
 COMMENT_WORKS
@@ -2019,16 +2089,17 @@ HTTP_PURCHASED_DRESS_CALL_BACK
             $itemDict = NewDictionary($item)
             $itemType = DictionaryGet(dict = $itemDict, key = "itemType")
             $itemName = DictionaryGet(dict = $itemDict, key = "itemName")
-            $itemId = DictionaryGet(dict = $itemDict, key = "index")
+            $itemId = GetConfigValue(type = "dress", fullName = $itemName, key = "itemId")
+            $itemIndex = DictionaryGet(dict = $itemDict, key = "index")
             ForeachDictionary(dict = $responseDict, keyName = "type", valueName = "responseItems")
             {
                 If($itemType == $type)
                 {
                     Foreach(array = $responseItems, key = "responseItem")
                     {
-                        If($itemName == ToString($responseItem))
+                        If($itemId == $responseItem)
                         {
-                            ChangeItemStatus(storeId = $storeId, index = $itemId, status = 1, player = $obj1)
+                            ChangeItemStatus(storeId = $storeId, index = $itemIndex, status = 1, player = $obj1)
                         }
                     }
                 }
@@ -2046,4 +2117,189 @@ PLAYER_ON_VISIT
     }
 }
 
-
+--打工
+GET_TASK_UI_DATA(){
+    $count = $obj1.worktaskCount % 10
+    $str = "/"
+    If($obj1.taskKey){
+        $str = "/rd"
+    }
+    $text = Concat(p1 = $count, p2 = $str, p3 = "40")
+    $rate = $count / 10
+    $taskData = Table(
+        operations = {
+            setProgress = {
+                rate = $rate
+            },
+            setBtnText = $text,
+            setArea = {
+                x = [0, 80],
+                y = [0, 50],
+                w = [0, 180],
+                h = [0, 100]
+            }
+        },
+        regData = {
+            regId = $obj1.taskRegId,
+            modName = "TASK_WORK",
+            key = "click"
+        }
+    )
+    UpdateUIData(player = $obj1, ui = "circleProgress", data = $taskData)
+}
+GET_TASK_GPS(debug = false) --得到打工的GPS位置
+{
+    $mapOutPos = {
+        house_default_inside_map = {x = 1643, y = 13, z = -574},
+        map001 = {x = 1639,y = 13, z = -574}
+    }
+    $pos = $obj1.taskPos or {x =  1663, y = 13, z = -557} --任务点，或者领任务点
+    $mapName = GetPlayerMap(player = $obj1, name = true)
+    $dict = NewDictionary($mapOutPos)
+    If( ($obj1.npcMap and $mapName ~= $obj1.npcMap) or (not $obj1.npcMap and $mapName ~= "map001") ){
+        $pos = DictionaryGet(dict = $dict, key = $mapName)
+    }
+    $obj1.gpsPos = $pos
+    If($obj1.showtaskGps){
+        SetGuidePostion(entity = $obj1, pos = $obj1.gpsPos)
+    }
+}
+INIT_WORK_TASK(){ --初始打工
+    $mapOutPos = {
+        house_default_inside_map = {x = 1643, y = 12, z = -574},
+        map001 = {x = 1639,y = 13, z = -574}
+    }
+    $index =  $obj1.taskIndex
+    If($index && $index > 0){
+        $taskDict = NewDictionary( ArrayGet(array = @TASK_TABLE, index = $index) )
+        $obj1.taskKey = DictionaryGet(dict = $taskDict, key = "taskKey") -- 随机到的任务
+        $obj1.taskPos = DictionaryGet(dict = $taskDict, key = "pos") -- 随机到的任务NPC ,GPS位置
+        $obj1.taskNpc = DictionaryGet(dict = $taskDict, key = "npcName") --npc的 fullName
+        $obj1.npcMap = DictionaryGet(dict = $taskDict, key = "npcMap")
+    }
+    CallTrigger(event = "GET_TASK_GPS", object = $obj1)
+    CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
+}
+FINISH_TASK(debug = false){
+    If($obj1.taskKey ~= $name){
+       Return()
+    }
+    $rewardTable = [
+        "myplugin/blueprint_wand",
+        "myplugin/Boots_01",
+        "myplugin/Chestplate_01",
+        "myplugin/exp_potion_1"
+    ]
+    OpenConversation(
+        entity = $obj1,
+        optionList = [],
+        optionNpc = "myplugin/player1",
+        talkList = [
+            {
+                msg = "tr.37965",
+                npc = $obj1.taskNpc
+            }
+        ]
+    )
+    $taskItem = SearchBagItem(entity = $obj1, key = "fullName", val = "myplugin/taskItem")
+    ConsumeItem(item = $taskItem, num = 1)
+    $proessLeve = NumberFloor(p1 = $obj1.worktaskCount / 10)
+    $proessCount = $obj1.worktaskCount % 10
+    $obj1.lastNpc = $obj1.taskNpc
+    $obj1.taskNpc = nil
+    $obj1.taskKey = nil
+    $obj1.taskPos = nil
+    $obj1.npcMap = nil
+    If($proessLeve > 0 and $proessCount == 0){
+        $recfg = ArrayGet(array = $rewardTable, index = $proessLeve)
+        AddItem(entity = $obj1, cfg = $recfg, count = 1)
+        ShowRewardNotice(
+            entity = $obj1,
+            tiptext = "",
+            tittletext = "final.summary.reward",
+            cfg = $recfg
+        )
+    }
+    If($obj1.worktaskCount >= 40){
+        $obj1.worktaskCount = 0
+    }
+    CallTrigger(event = "GET_TASK_GPS", object = $obj1)
+    CallTrigger(event = "TASK_NPC_ADD_BUFF", object = $obj1, from = "task_____ffffffff")
+    CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
+}
+TASK_NPC_ADD_BUFF(debug = false)
+{
+    $map = GetPlayerMap(player = $obj1)
+    $mapNpc = GetMapNpc(map = $map)
+    Foreach(array = $mapNpc, key = "npc"){
+        $name = GetConfigVar(obj = $npc, key = "fullName")
+        If($name == $obj1.lastNpc){
+            UnMarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
+        }
+        If($name == $obj1.taskNpc){
+            MarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
+        }
+    }
+}
+TASK_UPDATE_DATA(){
+    CallTrigger(event = "TASK_NPC_ADD_BUFF", object = $obj1, from = "MMMMMMMaaaaaapppp")
+	CallTrigger(event = "GET_TASK_GPS", object = $obj1)
+    CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
+}
+SHOW_WORK_PROGRESS(){ --button控制显示进度条，
+    If($obj1.showProgress){
+        $obj1.showProgress = false
+        $obj1.showtaskGps = false
+    }Else{
+        $obj1.showProgress = true
+        $obj1.showtaskGps = true
+    }
+    If($obj1.showtaskGps){
+        SetGuidePostion(entity = $obj1, pos = $obj1.gpsPos)
+    }Else{
+        SetGuidePostion(entity = $obj1, pos = nil)
+    }
+    ShowUI(player = $obj1, uiName = "circleProgress", show = $obj1.showProgress)
+}
+SHOW_WORK_GPS(){ --进度条控制显示GPS
+    If($obj1.showtaskGps){
+        $obj1.showtaskGps = false
+        SetGuidePostion(entity = $obj1, pos = nil)
+    }Else{
+        $obj1.showtaskGps = true
+        SetGuidePostion(entity = $obj1, pos = $obj1.gpsPos)
+    }
+}
+CLOSE_GPS(){ --按钮关闭进度条
+    $obj1.showtaskGps = false
+    SetGuidePostion(entity = $obj1, pos = nil)
+}
+--场景商店的购买逻辑
+SCENE_SHOP_BUY(){
+   ShowNotice(
+        buttonType = 2,
+        content = "你确定要买鱼？",
+        eventYes = "SURE_BUY_ITEM",
+        eventNo = "",
+        entity = $obj1,
+        textP1 = "Hahahaha",
+        tittleKey = "Do you want Join My Family"
+    )
+}
+SURE_BUY_ITEM(){
+    $result = CommodityBuyItem(itemIndex = $itemIndex, player = $obj1)
+    --result: ack_of_money, gui_str_app_shop_inventory_is_full, gui_buy_goods_successful, ..
+    ShowNotice(
+        buttonType = 1,
+        content = $result,
+        eventYes = "SURE_BUY_ITEM",
+        eventNo = "",
+        entity = $obj1,
+        textP1 = "Hahahaha",
+        tittleKey = "Do you want Join My Family"
+    )
+}
+--打开特权商店
+OPEN_PRISHOP(){
+    ShowUI(player = $obj1, uiName = "priShop", show = true)
+}
