@@ -8,9 +8,9 @@ ENTITY_CLICK
         Return()
     }
 
-    --CallTrigger(object = $obj1, event = "CHANGE_MODEL_SKIN", player = $obj2)
+    CallTrigger(object = $obj1, event = "CHANGE_MODEL_SKIN", player = $obj2)
 
-    CallTrigger(object = $obj1, event = "CHANGE_PLAYER_SKIN", player = $obj2)
+    -- CallTrigger(object = $obj1, event = "CHANGE_PLAYER_SKIN", player = $obj2)
 
 }
 
@@ -19,22 +19,13 @@ CHANGE_MODEL_SKIN()
     
     If($obj1.role ~= $player.role)
     {
-
-        If($obj1.scaleBuff)
-        {
-            RemoveEntityBuff(entity = $obj1, buff = $obj1.scaleBuff)
-            $obj1.scaleBuff = nil
-        }
-
         If($player.role == @child)
         {
-            $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
-            $obj1.role = $player.role
+            CallTrigger(object = $obj1, event = "CHANGE_PLAYER_SCALE_CHILD")
         }
         ElseIf($player.role == @adult)
         {
-            $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
-            $obj1.role = $player.role
+            CallTrigger(object = $obj1, event = "CHANGE_PLAYER_SCALE_ADULT")
         }
     }
 
@@ -113,22 +104,13 @@ CHANGE_PLAYER_SKIN
 {
    If($obj1.role ~= $player.role)
     {
-
-        If($player.scaleBuff)
-        {
-            RemoveEntityBuff(entity = $player, buff = $player.scaleBuff)
-            $player.scaleBuff = nil
-        }
-
         If($obj1.role == @child)
         {
-            $player.scaleBuff = AddEntityBuff(entity = $player, cfg = "myplugin/scale_child")
-            $player.role = $player.role
+            CallTrigger(object = $player, event = "CHANGE_PLAYER_SCALE_CHILD")
         }
         ElseIf($obj1.role == @adult)
         {
-            $player.scaleBuff = AddEntityBuff(entity = $player, cfg = "myplugin/scale_adult")
-            $player.role = $player.role
+            CallTrigger(object = $player, event = "CHANGE_PLAYER_SCALE_ADULT")
         }
     }
 
