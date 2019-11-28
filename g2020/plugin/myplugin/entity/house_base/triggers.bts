@@ -142,7 +142,7 @@ OPEN_THE_DOOR{
         Return()
     }
     -- 此处门entity播放动作即可？房子entity不播放？
-    PlayAction(entity = GetObjectVar(obj = $obj1, key = "door"), target = $player, actionName = "openDoor", actionTime = -1)
+    PlayAction(entity = $obj1, target = $player, actionName = "openDoor", actionTime = -1)
     Test(" yes sir ! ")
 }
 
@@ -154,7 +154,7 @@ CLOSE_THE_DOOR{
         Return()
     }
     -- 此处门entity播放动作即可？房子entity不播放？
-    PlayAction(entity = GetObjectVar(obj = $obj1, key = "door"), target = $player, actionName = "closeDoor", actionTime = -1)
+    PlayAction(entity = $obj1, target = $player, actionName = "closeDoor", actionTime = -1)
     Test(" yes madan ! ")
 }
 
