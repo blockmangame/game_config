@@ -1,0 +1,22 @@
+ENTITY_ENTER
+{
+}
+
+ENTITY_TOUCH_ALL{
+    If(not IsPlayer(entity = $obj2) or (GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "isLock") 
+        and GetObjectID(obj = GetObjectVar(obj = $obj1, key = "house")) ~= GetObjectID(obj = GetObjectVar(obj = $obj2, key = "house")))){
+        Return()
+    }
+    Test(" please in !! ")
+    ------------------------------------------ 设置出来的门的位置
+    SetObjectVar(obj = $obj2, key = "returnDoor", value = $obj1)
+    ------------------------------------------ 传送进内部房子
+    $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
+    SetEntityPosition(map = $map, entity = $obj2, 
+        pos = GetMapInitPos(map = $map) or GetEntityPosition(entity = $obj2))
+    If(GetObjectID(object = GetObjectVar(obj = $obj2, key = "house")) == GetObjectID(object = GetObjectVar(obj = $obj1, key = "house"))){
+        CallTrigger(object = $obj2, event = "SHOW_TITLE_BAR")
+        CallTrigger(object = $obj2, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = false)
+    }
+    CallTrigger(object = $obj2, event = "FUNC_STATE_OPEN_GPS", rtVal = $obj2.gpsDestination)--如果有导航则继续导航
+}

@@ -4,7 +4,6 @@
     "buyMoney": 250,
     "sellMoney": 250,
     "insideMap": "house_default_inside_map",
-    "HouseCreateBuff":"myplugin/buff_state_ill_effect",
     "houseDefaultInsideMapColorTb":[
         ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
         ["house_default_inside_map_area_2",["myplugin/cotton_stage_0","myplugin/dark_oak_stairs04","myplugin/acacia_door_10"]]
@@ -14,18 +13,18 @@
     "defaultColor": "myplugin/house_color_buff_1",
     "defaultColorImage":"plugin/myplugin/entity/house_default/g1047_chess_11.png",
     "allColor": [
-        ["COLOR_1","plugin/myplugin/entity/house_default/g1047_chess_11.png"],
-        ["COLOR_2","plugin/myplugin/entity/house_default/g1047_chess_12.png"]
+        ["house1_1","plugin/myplugin/image/house_big/COLOR1_1.png"],
+        ["house1_2","plugin/myplugin/image/house_big/COLOR1_2.png"],
+        ["house1_3","plugin/myplugin/image/house_big/COLOR1_3.png"],
+        ["house1_4","plugin/myplugin/image/house_big/COLOR1_4.png"],
+        ["house1_5","plugin/myplugin/image/house_big/COLOR1_5.png"],
+        ["house1_6","plugin/myplugin/image/house_big/COLOR1_6.png"]
+        
     ],
     "houseDefaultFurniture":[
         [{"x":1648, "y":13,"z":-574},0,"myplugin/chess_body_12","10001","true"],
         [{"x":1650, "y":13,"z":-574},90,"myplugin/chess_body_22","10002","false"]
     ],
-    "mailPos":{
-        "x": 4,
-        "y": 0.1,
-        "z": 8
-    },
     "collision": true,
     "boundingVolume": {
         "type": "Composite",
@@ -38,7 +37,7 @@
                     -3.65,
                     3.65,
                     4,
-                    3.2
+                    3
                 ]
             },
             {
@@ -47,7 +46,7 @@
                     3.65,
                     4,
                     3.7,
-                    -1,
+                    1,
                     0,
                     0
                 ]
@@ -58,7 +57,7 @@
                     -3.65,
                     4,
                     3.7,
-                    1,
+                    -1,
                     0,
                     0
                 ]
@@ -69,7 +68,7 @@
     "doorPos":{
         "x": 0,
         "y": 0.1,
-        "z": 3.65
+        "z": 3.2
     },
     "base": "house_base"
 }
