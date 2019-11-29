@@ -3,13 +3,6 @@ PLAYER_INTERACTION(debug = false){
 }
 
 INTERACTION_FEED(debug = true){
-    --0 $obj1 IsPlayer() ?
-    --1 $obj2 是否有HandItem ? 否：Return() DONE 
-    --2 $obj1 播放吃东西的动作 DONE
-    --3 $obj1 头顶显示气泡，“谢谢xxx的XXX食物” DONE
-    --4 $obj2 将物品栏的手持物品清除 DONE
-    --5 $obj1 消除item对应的状态 DONE
-
     -- If(not IsPlayer(entity = $obj1))
     -- {
     --     Return()
@@ -30,8 +23,14 @@ INTERACTION_FEED(debug = true){
     PlayAction(
         entity = $obj1,
         includeSelf = true,
-        actionName = GetConfigVar(obj = $item, key = "actionName"),
-        actionTime = GetConfigVar(obj = $item, key = "actionTime")
+        actionName = GetConfigVar(obj = $item, key = "feededAction"),
+        actionTime = GetConfigVar(obj = $item, key = "feededActionTime")
+    )
+    PlayAction(
+        entity = $obj2,
+        includeSelf = true,
+        actionName = GetConfigVar(obj = $item, key = "feedAction"),
+        actionTime = GetConfigVar(obj = $item, key = "feedActionTime")
     )
     CallTrigger(
         object = $obj1,
