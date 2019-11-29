@@ -1,9 +1,46 @@
 PLAYER_INTERACTION(debug = false){
     UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
 }
+
 INTERACTION_FEED(debug = true){
-    --TODO
+    --0 $obj1 IsPlayer() ?
+    --1 $obj2 是否有HandItem ? 否：Return() DONE 
+    --2 $obj1 播放吃东西的动作 DONE
+    --3 $obj1 头顶显示气泡，“谢谢xxx的XXX食物” DONE
+    --4 $obj2 将物品栏的手持物品清除 DONE
+    --5 $obj1 消除item对应的状态 DONE
+
+    -- If(not IsPlayer(entity = $obj1))
+    -- {
+    --     Return()
+    -- }
+    
+    $item = GetEntityHandItem(entity = $obj2)
+    If(not $item)
+    {
+        Return()
+    }
+
+    ShowBubbleMsg(
+        entity = $obj1,
+        textKey = "thank_sb_food",
+        textP1 = GetEntityName(entity = $obj2),
+        textP2 = GetConfigVar(obj = $item, key = "itemname")
+    )
+    PlayAction(
+        entity = $obj1,
+        includeSelf = true,
+        actionName = GetConfigVar(obj = $item, key = "actionName"),
+        actionTime = GetConfigVar(obj = $item, key = "actionTime")
+    )
+    CallTrigger(
+        object = $obj1,
+        event = "FUNC_STATE_RELEASE_AND_REWARD",
+        state = GetConfigVar(obj = $item, key = "state")
+    )
+    ConsumeItem(item = $item, num = 1)
 }
+
 ENTITY_ENTER
 {
     CallTrigger(event = "INIT_WORK_TASK", object = $obj1) --初始化打工任务
@@ -100,8 +137,8 @@ ENTITY_ENTER
     $house = GetObjectVar(obj = $obj1, key = "house")
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     SetObjectVar(obj = $obj1, key = "returnDoor", value = GetObjectVar(obj = $house, key = "door"))
-    SetEntityPosition(map = $houseInsideMap, entity = $obj1, 
-        pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
+    -- SetEntityPosition(map = $houseInsideMap, entity = $obj1, 
+    --     pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
 
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
@@ -1181,6 +1218,11 @@ FUNC_STATE_START_PROGRESS --params: state
 
 FUNC_STATE_RELEASE_AND_REWARD --params: state
 {
+    If(not $state)
+    {
+        Return()
+    }
+
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $hadState = Concat(p1 = "had", p2 = $stateBase)
