@@ -137,8 +137,8 @@ ENTITY_ENTER
     $house = GetObjectVar(obj = $obj1, key = "house")
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     SetObjectVar(obj = $obj1, key = "returnDoor", value = GetObjectVar(obj = $house, key = "door"))
-    -- SetEntityPosition(map = $houseInsideMap, entity = $obj1, 
-    --     pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
+    SetEntityPosition(map = $houseInsideMap, entity = $obj1, 
+        pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
 
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
