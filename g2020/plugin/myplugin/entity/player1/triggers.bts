@@ -1490,7 +1490,7 @@ CREATE_FAMILY
         }
         SetEntityTeam(entity = $obj1, teamId = @familyIndex)
         @familyIndex = @familyIndex + 1
-        ShowTip(entity = $obj1, tipType = 2,textKey = "Create Family Success", time = 40)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "gui_create_family_success", time = 40)
     }
 }
 
@@ -1499,7 +1499,7 @@ QUIT_FAMILY
     If(IsPlayer(entity = $obj1))
     {
         SetEntityTeam(entity = $obj1, teamId = 0)
-        ShowTip(entity = $obj1, tipType = 2,textKey = "Quit Family Success", time = 40)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "gui_quit_family_success", time = 40)
         CallTrigger(event = "INIT_TEAM_UI", obj1 = $obj1, show = false)
     }
 }
@@ -1554,10 +1554,39 @@ INVITE_JOIN_FAMILY
     ShowBubbleMsg(entity = $obj2, textKey = "Do you want Join My Family")
 }
 
+SHOW_TEAM_CREATE_UI
+{
+
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_family_create",
+        rightCoinId = nil,
+        rightContent = "ui_family_album"
+    }
+
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "TEAM_CREATE_RESULT", p1 = "ui_tip", p2= "ui_not_in_family", p3 = $btnInfo)
+}
+
+TEAM_CREATE_RESULT
+{
+    If($result)
+    {
+        If($button == "left")
+        {
+            CallTrigger(event = "CREATE_FAMILY", object = $obj1) 
+        }
+        ElseIf($button == "right")
+        {
+            ShowFamilyAlbum(entity = $obj1)
+        }
+    }
+}
+
+
 INIT_TEAM_UI
 {
     $title = {
-        name = "My Family Hahaha"
+        name = "gui_my_family"
     }
 
     $content = {
@@ -1572,7 +1601,7 @@ INIT_TEAM_UI
             event = "QUIT_FAMILY",
             normalImage = "set:new_gui_task.json image:yellow_btn.png",
             pushedImage = "set:new_gui_task.json image:yellow_btn.png",
-            name = "Quit Family"
+            name = "ui_family_quit"
         }
     ]
 
@@ -2040,7 +2069,7 @@ SHOW_OPERATE_DRESS_STORE_ITEM
 
 DRESS_STORE_ITEM_BUY
 {
-    If($result)
+    If($result and $button == "right")
     {
         StoreOperation(entity = $obj1, storeId = $storeId, itemIndex = $itemIndex, targetIndex = $targetIndex)
     }
