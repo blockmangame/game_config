@@ -98,28 +98,48 @@ ENTITY_ENTER
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     If(not $houseVars or ArraySize(array = $houseVars) == 0){ -- 第一次进入游戏的玩家
         Test("----------------------- First Login")
-        $houseVars = Table([
-                "myplugin/house_default",
-                "myplugin/house_color_buff_11",
-                [
-                    [{x = 1648,y=13,z=-574},0,"myplugin/test_dec_entity1","11111","true"],
-                    [{x = 1650,y=13,z=-574},90,"myplugin/test_dec_entity2","222222","false"],
-                ],
-                [
-                    ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
-                    ["house_default_inside_map_area_2",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]]
-                ],
-                "enable",
-                "Sakura NeNe",
-                "house_type_big_house",
-                "1234567",
-                "myplugin/house_base_inside_door"
-            ])
+        $houseVars = [
+                {
+                    houseCfg = "myplugin/house_default",
+                    houseSelectColor = "myplugin/house_color_buff_11",
+                    houseInsideFurnishing = [
+                        [{x = 1648,y=13,z=-574},0,"myplugin/test_dec_entity1","11111","true"],
+                        [{x = 1650,y=13,z=-574},90,"myplugin/test_dec_entity2","222222","false"],
+                    ],
+                    houseInsideRegionColors = [
+                        ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
+                        ["house_default_inside_map_area_2",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]]
+                    ],
+                    isCurEquip = "enable",
+                    houseName = "Sakura NeNe",
+                    houseType = "house_type_big_house",
+                    houseId = "1234567",
+                    houseInsideDoor = "myplugin/house_base_inside_door"
+                },{
+                    houseCfg = "myplugin/house_default",
+                    houseSelectColor = "myplugin/house_color_buff_11",
+                    houseInsideFurnishing = [
+                        [{x = 1648,y=13,z=-574},0,"myplugin/test_dec_entity1","11111","true"],
+                        [{x = 1650,y=13,z=-574},90,"myplugin/test_dec_entity2","222222","false"],
+                    ],
+                    houseInsideRegionColors = [
+                        ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
+                        ["house_default_inside_map_area_2",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]]
+                    ],
+                    isCurEquip = "disable",
+                    houseName = "Sakura NeNe",
+                    houseType = "house_type_big_house",
+                    houseId = "12345678",
+                    houseInsideDoor = "myplugin/house_base_inside_door"
+                }
+            ]
         SetObjectVar(obj = $obj1, key = "houseVars", value = $houseVars)
     }
+
+    $dict = {}
     Foreach(array = $houseVars, key = "house"){
-        If(ArrayGet(array = $house, index = 5) == "enable"){
-            $curSelectHouse = $house
+        $dict = NewDictionary($house)
+        If(DictionaryGet(dict = $dict, key = "isCurEquip")){
             Break()
         }
     }
@@ -129,8 +149,8 @@ ENTITY_ENTER
     Foreach(array = $regions, key = "region"){
         If(not GetRegionOwner(region = $region) and GetRegionConfig(region = $region, key = "isHouseRegion")){
             CallTrigger(object = $obj1, event = "CREATE_HOUSE_OUTSIDE", region = $region, 
-                houseCfg = ArrayGet(array = $curSelectHouse, index = 1),
-                houseColor = ArrayGet(array = $curSelectHouse, index = 2))
+                houseCfg = DictionaryGet(dict = $dict, key = "houseCfg"),
+                houseColor = DictionaryGet(dict = $dict, key = "houseSelectColor"))
             Break()
         }
     }
@@ -146,7 +166,7 @@ ENTITY_ENTER
 }
 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
-TEST_DATA{ -- 保存进数据库的数据伪代码
+TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
     Table(
         houseVars = [ -- all house 当前entity的所有房子
             [ --   arr[1] = houseCfg, arr[2] = houseSelectColor, 
@@ -178,6 +198,32 @@ TEST_DATA{ -- 保存进数据库的数据伪代码
         ]
     )
     Table(Demo = [[[],[]],[[],[]]])
+    Table( -- 保存进数据库的数据伪代码 -- 新 11-30
+        houseVars = [ -- all house 当前entity的所有房子
+            {
+                houseCfg = "myplugin/xxx...", -- houseCfg 
+                houseSelectColor = "myplugin/xxx...", -- houseSelectColor，是buff来着 -- 外部颜色不影响内部
+                houseInsideFurnishing = [ -- houseInsideFurnishing , 房子内部物品摆放
+                    -- pos是相对坐标，每个map都有一个initPos，坐标都是这个initPos+pos
+                    -- 绝对坐标也行
+                    [{x = "xx", y = "xx", z = "xx"},0,"myplugin/xxx...","id","true/false"],
+                    [{x = "xx", y = "xx", z = "xx"},0,"myplugin/xxx...","id","true/false"]
+                    -- {pos,yaw,cfg,全局唯一id:furnishingId（当前obj的id）,是否是旧家具，下线后则会将当前玩家全部房子的全部家具设置成true，即是旧家具}
+                ],
+                houseInsideRegionColors = [ -- houseInsideRegionColors 房子内部区域颜色
+                    ["regionkey", ["myplugin/xxx...","myplugin/xxx...","myplugin/xxx..."]], -- 第一个key是对应的region key，通过这个key获取这个区域region/获取到配置
+                    ["regionkey", ["myplugin/xxx...","myplugin/xxx...","myplugin/xxx..."]] -- 第二个数组对应的是上面获取到的region的childRegionKey属性中对应
+                                                                                        -- 该region的子region使用的方块！
+                ],
+                isCurEquip = "enable", -- cur select house 有这个标志就是 当前选择/出生的房子
+                houseName = "houseName", -- cur house name 当前房子的名字
+                houseType = "houseType", -- cur house type 当前房子的类型
+                houseId = "houseKey", -- cur house id 房子唯一ID，Concat(p1 = GetTime(), p2 = GetGameTime(), p3 = Random(min = 0, max = 999999))
+                houseInsideDoor = "houseInsideDoor" -- cur house InsideDoor
+            },{}
+
+        ]
+    )
 }
 
 CREATE_HOUSE_OUTSIDE{
@@ -217,34 +263,48 @@ ENTITY_LEAVE{
 }
 
 UPDATE_FURNITURE_STATUS{
-    Foreach(array = GetObjectVar(obj = $obj1, key = "houseVars") or {}, key = "house"){
-        Foreach(array = ArrayGet(array = $house, index = 3), key = "furniture"){
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        Foreach(array = DictionaryGet(dict = $dict, key = "houseInsideFurnishing"), key ="furniture"){
             ArraySet(array = $furniture, index = 5, value = true)
             ArraySet(array = $furniture, index = 4, value = 0)
         }
+        ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $dict))
     }
 }
 
 UPDATE_HOUSE{
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
-        $houseVar = ArrayGet(array = $houseVars, index = $index)
-        If(ArrayGet(array = $houseVar, index = 5) ~= "enable" and $houseKey == ArrayGet(array = $houseVar, index = 8)){
-            $newHouseVar = $houseVar   
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") ~= "enable" and $houseKey == DictionaryGet(dict = $dict, key = "houseId")){
+            DictionarySet(dict = $dict, key = "curHouseVarsIndex", value = $index)
+            $newHouseDict = $dict
         }
-        If(ArrayGet(array = $houseVar, index = 5) == "enable"){
-            $curHouseVar = $houseVar
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            DictionarySet(dict = $dict, key = "curHouseVarsIndex", value = $index)
+            $curHouseDict = $dict
         }
     }
-    If(not $newHouseVar){
-        ArraySet(array = $curHouseVar, index = 2, value = $curSelectKey)
+    If(not $newHouseDict){
+        DictionarySet(dict = $curHouseDict, key = "houseSelectColor", value = $curSelectKey)
+        $index = DictionaryGet(dict = $curHouseDict, key = "curHouseVarsIndex")
+        DictionarySet(dict = $dict, key = "curHouseVarsIndex", value = nil)
+        ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHouseDict))
         CallTrigger(object = $obj1, event = "CHANGE_HOUSE_COLOR", oldHouseColor = $oldSelectKey, houseColor = $curSelectKey)
     }Else{
-        ArraySet(array = $curHouseVar, index = 5, value = "disable")
-        ArraySet(array = $newHouseVar, index = 5, value = "enable")
-        ArraySet(array = $newHouseVar, index = 2, value = $curSelectKey)
+        DictionarySet(dict = $curHouseDict, key = "isCurEquip", value = "disable")
+        $index = DictionaryGet(dict = $curHouseDict, key = "curHouseVarsIndex")
+        DictionarySet(dict = $curHouseDict, key = "curHouseVarsIndex", value = nil)
+        ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHouseDict))
+        DictionarySet(dict = $newHouseDict, key = "isCurEquip", value = "enable")
+        DictionarySet(dict = $newHouseDict, key = "houseSelectColor", value = $curSelectKey)
+        $index = DictionaryGet(dict = $newHouseDict, key = "curHouseVarsIndex")
+        DictionarySet(dict = $newHouseDict, key = "curHouseVarsIndex", value = nil)
+        ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $newHouseDict))
         CallTrigger(object = $obj1, event = "CHANGE_HOUSE", 
-            newHouse = ArrayGet(array = $newHouseVar, index = 1), houseColor = $curSelectKey)
+            newHouse = DictionaryGet(dict = $newHouseDict, key = "houseCfg"), houseColor = $curSelectKey)
     }
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
 }
@@ -307,21 +367,22 @@ HOUSE_TAB_EVENT{
         Return()
     }
     Test("--------- u need show")
-    $curSelectHouse = nil
-    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
-    Foreach(array = $houseVars, key = "houseVar"){
-        If(ArrayGet(array = $houseVar, index = 8) == $key){
-            $curSelectHouse = $houseVar
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "houseId") == $key){
+            $curSelectDict = $dict
             Break()
         }
     }
-    If(not $curSelectHouse){
+    -- $curSelectHouse = $houseVar
+    If(not $curSelectDict){
         Return()
     }
     -- color
     $selectGvInfo = {}
     $worldAllColor = GetWorldVar(key = "allColor")
-    $curHouseColor = GetEntityCfg(fullName = ArrayGet(array = $curSelectHouse, index = 1), key = "allColor")
+    $curHouseColor = GetEntityCfg(fullName = DictionaryGet(dict = $curSelectDict, key = "houseCfg"), key = "allColor")
     Foreach(array = $curHouseColor, key = "entity_color"){
         Foreach(array = $worldAllColor, key = "world_color"){
             If(ArrayGet(array = $entity_color, index = 1) == ArrayGet(array = $world_color, index = 1)){
@@ -329,7 +390,7 @@ HOUSE_TAB_EVENT{
                     rightImg = ArrayGet(array = $world_color, index = 3),
                     leftImg = ArrayGet(array = $entity_color, index = 2),
                     key = ArrayGet(array = $world_color, index = 2),
-                    curSelect = ArrayGet(array = $world_color, index = 2) == ArrayGet(array = $curSelectHouse, index = 2)
+                    curSelect = ArrayGet(array = $world_color, index = 2) == DictionaryGet(dict = $curSelectDict, key = "houseSelectColor")
                         and true or false
                 })
             }
@@ -339,11 +400,11 @@ HOUSE_TAB_EVENT{
         uiWin = "genericListDisplayBox2",
         childInfoTb = {
             upperLayerKey = $key,
-            titleTb = {text = ArrayGet(array = $houseVar, index = 6), event = "EDIT_HOUSE_NAME", 
-                context = {houseKey = ArrayGet(array = $houseVar, index = 8), houseName = ArrayGet(array = $houseVar, index = 6)}},
+            titleTb = {text = DictionaryGet(dict = $curSelectDict, key = "houseName"), event = "EDIT_HOUSE_NAME", 
+                context = {houseKey = DictionaryGet(dict = $curSelectDict, key = "houseId"), houseName = DictionaryGet(dict = $curSelectDict, key = "houseName")}},
             selectInfo = {
                 selectTitleText = "ui_house_choice_color",
-                selectButtomText = ArrayGet(array = $houseVar, index = 7),
+                selectButtomText = DictionaryGet(dict = $curSelectDict, key = "houseType"),
                 selectGvInfo = $selectGvInfo
             },
             btnInfo = {
@@ -351,7 +412,7 @@ HOUSE_TAB_EVENT{
                 btnList = [
                     {text = "ui_house_sell_house", event = "SELL_HOUSE", context = { houseKey = $key }},
                     {text = "ui_house_use_house", event = "UPDATE_HOUSE", context = { houseKey = $key },
-                        curSelect = ArrayGet(array = $curSelectHouse, index = 5) == "enable"}
+                        curSelect = DictionaryGet(dict = $curSelectDict, key = "isCurEquip") == "enable"}
                 ] 
             }
         }
@@ -364,9 +425,12 @@ EDIT_HOUSE_NAME{
     If(not $titleEditText or not $houseKey){
         Return()
     }
-    Foreach(array = GetObjectVar(obj = $obj1, key = "houseVars"), key = "house"){
-        If(ArrayGet(array = $house, index = 8) == $houseKey){
-            ArraySet(array = $house, index = 6, value = $titleEditText)
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "houseId") == $houseKey){
+            DictionarySet(dict = $dict, key = "houseName", value = $titleEditText)
+            ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $dict))
             Break()
         }
     }
@@ -388,17 +452,17 @@ SURE_BUY_HOUSE{
         Return()
     }
     ------------- 给房子
-    ArrayAppend(array = $houseVars, value = [ -- 购买成功后拼接一个新的房子数据放进entity的houseVars中 -- TEST CODE
-            $houseCfg,
-            GetEntityCfg(fullName = $houseCfg, key = "defaultColor") or "",
-            GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
-            GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or [],
-            "disable",
-            GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
-            GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
-            Concat(p1 = GetTime(), p2 = GetGameTime(), p3 = Random(min = 0, max = 999999)),
-            GetEntityCfg(fullName = $houseCfg, key = "insideDoor") or "myplugin/house_base_inside_door"
-        ]
+    ArrayAppend(array = $houseVars, value = { -- 购买成功后拼接一个新的房子数据放进entity的houseVars中 -- TEST CODE
+            houseCfg = $houseCfg,
+            houseSelectColor = GetEntityCfg(fullName = $houseCfg, key = "defaultColor") or "",
+            houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
+            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or [],
+            isCurEquip = "disable",
+            houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
+            houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
+            houseId = Concat(p1 = GetTime(), p2 = GetGameTime(), p3 = Random(min = 0, max = 999999)),
+            houseInsideDoor = GetEntityCfg(fullName = $houseCfg, key = "insideDoor") or "myplugin/house_base_inside_door"
+        }
     )
     ShowTip(entity = $obj1, tipType = 1, textKey = "ui_buy_success")
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
@@ -406,23 +470,23 @@ SURE_BUY_HOUSE{
 
 SELL_HOUSE{
     Test("SELL_HOUSE",$houseKey)
-    $curSelectHouse = nil
-    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
-    Foreach(array = $houseVars, key = "houseVar"){
-        If(ArrayGet(array = $houseVar, index = 8) == $houseKey){
-            $curSelectHouse = $houseVar
+    $curSelectDict = nil
+    Foreach(array = GetObjectVar(obj = $obj1, key = "houseVars") or {}, key = "houseVar"){
+        $dict = NewDictionary($houseVar)
+        If(DictionaryGet(dict = $dict, key = "houseId") == $houseKey){
+            $curSelectDict = $dict
             Break()
         }
     }
-    If(not $curSelectHouse){
+    If(not $curSelectDict){
         Return()
     }
     -- showImage
     $worldAllColor = GetWorldVar(key = "allColor")
-    $curHouseColor = GetEntityCfg(fullName = ArrayGet(array = $curSelectHouse, index = 1), key = "allColor")
+    $curHouseColor = GetEntityCfg(fullName = DictionaryGet(dict = $curSelectDict, key = "houseCfg"), key = "allColor")
     Foreach(array = $curHouseColor, key = "entity_color"){
         Foreach(array = $worldAllColor, key = "world_color"){
-            If(ArrayGet(array = $world_color, index = 2) == ArrayGet(array = $curSelectHouse, index = 2) and 
+            If(ArrayGet(array = $world_color, index = 2) == DictionaryGet(dict = $curSelectDict, key = "houseSelectColor") and 
                 ArrayGet(array = $world_color, index = 1) == ArrayGet(array = $entity_color, index = 1)){
                 $showImage = ArrayGet(array = $entity_color, index = 2)
                 Break()
@@ -430,9 +494,9 @@ SELL_HOUSE{
         }
     }
     $sellHouseMoney = 0
-    $sellHouseCfg = ArrayGet(array = $curSelectHouse, index = 1)
+    $sellHouseCfg = DictionaryGet(dict = $curSelectDict, key = "houseCfg")
     $sellHouseMoney = $sellHouseMoney + GetEntityCfg(fullName = $sellHouseCfg, key = "sellMoney")
-    $sellHouseFurnitures = ArrayGet(array = $curSelectHouse, index = 3) or {}
+    $sellHouseFurnitures = DictionaryGet(dict = $curSelectDict, key = "houseInsideFurnishing") or {}
     Foreach(array = $sellHouseFurnitures, key = "furniture"){
         $cfg = ArrayGet(array = $furniture, index = 3)
         $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
@@ -444,14 +508,14 @@ SELL_HOUSE{
     -- showTextTb
     $showTextTb = {textWeightList = [
         {keyText = "ui_house_sell_house_money", valueText = $sellHouseMoney},
-        {keyText = "ui_house_sell_house_type", valueText = ArrayGet(array = $curSelectHouse, index = 7)}
+        {keyText = "ui_house_sell_house_type", valueText = DictionaryGet(dict = $curSelectDict, key = "houseType")}
     ]}
     ShowGenericListDisplayBox(entity = $obj1, infoTb = {
         uiWin = "genericShowPage",
         childInfoTb = {
             upperLayerKey = $houseKey,
-            titleTb = {text = ArrayGet(array = $curSelectHouse, index = 6), event = "EDIT_HOUSE_NAME", 
-                context = {houseKey = ArrayGet(array = $curSelectHouse, index = 8), houseName = ArrayGet(array = $curSelectHouse, index = 6)}},
+            titleTb = {text = DictionaryGet(dict = $curSelectDict, key = "houseName"), event = "EDIT_HOUSE_NAME", 
+                context = {houseKey = DictionaryGet(dict = $curSelectDict, key = "houseId"), houseName = DictionaryGet(dict = $curSelectDict, key = "houseName")}},
             showImage = $showImage,
             showTextTb = $showTextTb,
             btnInfo = {
@@ -466,28 +530,31 @@ SELL_HOUSE{
 }
 
 SELL_HOUSE_SURE{
-    $curSelectHouse = {}
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     If(ArraySize(array = $houseVars) <= 1){ -- 最后一套房不能出售
         ShowTip(entity = $obj1, tipType = 1, textKey = "ui_house_sell_cant_sell")
         Return()
     }
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
-        If(ArrayGet(array = ArrayGet(array = $houseVars, index = $index), index = 8) == $houseKey){
-            $curSelectHouse = ArrayGet(array = $houseVars, index = $index) or {}
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "houseId") == $houseKey){
+            $curSelectDict = $dict
             ArrayRemove(array = $houseVars, index = $index)
             Break()
         }
     }
     $newHouseVar = ArrayGet(array = $houseVars, index = 1)
-    ArraySet(array = $newHouseVar, index = 5, value = "enable")
+    $newHouseDict = NewDictionary($newHouseVar)
+    DictionarySet(dict = $newHouseDict, key = "isCurEquip", value = "enable")
+    ArraySet(array = $houseVars, index = 1, value = DictionaryToTable(dict = $newHouseDict))
     CallTrigger(object = $obj1, event = "CHANGE_HOUSE", 
-            newHouse = ArrayGet(array = $newHouseVar, index = 1), houseColor = ArrayGet(array = $newHouseVar, index = 2))
+            newHouse = DictionaryGet(dict = $newHouseDict, key = "houseCfg"), houseColor = DictionaryGet(dict = $newHouseDict, key = "houseSelectColor"))
+
     -- 出售成功，给玩家钱
-    $sellHouseCfg = ArrayGet(array = $curSelectHouse, index = 1)
+    $sellHouseCfg = DictionaryGet(dict = $curSelectDict, key = "houseCfg")
     AddCurrency(entity = $obj1, coinName = GetEntityCfg(fullName = $sellHouseCfg, key = "coinName"), 
         count = GetEntityCfg(fullName = $sellHouseCfg, key = "sellMoney"))
-    $sellHouseFurnitures = ArrayGet(array = $curSelectHouse, index = 3) or {}
+    $sellHouseFurnitures = DictionaryGet(dict = $curSelectDict, key = "houseInsideFurnishing") or {}
     Foreach(array = $sellHouseFurnitures, key = "furniture"){
         $cfg = ArrayGet(array = $furniture, index = 3)
         $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
@@ -517,32 +584,44 @@ BUY_STORE{
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
     $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg)
     SetObjectVar(obj = $npc, key = "house", value = GetObjectVar(obj = $obj1, key = "house"))
-    Foreach(array = GetObjectVar(obj = $obj1, key = "houseVars"), key = "house"){
-        If(ArrayGet(array = $house, index = 5) == "enable"){
-            $curSelectHouse = $house
+    
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            DictionarySet(dict = $dict, key = "curHouseVarsIndex", value = $index)
+            $curHousedict = $dict
             Break()
         }
     }
-    ArrayAppend(array = ArrayGet(array = $curSelectHouse, index = 3), value = [
+    ArrayAppend(array = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing"), value = [
         GetEntityPosition(entity = $npc), GetEntityYaw(entity = $npc),$cfg,GetObjectID(object = $npc),false
     ])
+    $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
+    DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
+    ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
 }
 
 SAVE_FURNITURE{
-    $curSelectHouse = {} -- 退出编辑模式需要保存编辑后的家具状态
-    Foreach(array = GetObjectVar(obj = $obj1, key = "houseVars"), key = "house"){
-        If(ArrayGet(array = $house, index = 5) == "enable"){
-            $curSelectHouse = $house
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            DictionarySet(dict = $dict, key = "curHouseVarsIndex", value = $index)
+            $curHousedict = $dict
             Break()
         }
     }
-    Foreach(array = ArrayGet(array = $curSelectHouse, index = 3), key = "furniture"){
+    Foreach(array = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing"), key = "furniture"){
         $npc = GetObject(objID = ArrayGet(array = $furniture, index = 4))
         If($npc){
             ArraySet(array = $furniture, index = 1, value = GetEntityPosition(entity = $npc))
             ArraySet(array = $furniture, index = 2, value = GetEntityYaw(entity = $npc))
         }
     }
+    $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
+    DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
+    ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
 }
 
 SHOW_TITLE_BAR{
@@ -773,9 +852,12 @@ BUY_INSIDE_DOOR{
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
         Return()
     }
-    Foreach(array = GetObjectVar(obj = $obj1, key = "houseVars"), key = "house"){
-        If(ArrayGet(array = $house, index = 5) == "enable"){
-            ArraySet(array = $house, index = 9, value = $cfg)
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            DictionarySet(dict = $dict, key = "houseInsideDoor", value = $cfg)
+            ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $dict))
             Break()
         }
     }
@@ -824,19 +906,25 @@ BUY_HOUSE_REGION_COLOR{
         FillBlocksInRegion(map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap"), region = $cRegion, 
             block = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
     }
-    $curSelectHouse = {}
-    Foreach(array = GetObjectVar(obj = $obj1, key = "houseVars"), key = "house"){
-        If(ArrayGet(array = $house, index = 5) == "enable"){
-            $curSelectHouse = $house
+
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            DictionarySet(dict = $dict, key = "curHouseVarsIndex", value = $index)
+            $curHousedict = $dict
             Break()
         }
     }
-    $curSelectHouseRegionColor = ArrayGet(array = $curSelectHouse, index = 4) or {}
+    $curSelectHouseRegionColor = DictionaryGet(dict = $curHousedict, key = "houseInsideRegionColors") or {}
     Foreach(array = $curSelectHouseRegionColor, key = "childRegionColorArr"){
         If(ArrayGet(array = $childRegionColorArr, index = 1) == $curInsideRegionKey){
             ArraySet(array = ArrayGet(array = $childRegionColorArr, index = 2), index = $curInsideRegionChildReionIndex, value = $colorBlock)
         }
     }
+    $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
+    DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
+    ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
 }
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 

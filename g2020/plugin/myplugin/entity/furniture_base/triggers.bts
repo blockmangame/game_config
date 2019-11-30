@@ -32,14 +32,16 @@ DEC_INTERACTION_MOVE_TOUCH_END{
 DEC_INTERACTION_SALE{
     Test("----------------------------------DEC_INTERACTION_SALE", $objID)
     $owner = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "owner")
-    $curSelectHouse = {}
-    Foreach(array = GetObjectVar(obj = $owner, key = "houseVars"), key = "house"){
-        If(ArrayGet(array = $house, index = 5) == "enable"){
-            $curSelectHouse = $house
+    $houseVars = GetObjectVar(obj = $owner, key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            DictionarySet(dict = $dict, key = "curHouseVarsIndex", value = $index)
+            $curHousedict = $dict
             Break()
         }
     }
-    $furnitures = ArrayGet(array = $curSelectHouse, index = 3)
+    $furnitures = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing")
     ForLoop(from = 1, to = ArraySize(array = $furnitures), key = "index"){
         $furniture = ArrayGet(array = $furnitures, index = $index)
         If(ArrayGet(array = $furniture, index = 4) == $objID){
@@ -54,6 +56,9 @@ DEC_INTERACTION_SALE{
             Break()
         }
     }
+    $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
+    DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
+    ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
     KillEntity(entity = $obj1)
 }
 

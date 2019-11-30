@@ -13,14 +13,14 @@ ENTITY_CLICK{
     -- infoTb是拼出来的
     $btnList = [{text = "ui_house_get_more", btnType = 3, event = "HOUSE_TAB_EVENT", context = { key = "0" }}]
     $houseVars = GetObjectVar(obj = $obj2, key = "houseVars")
-    
     Foreach(array = $houseVars, key = "houseVar"){
+        $dict = NewDictionary($houseVar)
         ArrayAppend(array = $btnList, value = {
-            text = ArrayGet(array = $houseVar, index = 6), 
-            curSelect = ArrayGet(array = $houseVar, index = 5) == "enable",
-            isEquip = ArrayGet(array = $houseVar, index = 5) == "enable",
+            text = DictionaryGet(dict = $dict, key = "houseName"), 
+            curSelect = DictionaryGet(dict = $dict, key = "isCurEquip") == "enable",
+            isEquip = DictionaryGet(dict = $dict, key = "isCurEquip") == "enable",
             event = "HOUSE_TAB_EVENT", 
-            context = { key = ArrayGet(array = $houseVar, index = 8) }
+            context = { key = DictionaryGet(dict = $dict, key = "houseId") }
         })
     }
     $infoTb = {

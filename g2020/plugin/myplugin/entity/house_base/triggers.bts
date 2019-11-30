@@ -44,10 +44,11 @@ CHANGE_DOOR_YAW{
 
 CREATR_HOUSE_INSIDE_SUBSIDIARY{
     Test("CREATR_HOUSE_INSIDE_SUBSIDIARY")
-    $curSelectHouse = {}
-    Foreach(array = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "owner"), key = "houseVars"), key = "house"){
-        If(ArrayGet(array = $house, index = 5) == "enable"){
-            $curSelectHouse = $house
+    $houseVars = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "owner"), key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            $curHousedict = $dict
             Break()
         }
     }
@@ -55,7 +56,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
     $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
     $allRegion = GetAllRegion(map = $map)
     -- //获取当前房子的内部regionColor 即存进数据库的
-    $regionColor = ArrayGet(array = $curSelectHouse, index = 4) or {}
+    $regionColor = DictionaryGet(dict = $curHousedict, key = "houseInsideRegionColors") or {}
     Foreach(array = $allRegion, key = "region"){
         $hadRegion = false
         $regionkey = GetRegionConfig(region = $region, key = "regionkey")
@@ -89,7 +90,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
     }
     ------------------------------------------ 内部各个家具
     ------------------------------------------ 房子 <house------- 家具
-    $furnitures = ArrayGet(array = $curSelectHouse, index = 3) or {}
+    $furnitures = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing") or {}
     Foreach(array = $furnitures, key = "furniture"){
         $temp = ArrayGet(array = $furniture, index = 1)
         $pos = {
@@ -116,7 +117,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
     }
     ------------------------------------------ 内部门
     ------------------------------------------ 房子 <house-------insideDoor> 内部门
-    $insideDoor = CreateNpc(map = $map, cfgName = ArrayGet(array = $curSelectHouse, index = 9) or GetConfigVar(obj = $obj1, key = "insideDoor"))
+    $insideDoor = CreateNpc(map = $map, cfgName = DictionaryGet(dict = $curHousedict, key = "houseInsideDoor") or GetConfigVar(obj = $obj1, key = "insideDoor"))
     SetEntityPosition(map = $map, entity = $insideDoor, pos = GetConfigVar(obj = $obj1, key = "insideDoorPos") or {x = 0,y = 0, z = 0})
     SetObjectVar(obj = $insideDoor, key = "house", value = $obj1)
     SetObjectVar(obj = $obj1, key = "insideDoor", value = $insideDoor)
