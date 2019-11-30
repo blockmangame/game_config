@@ -227,9 +227,10 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
 }
 
 CREATE_HOUSE_OUTSIDE{
-    $house = CreateNpc(pos = GetRegionCenter(region = $region), map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
-
     $yaw = GetRegionConfig(region = $region, key = "regionHouseYaw")
+    $housePosOffset = GetEntityCfg(fullName = $houseCfg, key = "housePosOffset") or {x = 0, y = 0, z = 0}
+    $house = CreateNpc(pos = ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)), 
+        map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
     SetEntityYaw(entity = $house, rotationYaw = $yaw)
     SetBodyYaw(entity = $house, yaw = $yaw)
 
