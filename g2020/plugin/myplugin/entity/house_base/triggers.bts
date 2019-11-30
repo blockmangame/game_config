@@ -116,7 +116,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
     }
     ------------------------------------------ 内部门
     ------------------------------------------ 房子 <house-------insideDoor> 内部门
-    $insideDoor = CreateNpc(map = $map, cfgName = GetConfigVar(obj = $obj1, key = "insideDoor"))
+    $insideDoor = CreateNpc(map = $map, cfgName = ArrayGet(array = $curSelectHouse, index = 9) or GetConfigVar(obj = $obj1, key = "insideDoor"))
     SetEntityPosition(map = $map, entity = $insideDoor, pos = GetConfigVar(obj = $obj1, key = "insideDoorPos") or {x = 0,y = 0, z = 0})
     SetObjectVar(obj = $insideDoor, key = "house", value = $obj1)
     SetObjectVar(obj = $obj1, key = "insideDoor", value = $insideDoor)

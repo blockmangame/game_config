@@ -267,5 +267,89 @@
             "name": "gui.team.scale",
             "value": "vars.role"
         }
+    ],
+    "houseStore": [
+        "myplugin/house1",
+        "myplugin/house1",
+        "myplugin/house1",
+        "myplugin/house1",
+        "myplugin/house1",
+        "myplugin/house1",
+        "myplugin/house1",
+        "myplugin/house1",
+        "myplugin/house1",
+        "myplugin/house1"
+    ],
+    "editStoreSellTab": [
+        {"text" : "ui_editStoreSellTab_allDec","nextCfgKey": "decStoreList","titleKey": "allDec", "event": "SHOW_DEC_STORE"},
+        {"text" : "ui_editStoreSellTab_allEdit","nextCfgKey": "editStoreList","titleKey": "allEdit", "event": "SHOW_DEC_STORE"}
+    ],
+    
+    "decStoreList": [
+        {"nextCfgKey": "kitchenStore", "titleKey": "allDec", "text": "ui_decStoreList_kitchenStore", "image": "set:Edit_1.json image:Edit_Kitchen_Icon.png", "event": "SHOW_DEC_STORE_LIST"},
+        {"nextCfgKey": "parlorStore", "titleKey": "allDec", "text": "ui_decStoreList_parlorStore", "image": "set:Edit_1.json image:Edit_Parlor_Icon.png", "event": "SHOW_DEC_STORE_LIST"},
+        {"nextCfgKey": "bedroomStore", "titleKey": "allDec", "text": "ui_decStoreList_bedroomStore", "image": "set:Edit_1.json image:Edit_Bed_Icon.png", "event": "SHOW_DEC_STORE_LIST"},
+        {"nextCfgKey": "bathroomStore", "titleKey": "allDec", "text": "ui_decStoreList_bathroomStore", "image": "set:Edit_1.json image:Edit_Toilet_Icon.png", "event": "SHOW_DEC_STORE_LIST"},
+        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}}
+    ],
+    "kitchenStore":[
+        {"type": "entity", "fullName": "myplugin/chairs_body_1"},
+        {"type": "entity", "fullName": "myplugin/chairs_body_11"},
+        {"type": "entity", "fullName": "myplugin/chairs_body_2024"},
+        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
+        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "parlorStore"}},
+        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
+    ],
+    "parlorStore": [
+        {"type": "entity", "fullName": "myplugin/chairs_body_2"},
+        {"type": "entity", "fullName": "myplugin/chairs_body_3"},
+        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
+        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "bedroomStore"}},
+        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
+    ],
+    "bedroomStore":[
+        {"type": "entity", "fullName": "myplugin/chairs_body_5"},
+        {"type": "entity", "fullName": "myplugin/chairs_body_2001"},
+        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
+        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "bathroomStore"}},
+        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
+    ],
+    "bathroomStore":[
+        {"type": "entity", "fullName": "myplugin/chairs_body_10"},
+        {"type": "entity", "fullName": "myplugin/chairs_body_19"},
+        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
+        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "kitchenStore"}},
+        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
+    ],
+
+    "editStoreList": [
+        {"nextCfgKey": "floorBlockStore","childRegionKey": "floorRegion", "titleKey": "allEdit", 
+            "text": "ui_editStoreList_floorBlockStore", "image": "set:Edit_1.json image:Edit_Floor_Icon.png", "event": "SHOW_DEC_STORE_LIST"},
+        {"nextCfgKey": "wallBlockStore","childRegionKey": "wallRegion", "titleKey": "allEdit", 
+            "text": "ui_editStoreList_wallBlockStore", "image": "set:Edit_1.json image:Edit_Wall_Page_Icon.png", "event": "SHOW_DEC_STORE_LIST"},
+        {"nextCfgKey": "doorStore", "titleKey": "allEdit", "text": "ui_editStoreList_doorStore", 
+            "image": "set:Edit_1.json image:Edit_Door_Icon.png", "event": "SHOW_DEC_STORE_LIST"},
+        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}}
+    ],
+    "floorBlockStore": [
+        {"type": "block", "fullName": "myplugin/wool_2"},
+        {"type": "block", "fullName": "myplugin/wool_3"},
+        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
+        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "wallBlockStore", "childRegionKey": "wallRegion"}},
+        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
+    ],
+    "wallBlockStore": [
+        {"type": "block", "fullName": "myplugin/wool_2"},
+        {"type": "block", "fullName": "myplugin/wool_1"},
+        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
+        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "doorStore"}},
+        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
+    ],
+    "doorStore": [
+        {"type": "entity", "fullName": "myplugin/chairs_body_10", "event": "BUY_INSIDE_DOOR"},
+        {"type": "entity", "fullName": "myplugin/chairs_body_19", "event": "BUY_INSIDE_DOOR"},
+        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
+        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "floorBlockStore", "childRegionKey": "floorRegion"}},
+        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
     ]
 }

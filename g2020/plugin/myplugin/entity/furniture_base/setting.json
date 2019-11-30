@@ -39,15 +39,16 @@
     "isStatic": true,
     "editUI": {
         "cfgKey": "editUI",
+        "eventTb": "events",
         "followParams": {
             "beginPos": 1
         },
         "moveWidget": {
             "text": "MOVE",
-            "image": "set:add_sub.json image:add",
+            "image": "set:Edit_1.json image:Edit_Move_Icon.png",
             "touchBeginEventIndex": 1,
             "touchEndEventIndex": 2,
-            "btnType": 2,
+            "btnType": 4,
             "pos": {
                 "x": -50,
                 "y": 0
@@ -57,9 +58,9 @@
         "aroundWidget": [
             {
                 "text": "SALE",
-                "image": "set:add_sub.json image:add",
+                "image": "set:Edit_1.json image:Edit_Sell_Icon.png",
                 "eventIndex": 3,
-                "btnType": 2,
+                "btnType": 4,
                 "pos": {
                     "x": 50,
                     "y": 0
@@ -68,8 +69,8 @@
             },
             {
                 "text": "COLOR",
-                "image": "set:add_sub.json image:add",
-                "btnType": 2,
+                "image": "set:Edit_1.json image:Edit_Edit_Color_Icon.png",
+                "btnType": 4,
                 "pos": {
                     "x": -150,
                     "y": 0
@@ -78,9 +79,9 @@
             },
             {
                 "text": "LEFT_ROTATION",
-                "image": "set:add_sub.json image:add",
+                "image": "set:Edit_1.json image:Edit_Left_Rotation_Icon.png",
                 "eventIndex": 4,
-                "btnType": 2,
+                "btnType": 4,
                 "pos": {
                     "x": -100,
                     "y": 150
@@ -89,9 +90,9 @@
             },
             {
                 "text": "RIGHT_ROTATION",
-                "image": "set:add_sub.json image:add",
+                "image": "set:Edit_1.json image:Edit_Right_Rotation_Icon.png",
                 "eventIndex": 5,
-                "btnType": 2,
+                "btnType": 4,
                 "pos": {
                     "x": 0,
                     "y": 150
@@ -100,11 +101,11 @@
             }
         ],
         "events":[
-            "DEC_INTERACTION_MOVE_TOUCH_BEGIN",
-            "DEC_INTERACTION_MOVE_TOUCH_END",
-            "DEC_INTERACTION_SALE",
-            "DEC_INTERACTION_LEFT_ROTATION",
-            "DEC_INTERACTION_RIGHT_ROTATION"
+            {"event":"DEC_INTERACTION_MOVE_TOUCH_BEGIN"},
+            {"event":"DEC_INTERACTION_MOVE_TOUCH_END"},
+            {"event":"DEC_INTERACTION_SALE"},
+            {"event":"DEC_INTERACTION_LEFT_ROTATION"},
+            {"event":"DEC_INTERACTION_RIGHT_ROTATION"}
         ]
     },
     "interaction": {
