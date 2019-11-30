@@ -45,6 +45,7 @@ ENTITY_ENTER
     CallTrigger(event = "INIT_WORK_TASK", object = $obj1) --初始化打工任务
     If(IsPlayer(entity = $obj1))
     {
+        SetEntityTeam(entity = $obj1, teamId = 1)
         $playerName = GetEntityName(entity = $obj1)
 
         If($obj1.nickName == "defaultNickName")
@@ -1647,19 +1648,18 @@ INIT_TEAM_UI
     $title = {
         name = "gui_my_family"
     }
-
-    $content = {
-        showHeadPic = true,
-        showGender = true,
-        showScale = true,
-        showNickName = true
-    }
     
     $buttons = [
         {
+            event = "SHOW_FAMILY_ALBUM",
+            normalImage = "set:team.json image:blue_btn",
+            pushedImage = "set:team.json image:blue_btn",
+             name = "ui_family_album"
+        },
+        {
             event = "QUIT_FAMILY",
-            normalImage = "set:new_gui_task.json image:yellow_btn.png",
-            pushedImage = "set:new_gui_task.json image:yellow_btn.png",
+            normalImage = "set:team.json image:green_btn",
+            pushedImage = "set:team.json image:green_btn",
             name = "ui_family_quit"
         }
     ]
@@ -1668,15 +1668,18 @@ INIT_TEAM_UI
         disableClose = false
     }
 
-
     $info = {
         title = $title,
-        content = $content,
         buttons = $buttons,
         closeBtn = $closeBtn
     }
 
     ShowTeam(entity = $obj1, show = $show, info = $info)
+}
+
+SHOW_FAMILY_ALBUM
+{
+    ShowFamilyAlbum(entity = $obj1)
 }
 
 STORE_ITEM_STATUS_CHANGE
