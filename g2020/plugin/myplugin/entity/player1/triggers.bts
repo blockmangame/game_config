@@ -45,7 +45,6 @@ ENTITY_ENTER
     CallTrigger(event = "INIT_WORK_TASK", object = $obj1) --初始化打工任务
     If(IsPlayer(entity = $obj1))
     {
-        SetEntityTeam(entity = $obj1, teamId = 1)
         $playerName = GetEntityName(entity = $obj1)
 
         If($obj1.nickName == "defaultNickName")
