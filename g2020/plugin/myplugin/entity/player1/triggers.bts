@@ -646,7 +646,9 @@ SHOW_TITLE_BAR{
             ]
         }
     }
-    ShowTitleBarPage(entity = $obj1, infoTb = $infoTb)
+
+    ShowTitleBarPage(entity = $obj1, infoTb = {})
+    ShowTitleBarPage(entity = $obj1, infoTb = $infoTb, updateWin = true)
 }
 
 EDIT_HOUSE{
@@ -665,6 +667,7 @@ EDIT_HOUSE{
             ]
         }
     }
+    ShowTitleBarPage(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, infoTb = $infoTb, updateWin = true)
 }
 
