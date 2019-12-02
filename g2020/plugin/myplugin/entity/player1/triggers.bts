@@ -356,10 +356,16 @@ HOUSE_TAB_EVENT{
         Test("--------- u need buy")
         $listInfoTb = {}
         Foreach(array = GetConfigVar(obj = $obj1, key = "houseStore") or {}, key = "houseFullName"){
+            $coinName = GetEntityCfg(fullName = $houseFullName, key = "coinName") or ""
+            If("green_currency" == $coinName){
+                $coinImg = "set:jail_break.json image:jail_break_currency"
+            }ElseIf("gDiamonds" == $coinName){
+                $coinImg = "set:diamond.json image:Diamond-icon2.png"
+            }
             ArrayAppend(array = $listInfoTb, value = {
                 image = GetEntityCfg(fullName = $houseFullName, key = "defaultColorImage") or "",
                 text = GetEntityCfg(fullName = $houseFullName, key = "houseType") or "",
-                coinName = GetEntityCfg(fullName = $houseFullName, key = "coinName") or "",
+                coinImg = $coinImg or "",
                 btnShowText = GetEntityCfg(fullName = $houseFullName, key = "buyMoney") or "",
                 context = {houseCfg = $houseFullName}
             })
@@ -731,16 +737,18 @@ SHOW_DEC_STORE{
     $closeEvent = {}
     Foreach(array = GetConfigVar(obj = $obj1, key = $nextCfgKey) or {}, key = "bottomBtn"){
         $dic = NewDictionary($bottomBtn)
-        ArrayAppend(array = $listInfoTb, value = {
-            text = DictionaryGet(dict = $dic, key = "text"),
-            image = DictionaryGet(dict = $dic, key = "image"),
-            event = DictionaryGet(dict = $dic, key = "event"),
-            context = {
-                titleKey = DictionaryGet(dict = $dic, key = "titleKey"),
-                nextCfgKey = DictionaryGet(dict = $dic, key = "nextCfgKey"),
-                childRegionKey = DictionaryGet(dict = $dic, key = "childRegionKey")
-            }
-        })
+        If(DictionaryGet(dict = $dic, key = "nextCfgKey")){
+            ArrayAppend(array = $listInfoTb, value = {
+                text = DictionaryGet(dict = $dic, key = "text"),
+                image = DictionaryGet(dict = $dic, key = "image"),
+                event = DictionaryGet(dict = $dic, key = "event"),
+                context = {
+                    titleKey = DictionaryGet(dict = $dic, key = "titleKey"),
+                    nextCfgKey = DictionaryGet(dict = $dic, key = "nextCfgKey"),
+                    childRegionKey = DictionaryGet(dict = $dic, key = "childRegionKey")
+                }
+            })
+        }
         If(DictionaryGet(dict = $dic, key = "closeEvent")){
             $closeEvent = {
                 event = DictionaryGet(dict = $dic, key = "closeEvent"),
@@ -771,11 +779,17 @@ UPDATE_STORE_LIST{
         $type = DictionaryGet(dict = $dic, key = "type")
         If("entity" == $type){
             $fullName = DictionaryGet(dict = $dic, key = "fullName")
+            $coinName = GetEntityCfg(fullName = $fullName, key = "coinName") or ""
+            If("green_currency" == $coinName){
+                $coinImg = "set:jail_break.json image:jail_break_currency"
+            }ElseIf("gDiamonds" == $coinName){
+                $coinImg = "set:diamond.json image:Diamond-icon2.png"
+            }
             ArrayAppend(array = $listInfoTb, value = {
                 text = GetEntityCfg(fullName = $fullName, key = "buyMoney"),
                 image = GetEntityCfg(fullName = $fullName, key = "image"),
                 actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale"),
-                coinName = GetEntityCfg(fullName = $fullName, key = "coinName"),
+                coinImg = $coinImg or "",
                 cfg = $fullName,
                 event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
                 context = {
@@ -784,10 +798,16 @@ UPDATE_STORE_LIST{
             })
         }ElseIf("block" == $type){
             $fullName = DictionaryGet(dict = $dic, key = "fullName")
+            $coinName = GetBlockConfigByName(block = $fullName, key = "coinName") or ""
+            If("green_currency" == $coinName){
+                $coinImg = "set:jail_break.json image:jail_break_currency"
+            }ElseIf("gDiamonds" == $coinName){
+                $coinImg = "set:diamond.json image:Diamond-icon2.png"
+            }
             ArrayAppend(array = $listInfoTb, value = {
                 text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or 0,
                 image = GetBlockConfigByName(block = $fullName, key = "image") or "",
-                coinName = GetBlockConfigByName(block = $fullName, key = "coinName"),
+                coinImg = $coinImg or "",
                 event = "BUY_HOUSE_REGION_COLOR",
                 context = {
                     colorBlock = $fullName,
