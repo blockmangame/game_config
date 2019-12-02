@@ -13,31 +13,42 @@ INTERACTION_FEED(debug = true){
     {
         Return()
     }
-
+    $state = GetConfigVar(obj = $item, key = "state")
+    $itemname = GetConfigVar(obj = $item, key = "itemname")
+    $action = [
+        [
+            $obj1,
+            GetConfigVar(obj = $item, key = "feededAction"),
+            GetConfigVar(obj = $item, key = "feededActionTime")
+        ],
+        [
+            $obj2,
+            GetConfigVar(obj = $item, key = "feedAction"),
+            GetConfigVar(obj = $item, key = "feedActionTime")
+        ]
+    ]
+    ConsumeItem(item = $item, num = 1)
+    CallTrigger(event = "FUNC_STATE_ADD_INTERACTLIST", entities = [$obj1, $obj2])
+    Foreach(array = $action, key = "act")
+    {
+        PlayAction(
+            entity = ArrayGet(array = $act, index = 1),
+            includeSelf = true,
+            actionName = ArrayGet(array = $act, index = 2),
+            actionTime = ArrayGet(array = $act, index = 3)
+        )
+    }
     ShowBubbleMsg(
         entity = $obj1,
         textKey = "thank_sb_food",
         textP1 = GetEntityName(entity = $obj2),
-        textP2 = GetConfigVar(obj = $item, key = "itemname")
-    )
-    PlayAction(
-        entity = $obj1,
-        includeSelf = true,
-        actionName = GetConfigVar(obj = $item, key = "feededAction"),
-        actionTime = GetConfigVar(obj = $item, key = "feededActionTime")
-    )
-    PlayAction(
-        entity = $obj2,
-        includeSelf = true,
-        actionName = GetConfigVar(obj = $item, key = "feedAction"),
-        actionTime = GetConfigVar(obj = $item, key = "feedActionTime")
+        textP2 = $itemname
     )
     CallTrigger(
         object = $obj1,
         event = "FUNC_STATE_RELEASE_AND_REWARD",
-        state = GetConfigVar(obj = $item, key = "state")
+        state = $state
     )
-    ConsumeItem(item = $item, num = 1)
 }
 
 ENTITY_ENTER
@@ -1268,7 +1279,7 @@ FUNC_STATE_RELEASE_AND_REWARD --params: state
             $rewardSum = $myTeamId == $teamId and $rewardFamily or $rewardOther
             $textKey = $myTeamId == $teamId and "reward_family" or "reward_takeCare"
             CallTrigger(
-                object = $obj1,
+                object = $entity,
                 event = "FUNC_STATE_REWARD_AND_TIP",
                 rewardSum = $rewardSum,
                 textKey = $textKey,
@@ -1383,33 +1394,6 @@ FUNC_STATE_OPEN_GPS --params: rtVal
         destination = $rtVal,
         pos = $gps
     )
-}
-
-FUNC_STATE_ADD_INTERACTLIST
-{
-    Foreach(array = @Generate_State_List, key = "stateBase")
-    {
-        If(not GetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase)))
-        {
-            Continue()
-        }
-        $listName = Concat(p1 = $stateBase, p2 = "InteractList")
-        $interactList = GetObjectVar(obj = $obj1, key = $listName)
-        $targetID = GetObjectVar(obj = $obj1, key = "interactionObjId")
-        If(not IsPlayer(entity = GetObject(objID = $targetID)))
-        {
-            Return()
-        }
-        If(not $interactList)
-        {
-            $interactList = []
-        }
-        If(not ArrayFind(array = $interactList, value = $targetID))
-        {
-            ArrayAppend(array = $interactList, value = $targetID)
-        }
-        SetObjectVar(obj = $obj1, key = $listName, value = $interactList)
-    }
 }
 
 FUNC_UPDATE_STATE_SKILL_JACK_AREA --params: up
