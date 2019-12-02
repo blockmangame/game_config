@@ -646,7 +646,9 @@ SHOW_TITLE_BAR{
             ]
         }
     }
-    ShowTitleBarPage(entity = $obj1, infoTb = $infoTb)
+
+    ShowTitleBarPage(entity = $obj1, infoTb = {})
+    ShowTitleBarPage(entity = $obj1, infoTb = $infoTb, updateWin = true)
 }
 
 EDIT_HOUSE{
@@ -665,6 +667,7 @@ EDIT_HOUSE{
             ]
         }
     }
+    ShowTitleBarPage(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, infoTb = $infoTb, updateWin = true)
 }
 
@@ -1549,9 +1552,23 @@ QUIT_FAMILY
 {
     If(IsPlayer(entity = $obj1))
     {
+        $teamId = GetEntityTeam(entity = $obj1)
         SetEntityTeam(entity = $obj1, teamId = 0)
         ShowTip(entity = $obj1, tipType = 2,textKey = "gui_quit_family_success", time = 40)
         CallTrigger(event = "INIT_TEAM_UI", obj1 = $obj1, show = false)
+        CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId, object = $obj1)
+    }
+}
+
+UPDATE_TEAM_MEMBER_LIST
+{
+    $entityList = GetTeamEntityList(teamId = $teamId)
+    ForeachDictionary(keyName = "objID", valueName = "entity", dict = NewDictionary($entityList))
+    {
+        If(IsPlayer(entity = $entity))
+        {
+            UpdateUIData(player = $entity, ui = "win_team")
+        }
     }
 }
 

@@ -110,19 +110,20 @@ REQUEST_JOIN_FAMILY_YES
         Return()
     }
 
-    $teamID = GetEntityTeam(entity = $obj1)
-    If(not $teamID or $teamID == 0)
+    $teamId = GetEntityTeam(entity = $obj1)
+    If(not $teamId or $teamId == 0)
     {
         Return()
     }
 
-    $playerCount = GetTeamInfo(teamId = $teamID, key = "playerCount")
+    $playerCount = GetTeamInfo(teamId = $teamId, key = "playerCount")
     If(not $playerCount or $playerCount >= 4)
     {
         Return()
     }
 
-    SetEntityTeam(entity = $obj1.requestFamilyPlayer, teamId = $teamID)
+    SetEntityTeam(entity = $obj1.requestFamilyPlayer, teamId = $teamId)
+    CallTrigger(event = "REFRESH_TEAM_LIST", teamId = $teamId)
     ShowTip(entity = $obj1.requestFamilyPlayer, tipType = 2,textKey = "You Are In Family", time = 40)
     $obj1.requestFamilyPlayer = nil
 }
@@ -144,19 +145,20 @@ INVITE_JOIN_FAMILY_YES
         Return()
     }
 
-    $teamID = GetEntityTeam(entity = $obj1.inviteFamilyPlayer)
-    If(not $teamID or $teamID == 0)
+    $teamId = GetEntityTeam(entity = $obj1.inviteFamilyPlayer)
+    If(not $teamId or $teamId == 0)
     {
         Return()
     }
 
-    $playerCount = GetTeamInfo(teamId = $teamID, key = "playerCount")
+    $playerCount = GetTeamInfo(teamId = $teamId, key = "playerCount")
     If(not $playerCount or $playerCount >= 4)
     {
         Return()
     }
 
-    SetEntityTeam(entity = $obj1, teamId = $teamID)
+    SetEntityTeam(entity = $obj1, teamId = $teamId)
+    CallTrigger(event = "REFRESH_TEAM_LIST", teamId = $teamId)
     ShowTip(entity = $obj1, tipType = 2,textKey = "You Are In Family", time = 40)
     $obj1.inviteFamilyPlayer = nil
 }
@@ -215,7 +217,7 @@ CHANGE_PLAYER_SCALE_CHILD
     
     If(IsPlayer(entity = $obj1))
     {
-        UpdateUIData(player = $obj1, ui = "win_dressArchiveScale", data = 0.65)
+        UpdateUIData(player = $obj1, ui = "win_dressArchiveScale", data = 0.8)
     }
 }
 
