@@ -646,7 +646,12 @@ SHOW_TITLE_BAR{
             ]
         }
     }
-    ShowTitleBarPage(entity = $obj1, infoTb = $infoTb)
+    If(not $obj1.firstInInside){
+        $obj1.firstInInside = true
+        ShowTitleBarPage(entity = $obj1, infoTb = $infoTb)
+    }Else{
+        ShowTitleBarPage(entity = $obj1, infoTb = $infoTb, updateWin = true)
+    }
 }
 
 EDIT_HOUSE{
