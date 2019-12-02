@@ -660,7 +660,8 @@ SHOW_TITLE_BAR{
         btnInfo = {
             btnList = [
                 {text = "ui_edit", btnType = 1, event = "EDIT_HOUSE"},
-                {text = "ui_lock", btnType = 2, event = "HOUSE_LOCK"}
+                {text = "ui_lock", btnType = 2, event = "HOUSE_LOCK", 
+                    curSelect = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "isLock")}
             ]
         }
     }
