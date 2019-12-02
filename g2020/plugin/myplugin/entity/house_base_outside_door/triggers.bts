@@ -14,6 +14,8 @@ ENTITY_TOUCH_ALL{
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
     SetEntityPosition(map = $map, entity = $obj2, 
         pos = GetMapInitPos(map = $map) or GetEntityPosition(entity = $obj2))
+    SetEntityYaw(entity = $obj2, rotationYaw = GetConfigVar(obj = $obj2, key = "insideMapRotationYaw"))
+    SetBodyYaw(entity = $obj2, yaw = GetConfigVar(obj = $obj2, key = "insideMapRotationYaw"))
     If(GetObjectID(object = GetObjectVar(obj = $obj2, key = "house")) == GetObjectID(object = GetObjectVar(obj = $obj1, key = "house"))){
         CallTrigger(object = $obj2, event = "SHOW_TITLE_BAR")
         CallTrigger(object = $obj2, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = false)

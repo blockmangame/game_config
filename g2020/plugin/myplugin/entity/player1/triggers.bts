@@ -170,7 +170,8 @@ ENTITY_ENTER
     SetObjectVar(obj = $obj1, key = "returnDoor", value = GetObjectVar(obj = $house, key = "door"))
     SetEntityPosition(map = $houseInsideMap, entity = $obj1, 
         pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-
+    SetEntityYaw(entity = $obj2, rotationYaw = GetConfigVar(obj = $obj2, key = "insideMapRotationYaw"))
+    SetBodyYaw(entity = $obj2, yaw = GetConfigVar(obj = $obj2, key = "insideMapRotationYaw"))
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 }
