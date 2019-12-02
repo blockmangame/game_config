@@ -282,6 +282,32 @@ FUNC_REMOVE_BUFF --params: buffStr
     SetObjectVar(obj = $obj1, key = $buffStr, value = nil)
 }
 
+FUNC_STATE_ADD_INTERACTLIST --params: entities
+{
+    Foreach(array = @Generate_State_List, key = "stateBase")
+    {
+        $listName = Concat(p1 = $stateBase, p2 = "InteractList")
+        Foreach(array = $entities, key = "entity")
+        {
+            If(not IsPlayer(entity = $entity) || not GetObjectVar(obj = $entity, key = Concat(p1 = "had", p2 = $stateBase)))
+            {
+                Continue()
+            }
+            $interactList = GetObjectVar(obj = $entity, key = $listName) or []
+            Foreach(array = $entities, key = "cp")
+            {
+                $cpID = GetObjectID(object = $cp)
+                If($cp == $entity || not IsPlayer(entity = $cp) || ArrayFind(array = $interactList, value = $cpID))
+                {
+                    Continue()
+                }
+                ArrayAppend(array = $interactList, value = $cpID)
+            }
+            SetObjectVar(obj = $entity, key = $listName, value = $interactList)
+        }
+    }
+}
+
 FUNC_LOAD_NEW_WORKS {
     $currentCount = 20
     $othersCount = 20
