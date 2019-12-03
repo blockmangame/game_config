@@ -144,7 +144,7 @@ REQUEST_JOIN_FAMILY_YES
 
     SetEntityTeam(entity = $obj1.requestFamilyPlayer, teamId = $teamId)
     CallTrigger(event = "REFRESH_TEAM_LIST", teamId = $teamId)
-    ShowTip(entity = $obj1.requestFamilyPlayer, tipType = 2,textKey = "You Are In Family", time = 40)
+    ShowTip(entity = $obj1.requestFamilyPlayer, tipType = 2,textKey = "ui_family_join_in", time = 40)
     $obj1.requestFamilyPlayer = nil
 }
 
@@ -152,7 +152,7 @@ REQUEST_JOIN_FAMILY_NO
 {
     If($obj1.requestFamilyPlayer)
     {
-        ShowTip(entity = $obj1.requestFamilyPlayer, tipType = 2,textKey = "Sorry, I Can't Accept You Request.", time = 40)
+        ShowTip(entity = $obj1.requestFamilyPlayer, tipType = 2,textKey = "ui_family_reject_request", time = 40)
     }
 
     $obj1.requestFamilyPlayer = nil
@@ -179,7 +179,7 @@ INVITE_JOIN_FAMILY_YES
 
     SetEntityTeam(entity = $obj1, teamId = $teamId)
     CallTrigger(event = "REFRESH_TEAM_LIST", teamId = $teamId)
-    ShowTip(entity = $obj1, tipType = 2,textKey = "You Are In Family", time = 40)
+    ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", time = 40)
     $obj1.inviteFamilyPlayer = nil
 }
 
@@ -187,7 +187,7 @@ INVITE_JOIN_FAMILY_NO
 {
     If($obj1.inviteFamilyPlayer)
     {
-        ShowTip(entity = $obj1.inviteFamilyPlayer, tipType = 2,textKey = "Sorry, I Don't Want Join Family.", time = 40)
+        ShowTip(entity = $obj1.inviteFamilyPlayer, tipType = 2,textKey = "ui_family_reject_invite", time = 40)
     }
 
     $obj1.inviteFamilyPlayer = nil
