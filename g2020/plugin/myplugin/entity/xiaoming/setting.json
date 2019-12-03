@@ -1,0 +1,32 @@
+{
+    "icon":"turtle.png",
+    "actorName": "character_new_blue_mario.actor",
+    "clickDistance": 5,
+    "canClick": true,
+    "hpBarColor": 0,
+    "canInteract":true,
+    "name": "xiaoming",
+    "taskKey": "myplugin/work/key_1",
+	"interactionUI":{
+        "cfgKey": "interactionUI",
+        "followParams":{
+            "followScenePos":false
+        },
+        "centerBtns":[
+            {
+                "text":"submit order",
+                "widgetFileName":"widget_button",
+                "image":"set:add_sub.json image:add",
+                "event": "SUBMIT_ORDER"
+            }
+        ]
+    },
+    "interaction":{
+        "radius": 1,
+        "offset":{
+            "x": 0,
+            "y": 0,
+            "z": 2
+        }
+    }
+}

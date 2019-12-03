@@ -13,4 +13,8 @@ GMItem["g2020/金币商店"] = function()
     Lib.emitEvent(Event.EVENT_SHOW_GOLD_SHOP, true)
 end
 
+GMItem["g2020/打工按钮"] = function()
+    Lib.emitEvent(Event.EVENT_SHOW_WORK_DETAILS, true)
+end
+
 return GMItem

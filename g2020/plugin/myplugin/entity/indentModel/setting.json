@@ -1,0 +1,58 @@
+{
+    "canTouch": false,
+    "actorName": "mob_new_turtle_shell.actor",
+    "name": "indentModel",
+    "clickDistance": 5,
+    "canClick": true,
+    "hideHp": true,
+    "sex": 1,
+    "hideDeep": 0.1,
+    "boundingVolume": {
+        "type": "Box",
+        "params": [
+            1,
+            1,
+            1
+        ]
+    },
+    "canInteract":true,
+    "interactionUI":{
+        "cfgKey": "interactionUI",
+        "followParams":{
+            "followScenePos":false
+        },
+        "centerBtns":[
+            {
+                "text":"",
+                "widgetFileName":"",
+                "image":"",
+                "event": ""
+            }
+        ]
+    },
+    "interactionUI_1":{
+        "cfgKey": "interactionUI_1",
+        "aroundParams":{
+            "radius": 100
+        },
+        "followParams":{
+            "followScenePos":false
+        },
+        "aroundBtns":[
+            {
+                "text":"1",
+                "image":"",
+                "event": "INTERACTION_1",
+                "disable": true
+            }
+        ]
+    },
+    "interaction":{
+      "radius": 1,
+      "offset":{
+          "x": 0,
+          "y": -1,
+          "z": 2
+      }
+    }
+}

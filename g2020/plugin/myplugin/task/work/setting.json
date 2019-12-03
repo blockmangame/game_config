@@ -1,0 +1,47 @@
+{
+    "Editor_NameKey": "tr.95268",
+    "name": "tr.23569",
+    "sequenced": false,
+    "showOrder": 1,
+    "tasks": [
+        {
+            "key": "key_1",
+			"icon": "icon_2.png",
+			"times": "loop",
+			"fromList": false,
+			"needTask": null,
+			"needVar": null,
+			"name": "myplugin/main/main_task01.name",
+			"desc": "myplugin/main/main_task01.desc",
+			"reward": "myplugin/work_reward",		
+			"targets": [
+				{
+					"type": "FindObject",
+					"name":"main_task01_targets",
+					"cfgName":"myplugin/xiaoming"
+				}
+			]
+        },
+        {
+            "key": "key_2",
+			"icon": "icon_2.png",
+			"times": "loop",
+			"fromList": false,
+			"needTask": null,
+			"needVar": null,
+			"name": "myplugin/main/main_task02.name",
+			"desc": "myplugin/main/main_task01.desc",
+			"reward": "myplugin/work_reward",
+			"targets": [
+				{
+					"type": "FindObject",
+					"name":"main_task02_targets",
+					"cfgName":"myplugin/xiaohong",
+					"npcMap": "map001",
+			        "npcPos": { "x": 207, "y": 18, "z": 343}
+				}
+			]
+        }
+    ],
+    "triggers": null
+}

@@ -4,6 +4,23 @@ GAME_INIT
     @skillPath = "myplugin/skill_state_"
     CallTrigger(event = "FUNC_STATE_STARTTIMER")
 
+    @TASK_TABLE = [ --打工的任务表
+        {
+            taskKey = "myplugin/work/key_1",
+            pos =  { x = 187, y = 18, z = 343},
+            npcName = "myplugin/xiaoming",
+            npcMap = "map001"
+        },
+        {
+            taskKey = "myplugin/work/key_2",
+            pos =  { x = 207, y = 18, z = 343},
+            npcName = "myplugin/xiaohong",
+            npcMap = "map001"
+        }
+    ]
+    CreateNpc(cfgName = "myplugin/indentMode", pos = {x = 170, y = 17, z = 343}  ,name = "订单")
+    CreateNpc(cfgName = "myplugin/xiaoming", pos = {x = 207, y = 17, z = 343}  ,name = "小明")
+    CreateNpc(cfgName = "myplugin/xiaohong", pos = {x = 187, y = 17, z = 343} ,name = "小红")
 }
 
 

@@ -1,0 +1,12 @@
+ENTITY_ENTER(debug = false)
+{
+    
+}
+SUBMIT_ORDER(debug = false){
+    AddTarget(entity = $obj2, target = $obj1, type = "FindObject")
+    $player = GetObject(objID = GetObjectID(object = $obj2))
+    $key = GetConfigVar(obj = $obj1, key = "taskKey")
+    If($obj2.taskKey == $key){
+        DoFinishTask(player = $obj2, name = $key)
+    }
+}
