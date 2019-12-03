@@ -3,8 +3,11 @@ ENTITY_ENTER
 }
 
 ENTITY_TOUCH_ALL{
-    If(not IsPlayer(entity = $obj2) or (GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "isLock") 
-        and GetObjectID(obj = GetObjectVar(obj = $obj1, key = "house")) ~= GetObjectID(obj = GetObjectVar(obj = $obj2, key = "house")))){
+    $ownerPlayer = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "owner")
+    $isLock = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "isLock")
+    If(not IsPlayer(entity = $obj2) 
+        or ($isLock and GetObjectID(obj = ownerPlayer) ~= GetObjectID(obj = $obj2))
+        or ($isLock and ownerPlayer.teamId ~= $obj2.teamId)){
         Return()
     }
     Test(" please in !! ")
@@ -13,7 +16,7 @@ ENTITY_TOUCH_ALL{
     ------------------------------------------ 传送进内部房子
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
     SetEntityPosition(map = $map, entity = $obj2, 
-        pos = GetMapInitPos(map = $map) or GetEntityPosition(entity = $obj2))
+        pos = ComputeV3(p1 = GetMapInitPos(map = $map) or GetEntityPosition(entity = $obj2), p2 = Table(x = 0, y = 0.5, z = 0), op = "add"))
     SetEntityYaw(entity = $obj2, rotationYaw = GetConfigVar(obj = $obj2, key = "insideMapRotationYaw"))
     SetBodyYaw(entity = $obj2, yaw = GetConfigVar(obj = $obj2, key = "insideMapRotationYaw"))
     If(GetObjectID(object = GetObjectVar(obj = $obj2, key = "house")) == GetObjectID(object = GetObjectVar(obj = $obj1, key = "house"))){

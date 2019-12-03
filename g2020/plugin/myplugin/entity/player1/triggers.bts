@@ -470,20 +470,23 @@ SURE_BUY_HOUSE{
         Return()
     }
     ------------- 给房子
+    $houseId = Concat(p1 = GetTime(), p2 = GetGameTime(), p3 = Random(min = 0, max = 999999))
+    $curSelect = GetEntityCfg(fullName = $houseCfg, key = "defaultColor")
     ArrayAppend(array = $houseVars, value = { -- 购买成功后拼接一个新的房子数据放进entity的houseVars中 -- TEST CODE
             houseCfg = $houseCfg,
-            houseSelectColor = GetEntityCfg(fullName = $houseCfg, key = "defaultColor") or "",
+            houseSelectColor = $curSelect,
             houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
             houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or [],
             isCurEquip = "disable",
             houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
             houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
-            houseId = Concat(p1 = GetTime(), p2 = GetGameTime(), p3 = Random(min = 0, max = 999999)),
+            houseId = $houseId,
             houseInsideDoor = GetEntityCfg(fullName = $houseCfg, key = "insideDoor") or "myplugin/house_base_inside_door"
         }
     )
     ShowTip(entity = $obj1, tipType = 1, textKey = "ui_buy_success")
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
+    CallTrigger(object = $obj1, event = "UPDATE_HOUSE", houseKey = $houseId, curSelectKey = $curSelect)
 }
 
 SELL_HOUSE{
