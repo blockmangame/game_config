@@ -1,0 +1,63 @@
+ENTITY_ENTER(debug = false)
+{
+    
+}
+GET_TASK_KEY(debug = true) --随机任务key
+{
+    $idx = 1
+    $count = 0
+    Foreach(array = @TASK_WEIGHT, key = "weight"){
+        $count = $count + $weight
+    }
+    $sum = Random(min = 1, max = $count)
+    Foreach(array = @TASK_WEIGHT, key = "weight"){
+        $sum = $sum - $weight
+        If($sum <= 0){
+           $index = $idx
+           Break()
+        }
+        $idx = $idx + 1
+    }
+    $obj2.taskIndex = $index
+    $taskDict = ArrayGet(array = @TASK_TABLE, index = $index)
+    $obj2.taskKey = DictionaryGet(dict = $taskDict, key = "taskKey") -- 随机到的任务
+    $obj2.taskPos = DictionaryGet(dict = $taskDict, key = "pos") -- 随机到的任务NPC ,GPS位置
+    $obj2.taskNpc = DictionaryGet(dict = $taskDict, key = "npcName") --npc的 fullName
+    $obj2.npcMap = DictionaryGet(dict = $taskDict, key = "npcMap") --npc的Map
+
+}
+ENTITY_CLICK(debug = false)
+{
+    If($obj2.stakCD){ --玩家任务CD中
+        Return()
+    }
+    If($obj2.taskKey){
+       --放弃任务
+       $obj2.lastNpc = $obj2.taskNpc
+       $obj2.worktaskCount = $obj2.worktaskCount - 1
+       CancelTask(player = $obj2, name = $obj2.taskKey)
+    }
+    CallTrigger(event = "GET_TASK_KEY", object = $obj1, obj2 = $obj2)
+    --接受任务，开始任务。
+    StartTask(player = $obj2 ,fullName = $obj2.taskKey)
+    SetGuidePostion(entity = $obj2, pos = $obj2.taskPos)
+    AddItem(entity = $obj2, cfg = "myplugin/taskItem", count = 1)
+    --TO DO 得到任务道具
+    --给模型加隐身buff，并定时CD，一定的时间不能点，
+    MarkEntityForPlayer(player = $obj2, entity = $obj1, buffName = "myplugin/transparent_buff")
+    StartTimer(rep = false, time = 20*4, object = $obj1, event = "TASK_REFRESH", obj2 = $obj2)
+    --给对应NPC加动作或者Buff
+    CallTrigger(event = "TASK_NPC_ADD_BUFF", object = $obj2, from = "adddddaaad stask")
+    $obj2.stakCD = true
+    $obj2.worktaskCount = $obj2.worktaskCount + 1
+    CallTrigger(event = "GET_TASK_GPS", object = $obj2)
+    CallTrigger(event = "GET_TASK_UI_DATA", object = $obj2)
+}
+TASK_REFRESH()
+{
+    If($obj1 and $obj2){
+        $obj2.stakCD = false
+        UnMarkEntityForPlayer(player = $obj2, entity = $obj1, buffName = "myplugin/transparent_buff")
+        UpdateObjectInteractionUI(cfgKey = "interactionUI_1", player = $obj2, target = $obj1, show = true)
+    }
+}

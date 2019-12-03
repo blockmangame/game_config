@@ -1,9 +1,29 @@
-GAME_INIT
+GAME_INIT(debug = false)
 {
     @Generate_State_List = ["hunger", "thirsty", "dirty", "fatigue", "ill", "region"]
     @skillPath = "myplugin/skill_state_"
     CallTrigger(event = "FUNC_STATE_STARTTIMER")
 
+    @TASK_TABLE = NewArray() --打工的任务表
+    @TASK_WEIGHT = NewArray()
+    $taskData = GetConfigValue(type = "task", fullName = "myplugin/work", key = "tasks")
+    Foreach(array = $taskData, key = "Dict"){
+        $taskDict = NewDictionary($Dict)
+        $arg = DictionaryGet( dict = $taskDict, key = "targets")
+        $targets = NewDictionary(ArrayGet(array = $arg, index = 1)) 
+        $value = NewDictionary()
+        DictionarySet(dict = $value,  key = "taskKey" , value = DictionaryGet(dict = $taskDict, key = "fullName"))
+        DictionarySet(dict = $value,  key = "pos" , value = DictionaryGet(dict = $taskDict, key = "npcPos"))
+        DictionarySet(dict = $value,  key = "npcName" , value = DictionaryGet(dict = $targets, key = "cfgName"))
+        DictionarySet(dict = $value,  key = "npcMap" , value = DictionaryGet(dict = $taskDict, key = "npcMap"))
+        $weight =  DictionaryGet(dict = $taskDict, key = "weight")
+        DictionarySet(dict = $value,  key = "weight" , value = $weight)
+        ArrayAppend(array = @TASK_WEIGHT, value = $weight)
+        ArrayAppend(array = @TASK_TABLE, value = $value)
+    }
+    CreateNpc(cfgName = "myplugin/indentModel", pos = {x = 170, y = 17, z = 343}  ,name = "订单")
+    CreateNpc(cfgName = "myplugin/xiaoming", pos = {x = 187, y = 17, z = 343}  ,name = "小明")
+    CreateNpc(cfgName = "myplugin/xiaohong", pos = {x = 207, y = 17, z = 343} ,name = "小红")
 }
 
 

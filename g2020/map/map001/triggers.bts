@@ -1,0 +1,8 @@
+PLAYER_ENTER_MAP(debug = false) {
+	$obj1.taskTemer = StartTimer(rep = false, time = 20, object = $obj1, event = "TASK_UPDATE_DATA")
+}
+PLAYER_LEAVE_MAP(){
+	If($obj1.taskTemer){
+		StopTimer(timer = $obj1.taskTemer)
+	}
+}

@@ -2210,26 +2210,18 @@ GET_TASK_UI_DATA(){
     If($obj1.taskKey){
         $str = "/rd"
     }
+    $isTasking = false
+    If($obj1.taskKey){
+        $count = $count - 1
+        $isTasking = true
+    }
     $text = Concat(p1 = $count, p2 = $str, p3 = "40")
     $rate = $count / 10
     $taskData = Table(
-        operations = {
-            setProgress = {
-                rate = $rate
-            },
-            setBtnText = $text,
-            setArea = {
-                x = [0, 80],
-                y = [0, 50],
-                w = [0, 180],
-                h = [0, 100]
-            }
-        },
-        regData = {
-            regId = $obj1.taskRegId,
-            modName = "TASK_WORK",
-            key = "click"
-        }
+        Progress =  $rate,
+        BtnText = $text,
+        gpsPos = $obj1.gpsPos,
+        isTasking = $isTasking
     )
     UpdateUIData(player = $obj1, ui = "circleProgress", data = $taskData)
 }
@@ -2239,7 +2231,7 @@ GET_TASK_GPS(debug = false) --得到打工的GPS位置
         house_default_inside_map = {x = 1643, y = 13, z = -574},
         map001 = {x = 1639,y = 13, z = -574}
     }
-    $pos = $obj1.taskPos or {x =  1663, y = 13, z = -557} --任务点，或者领任务点
+    $pos = $obj1.taskPos or  { x = 170, y = 18, z = 343} --任务点，或者领任务点
     $mapName = GetPlayerMap(player = $obj1, name = true)
     $dict = NewDictionary($mapOutPos)
     If( ($obj1.npcMap and $mapName ~= $obj1.npcMap) or (not $obj1.npcMap and $mapName ~= "map001") ){
@@ -2251,13 +2243,9 @@ GET_TASK_GPS(debug = false) --得到打工的GPS位置
     }
 }
 INIT_WORK_TASK(){ --初始打工
-    $mapOutPos = {
-        house_default_inside_map = {x = 1643, y = 12, z = -574},
-        map001 = {x = 1639,y = 13, z = -574}
-    }
     $index =  $obj1.taskIndex
     If($index && $index > 0){
-        $taskDict = NewDictionary( ArrayGet(array = @TASK_TABLE, index = $index) )
+        $taskDict = ArrayGet(array = @TASK_TABLE, index = $index)
         $obj1.taskKey = DictionaryGet(dict = $taskDict, key = "taskKey") -- 随机到的任务
         $obj1.taskPos = DictionaryGet(dict = $taskDict, key = "pos") -- 随机到的任务NPC ,GPS位置
         $obj1.taskNpc = DictionaryGet(dict = $taskDict, key = "npcName") --npc的 fullName
