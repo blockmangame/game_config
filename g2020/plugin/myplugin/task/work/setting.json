@@ -13,14 +13,15 @@
 			"needVar": null,
 			"name": "myplugin/main/main_task01.name",
 			"desc": "myplugin/main/main_task01.desc",
-			"reward": "myplugin/work_reward",		
+			"reward": "myplugin/work_reward",
+			"npcMap": "map001",
+			"npcPos": { "x": 187, "y": 17, "z": 343},
+            "weight": 70,			
 			"targets": [
 				{
 					"type": "FindObject",
 					"name":"main_task01_targets",
-					"cfgName":"myplugin/xiaoming",
-					"npcMap": "map001",
-			        "npcPos": { "x": 187, "y": 17, "z": 343}
+					"cfgName":"myplugin/xiaoming"
 				}
 			]
         },
@@ -34,13 +35,14 @@
 			"name": "myplugin/main/main_task02.name",
 			"desc": "myplugin/main/main_task01.desc",
 			"reward": "myplugin/work_reward",
+			"npcMap": "map001",
+			"npcPos": { "x": 207, "y": 17, "z": 343},
+			"weight": 30,
 			"targets": [
 				{
 					"type": "FindObject",
 					"name":"main_task02_targets",
-					"cfgName":"myplugin/xiaohong",
-					"npcMap": "map001",
-			        "npcPos": { "x": 207, "y": 17, "z": 343}
+					"cfgName":"myplugin/xiaohong"
 				}
 			]
         }

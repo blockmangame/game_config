@@ -2245,7 +2245,7 @@ GET_TASK_GPS(debug = false) --得到打工的GPS位置
 INIT_WORK_TASK(){ --初始打工
     $index =  $obj1.taskIndex
     If($index && $index > 0){
-        $taskDict = NewDictionary( ArrayGet(array = @TASK_TABLE, index = $index) )
+        $taskDict = ArrayGet(array = @TASK_TABLE, index = $index)
         $obj1.taskKey = DictionaryGet(dict = $taskDict, key = "taskKey") -- 随机到的任务
         $obj1.taskPos = DictionaryGet(dict = $taskDict, key = "pos") -- 随机到的任务NPC ,GPS位置
         $obj1.taskNpc = DictionaryGet(dict = $taskDict, key = "npcName") --npc的 fullName
