@@ -74,7 +74,6 @@ ENTITY_ENTER
         $obj1.boundingBuff = nil
 
         $obj1.requestFamilyPlayer = nil
-        $obj1.inviteFamilyPlayer = nil
 
         CallTrigger(event = "ADD_MONEY", object = $obj1)
         CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)    
@@ -1579,54 +1578,89 @@ UPDATE_TEAM_MEMBER_LIST
     }
 }
 
-REQUEST_JOIN_FAMILY
+INTERACTION_JOIN_FAMILY
 {
-    $targetFamilyID = GetEntityTeam(entity = $obj1)
-    If(not $targetFamilyID or $targetFamilyID == 0)
-    {
-        Return()
-    }
-    $obj1.requestFamilyPlayer = $obj2
-    ShowNotice(
-            buttonType = 2,
-            content = "I Want Join Family",
-            eventYes = "REQUEST_JOIN_FAMILY_YES",
-            eventNo = "REQUEST_JOIN_FAMILY_NO",
-            entity = $obj1,
-            textP1 = "Hahahaha",
-            tittleKey = "I Want Join Family"
-    )
+    -- obj2是点击UI的那个人
+    -- obj1是被点击的那个人
 
-    ShowBubbleMsg(entity = $obj2, textKey = "I Want Join Family")
+    $selfFamilyID = GetEntityTeam(entity = $obj2)
+    
+    If($selfFamilyID and $selfFamilyID ~= 0)
+    {
+        $playerCount = GetTeamInfo(teamId = $selfFamilyID, key = "playerCount")
+        If($playerCount >= 4)
+        {
+            ShowTip(entity = $obj2, tipType = 2,textKey = "ui_family_full_member", time = 40)
+            Return()
+        }
+    }
+
+    $obj1.requestFamilyPlayer = $obj2
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = nil,
+        rightContent = "ui_sure"
+    }
+    
+    $content = {
+        msg = "ui_family_request",
+        args = NewArray(GetEntityName(entity = $obj2))
+    }
+
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "REQUEST_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
-INVITE_JOIN_FAMILY
+REQUEST_JOIN_FAMILY
 {
-    $myFamilyID = GetEntityTeam(entity = $obj2)
-    If(not $myFamilyID or $myFamilyID == 0)
+    $selfFamilyID = GetEntityTeam(entity = $obj1)
+    $targetPlayer = $obj1.requestFamilyPlayer
+    If($button == "left")
     {
+        If(IsPlayer(entity = $targetPlayer))
+        {
+            ShowTip(entity = $targetPlayer, tipType = 2,textKey = "ui_family_reject", time = 40)
+        }
         Return()
     }
-
-    $playerCount = GetTeamInfo(teamId = $myFamilyID, key = "playerCount")
-    If(not $playerCount or $playerCount >= 4)
+    ElseIf($button == "right")
     {
-        Return()
+        If(not IsPlayer(entity = $targetPlayer))
+        {
+            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_offline", time = 40)
+            Return()
+        }
+
+        $targetFamilyID = GetEntityTeam(entity = $targetPlayer)
+
+        
+        If($targetFamilyID and $targetFamilyID ~= 0)
+        {
+            -- 如果 target 有家庭
+            $playerCount = GetTeamInfo(teamId = $targetFamilyID, key = "playerCount")
+            If(not $playerCount or $playerCount >= 4)
+            {
+                ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_full_member", time = 40)
+                Return()
+            }
+
+            SetEntityTeam(entity = $obj1, teamId = $targetFamilyID)
+            CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $targetFamilyID)
+            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", time = 40)
+            $obj1.requestFamilyPlayer = nil
+        }
+        Else
+        {
+            -- 如果 target 没有家庭
+            $teamId = @familyIndex
+            @familyIndex = @familyIndex + 1
+            SetEntityTeam(entity = $targetPlayer, teamId = $teamId)
+            SetEntityTeam(entity = $obj1, teamId = $teamId)
+            CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId)
+            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", time = 40)
+            $obj1.requestFamilyPlayer = nil
+        }
     }
-
-    $obj1.inviteFamilyPlayer = $obj2
-
-    ShowNotice(
-            buttonType = 2,
-            content = "Do you want Join My Family",
-            eventYes = "INVITE_JOIN_FAMILY_YES",
-            eventNo = "INVITE_JOIN_FAMILY_NO",
-            entity = $obj1,
-            textP1 = "Hahahaha",
-            tittleKey = "Do you want Join My Family"
-    )
-
-    ShowBubbleMsg(entity = $obj2, textKey = "Do you want Join My Family")
 }
 
 SHOW_TEAM_CREATE_UI
