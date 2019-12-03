@@ -543,7 +543,7 @@ SELL_HOUSE{
                 btnType = 2,
                 btnList = [
                         {text = "ui_sure", event = "SELL_HOUSE_SURE", context = { houseKey = $houseKey}},
-                        {text = "ui_cancle", event = "HOUSE_TAB_EVENT", context = { key = $houseKey}}
+                        {text = "ui_cancel", event = "HOUSE_TAB_EVENT", context = { key = $houseKey}}
                     ]
             }
         }
@@ -790,17 +790,11 @@ UPDATE_STORE_LIST{
         $type = DictionaryGet(dict = $dic, key = "type")
         If("entity" == $type){
             $fullName = DictionaryGet(dict = $dic, key = "fullName")
-            $coinName = GetEntityCfg(fullName = $fullName, key = "coinName") or ""
-            If("green_currency" == $coinName){
-                $coinImg = "set:jail_break.json image:jail_break_currency"
-            }ElseIf("gDiamonds" == $coinName){
-                $coinImg = "set:diamond.json image:Diamond-icon2.png"
-            }
             ArrayAppend(array = $listInfoTb, value = {
                 text = GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
                 image = GetEntityCfg(fullName = $fullName, key = "image") or "",
                 actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
-                coinImg = $coinImg or "",
+                coinImg = GetWorldVar(key = GetEntityCfg(fullName = $fullName, key = "coinName") or "green_currency") or "",
                 cfg = $fullName,
                 event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
                 context = {
@@ -809,16 +803,10 @@ UPDATE_STORE_LIST{
             })
         }ElseIf("block" == $type){
             $fullName = DictionaryGet(dict = $dic, key = "fullName")
-            $coinName = GetBlockConfigByName(block = $fullName, key = "coinName") or ""
-            If("green_currency" == $coinName){
-                $coinImg = "set:jail_break.json image:jail_break_currency"
-            }ElseIf("gDiamonds" == $coinName){
-                $coinImg = "set:diamond.json image:Diamond-icon2.png"
-            }
             ArrayAppend(array = $listInfoTb, value = {
                 text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or "",
                 image = GetBlockConfigByName(block = $fullName, key = "image") or "",
-                coinImg = $coinImg or "",
+                coinImg = GetWorldVar(key = GetEntityCfg(fullName = $fullName, key = "coinName") or "green_currency") or "",
                 event = "BUY_HOUSE_REGION_COLOR",
                 context = {
                     colorBlock = $fullName,
