@@ -618,6 +618,13 @@ BUY_STORE{
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
+
+    -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
+}
+
+CLICK_BUY_STORE{
+    Test("CLICK_BUY_STORE", GetObjectID(object = $npc))
+    CastSkill(skill = "/click", from = $obj1, packet = {targetID = GetObjectID(object = $npc)})
 }
 
 SAVE_FURNITURE{
