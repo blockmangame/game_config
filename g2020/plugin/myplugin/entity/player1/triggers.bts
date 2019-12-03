@@ -787,9 +787,9 @@ UPDATE_STORE_LIST{
                 $coinImg = "set:diamond.json image:Diamond-icon2.png"
             }
             ArrayAppend(array = $listInfoTb, value = {
-                text = GetEntityCfg(fullName = $fullName, key = "buyMoney"),
-                image = GetEntityCfg(fullName = $fullName, key = "image"),
-                actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale"),
+                text = GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
+                image = GetEntityCfg(fullName = $fullName, key = "image") or "",
+                actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
                 coinImg = $coinImg or "",
                 cfg = $fullName,
                 event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
@@ -806,7 +806,7 @@ UPDATE_STORE_LIST{
                 $coinImg = "set:diamond.json image:Diamond-icon2.png"
             }
             ArrayAppend(array = $listInfoTb, value = {
-                text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or 0,
+                text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or "",
                 image = GetBlockConfigByName(block = $fullName, key = "image") or "",
                 coinImg = $coinImg or "",
                 event = "BUY_HOUSE_REGION_COLOR",
