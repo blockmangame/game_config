@@ -991,6 +991,12 @@ ADD_MONEY
     $cdTime = ArrayGet(array = $rewardArray, index = 1)
     $money = ArrayGet(array = $rewardArray, index = 2)
 
+    -- todo: 特权名字暂时未知，先用home_privilege
+    If($obj1.home_privilege)
+    {
+        $money = $money * 2
+    }
+
     If($obj1.isReadyReward)
     {
         AddCurrency(count = $money, coinName = "green_currency", entity = $obj1)
