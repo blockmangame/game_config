@@ -2431,3 +2431,14 @@ SURE_BUY_ITEM(){
 OPEN_PRISHOP(){
     ShowUI(player = $obj1, uiName = "priShop", show = true)
 }
+--特权购买成功
+ENTITY_BUY_APPSTOP(debug = true){
+    $dict = NewDictionary($shop)
+    $shopType = DictionaryGet(dict = $dict, key = "type")
+    If($shopType == 1){
+        $addItem = false
+        $goodsInfo = $obj1.goodsInfo
+        $limit = $limit - $goodsInfo[$itemIndex]
+        Test("--------------",$itemIndex, $goodsInfo[$itemIndex], $limit)
+    }
+}
