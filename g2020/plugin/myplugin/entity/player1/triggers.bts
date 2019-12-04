@@ -2435,10 +2435,17 @@ OPEN_PRISHOP(){
 ENTITY_BUY_APPSTOP(debug = true){
     $dict = NewDictionary($shop)
     $shopType = DictionaryGet(dict = $dict, key = "type")
-    If($shopType == 1){
+    $itemIndex = DictionaryGet(dict = $dict, key = "index")
+    $name = FindStr(str = $itemName, where_ = "/", back_ = true)
+    $index = ArrayFind(array = $obj1.privilege, value = $name)
+    --Test("-----goodsinfo:",$obj1.goodsInfo)
+    --Test("-----privilege:",$obj1.privilege)
+    If($shopType == "1" && not $index){
         $addItem = false
-        $goodsInfo = $obj1.goodsInfo
-        $limit = $limit - $goodsInfo[$itemIndex]
-        Test("--------------",$itemIndex, $goodsInfo[$itemIndex], $limit)
+        $goodsDict = NewDictionary($obj1.goodsInfo)
+        $limit = $limit - DictionaryGet(dict = $goodsDict, key = $itemIndex)
+        
+        ArrayAppend(array = $obj1.privilege, value = $name)
+        --Test("------------",$obj1.privilege)
     }
 }
