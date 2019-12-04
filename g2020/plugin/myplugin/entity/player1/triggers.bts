@@ -438,14 +438,14 @@ HOUSE_TAB_EVENT{
 
 EDIT_HOUSE_NAME{
     -- 房子改名
-    Test("EDIT_HOUSE_NAME", $houseKey, $titleEditText)
-    If(not $titleEditText or not $houseKey){
+    Test("EDIT_HOUSE_NAME", $houseKey, $upperLayerKey, $titleEditText)
+    If(not $titleEditText or not $upperLayerKey){
         Return()
     }
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
         $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
-        If(DictionaryGet(dict = $dict, key = "houseId") == $houseKey){
+        If(DictionaryGet(dict = $dict, key = "houseId") == $upperLayerKey){
             DictionarySet(dict = $dict, key = "houseName", value = $titleEditText)
             ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $dict))
             Break()
