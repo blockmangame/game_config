@@ -2132,30 +2132,315 @@ DRESS_STORE_ITEM_BUY
     }
 }
 
-COMMENT_WORKS
+SHOW_SAVE_WORKS_TIP
 {
-    Test($msg)
-    CommentWorks(player = $obj1, id = $id, msg = $msg, event = "HTTP_TEST")
+    Test("================================================== SHOW_SAVE_WORKS_TIP")
+    $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+    $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = nil, rightContent = "works_save" }
+    $context = { url = $url}
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "SAVE_WORKS_TIP_CLICK_EVENT", p1 = "ui_tip", p2= "publish_works_tip", p3 = $btnInfo, context = $context)
 }
 
-GET_WORKS_COMMENT
+SAVE_WORKS_TIP_CLICK_EVENT
 {
-    GetWorksComments(player = $obj1, id = $id, event = "HTTP_GET_WORKS_COMMENT_CALL_BACK")
+    Test("================================================== SAVE_WORKS_TIP_CLICK_EVENT")
+
+    If(not $result) {
+        Return()
+    }
+
+    $isPublish = false
+    If($button == "left")
+    {
+        $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+        If(CheckBalance(entity = $obj1, coinName = "green_currency", price = $price))
+        {
+            $isPublish = true
+        }
+        Else
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_not_enough_money", time = 20)
+            Return()
+        }
+    }
+
+    $content = { url = $url, isPublish = $isPublish }
+    CallTrigger(event = "CHECK_WORKS_ARCHIVE", obj1 = $obj1, url = $url, isPublish = $isPublish)
 }
 
-GET_WORKS_COMMENT_CALL_BACK
+
+CHECK_WORKS_ARCHIVE
 {
+    Test("================================================== CHECK_WORKS_ARCHIVE")
+    GetWorksCount(player = $obj1, event = "CHECK_WORKS_ARCHIVE_RESPONSE", url = $url, isPublish = $isPublish)
+}
+
+CHECK_WORKS_ARCHIVE_RESPONSE
+{
+    Test("================================================== CHECK_WORKS_ARCHIVE_RESPONSE")
+    Test($response)
+
+    $dictValue = NewDictionary($response)
+    $code = DictionaryGet(dict = $dictValue, key = "code")
+
+    If($code == 1)
+    {
+        $freeCount = GetConfigVar(obj = $obj1, key = "freeWorksArchive" )
+        $count = DictionaryGet(dict = $dictValue, key = "data")
+        If($count < $freeCount)
+        {
+            CallTrigger(event = "CREATE_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish)
+        }
+        Else
+        {
+            CallTrigger(event = "SHOW_BYU_WORKS_ARCHIVE_UI", obj1 = $obj1, url = $url, isPublish = $isPublish)
+        }
+    }
+    Else
+    {
+        If($isPublish)
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
+        }
+        Else
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_failure", time = 20)
+        }
+    }
+}
+
+SHOW_BYU_WORKS_ARCHIVE_UI
+{
+    Test("================================================== SHOW_BYU_WORKS_ARCHIVE_UI")
+    $price = GetConfigVar(obj = $obj1, key = "worksArchivePrice" )
+    $btnInfo = { leftCoinId = 0, leftContent = $price, rightCoinId = nil, rightContent = "works_save_coverage_new" }
+    $context = { url = $url, isPublish = $isPublish }
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "BUY_WORKS_ARCHIVE", p1 = "publish_works_buy_archive_title", p2= "publish_works_buy_archive", p3 = $btnInfo, context = $context)
+}
+
+BUY_WORKS_ARCHIVE
+{
+    Test("================================================== BUY_WORKS_ARCHIVE")
+    If($button == "close" || not $result)
+    {
+        Return()
+    }
+
+    If($button == "left")
+    {
+        $price = GetConfigVar(obj = $obj1, key = "worksArchivePrice" )
+        If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_buy_archive_not_enough_money", time = 20)
+            Return()
+        }
+        BuyGoods(player = $obj1, uniqueId = 1000001,  coinId = 0, price = $price, url = $url, isPublish = $isPublish, event = "BUY_WORKS_ARCHIVE_RESPONSE" )
+    }
+
+    If($button == "right")
+    {
+        CallTrigger(event = "GET_NEW_UN_PUBLISH_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish)
+    }
+}
+
+BUY_WORKS_ARCHIVE_RESPONSE
+{
+    Test("================================================== BUY_WORKS_ARCHIVE_RESPONSE")
+    Test($response)
+    $dictValue = NewDictionary($response)
+
+    $url = DictionaryGet(dict = $dictValue, key = "url")
+    $obj1 = DictionaryGet(dict = $dictValue, key = "player")
+    $isPublish = DictionaryGet(dict = $dictValue, key = "isPublish")
+    If($isSucceed)
+    {
+        CallTrigger(event = "CREATE_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish)
+    }
+    Else
+    {
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_buy_archive_failure", time = 20)
+    }
+}
+
+GET_NEW_UN_PUBLISH_WORKS
+{
+    GetNewUnPublishWorks(event = "GET_NEW_UN_PUBLISH_RESPONSE", player = $obj1, url = $url, isPublish = $isPublish)
+}
+
+GET_NEW_UN_PUBLISH_RESPONSE
+{
+     $dictValue = NewDictionary($response)
+     $code = DictionaryGet(dict = $dictValue, key = "code")
+     If($code == 1)
+     {
+        $worksId = DictionaryGet(dict = $dictValue, key = "data")
+        CallTrigger(event = "UPDATE_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish, worksId = $worksId)
+     }
+     Else
+     {
+        ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_failure", time = 20)
+     }
+}
+
+UPDATE_WORKS
+{
+    UpdateWorks(player = $obj1, url = $url, isPublish = $isPublish, worksId = $worksId, event = "UPDATE_WORKS_RESPONSE")
+}
+
+UPDATE_WORKS_RESPONSE
+{
+     $dictValue = NewDictionary($response)
+     $code = DictionaryGet(dict = $dictValue, key = "code")
+     If($code == 1)
+     {
+        If($isPublish)
+        {
+            $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+            PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_and_publish_new_works_succeed", time = 20)
+        }
+        Else
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_succeed", time = 20)
+        }
+     }
+     Else
+     {
+        ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_failure", time = 20)
+     }
+}
+
+CREATE_WORKS
+{
+    Test("================================================== CREATE_WORKS")
+    CreateWorks(player = $obj1, picUrl = $url, isPublish = $isPublish, event = "CREATE_WORKS_RESPONSE")
+}
+
+CREATE_WORKS_RESPONSE
+{
+    Test("================================================== CREATE_WORKS_RESPONSE")
+    Test($response)
+
+    $dictValue = NewDictionary($response)
+    $code = DictionaryGet(dict = $dictValue, key = "code")
+
+    If($code == 1)
+    {
+        If($isPublish)
+        {
+            $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+            PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
+        }
+        Else
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_succeed", time = 20)
+        }
+    }
+    Else
+    {
+        If($isPublish)
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
+        }
+        Else
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_failure", time = 20)
+        }
+    }
+}
+
+SHOW_PUBLISH_WORKS_UI
+{
+    Test("===========================================================11111111")
+    $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+    $cubePrice = GetConfigVar(obj = $obj1, key = "publishWorksCubePrice" )
+    $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = 0, rightContent = $cubePrice }
+    $context = { worksId = $worksId, isEdit = false }
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "PUBLISH_WORKS", p1 = "ui_tip", p2= "publish_works_tip", p3 = $btnInfo, context = $context)
+}
+
+PUBLISH_WORKS
+{
+    If($button == "left")
+    {
+        $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+        If(not CheckBalance(entity = $obj1, coinName = "green_currency", price = $price))
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_not_enough_money", time = 20)
+            Return()
+        }
+        PublishWorks(player = $obj1, id = $worksId, event = "PUBLISH_WORKS_RESPONSE")
+    }
+
+    If($button == "right")
+    {
+        $price = GetConfigVar(obj = $obj1, key = "publishWorksCubePrice")
+        If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_not_enough_money", time = 20)
+            Return()
+        }
+        BuyGoods(player = $obj1, uniqueId = 1000002,  coinId = 0, price = $price, worksId = $worksId, event = "PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE" )
+    }
+}
+
+PUBLISH_WORKS_RESPONSE
+{
+    Test($response)
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
     If($code == 1)
     {
-        $data = DictionaryGet(dict = $dictValue, key = "data")
-        UpdateUIData(player = $obj1, ui = "win_msgBoard", data = $data)
+        $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+        PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
     }
     Else
     {
-        UpdateUIData(player = $obj1, ui = "win_msgBoard", data = {})
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
     }
+}
+
+PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE
+{
+    Test("================================================== PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE")
+    Test($response)
+    $dictValue = NewDictionary($response)
+
+    $obj1 = DictionaryGet(dict = $dictValue, key = "player")
+    $worksId = DictionaryGet(dict = $dictValue, key = "worksId")
+
+    If($isSucceed)
+    {
+        PublishWorks(player = $obj1, id = $worksId, event = "PUBLISH_WORKS_BY_CUBE_RESPONSE")
+    }
+    Else
+    {
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
+    }
+}
+
+PUBLISH_WORKS_BY_CUBE_RESPONSE
+{
+    Test("================================================== PUBLISH_WORKS_BY_CUBE_RESPONSE")
+    Test($response)
+    $dictValue = NewDictionary($response)
+    $code = DictionaryGet(dict = $dictValue, key = "code")
+    If($code == 1)
+    {
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
+    }
+    Else
+    {
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
+    }
+}
+
+COMMENT_WORKS
+{
+    Test($msg)
+    CommentWorks(player = $obj1, id = $id, msg = $msg, event = "HTTP_TEST")
 }
 
 HTTP_TEST
