@@ -1,0 +1,28 @@
+REGION_ENTER { 
+    Test("REGION_ENTER")
+    $door = GetRegionOwner(region = $region)
+    $ownerPlayer = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "owner")
+    $isLock = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "isLock")
+    If(not IsPlayer(entity = $obj1) 
+        or ($isLock and GetObjectID(object = $ownerPlayer) ~= GetObjectID(object = $obj1))
+        or ($isLock and $ownerPlayer.teamId ~= $obj1.teamId)){
+        Return()
+    }
+    Test(" please in !! ")
+    ------------------------------------------ 设置出来的门的位置
+    SetObjectVar(obj = $obj1, key = "returnDoor", value = $door)
+    ------------------------------------------ 传送进内部房子
+    $map = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "houseInsideMap")
+    SetEntityPosition(map = $map, entity = $obj1, 
+        pos = ComputeV3(p1 = GetMapInitPos(map = $map) or GetEntityPosition(entity = $obj1), p2 = Table(x = 0, y = 0.5, z = 0), op = "add"))
+    SetEntityYaw(entity = $obj1, rotationYaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
+    SetBodyYaw(entity = $obj1, yaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
+    Test(GetObjectID(object = $ownerPlayer))
+    Test(GetObjectID(object = $obj1))
+    If(GetObjectID(object = $ownerPlayer) == GetObjectID(object = $obj1)){
+        CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+        CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = false)
+    }
+    CallTrigger(object = $obj1, event = "FUNC_STATE_OPEN_GPS", rtVal = $obj1.gpsDestination)--如果有导航则继续导航
+
+}

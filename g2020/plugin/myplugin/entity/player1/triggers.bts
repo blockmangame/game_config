@@ -74,7 +74,6 @@ ENTITY_ENTER
         $obj1.boundingBuff = nil
 
         $obj1.requestFamilyPlayer = nil
-        $obj1.inviteFamilyPlayer = nil
 
         CallTrigger(event = "ADD_MONEY", object = $obj1)
         CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)    
@@ -170,7 +169,8 @@ ENTITY_ENTER
     SetObjectVar(obj = $obj1, key = "returnDoor", value = GetObjectVar(obj = $house, key = "door"))
     SetEntityPosition(map = $houseInsideMap, entity = $obj1, 
         pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-
+    SetEntityYaw(entity = $obj1, rotationYaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
+    SetBodyYaw(entity = $obj1, yaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 }
@@ -355,10 +355,16 @@ HOUSE_TAB_EVENT{
         Test("--------- u need buy")
         $listInfoTb = {}
         Foreach(array = GetConfigVar(obj = $obj1, key = "houseStore") or {}, key = "houseFullName"){
+            $coinName = GetEntityCfg(fullName = $houseFullName, key = "coinName") or ""
+            If("green_currency" == $coinName){
+                $coinImg = "set:jail_break.json image:jail_break_currency"
+            }ElseIf("gDiamonds" == $coinName){
+                $coinImg = "set:diamond.json image:Diamond-icon2.png"
+            }
             ArrayAppend(array = $listInfoTb, value = {
                 image = GetEntityCfg(fullName = $houseFullName, key = "defaultColorImage") or "",
                 text = GetEntityCfg(fullName = $houseFullName, key = "houseType") or "",
-                coinName = GetEntityCfg(fullName = $houseFullName, key = "coinName") or "",
+                coinImg = $coinImg or "",
                 btnShowText = GetEntityCfg(fullName = $houseFullName, key = "buyMoney") or "",
                 context = {houseCfg = $houseFullName}
             })
@@ -432,19 +438,27 @@ HOUSE_TAB_EVENT{
 
 EDIT_HOUSE_NAME{
     -- 房子改名
-    Test("EDIT_HOUSE_NAME", $houseKey, $titleEditText)
-    If(not $titleEditText or not $houseKey){
+    Test("EDIT_HOUSE_NAME", $houseKey, $upperLayerKey, $titleEditText)
+    If(not $titleEditText or not $upperLayerKey){
         Return()
     }
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
         $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
-        If(DictionaryGet(dict = $dict, key = "houseId") == $houseKey){
+        If(DictionaryGet(dict = $dict, key = "houseId") == $upperLayerKey){
             DictionarySet(dict = $dict, key = "houseName", value = $titleEditText)
             ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $dict))
             Break()
         }
     }
+    $mail = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "mail")
+    SetEntityName(entity = $mail, name = $titleEditText)
+    ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
+    StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, mail = $mail, event = "UPDATE_HOUSE_TAB")
+}
+
+UPDATE_HOUSE_TAB{
+    CastSkill(skill = "/click", from = $obj1, packet = {targetID = GetObjectID(object = $mail)})
 }
 
 SURE_BUY_HOUSE{
@@ -463,20 +477,23 @@ SURE_BUY_HOUSE{
         Return()
     }
     ------------- 给房子
+    $houseId = Concat(p1 = GetTime(), p2 = GetGameTime(), p3 = Random(min = 0, max = 999999))
+    $curSelect = GetEntityCfg(fullName = $houseCfg, key = "defaultColor")
     ArrayAppend(array = $houseVars, value = { -- 购买成功后拼接一个新的房子数据放进entity的houseVars中 -- TEST CODE
             houseCfg = $houseCfg,
-            houseSelectColor = GetEntityCfg(fullName = $houseCfg, key = "defaultColor") or "",
+            houseSelectColor = $curSelect,
             houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
             houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or [],
             isCurEquip = "disable",
             houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
             houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
-            houseId = Concat(p1 = GetTime(), p2 = GetGameTime(), p3 = Random(min = 0, max = 999999)),
+            houseId = $houseId,
             houseInsideDoor = GetEntityCfg(fullName = $houseCfg, key = "insideDoor") or "myplugin/house_base_inside_door"
         }
     )
     ShowTip(entity = $obj1, tipType = 1, textKey = "ui_buy_success")
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
+    CallTrigger(object = $obj1, event = "UPDATE_HOUSE", houseKey = $houseId, curSelectKey = $curSelect)
 }
 
 SELL_HOUSE{
@@ -533,7 +550,7 @@ SELL_HOUSE{
                 btnType = 2,
                 btnList = [
                         {text = "ui_sure", event = "SELL_HOUSE_SURE", context = { houseKey = $houseKey}},
-                        {text = "ui_cancle", event = "HOUSE_TAB_EVENT", context = { key = $houseKey}}
+                        {text = "ui_cancel", event = "HOUSE_TAB_EVENT", context = { key = $houseKey}}
                     ]
             }
         }
@@ -611,6 +628,13 @@ BUY_STORE{
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
+
+    -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
+}
+
+CLICK_BUY_STORE{
+    Test("CLICK_BUY_STORE", GetObjectID(object = $npc))
+    CastSkill(skill = "/click", from = $obj1, packet = {targetID = GetObjectID(object = $npc)})
 }
 
 SAVE_FURNITURE{
@@ -653,7 +677,8 @@ SHOW_TITLE_BAR{
         btnInfo = {
             btnList = [
                 {text = "ui_edit", btnType = 1, event = "EDIT_HOUSE"},
-                {text = "ui_lock", btnType = 2, event = "HOUSE_LOCK"}
+                {text = "ui_lock", btnType = 2, event = "HOUSE_LOCK", 
+                    curSelect = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "isLock")}
             ]
         }
     }
@@ -674,7 +699,7 @@ EDIT_HOUSE{
         btnInfo = {
             btnList = [
                 {text = "ui_dec_shop", btnType = 1, event = "SHOW_DEC_STORE"},
-                {text = "ui_cancle", btnType = 2, event = "SHOW_TITLE_BAR"}
+                {text = "ui_cancel", btnType = 4, event = "SHOW_TITLE_BAR"}
             ]
         }
     }
@@ -730,16 +755,18 @@ SHOW_DEC_STORE{
     $closeEvent = {}
     Foreach(array = GetConfigVar(obj = $obj1, key = $nextCfgKey) or {}, key = "bottomBtn"){
         $dic = NewDictionary($bottomBtn)
-        ArrayAppend(array = $listInfoTb, value = {
-            text = DictionaryGet(dict = $dic, key = "text"),
-            image = DictionaryGet(dict = $dic, key = "image"),
-            event = DictionaryGet(dict = $dic, key = "event"),
-            context = {
-                titleKey = DictionaryGet(dict = $dic, key = "titleKey"),
-                nextCfgKey = DictionaryGet(dict = $dic, key = "nextCfgKey"),
-                childRegionKey = DictionaryGet(dict = $dic, key = "childRegionKey")
-            }
-        })
+        If(DictionaryGet(dict = $dic, key = "nextCfgKey")){
+            ArrayAppend(array = $listInfoTb, value = {
+                text = DictionaryGet(dict = $dic, key = "text"),
+                image = DictionaryGet(dict = $dic, key = "image"),
+                event = DictionaryGet(dict = $dic, key = "event"),
+                context = {
+                    titleKey = DictionaryGet(dict = $dic, key = "titleKey"),
+                    nextCfgKey = DictionaryGet(dict = $dic, key = "nextCfgKey"),
+                    childRegionKey = DictionaryGet(dict = $dic, key = "childRegionKey")
+                }
+            })
+        }
         If(DictionaryGet(dict = $dic, key = "closeEvent")){
             $closeEvent = {
                 event = DictionaryGet(dict = $dic, key = "closeEvent"),
@@ -769,12 +796,13 @@ UPDATE_STORE_LIST{
         $dic = NewDictionary($bottomBtn)
         $type = DictionaryGet(dict = $dic, key = "type")
         If("entity" == $type){
+            Test("$entity-----------------", $type)
             $fullName = DictionaryGet(dict = $dic, key = "fullName")
             ArrayAppend(array = $listInfoTb, value = {
-                text = GetEntityCfg(fullName = $fullName, key = "buyMoney"),
-                image = GetEntityCfg(fullName = $fullName, key = "image"),
-                actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale"),
-                coinName = GetEntityCfg(fullName = $fullName, key = "coinName"),
+                text = GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
+                image = GetEntityCfg(fullName = $fullName, key = "image") or "",
+                actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
+                coinImg = GetWorldVar(key = GetEntityCfg(fullName = $fullName, key = "coinName") or "green_currency") or "",
                 cfg = $fullName,
                 event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
                 context = {
@@ -782,11 +810,12 @@ UPDATE_STORE_LIST{
                 }
             })
         }ElseIf("block" == $type){
+            Test("$block-----------------", $type)
             $fullName = DictionaryGet(dict = $dic, key = "fullName")
             ArrayAppend(array = $listInfoTb, value = {
-                text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or 0,
+                text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or "",
                 image = GetBlockConfigByName(block = $fullName, key = "image") or "",
-                coinName = GetBlockConfigByName(block = $fullName, key = "coinName"),
+                coinImg = GetWorldVar(key = GetBlockConfigByName(block = $fullName, key = "coinName") or "green_currency") or "",
                 event = "BUY_HOUSE_REGION_COLOR",
                 context = {
                     colorBlock = $fullName,
@@ -961,6 +990,12 @@ ADD_MONEY
     $rewardArray = ArrayGet(array = @CDReward, index = $count)
     $cdTime = ArrayGet(array = $rewardArray, index = 1)
     $money = ArrayGet(array = $rewardArray, index = 2)
+
+    -- todo: 特权名字暂时未知，先用home_privilege
+    If($obj1.home_privilege)
+    {
+        $money = $money * 2
+    }
 
     If($obj1.isReadyReward)
     {
@@ -1559,54 +1594,89 @@ UPDATE_TEAM_MEMBER_LIST
     }
 }
 
-REQUEST_JOIN_FAMILY
+INTERACTION_JOIN_FAMILY
 {
-    $targetFamilyID = GetEntityTeam(entity = $obj1)
-    If(not $targetFamilyID or $targetFamilyID == 0)
-    {
-        Return()
-    }
-    $obj1.requestFamilyPlayer = $obj2
-    ShowNotice(
-            buttonType = 2,
-            content = "I Want Join Family",
-            eventYes = "REQUEST_JOIN_FAMILY_YES",
-            eventNo = "REQUEST_JOIN_FAMILY_NO",
-            entity = $obj1,
-            textP1 = "Hahahaha",
-            tittleKey = "I Want Join Family"
-    )
+    -- obj2是点击UI的那个人
+    -- obj1是被点击的那个人
 
-    ShowBubbleMsg(entity = $obj2, textKey = "I Want Join Family")
+    $selfFamilyID = GetEntityTeam(entity = $obj2)
+    
+    If($selfFamilyID and $selfFamilyID ~= 0)
+    {
+        $playerCount = GetTeamInfo(teamId = $selfFamilyID, key = "playerCount")
+        If($playerCount >= 4)
+        {
+            ShowTip(entity = $obj2, tipType = 2,textKey = "ui_family_full_member", time = 40)
+            Return()
+        }
+    }
+
+    $obj1.requestFamilyPlayer = $obj2
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = nil,
+        rightContent = "ui_sure"
+    }
+    
+    $content = {
+        msg = "ui_family_request",
+        args = NewArray(GetEntityName(entity = $obj2))
+    }
+
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "REQUEST_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
-INVITE_JOIN_FAMILY
+REQUEST_JOIN_FAMILY
 {
-    $myFamilyID = GetEntityTeam(entity = $obj2)
-    If(not $myFamilyID or $myFamilyID == 0)
+    $selfFamilyID = GetEntityTeam(entity = $obj1)
+    $targetPlayer = $obj1.requestFamilyPlayer
+    If($button == "left")
     {
+        If(IsPlayer(entity = $targetPlayer))
+        {
+            ShowTip(entity = $targetPlayer, tipType = 2,textKey = "ui_family_reject", time = 40)
+        }
         Return()
     }
-
-    $playerCount = GetTeamInfo(teamId = $myFamilyID, key = "playerCount")
-    If(not $playerCount or $playerCount >= 4)
+    ElseIf($button == "right")
     {
-        Return()
+        If(not IsPlayer(entity = $targetPlayer))
+        {
+            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_offline", time = 40)
+            Return()
+        }
+
+        $targetFamilyID = GetEntityTeam(entity = $targetPlayer)
+
+        
+        If($targetFamilyID and $targetFamilyID ~= 0)
+        {
+            -- 如果 target 有家庭
+            $playerCount = GetTeamInfo(teamId = $targetFamilyID, key = "playerCount")
+            If(not $playerCount or $playerCount >= 4)
+            {
+                ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_full_member", time = 40)
+                Return()
+            }
+
+            SetEntityTeam(entity = $obj1, teamId = $targetFamilyID)
+            CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $targetFamilyID)
+            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", time = 40)
+            $obj1.requestFamilyPlayer = nil
+        }
+        Else
+        {
+            -- 如果 target 没有家庭
+            $teamId = @familyIndex
+            @familyIndex = @familyIndex + 1
+            SetEntityTeam(entity = $targetPlayer, teamId = $teamId)
+            SetEntityTeam(entity = $obj1, teamId = $teamId)
+            CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId)
+            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", time = 40)
+            $obj1.requestFamilyPlayer = nil
+        }
     }
-
-    $obj1.inviteFamilyPlayer = $obj2
-
-    ShowNotice(
-            buttonType = 2,
-            content = "Do you want Join My Family",
-            eventYes = "INVITE_JOIN_FAMILY_YES",
-            eventNo = "INVITE_JOIN_FAMILY_NO",
-            entity = $obj1,
-            textP1 = "Hahahaha",
-            tittleKey = "Do you want Join My Family"
-    )
-
-    ShowBubbleMsg(entity = $obj2, textKey = "Do you want Join My Family")
 }
 
 SHOW_TEAM_CREATE_UI
@@ -2661,4 +2731,22 @@ SURE_BUY_ITEM(){
 --打开特权商店
 OPEN_PRISHOP(){
     ShowUI(player = $obj1, uiName = "priShop", show = true)
+}
+--特权购买成功
+ENTITY_BUY_APPSTOP(debug = true){
+    $dict = NewDictionary($shop)
+    $shopType = DictionaryGet(dict = $dict, key = "type")
+    $itemIndex = DictionaryGet(dict = $dict, key = "index")
+    $name = FindStr(str = $itemName, where_ = "/", back_ = true)
+    $index = ArrayFind(array = $obj1.privilege, value = $name)
+    --Test("-----goodsinfo:",$obj1.goodsInfo)
+    --Test("-----privilege:",$obj1.privilege)
+    If($shopType == "1" && not $index){
+        $addItem = false
+        $goodsDict = NewDictionary($obj1.goodsInfo)
+        $limit = $limit - DictionaryGet(dict = $goodsDict, key = $itemIndex)
+        
+        ArrayAppend(array = $obj1.privilege, value = $name)
+        --Test("------------",$obj1.privilege)
+    }
 }

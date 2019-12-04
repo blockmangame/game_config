@@ -14,7 +14,7 @@ ENTITY_TOUCH_ALL{
     }
     SetObjectVar(obj = $obj2, key = "returnDoor", value = nil)
     SetEntityPosition(entity = $obj2, map = GetEntityMap(entity = $door), 
-        pos = ComputeV3(p1 = GetEntityPosition(entity = $door), p2 = V3RotationYaw(vector = Table(x = 0, y = 0.1, z = 3), yaw = GetEntityYaw(entity = $door)), op = "add"))
+        pos = ComputeV3(p1 = GetEntityPosition(entity = $door), p2 = V3RotationYaw(vector = Table(x = 0, y = 0.5, z = 3), yaw = GetEntityYaw(entity = $door)), op = "add"))
     If(GetObjectID(object = GetObjectVar(obj = $obj2, key = "house")) == GetObjectID(object = GetObjectVar(obj = $obj1, key = "house"))){
         CallTrigger(object = $obj2, event = "SAVE_FURNITURE")
         ShowTitleBarPage(entity = $obj2, closeWin = true)

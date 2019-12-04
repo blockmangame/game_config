@@ -1,6 +1,7 @@
 {
     "actorName": "",
     "coinName": "green_currency",
+    "image": "",
     "buyMoney": 0,
     "sellMoney": 0,
     "sellByDiscountMoney": 0,
@@ -9,31 +10,6 @@
     "name": "",
     "showActorScale": 1,
     "canClick": true,
-    "/canInteract":true,
-    "/interactionUI": {
-        "topUI": {
-            "expand": {
-                "image": "set:add_sub.json image:add",
-                "text": "expandUI_text"
-            },
-            "shrink": {
-                "image": "set:add_sub.json image:sub",
-                "text": "shrink_text"
-            }
-        },
-        "btns": [
-            {
-
-                "text": "1",
-                "image": "set:add_sub.json image:add",
-                "eventIndex": 1
-            }
-        ],
-        "events": [
-            "DEC_INTERACTION_TEST"
-        ]
-    },
-    "canInteract": true,
     "rotationYawModlus": 90,
     "supportingForce": false,
     "isStatic": true,
@@ -41,7 +17,12 @@
         "cfgKey": "editUI",
         "eventTb": "events",
         "followParams": {
-            "beginPos": 1
+            "offset": {
+                "x": 0,
+                "y": 1.5,
+                "z": 0
+            },
+            "isOffsetRotateByYaw": true
         },
         "moveWidget": {
             "text": "MOVE",
