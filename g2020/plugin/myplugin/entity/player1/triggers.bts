@@ -451,6 +451,14 @@ EDIT_HOUSE_NAME{
             Break()
         }
     }
+    $mail = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "mail")
+    SetEntityName(entity = $mail, name = $titleEditText)
+    ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
+    StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, mail = $mail, event = "UPDATE_HOUSE_TAB")
+}
+
+UPDATE_HOUSE_TAB{
+    CastSkill(skill = "/click", from = $obj1, packet = {targetID = GetObjectID(object = $mail)})
 }
 
 SURE_BUY_HOUSE{
