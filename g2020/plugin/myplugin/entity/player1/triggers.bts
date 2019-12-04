@@ -796,6 +796,7 @@ UPDATE_STORE_LIST{
         $dic = NewDictionary($bottomBtn)
         $type = DictionaryGet(dict = $dic, key = "type")
         If("entity" == $type){
+            Test("$entity-----------------", $type)
             $fullName = DictionaryGet(dict = $dic, key = "fullName")
             ArrayAppend(array = $listInfoTb, value = {
                 text = GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
@@ -809,11 +810,12 @@ UPDATE_STORE_LIST{
                 }
             })
         }ElseIf("block" == $type){
+            Test("$block-----------------", $type)
             $fullName = DictionaryGet(dict = $dic, key = "fullName")
             ArrayAppend(array = $listInfoTb, value = {
                 text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or "",
                 image = GetBlockConfigByName(block = $fullName, key = "image") or "",
-                coinImg = GetWorldVar(key = GetEntityCfg(fullName = $fullName, key = "coinName") or "green_currency") or "",
+                coinImg = GetWorldVar(key = GetBlockConfigByName(block = $fullName, key = "coinName") or "green_currency") or "",
                 event = "BUY_HOUSE_REGION_COLOR",
                 context = {
                     colorBlock = $fullName,
