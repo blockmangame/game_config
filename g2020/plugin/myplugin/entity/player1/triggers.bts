@@ -2704,33 +2704,38 @@ CLOSE_GPS(){ --按钮关闭进度条
     SetGuidePostion(entity = $obj1, pos = nil)
 }
 --场景商店的购买逻辑
-SCENE_SHOP_BUY(){
-   ShowNotice(
-        buttonType = 2,
-        content = "你确定要买鱼？",
-        eventYes = "SURE_BUY_ITEM",
-        eventNo = "",
-        entity = $obj1,
-        textP1 = "Hahahaha",
-        tittleKey = "Do you want Join My Family"
-    )
-}
-SURE_BUY_ITEM(){
-    $result = CommodityBuyItem(itemIndex = $itemIndex, player = $obj1)
-    --result: ack_of_money, gui_str_app_shop_inventory_is_full, gui_buy_goods_successful, ..
-    ShowNotice(
-        buttonType = 1,
-        content = $result,
-        eventYes = "SURE_BUY_ITEM",
-        eventNo = "",
-        entity = $obj1,
-        textP1 = "Hahahaha",
-        tittleKey = "Do you want Join My Family"
-    )
-}
---打开特权商店
-OPEN_PRISHOP(){
-    ShowUI(player = $obj1, uiName = "priShop", show = true)
+SURE_BUY(debug = true){
+   If($button == "left"){
+      Return()
+   }
+   $seccion = ArrayGet(array = $obj1.buySceneObjItem, index = 1)
+   $obj2 = ArrayGet(array = $obj1.buySceneObjItem, index = 2)
+   If($seccion ~= $obj1.buySession or not $obj2 or not IsValidObject($obj2))
+   {
+      Return()
+   }
+   $itemfullName = GetConfigVar(obj = $obj2, key = "sellItem")
+   $price = GetConfigVar(obj = $obj2, key = "sellPrice")
+   $coinName = "green_currency"
+   $itemName = GetItemCfg(fullName = $itemfullName, key = "itemname")
+   $enoughMoney = CheckBalance(entity = $obj1, coinName = $coinName, price = $price)
+   If($enoughMoney){ --够钱
+         $checkBag = AddItem(entity = $obj1, cfg = $itemfullName, count = 1)
+         If($checkBag ~= false){
+            ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
+            PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
+            $owner = $obj2.owner
+            If($owner && IsValidObject($owner)){ --给领主加钱
+               $name = GetEntityName(entity = $obj1)
+               ShowTip(textKey = "gui_buys_your_stuff",textP1 = $name, textP2 = $itemName, tipType = 1, entity = $owner, keepTime = 20)
+               AddCurrency(entity = $owner, coinName = $coinName, count = $price)
+            }
+         }Else{ --背包满了
+            ShowTip(textKey = "gui_str_app_shop_inventory_is_full", tipType = 2, entity = $obj1, keepTime = 20)
+         }
+   }Else{ --不够钱
+      ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
+   }
 }
 --特权购买成功
 ENTITY_BUY_APPSTOP(debug = true){
