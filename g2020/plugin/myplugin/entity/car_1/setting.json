@@ -1,0 +1,31 @@
+{
+	"collision": true,
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    5,
+                    1.2,
+                    3
+                ]
+            }
+        ]
+    },
+	"interactionUI":
+        {
+            "centerBtns":[
+                {
+                    "text":"item_testlang",
+                    "image":"plugin/myplugin/image/hand_click.png",
+                    "event": "FOOD_BUY"
+                }
+            ],
+            "followParams":{
+                "followScenePos": false
+            }
+        },
+    "actorName": "g2020_car01.actor",
+    "base": "food_base"
+}

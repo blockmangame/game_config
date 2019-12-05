@@ -1,9 +1,8 @@
 {
     "actorName": "fish02.actor",
+    "sellItem": "myplugin/random_commodity",
+    "sellPrice": 10,
     "canInteract":true,
-    "deadInRed":false,
-    "destroyTime":40,
-    "itemIndex": 1,
     "interactionUI":{
         "cfgKey": "interactionUI",
         "followParams":{
@@ -11,10 +10,10 @@
         },
         "centerBtns":[
             {
-                "text":"鱼，购买鱼100￥",
+                "text":"苹果：$100",
                 "widgetFileName":"widget_button",
                 "image":"set:add_sub.json image:add",
-                "event": "SCENE_SHOP_BUY"
+                "event": "BUY_SHOP"
             }
         ]
     },
