@@ -175,7 +175,7 @@
         "cfgKey": "interactionUI",
         "centerBtns":[
             {
-                "text":"",
+                "text":"name",
                 "image":"plugin/myplugin/image/hand_click.png",
                 "event": "PLAYER_INTERACTION"
             }
@@ -193,7 +193,8 @@
             "radius": 100
         },
         "followParams":{
-            "followScenePos": false,
+            "followScenePos": true,
+            "showRange": 5,
             "resetWhenHide": true
         },
         "aroundBtns":[
@@ -240,8 +241,8 @@
         "radius": 5,
         "offset":{
             "x": 0,
-            "y": -1,
-            "z": 2
+            "y": 0,
+            "z": 0
         }
     },
     "insideMapRotationYaw": 180,
