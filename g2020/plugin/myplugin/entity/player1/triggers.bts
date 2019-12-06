@@ -2549,14 +2549,6 @@ HTTP_PURCHASED_DRESS_CALL_BACK
     SyncStore(player = $obj1)
 }
 
-PLAYER_ON_VISIT
-{
-    If ($obj1 and $obj2)
-    {
-        SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj2),pos = GetEntityPosition(entity = $obj2))
-    }
-}
-
 --打工
 GET_TASK_UI_DATA(){
     $count = $obj1.worktaskCount % 10
@@ -2752,5 +2744,53 @@ ENTITY_BUY_APPSTOP(debug = true){
         
         ArrayAppend(array = $obj1.privilege, value = $name)
         --Test("------------",$obj1.privilege)
+    }
+}
+PLAYER_BE_INVITE(debug = true){
+    $obj1.visitTarget = $obj2
+    $contentDict = NewDictionary($content)
+    --todo: can close by showTime
+    --showTime = DictionaryGet(dict = $contentDict, key = "showTime")
+    ShowNotice(
+		buttonType = 2,
+		content = "gui_friend_invite_notice",
+		eventYes = "PLAYER_ON_VISIT",
+		entity = $obj1,
+		textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
+	)
+}
+PLAYER_BE_INVITE_OTHER_SERVER(debug = true){
+    $contentDict = NewDictionary($content)
+    $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
+    ShowNotice(
+		buttonType = 2,
+		content = "gui_friend_invite_notice",
+		eventYes = "PLAYER_ON_VISIT_OTHER_SERVER",
+		entity = $obj1,
+		textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
+	)
+}
+PLAYER_ON_VISIT_OTHER_SERVER(debug = true){
+	GotoOtherServer(targetUserId = $targetUserId or $obj1.visitTargetUserId, player = $obj1)
+}
+PLAYER_ON_VISIT(debug = true){
+    $fromInParty = false
+    $targetInRoom = false
+    $targetRoomLocked = true
+    $fromJustBeRemoved = false
+    $target = $obj2 or $obj1.visitTarget
+    If(not $target){
+        Return()
+    }
+    If($fromInParty){
+        SetEntityPosition(entity = $obj1, pos = GetEntityPosition(entity = $target))
+    }
+    Else{
+        If($targetInRoom){
+            --todo
+        }
+        Else{
+            SetEntityPosition(entity = $obj1, pos = GetEntityPosition(entity = $target))
+        }
     }
 }
