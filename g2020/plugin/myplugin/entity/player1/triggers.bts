@@ -2746,6 +2746,69 @@ ENTITY_BUY_APPSTOP(debug = true){
         --Test("------------",$obj1.privilege)
     }
 }
+--弹窗购买特权
+POP_UP_BUY_PRIVILEGE(debug = false)
+{
+    If(not $itemName ){
+        Return()
+    }
+    $PRIVILEGE_TABLE = {
+            vip_privilege = 100000,
+            dance_privilege = 20000,
+            action_privilege = 3000,
+            music_privilege = 40000,
+            home_privilege = 50000,
+            svip_privilege = 60000,
+    }
+    $dict = NewDictionary($PRIVILEGE_TABLE)
+    $price = DictionaryGet(dict = $dict, key = $itemName)
+    If(not $price){
+        Return()
+    }
+    $obj1.buyPriSession = ($obj1.buyPriSession or 0 ) + 1
+    $obj1.buyPriItem = [ $obj1.buyPriSession, $itemName, $price ]
+
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = nil,
+        rightContent = "ui_sure"
+    }
+    $content = {
+        msg = "gui_you_want_to_buy_this",
+        args = [ $price, $itemName]
+    }
+
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_BUY_PRI", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
+}
+SURE_BUY_PRI(debug = false)
+{
+    If($button == "left"){
+        Return()
+    }
+    $seccion = ArrayGet(array = $obj1.buyPriItem or [], index = 1)
+    $itemName = ArrayGet(array = $obj1.buyPriItem or [], index = 2)
+    $price = ArrayGet(array = $obj1.buyPriItem or [], index = 3)
+    If($seccion ~= $obj1.buyPriSession or not $itemName)
+    {
+        Return()
+    }
+
+    BuyGoods(player = $obj1, uniqueId = 1000111,  coinId = 0, event = "BUY_PRI_GOODS" ,price = $price, itemName = $itemName, obj1 = $obj1)
+}
+BUY_PRI_GOODS(debug = false)
+{
+    $dict = NewDictionary($response)
+    $itemName = DictionaryGet(dict = $dict, key = "itemName")
+    $obj1 = DictionaryGet(dict = $dict, key = "obj1")
+    If($isSucceed){
+        ArrayAppend(array = $obj1.privilege, value = $itemName)
+        ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
+    }Else{
+        ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
+    }
+}
+--
 PLAYER_BE_INVITE(debug = true){
     $obj1.visitTarget = $obj2
     $contentDict = NewDictionary($content)
