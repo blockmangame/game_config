@@ -2778,7 +2778,9 @@ PLAYER_ON_VISIT(debug = true){
     $targetInRoom = false
     $targetRoomLocked = true
     $fromJustBeRemoved = false
-    $target = $obj2 or $obj1.visitTarget
+    If(not $target){
+        $target = $obj2 or $obj1.visitTarget
+    }
     If(not $target){
         Return()
     }
