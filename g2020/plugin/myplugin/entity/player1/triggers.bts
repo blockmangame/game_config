@@ -2699,13 +2699,12 @@ CLOSE_GPS(){ --按钮关闭进度条
     SetGuidePostion(entity = $obj1, pos = nil)
 }
 --场景商店的购买逻辑
-SURE_BUY(debug = true){
+SURE_BUY(debug = false){
    If($button == "left"){
       Return()
    }
-   $seccion = ArrayGet(array = $obj1.buySceneObjItem, index = 1)
-   $obj2 = ArrayGet(array = $obj1.buySceneObjItem, index = 2)
-   If($seccion ~= $obj1.buySession or not $obj2 or not IsValidObject($obj2))
+   $obj2 = GetObject(objID = $objID)
+   If($checkId ~= $obj1.buySessionSS or not $obj2 or not IsValidObject($obj2))
    {
       Return()
    }
@@ -2733,7 +2732,7 @@ SURE_BUY(debug = true){
    }
 }
 --特权购买成功
-ENTITY_BUY_APPSTOP(debug = true){
+ENTITY_BUY_APPSTOP(debug = false){
     $dict = NewDictionary($shop)
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
