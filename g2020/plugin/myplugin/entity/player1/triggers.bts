@@ -1023,7 +1023,11 @@ FUNC_STATE_GENERATE --params: stateBase, col, skill
         SetObjectVar(obj = $obj1, value = $state, key = Concat(p1 = "pre", p2 = $stateBase))
         SetObjectVar(obj = $obj1, value = $col, key = Concat(p1 = $stateBase, p2 = "Idx"))
     }
-    ShowBubbleMsg(entity = $obj1, textKey = "state_get", textP1 = $state)
+    --ShowBubbleMsg(entity = $obj1, textKey = "state_get", textP1 = $state)
+    ShowBubbleMsg(
+        entity = $obj1,
+        contents = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "tipContents")
+    )
     CallTrigger(object = $obj1, event = "FUNC_STATE_ADD", state = $state)
 }
 

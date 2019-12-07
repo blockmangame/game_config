@@ -7,11 +7,27 @@
     "generateType": "A",
     "hadReward": true,
 
-    "generateTime":[1,  2, 12, 16, 20, 28, 32, 36, 40, 44, 48, 52],
+    "generateTime":[0.558,  2, 12, 16, 20, 28, 32, 36, 40, 44, 48, 52],
     "rewardSelf": 20000,
     "rewardOther": 1000,
     "rewardFamily": 1000,
     "rewardDis": 5,
     "duration": 0,
-    "rewardCount": 3 
+    "rewardCount": 3,
+
+    
+    "tipContents": {
+        "text": {
+            "textKey": "state_get",
+            "textP1": "thirsty"
+        },
+        "image1": [
+            "set:state_detail.json image:pool_detail",
+            "set:state_detail.json image:playground_detail"
+        ],
+        "image2": [
+            "set:state_detail.json image:hunger_detail",
+            "set:state_detail.json image:camp_detail"
+        ]
+    }
 }

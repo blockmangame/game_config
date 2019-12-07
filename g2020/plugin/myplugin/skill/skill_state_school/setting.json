@@ -5,5 +5,21 @@
     "pushImage": "set:state_detail.json image:school_chosen",
     "state": "school",
     "stateBase": "region",
-    "duration": 100
+    "duration": 100,
+
+    
+    "tipContents": {
+        "text": {
+            "textKey": "state_get",
+            "textP1": "school"
+        },
+        "image1": [
+            "set:state_detail.json image:pool_detail",
+            "set:state_detail.json image:playground_detail"
+        ],
+        "image2": [
+            "set:state_detail.json image:hunger_detail",
+            "set:state_detail.json image:camp_detail"
+        ]
+    }
 }
