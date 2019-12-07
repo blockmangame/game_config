@@ -148,7 +148,7 @@ ENTITY_ENTER
     $dict = {}
     Foreach(array = $houseVars, key = "house"){
         $dict = NewDictionary($house)
-        If(DictionaryGet(dict = $dict, key = "isCurEquip")){
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
             Break()
         }
     }
@@ -946,8 +946,10 @@ BUY_HOUSE_REGION_COLOR{
     $childRegionArr = GetRegionConfig(region = $curInsideRegion, key = $childRegionKey) or {}
     
     Foreach(array = $childRegionArr, key = "cRegion"){
-        FillBlocksInRegion(map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap"), region = $cRegion, 
-            block = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
+        $insideMap = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
+        $block = GetBlockConfig(map = $insideMap, pos = GetRegionMin(region = $cRegion), key = "fullName")
+        ResetBlocksInRegion(map = $insideMap, region = $cRegion, 
+            sourceBlock = $block, destBlock = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
     }
 
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")

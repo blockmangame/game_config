@@ -70,8 +70,9 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
                 ForLoop(from = 1, to = ArraySize(array = $childRegionKeyArr), key = "index"){
                     $childRegionArr = GetRegionConfig(region = $region, key = ArrayGet(array = $childRegionKeyArr, index = $index)) or {}
                     Foreach(array = $childRegionArr, key = "cRegion"){
-                        FillBlocksInRegion(map = $map, region = $cRegion, 
-                            block = ArrayGet(array = $childRegionColorArr, index = $index) or 
+                        $block = GetBlockConfig(map = $map, pos = GetRegionMin(region = $cRegion), key = "fullName")
+                        ResetBlocksInRegion(map = $map, region = $cRegion, sourceBlock = $block, 
+                            destBlock = ArrayGet(array = $childRegionColorArr, index = $index) or 
                             ArrayGet(array = $defaultChildRegionBlock, index = $index) or 
                             GetRegionConfig(region = $region, key = "defaultBlock")
                         )
@@ -83,8 +84,9 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
         If(not $hadRegion){
             Foreach(array = $childRegionKeyArr, key = "key"){
                 Foreach(array = GetRegionConfig(region = $region, key = $key) or {}, key = "cRegion"){
-                    FillBlocksInRegion(map = $map, region = $cRegion, 
-                        block = GetRegionConfig(region = $region, key = "defaultBlock"))
+                    $block = GetBlockConfig(map = $map, pos = GetRegionMin(region = $cRegion), key = "fullName")
+                    ResetBlocksInRegion(map = $map, region = $cRegion, 
+                        sourceBlock = $block, destBlock = GetRegionConfig(region = $region, key = "defaultBlock"))
                 }
             }
         }
