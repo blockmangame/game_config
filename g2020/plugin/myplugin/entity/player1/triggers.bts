@@ -355,7 +355,6 @@ CHANGE_HOUSE{ -- 换房子/存档
 
 -------------------------------------- ui/btn/event
 HOUSE_TAB_EVENT{
-    -- TODO 更新出售的商品列表
     Test("---------HOUSE_TAB_EVENT")
     If(not $key or "0" == $key){
         Test("--------- u need buy")
@@ -741,7 +740,6 @@ UPDATE_EDIT_STORE_SELL_TAB{
 }
 
 SHOW_DEC_STORE{
-    -- TODO 更新出售的商品列表
     Test("SHOW_DEC_STORE")
     ShowGenericActorShowStore(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, closeWin = true)
@@ -798,57 +796,66 @@ SHOW_DEC_STORE{
 }
 
 UPDATE_STORE_LIST{
-    Foreach(array = GetConfigVar(obj = $obj1, key = $nextCfgKey) or {}, key = "bottomBtn"){
-        $dic = NewDictionary($bottomBtn)
-        $type = DictionaryGet(dict = $dic, key = "type")
-        If("entity" == $type){
-            Test("$entity-----------------", $type)
-            $fullName = DictionaryGet(dict = $dic, key = "fullName")
-            ArrayAppend(array = $listInfoTb, value = {
-                text = GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
-                image = GetEntityCfg(fullName = $fullName, key = "image") or "",
-                actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
-                coinImg = GetWorldVar(key = GetEntityCfg(fullName = $fullName, key = "coinName") or "green_currency") or "",
-                cfg = $fullName,
-                event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
-                context = {
-                    cfg = $fullName
-                }
-            })
-        }ElseIf("block" == $type){
-            Test("$block-----------------", $type)
-            $fullName = DictionaryGet(dict = $dic, key = "fullName")
-            ArrayAppend(array = $listInfoTb, value = {
-                text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or "",
-                image = GetBlockConfigByName(block = $fullName, key = "image") or "",
-                coinImg = GetWorldVar(key = GetBlockConfigByName(block = $fullName, key = "coinName") or "green_currency") or "",
-                event = "BUY_HOUSE_REGION_COLOR",
-                context = {
-                    colorBlock = $fullName,
-                    childRegionKey = $childRegionKey
-                }
-            })
-        }ElseIf(DictionaryGet(dict = $dic, key = "closeEvent")){
-            ArrayAppend(array = $closeEvent, value = {
-                event = DictionaryGet(dict = $dic, key = "closeEvent"),
-                context = DictionaryGet(dict = $dic, key = "context")
-            })
-        }ElseIf(DictionaryGet(dict = $dic, key = "rightEvent")){
-            ArrayAppend(array = $rightEvent, value = {
-                event = DictionaryGet(dict = $dic, key = "rightEvent"),
-                context = DictionaryGet(dict = $dic, key = "context")
-            })
-        }ElseIf(DictionaryGet(dict = $dic, key = "leftEvent")){
-            ArrayAppend(array = $leftEvent, value = {
-                event = DictionaryGet(dict = $dic, key = "leftEvent"),
-                context = DictionaryGet(dict = $dic, key = "context")
-            })
+    $dicInfoTb = NewDictionary(GetConfigVar(obj = $obj1, key = $nextCfgKey) or {})
+    If(DictionaryGet(dict = $dicInfoTb, key = "storeInfo")){
+        $dic = NewDictionary(DictionaryGet(dict = $dicInfoTb, key = "storeInfo"))
+        $storeId = DictionaryGet(dict = $dic, key = "storeId")
+        Foreach(array = @DECORATION_STORE, key = "decorationTb"){
+            $decorationDic = NewDictionary($decorationTb)
+            $type = DictionaryGet(dict = $decorationDic, key = "type")
+            If(DictionaryGet(dict = $decorationDic, key = "storeId") == $storeId and "entity" == $type){
+                $fullName = DictionaryGet(dict = $decorationDic, key = "fullName")
+                ArrayAppend(array = $listInfoTb, value = {
+                    text = GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
+                    image = GetEntityCfg(fullName = $fullName, key = "image") or "",
+                    actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
+                    coinImg = GetWorldVar(key = GetEntityCfg(fullName = $fullName, key = "coinName") or "green_currency") or "",
+                    cfg = $fullName,
+                    event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
+                    context = {
+                        cfg = $fullName
+                    }
+                })
+            }
+            If(DictionaryGet(dict = $decorationDic, key = "storeId") == $storeId and "block" == $type){
+                $fullName = DictionaryGet(dict = $decorationDic, key = "fullName")
+                ArrayAppend(array = $listInfoTb, value = {
+                    text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or "",
+                    image = GetBlockConfigByName(block = $fullName, key = "image") or "",
+                    coinImg = GetWorldVar(key = GetBlockConfigByName(block = $fullName, key = "coinName") or "green_currency") or "",
+                    event = "BUY_HOUSE_REGION_COLOR",
+                    context = {
+                        colorBlock = $fullName,
+                        childRegionKey = $childRegionKey
+                    }
+                })
+            }
         }
+    }
+    If(DictionaryGet(dict = $dicInfoTb, key = "closeInfo")){
+        $dic = NewDictionary(DictionaryGet(dict = $dicInfoTb, key = "closeInfo"))
+        ArrayAppend(array = $closeEvent, value = {
+            event = DictionaryGet(dict = $dic, key = "closeEvent"),
+            context = DictionaryGet(dict = $dic, key = "context")
+        })
+    }
+    If(DictionaryGet(dict = $dicInfoTb, key = "rightInfo")){
+        $dic = NewDictionary(DictionaryGet(dict = $dicInfoTb, key = "rightInfo"))
+        ArrayAppend(array = $rightEvent, value = {
+            event = DictionaryGet(dict = $dic, key = "rightEvent"),
+            context = DictionaryGet(dict = $dic, key = "context")
+        })
+    }
+    If(DictionaryGet(dict = $dicInfoTb, key = "leftInfo")){
+        $dic = NewDictionary(DictionaryGet(dict = $dicInfoTb, key = "leftInfo"))
+        ArrayAppend(array = $leftEvent, value = {
+            event = DictionaryGet(dict = $dic, key = "leftEvent"),
+            context = DictionaryGet(dict = $dic, key = "context")
+        })
     }
 }
 
 SHOW_DEC_STORE_LIST{
-    -- TODO 更新出售的商品列表
     Test("SHOW_DEC_STORE_LIST")
     ShowGenericActorShowStore(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, closeWin = true)
@@ -867,11 +874,6 @@ SHOW_DEC_STORE_LIST{
     $rightEvent = {}
     CallTrigger(object = $obj1, event = "UPDATE_STORE_LIST", nextCfgKey = $nextCfgKey, childRegionKey = $childRegionKey,
         listInfoTb = $listInfoTb, closeEvent = $closeEvent, leftEvent = $leftEvent, rightEvent = $rightEvent) 
-    --Test("SHOW_DEC_STORE_LIST", $listInfoTb)
-    --Test("SHOW_DEC_STORE_LIST", $closeEvent)
-    --Test("SHOW_DEC_STORE_LIST", $leftEvent)
-    --Test("SHOW_DEC_STORE_LIST", $rightEvent)
-
     $infoTb = {
         btnInfo = {
             btnType = 3,
