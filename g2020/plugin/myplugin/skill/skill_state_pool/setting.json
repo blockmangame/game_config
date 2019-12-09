@@ -4,5 +4,21 @@
     "icon": "set:state_detail.json image:pool",
     "pushImage": "set:state_detail.json image:pool_chosen",
     "state": "pool",
-    "stateBase": "region"
+    "stateBase": "region",
+
+    
+    "tipContents": {
+        "text": {
+            "textKey": "state_get",
+            "textP1": "pool"
+        },
+        "image1": [
+            "set:state_detail.json image:pool_detail",
+            "set:state_detail.json image:playground_detail"
+        ],
+        "image2": [
+            "set:state_detail.json image:hunger_detail",
+            "set:state_detail.json image:camp_detail"
+        ]
+    }
 }

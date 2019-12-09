@@ -8,11 +8,27 @@
     "generateType": "A",
     "hadReward": true,
 
-    "generateTime":[1,  2, 15, 20, 25, 30, 35, 40, 45, 50, 55],
+    "generateTime":[0.3,  2, 15, 20, 25, 30, 35, 40, 45, 50, 55],
     "rewardSelf": 20000,
     "rewardOther": 1000,
     "rewardFamily": 1000,
     "rewardDis": 5,
     "rewardCount": 3,
-    "duration": 0
+    "duration": 0,
+
+    
+    "tipContents": {
+        "text": {
+            "textKey": "state_get",
+            "textP1": "hunger"
+        },
+        "image1": [
+            "set:state_detail.json image:pool_detail",
+            "set:state_detail.json image:playground_detail"
+        ],
+        "image2": [
+            "set:state_detail.json image:hunger_detail",
+            "set:state_detail.json image:camp_detail"
+        ]
+    }
 }

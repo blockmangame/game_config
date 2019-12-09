@@ -148,10 +148,11 @@ ENTITY_ENTER
     $dict = {}
     Foreach(array = $houseVars, key = "house"){
         $dict = NewDictionary($house)
-        If(DictionaryGet(dict = $dict, key = "isCurEquip")){
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
             Break()
         }
     }
+    $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
     ------------------------------------------ 获得当前地图上的空出的区域，创建房子 * 
     -- 区域 <region------owner> 房子 <house-------owner> 玩家，可通过区域获取区域上的房子，通过房子获得所属玩家。 反向同理
     $regions = GetAllRegion(map = GetEntityMap(entity = $obj1))
@@ -167,10 +168,12 @@ ENTITY_ENTER
     $house = GetObjectVar(obj = $obj1, key = "house")
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     SetObjectVar(obj = $obj1, key = "returnDoor", value = GetObjectVar(obj = $house, key = "door"))
-    SetEntityPosition(map = $houseInsideMap, entity = $obj1, 
+    $yaw = 0
+    If($obj1.curHouseCfg){
+        $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
+    }
+    SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
         pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-    SetEntityYaw(entity = $obj1, rotationYaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
-    SetBodyYaw(entity = $obj1, yaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 }
@@ -338,6 +341,7 @@ CHANGE_HOUSE_COLOR{ -- 换色
 
 CHANGE_HOUSE{ -- 换房子/存档
     $region = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "region")
+    $obj1.curHouseCfg = $newHouse
     ------------------------------------------ 改变房子(actor)，直接杀掉原来的，新建新的
     CallTrigger(object = $obj1, event = "REMOVE_HOUSE_OUTSIDE")
     ShowTip(entity = $obj1, tipType = 1, textKey = "house_change")
@@ -483,7 +487,7 @@ SURE_BUY_HOUSE{
             houseCfg = $houseCfg,
             houseSelectColor = $curSelect,
             houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
-            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or [],
+            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or ["", "", ""],
             isCurEquip = "disable",
             houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
             houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
@@ -946,8 +950,10 @@ BUY_HOUSE_REGION_COLOR{
     $childRegionArr = GetRegionConfig(region = $curInsideRegion, key = $childRegionKey) or {}
     
     Foreach(array = $childRegionArr, key = "cRegion"){
-        FillBlocksInRegion(map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap"), region = $cRegion, 
-            block = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
+        $insideMap = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
+        $block = GetBlockConfig(map = $insideMap, pos = GetRegionMin(region = $cRegion), key = "fullName")
+        ResetBlocksInRegion(map = $insideMap, region = $cRegion, 
+            sourceBlock = $block, destBlock = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
     }
 
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
@@ -1023,7 +1029,11 @@ FUNC_STATE_GENERATE --params: stateBase, col, skill
         SetObjectVar(obj = $obj1, value = $state, key = Concat(p1 = "pre", p2 = $stateBase))
         SetObjectVar(obj = $obj1, value = $col, key = Concat(p1 = $stateBase, p2 = "Idx"))
     }
-    ShowBubbleMsg(entity = $obj1, textKey = "state_get", textP1 = $state)
+    --ShowBubbleMsg(entity = $obj1, textKey = "state_get", textP1 = $state)
+    ShowBubbleMsg(
+        entity = $obj1,
+        contents = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "tipContents")
+    )
     CallTrigger(object = $obj1, event = "FUNC_STATE_ADD", state = $state)
 }
 
@@ -1623,6 +1633,7 @@ INTERACTION_JOIN_FAMILY
         args = NewArray(GetEntityName(entity = $obj2))
     }
 
+    ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
     ShowDialogTip(entity = $obj1, tipType = 5, event = "REQUEST_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
@@ -2695,13 +2706,12 @@ CLOSE_GPS(){ --按钮关闭进度条
     SetGuidePostion(entity = $obj1, pos = nil)
 }
 --场景商店的购买逻辑
-SURE_BUY(debug = true){
+SURE_BUY(debug = false){
    If($button == "left"){
       Return()
    }
-   $seccion = ArrayGet(array = $obj1.buySceneObjItem, index = 1)
-   $obj2 = ArrayGet(array = $obj1.buySceneObjItem, index = 2)
-   If($seccion ~= $obj1.buySession or not $obj2 or not IsValidObject($obj2))
+   $obj2 = GetObject(objID = $objID)
+   If($checkId ~= $obj1.buySessionSS or not $obj2 or not IsValidObject($obj2))
    {
       Return()
    }
@@ -2729,7 +2739,7 @@ SURE_BUY(debug = true){
    }
 }
 --特权购买成功
-ENTITY_BUY_APPSTOP(debug = true){
+ENTITY_BUY_APPSTOP(debug = false){
     $dict = NewDictionary($shop)
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
@@ -2746,6 +2756,70 @@ ENTITY_BUY_APPSTOP(debug = true){
         --Test("------------",$obj1.privilege)
     }
 }
+--弹窗购买特权
+POP_UP_BUY_PRIVILEGE(debug = false)
+{
+    If(not $itemName ){
+        Return()
+    }
+    $PRIVILEGE_TABLE = {
+            vip_privilege = 100000,
+            dance_privilege = 20000,
+            action_privilege = 3000,
+            music_privilege = 40000,
+            home_privilege = 50000,
+            svip_privilege = 60000,
+    }
+    $dict = NewDictionary($PRIVILEGE_TABLE)
+    $price = DictionaryGet(dict = $dict, key = $itemName)
+    If(not $price){
+        Return()
+    }
+    $obj1.checkprid = ($obj1.checkprid or 0 ) + 1
+    $Context = {
+        itemName = $itemName,
+        price = $price,
+        seccionid = $obj1.checkprid
+    }
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = nil,
+        rightContent = "ui_sure"
+    }
+    $content = {
+        msg = "gui_you_want_to_buy_this",
+        args = [ $price, $itemName]
+    }
+
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_BUY_PRI", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
+}
+SURE_BUY_PRI(debug = false)
+{
+    If($button == "left"){
+        Return()
+    }
+ 
+    If($seccionid ~= $obj1.checkprid or not $itemName)
+    {
+        Return()
+    }
+
+    BuyGoods(player = $obj1, uniqueId = 1000111,  coinId = 0, event = "BUY_PRI_GOODS" ,price = $price, itemName = $itemName, obj1 = $obj1)
+}
+BUY_PRI_GOODS(debug = false)
+{
+    $dict = NewDictionary($response)
+    $itemName = DictionaryGet(dict = $dict, key = "itemName")
+    $obj1 = DictionaryGet(dict = $dict, key = "obj1")
+    If($isSucceed){
+        ArrayAppend(array = $obj1.privilege, value = $itemName)
+        ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
+    }Else{
+        ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
+    }
+}
+--
 PLAYER_BE_INVITE(debug = true){
     $obj1.visitTarget = $obj2
     $contentDict = NewDictionary($content)
@@ -2778,7 +2852,9 @@ PLAYER_ON_VISIT(debug = true){
     $targetInRoom = false
     $targetRoomLocked = true
     $fromJustBeRemoved = false
-    $target = $obj2 or $obj1.visitTarget
+    If(not $target){
+        $target = $obj2 or $obj1.visitTarget
+    }
     If(not $target){
         Return()
     }

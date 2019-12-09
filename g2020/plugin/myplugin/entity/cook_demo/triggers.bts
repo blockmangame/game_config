@@ -6,10 +6,10 @@ COOK_SHOW_BACK(debug = true){
 }
 COOK_1(debug = true){
     AddItem(cfg = "myplugin/food_burger", count = 1, entity = $obj2)
-    CallTrigger(event = "COOK_SHOW_BACK", object = $obj1)
+    CallTrigger(event = "COOK_SHOW_BACK", object = $obj1, obj2 = $obj2)
 
 }
 COOK_2(debug = true){
     AddItem(cfg = "myplugin/food_pizza", count = 1, entity = $obj2)
-    CallTrigger(event = "COOK_SHOW_BACK", object = $obj1)
+    CallTrigger(event = "COOK_SHOW_BACK", object = $obj1, obj2 = $obj2)
 }
