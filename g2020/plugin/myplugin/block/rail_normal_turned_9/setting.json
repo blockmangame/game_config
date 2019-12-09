@@ -1,4 +1,7 @@
 {
+    "isOpaqueFullCube": false,
+    "lightOpacity": 0,
+    "breakTime": 20,
     "collisionBoxes": [
         {
             "max": {
@@ -13,36 +16,33 @@
             }
         }
     ],
-    "breakTime": 20,
-    "isOpaqueFullCube": false,
     "quads": [
         {
+            "texture": "rail_normal_turned.png",
             "pos": [
+                {
+                    "z": 1,
+                    "y": 0,
+                    "x": 0
+                },
                 {
                     "z": 0,
                     "y": 0,
                     "x": 0
                 },
                 {
-                    "z": 1,
-                    "y": 0,
-                    "x": 0
-                },
-                {
-                    "z": 1,
+                    "z": 0,
                     "y": 0,
                     "x": 1
                 },
                 {
-                    "z": 0,
+                    "z": 1,
                     "y": 0,
                     "x": 1
                 }
-            ],
-            "texture": "rail_normal_turned.png"
+            ]
         }
     ],
-    "blockObjectOnCollision": false,
-    "renderPass": 4,
-    "base": "base_block"
+    "renderPass": null,
+    "blockObjectOnCollision": false
 }

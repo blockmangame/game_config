@@ -1,48 +1,48 @@
 {
-    "breakTime": 20,
-    "quads": [
-        {
-            "pos": [
-                {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0.1
-                },
-                {
-                    "x": 0,
-                    "y": 1,
-                    "z": 0.1
-                },
-                {
-                    "x": 1,
-                    "y": 1,
-                    "z": 0.1
-                },
-                {
-                    "x": 1,
-                    "y": 0,
-                    "z": 0.1
-                }
-            ],
-            "texture": "door_iron_lower.png"
-        }
-    ],
     "isOpaqueFullCube": false,
-    "blockObjectOnCollision": false,
+    "lightOpacity": 0,
+    "breakTime": 20,
     "collisionBoxes": [
         {
-            "min": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
             "max": {
-                "x": 1,
+                "z": 0.2,
                 "y": 1,
-                "z": 0.2
+                "x": 1
+            },
+            "min": {
+                "z": 0,
+                "y": 0,
+                "x": 0
             }
         }
     ],
-    "renderPass": 4,
-    "base": "base_block"
+    "quads": [
+        {
+            "texture": "door_iron_lower.png",
+            "pos": [
+                {
+                    "z": 0.1,
+                    "y": 1,
+                    "x": 0
+                },
+                {
+                    "z": 0.1,
+                    "y": 0,
+                    "x": 0
+                },
+                {
+                    "z": 0.1,
+                    "y": 0,
+                    "x": 1
+                },
+                {
+                    "z": 0.1,
+                    "y": 1,
+                    "x": 1
+                }
+            ]
+        }
+    ],
+    "renderPass": null,
+    "blockObjectOnCollision": false
 }

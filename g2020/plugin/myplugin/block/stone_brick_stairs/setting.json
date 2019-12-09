@@ -1,235 +1,236 @@
 {
-    "blockObjectOnCollision": false,
-    "breakTime": 20,
     "collisionBoxes": [
         {
-            "min": {
-                "x": 0,
-                "y": 0,
-                "z": 0.5
-            },
             "max": {
+                "z": 1,
                 "x": 1,
-                "y": 0.5,
-                "z": 1
+                "y": 0.5
+            },
+            "min": {
+                "z": 0,
+                "x": 0,
+                "y": 0
             }
         },
         {
-            "min": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
             "max": {
+                "z": 1,
                 "x": 1,
-                "y": 1,
-                "z": 0.5
+                "y": 1
+            },
+            "min": {
+                "z": 0,
+                "x": 0.5,
+                "y": 0.5
             }
         }
     ],
-    "renderPass": 4,
+    "base": "stone_stairs",
+    "lightOpacity": 15,
+    "blockObjectOnCollision": false,
+    "renderPass": null,
+    "breakTime": 20,
+    "isOpaqueFullCube": false,
     "quads": [
         {
-            "texture": "stone_brick_left.png",
             "pos": [
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 0,
-                    "z": 0
+                    "y": 1
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 1,
-                    "z": 0
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 1,
-                    "z": 1
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 0,
-                    "z": 1
+                    "y": 1
                 }
-            ]
+            ],
+            "texture": "stone_brick_front.png"
         },
         {
-            "texture": "stone_brick_right.png",
             "pos": [
                 {
+                    "z": 1,
                     "x": 1,
-                    "y": 0,
-                    "z": 1
+                    "y": 0
                 },
                 {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
+                    "z": 1,
+                    "x": 0,
+                    "y": 0
                 },
                 {
-                    "x": 1,
-                    "y": 1,
-                    "z": 0
+                    "z": 0,
+                    "x": 0,
+                    "y": 0
                 },
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 0,
-                    "z": 0
+                    "y": 0
                 }
-            ]
+            ],
+            "texture": "stone_brick_back.png"
         },
         {
-            "texture": "stone_brick_back.png",
             "pos": [
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 0,
-                    "z": 0
+                    "y": 1
                 },
                 {
+                    "z": 1,
+                    "x": 1,
+                    "y": 1
+                },
+                {
+                    "z": 0,
+                    "x": 1,
+                    "y": 1
+                },
+                {
+                    "z": 0,
                     "x": 0,
-                    "y": 1,
-                    "z": 0
-                },
-                {
-                    "x": 1,
-                    "y": 1,
-                    "z": 0
-                },
-                {
-                    "x": 1,
-                    "y": 0,
-                    "z": 0
+                    "y": 1
                 }
-            ]
+            ],
+            "texture": "stone_brick_front.png"
         },
         {
-            "texture": "stone_brick_front.png",
             "pos": [
                 {
-                    "x": 0,
-                    "y": 0,
-                    "z": 1
-                },
-                {
-                    "x": 0,
-                    "y": 1,
-                    "z": 1
-                },
-                {
+                    "z": 1,
                     "x": 1,
-                    "y": 1,
-                    "z": 1
+                    "y": 1
                 },
                 {
+                    "z": 1,
                     "x": 1,
-                    "y": 0,
-                    "z": 1
+                    "y": 0
+                },
+                {
+                    "z": 0,
+                    "x": 1,
+                    "y": 0
+                },
+                {
+                    "z": 0,
+                    "x": 1,
+                    "y": 1
                 }
-            ]
+            ],
+            "texture": "stone_brick_back.png"
         },
         {
-            "texture": "stone_brick_front.png",
             "pos": [
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 0.5,
-                    "z": 1
+                    "y": 1
                 },
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 0.5,
-                    "z": 0
+                    "y": 0
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 0.5,
-                    "z": 0
+                    "y": 0
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 0.5,
-                    "z": 1
+                    "y": 1
                 }
-            ]
+            ],
+            "texture": "stone_brick_left.png"
         },
         {
-            "texture": "stone_brick_front.png",
             "pos": [
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 1,
-                    "z": 0.5
+                    "y": 1
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 0,
-                    "z": 0.5
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 1,
-                    "y": 0,
-                    "z": 0.5
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 1,
-                    "y": 1,
-                    "z": 0.5
+                    "y": 1
                 }
-            ]
+            ],
+            "texture": "stone_brick_right.png"
         },
         {
-            "texture": "stone_brick_front.png",
             "pos": [
                 {
-                    "x": 0,
-                    "y": 1,
-                    "z": 0
-                },
-                {
-                    "x": 0,
-                    "y": 1,
-                    "z": 1
-                },
-                {
+                    "z": 0,
                     "x": 1,
-                    "y": 1,
-                    "z": 1
+                    "y": 0.5
                 },
                 {
+                    "z": 0,
+                    "x": 0,
+                    "y": 0.5
+                },
+                {
+                    "z": 1,
+                    "x": 0,
+                    "y": 0.5
+                },
+                {
+                    "z": 1,
                     "x": 1,
-                    "y": 1,
-                    "z": 0
+                    "y": 0.5
                 }
-            ]
+            ],
+            "texture": "stone_brick_front.png"
         },
         {
-            "texture": "stone_brick_back.png",
             "pos": [
                 {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
+                    "z": 1,
+                    "x": 0.5,
+                    "y": 0
                 },
                 {
-                    "x": 0,
-                    "y": 0,
-                    "z": 1
+                    "z": 1,
+                    "x": 0.5,
+                    "y": 1
                 },
                 {
-                    "x": 1,
-                    "y": 0,
-                    "z": 1
+                    "z": 0,
+                    "x": 0.5,
+                    "y": 1
                 },
                 {
-                    "x": 1,
-                    "y": 0,
-                    "z": 0
+                    "z": 0,
+                    "x": 0.5,
+                    "y": 0
                 }
-            ]
+            ],
+            "texture": "stone_brick_front.png"
         }
-    ],
-    "isOpaqueFullCube": false,
-    "base": "base_block"
+    ]
 }

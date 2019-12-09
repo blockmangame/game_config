@@ -1,42 +1,29 @@
 {
-    "renderPass": 4,
-    "collisionBoxes": [
-        {
-            "min": {
-                "x": 0,
-                "z": 1,
-                "y": 0
-            },
-            "max": {
-                "x": 0,
-                "z": 1,
-                "y": 0
-            }
-        }
-    ],
+    "blockObjectOnCollision": false,
+    "lightOpacity": 0,
     "quads": [
         {
             "texture": "torch_on.png",
             "pos": [
                 {
-                    "x": 0.5,
                     "z": 0.5,
-                    "y": 0
+                    "y": 1,
+                    "x": 0.5
                 },
                 {
-                    "x": 0.5,
-                    "z": 0,
-                    "y": 0.5
-                },
-                {
-                    "x": 0.5,
-                    "z": 0.5,
-                    "y": 1
-                },
-                {
-                    "x": 0.5,
                     "z": 1,
-                    "y": 0.5
+                    "y": 0.5,
+                    "x": 0.5
+                },
+                {
+                    "z": 0.5,
+                    "y": 0,
+                    "x": 0.5
+                },
+                {
+                    "z": 0,
+                    "y": 0.5,
+                    "x": 0.5
                 }
             ]
         },
@@ -44,30 +31,43 @@
             "texture": "torch_on.png",
             "pos": [
                 {
-                    "x": 1,
-                    "z": 1,
-                    "y": 0
-                },
-                {
-                    "x": 1,
                     "z": 0,
-                    "y": 1
+                    "y": 1,
+                    "x": 0
                 },
                 {
-                    "x": 0,
-                    "z": 0,
-                    "y": 1
-                },
-                {
-                    "x": 0,
                     "z": 1,
-                    "y": 0
+                    "y": 0,
+                    "x": 0
+                },
+                {
+                    "z": 1,
+                    "y": 0,
+                    "x": 1
+                },
+                {
+                    "z": 0,
+                    "y": 1,
+                    "x": 1
                 }
             ]
         }
     ],
+    "collisionBoxes": [
+        {
+            "max": {
+                "z": 1,
+                "y": 0,
+                "x": 0
+            },
+            "min": {
+                "z": 1,
+                "y": 0,
+                "x": 0
+            }
+        }
+    ],
     "breakTime": 20,
-    "blockObjectOnCollision": false,
-    "isOpaqueFullCube": false,
-    "base": "base_block"
+    "renderPass": null,
+    "isOpaqueFullCube": false
 }

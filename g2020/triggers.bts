@@ -24,6 +24,9 @@ GAME_INIT(debug = false)
     CreateNpc(cfgName = "myplugin/indentModel", pos = {x = 170, y = 17, z = 343}  ,name = "订单")
     CreateNpc(cfgName = "myplugin/xiaoming", pos = {x = 187, y = 17, z = 343}  ,name = "小明")
     CreateNpc(cfgName = "myplugin/xiaohong", pos = {x = 207, y = 17, z = 343} ,name = "小红")
+	CreateNpc(cfgName = "myplugin/fishItem", pos = {x = 210, y = 18, z = 343} ,name = "小红")
+
+    CallTrigger(event = "WORKS_WALL_TIMER_START")
 }
 
 
@@ -104,14 +107,12 @@ SHOW_SELECT_ROLE
         {
             normalImage = "set:select_role.json image:child",
             pushedImage = "set:select_role.json image:child",
-            name = "child",
             event = "CHANGE_PLAYER_SCALE_CHILD",
             text = "ui_pick_child"
         },
         {
             normalImage = "set:select_role.json image:adult",
             pushedImage = "set:select_role.json image:adult",
-            name = "adult",
             event = "CHANGE_PLAYER_SCALE_ADULT",
             text = "ui_pick_adult"
         }
@@ -257,6 +258,34 @@ FUNC_STATE_ADD_INTERACTLIST --params: entities
     }
 }
 
+WORKS_WALL_TIMER_START
+{
+    StartTimer(rep = true, time = 1200, event = "WORKS_WALL_UPDATE_EXCELLENT_WORKS")
+}
+
+WORKS_WALL_UPDATE_EXCELLENT_WORKS
+{
+    If(not @excellentWorksIndex)
+    {
+        @excellentWorksIndex = 0
+    }
+    $worksIndex = 1
+    $size = ArraySize(array = @excellentWorks)
+    Foreach(array = @excellentWorks, key = "works")
+    {
+        If(@excellentWorksIndex < $worksIndex || (@excellentWorksIndex == $size && $worksIndex == 1))
+        {
+            @excellentWorksIndex = $worksIndex
+            Foreach(array = GetAllPlayers(), key = "player")
+            {
+                UpdateUIData(player =$player, ui = "win_worksWall", data = $works)
+            }
+            Break()
+        }
+        $worksIndex = $worksIndex + 1
+    }
+}
+
 FUNC_LOAD_NEW_WORKS {
     $currentCount = 20
     $othersCount = 20
@@ -273,7 +302,6 @@ LOAD_NEW_WORKS_RESPONSE {
     $info = {}
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
-
     If($code == 1)
     {
         $info = DictionaryGet(dict = $dictValue, key = "data")
@@ -294,7 +322,6 @@ LOAD_TOP_EXCELLENT_RESPONSE {
     $info = {}
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
-
     If($code == 1)
     {
         $info = DictionaryGet(dict = $dictValue, key = "data")
@@ -304,4 +331,6 @@ LOAD_TOP_EXCELLENT_RESPONSE {
     {
         UpdateUIData(player =$player, ui = "works_top", data = $info)
     }
+
+    @excellentWorks = $info
 }

@@ -1,48 +1,48 @@
 {
-    "renderPass": 4,
-    "breakTime": 20,
-    "quads": [
-        {
-            "pos": [
-                {
-                    "x": 1,
-                    "y": 0,
-                    "z": 1
-                },
-                {
-                    "x": 1,
-                    "y": 0,
-                    "z": 0
-                },
-                {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                },
-                {
-                    "x": 0,
-                    "y": 0,
-                    "z": 1
-                }
-            ],
-            "texture": "rail_normal_turned.png"
-        }
-    ],
     "isOpaqueFullCube": false,
+    "lightOpacity": 0,
+    "breakTime": 20,
     "collisionBoxes": [
         {
             "max": {
-                "x": 1,
+                "z": 1,
                 "y": 0,
-                "z": 1
+                "x": 1
             },
             "min": {
-                "x": 1,
+                "z": 1,
                 "y": 0,
-                "z": 1
+                "x": 1
             }
         }
     ],
-    "blockObjectOnCollision": false,
-    "base": "base_block"
+    "quads": [
+        {
+            "texture": "rail_normal_turned.png",
+            "pos": [
+                {
+                    "z": 0,
+                    "y": 0,
+                    "x": 1
+                },
+                {
+                    "z": 1,
+                    "y": 0,
+                    "x": 1
+                },
+                {
+                    "z": 1,
+                    "y": 0,
+                    "x": 0
+                },
+                {
+                    "z": 0,
+                    "y": 0,
+                    "x": 0
+                }
+            ]
+        }
+    ],
+    "renderPass": null,
+    "blockObjectOnCollision": false
 }

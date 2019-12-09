@@ -1,106 +1,132 @@
 {
-    "renderPass": 4,
-    "blockObjectOnCollision": false,
-    "isOpaqueFullCube": false,
     "collisionBoxes": [
         {
-            "min": {
-                "x": 0,
-                "z": 0,
-                "y": 0
-            },
             "max": {
-                "x": 0.5,
                 "z": 1,
+                "x": 1,
                 "y": 0.5
+            },
+            "min": {
+                "z": 0,
+                "x": 0,
+                "y": 0
             }
         },
         {
-            "min": {
-                "x": 0.5,
-                "z": 0,
-                "y": 0
-            },
             "max": {
-                "x": 1,
                 "z": 1,
+                "x": 1,
                 "y": 1
+            },
+            "min": {
+                "z": 0,
+                "x": 0.5,
+                "y": 0.5
             }
         }
     ],
+    "lightOpacity": 15,
+    "renderPass": null,
+    "blockObjectOnCollision": false,
     "breakTime": 20,
+    "isOpaqueFullCube": false,
     "quads": [
         {
             "pos": [
                 {
-                    "x": 1,
                     "z": 0,
-                    "y": 0
-                },
-                {
-                    "x": 1,
-                    "z": 0,
+                    "x": 0,
                     "y": 1
                 },
                 {
-                    "x": 0,
                     "z": 0,
-                    "y": 1
+                    "x": 0,
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "z": 0,
                     "y": 0
+                },
+                {
+                    "z": 1,
+                    "x": 0,
+                    "y": 1
                 }
             ],
-            "texture": "sandstone_left.png"
+            "texture": "sandstone_front.png"
         },
         {
             "pos": [
                 {
-                    "x": 0,
                     "z": 1,
+                    "x": 1,
                     "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "z": 1,
-                    "y": 1
+                    "y": 0
                 },
                 {
-                    "x": 1,
-                    "z": 1,
-                    "y": 1
+                    "z": 0,
+                    "x": 0,
+                    "y": 0
                 },
                 {
+                    "z": 0,
                     "x": 1,
-                    "z": 1,
                     "y": 0
                 }
             ],
-            "texture": "sandstone_right.png"
+            "texture": "sandstone_top.png"
         },
         {
             "pos": [
                 {
-                    "x": 1,
-                    "z": 0,
-                    "y": 0
-                },
-                {
-                    "x": 1,
-                    "z": 0,
+                    "z": 1,
+                    "x": 0,
                     "y": 1
                 },
                 {
-                    "x": 1,
                     "z": 1,
+                    "x": 1,
                     "y": 1
                 },
                 {
+                    "z": 0,
                     "x": 1,
+                    "y": 1
+                },
+                {
+                    "z": 0,
+                    "x": 0,
+                    "y": 1
+                }
+            ],
+            "texture": "smooth_sandstone_front.png"
+        },
+        {
+            "pos": [
+                {
                     "z": 1,
+                    "x": 1,
+                    "y": 1
+                },
+                {
+                    "z": 1,
+                    "x": 1,
                     "y": 0
+                },
+                {
+                    "z": 0,
+                    "x": 1,
+                    "y": 0
+                },
+                {
+                    "z": 0,
+                    "x": 1,
+                    "y": 1
                 }
             ],
             "texture": "sandstone_back.png"
@@ -108,128 +134,102 @@
         {
             "pos": [
                 {
-                    "x": 0,
                     "z": 0,
-                    "y": 0
-                },
-                {
-                    "x": 0,
-                    "z": 0,
+                    "x": 1,
                     "y": 1
                 },
                 {
-                    "x": 0,
-                    "z": 1,
-                    "y": 1
+                    "z": 0,
+                    "x": 1,
+                    "y": 0
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "z": 1,
                     "y": 0
+                },
+                {
+                    "z": 0,
+                    "x": 0,
+                    "y": 1
                 }
             ],
-            "texture": "sandstone_font.png"
+            "texture": "sandstone_left.png"
         },
         {
             "pos": [
                 {
-                    "x": 0,
                     "z": 1,
-                    "y": 0.5
-                },
-                {
-                    "x": 1,
-                    "z": 1,
-                    "y": 0.5
-                },
-                {
-                    "x": 1,
-                    "z": 0,
-                    "y": 0.5
-                },
-                {
                     "x": 0,
-                    "z": 0,
-                    "y": 0.5
+                    "y": 1
+                },
+                {
+                    "z": 1,
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "z": 1,
+                    "x": 1,
+                    "y": 0
+                },
+                {
+                    "z": 1,
+                    "x": 1,
+                    "y": 1
                 }
             ],
-            "texture": "smooth_sandstone_font.png"
+            "texture": "sandstone_right.png"
         },
         {
             "pos": [
                 {
-                    "x": 0.5,
                     "z": 0,
-                    "y": 1
+                    "x": 1,
+                    "y": 0.5
                 },
                 {
-                    "x": 0.5,
                     "z": 0,
-                    "y": 0
+                    "x": 0,
+                    "y": 0.5
                 },
                 {
-                    "x": 0.5,
                     "z": 1,
-                    "y": 0
+                    "x": 0,
+                    "y": 0.5
                 },
                 {
-                    "x": 0.5,
                     "z": 1,
-                    "y": 1
+                    "x": 1,
+                    "y": 0.5
                 }
             ],
-            "texture": "sandstone_font.png"
+            "texture": "smooth_sandstone_front.png"
         },
         {
             "pos": [
                 {
-                    "x": 1,
-                    "z": 0,
-                    "y": 1
-                },
-                {
-                    "x": 0,
-                    "z": 0,
-                    "y": 1
-                },
-                {
-                    "x": 0,
                     "z": 1,
-                    "y": 1
-                },
-                {
-                    "x": 1,
-                    "z": 1,
-                    "y": 1
-                }
-            ],
-            "texture": "smooth_sandstone_font.png"
-        },
-        {
-            "pos": [
-                {
-                    "x": 1,
-                    "z": 0,
+                    "x": 0.5,
                     "y": 0
                 },
                 {
-                    "x": 0,
+                    "z": 1,
+                    "x": 0.5,
+                    "y": 1
+                },
+                {
                     "z": 0,
-                    "y": 0
+                    "x": 0.5,
+                    "y": 1
                 },
                 {
-                    "x": 0,
-                    "z": 1,
-                    "y": 0
-                },
-                {
-                    "x": 1,
-                    "z": 1,
+                    "z": 0,
+                    "x": 0.5,
                     "y": 0
                 }
             ],
-            "texture": "sandstone_top.png"
+            "texture": "sandstone_front.png"
         }
-    ],
-    "base": "base_block"
+    ]
 }

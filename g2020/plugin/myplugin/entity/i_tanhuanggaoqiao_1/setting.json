@@ -1,0 +1,34 @@
+{	
+	"skin": {
+        "body": "1"
+    },
+	"collision": true,
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    0.3,
+                    1,
+                    0.6
+                ]
+            }
+        ]
+    },
+	"interactionUI":
+        {
+            "centerBtns":[
+                {
+                    "text":"item_testlang",
+                    "image":"plugin/myplugin/image/hand_click.png",
+                    "event": "FOOD_BUY"
+                }
+            ],
+            "followParams":{
+                "followScenePos": false
+            }
+        },
+    "actorName": "g2020_tanhuanggaoqiao.actor",
+    "base": "food_base"
+}

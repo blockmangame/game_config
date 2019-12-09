@@ -1,17 +1,9 @@
 ENTITY_CLICK
 {
-    $gender = GetEntityMainData(entity = $obj2, key = "sex")
-    $actorGender = $obj1.cfg.sex
-
-    If ($gender ~= $actorGender)
-    {
-        Return()
-    }
-
+    -- todo : 判断是否是道具的主人， 主人: 修改道具的服装。  访客： 把自己的装扮改成道具的服装
     CallTrigger(object = $obj1, event = "CHANGE_MODEL_SKIN", player = $obj2)
 
     -- CallTrigger(object = $obj1, event = "CHANGE_PLAYER_SKIN", player = $obj2)
-
 }
 
 CHANGE_MODEL_SKIN()

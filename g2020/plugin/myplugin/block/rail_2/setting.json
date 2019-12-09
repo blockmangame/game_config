@@ -1,5 +1,6 @@
 {
-    "renderPass": 4,
+    "blockObjectOnCollision": false,
+    "lightOpacity": 0,
     "isOpaqueFullCube": false,
     "quads": [
         {
@@ -7,27 +8,29 @@
             "pos": [
                 {
                     "z": 1,
-                    "y": 0,
-                    "x": 0
+                    "y": 1,
+                    "x": 1
                 },
                 {
                     "z": 1,
-                    "y": 1,
-                    "x": 1
-                },
-                {
-                    "z": 0,
-                    "y": 1,
-                    "x": 1
+                    "y": 0,
+                    "x": 0
                 },
                 {
                     "z": 0,
                     "y": 0,
                     "x": 0
+                },
+                {
+                    "z": 0,
+                    "y": 1,
+                    "x": 1
                 }
             ]
         }
     ],
+    "breakTime": 20,
+    "renderPass": null,
     "collisionBoxes": [
         {
             "max": {
@@ -41,8 +44,5 @@
                 "x": 1
             }
         }
-    ],
-    "blockObjectOnCollision": false,
-    "breakTime": 20,
-    "base": "base_block"
+    ]
 }

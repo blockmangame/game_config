@@ -7,6 +7,16 @@
         "aroundParams":{
             "startAngle": 270,
             "endAngle": 90,
+            "background":"plugin/myplugin/image/food_bg.png",
+            "backgroundSize":{
+                "width":100,
+                "height":100
+            },
+            "imageSize":{
+                "width":80,
+                "height":80
+            },
+            "textFontSize": "HT24",
             "radius": 100
         },
         "followParams":{
@@ -15,19 +25,23 @@
         },
         "aroundBtns":[
             {
-                "text":"",
+                "text":"$1",
                 "image":"plugin/myplugin/image/pizza.png",
-                "event": "COOK_PIZZA"
+                "event": "COOK_1"
             },
             {
-                "text":"",
                 "image":"plugin/myplugin/image/back.png",
+                "imageSize":{
+                    "width":100,
+                    "height":100
+                },
+                "background":"",
                 "event": "COOK_SHOW_BACK"
             },
             {
-                "text":"",
+                "text":"$2",
                 "image":"plugin/myplugin/image/burger.png",
-                "event": "COOK_BURGER"
+                "event": "COOK_2"
             }
         ]
     }

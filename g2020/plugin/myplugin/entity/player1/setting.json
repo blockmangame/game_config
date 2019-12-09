@@ -175,7 +175,7 @@
         "cfgKey": "interactionUI",
         "centerBtns":[
             {
-                "text":"",
+                "text":"name",
                 "image":"plugin/myplugin/image/hand_click.png",
                 "event": "PLAYER_INTERACTION"
             }
@@ -193,7 +193,8 @@
             "radius": 100
         },
         "followParams":{
-            "followScenePos": false,
+            "followScenePos": true,
+            "showRange": 5,
             "resetWhenHide": true
         },
         "aroundBtns":[
@@ -240,11 +241,10 @@
         "radius": 5,
         "offset":{
             "x": 0,
-            "y": -1,
-            "z": 2
+            "y": 0,
+            "z": 0
         }
     },
-    "insideMapRotationYaw": 180,
     "uiEvents":{
         "events":[
             "HOUSE_TAB_EVENT",
@@ -355,5 +355,9 @@
         {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
         {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "floorBlockStore", "childRegionKey": "floorRegion"}},
         {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
-    ]
+    ],
+    "freeWorksArchive" : 3,
+    "worksArchivePrice" : 100,
+    "publishWorksPrice" : 360,
+    "publishWorksCubePrice" : 360
 }

@@ -1,48 +1,48 @@
 {
+    "blockObjectOnCollision": false,
+    "lightOpacity": 0,
+    "isOpaqueFullCube": false,
     "quads": [
         {
             "texture": "door_dark_oak_lower.png",
             "pos": [
                 {
-                    "x": 0.9,
-                    "y": 0,
-                    "z": 0
-                },
-                {
-                    "x": 0.9,
+                    "z": 0,
                     "y": 1,
-                    "z": 0
+                    "x": 0.9
                 },
                 {
-                    "x": 0.9,
-                    "y": 1,
-                    "z": 1
-                },
-                {
-                    "x": 0.9,
+                    "z": 0,
                     "y": 0,
-                    "z": 1
+                    "x": 0.9
+                },
+                {
+                    "z": 1,
+                    "y": 0,
+                    "x": 0.9
+                },
+                {
+                    "z": 1,
+                    "y": 1,
+                    "x": 0.9
                 }
             ]
         }
     ],
-    "isOpaqueFullCube": false,
-    "renderPass": 4,
+    "breakTime": 20,
+    "renderPass": null,
     "collisionBoxes": [
         {
-            "min": {
-                "x": 0.8,
-                "y": 0,
-                "z": 0
-            },
             "max": {
-                "x": 1,
+                "z": 1,
                 "y": 1,
-                "z": 1
+                "x": 1
+            },
+            "min": {
+                "z": 0,
+                "y": 0,
+                "x": 0.8
             }
         }
-    ],
-    "blockObjectOnCollision": false,
-    "breakTime": 20,
-    "base": "base_block"
+    ]
 }

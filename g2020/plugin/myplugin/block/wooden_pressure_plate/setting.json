@@ -1,48 +1,48 @@
 {
-    "quads": [
-        {
-            "pos": [
-                {
-                    "x": 1,
-                    "y": 0.3,
-                    "z": 0
-                },
-                {
-                    "x": 1,
-                    "y": 0.3,
-                    "z": 1
-                },
-                {
-                    "x": 0,
-                    "y": 0.3,
-                    "z": 1
-                },
-                {
-                    "x": 0,
-                    "y": 0.3,
-                    "z": 0
-                }
-            ],
-            "texture": "planks_oak.png"
-        }
-    ],
+    "isOpaqueFullCube": false,
+    "lightOpacity": 0,
     "collisionBoxes": [
         {
             "max": {
-                "x": 1,
+                "z": 1,
                 "y": 0.3,
-                "z": 1
+                "x": 1
             },
             "min": {
-                "x": 0,
+                "z": 0,
                 "y": 0,
-                "z": 0
+                "x": 0
             }
         }
     ],
-    "isOpaqueFullCube": false,
-    "blockObjectOnCollision": false,
-    "renderPass": 4,
+    "quads": [
+        {
+            "texture": "planks_oak.png",
+            "pos": [
+                {
+                    "z": 1,
+                    "y": 0.3,
+                    "x": 1
+                },
+                {
+                    "z": 0,
+                    "y": 0.3,
+                    "x": 1
+                },
+                {
+                    "z": 0,
+                    "y": 0.3,
+                    "x": 0
+                },
+                {
+                    "z": 1,
+                    "y": 0.3,
+                    "x": 0
+                }
+            ]
+        }
+    ],
     "breakTime": 20,
-    "base": "base_block"
+    "renderPass": null,
+    "blockObjectOnCollision": false
 }

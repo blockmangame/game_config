@@ -148,10 +148,11 @@ ENTITY_ENTER
     $dict = {}
     Foreach(array = $houseVars, key = "house"){
         $dict = NewDictionary($house)
-        If(DictionaryGet(dict = $dict, key = "isCurEquip")){
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
             Break()
         }
     }
+    $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
     ------------------------------------------ 获得当前地图上的空出的区域，创建房子 * 
     -- 区域 <region------owner> 房子 <house-------owner> 玩家，可通过区域获取区域上的房子，通过房子获得所属玩家。 反向同理
     $regions = GetAllRegion(map = GetEntityMap(entity = $obj1))
@@ -167,10 +168,12 @@ ENTITY_ENTER
     $house = GetObjectVar(obj = $obj1, key = "house")
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     SetObjectVar(obj = $obj1, key = "returnDoor", value = GetObjectVar(obj = $house, key = "door"))
-    SetEntityPosition(map = $houseInsideMap, entity = $obj1, 
+    $yaw = 0
+    If($obj1.curHouseCfg){
+        $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
+    }
+    SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
         pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-    SetEntityYaw(entity = $obj1, rotationYaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
-    SetBodyYaw(entity = $obj1, yaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 }
@@ -338,6 +341,7 @@ CHANGE_HOUSE_COLOR{ -- 换色
 
 CHANGE_HOUSE{ -- 换房子/存档
     $region = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "region")
+    $obj1.curHouseCfg = $newHouse
     ------------------------------------------ 改变房子(actor)，直接杀掉原来的，新建新的
     CallTrigger(object = $obj1, event = "REMOVE_HOUSE_OUTSIDE")
     ShowTip(entity = $obj1, tipType = 1, textKey = "house_change")
@@ -483,7 +487,7 @@ SURE_BUY_HOUSE{
             houseCfg = $houseCfg,
             houseSelectColor = $curSelect,
             houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
-            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or [],
+            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or ["", "", ""],
             isCurEquip = "disable",
             houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
             houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
@@ -946,8 +950,10 @@ BUY_HOUSE_REGION_COLOR{
     $childRegionArr = GetRegionConfig(region = $curInsideRegion, key = $childRegionKey) or {}
     
     Foreach(array = $childRegionArr, key = "cRegion"){
-        FillBlocksInRegion(map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap"), region = $cRegion, 
-            block = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
+        $insideMap = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
+        $block = GetBlockConfig(map = $insideMap, pos = GetRegionMin(region = $cRegion), key = "fullName")
+        ResetBlocksInRegion(map = $insideMap, region = $cRegion, 
+            sourceBlock = $block, destBlock = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
     }
 
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
@@ -991,6 +997,11 @@ ADD_MONEY
     $cdTime = ArrayGet(array = $rewardArray, index = 1)
     $money = ArrayGet(array = $rewardArray, index = 2)
 
+    If(ArrayFind(array = $obj1.privilege, value = "vip_privilege"))
+    {
+        $money = $money * 2
+    }
+
     If($obj1.isReadyReward)
     {
         AddCurrency(count = $money, coinName = "green_currency", entity = $obj1)
@@ -1018,7 +1029,11 @@ FUNC_STATE_GENERATE --params: stateBase, col, skill
         SetObjectVar(obj = $obj1, value = $state, key = Concat(p1 = "pre", p2 = $stateBase))
         SetObjectVar(obj = $obj1, value = $col, key = Concat(p1 = $stateBase, p2 = "Idx"))
     }
-    ShowBubbleMsg(entity = $obj1, textKey = "state_get", textP1 = $state)
+    --ShowBubbleMsg(entity = $obj1, textKey = "state_get", textP1 = $state)
+    ShowBubbleMsg(
+        entity = $obj1,
+        contents = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "tipContents")
+    )
     CallTrigger(object = $obj1, event = "FUNC_STATE_ADD", state = $state)
 }
 
@@ -1043,7 +1058,7 @@ FUNC_STATE_ADD_EFFECT --params: state
     }
     SetObjectVar(
         obj = $obj1,
-        key = $effectStr,
+        key = Concat(p1 = $state, p2 = "Effect"),
         value = AddEntityBuff(
             entity = $obj1,
             cfg = $effect
@@ -1177,6 +1192,11 @@ FUNC_REGION_STATE_OPERATION --parmas: opt, state
 
 FUNC_STATE_SUSPEND_PROGRESS --params: state
 {
+    If(not $state)
+    {
+        Return()
+    }
+
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $duration = GetSkillVar(fullName = $skill, key = "duration")
@@ -1212,6 +1232,11 @@ FUNC_STATE_SUSPEND_PROGRESS --params: state
 
 FUNC_STATE_START_PROGRESS --params: state
 {
+    If(not $state)
+    {
+        Return()
+    }
+
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $duration = GetSkillVar(fullName = $skill, key = "duration")
@@ -1618,6 +1643,7 @@ INTERACTION_JOIN_FAMILY
         args = NewArray(GetEntityName(entity = $obj2))
     }
 
+    ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
     ShowDialogTip(entity = $obj1, tipType = 5, event = "REQUEST_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
@@ -2196,30 +2222,315 @@ DRESS_STORE_ITEM_BUY
     }
 }
 
-COMMENT_WORKS
+SHOW_SAVE_WORKS_TIP
 {
-    Test($msg)
-    CommentWorks(player = $obj1, id = $id, msg = $msg, event = "HTTP_TEST")
+    Test("================================================== SHOW_SAVE_WORKS_TIP")
+    $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+    $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = nil, rightContent = "works_save" }
+    $context = { url = $url}
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "SAVE_WORKS_TIP_CLICK_EVENT", p1 = "ui_tip", p2= "publish_works_tip", p3 = $btnInfo, context = $context)
 }
 
-GET_WORKS_COMMENT
+SAVE_WORKS_TIP_CLICK_EVENT
 {
-    GetWorksComments(player = $obj1, id = $id, event = "HTTP_GET_WORKS_COMMENT_CALL_BACK")
+    Test("================================================== SAVE_WORKS_TIP_CLICK_EVENT")
+
+    If(not $result) {
+        Return()
+    }
+
+    $isPublish = false
+    If($button == "left")
+    {
+        $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+        If(CheckBalance(entity = $obj1, coinName = "green_currency", price = $price))
+        {
+            $isPublish = true
+        }
+        Else
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_not_enough_money", time = 20)
+            Return()
+        }
+    }
+
+    $content = { url = $url, isPublish = $isPublish }
+    CallTrigger(event = "CHECK_WORKS_ARCHIVE", obj1 = $obj1, url = $url, isPublish = $isPublish)
 }
 
-GET_WORKS_COMMENT_CALL_BACK
+
+CHECK_WORKS_ARCHIVE
 {
+    Test("================================================== CHECK_WORKS_ARCHIVE")
+    GetWorksCount(player = $obj1, event = "CHECK_WORKS_ARCHIVE_RESPONSE", url = $url, isPublish = $isPublish)
+}
+
+CHECK_WORKS_ARCHIVE_RESPONSE
+{
+    Test("================================================== CHECK_WORKS_ARCHIVE_RESPONSE")
+    Test($response)
+
+    $dictValue = NewDictionary($response)
+    $code = DictionaryGet(dict = $dictValue, key = "code")
+
+    If($code == 1)
+    {
+        $freeCount = GetConfigVar(obj = $obj1, key = "freeWorksArchive" )
+        $count = DictionaryGet(dict = $dictValue, key = "data")
+        If($count < $freeCount)
+        {
+            CallTrigger(event = "CREATE_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish)
+        }
+        Else
+        {
+            CallTrigger(event = "SHOW_BYU_WORKS_ARCHIVE_UI", obj1 = $obj1, url = $url, isPublish = $isPublish)
+        }
+    }
+    Else
+    {
+        If($isPublish)
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
+        }
+        Else
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_failure", time = 20)
+        }
+    }
+}
+
+SHOW_BYU_WORKS_ARCHIVE_UI
+{
+    Test("================================================== SHOW_BYU_WORKS_ARCHIVE_UI")
+    $price = GetConfigVar(obj = $obj1, key = "worksArchivePrice" )
+    $btnInfo = { leftCoinId = 0, leftContent = $price, rightCoinId = nil, rightContent = "works_save_coverage_new" }
+    $context = { url = $url, isPublish = $isPublish }
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "BUY_WORKS_ARCHIVE", p1 = "publish_works_buy_archive_title", p2= "publish_works_buy_archive", p3 = $btnInfo, context = $context)
+}
+
+BUY_WORKS_ARCHIVE
+{
+    Test("================================================== BUY_WORKS_ARCHIVE")
+    If($button == "close" || not $result)
+    {
+        Return()
+    }
+
+    If($button == "left")
+    {
+        $price = GetConfigVar(obj = $obj1, key = "worksArchivePrice" )
+        If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_buy_archive_not_enough_money", time = 20)
+            Return()
+        }
+        BuyGoods(player = $obj1, uniqueId = 1000001,  coinId = 0, price = $price, url = $url, isPublish = $isPublish, event = "BUY_WORKS_ARCHIVE_RESPONSE" )
+    }
+
+    If($button == "right")
+    {
+        CallTrigger(event = "GET_NEW_UN_PUBLISH_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish)
+    }
+}
+
+BUY_WORKS_ARCHIVE_RESPONSE
+{
+    Test("================================================== BUY_WORKS_ARCHIVE_RESPONSE")
+    Test($response)
+    $dictValue = NewDictionary($response)
+
+    $url = DictionaryGet(dict = $dictValue, key = "url")
+    $obj1 = DictionaryGet(dict = $dictValue, key = "player")
+    $isPublish = DictionaryGet(dict = $dictValue, key = "isPublish")
+    If($isSucceed)
+    {
+        CallTrigger(event = "CREATE_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish)
+    }
+    Else
+    {
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_buy_archive_failure", time = 20)
+    }
+}
+
+GET_NEW_UN_PUBLISH_WORKS
+{
+    GetNewUnPublishWorks(event = "GET_NEW_UN_PUBLISH_RESPONSE", player = $obj1, url = $url, isPublish = $isPublish)
+}
+
+GET_NEW_UN_PUBLISH_RESPONSE
+{
+     $dictValue = NewDictionary($response)
+     $code = DictionaryGet(dict = $dictValue, key = "code")
+     If($code == 1)
+     {
+        $worksId = DictionaryGet(dict = $dictValue, key = "data")
+        CallTrigger(event = "UPDATE_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish, worksId = $worksId)
+     }
+     Else
+     {
+        ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_failure", time = 20)
+     }
+}
+
+UPDATE_WORKS
+{
+    UpdateWorks(player = $obj1, url = $url, isPublish = $isPublish, worksId = $worksId, event = "UPDATE_WORKS_RESPONSE")
+}
+
+UPDATE_WORKS_RESPONSE
+{
+     $dictValue = NewDictionary($response)
+     $code = DictionaryGet(dict = $dictValue, key = "code")
+     If($code == 1)
+     {
+        If($isPublish)
+        {
+            $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+            PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_and_publish_new_works_succeed", time = 20)
+        }
+        Else
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_succeed", time = 20)
+        }
+     }
+     Else
+     {
+        ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_failure", time = 20)
+     }
+}
+
+CREATE_WORKS
+{
+    Test("================================================== CREATE_WORKS")
+    CreateWorks(player = $obj1, picUrl = $url, isPublish = $isPublish, event = "CREATE_WORKS_RESPONSE")
+}
+
+CREATE_WORKS_RESPONSE
+{
+    Test("================================================== CREATE_WORKS_RESPONSE")
+    Test($response)
+
+    $dictValue = NewDictionary($response)
+    $code = DictionaryGet(dict = $dictValue, key = "code")
+
+    If($code == 1)
+    {
+        If($isPublish)
+        {
+            $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+            PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
+        }
+        Else
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_succeed", time = 20)
+        }
+    }
+    Else
+    {
+        If($isPublish)
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
+        }
+        Else
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_failure", time = 20)
+        }
+    }
+}
+
+SHOW_PUBLISH_WORKS_UI
+{
+    Test("===========================================================SHOW_PUBLISH_WORKS_UI")
+    $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+    $cubePrice = GetConfigVar(obj = $obj1, key = "publishWorksCubePrice" )
+    $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = 0, rightContent = $cubePrice }
+    $context = { worksId = $worksId, isEdit = false }
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "PUBLISH_WORKS", p1 = "ui_tip", p2= "publish_works_tip", p3 = $btnInfo, context = $context)
+}
+
+PUBLISH_WORKS
+{
+    If($button == "left")
+    {
+        $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+        If(not CheckBalance(entity = $obj1, coinName = "green_currency", price = $price))
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_not_enough_money", time = 20)
+            Return()
+        }
+        PublishWorks(player = $obj1, id = $worksId, event = "PUBLISH_WORKS_RESPONSE")
+    }
+
+    If($button == "right")
+    {
+        $price = GetConfigVar(obj = $obj1, key = "publishWorksCubePrice")
+        If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_not_enough_money", time = 20)
+            Return()
+        }
+        BuyGoods(player = $obj1, uniqueId = 1000002,  coinId = 0, price = $price, worksId = $worksId, event = "PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE" )
+    }
+}
+
+PUBLISH_WORKS_RESPONSE
+{
+    Test($response)
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
     If($code == 1)
     {
-        $data = DictionaryGet(dict = $dictValue, key = "data")
-        UpdateUIData(player = $obj1, ui = "win_msgBoard", data = $data)
+        $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+        PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
     }
     Else
     {
-        UpdateUIData(player = $obj1, ui = "win_msgBoard", data = {})
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
     }
+}
+
+PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE
+{
+    Test("================================================== PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE")
+    Test($response)
+    $dictValue = NewDictionary($response)
+
+    $obj1 = DictionaryGet(dict = $dictValue, key = "player")
+    $worksId = DictionaryGet(dict = $dictValue, key = "worksId")
+
+    If($isSucceed)
+    {
+        PublishWorks(player = $obj1, id = $worksId, event = "PUBLISH_WORKS_BY_CUBE_RESPONSE")
+    }
+    Else
+    {
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
+    }
+}
+
+PUBLISH_WORKS_BY_CUBE_RESPONSE
+{
+    Test("================================================== PUBLISH_WORKS_BY_CUBE_RESPONSE")
+    Test($response)
+    $dictValue = NewDictionary($response)
+    $code = DictionaryGet(dict = $dictValue, key = "code")
+    If($code == 1)
+    {
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
+    }
+    Else
+    {
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
+    }
+}
+
+COMMENT_WORKS
+{
+    Test($msg)
+    CommentWorks(player = $obj1, id = $id, msg = $msg, event = "HTTP_TEST")
 }
 
 HTTP_TEST
@@ -2257,14 +2568,6 @@ HTTP_PURCHASED_DRESS_CALL_BACK
         }
     }
     SyncStore(player = $obj1)
-}
-
-PLAYER_ON_VISIT
-{
-    If ($obj1 and $obj2)
-    {
-        SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj2),pos = GetEntityPosition(entity = $obj2))
-    }
 }
 
 --打工
@@ -2413,36 +2716,40 @@ CLOSE_GPS(){ --按钮关闭进度条
     SetGuidePostion(entity = $obj1, pos = nil)
 }
 --场景商店的购买逻辑
-SCENE_SHOP_BUY(){
-   ShowNotice(
-        buttonType = 2,
-        content = "你确定要买鱼？",
-        eventYes = "SURE_BUY_ITEM",
-        eventNo = "",
-        entity = $obj1,
-        textP1 = "Hahahaha",
-        tittleKey = "Do you want Join My Family"
-    )
-}
-SURE_BUY_ITEM(){
-    $result = CommodityBuyItem(itemIndex = $itemIndex, player = $obj1)
-    --result: ack_of_money, gui_str_app_shop_inventory_is_full, gui_buy_goods_successful, ..
-    ShowNotice(
-        buttonType = 1,
-        content = $result,
-        eventYes = "SURE_BUY_ITEM",
-        eventNo = "",
-        entity = $obj1,
-        textP1 = "Hahahaha",
-        tittleKey = "Do you want Join My Family"
-    )
-}
---打开特权商店
-OPEN_PRISHOP(){
-    ShowUI(player = $obj1, uiName = "priShop", show = true)
+SURE_BUY(debug = false){
+   If($button == "left"){
+      Return()
+   }
+   $obj2 = GetObject(objID = $objID)
+   If($checkId ~= $obj1.buySessionSS or not $obj2 or not IsValidObject($obj2))
+   {
+      Return()
+   }
+   $itemfullName = GetConfigVar(obj = $obj2, key = "sellItem")
+   $price = GetConfigVar(obj = $obj2, key = "sellPrice")
+   $coinName = "green_currency"
+   $itemName = GetItemCfg(fullName = $itemfullName, key = "itemname")
+   $enoughMoney = CheckBalance(entity = $obj1, coinName = $coinName, price = $price)
+   If($enoughMoney){ --够钱
+         $checkBag = AddItem(entity = $obj1, cfg = $itemfullName, count = 1)
+         If($checkBag ~= false){
+            ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
+            PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
+            $owner = $obj2.owner
+            If($owner && IsValidObject($owner)){ --给领主加钱
+               $name = GetEntityName(entity = $obj1)
+               ShowTip(textKey = "gui_buys_your_stuff",textP1 = $name, textP2 = $itemName, tipType = 1, entity = $owner, keepTime = 20)
+               AddCurrency(entity = $owner, coinName = $coinName, count = $price)
+            }
+         }Else{ --背包满了
+            ShowTip(textKey = "gui_str_app_shop_inventory_is_full", tipType = 2, entity = $obj1, keepTime = 20)
+         }
+   }Else{ --不够钱
+      ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
+   }
 }
 --特权购买成功
-ENTITY_BUY_APPSTOP(debug = true){
+ENTITY_BUY_APPSTOP(debug = false){
     $dict = NewDictionary($shop)
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
@@ -2457,5 +2764,119 @@ ENTITY_BUY_APPSTOP(debug = true){
         
         ArrayAppend(array = $obj1.privilege, value = $name)
         --Test("------------",$obj1.privilege)
+    }
+}
+--弹窗购买特权
+POP_UP_BUY_PRIVILEGE(debug = false)
+{
+    If(not $itemName ){
+        Return()
+    }
+    $PRIVILEGE_TABLE = {
+            vip_privilege = 100000,
+            dance_privilege = 20000,
+            action_privilege = 3000,
+            music_privilege = 40000,
+            home_privilege = 50000,
+            svip_privilege = 60000,
+    }
+    $dict = NewDictionary($PRIVILEGE_TABLE)
+    $price = DictionaryGet(dict = $dict, key = $itemName)
+    If(not $price){
+        Return()
+    }
+    $obj1.checkprid = ($obj1.checkprid or 0 ) + 1
+    $Context = {
+        itemName = $itemName,
+        price = $price,
+        seccionid = $obj1.checkprid
+    }
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = nil,
+        rightContent = "ui_sure"
+    }
+    $content = {
+        msg = "gui_you_want_to_buy_this",
+        args = [ $price, $itemName]
+    }
+
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_BUY_PRI", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
+}
+SURE_BUY_PRI(debug = false)
+{
+    If($button == "left"){
+        Return()
+    }
+ 
+    If($seccionid ~= $obj1.checkprid or not $itemName)
+    {
+        Return()
+    }
+
+    BuyGoods(player = $obj1, uniqueId = 1000111,  coinId = 0, event = "BUY_PRI_GOODS" ,price = $price, itemName = $itemName, obj1 = $obj1)
+}
+BUY_PRI_GOODS(debug = false)
+{
+    $dict = NewDictionary($response)
+    $itemName = DictionaryGet(dict = $dict, key = "itemName")
+    $obj1 = DictionaryGet(dict = $dict, key = "obj1")
+    If($isSucceed){
+        ArrayAppend(array = $obj1.privilege, value = $itemName)
+        ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
+    }Else{
+        ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
+    }
+}
+--
+PLAYER_BE_INVITE(debug = true){
+    $obj1.visitTarget = $obj2
+    $contentDict = NewDictionary($content)
+    --todo: can close by showTime
+    --showTime = DictionaryGet(dict = $contentDict, key = "showTime")
+    ShowNotice(
+		buttonType = 2,
+		content = "gui_friend_invite_notice",
+		eventYes = "PLAYER_ON_VISIT",
+		entity = $obj1,
+		textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
+	)
+}
+PLAYER_BE_INVITE_OTHER_SERVER(debug = true){
+    $contentDict = NewDictionary($content)
+    $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
+    ShowNotice(
+		buttonType = 2,
+		content = "gui_friend_invite_notice",
+		eventYes = "PLAYER_ON_VISIT_OTHER_SERVER",
+		entity = $obj1,
+		textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
+	)
+}
+PLAYER_ON_VISIT_OTHER_SERVER(debug = true){
+	GotoOtherServer(targetUserId = $targetUserId or $obj1.visitTargetUserId, player = $obj1)
+}
+PLAYER_ON_VISIT(debug = true){
+    $fromInParty = false
+    $targetInRoom = false
+    $targetRoomLocked = true
+    $fromJustBeRemoved = false
+    If(not $target){
+        $target = $obj2 or $obj1.visitTarget
+    }
+    If(not $target){
+        Return()
+    }
+    If($fromInParty){
+        SetEntityPosition(entity = $obj1, pos = GetEntityPosition(entity = $target))
+    }
+    Else{
+        If($targetInRoom){
+            --todo
+        }
+        Else{
+            SetEntityPosition(entity = $obj1, pos = GetEntityPosition(entity = $target))
+        }
     }
 }
