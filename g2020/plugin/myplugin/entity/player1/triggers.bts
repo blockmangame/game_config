@@ -168,10 +168,12 @@ ENTITY_ENTER
     $house = GetObjectVar(obj = $obj1, key = "house")
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     SetObjectVar(obj = $obj1, key = "returnDoor", value = GetObjectVar(obj = $house, key = "door"))
-    SetEntityPosition(map = $houseInsideMap, entity = $obj1, 
+    $yaw = 0
+    If($obj1.curHouseCfg){
+        $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
+    }
+    SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
         pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-    SetEntityYaw(entity = $obj1, rotationYaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
-    SetBodyYaw(entity = $obj1, yaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 }
