@@ -1627,6 +1627,7 @@ INTERACTION_JOIN_FAMILY
         args = NewArray(GetEntityName(entity = $obj2))
     }
 
+    ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
     ShowDialogTip(entity = $obj1, tipType = 5, event = "REQUEST_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
