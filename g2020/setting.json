@@ -17,29 +17,6 @@
         "y": 18,
         "z": -560
     },
-    "uiNavigation": [
-        {
-            "name": "shop",
-            "iconPath": "set:main_page.json image:shop_icon.png",
-            "list": 1
-        },
-        {
-            "name": "team",
-            "iconPath": "set:main_page.json image:shop_icon.png",
-            "list": 1,
-            "event": "INIT_TEAM_UI"
-        },
-        {
-            "name": "dressArchive",
-            "iconPath": "set:main_page.json image:welfare_icon.png",
-            "list": 2
-        },
-        {
-            "name": "dance",
-            "iconPath": "set:main_page.json image:welfare_icon.png",
-            "list": 2
-        }
-    ],
 	"uiExtension": {
 		"hideBtnIcon": "set:btn_extension.json image:hide",
 		"openBtnIcon": "set:btn_extension.json image:open",
@@ -49,56 +26,56 @@
 				"showName": false,
 				"iconPath": "set:btn_extension.json image:check_in",
 				"tipWords": "",
-				"event": "EVENT_SHOW_DRESS_STORE"
+				"event": "EVENT_SHOW_NEW_SIGIN_IN"
 			},
 			{
 				"name": "photo",
 				"showName": false,
 				"iconPath": "set:btn_extension.json image:photo",
 				"tipWords": "",
-				"event": ""
+				"event": "EVENT_SHOW_FAMILY_ALBUM"
 			},
 			{
 				"name": "friend",
 				"showName": false,
 				"iconPath": "set:btn_extension.json image:friend",
 				"tipWords": "",
-				"event": ""
+				"event": "EVENT_SHOW_FRIEND"
 			},
 			{
 				"name": "family",
 				"showName": false,
 				"iconPath": "set:btn_extension.json image:family",
 				"tipWords": "",
-				"event": ""
+				"event": "EVENT_SHOW_FAMILY"
 			},
 			{
 				"name": "dress",
 				"showName": false,
 				"iconPath": "set:btn_extension.json image:dress",
 				"tipWords": "",
-				"event": ""
+				"event": "EVENT_OPEN_DRESS_ARCHIVE"
 			},
 			{
 				"name": "order",
 				"showName": false,
 				"iconPath": "set:btn_extension.json image:order",
 				"tipWords": "",
-				"event": ""
+				"event": "EVENT_SHOW_WORK_DETAILS"
 			},
 			{
 				"name": "g_cube_store",
 				"showName": false,
 				"iconPath": "set:btn_extension.json image:g_cube_store",
 				"tipWords": "",
-				"event": ""
+				"event": "EVENT_SHOW_PRI_SHOP"
 			},
 			{
 				"name": "party",
 				"showName": false,
 				"iconPath": "set:btn_extension.json image:party",
 				"tipWords": "",
-				"event": ""
+				"event": "EVENT_SHOW_PARTY"
 			}
 		]
 	},
