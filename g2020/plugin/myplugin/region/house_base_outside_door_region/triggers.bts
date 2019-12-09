@@ -13,10 +13,12 @@ REGION_ENTER {
     SetObjectVar(obj = $obj1, key = "returnDoor", value = $door)
     ------------------------------------------ 传送进内部房子
     $map = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "houseInsideMap")
-    SetEntityPosition(map = $map, entity = $obj1, 
+    $yaw = 0
+    If($obj1.curHouseCfg){
+        $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
+    }
+    SetEntityPosition(map = $map, entity = $obj1, ry = $yaw,
         pos = ComputeV3(p1 = GetMapInitPos(map = $map) or GetEntityPosition(entity = $obj1), p2 = Table(x = 0, y = 0.5, z = 0), op = "add"))
-    SetEntityYaw(entity = $obj1, rotationYaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
-    SetBodyYaw(entity = $obj1, yaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
     Test(GetObjectID(object = $ownerPlayer))
     Test(GetObjectID(object = $obj1))
     If(GetObjectID(object = $ownerPlayer) == GetObjectID(object = $obj1)){

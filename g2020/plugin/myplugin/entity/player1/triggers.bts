@@ -148,10 +148,11 @@ ENTITY_ENTER
     $dict = {}
     Foreach(array = $houseVars, key = "house"){
         $dict = NewDictionary($house)
-        If(DictionaryGet(dict = $dict, key = "isCurEquip")){
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
             Break()
         }
     }
+    $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
     ------------------------------------------ 获得当前地图上的空出的区域，创建房子 * 
     -- 区域 <region------owner> 房子 <house-------owner> 玩家，可通过区域获取区域上的房子，通过房子获得所属玩家。 反向同理
     $regions = GetAllRegion(map = GetEntityMap(entity = $obj1))
@@ -167,10 +168,12 @@ ENTITY_ENTER
     $house = GetObjectVar(obj = $obj1, key = "house")
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     SetObjectVar(obj = $obj1, key = "returnDoor", value = GetObjectVar(obj = $house, key = "door"))
-    SetEntityPosition(map = $houseInsideMap, entity = $obj1, 
+    $yaw = 0
+    If($obj1.curHouseCfg){
+        $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
+    }
+    SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
         pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-    SetEntityYaw(entity = $obj1, rotationYaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
-    SetBodyYaw(entity = $obj1, yaw = GetConfigVar(obj = $obj1, key = "insideMapRotationYaw"))
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 }
@@ -338,6 +341,7 @@ CHANGE_HOUSE_COLOR{ -- 换色
 
 CHANGE_HOUSE{ -- 换房子/存档
     $region = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "region")
+    $obj1.curHouseCfg = $newHouse
     ------------------------------------------ 改变房子(actor)，直接杀掉原来的，新建新的
     CallTrigger(object = $obj1, event = "REMOVE_HOUSE_OUTSIDE")
     ShowTip(entity = $obj1, tipType = 1, textKey = "house_change")
@@ -483,7 +487,7 @@ SURE_BUY_HOUSE{
             houseCfg = $houseCfg,
             houseSelectColor = $curSelect,
             houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
-            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or [],
+            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or ["", "", ""],
             isCurEquip = "disable",
             houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
             houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
@@ -946,8 +950,10 @@ BUY_HOUSE_REGION_COLOR{
     $childRegionArr = GetRegionConfig(region = $curInsideRegion, key = $childRegionKey) or {}
     
     Foreach(array = $childRegionArr, key = "cRegion"){
-        FillBlocksInRegion(map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap"), region = $cRegion, 
-            block = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
+        $insideMap = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
+        $block = GetBlockConfig(map = $insideMap, pos = GetRegionMin(region = $cRegion), key = "fullName")
+        ResetBlocksInRegion(map = $insideMap, region = $cRegion, 
+            sourceBlock = $block, destBlock = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
     }
 
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
@@ -2436,7 +2442,7 @@ CREATE_WORKS_RESPONSE
 
 SHOW_PUBLISH_WORKS_UI
 {
-    Test("===========================================================11111111")
+    Test("===========================================================SHOW_PUBLISH_WORKS_UI")
     $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
     $cubePrice = GetConfigVar(obj = $obj1, key = "publishWorksCubePrice" )
     $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = 0, rightContent = $cubePrice }
