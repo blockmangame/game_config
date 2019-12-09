@@ -67,10 +67,10 @@ DEC_INTERACTION_SALE{
 }
 
 DEC_INTERACTION_LEFT_ROTATION{ -- TODO 旋转时需要注意是否卡墙里（碰撞盒）
-    Test("----------------------------------DEC_INTERACTION_LEFT_ROTATION")
+    Test("----------------------------------DEC_INTERACTION_LEFT_ROTATION", GetEntityYaw(entity = $obj1))
     $yaw = (GetEntityYaw(entity = $obj1) or 0) + (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)
     SetEntityYaw(entity = $obj1, rotationYaw = $yaw)
-    SetBodyYaw(entity = $obj1, yaw = $yaw)
+    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw, time = 2, event = "ROTATION_BODY_YAW")
     
     CallTrigger(object = $obj1, event = "ROTATION_BOUNDING_BOX_LEFT")
 }
@@ -95,7 +95,7 @@ ROTATION_BOUNDING_BOX_LEFT{
 DEC_INTERACTION_RIGHT_ROTATION{ -- TODO 旋转时需要注意是否卡墙里（碰撞盒）
     $yaw = (GetEntityYaw(entity = $obj1) or 0) - (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)
     SetEntityYaw(entity = $obj1, rotationYaw = $yaw)
-    SetBodyYaw(entity = $obj1, yaw = $yaw)
+    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw, time = 2, event = "ROTATION_BODY_YAW")
 
     CallTrigger(object = $obj1, event = "ROTATION_BOUNDING_BOX_LEFT")
 }
@@ -115,6 +115,10 @@ ROTATION_BOUNDING_BOX_RIGHT{
     }Else{
         AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_90")
     }  
+}
+
+ROTATION_BODY_YAW{
+    SetBodyYaw(entity = $obj1, yaw = $yaw)
 }
 
 DEC_INTERACTION_TEST{
