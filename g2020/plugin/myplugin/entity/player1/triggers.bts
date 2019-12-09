@@ -152,6 +152,7 @@ ENTITY_ENTER
             Break()
         }
     }
+    $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
     ------------------------------------------ 获得当前地图上的空出的区域，创建房子 * 
     -- 区域 <region------owner> 房子 <house-------owner> 玩家，可通过区域获取区域上的房子，通过房子获得所属玩家。 反向同理
     $regions = GetAllRegion(map = GetEntityMap(entity = $obj1))
@@ -338,6 +339,7 @@ CHANGE_HOUSE_COLOR{ -- 换色
 
 CHANGE_HOUSE{ -- 换房子/存档
     $region = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "region")
+    $obj1.curHouseCfg = $newHouse
     ------------------------------------------ 改变房子(actor)，直接杀掉原来的，新建新的
     CallTrigger(object = $obj1, event = "REMOVE_HOUSE_OUTSIDE")
     ShowTip(entity = $obj1, tipType = 1, textKey = "house_change")
@@ -483,7 +485,7 @@ SURE_BUY_HOUSE{
             houseCfg = $houseCfg,
             houseSelectColor = $curSelect,
             houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
-            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or [],
+            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or ["", "", ""],
             isCurEquip = "disable",
             houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
             houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",

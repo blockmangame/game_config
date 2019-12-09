@@ -71,11 +71,12 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
                     $childRegionArr = GetRegionConfig(region = $region, key = ArrayGet(array = $childRegionKeyArr, index = $index)) or {}
                     Foreach(array = $childRegionArr, key = "cRegion"){
                         $block = GetBlockConfig(map = $map, pos = GetRegionMin(region = $cRegion), key = "fullName")
-                        ResetBlocksInRegion(map = $map, region = $cRegion, sourceBlock = $block, 
-                            destBlock = ArrayGet(array = $childRegionColorArr, index = $index) or 
-                            ArrayGet(array = $defaultChildRegionBlock, index = $index) or 
-                            GetRegionConfig(region = $region, key = "defaultBlock")
-                        )
+                        $destBlock = ArrayGet(array = $childRegionColorArr, index = $index) or 
+                                    ArrayGet(array = $defaultChildRegionBlock, index = $index) or 
+                                    GetRegionConfig(region = $region, key = "defaultBlock")
+                        If($destBlock and "" ~= $destBlock){
+                            ResetBlocksInRegion(map = $map, region = $cRegion, sourceBlock = $block, destBlock = $destBlock)
+                        }
                     }
                 }
                 Break()
@@ -85,8 +86,10 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
             Foreach(array = $childRegionKeyArr, key = "key"){
                 Foreach(array = GetRegionConfig(region = $region, key = $key) or {}, key = "cRegion"){
                     $block = GetBlockConfig(map = $map, pos = GetRegionMin(region = $cRegion), key = "fullName")
-                    ResetBlocksInRegion(map = $map, region = $cRegion, 
-                        sourceBlock = $block, destBlock = GetRegionConfig(region = $region, key = "defaultBlock"))
+                    $destBlock = GetRegionConfig(region = $region, key = "defaultBlock")
+                    If($destBlock and "" ~= $destBlock){
+                        ResetBlocksInRegion(map = $map, region = $cRegion, sourceBlock = $block, destBlock = $destBlock)
+                    }
                 }
             }
         }
