@@ -2421,7 +2421,7 @@ CREATE_WORKS_RESPONSE
 
 SHOW_PUBLISH_WORKS_UI
 {
-    Test("===========================================================11111111")
+    Test("===========================================================SHOW_PUBLISH_WORKS_UI")
     $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
     $cubePrice = GetConfigVar(obj = $obj1, key = "publishWorksCubePrice" )
     $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = 0, rightContent = $cubePrice }
