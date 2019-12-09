@@ -29,7 +29,7 @@ DEC_INTERACTION_MOVE_TOUCH_BEGIN{
 }
 
 DEC_INTERACTION_MOVE_TOUCH_END{
-    Test("----------------------------------DEC_INTERACTION_MOVE_TOUCH_END")
+    Test("----------------------------------DEC_INTERACTION_MOVE_TOUCH_END", $entityPos)
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = $entityPos or GetEntityPosition(entity = $obj1))
 }
 
