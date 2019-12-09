@@ -1699,6 +1699,20 @@ REQUEST_JOIN_FAMILY
     }
 }
 
+
+SHOW_TEAM_UI
+{
+    $teamId = GetEntityTeam(entity = $obj1)
+    If($teamId and $teamId ~= 0)
+    {
+        CallTrigger(event = "INIT_TEAM_UI", object = $obj1) 
+    }
+    Else
+    {
+        CallTrigger(event = "SHOW_TEAM_CREATE_UI", object = $obj1) 
+    }
+}
+
 SHOW_TEAM_CREATE_UI
 {
 
