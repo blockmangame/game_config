@@ -1,30 +1,45 @@
 {
-    "isOpaqueFullCube": false,
-    "breakTime": 20,
-    "renderPass": 4,
+    "collisionBoxes": [
+        {
+            "max": {
+                "z": 1,
+                "x": 1,
+                "y": 0.5
+            },
+            "min": {
+                "z": 0,
+                "x": 0,
+                "y": 0
+            }
+        }
+    ],
+    "lightOpacity": 15,
+    "renderPass": null,
     "blockObjectOnCollision": false,
+    "breakTime": 20,
+    "isOpaqueFullCube": false,
     "quads": [
         {
             "pos": [
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 0.55,
-                    "z": 1
+                    "y": 0.55
                 },
                 {
+                    "z": 1,
                     "x": 1,
-                    "y": 0.55,
-                    "z": 0
+                    "y": 0.55
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 0.55,
-                    "z": 0
+                    "y": 0.55
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 0.55,
-                    "z": 1
+                    "y": 0.55
                 }
             ],
             "texture": "bed_head_top.png"
@@ -32,24 +47,24 @@
         {
             "pos": [
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 0,
-                    "z": 0
+                    "y": 1
                 },
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 1,
-                    "z": 0
+                    "y": 0
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 1,
-                    "z": 0
+                    "y": 0
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 0,
-                    "z": 0
+                    "y": 1
                 }
             ],
             "texture": "bed_head_side_1.png"
@@ -57,24 +72,24 @@
         {
             "pos": [
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 0,
-                    "z": 1
+                    "y": 1
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 1,
-                    "z": 1
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 1,
-                    "y": 1,
-                    "z": 1
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 1,
-                    "y": 0,
-                    "z": 1
+                    "y": 1
                 }
             ],
             "texture": "bed_head_side_2.png"
@@ -82,42 +97,27 @@
         {
             "pos": [
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 0,
-                    "z": 0
+                    "y": 1
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 1,
-                    "z": 0
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 1,
-                    "z": 1
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 0,
-                    "z": 1
+                    "y": 1
                 }
             ],
             "texture": "bed_head_end.png"
         }
-    ],
-    "collisionBoxes": [
-        {
-            "min": {
-                "z": 0,
-                "x": 0,
-                "y": 0
-            },
-            "max": {
-                "z": 1,
-                "x": 1,
-                "y": 0.5
-            }
-        }
-    ],
-    "base": "base_block"
+    ]
 }

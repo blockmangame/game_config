@@ -1,48 +1,48 @@
 {
+    "isOpaqueFullCube": false,
+    "lightOpacity": 0,
     "collisionBoxes": [
         {
             "max": {
-                "x": 1,
+                "z": 1,
                 "y": 0.2,
-                "z": 1
+                "x": 1
             },
             "min": {
-                "x": 0,
+                "z": 0,
                 "y": 0,
-                "z": 0
+                "x": 0
             }
         }
     ],
-    "blockObjectOnCollision": false,
-    "renderPass": 4,
-    "isOpaqueFullCube": false,
     "quads": [
         {
+            "texture": "gold_block.png",
             "pos": [
                 {
-                    "x": 1,
+                    "z": 1,
                     "y": 0.2,
-                    "z": 0
+                    "x": 1
                 },
                 {
-                    "x": 1,
+                    "z": 0,
                     "y": 0.2,
-                    "z": 1
+                    "x": 1
                 },
                 {
-                    "x": 0,
+                    "z": 0,
                     "y": 0.2,
-                    "z": 1
+                    "x": 0
                 },
                 {
-                    "x": 0,
+                    "z": 1,
                     "y": 0.2,
-                    "z": 0
+                    "x": 0
                 }
-            ],
-            "texture": "gold_block.png"
+            ]
         }
     ],
     "breakTime": 20,
-    "base": "base_block"
+    "renderPass": null,
+    "blockObjectOnCollision": false
 }

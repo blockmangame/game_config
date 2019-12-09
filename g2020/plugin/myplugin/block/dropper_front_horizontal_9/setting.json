@@ -1,27 +1,32 @@
 {
+    "lightOpacity": 15,
+    "renderPass": null,
+    "blockObjectOnCollision": false,
+    "breakTime": 20,
+    "isOpaqueFullCube": false,
     "quads": [
         {
             "texture": "dropper_front_horizontal.png",
             "pos": [
                 {
+                    "z": 1,
                     "x": 1,
-                    "y": 1,
-                    "z": 0
+                    "y": 1
                 },
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 1,
-                    "z": 1
+                    "y": 1
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 1,
-                    "z": 1
+                    "y": 1
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 1,
-                    "z": 0
+                    "y": 1
                 }
             ]
         },
@@ -29,24 +34,24 @@
             "texture": "furnace_side.png",
             "pos": [
                 {
-                    "x": 1,
-                    "y": 0,
-                    "z": 0
-                },
-                {
-                    "x": 1,
-                    "y": 0,
-                    "z": 1
-                },
-                {
+                    "z": 1,
                     "x": 0,
-                    "y": 0,
-                    "z": 1
+                    "y": 0
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 0,
-                    "z": 0
+                    "y": 0
+                },
+                {
+                    "z": 0,
+                    "x": 1,
+                    "y": 0
+                },
+                {
+                    "z": 1,
+                    "x": 1,
+                    "y": 0
                 }
             ]
         },
@@ -54,24 +59,24 @@
             "texture": "furnace_side.png",
             "pos": [
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 1,
-                    "z": 0
+                    "y": 1
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 1,
-                    "z": 1
+                    "y": 1
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 0,
-                    "z": 1
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 0,
-                    "z": 0
+                    "y": 0
                 }
             ]
         },
@@ -79,24 +84,24 @@
             "texture": "furnace_side.png",
             "pos": [
                 {
+                    "z": 1,
                     "x": 1,
-                    "y": 1,
-                    "z": 0
+                    "y": 0
                 },
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 1,
-                    "z": 1
+                    "y": 0
                 },
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 0,
-                    "z": 1
+                    "y": 1
                 },
                 {
+                    "z": 1,
                     "x": 1,
-                    "y": 0,
-                    "z": 0
+                    "y": 1
                 }
             ]
         },
@@ -104,24 +109,24 @@
             "texture": "furnace_top.png",
             "pos": [
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 0,
-                    "z": 0
+                    "y": 1
                 },
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 1,
-                    "z": 0
+                    "y": 0
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 1,
-                    "z": 0
+                    "y": 0
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 0,
-                    "z": 0
+                    "y": 1
                 }
             ]
         },
@@ -129,31 +134,26 @@
             "texture": "furnace_top.png",
             "pos": [
                 {
-                    "x": 1,
-                    "y": 0,
-                    "z": 1
-                },
-                {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                },
-                {
+                    "z": 1,
                     "x": 0,
-                    "y": 1,
-                    "z": 1
+                    "y": 1
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 0,
-                    "z": 1
+                    "y": 0
+                },
+                {
+                    "z": 1,
+                    "x": 1,
+                    "y": 0
+                },
+                {
+                    "z": 1,
+                    "x": 1,
+                    "y": 1
                 }
             ]
         }
-    ],
-    "blockObjectOnCollision": false,
-    "breakTime": 20,
-    "renderPass": 4,
-    "isOpaqueFullCube": false,
-    "base": "base_block"
+    ]
 }
