@@ -2627,17 +2627,28 @@ GET_TASK_UI_DATA(){ --更新UI数据。
         $count = 10 
     }
     $textCount = $count
-    $str = "/"
-    If($obj1.taskKey){
-        $str = "/rd"
-    }
     $isTasking = false
     If($obj1.taskKey){
         $count = $count - 1
         $isTasking = true
     }
+    $str = "/"
+    If($obj1.taskKey){
+        If($textCount == 1){
+            $str = "/st"
+        }ElseIf($textCount == 2){
+            $str = "/nd"
+        }ElseIf($textCount == 3){
+            $str = "/rd"
+        }Else{
+            $str = "/th"
+        }
+    }
     $text = Concat(p1 = $textCount, p2 = $str, p3 = "40")
     $rate = $count / 10
+    If(not $obj1.taskKey){
+        $text = ""
+    }
     $taskData = Table(
         Progress =  $rate,
         BtnText = $text,
