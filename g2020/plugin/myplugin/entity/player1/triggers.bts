@@ -46,7 +46,7 @@ INTERACTION_FEED(debug = true){
     )
     CallTrigger(
         object = $obj1,
-        event = "FUNC_STATE_RELEASE_AND_REWARD",
+        event = "FUNC_STATE_RELEASE",
         state = $state
     )
 }
@@ -1029,7 +1029,6 @@ FUNC_STATE_GENERATE --params: stateBase, col, skill
         SetObjectVar(obj = $obj1, value = $state, key = Concat(p1 = "pre", p2 = $stateBase))
         SetObjectVar(obj = $obj1, value = $col, key = Concat(p1 = $stateBase, p2 = "Idx"))
     }
-    --ShowBubbleMsg(entity = $obj1, textKey = "state_get", textP1 = $state)
     ShowBubbleMsg(
         entity = $obj1,
         contents = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "tipContents")
@@ -1116,7 +1115,29 @@ FUNC_STATE_AFFECT_OTHER --params: state
     }
 }
 
-FUNC_STATE_IS_IN_REGION_BEGIN --params: state
+FUNC_STATE_RIDEON --params: ride[, isCancel = false]
+{
+    If(not $ride)
+    {
+        Return()
+    }
+
+    $state = GetConfigVar(obj = $ride, key = "releaseState")
+    If(not $state)
+    {
+        Return()
+    }
+    If(not $isCancel)
+    {
+        CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = $state)
+    }
+    Else
+    {
+        CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $state)
+    }
+}
+
+FUNC_STATE_CHECK_IS_IN_REGION --params: state
 {   
     -- 判断状态生成时是否就已经在区域里面了
     If("region" ~= GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "releaseType"))
@@ -1186,26 +1207,12 @@ FUNC_REGION_STATE_OPERATION --parmas: opt, state
     CallTrigger(
         object = $obj1,
         state = $state,
-        event = $opt ~= "LEAVE" and "FUNC_STATE_START_PROGRESS" or "FUNC_STATE_SUSPEND_PROGRESS"
+        event = $opt ~= "LEAVE" and "FUNC_STATE_RELEASE" or "FUNC_STATE_RELEASE_SUSPEND"
     )
 }
 
-FUNC_STATE_SUSPEND_PROGRESS --params: state
+FUNC_STATE_SUSPEND_PROGRESS --params: state, stateBase, duration
 {
-    If(not $state)
-    {
-        Return()
-    }
-
-    $skill = Concat(p1 = @skillPath, p2 = $state)
-    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
-    $duration = GetSkillVar(fullName = $skill, key = "duration")
-
-    If(not $duration || $duration <= 0 || not GetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase)))
-    {
-        Return()
-    }
-    
     CallTrigger(
         object = $obj1,
         pgName = $state,
@@ -1230,22 +1237,8 @@ FUNC_STATE_SUSPEND_PROGRESS --params: state
     }
 }
 
-FUNC_STATE_START_PROGRESS --params: state
+FUNC_STATE_START_PROGRESS --params: state, stateBase, duration
 {
-    If(not $state)
-    {
-        Return()
-    }
-
-    $skill = Concat(p1 = @skillPath, p2 = $state)
-    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
-    $duration = GetSkillVar(fullName = $skill, key = "duration")
-
-    If(not $duration || $duration <= 0 || not GetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase)))
-    {
-        Return()
-    }
-
     $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime")) or 0
 
     SetObjectVar(obj = $obj1, value = GetTime(), key = Concat(p1 = $stateBase, p2 = "STime"))
@@ -1273,25 +1266,16 @@ FUNC_STATE_START_PROGRESS --params: state
             object =$obj1,
             state = $state,
             time = (($duration - $usedTime) * 20) // 1,
-            event = "FUNC_STATE_RELEASE_AND_REWARD"
+            event = "FUNC_STATE_REWARD"
         )
     )
 }
 
-FUNC_STATE_RELEASE_AND_REWARD --params: state
+FUNC_STATE_REWARD --state [, stateBase, skill]
 {
-    If(not $state)
-    {
-        Return()
-    }
+    $skill = $skill or Concat(p1 = @skillPath, p2 = $state)
+    $stateBase = $stateBase or GetSkillVar(fullName = $skill, key = "stateBase") or $state
 
-    $skill = Concat(p1 = @skillPath, p2 = $state)
-    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
-    $hadState = Concat(p1 = "had", p2 = $stateBase)
-    If(not GetObjectVar(obj = $obj1, key = $hadState))
-    {
-        Return()
-    }
     $interactList = GetObjectVar(
         obj = $obj1,
         key = Concat(p1 = $stateBase, p2 = "InteractList")
@@ -1351,6 +1335,52 @@ FUNC_STATE_RELEASE_AND_REWARD --params: state
         textKey = "reward_takeCare",
         rewardType = $rewardType
     )
+}
+
+FUNC_STATE_RELEASE --params: state
+{
+    If(not $state)
+    {
+        Return()
+    }
+
+    $skill = Concat(p1 = @skillPath, p2 = $state)
+    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
+    $hadState = Concat(p1 = "had", p2 = $stateBase)
+    If(not GetObjectVar(obj = $obj1, key = $hadState))
+    {
+        Return()
+    }
+    $duration = GetSkillVar(fullName = $skill, key = "duration")
+    If($duration && $duration > 0)
+    {
+        CallTrigger(object = $obj1, event = "FUNC_STATE_START_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
+    }
+    Else
+    {
+        CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD", state = $state, stateBase = $stateBase, skill = $skill)
+    }
+}
+
+FUNC_STATE_RELEASE_SUSPEND --params: state
+{
+    If(not $state)
+    {
+        Return()
+    }
+
+    $skill = Concat(p1 = @skillPath, p2 = $state)
+    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
+    $hadState = Concat(p1 = "had", p2 = $stateBase)
+    If(not GetObjectVar(obj = $obj1, key = $hadState))
+    {
+        Return()
+    }
+    $duration = GetSkillVar(fullName = $skill, key = "duration")
+    If($duration && $duration > 0)
+    {
+        CallTrigger(object = $obj1, event = "FUNC_STATE_SUSPEND_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
+    }
 }
 
 FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey, rewardType
@@ -1497,7 +1527,8 @@ FUNC_STATE_ACTION --params: state
 {
     CallTrigger(object = $obj1, event = "FUNC_STATE_ADD_EFFECT", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_START_AFFECT", state = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_IS_IN_REGION_BEGIN", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_IS_IN_REGION", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RIDEON", ride = GetRideOn(entity = $obj1)) --检查是否已经在骑乘并且该骑乘是否会触发解除状态
 }
 
 INTERACTION_CLAP { --拍手 小孩和小孩
@@ -1554,6 +1585,7 @@ ENTITY_JUMP {
     $ride = GetRideOn(entity = $obj1)
     If ($ride){
         ClearRide(entity = $ride)
+        CallTrigger(object = $obj1, event = "FUNC_STATE_RIDEON", ride = $ride, isCancel = true)
     }
 }
 

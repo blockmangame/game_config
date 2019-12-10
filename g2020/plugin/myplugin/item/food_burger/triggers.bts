@@ -1,4 +1,4 @@
 --BUG: triggers can not be inherited!!!
 USE_ITEM(debug = true){
-    CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_AND_REWARD", state = "hunger")
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = "hunger")
 }
