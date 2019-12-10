@@ -47,11 +47,11 @@ DEC_INTERACTION_SALE{
     }
     $furnitures = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing")
     ForLoop(from = 1, to = ArraySize(array = $furnitures), key = "index"){
-        $furniture = ArrayGet(array = $furnitures, index = $index)
-        If(ArrayGet(array = $furniture, index = 4) == $objID){
-            $cfg = ArrayGet(array = $furniture, index = 3)
+        $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $index))
+        If(DictionaryGet(dict = $fDict, key = "furnishingId") == $objID){
+            $cfg = DictionaryGet(dict = $fDict, key = "cfg")
             $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
-            If(ArrayGet(array = $furniture, index = 5)){
+            If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
                 $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
             }
             $coinName = GetEntityCfg(fullName = $cfg, key = "coinName")
