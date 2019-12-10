@@ -53,6 +53,8 @@ INTERACTION_FEED(debug = true){
 
 ENTITY_ENTER
 {
+    UpdateUIData(player = $obj1, ui = "circleProgress", data = {})
+    OpenWindows(win = "workTask", player = $obj1)
     CallTrigger(event = "INIT_WORK_TASK", object = $obj1) --初始化打工任务
     If(IsPlayer(entity = $obj1))
     {
@@ -2646,9 +2648,6 @@ GET_TASK_UI_DATA(){ --更新UI数据。
     }
     $text = Concat(p1 = $textCount, p2 = $str, p3 = "40")
     $rate = $count / 10
-    If(not $obj1.taskKey){
-        $text = ""
-    }
     $taskData = Table(
         Progress =  $rate,
         BtnText = $text,
