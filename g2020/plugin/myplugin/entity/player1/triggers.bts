@@ -205,8 +205,11 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
                 houseInsideFurnishing = [ -- houseInsideFurnishing , 房子内部物品摆放
                     -- pos是相对坐标，每个map都有一个initPos，坐标都是这个initPos+pos
                     -- 绝对坐标也行
-                    {pos = {x = "xx", y = "xx", z = "xx"},yaw = 0,cfg = "myplugin/xxx...",furnishingId = "id",isOldFurnishing = "true/false"}
-                    -- {pos,yaw,cfg,全局唯一id:furnishingId（当前obj的id）,是否是旧家具，下线后则会将当前玩家全部房子的全部家具设置成true，即是旧家具}
+                    {pos = {x = "xx", y = "xx", z = "xx"},yaw = 0,cfg = "myplugin/xxx...",
+                        furnishingId = "id",isOldFurnishing = "true/false", saveSkinList = [{skinName = "xxx", skin = "xxx"}]}
+                    -- {pos,yaw,cfg,全局唯一id:furnishingId（当前obj的id）,
+                    -- isOldFurnishing 是否是旧家具，下线后则会将当前玩家全部房子的全部家具设置成true，即是旧家具
+                    -- saveSkinList 特殊家具需要保存皮肤列表（需要在该家具中配一个saveSkinList 要保存的皮肤列表）}
                 ],
                 houseInsideRegionColors = [ -- houseInsideRegionColors 房子内部区域颜色
                     ["regionkey", ["myplugin/xxx...","myplugin/xxx...","myplugin/xxx..."]], -- 第一个key是对应的region key，通过这个key获取这个区域region/获取到配置
@@ -648,6 +651,17 @@ SAVE_FURNITURE{
         If($npc){
             DictionarySet(dict = $fDict, key = "pos", value = GetEntityPosition(entity = $npc))
             DictionarySet(dict = $fDict, key = "yaw", value = GetEntityYaw(entity = $npc))
+            -- 如果是衣架，有saveSkinList，则需要保存当前衣架的皮肤
+            If(GetConfigVar(obj = $npc, key = "saveSkinList")){
+                $saveSkinList = {}
+                Foreach(array = GetConfigVar(obj = $npc, key = "saveSkinList"), key = "skinName"){
+                    ArrayAppend(array = $skinList, value = {
+                        skinName = $skinName,
+                        skin = GetSkin(entity = $npc, skinName = $skinName)
+                    })
+                }
+                DictionarySet(dict = $fDict, key = "saveSkinList", value = $saveSkinList)
+            }
         }
         ArraySet(array = $furnitures, index = $fIndex, value = DictionaryToTable(dict = $fDict))
     }

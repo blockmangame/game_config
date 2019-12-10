@@ -90,6 +90,8 @@ CHANGE_MODEL_SKIN()
         SetSkin(entity = $obj1, skinName = "custom_tail", skinValue = $tail)
         $obj1.tail = $tail
     }
+
+    CallTrigger(object = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "owner"), event = "SAVE_FURNITURE")
 }
 
 CHANGE_PLAYER_SKIN
@@ -176,4 +178,5 @@ CHANGE_PLAYER_SKIN
         $player.tail = $tail
     }
 
+    CallTrigger(object = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "owner"), event = "SAVE_FURNITURE")
 }

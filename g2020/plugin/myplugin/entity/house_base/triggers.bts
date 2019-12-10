@@ -120,6 +120,12 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
             }
             AddEntityBuff(entity = $npc, cfg = Concat(p1= "myplugin/rotate_bounding_box_buff_", p2 = $ry))
         }
+        Foreach(array = DictionaryGet(dict = $fDict, key = "saveSkinList") or {}, key = "skinTb"){
+            $skinDict = NewDictionary($skinTb)
+            If(DictionaryGet(dict = $skinDict, key = "skin")){
+                SetSkin(entity = $npc, skinName = DictionaryGet(dict = $skinDict, key = "skinName"), skinValue = DictionaryGet(dict = $skinDict, key = "skin"))
+            }
+        }
         DictionarySet(dict = $fDict, key = "furnishingId", value = GetObjectID(object = $npc))
         SetObjectVar(obj = $npc, key = "house", value = $obj1)
         ArraySet(array = $furnitures, index = $findex, value = DictionaryToTable(dict = $fDict))
