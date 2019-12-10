@@ -23,27 +23,10 @@
         },
         "centerBtns":[
             {
-                "text":"",
-                "widgetFileName":"",
-                "image":"",
-                "event": ""
-            }
-        ]
-    },
-    "interactionUI_1":{
-        "cfgKey": "interactionUI_1",
-        "aroundParams":{
-            "radius": 100
-        },
-        "followParams":{
-            "followScenePos":false
-        },
-        "aroundBtns":[
-            {
-                "text":"1",
-                "image":"",
-                "event": "INTERACTION_1",
-                "disable": true
+                "text":"领取订单",
+                "widgetFileName":"widget_button",
+                "image":"set:add_sub.json image:add",
+                "event": "GET_TASK"
             }
         ]
     },
@@ -51,7 +34,7 @@
       "radius": 1,
       "offset":{
           "x": 0,
-          "y": -1,
+          "y": 0,
           "z": 2
       }
     }

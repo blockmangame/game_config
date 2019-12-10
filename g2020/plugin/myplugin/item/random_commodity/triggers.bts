@@ -1,4 +1,4 @@
-USE_ITEM(debug = false) --随机抽奖，抽奖道具使用后随机获得奖品
+USE_ITEM(debug = true) --随机抽奖，抽奖道具使用后随机获得奖品
 {
     --TO DO 播放特效
     $rewardArray = NewArray()
@@ -14,26 +14,14 @@ USE_ITEM(debug = false) --随机抽奖，抽奖道具使用后随机获得奖品
     $count = 0
     Foreach(array = $rewardArray or {}, key = "rewardA"){
         $dict = NewDictionary($rewardA)
-        If(DictionaryGet(dict = $dict, key = "type") == "List")
-        {
-            $array = DictionaryGet(dict = $dict, key = "array")
-            $index = 0
-            Foreach(array = $array or {} , key = "reward")
-            {
-                $index = $index + 1
-                $rewardDict = NewDictionary($reward)
-                $name = DictionaryGet(dict = $rewardDict, key = "name")
-                If($name ~= "myplugin/blueprint_sword")
-                {
-                    ArrayAppend(array = $reardList, value = $reward)
-                }
-            }
-        }Else{
+        $name = DictionaryGet(dict = $dict, key = "name")
+        $once = DictionaryGet(dict = $dict, key = "weight")
+        $find = ArrayFind(array = $obj1.randomOnce, value = $name)
+        If( not ($once == true and $find)){
             ArrayAppend(array = $reardList, value = $rewardA)
+            $weight = DictionaryGet(dict = $dict, key = "weight")
+            $count = $count + $weight
         }
-        $rewardDict = NewDictionary($rewardA)
-        $weight = DictionaryGet(dict = $rewardDict, key = "weight")
-        $count = $count + $weight
     }
     $sum = Random(min = 1, max = $count)
     Foreach(array = $reardList, key = "item"){

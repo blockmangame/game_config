@@ -1,0 +1,7 @@
+
+TEST_SHOW_NEW_UI(debug = true){
+    UpdateObjectInteractionUI(cfgKey = "interactionUI_1", player = $obj2, target = $obj1, show = true)
+}
+ENTITY_CLICK {
+	RideOn(ctrl = false, entity = $obj2, target = $obj1)
+}
