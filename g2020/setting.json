@@ -5,6 +5,9 @@
     "needSave": true,
     "personalShop": false,
     "hideTeamStatusBar": true,
+    "isShowFriendUI": true,
+    "isShowSignInUI": true,
+    "ShowFriendUIEvent": "EVENT_SHOW_FRIEND",
     "waitPlayerTime": 0,
     "waitStartTime": 0,
     "waitGoTime": 0,
@@ -22,25 +25,11 @@
 		"openBtnIcon": "set:btn_extension.json image:open",
 		"btnList": [
 			{
-				"name": "check_in",
-				"showName": false,
-				"iconPath": "set:btn_extension.json image:check_in",
-				"tipWords": "",
-				"event": "EVENT_SHOW_NEW_SIGIN_IN"
-			},
-			{
 				"name": "photo",
 				"showName": false,
 				"iconPath": "set:btn_extension.json image:photo",
 				"tipWords": "",
 				"event": "EVENT_SHOW_FAMILY_ALBUM"
-			},
-			{
-				"name": "friend",
-				"showName": false,
-				"iconPath": "set:btn_extension.json image:friend",
-				"tipWords": "",
-				"event": "EVENT_SHOW_FRIEND"
 			},
 			{
 				"name": "family",
