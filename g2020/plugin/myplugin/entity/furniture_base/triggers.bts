@@ -29,7 +29,7 @@ DEC_INTERACTION_MOVE_TOUCH_BEGIN{
 }
 
 DEC_INTERACTION_MOVE_TOUCH_END{
-    Test("----------------------------------DEC_INTERACTION_MOVE_TOUCH_END")
+    Test("----------------------------------DEC_INTERACTION_MOVE_TOUCH_END", $entityPos)
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = $entityPos or GetEntityPosition(entity = $obj1))
 }
 
@@ -47,11 +47,11 @@ DEC_INTERACTION_SALE{
     }
     $furnitures = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing")
     ForLoop(from = 1, to = ArraySize(array = $furnitures), key = "index"){
-        $furniture = ArrayGet(array = $furnitures, index = $index)
-        If(ArrayGet(array = $furniture, index = 4) == $objID){
-            $cfg = ArrayGet(array = $furniture, index = 3)
+        $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $index))
+        If(DictionaryGet(dict = $fDict, key = "furnishingId") == $objID){
+            $cfg = DictionaryGet(dict = $fDict, key = "cfg")
             $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
-            If(ArrayGet(array = $furniture, index = 5)){
+            If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
                 $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
             }
             $coinName = GetEntityCfg(fullName = $cfg, key = "coinName")
@@ -67,10 +67,10 @@ DEC_INTERACTION_SALE{
 }
 
 DEC_INTERACTION_LEFT_ROTATION{ -- TODO 旋转时需要注意是否卡墙里（碰撞盒）
-    Test("----------------------------------DEC_INTERACTION_LEFT_ROTATION")
+    Test("----------------------------------DEC_INTERACTION_LEFT_ROTATION", GetEntityYaw(entity = $obj1))
     $yaw = (GetEntityYaw(entity = $obj1) or 0) + (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)
     SetEntityYaw(entity = $obj1, rotationYaw = $yaw)
-    SetBodyYaw(entity = $obj1, yaw = $yaw)
+    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw, time = 2, event = "ROTATION_BODY_YAW")
     
     CallTrigger(object = $obj1, event = "ROTATION_BOUNDING_BOX_LEFT")
 }
@@ -95,7 +95,7 @@ ROTATION_BOUNDING_BOX_LEFT{
 DEC_INTERACTION_RIGHT_ROTATION{ -- TODO 旋转时需要注意是否卡墙里（碰撞盒）
     $yaw = (GetEntityYaw(entity = $obj1) or 0) - (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)
     SetEntityYaw(entity = $obj1, rotationYaw = $yaw)
-    SetBodyYaw(entity = $obj1, yaw = $yaw)
+    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw, time = 2, event = "ROTATION_BODY_YAW")
 
     CallTrigger(object = $obj1, event = "ROTATION_BOUNDING_BOX_LEFT")
 }
@@ -115,6 +115,10 @@ ROTATION_BOUNDING_BOX_RIGHT{
     }Else{
         AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_90")
     }  
+}
+
+ROTATION_BODY_YAW{
+    SetBodyYaw(entity = $obj1, yaw = $yaw)
 }
 
 DEC_INTERACTION_TEST{

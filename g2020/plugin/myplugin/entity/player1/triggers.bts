@@ -53,6 +53,8 @@ INTERACTION_FEED(debug = true){
 
 ENTITY_ENTER
 {
+    UpdateUIData(player = $obj1, ui = "circleProgress", data = {})
+    OpenWindows(win = "workTask", player = $obj1)
     CallTrigger(event = "INIT_WORK_TASK", object = $obj1) --初始化打工任务
     If(IsPlayer(entity = $obj1))
     {
@@ -112,8 +114,8 @@ ENTITY_ENTER
                     houseCfg = "myplugin/house_default",
                     houseSelectColor = "myplugin/house_color_buff_11",
                     houseInsideFurnishing = [
-                        [{x = 1648,y=13,z=-574},0,"myplugin/test_dec_entity1","11111","true"],
-                        [{x = 1650,y=13,z=-574},90,"myplugin/test_dec_entity2","222222","false"],
+                        {pos = {x = 1648,y=13,z=-574},yaw = 0,cfg = "myplugin/test_dec_entity1",furnishingId = "11111",isOldFurnishing = "true"},
+                        {pos = {x = 1650,y=13,z=-574},yaw = 90,cfg = "myplugin/test_dec_entity2",furnishingId = "222222",isOldFurnishing = "false"},
                     ],
                     houseInsideRegionColors = [
                         ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
@@ -123,22 +125,6 @@ ENTITY_ENTER
                     houseName = "Sakura NeNe",
                     houseType = "house_type_big_house",
                     houseId = "1234567",
-                    houseInsideDoor = "myplugin/house_base_inside_door"
-                },{
-                    houseCfg = "myplugin/house_default",
-                    houseSelectColor = "myplugin/house_color_buff_11",
-                    houseInsideFurnishing = [
-                        [{x = 1648,y=13,z=-574},0,"myplugin/test_dec_entity1","11111","true"],
-                        [{x = 1650,y=13,z=-574},90,"myplugin/test_dec_entity2","222222","false"],
-                    ],
-                    houseInsideRegionColors = [
-                        ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
-                        ["house_default_inside_map_area_2",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]]
-                    ],
-                    isCurEquip = "disable",
-                    houseName = "Sakura NeNe",
-                    houseType = "house_type_big_house",
-                    houseId = "12345678",
                     houseInsideDoor = "myplugin/house_base_inside_door"
                 }
             ]
@@ -219,9 +205,11 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
                 houseInsideFurnishing = [ -- houseInsideFurnishing , 房子内部物品摆放
                     -- pos是相对坐标，每个map都有一个initPos，坐标都是这个initPos+pos
                     -- 绝对坐标也行
-                    [{x = "xx", y = "xx", z = "xx"},0,"myplugin/xxx...","id","true/false"],
-                    [{x = "xx", y = "xx", z = "xx"},0,"myplugin/xxx...","id","true/false"]
-                    -- {pos,yaw,cfg,全局唯一id:furnishingId（当前obj的id）,是否是旧家具，下线后则会将当前玩家全部房子的全部家具设置成true，即是旧家具}
+                    {pos = {x = "xx", y = "xx", z = "xx"},yaw = 0,cfg = "myplugin/xxx...",
+                        furnishingId = "id",isOldFurnishing = "true/false", saveSkinList = [{skinName = "xxx", skin = "xxx"}]}
+                    -- {pos,yaw,cfg,全局唯一id:furnishingId（当前obj的id）,
+                    -- isOldFurnishing 是否是旧家具，下线后则会将当前玩家全部房子的全部家具设置成true，即是旧家具
+                    -- saveSkinList 特殊家具需要保存皮肤列表（需要在该家具中配一个saveSkinList 要保存的皮肤列表）}
                 ],
                 houseInsideRegionColors = [ -- houseInsideRegionColors 房子内部区域颜色
                     ["regionkey", ["myplugin/xxx...","myplugin/xxx...","myplugin/xxx..."]], -- 第一个key是对应的region key，通过这个key获取这个区域region/获取到配置
@@ -280,9 +268,12 @@ UPDATE_FURNITURE_STATUS{
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
         $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
-        Foreach(array = DictionaryGet(dict = $dict, key = "houseInsideFurnishing"), key ="furniture"){
-            ArraySet(array = $furniture, index = 5, value = true)
-            ArraySet(array = $furniture, index = 4, value = 0)
+        $furnitures = DictionaryGet(dict = $dict, key = "houseInsideFurnishing")
+        ForLoop(from = 1, to = ArraySize(array = $furnitures or {}), key = "fIndex"){
+            $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $fIndex))
+            DictionarySet(dict = $fDict, key = "isOldFurnishing", value = true)
+            DictionarySet(dict = $fDict, key = "furnishingId", value = 0)
+            ArraySet(array = $furnitures, index = $fIndex, value = DictionaryToTable(dict = $fDict))
         }
         ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $dict))
     }
@@ -353,7 +344,6 @@ CHANGE_HOUSE{ -- 换房子/存档
 
 -------------------------------------- ui/btn/event
 HOUSE_TAB_EVENT{
-    -- TODO 更新出售的商品列表
     Test("---------HOUSE_TAB_EVENT")
     If(not $key or "0" == $key){
         Test("--------- u need buy")
@@ -530,9 +520,10 @@ SELL_HOUSE{
     $sellHouseMoney = $sellHouseMoney + GetEntityCfg(fullName = $sellHouseCfg, key = "sellMoney")
     $sellHouseFurnitures = DictionaryGet(dict = $curSelectDict, key = "houseInsideFurnishing") or {}
     Foreach(array = $sellHouseFurnitures, key = "furniture"){
-        $cfg = ArrayGet(array = $furniture, index = 3)
+        $fDict = NewDictionary($furniture)
+        $cfg = DictionaryGet(dict = $fDict, key = "cfg")
         $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
-        If(ArrayGet(array = $furniture, index = 5)){
+        If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
             $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
         }
         $sellHouseMoney = $sellHouseMoney + $sellMoney
@@ -588,9 +579,10 @@ SELL_HOUSE_SURE{
         count = GetEntityCfg(fullName = $sellHouseCfg, key = "sellMoney"))
     $sellHouseFurnitures = DictionaryGet(dict = $curSelectDict, key = "houseInsideFurnishing") or {}
     Foreach(array = $sellHouseFurnitures, key = "furniture"){
-        $cfg = ArrayGet(array = $furniture, index = 3)
+        $fDict = NewDictionary($furniture)
+        $cfg = DictionaryGet(dict = $fDict, key = "cfg")
         $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
-        If(ArrayGet(array = $furniture, index = 5)){
+        If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
             $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
         }
         $coinName = GetEntityCfg(fullName = $cfg, key = "coinName")
@@ -614,7 +606,7 @@ BUY_STORE{
     ShowGenericActorShowStore(entity = $obj1, closeWin =true)
     
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
-    $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg)
+    $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg, ry = 0, rp = 0)
     SetObjectVar(obj = $npc, key = "house", value = GetObjectVar(obj = $obj1, key = "house"))
     
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
@@ -626,9 +618,10 @@ BUY_STORE{
             Break()
         }
     }
-    ArrayAppend(array = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing"), value = [
-        GetEntityPosition(entity = $npc), GetEntityYaw(entity = $npc),$cfg,GetObjectID(object = $npc),false
-    ])
+    ArrayAppend(array = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing"), value = {
+        pos = GetEntityPosition(entity = $npc), yaw = GetEntityYaw(entity = $npc),cfg = $cfg,
+        furnishingId = GetObjectID(object = $npc),isOldFurnishing = false
+    })
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
@@ -651,12 +644,26 @@ SAVE_FURNITURE{
             Break()
         }
     }
-    Foreach(array = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing"), key = "furniture"){
-        $npc = GetObject(objID = ArrayGet(array = $furniture, index = 4))
+    $furnitures = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing")
+    ForLoop(from = 1, to = ArraySize(array = $furnitures or {}), key = "fIndex"){
+        $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $fIndex))
+        $npc = GetObject(objID = DictionaryGet(dict = $fDict, key = "furnishingId"))
         If($npc){
-            ArraySet(array = $furniture, index = 1, value = GetEntityPosition(entity = $npc))
-            ArraySet(array = $furniture, index = 2, value = GetEntityYaw(entity = $npc))
+            DictionarySet(dict = $fDict, key = "pos", value = GetEntityPosition(entity = $npc))
+            DictionarySet(dict = $fDict, key = "yaw", value = GetEntityYaw(entity = $npc))
+            -- 如果是衣架，有saveSkinList，则需要保存当前衣架的皮肤
+            If(GetConfigVar(obj = $npc, key = "saveSkinList")){
+                $saveSkinList = {}
+                Foreach(array = GetConfigVar(obj = $npc, key = "saveSkinList"), key = "skinName"){
+                    ArrayAppend(array = $skinList, value = {
+                        skinName = $skinName,
+                        skin = GetSkin(entity = $npc, skinName = $skinName)
+                    })
+                }
+                DictionarySet(dict = $fDict, key = "saveSkinList", value = $saveSkinList)
+            }
         }
+        ArraySet(array = $furnitures, index = $fIndex, value = DictionaryToTable(dict = $fDict))
     }
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
@@ -680,7 +687,7 @@ SHOW_TITLE_BAR{
     $infoTb = {
         btnInfo = {
             btnList = [
-                {text = "ui_edit", btnType = 1, event = "EDIT_HOUSE"},
+                {text = "ui_edit", btnType = 5, event = "EDIT_HOUSE"},
                 {text = "ui_lock", btnType = 2, event = "HOUSE_LOCK", 
                     curSelect = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "isLock")}
             ]
@@ -739,7 +746,6 @@ UPDATE_EDIT_STORE_SELL_TAB{
 }
 
 SHOW_DEC_STORE{
-    -- TODO 更新出售的商品列表
     Test("SHOW_DEC_STORE")
     ShowGenericActorShowStore(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, closeWin = true)
@@ -796,57 +802,66 @@ SHOW_DEC_STORE{
 }
 
 UPDATE_STORE_LIST{
-    Foreach(array = GetConfigVar(obj = $obj1, key = $nextCfgKey) or {}, key = "bottomBtn"){
-        $dic = NewDictionary($bottomBtn)
-        $type = DictionaryGet(dict = $dic, key = "type")
-        If("entity" == $type){
-            Test("$entity-----------------", $type)
-            $fullName = DictionaryGet(dict = $dic, key = "fullName")
-            ArrayAppend(array = $listInfoTb, value = {
-                text = GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
-                image = GetEntityCfg(fullName = $fullName, key = "image") or "",
-                actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
-                coinImg = GetWorldVar(key = GetEntityCfg(fullName = $fullName, key = "coinName") or "green_currency") or "",
-                cfg = $fullName,
-                event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
-                context = {
-                    cfg = $fullName
-                }
-            })
-        }ElseIf("block" == $type){
-            Test("$block-----------------", $type)
-            $fullName = DictionaryGet(dict = $dic, key = "fullName")
-            ArrayAppend(array = $listInfoTb, value = {
-                text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or "",
-                image = GetBlockConfigByName(block = $fullName, key = "image") or "",
-                coinImg = GetWorldVar(key = GetBlockConfigByName(block = $fullName, key = "coinName") or "green_currency") or "",
-                event = "BUY_HOUSE_REGION_COLOR",
-                context = {
-                    colorBlock = $fullName,
-                    childRegionKey = $childRegionKey
-                }
-            })
-        }ElseIf(DictionaryGet(dict = $dic, key = "closeEvent")){
-            ArrayAppend(array = $closeEvent, value = {
-                event = DictionaryGet(dict = $dic, key = "closeEvent"),
-                context = DictionaryGet(dict = $dic, key = "context")
-            })
-        }ElseIf(DictionaryGet(dict = $dic, key = "rightEvent")){
-            ArrayAppend(array = $rightEvent, value = {
-                event = DictionaryGet(dict = $dic, key = "rightEvent"),
-                context = DictionaryGet(dict = $dic, key = "context")
-            })
-        }ElseIf(DictionaryGet(dict = $dic, key = "leftEvent")){
-            ArrayAppend(array = $leftEvent, value = {
-                event = DictionaryGet(dict = $dic, key = "leftEvent"),
-                context = DictionaryGet(dict = $dic, key = "context")
-            })
+    $dicInfoTb = NewDictionary(GetConfigVar(obj = $obj1, key = $nextCfgKey) or {})
+    If(DictionaryGet(dict = $dicInfoTb, key = "storeInfo")){
+        $dic = NewDictionary(DictionaryGet(dict = $dicInfoTb, key = "storeInfo"))
+        $storeId = DictionaryGet(dict = $dic, key = "storeId")
+        Foreach(array = @DECORATION_STORE, key = "decorationTb"){
+            $decorationDic = NewDictionary($decorationTb)
+            $type = DictionaryGet(dict = $decorationDic, key = "type")
+            If(DictionaryGet(dict = $decorationDic, key = "storeId") == $storeId and "entity" == $type){
+                $fullName = DictionaryGet(dict = $decorationDic, key = "fullName")
+                ArrayAppend(array = $listInfoTb, value = {
+                    text = GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
+                    image = GetEntityCfg(fullName = $fullName, key = "image") or "",
+                    actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
+                    coinImg = GetWorldVar(key = GetEntityCfg(fullName = $fullName, key = "coinName") or "green_currency") or "",
+                    cfg = $fullName,
+                    event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
+                    context = {
+                        cfg = $fullName
+                    }
+                })
+            }
+            If(DictionaryGet(dict = $decorationDic, key = "storeId") == $storeId and "block" == $type){
+                $fullName = DictionaryGet(dict = $decorationDic, key = "fullName")
+                ArrayAppend(array = $listInfoTb, value = {
+                    text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or "",
+                    image = GetBlockConfigByName(block = $fullName, key = "image") or "",
+                    coinImg = GetWorldVar(key = GetBlockConfigByName(block = $fullName, key = "coinName") or "green_currency") or "",
+                    event = "BUY_HOUSE_REGION_COLOR",
+                    context = {
+                        colorBlock = $fullName,
+                        childRegionKey = $childRegionKey
+                    }
+                })
+            }
         }
+    }
+    If(DictionaryGet(dict = $dicInfoTb, key = "closeInfo")){
+        $dic = NewDictionary(DictionaryGet(dict = $dicInfoTb, key = "closeInfo"))
+        ArrayAppend(array = $closeEvent, value = {
+            event = DictionaryGet(dict = $dic, key = "closeEvent"),
+            context = DictionaryGet(dict = $dic, key = "context")
+        })
+    }
+    If(DictionaryGet(dict = $dicInfoTb, key = "rightInfo")){
+        $dic = NewDictionary(DictionaryGet(dict = $dicInfoTb, key = "rightInfo"))
+        ArrayAppend(array = $rightEvent, value = {
+            event = DictionaryGet(dict = $dic, key = "rightEvent"),
+            context = DictionaryGet(dict = $dic, key = "context")
+        })
+    }
+    If(DictionaryGet(dict = $dicInfoTb, key = "leftInfo")){
+        $dic = NewDictionary(DictionaryGet(dict = $dicInfoTb, key = "leftInfo"))
+        ArrayAppend(array = $leftEvent, value = {
+            event = DictionaryGet(dict = $dic, key = "leftEvent"),
+            context = DictionaryGet(dict = $dic, key = "context")
+        })
     }
 }
 
 SHOW_DEC_STORE_LIST{
-    -- TODO 更新出售的商品列表
     Test("SHOW_DEC_STORE_LIST")
     ShowGenericActorShowStore(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, closeWin = true)
@@ -865,11 +880,6 @@ SHOW_DEC_STORE_LIST{
     $rightEvent = {}
     CallTrigger(object = $obj1, event = "UPDATE_STORE_LIST", nextCfgKey = $nextCfgKey, childRegionKey = $childRegionKey,
         listInfoTb = $listInfoTb, closeEvent = $closeEvent, leftEvent = $leftEvent, rightEvent = $rightEvent) 
-    --Test("SHOW_DEC_STORE_LIST", $listInfoTb)
-    --Test("SHOW_DEC_STORE_LIST", $closeEvent)
-    --Test("SHOW_DEC_STORE_LIST", $leftEvent)
-    --Test("SHOW_DEC_STORE_LIST", $rightEvent)
-
     $infoTb = {
         btnInfo = {
             btnType = 3,
@@ -2627,14 +2637,22 @@ GET_TASK_UI_DATA(){ --更新UI数据。
         $count = 10 
     }
     $textCount = $count
-    $str = "/"
-    If($obj1.taskKey){
-        $str = "/rd"
-    }
     $isTasking = false
     If($obj1.taskKey){
         $count = $count - 1
         $isTasking = true
+    }
+    $str = "/"
+    If($obj1.taskKey){
+        If($textCount == 1){
+            $str = "/st"
+        }ElseIf($textCount == 2){
+            $str = "/nd"
+        }ElseIf($textCount == 3){
+            $str = "/rd"
+        }Else{
+            $str = "/th"
+        }
     }
     $text = Concat(p1 = $textCount, p2 = $str, p3 = "40")
     $rate = $count / 10

@@ -22,7 +22,43 @@
             "pos": {
                 "y": -0.32,
                 "z": 0,
+                "x": 3
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
                 "x": 0
+            },
+            "passengerAction": {
+                "base": "sit1"
+            },
+            "ctrl": false,
+            "view": false
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": -0.32,
+                "z": 0,
+                "x": 2
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "passengerAction": {
+                "base": "sit1"
+            },
+            "ctrl": false,
+            "view": false
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": -0.32,
+                "z": 0,
+                "x": 1
             },
             "out": {
                 "y": 0,
@@ -43,7 +79,7 @@
             {
                 "text": "sit",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "event": "ENTITY_CLICK"
+                "event": "ENTITY_CLICK_2"
             }
         ],"aroundParams":{
             "radius": 100
@@ -53,12 +89,12 @@
             {
                 "text": "1",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "event": ""
+                "event": "ENTITY_CLICK_1"
             },
             {
                 "text": "2",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "event": ""
+                "event": "ENTITY_CLICK_3"
             }
         ],
         "followParams": {

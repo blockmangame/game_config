@@ -97,16 +97,18 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
     ------------------------------------------ 内部各个家具
     ------------------------------------------ 房子 <house------- 家具
     $furnitures = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing") or {}
-    Foreach(array = $furnitures, key = "furniture"){
-        $temp = ArrayGet(array = $furniture, index = 1)
+    ForLoop(from = 1, to = ArraySize(array = $furnitures), key = "findex"){
+        $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $findex))
+        $temp = DictionaryGet(dict = $fDict, key = "pos")
         $pos = {
             x = GetPosX(pos = $temp),
             y = GetPosY(pos = $temp),
             z = GetPosZ(pos = $temp)
         } -- 这样拼接的原因是直接把pos传入会导致pos内部值多了个map，而这个是不需要的，故此处拼接一个临时的pos
-        $npc = CreateNpc(map = $map, cfgName = ArrayGet(array = $furniture, index = 3), 
-            pos = $pos, ry = ArrayGet(array = $furniture, index = 2))
-        $yaw = ArrayGet(array = $furniture, index = 2)
+        Test($fDict)
+        $npc = CreateNpc(map = $map, cfgName = DictionaryGet(dict = $fDict, key = "cfg"), 
+            pos = $pos, ry = DictionaryGet(dict = $fDict, key = "yaw"))
+        $yaw = DictionaryGet(dict = $fDict, key = "yaw")
         If($yaw and 0 ~= $yaw){
             $ry = 90
             If(90 == $yaw or -270 == $yaw){
@@ -118,8 +120,15 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
             }
             AddEntityBuff(entity = $npc, cfg = Concat(p1= "myplugin/rotate_bounding_box_buff_", p2 = $ry))
         }
-        ArraySet(array = $furniture, index = 4, value = GetObjectID(object = $npc))
+        Foreach(array = DictionaryGet(dict = $fDict, key = "saveSkinList") or {}, key = "skinTb"){
+            $skinDict = NewDictionary($skinTb)
+            If(DictionaryGet(dict = $skinDict, key = "skin")){
+                SetSkin(entity = $npc, skinName = DictionaryGet(dict = $skinDict, key = "skinName"), skinValue = DictionaryGet(dict = $skinDict, key = "skin"))
+            }
+        }
+        DictionarySet(dict = $fDict, key = "furnishingId", value = GetObjectID(object = $npc))
         SetObjectVar(obj = $npc, key = "house", value = $obj1)
+        ArraySet(array = $furnitures, index = $findex, value = DictionaryToTable(dict = $fDict))
     }
     ------------------------------------------ 内部门
     ------------------------------------------ 房子 <house-------insideDoor> 内部门

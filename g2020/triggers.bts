@@ -27,6 +27,8 @@ GAME_INIT(debug = false)
     CreateNpc(cfgName = "myplugin/xiaohong", pos = {x = 207, y = 17, z = 343} ,name = "小红")
 	CreateNpc(cfgName = "myplugin/fishItem", pos = {x = 210, y = 18, z = 343} ,name = "小红")
 
+    @DECORATION_STORE = ReadGameCsv(path = "decoration_store.csv")
+
     CallTrigger(event = "WORKS_WALL_TIMER_START")
 }
 
