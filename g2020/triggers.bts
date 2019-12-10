@@ -4,6 +4,7 @@ GAME_INIT(debug = false)
     @skillPath = "myplugin/skill_state_"
     CallTrigger(event = "FUNC_STATE_STARTTIMER")
 
+    @taskMap = NewDictionary({}) --
     @TASK_TABLE = NewArray() --打工的任务表
     @TASK_WEIGHT = NewArray()
     $taskData = GetConfigValue(type = "task", fullName = "myplugin/work", key = "tasks")
