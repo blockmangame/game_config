@@ -2378,6 +2378,7 @@ UPDATE_WORKS_RESPONSE
             $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
             PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
             ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_and_publish_new_works_succeed", time = 20)
+            UpdateUIData(player =$obj1, ui = "works_person", data = true)
         }
         Else
         {
@@ -2411,6 +2412,7 @@ CREATE_WORKS_RESPONSE
             $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
             PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
             ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
+            UpdateUIData(player =$obj1, ui = "works_person", data = true)
         }
         Else
         {
@@ -2475,6 +2477,7 @@ PUBLISH_WORKS_RESPONSE
         $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
         PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
         ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
+        UpdateUIData(player =$obj1, ui = "works_person", data = true)
     }
     Else
     {

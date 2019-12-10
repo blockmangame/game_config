@@ -329,7 +329,7 @@ LOAD_TOP_EXCELLENT_RESPONSE {
 
     Foreach(array = GetAllPlayers(), key = "player")
     {
-        UpdateUIData(player =$player, ui = "works_top", data = $info)
+        UpdateUIData(player =$player, ui = "works_excellent", data = $info)
     }
 
     @excellentWorks = $info
