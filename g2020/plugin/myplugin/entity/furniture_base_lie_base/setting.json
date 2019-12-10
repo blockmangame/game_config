@@ -1,6 +1,50 @@
 {
     "actorName": "",
+    "releaseState": "fatigue",
     "hpBarColor": 0,
     "collision": true,
-    "name": ""
+    "canClick": true,
+    "name": "",
+    "ridePos": [
+        {
+            "yaw": 0,
+            "pos": {
+                "y": 0.02,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "passengerAction": {
+                "base": "sleep1"
+            },
+            "ctrl": false,
+            "view": false
+        }
+    ],
+    "canInteract": true,
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "sit",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": "ENTITY_CLICK"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false
+        }
+    },
+    "interaction": {
+        "radius": 3,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    }
 }
