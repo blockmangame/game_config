@@ -5,6 +5,9 @@
     "needSave": true,
     "personalShop": false,
     "hideTeamStatusBar": true,
+    "isShowFriendUI": true,
+    "isShowSignInUI": true,
+    "ShowFriendUIEvent": "EVENT_SHOW_FRIEND",
     "waitPlayerTime": 0,
     "waitStartTime": 0,
     "waitGoTime": 0,
@@ -17,29 +20,54 @@
         "y": 18,
         "z": -560
     },
-    "uiNavigation": [
-        {
-            "name": "shop",
-            "iconPath": "set:main_page.json image:shop_icon.png",
-            "list": 1
-        },
-        {
-            "name": "team",
-            "iconPath": "set:main_page.json image:shop_icon.png",
-            "list": 1,
-            "event": "INIT_TEAM_UI"
-        },
-        {
-            "name": "dressArchive",
-            "iconPath": "set:main_page.json image:welfare_icon.png",
-            "list": 2
-        },
-        {
-            "name": "dance",
-            "iconPath": "set:main_page.json image:welfare_icon.png",
-            "list": 2
-        }
-    ],
+	"uiExtension": {
+		"hideBtnIcon": "set:btn_extension.json image:hide",
+		"openBtnIcon": "set:btn_extension.json image:open",
+		"btnList": [
+			{
+				"name": "photo",
+				"showName": false,
+				"iconPath": "set:btn_extension.json image:photo",
+				"tipWords": "",
+				"event": "EVENT_SHOW_FAMILY_ALBUM"
+			},
+			{
+				"name": "family",
+				"showName": false,
+				"iconPath": "set:btn_extension.json image:family",
+				"tipWords": "",
+				"event": "EVENT_SHOW_FAMILY"
+			},
+			{
+				"name": "dress",
+				"showName": false,
+				"iconPath": "set:btn_extension.json image:dress",
+				"tipWords": "",
+				"event": "EVENT_OPEN_DRESS_ARCHIVE"
+			},
+			{
+				"name": "order",
+				"showName": false,
+				"iconPath": "set:btn_extension.json image:order",
+				"tipWords": "",
+				"event": "EVENT_SHOW_WORK_DETAILS"
+			},
+			{
+				"name": "g_cube_store",
+				"showName": false,
+				"iconPath": "set:btn_extension.json image:g_cube_store",
+				"tipWords": "",
+				"event": "EVENT_SHOW_PRI_SHOP"
+			},
+			{
+				"name": "party",
+				"showName": false,
+				"iconPath": "set:btn_extension.json image:party",
+				"tipWords": "",
+				"event": "EVENT_SHOW_PARTY"
+			}
+		]
+	},
     "vars": {
         "global": [
             {
@@ -256,7 +284,7 @@
         "jackList":[
             {
                 "jackNum":4,
-                "radius":150,
+                "radius":120,
                 "jackSize": 60,
                 "startAngle":240,
                 "deltaAngle":45

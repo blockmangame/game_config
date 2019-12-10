@@ -1058,7 +1058,7 @@ FUNC_STATE_ADD_EFFECT --params: state
     }
     SetObjectVar(
         obj = $obj1,
-        key = $effectStr,
+        key = Concat(p1 = $state, p2 = "Effect"),
         value = AddEntityBuff(
             entity = $obj1,
             cfg = $effect
@@ -1192,6 +1192,11 @@ FUNC_REGION_STATE_OPERATION --parmas: opt, state
 
 FUNC_STATE_SUSPEND_PROGRESS --params: state
 {
+    If(not $state)
+    {
+        Return()
+    }
+
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $duration = GetSkillVar(fullName = $skill, key = "duration")
@@ -1227,6 +1232,11 @@ FUNC_STATE_SUSPEND_PROGRESS --params: state
 
 FUNC_STATE_START_PROGRESS --params: state
 {
+    If(not $state)
+    {
+        Return()
+    }
+
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $duration = GetSkillVar(fullName = $skill, key = "duration")
@@ -1686,6 +1696,20 @@ REQUEST_JOIN_FAMILY
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", time = 40)
             $obj1.requestFamilyPlayer = nil
         }
+    }
+}
+
+
+SHOW_TEAM_UI
+{
+    $teamId = GetEntityTeam(entity = $obj1)
+    If($teamId and $teamId ~= 0)
+    {
+        CallTrigger(event = "INIT_TEAM_UI", object = $obj1) 
+    }
+    Else
+    {
+        CallTrigger(event = "SHOW_TEAM_CREATE_UI", object = $obj1) 
     }
 }
 

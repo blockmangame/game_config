@@ -1,123 +1,123 @@
 {
+    "blockObjectOnCollision": false,
+    "lightOpacity": 0,
     "isOpaqueFullCube": false,
     "breakTime": 20,
-    "renderPass": 4,
-    "blockObjectOnCollision": false,
     "quads": [
         {
+            "texture": "bed_feet_top.png",
             "pos": [
                 {
-                    "x": 1,
+                    "z": 0,
                     "y": 0.55,
-                    "z": 1
+                    "x": 1
                 },
                 {
-                    "x": 1,
+                    "z": 1,
                     "y": 0.55,
-                    "z": 0
+                    "x": 1
                 },
                 {
-                    "x": 0,
+                    "z": 1,
                     "y": 0.55,
-                    "z": 0
+                    "x": 0
                 },
                 {
-                    "x": 0,
+                    "z": 0,
                     "y": 0.55,
-                    "z": 1
+                    "x": 0
                 }
-            ],
-            "texture": "bed_feet_top.png"
+            ]
         },
         {
+            "texture": "bed_feet_side_2.png",
             "pos": [
                 {
-                    "x": 1,
-                    "y": 0,
-                    "z": 0
-                },
-                {
-                    "x": 1,
+                    "z": 0,
                     "y": 1,
-                    "z": 0
+                    "x": 1
                 },
                 {
-                    "x": 0,
-                    "y": 1,
-                    "z": 0
-                },
-                {
-                    "x": 0,
+                    "z": 0,
                     "y": 0,
-                    "z": 0
+                    "x": 1
+                },
+                {
+                    "z": 0,
+                    "y": 0,
+                    "x": 0
+                },
+                {
+                    "z": 0,
+                    "y": 1,
+                    "x": 0
                 }
-            ],
-            "texture": "bed_feet_side_2.png"
+            ]
         },
         {
+            "texture": "bed_feet_end.png",
             "pos": [
                 {
-                    "x": 1,
-                    "y": 0,
-                    "z": 1
-                },
-                {
-                    "x": 1,
+                    "z": 1,
                     "y": 1,
-                    "z": 1
+                    "x": 1
                 },
                 {
-                    "x": 1,
-                    "y": 1,
-                    "z": 0
-                },
-                {
-                    "x": 1,
+                    "z": 1,
                     "y": 0,
-                    "z": 0
+                    "x": 1
+                },
+                {
+                    "z": 0,
+                    "y": 0,
+                    "x": 1
+                },
+                {
+                    "z": 0,
+                    "y": 1,
+                    "x": 1
                 }
-            ],
-            "texture": "bed_feet_end.png"
+            ]
         },
         {
+            "texture": "bed_feet_side_1.png",
             "pos": [
                 {
-                    "x": 0,
-                    "y": 0,
-                    "z": 1
-                },
-                {
-                    "x": 0,
+                    "z": 1,
                     "y": 1,
-                    "z": 1
+                    "x": 0
                 },
                 {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                },
-                {
-                    "x": 1,
+                    "z": 1,
                     "y": 0,
-                    "z": 1
+                    "x": 0
+                },
+                {
+                    "z": 1,
+                    "y": 0,
+                    "x": 1
+                },
+                {
+                    "z": 1,
+                    "y": 1,
+                    "x": 1
                 }
-            ],
-            "texture": "bed_feet_side_1.png"
+            ]
         }
     ],
+    "renderPass": null,
     "collisionBoxes": [
         {
-            "min": {
-                "z": 0,
-                "x": 0,
-                "y": 0
-            },
             "max": {
                 "z": 1,
-                "x": 1,
-                "y": 0.5
+                "y": 0.5,
+                "x": 1
+            },
+            "min": {
+                "z": 0,
+                "y": 0,
+                "x": 0
             }
         }
-    ],
-    "base": "base_block"
+    ]
 }

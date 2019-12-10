@@ -1,29 +1,30 @@
 {
-    "isOpaqueFullCube": false,
-    "renderPass": 4,
+    "lightOpacity": 15,
+    "renderPass": null,
     "breakTime": 20,
+    "isOpaqueFullCube": false,
     "quads": [
         {
             "pos": [
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 0,
-                    "z": 0
+                    "y": 1
                 },
                 {
+                    "z": 0,
                     "x": 0,
-                    "y": 1,
-                    "z": 0
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 1,
-                    "y": 1,
-                    "z": 1
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 1,
-                    "y": 0,
-                    "z": 1
+                    "y": 1
                 }
             ],
             "texture": "brewing_stand.png"
@@ -31,28 +32,27 @@
         {
             "pos": [
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 0,
-                    "z": 0
+                    "y": 1
                 },
                 {
+                    "z": 0,
                     "x": 1,
-                    "y": 1,
-                    "z": 0
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 1,
-                    "z": 1
+                    "y": 0
                 },
                 {
+                    "z": 1,
                     "x": 0,
-                    "y": 0,
-                    "z": 1
+                    "y": 1
                 }
             ],
             "texture": "brewing_stand.png"
         }
-    ],
-    "base": "base_block"
+    ]
 }
