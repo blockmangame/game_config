@@ -15,6 +15,64 @@
             }
         ]
     },
+    "name": "",
+    "ridePos": [
+        {
+            "yaw": 0,
+            "pos": {
+                "y": -0.32,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "passengerAction": {
+                "base": "sit1"
+            },
+            "ctrl": false,
+            "view": false
+        }
+    ],
+    "canInteract": true,
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "sit",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": "ENTITY_CLICK"
+            }
+        ],"aroundParams":{
+            "radius": 100
+        },
+
+        "aroundBtns": [
+            {
+                "text": "1",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": ""
+            },
+            {
+                "text": "2",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": ""
+            }
+        ],
+        "followParams": {
+            "followScenePos": false
+        }
+    },
+    "interaction": {
+        "radius": 3,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
     "actorName": "g2020_chairs.actor",
     "base": "furniture_base_lowsit_base"
 }
