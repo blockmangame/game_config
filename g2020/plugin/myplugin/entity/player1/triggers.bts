@@ -2,6 +2,10 @@ PLAYER_INTERACTION(debug = false){
     UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
 }
 
+DEBARK {
+	Dismount(entity = $obj1)
+}
+
 INTERACTION_FEED(debug = false){
     -- If(not IsPlayer(entity = $obj1))
     -- {
