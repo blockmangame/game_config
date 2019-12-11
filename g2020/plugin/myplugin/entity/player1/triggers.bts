@@ -2656,6 +2656,15 @@ GET_TASK_UI_DATA(){ --更新UI数据。
     }
     $text = Concat(p1 = $textCount, p2 = $str, p3 = "40")
     $rate = $count / 10
+    If($count >=0 and $count <10){
+        $btnImg = "set:indentImg.json image:btn1.png"
+    }ElseIf($count >=10 &&  $count <20){
+        $btnImg = "set:indentImg.json image:BtnGreen.png"
+    }ElseIf($count >=20 && $count <30){
+        $btnImg = "set:indentImg.json image:btnBule.png"
+    }ElseIf($count >=30 && $count <40){
+        $btnImg = "set:indentImg.json image:BtnRed.png"
+    }
     $taskData = Table(
         Progress =  $rate,
         BtnText = $text,
@@ -2663,7 +2672,8 @@ GET_TASK_UI_DATA(){ --更新UI数据。
         isTasking = $isTasking,
         closeOneceGps = $closeGps,
         showOneceGps = $showGps,
-        animation = $animation
+        animation = $animation,
+        btnImg = $btnImg
     )
     UpdateUIData(player = $obj1, ui = "circleProgress", data = $taskData)
 }
