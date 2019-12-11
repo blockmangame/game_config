@@ -21,4 +21,16 @@ GMItem["g2020/签到"] = function()
     Lib.emitEvent(Event.EVENT_SHOW_NEW_SIGIN_IN, true)
 end
 
+GMItem["party/party_list"] = function()
+    Lib.emitEvent(Event.EVENT_SHOW_PARTY_LIST, true)
+end
+
+GMItem["party/party_setting"] = function()
+    Lib.emitEvent(Event.EVENT_SHOW_PARTY_SETTING, true)
+end
+
+GMItem["party/party_inner_setting"] = function()
+    Lib.emitEvent(Event.EVENT_SHOW_PARTY_INNER_SETTING, true, {inPartyOwnerId = 18528})
+end
+
 return GMItem
