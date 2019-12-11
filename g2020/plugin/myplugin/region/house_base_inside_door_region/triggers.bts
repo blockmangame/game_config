@@ -1,0 +1,5 @@
+REGION_ENTER { 
+    Test("get out here !")
+    $owner = GetRegionOwner(region = $region)
+    CallTrigger(object = $owner, obj1 = $owner, obj2 = $obj1, event = "INTER_WITH_DOOR")
+}

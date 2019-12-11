@@ -108,18 +108,9 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
         } -- 这样拼接的原因是直接把pos传入会导致pos内部值多了个map，而这个是不需要的，故此处拼接一个临时的pos
         Test($fDict)
         $npc = CreateNpc(map = $map, cfgName = DictionaryGet(dict = $fDict, key = "cfg"), 
-            pos = $pos, ry = DictionaryGet(dict = $fDict, key = "yaw"))
-        $yaw = DictionaryGet(dict = $fDict, key = "yaw")
-        If($yaw and 0 ~= $yaw){
-            $ry = 90
-            If(90 == $yaw or -270 == $yaw){
-                $ry = 90
-            }ElseIf(180 == $yaw or -180 == $yaw){
-                $ry = 180
-            }ElseIf(270 == $yaw or -90 == $yaw){
-                $ry = 270
-            }
-            AddEntityBuff(entity = $npc, cfg = Concat(p1= "myplugin/rotate_bounding_box_buff_", p2 = $ry))
+            pos = $pos, ry = DictionaryGet(dict = $fDict, key = "yaw") or 0, rp = DictionaryGet(dict = $fDict, key = "pitch"))
+        If(GetConfigVar(obj = $npc, key = "boundBoxRotateWithYawAndPitch")){
+            UpdateEntityBoundBoxWithRotate(entity = $npc)
         }
         Foreach(array = DictionaryGet(dict = $fDict, key = "saveSkinList") or {}, key = "skinTb"){
             $skinDict = NewDictionary($skinTb)
@@ -135,6 +126,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
     ------------------------------------------ 房子 <house-------insideDoor> 内部门
     $insideDoor = CreateNpc(map = $map, cfgName = DictionaryGet(dict = $curHousedict, key = "houseInsideDoor") or GetConfigVar(obj = $obj1, key = "insideDoor"))
     SetEntityPosition(map = $map, entity = $insideDoor, pos = GetConfigVar(obj = $obj1, key = "insideDoorPos") or {x = 0,y = 0, z = 0})
+    StartTimer(time = 1, object = $insideDoor, event = "CREATE_DOOR_REGION")
     SetObjectVar(obj = $insideDoor, key = "house", value = $obj1)
     SetObjectVar(obj = $obj1, key = "insideDoor", value = $insideDoor)
 }
