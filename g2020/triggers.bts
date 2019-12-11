@@ -22,9 +22,9 @@ GAME_INIT(debug = false)
         ArrayAppend(array = @TASK_WEIGHT, value = $weight)
         ArrayAppend(array = @TASK_TABLE, value = $value)
     }
-    CreateNpc(cfgName = "myplugin/indentModel", pos = {x = 170, y = 17, z = 343}  ,name = "订单")
+    CreateNpc(cfgName = "myplugin/indentModel", pos = {x = 177, y = 17, z = 343}  ,name = "订单")
     CreateNpc(cfgName = "myplugin/xiaoming", pos = {x = 187, y = 17, z = 343}  ,name = "小明")
-    CreateNpc(cfgName = "myplugin/xiaohong", pos = {x = 207, y = 17, z = 343} ,name = "小红")
+    CreateNpc(cfgName = "myplugin/xiaohong", pos = {x = 185, y = 17, z = 343} ,name = "小红")
 	CreateNpc(cfgName = "myplugin/fishItem", pos = {x = 210, y = 18, z = 343} ,name = "小红")
 
     @DECORATION_STORE = ReadGameCsv(path = "decoration_store.csv")

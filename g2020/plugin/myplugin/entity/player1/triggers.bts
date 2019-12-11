@@ -2631,12 +2631,11 @@ HTTP_PURCHASED_DRESS_CALL_BACK
 
 --打工
 GET_TASK_UI_DATA(){ --更新UI数据。
-    Test("-----------------UPdaUI")
     $count = $obj1.worktaskCount % 10
     If($count == 0 && $obj1.worktaskCount >0){
         $count = 10 
     }
-    $textCount = $count
+    $textCount = $obj1.worktaskCount
     $isTasking = false
     If($obj1.taskKey){
         $count = $count - 1
@@ -2656,13 +2655,17 @@ GET_TASK_UI_DATA(){ --更新UI数据。
     }
     $text = Concat(p1 = $textCount, p2 = $str, p3 = "40")
     $rate = $count / 10
-    If($count >=0 and $count <10){
+    $imgcount = $obj1.worktaskCount
+    If($obj1.taskKey){
+        $imgcount = $imgcount - 1
+    }
+    If($imgcount >=0 and $imgcount <10){
         $btnImg = "set:indentImg.json image:btn1.png"
-    }ElseIf($count >=10 &&  $count <20){
+    }ElseIf($imgcount >=10 &&  $imgcount <20){
         $btnImg = "set:indentImg.json image:BtnGreen.png"
-    }ElseIf($count >=20 && $count <30){
+    }ElseIf($imgcount >=20 && $imgcount <30){
         $btnImg = "set:indentImg.json image:btnBule.png"
-    }ElseIf($count >=30 && $count <40){
+    }ElseIf($imgcount >=30 && $imgcount <40){
         $btnImg = "set:indentImg.json image:BtnRed.png"
     }
     $taskData = Table(
@@ -2679,23 +2682,23 @@ GET_TASK_UI_DATA(){ --更新UI数据。
 }
 GET_TASK_GPS(debug = false) --得到打工的GPS位置
 {
-    $mapOutPos = {
-        house1_map = {x = 120, y = 34, z = 187},
-        house2_map = {x = 120, y = 34, z = 187},
-        house3_map = {x = 120, y = 34, z = 187},
-        map001 = {x = 1639,y = 13, z = -574}
-    }
-    $pos = $obj1.taskPos or  { x = 170, y = 18, z = 343} --任务点，或者领任务点
     $mapName = GetPlayerMap(player = $obj1, name = true)
-    $dict = NewDictionary($mapOutPos)
-    If( ($obj1.npcMap and $mapName ~= $obj1.npcMap) or (not $obj1.npcMap and $mapName ~= "map001") ){
-        $pos = DictionaryGet(dict = $dict, key = $mapName)
+    If($mapName ~= "map001"){
+        $map = GetPlayerMap(player = $obj1)
+        $region = GetRegionByName(map = $map, name = "house_default_inside_map_area_1")
+        If(not $region){
+            $region = GetRegionByName(map = $map, name = "house_default_inside_map_area_2")
+        }
+        $pos = GetRegionMin(region = $region)
+        $pos = ComputeV3(p1 = $pos, p2 = {x = 1, y = 0, z = 0}, op = "add")
+        Test("-------------------pos",$pos)
+        $obj1.gpsPos = $pos
+    }Else{
+        $obj1.gpsPos = $obj1.taskPos or  { x = 177, y = 18, z = 343}
     }
-    $obj1.gpsPos = $pos
 }
 INIT_WORK_TASK(){ --初始打工
     $index =  $obj1.taskIndex
-    Test("index=========",$index, $obj1.worktaskCount)
     If($index && $index > 0){
         $taskDict = ArrayGet(array = @TASK_TABLE, index = $index)
         $obj1.taskKey = DictionaryGet(dict = $taskDict, key = "taskKey") -- 随机到的任务
@@ -2728,12 +2731,10 @@ FINISH_TASK(debug = false){ --完成打工的对话
     )
 }
 FINISH_AWARD(){ --完成打工的奖励
-    Test("8888888888888888888888888")
     $money = GetConfigValue(type = "reward", fullName = "myplugin/task_money", key = $obj1.worktaskCount)
     If(not $money){
         $money = 1
     }
-    Test("-----------",$money)
     AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
     ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
     $taskItem = SearchBagItem(entity = $obj1, key = "fullName", val = "myplugin/taskItem")
@@ -2768,7 +2769,6 @@ FINISH_AWARD(){ --完成打工的奖励
 }
 TASK_NPC_ADD_BUFF(debug = false)
 {
-    Test("+++++++++++++++++++++++++++++++")
     $map = GetPlayerMap(player = $obj1)
     $mapNpc = GetMapNpc(map = $map)
     Foreach(array = $mapNpc, key = "npc"){
@@ -2776,7 +2776,6 @@ TASK_NPC_ADD_BUFF(debug = false)
         If($name == $obj1.lastNpc){
             UnMarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
         }
-        Test("---------ccccc--------",$obj1.taskNpc, $name)
         If($name == $obj1.taskNpc){
             MarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
         }
@@ -2950,5 +2949,18 @@ PLAYER_ON_VISIT(debug = true){
         Else{
             SetEntityPosition(entity = $obj1, pos = GetEntityPosition(entity = $target))
         }
+    }
+}
+--场景商店门面
+SHOW_SHOP_TITLE(debug = true){
+    Return()
+    If($obj1.showShopTitleTimer){
+        StopTimer(timer = $obj1.showShopTitleTimer)
+    }
+    If(GetEntityMapName(entity = $obj1) == "map001" ){
+        $data1 = GetWorldVar(key = "titilePos1")
+        $data2 = GetWorldVar(key = "titilePos2")
+        Show3DUI(player = $obj1, show = true, data = $data1)
+        Show3DUI(player = $obj1, show = true, data = $data2)
     }
 }
