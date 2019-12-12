@@ -29,6 +29,12 @@ GAME_INIT(debug = false)
 
     @DECORATION_STORE = ReadGameCsv(path = "decoration_store.csv")
 
+    @CURRENT_ID_IMAGE = [
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:jail_break.json image:jail_break_currency"
+    ]
     CallTrigger(event = "WORKS_WALL_TIMER_START")
 }
 
