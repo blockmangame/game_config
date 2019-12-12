@@ -54,25 +54,51 @@ INTERACTION_FEED(debug = false){
         state = $state
     )
 }
+CHECK_LEAVE_PARTY_FROM_DOOR(debug = false){
+    If($obj1.inSelfParty == 1){
+        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.close", event = "CHECK_CLOSE_PARTY", tipType = 2)
+    }
+    Else{
+        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.exit", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
+    }
+}
+ASK_SHOW_PARTY_LIST(debug = false){
+    If($result == false) {
+        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+        Return()
+    }
+    ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "CHECK_EXIT_PARTY", tipType = 2)
+}
+CHECK_CLOSE_PARTY(debug = false){
+    If($result == false) {Return()}
+    CloseParty(object = $obj1)
+}
+CHECK_EXIT_PARTY(debug = false){
+    If($result == false) {Return()}
+    LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+}
+LEAVE_PARTY_SUCCESS(debug = false){
+    $obj1.inPartyOwnerId = 0
+    GotoOtherServer(player = $player)
+}
 CHECK_IN_PARTY(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
     If($inPartyOwnerId ~= 0){
-        --hide party list ui
+        UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
         If($userId == $inPartyOwnerId){
-            Test("My Party!!!!1111111111 ")
+            $obj1.inSelfParty = 1
+            --My Party!!!!
             --broadcast!!!!!
-            --show setting ui
         }
         Else{
-            Test("In Party!!!2222222222222")
+            --In Party
+            $obj1.inSelfParty = 0
             $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
             If(not $partyOwner){
                 Return()
             }
             CallTrigger(fromInParty = true, target = $partyOwner, event = "PLAYER_ON_VISIT", object = $obj1)
-            --hide setting ui
-            --transfer
         }
     }
 }
@@ -104,7 +130,9 @@ ENTITY_ENTER
         $obj1.requestFamilyPlayer = nil
 
         CallTrigger(event = "ADD_MONEY", object = $obj1)
-        CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)    
+        If($obj1.inPartyOwnerId == 0){--in party
+            CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)
+        }
 		
 		CallTrigger(event = "SET_DRESS_ARCHIVE", object = $obj1)
         CallTrigger(event = "INIT_PLAYER_DRESS", object = $obj1)
@@ -288,13 +316,15 @@ ENTITY_LEAVE{
     CallTrigger(object = $obj1, event = "SAVE_PLAYER_DRESS")
     ---------------------------------------玩家退出，删除掉暂存在数据库“dressArchive”字段中的bm装扮信息
     CallTrigger(object = $obj1, event = "REMOVE_BM_DRESS")
-    CallTrigger(object = $obj1, event = "CHECK_CLOSE_PARTY")
+    CallTrigger(object = $obj1, event = "CHECK_LEAVE_PARTY")
 }
-CHECK_CLOSE_PARTY(debug = false){
-    $userId = GetPlayerUserID(player = $obj1)
-    $inPartyOwnerId = $obj1.inPartyOwnerId
-    If($userId == $inPartyOwnerId){
-        CallTrigger(event = "CloseParty", object = $obj1)
+CHECK_LEAVE_PARTY(debug = false){
+    If($obj1.inSelfParty == 1){
+        CloseParty(object = $obj1)
+        Return()
+    }
+    If($obj1.inSelfParty == 0){
+        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
     }
 }
 UPDATE_FURNITURE_STATUS{
@@ -705,6 +735,9 @@ SAVE_FURNITURE{
 
 SHOW_TITLE_BAR{
     Test("SHOW_TITLE_BAR")
+    If($obj1.inPartyOwnerId ~= 0){
+        Return()--in party
+    }
     $editBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/edit_house_buff")
     If($editBuff){
         RemoveEntityBuff(entity = $obj1, buff = $editBuff)
@@ -2995,7 +3028,7 @@ PLAYER_ON_VISIT(debug = false){
         Return()
     }
     If($fromInParty){
-        SetEntityPosition(entity = $obj1, pos = GetEntityPosition(entity = $target))
+        SetEntityPosition(map = GetEntityMap(entity = $target), entity = $obj1, pos = GetEntityPosition(entity = $target))
     }
     Else{
         If($targetInRoom){
@@ -3024,8 +3057,9 @@ JOIN_PARTY_SUCCESS(debug = false){
     GotoOtherServer(player = $obj1, targetUserId = $targetUserId)
 }
 UPDATE_CREATE_PARTY_VIEW_INFO(debug = false){
-    Test("TEST_EVENT")
-    --read image and memberMax
+    $curHouseCfg = $obj1.curHouseCfg
+    $maxPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "partyMaxPlayerNumber")
+    $partyImage = GetEntityCfg(fullName = $curHouseCfg, key = "partyImage")
 }
 CREATE_PARTY_SUCCESS(debug = false){
     $obj1.inPartyOwnerId = GetPlayerUserID(player = $obj1)
