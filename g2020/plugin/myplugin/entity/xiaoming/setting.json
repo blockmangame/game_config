@@ -1,32 +1,37 @@
 {
-    "icon":"turtle.png",
+    "icon": "turtle.png",
     "actorName": "character_new_blue_mario.actor",
-    "clickDistance": 5,
-    "canClick": true,
+
+    "canClick": false,
     "hpBarColor": 0,
-    "canInteract":true,
-    "name": "xiaoming",
+    "canInteract": true,
+    "name": "you_came",
     "taskKey": "myplugin/work/key_1",
-	"interactionUI":{
+    "interactionUI": {
         "cfgKey": "interactionUI",
-        "followParams":{
-            "followScenePos":false
+        "followParams": {
+            "followScenePos": false
         },
-        "centerBtns":[
+        "centerBtns": [
             {
-                "text":"submit order",
-                "widgetFileName":"widget_button",
-                "image":"set:add_sub.json image:add",
+                "text": "submit order",
+                "widgetFileName": "widget_button",
+                "image": "set:add_sub.json image:add",
                 "event": "SUBMIT_ORDER"
             }
         ]
     },
-    "interaction":{
+    "interaction": {
         "radius": 1,
-        "offset":{
+        "offset": {
             "x": 0,
             "y": 0,
             "z": 2
         }
-    }
+    },
+    "headPic": "xiaohong.png",
+    "canAttack": false,
+
+
+    "base": "xiaoming"
 }
