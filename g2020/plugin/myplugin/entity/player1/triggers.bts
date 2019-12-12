@@ -2859,6 +2859,8 @@ INIT_WORK_TASK(){ --初始打工
         $obj1.taskPos = DictionaryGet(dict = $taskDict, key = "pos") -- 随机到的任务NPC ,GPS位置
         $obj1.taskNpc = DictionaryGet(dict = $taskDict, key = "npcName") --npc的 fullName
         $obj1.npcMap = DictionaryGet(dict = $taskDict, key = "npcMap")
+        $obj1.succeedMsg = DictionaryGet(dict = $taskDict, key = "succeedMsg")
+        $obj1.failedMsg = DictionaryGet(dict = $taskDict, key = "failedMsg")
     }
     CallTrigger(event = "GET_TASK_GPS", object = $obj1)
     CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
@@ -2878,7 +2880,7 @@ FINISH_TASK(debug = false){ --完成打工的对话
         optionNpc = "myplugin/player1",
         talkList = [
             {
-                msg = "tr.37965",
+                msg =  $obj1.succeedMsg or "tr.37965",
                 npc = $obj1.taskNpc
             }
         ]
@@ -3001,27 +3003,15 @@ ENTITY_BUY_APPSTOP(debug = false){
 --弹窗购买特权
 POP_UP_BUY_PRIVILEGE(debug = false)
 {
-    If(not $itemName ){
-        Return()
-    }
-    $PRIVILEGE_TABLE = {
-            vip_privilege = 100000,
-            dance_privilege = 20000,
-            action_privilege = 3000,
-            music_privilege = 40000,
-            home_privilege = 50000,
-            svip_privilege = 60000,
-    }
-    $dict = NewDictionary($PRIVILEGE_TABLE)
-    $price = DictionaryGet(dict = $dict, key = $itemName)
-    If(not $price){
+    If(not $shopIndex ){
         Return()
     }
     $obj1.checkprid = ($obj1.checkprid or 0 ) + 1
+    $price = GetShopItemKey(shopIndex = $shopIndex, key = "price")
+    $itemdesc = GetShopItemKey(shopIndex = $shopIndex, key = "desc")
     $Context = {
-        itemName = $itemName,
-        price = $price,
-        seccionid = $obj1.checkprid
+        seccionid = $obj1.checkprid,
+        shopIndex = $shopIndex
     }
     $btnInfo = {
         leftCoinId = nil,
@@ -3031,7 +3021,7 @@ POP_UP_BUY_PRIVILEGE(debug = false)
     }
     $content = {
         msg = "gui_you_want_to_buy_this",
-        args = [ $price, $itemName]
+        args = [ $price, $itemdesc]
     }
 
     ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_BUY_PRI", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
@@ -3042,24 +3032,12 @@ SURE_BUY_PRI(debug = false)
         Return()
     }
  
-    If($seccionid ~= $obj1.checkprid or not $itemName)
+    If($seccionid ~= $obj1.checkprid or not $shopIndex)
     {
         Return()
     }
 
-    BuyGoods(player = $obj1, uniqueId = 1000111,  coinId = 0, event = "BUY_PRI_GOODS" ,price = $price, itemName = $itemName, obj1 = $obj1)
-}
-BUY_PRI_GOODS(debug = false)
-{
-    $dict = NewDictionary($response)
-    $itemName = DictionaryGet(dict = $dict, key = "itemName")
-    $obj1 = DictionaryGet(dict = $dict, key = "obj1")
-    If($isSucceed){
-        ArrayAppend(array = $obj1.privilege, value = $itemName)
-        ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
-    }Else{
-        ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
-    }
+    RequestCanBuy(shopIndex = $shopIndex, palyer = $obj1, count = 1)
 }
 --
 PLAYER_BE_INVITE(debug = false){
