@@ -310,47 +310,107 @@
     "dressStoreIds": [3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     "partypriShops": [1],
     "partyGoldShops": [2],
-	"ShopSignHorizontal": [
+	"ShopSignVertical": [
 		{
-			"img": "set:party_pg_shop_img.json image:gold1.png",
-			"name": "10%" 
+            "name": "10%",
+            "backColor": [
+                0,
+                0,
+                255,
+                255
+            ]
 		},
 		{
-			"img": "set:party_pg_shop_img.json image:gold1.png",
-			"name": "10%" 
+            "name": "10%",
+            "backColor": [
+                0,
+                255,
+                0,
+                255
+            ]
 		},
 		{
-			"img": "set:party_pg_shop_img.json image:gold1.png",
-			"name": "10%" 
+            "name": "10%",
+            "backColor": [
+                255,
+                0,
+                0,
+                255
+            ]
 		},
 		{
-			"img": "set:party_pg_shop_img.json image:gold1.png",
-			"name": "10%" 
+            "name": "10%",
+            "backColor": [
+                0,
+                0,
+                0,
+                255
+            ]
 		},
 		{
-			"img": "set:party_pg_shop_img.json image:gold1.png",
-			"name": "10%" 
+            "name": "10%",
+            "backColor": [
+                128,
+                0,
+                255,
+                255
+            ]
 		}
 	],
-	"ShopSignVertical": [
+	"ShopSignHorizontal": [
         {
-            "name": "10%"
-        },
+			"img": "set:party_pg_shop_img.json image:gold1.png",
+            "name": "10%",
+            "backColor": [
+                0,
+                0,
+                255,
+                255
+            ]
+		},
 		{
-            "name": "10%"
-        },
+			"img": "set:party_pg_shop_img.json image:gold1.png",
+            "name": "10%",
+            "backColor": [
+                0,
+                255,
+                0,
+                255
+            ]
+		},
 		{
-            "name": "10%"
-        },
+			"img": "set:party_pg_shop_img.json image:gold1.png",
+            "name": "10%",
+            "backColor": [
+                255,
+                0,
+                0,
+                255
+            ]
+		},
 		{
-            "name": "10%"
-        },
+			"img": "set:party_pg_shop_img.json image:gold1.png",
+            "name": "10%",
+            "backColor": [
+                0,
+                0,
+                0,
+                255
+            ]
+		},
 		{
-            "name": "10%"
-        }
+			"img": "set:party_pg_shop_img.json image:gold1.png",
+            "name": "10%",
+            "backColor": [
+                128,
+                0,
+                255,
+                255
+            ]
+		}
     ],
-    "titilePos1": {
-        "name": "shopSignH",
+    "titilePos2": {
+        "name": "shopSignV",
         "width": 4,
         "height": 3,
         "rotate": {
@@ -359,13 +419,13 @@
             "z": 0
           },
           "position": {
-            "x": 139,
-            "y": 34.3,
-            "z": 185
+            "x": 1642,
+            "y": 13.5,
+            "z": -580
           }
     },
-    "titilePos2": {
-        "name": "shopSignV",
+    "titilePos1": {
+        "name": "shopSignH",
         "width": 4,
         "height": 2,
         "rotate": {
@@ -374,9 +434,9 @@
             "z": 0
           },
           "position": {
-            "x": 139,
-            "y": 34.3,
-            "z": 180
+            "x": 1652,
+            "y": 14.5,
+            "z": -581
           }
     }
 }

@@ -18,8 +18,6 @@ CREATE_DOOR_REGION{
     $region = AddRegion(map = $map, key = $doorRegionKey, region = $regionArea, regionCfg = $doorRegionCfg, obj1 = $obj1)
     SetRegionOwner(region = $region, owner = $obj1)
     SetObjectVar(obj = $obj1, key = "curDoorRegionKey", value = $doorRegionKey)
-    $obj2.taskTemer = StartTimer(rep = false, time = 1, object = $obj2, event = "TASK_UPDATE_DATA") --打工导航
-    $obj2.showShopTitleTimer = StartTimer(rep = false, time = 5, object = $obj2, event = "SHOW_SHOP_TITLE")
 }
 
 ENTITY_DIE{

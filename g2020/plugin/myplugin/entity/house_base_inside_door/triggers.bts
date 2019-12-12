@@ -41,8 +41,7 @@ INTER_WITH_DOOR{
         CallTrigger(object = $obj2, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = true)
     }
     CallTrigger(object = $obj2, event = "FUNC_STATE_OPEN_GPS", rtVal = $obj2.gpsDestination) --如果有导航则继续导航
-    $obj2.taskTemer = StartTimer(rep = false, time = 1, object = $obj2, event = "TASK_UPDATE_DATA") --打工导航
-    $obj2.showShopTitleTimer = StartTimer(rep = false, time = 5, object = $obj2, event = "SHOW_SHOP_TITLE")
+    CallTrigger(object = $obj2, event = "TASK_UPDATE_DATA") --打工导航
 }
 
 ENTITY_DIE{
