@@ -1,0 +1,22 @@
+{
+    "base": "npc_dialog_base",
+    "actorName": "boy.actor",
+    "headPic": "npc_dialog_1.png",
+    "name": "npc_dialog_1",
+    "talkList": [
+        {
+            "msg": "hello",
+            "npc": "myplugin/npc_dialog_1"
+        },
+        {
+            "msg": "hahahaha",
+            "npc": "myplugin/npc_dialog_1"
+        }
+    ],
+    "optionNpc": "myplugin/npc_dialog_1",
+    "optionList": [
+        {
+            "triggerName": "REMOVE_ILL_BUFF"
+        }
+    ]
+}

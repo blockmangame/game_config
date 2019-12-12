@@ -17,16 +17,26 @@ GAME_INIT(debug = false)
         DictionarySet(dict = $value,  key = "pos" , value = DictionaryGet(dict = $taskDict, key = "npcPos"))
         DictionarySet(dict = $value,  key = "npcName" , value = DictionaryGet(dict = $targets, key = "cfgName"))
         DictionarySet(dict = $value,  key = "npcMap" , value = DictionaryGet(dict = $taskDict, key = "npcMap"))
+        DictionarySet(dict = $value,  key = "failedMsg" , value = DictionaryGet(dict = $taskDict, key = "failedMsg"))
+        DictionarySet(dict = $value,  key = "succeedMsg" , value = DictionaryGet(dict = $taskDict, key = "succeedMsg"))
         $weight =  DictionaryGet(dict = $taskDict, key = "weight")
         DictionarySet(dict = $value,  key = "weight" , value = $weight)
         ArrayAppend(array = @TASK_WEIGHT, value = $weight)
         ArrayAppend(array = @TASK_TABLE, value = $value)
     }
-    CreateNpc(cfgName = "myplugin/indentModel", pos = {x = 170, y = 17, z = 343}  ,name = "订单")
-    CreateNpc(cfgName = "myplugin/xiaoming", pos = {x = 187, y = 17, z = 343}  ,name = "小明")
-    CreateNpc(cfgName = "myplugin/xiaohong", pos = {x = 207, y = 17, z = 343} ,name = "小红")
+    CreateNpc(cfgName = "myplugin/indentModel", pos = {x = 89, y = 18, z = 195}  ,name = "订单")
+    CreateNpc(cfgName = "myplugin/xiaoming", pos = {x = 88, y = 18, z = 194}  ,name = "小明")
+    CreateNpc(cfgName = "myplugin/xiaohong", pos = {x = 85, y = 18, z = 194} ,name = "小红")
 	CreateNpc(cfgName = "myplugin/fishItem", pos = {x = 210, y = 18, z = 343} ,name = "小红")
 
+    @DECORATION_STORE = ReadGameCsv(path = "decoration_store.csv")
+
+    @CURRENT_ID_IMAGE = [
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:jail_break.json image:jail_break_currency"
+    ]
     CallTrigger(event = "WORKS_WALL_TIMER_START")
 }
 
@@ -334,4 +344,10 @@ LOAD_TOP_EXCELLENT_RESPONSE {
     }
 
     @excellentWorks = $info
+}
+
+REMOVE_ILL_BUFF
+{
+    -- CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = "illEffect")
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = "ill", duration = 0)
 }

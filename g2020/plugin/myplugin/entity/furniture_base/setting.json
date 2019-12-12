@@ -1,6 +1,7 @@
 {
     "actorName": "",
     "coinName": "green_currency",
+    "posSyncDelay": 1,
     "image": "",
     "buyMoney": 0,
     "sellMoney": 0,
@@ -40,7 +41,15 @@
             {
                 "text": "SALE",
                 "image": "set:Edit_1.json image:Edit_Sell_Icon.png",
-                "eventIndex": 3,
+                "tipContent": {
+                    "eventIndex": 3,
+                    "content": { 
+                        "titleText": "ui_tip",
+                        "msgText": "ui_sure_to_sell_furniture",
+                        "leftText": "ui_sure",
+                        "rightText": "ui_cancel"
+                    }
+                },
                 "btnType": 4,
                 "pos": {
                     "x": 50,

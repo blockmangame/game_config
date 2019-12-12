@@ -9,8 +9,6 @@ REGION_ENTER {
         Return()
     }
     Test(" please in !! ")
-    ------------------------------------------ 设置出来的门的位置
-    SetObjectVar(obj = $obj1, key = "returnDoor", value = $door)
     ------------------------------------------ 传送进内部房子
     $map = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "houseInsideMap")
     $yaw = 0
@@ -26,5 +24,5 @@ REGION_ENTER {
         CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = false)
     }
     CallTrigger(object = $obj1, event = "FUNC_STATE_OPEN_GPS", rtVal = $obj1.gpsDestination)--如果有导航则继续导航
-
+    StartTimer(time = 20,object = $obj1, event = "TASK_UPDATE_DATA") --打工导航
 }

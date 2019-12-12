@@ -2,7 +2,11 @@ PLAYER_INTERACTION(debug = false){
     UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
 }
 
-INTERACTION_FEED(debug = true){
+DEBARK {
+	Dismount(entity = $obj1)
+}
+
+INTERACTION_FEED(debug = false){
     -- If(not IsPlayer(entity = $obj1))
     -- {
     --     Return()
@@ -50,9 +54,59 @@ INTERACTION_FEED(debug = true){
         state = $state
     )
 }
-
+CHECK_LEAVE_PARTY_FROM_DOOR(debug = false){
+    If($obj1.inSelfParty == 1){
+        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.close", event = "CHECK_CLOSE_PARTY", tipType = 2)
+    }
+    Else{
+        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.exit", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
+    }
+}
+ASK_SHOW_PARTY_LIST(debug = false){
+    If($result == false) {
+        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+        Return()
+    }
+    ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "CHECK_EXIT_PARTY", tipType = 2)
+}
+CHECK_CLOSE_PARTY(debug = false){
+    If($result == false) {Return()}
+    CloseParty(object = $obj1)
+}
+CHECK_EXIT_PARTY(debug = false){
+    If($result == false) {Return()}
+    LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+}
+LEAVE_PARTY_SUCCESS(debug = false){
+    $obj1.inPartyOwnerId = 0
+    GotoOtherServer(player = $player)
+}
+CHECK_IN_PARTY(debug = false){
+    $userId = GetPlayerUserID(player = $obj1)
+    $inPartyOwnerId = $obj1.inPartyOwnerId
+    If($inPartyOwnerId ~= 0){
+        UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
+        If($userId == $inPartyOwnerId){
+            $obj1.inSelfParty = 1
+            --My Party!!!!
+            --broadcast!!!!!
+        }
+        Else{
+            --In Party
+            $obj1.inSelfParty = 0
+            $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
+            If(not $partyOwner){
+                Return()
+            }
+            CallTrigger(fromInParty = true, target = $partyOwner, event = "PLAYER_ON_VISIT", object = $obj1)
+        }
+    }
+}
 ENTITY_ENTER
 {
+    CallTrigger(event = "CHECK_IN_PARTY", object = $obj1)
+    UpdateUIData(player = $obj1, ui = "circleProgress", data = {})
+    OpenWindows(win = "workTask", player = $obj1)
     CallTrigger(event = "INIT_WORK_TASK", object = $obj1) --初始化打工任务
     If(IsPlayer(entity = $obj1))
     {
@@ -76,7 +130,9 @@ ENTITY_ENTER
         $obj1.requestFamilyPlayer = nil
 
         CallTrigger(event = "ADD_MONEY", object = $obj1)
-        CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)    
+        If($obj1.inPartyOwnerId == 0){--in party
+            CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)
+        }
 		
 		CallTrigger(event = "SET_DRESS_ARCHIVE", object = $obj1)
         CallTrigger(event = "INIT_PLAYER_DRESS", object = $obj1)
@@ -112,8 +168,8 @@ ENTITY_ENTER
                     houseCfg = "myplugin/house_default",
                     houseSelectColor = "myplugin/house_color_buff_11",
                     houseInsideFurnishing = [
-                        [{x = 1648,y=13,z=-574},0,"myplugin/test_dec_entity1","11111","true"],
-                        [{x = 1650,y=13,z=-574},90,"myplugin/test_dec_entity2","222222","false"],
+                        {pos = {x = 1648,y=13,z=-574},yaw = 0,cfg = "myplugin/test_dec_entity1",furnishingId = "11111",isOldFurnishing = "true"},
+                        {pos = {x = 1650,y=13,z=-574},yaw = 90,cfg = "myplugin/test_dec_entity2",furnishingId = "222222",isOldFurnishing = "false"},
                     ],
                     houseInsideRegionColors = [
                         ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
@@ -123,22 +179,6 @@ ENTITY_ENTER
                     houseName = "Sakura NeNe",
                     houseType = "house_type_big_house",
                     houseId = "1234567",
-                    houseInsideDoor = "myplugin/house_base_inside_door"
-                },{
-                    houseCfg = "myplugin/house_default",
-                    houseSelectColor = "myplugin/house_color_buff_11",
-                    houseInsideFurnishing = [
-                        [{x = 1648,y=13,z=-574},0,"myplugin/test_dec_entity1","11111","true"],
-                        [{x = 1650,y=13,z=-574},90,"myplugin/test_dec_entity2","222222","false"],
-                    ],
-                    houseInsideRegionColors = [
-                        ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
-                        ["house_default_inside_map_area_2",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]]
-                    ],
-                    isCurEquip = "disable",
-                    houseName = "Sakura NeNe",
-                    houseType = "house_type_big_house",
-                    houseId = "12345678",
                     houseInsideDoor = "myplugin/house_base_inside_door"
                 }
             ]
@@ -154,7 +194,7 @@ ENTITY_ENTER
     }
     $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
     ------------------------------------------ 获得当前地图上的空出的区域，创建房子 * 
-    -- 区域 <region------owner> 房子 <house-------owner> 玩家，可通过区域获取区域上的房子，通过房子获得所属玩家。 反向同理
+    -- 区域 <region------owner(需要使用GetRegionOwner)> 房子 <house-------owner> 玩家，可通过区域获取区域上的房子，通过房子获得所属玩家。 反向同理
     $regions = GetAllRegion(map = GetEntityMap(entity = $obj1))
     Foreach(array = $regions, key = "region"){
         If(not GetRegionOwner(region = $region) and GetRegionConfig(region = $region, key = "isHouseRegion")){
@@ -167,7 +207,6 @@ ENTITY_ENTER
     ------------------------------------------ 玩家进入游戏就进入自己房间
     $house = GetObjectVar(obj = $obj1, key = "house")
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
-    SetObjectVar(obj = $obj1, key = "returnDoor", value = GetObjectVar(obj = $house, key = "door"))
     $yaw = 0
     If($obj1.curHouseCfg){
         $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
@@ -219,9 +258,11 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
                 houseInsideFurnishing = [ -- houseInsideFurnishing , 房子内部物品摆放
                     -- pos是相对坐标，每个map都有一个initPos，坐标都是这个initPos+pos
                     -- 绝对坐标也行
-                    [{x = "xx", y = "xx", z = "xx"},0,"myplugin/xxx...","id","true/false"],
-                    [{x = "xx", y = "xx", z = "xx"},0,"myplugin/xxx...","id","true/false"]
-                    -- {pos,yaw,cfg,全局唯一id:furnishingId（当前obj的id）,是否是旧家具，下线后则会将当前玩家全部房子的全部家具设置成true，即是旧家具}
+                    {pos = {x = "xx", y = "xx", z = "xx"},yaw = 0,cfg = "myplugin/xxx...",
+                        furnishingId = "id",isOldFurnishing = "true/false", saveSkinList = [{skinName = "xxx", skin = "xxx"}]}
+                    -- {pos,yaw,cfg,全局唯一id:furnishingId（当前obj的id）,
+                    -- isOldFurnishing 是否是旧家具，下线后则会将当前玩家全部房子的全部家具设置成true，即是旧家具
+                    -- saveSkinList 特殊家具需要保存皮肤列表（需要在该家具中配一个saveSkinList 要保存的皮肤列表）}
                 ],
                 houseInsideRegionColors = [ -- houseInsideRegionColors 房子内部区域颜色
                     ["regionkey", ["myplugin/xxx...","myplugin/xxx...","myplugin/xxx..."]], -- 第一个key是对应的region key，通过这个key获取这个区域region/获取到配置
@@ -274,15 +315,27 @@ ENTITY_LEAVE{
     CallTrigger(object = $obj1, event = "SAVE_PLAYER_DRESS")
     ---------------------------------------玩家退出，删除掉暂存在数据库“dressArchive”字段中的bm装扮信息
     CallTrigger(object = $obj1, event = "REMOVE_BM_DRESS")
+    CallTrigger(object = $obj1, event = "CHECK_LEAVE_PARTY")
 }
-
+CHECK_LEAVE_PARTY(debug = false){
+    If($obj1.inSelfParty == 1){
+        CloseParty(object = $obj1)
+        Return()
+    }
+    If($obj1.inSelfParty == 0){
+        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+    }
+}
 UPDATE_FURNITURE_STATUS{
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
         $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
-        Foreach(array = DictionaryGet(dict = $dict, key = "houseInsideFurnishing"), key ="furniture"){
-            ArraySet(array = $furniture, index = 5, value = true)
-            ArraySet(array = $furniture, index = 4, value = 0)
+        $furnitures = DictionaryGet(dict = $dict, key = "houseInsideFurnishing")
+        ForLoop(from = 1, to = ArraySize(array = $furnitures or {}), key = "fIndex"){
+            $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $fIndex))
+            DictionarySet(dict = $fDict, key = "isOldFurnishing", value = true)
+            DictionarySet(dict = $fDict, key = "furnishingId", value = 0)
+            ArraySet(array = $furnitures, index = $fIndex, value = DictionaryToTable(dict = $fDict))
         }
         ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $dict))
     }
@@ -353,23 +406,18 @@ CHANGE_HOUSE{ -- 换房子/存档
 
 -------------------------------------- ui/btn/event
 HOUSE_TAB_EVENT{
-    -- TODO 更新出售的商品列表
     Test("---------HOUSE_TAB_EVENT")
     If(not $key or "0" == $key){
         Test("--------- u need buy")
         $listInfoTb = {}
         Foreach(array = GetConfigVar(obj = $obj1, key = "houseStore") or {}, key = "houseFullName"){
-            $coinName = GetEntityCfg(fullName = $houseFullName, key = "coinName") or ""
-            If("green_currency" == $coinName){
-                $coinImg = "set:jail_break.json image:jail_break_currency"
-            }ElseIf("gDiamonds" == $coinName){
-                $coinImg = "set:diamond.json image:Diamond-icon2.png"
-            }
+            $coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, index = (GetEntityCfg(fullName = $houseFullName, key = "coinId") or 3) + 1)
+                        or "set:jail_break.json image:jail_break_currency"
             ArrayAppend(array = $listInfoTb, value = {
                 image = GetEntityCfg(fullName = $houseFullName, key = "defaultColorImage") or "",
                 text = GetEntityCfg(fullName = $houseFullName, key = "houseType") or "",
                 coinImg = $coinImg or "",
-                btnShowText = GetEntityCfg(fullName = $houseFullName, key = "buyMoney") or "",
+                btnShowText = GetEntityCfg(fullName = $houseFullName, key = "buyMoney") or 0,
                 context = {houseCfg = $houseFullName}
             })
         }
@@ -474,13 +522,33 @@ SURE_BUY_HOUSE{
         Return()
     }
     ------------- 花钱买房 -- 此处判断是否购买失败，失败直接返回
-    $buyMoney = GetEntityCfg(fullName = $houseCfg, key = "buyMoney")
-    $coinName = GetEntityCfg(fullName = $houseCfg, key = "coinName")
-    If(not PayCurrency(entity = $obj1, coinName = $coinName, count = $buyMoney)){
+    $buyMoney = GetEntityCfg(fullName = $houseCfg, key = "buyMoney") or 0
+    $coinId = GetEntityCfg(fullName = $houseCfg, key = "coinId")
+    If(3 ~= $coinId){
+        BuyGoods(player = $obj1, uniqueId = 20201000001,  coinId = $coinId, price = $buyMoney, houseCfg = $houseCfg, event = "BUY_HOUSE_BY_APP" )
+        Return()
+    }
+    If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_not_enough_money", time = 40)
         Return()
     }
+    CallTrigger(object = $obj1, event = "GIVE_HOUSE", houseCfg = $houseCfg)
+}
+
+BUY_HOUSE_BY_APP{
+    $dictValue = NewDictionary($response)
+    $houseCfg = DictionaryGet(dict = $dictValue, key = "houseCfg")
+    $obj1 = DictionaryGet(dict = $dictValue, key = "player")
+    If(not $isSucceed){
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_not_enough_money", time = 40)
+        Return()
+    }
+    CallTrigger(object = $obj1, event = "GIVE_HOUSE", houseCfg = $houseCfg)
+}
+
+GIVE_HOUSE{
     ------------- 给房子
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
     $houseId = Concat(p1 = GetTime(), p2 = GetGameTime(), p3 = Random(min = 0, max = 999999))
     $curSelect = GetEntityCfg(fullName = $houseCfg, key = "defaultColor")
     ArrayAppend(array = $houseVars, value = { -- 购买成功后拼接一个新的房子数据放进entity的houseVars中 -- TEST CODE
@@ -530,9 +598,10 @@ SELL_HOUSE{
     $sellHouseMoney = $sellHouseMoney + GetEntityCfg(fullName = $sellHouseCfg, key = "sellMoney")
     $sellHouseFurnitures = DictionaryGet(dict = $curSelectDict, key = "houseInsideFurnishing") or {}
     Foreach(array = $sellHouseFurnitures, key = "furniture"){
-        $cfg = ArrayGet(array = $furniture, index = 3)
+        $fDict = NewDictionary($furniture)
+        $cfg = DictionaryGet(dict = $fDict, key = "cfg")
         $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
-        If(ArrayGet(array = $furniture, index = 5)){
+        If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
             $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
         }
         $sellHouseMoney = $sellHouseMoney + $sellMoney
@@ -584,13 +653,14 @@ SELL_HOUSE_SURE{
 
     -- 出售成功，给玩家钱
     $sellHouseCfg = DictionaryGet(dict = $curSelectDict, key = "houseCfg")
-    AddCurrency(entity = $obj1, coinName = GetEntityCfg(fullName = $sellHouseCfg, key = "coinName"), 
+    AddCurrency(entity = $obj1, coinName = "green_currency", 
         count = GetEntityCfg(fullName = $sellHouseCfg, key = "sellMoney"))
     $sellHouseFurnitures = DictionaryGet(dict = $curSelectDict, key = "houseInsideFurnishing") or {}
     Foreach(array = $sellHouseFurnitures, key = "furniture"){
-        $cfg = ArrayGet(array = $furniture, index = 3)
+        $fDict = NewDictionary($furniture)
+        $cfg = DictionaryGet(dict = $fDict, key = "cfg")
         $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
-        If(ArrayGet(array = $furniture, index = 5)){
+        If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
             $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
         }
         $coinName = GetEntityCfg(fullName = $cfg, key = "coinName")
@@ -605,16 +675,35 @@ BUY_STORE{
     If(not $cfg){
         Return()
     }
-    $buyMoney = GetEntityCfg(fullName = $cfg, key = "buyMoney")
-    $coinName = GetEntityCfg(fullName = $cfg, key = "coinName")
-    If(not PayCurrency(entity = $obj1, coinName = $coinName, count = $buyMoney)){
+    $buyMoney = GetEntityCfg(fullName = $cfg, key = "buyMoney") or 0
+    $coinId = GetEntityCfg(fullName = $cfg, key = "coinId")
+    If(3 ~= $coinId){
+        BuyGoods(player = $obj1, uniqueId = 20201000002,  coinId = $coinId, price = $buyMoney, cfg = $cfg, event = "BUY_STORE_BY_APP" )
+        Return()
+    }
+    If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
         Return()
     }
+    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg)
+}
+
+BUY_STORE_BY_APP{
+    $dictValue = NewDictionary($response)
+    $cfg = DictionaryGet(dict = $dictValue, key = "cfg")
+    $obj1 = DictionaryGet(dict = $dictValue, key = "player")
+    If(not $isSucceed){
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
+        Return()
+    }
+    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg)
+}
+
+GIVE_STORE{
     ShowGenericActorShowStore(entity = $obj1, closeWin =true)
     
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
-    $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg)
+    $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg, ry = 0, rp = 0)
     SetObjectVar(obj = $npc, key = "house", value = GetObjectVar(obj = $obj1, key = "house"))
     
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
@@ -626,9 +715,10 @@ BUY_STORE{
             Break()
         }
     }
-    ArrayAppend(array = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing"), value = [
-        GetEntityPosition(entity = $npc), GetEntityYaw(entity = $npc),$cfg,GetObjectID(object = $npc),false
-    ])
+    ArrayAppend(array = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing"), value = {
+        pos = GetEntityPosition(entity = $npc), yaw = GetEntityYaw(entity = $npc),cfg = $cfg,
+        furnishingId = GetObjectID(object = $npc),isOldFurnishing = false
+    })
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
@@ -651,12 +741,27 @@ SAVE_FURNITURE{
             Break()
         }
     }
-    Foreach(array = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing"), key = "furniture"){
-        $npc = GetObject(objID = ArrayGet(array = $furniture, index = 4))
+    $furnitures = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing")
+    ForLoop(from = 1, to = ArraySize(array = $furnitures or {}), key = "fIndex"){
+        $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $fIndex))
+        $npc = GetObject(objID = DictionaryGet(dict = $fDict, key = "furnishingId"))
         If($npc){
-            ArraySet(array = $furniture, index = 1, value = GetEntityPosition(entity = $npc))
-            ArraySet(array = $furniture, index = 2, value = GetEntityYaw(entity = $npc))
+            DictionarySet(dict = $fDict, key = "pos", value = GetEntityPosition(entity = $npc))
+            DictionarySet(dict = $fDict, key = "yaw", value = GetEntityYaw(entity = $npc))
+            -- DictionarySet(dict = $fDict, key = "pitch", value = GetEntityPitch(entity = $npc)) -- TODO 打开，此处是俯仰角，等碰撞盒旋转合过来之后打开
+            -- 如果是衣架，有saveSkinList，则需要保存当前衣架的皮肤
+            If(GetConfigVar(obj = $npc, key = "saveSkinList")){
+                $saveSkinList = {}
+                Foreach(array = GetConfigVar(obj = $npc, key = "saveSkinList"), key = "skinName"){
+                    ArrayAppend(array = $skinList, value = {
+                        skinName = $skinName,
+                        skin = GetSkin(entity = $npc, skinName = $skinName)
+                    })
+                }
+                DictionarySet(dict = $fDict, key = "saveSkinList", value = $saveSkinList)
+            }
         }
+        ArraySet(array = $furnitures, index = $fIndex, value = DictionaryToTable(dict = $fDict))
     }
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
@@ -665,6 +770,9 @@ SAVE_FURNITURE{
 
 SHOW_TITLE_BAR{
     Test("SHOW_TITLE_BAR")
+    If($obj1.inPartyOwnerId ~= 0){
+        Return()--in party
+    }
     $editBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/edit_house_buff")
     If($editBuff){
         RemoveEntityBuff(entity = $obj1, buff = $editBuff)
@@ -680,7 +788,7 @@ SHOW_TITLE_BAR{
     $infoTb = {
         btnInfo = {
             btnList = [
-                {text = "ui_edit", btnType = 1, event = "EDIT_HOUSE"},
+                {text = "ui_edit", btnType = 5, event = "EDIT_HOUSE"},
                 {text = "ui_lock", btnType = 2, event = "HOUSE_LOCK", 
                     curSelect = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "isLock")}
             ]
@@ -739,7 +847,6 @@ UPDATE_EDIT_STORE_SELL_TAB{
 }
 
 SHOW_DEC_STORE{
-    -- TODO 更新出售的商品列表
     Test("SHOW_DEC_STORE")
     ShowGenericActorShowStore(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, closeWin = true)
@@ -796,57 +903,68 @@ SHOW_DEC_STORE{
 }
 
 UPDATE_STORE_LIST{
-    Foreach(array = GetConfigVar(obj = $obj1, key = $nextCfgKey) or {}, key = "bottomBtn"){
-        $dic = NewDictionary($bottomBtn)
-        $type = DictionaryGet(dict = $dic, key = "type")
-        If("entity" == $type){
-            Test("$entity-----------------", $type)
-            $fullName = DictionaryGet(dict = $dic, key = "fullName")
-            ArrayAppend(array = $listInfoTb, value = {
-                text = GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
-                image = GetEntityCfg(fullName = $fullName, key = "image") or "",
-                actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
-                coinImg = GetWorldVar(key = GetEntityCfg(fullName = $fullName, key = "coinName") or "green_currency") or "",
-                cfg = $fullName,
-                event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
-                context = {
-                    cfg = $fullName
-                }
-            })
-        }ElseIf("block" == $type){
-            Test("$block-----------------", $type)
-            $fullName = DictionaryGet(dict = $dic, key = "fullName")
-            ArrayAppend(array = $listInfoTb, value = {
-                text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or "",
-                image = GetBlockConfigByName(block = $fullName, key = "image") or "",
-                coinImg = GetWorldVar(key = GetBlockConfigByName(block = $fullName, key = "coinName") or "green_currency") or "",
-                event = "BUY_HOUSE_REGION_COLOR",
-                context = {
-                    colorBlock = $fullName,
-                    childRegionKey = $childRegionKey
-                }
-            })
-        }ElseIf(DictionaryGet(dict = $dic, key = "closeEvent")){
-            ArrayAppend(array = $closeEvent, value = {
-                event = DictionaryGet(dict = $dic, key = "closeEvent"),
-                context = DictionaryGet(dict = $dic, key = "context")
-            })
-        }ElseIf(DictionaryGet(dict = $dic, key = "rightEvent")){
-            ArrayAppend(array = $rightEvent, value = {
-                event = DictionaryGet(dict = $dic, key = "rightEvent"),
-                context = DictionaryGet(dict = $dic, key = "context")
-            })
-        }ElseIf(DictionaryGet(dict = $dic, key = "leftEvent")){
-            ArrayAppend(array = $leftEvent, value = {
-                event = DictionaryGet(dict = $dic, key = "leftEvent"),
-                context = DictionaryGet(dict = $dic, key = "context")
-            })
+    $dicInfoTb = NewDictionary(GetConfigVar(obj = $obj1, key = $nextCfgKey) or {})
+    If(DictionaryGet(dict = $dicInfoTb, key = "storeInfo")){
+        $dic = NewDictionary(DictionaryGet(dict = $dicInfoTb, key = "storeInfo"))
+        $storeId = DictionaryGet(dict = $dic, key = "storeId")
+        Foreach(array = @DECORATION_STORE, key = "decorationTb"){
+            $decorationDic = NewDictionary($decorationTb)
+            $type = DictionaryGet(dict = $decorationDic, key = "type")
+            If(DictionaryGet(dict = $decorationDic, key = "storeId") == $storeId and "entity" == $type){
+                $fullName = DictionaryGet(dict = $decorationDic, key = "fullName")
+                ArrayAppend(array = $listInfoTb, value = {
+                    text = GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
+                    image = GetEntityCfg(fullName = $fullName, key = "image") or "",
+                    actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
+                    coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, index = (GetEntityCfg(fullName = $fullName, key = "coinId") or 3) + 1) 
+                        or "set:jail_break.json image:jail_break_currency",
+                    cfg = $fullName,
+                    event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
+                    context = {
+                        cfg = $fullName
+                    }
+                })
+            }
+            If(DictionaryGet(dict = $decorationDic, key = "storeId") == $storeId and "block" == $type){
+                $fullName = DictionaryGet(dict = $decorationDic, key = "fullName")
+                ArrayAppend(array = $listInfoTb, value = {
+                    text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or 0,
+                    image = GetBlockConfigByName(block = $fullName, key = "image") or "",
+                    coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, index = (GetBlockConfigByName(block = $fullName, key = "coinId") or 3) + 1) 
+                        or "set:jail_break.json image:jail_break_currency",
+                    event = "BUY_HOUSE_REGION_COLOR",
+                    context = {
+                        colorBlock = $fullName,
+                        childRegionKey = $childRegionKey
+                    }
+                })
+            }
         }
+    }
+    If(DictionaryGet(dict = $dicInfoTb, key = "closeInfo")){
+        $dic = NewDictionary(DictionaryGet(dict = $dicInfoTb, key = "closeInfo"))
+        ArrayAppend(array = $closeEvent, value = {
+            event = DictionaryGet(dict = $dic, key = "closeEvent"),
+            context = DictionaryGet(dict = $dic, key = "context")
+        })
+    }
+    If(DictionaryGet(dict = $dicInfoTb, key = "rightInfo")){
+        $dic = NewDictionary(DictionaryGet(dict = $dicInfoTb, key = "rightInfo"))
+        ArrayAppend(array = $rightEvent, value = {
+            event = DictionaryGet(dict = $dic, key = "rightEvent"),
+            context = DictionaryGet(dict = $dic, key = "context")
+        })
+    }
+    If(DictionaryGet(dict = $dicInfoTb, key = "leftInfo")){
+        $dic = NewDictionary(DictionaryGet(dict = $dicInfoTb, key = "leftInfo"))
+        ArrayAppend(array = $leftEvent, value = {
+            event = DictionaryGet(dict = $dic, key = "leftEvent"),
+            context = DictionaryGet(dict = $dic, key = "context")
+        })
     }
 }
 
 SHOW_DEC_STORE_LIST{
-    -- TODO 更新出售的商品列表
     Test("SHOW_DEC_STORE_LIST")
     ShowGenericActorShowStore(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, closeWin = true)
@@ -865,11 +983,6 @@ SHOW_DEC_STORE_LIST{
     $rightEvent = {}
     CallTrigger(object = $obj1, event = "UPDATE_STORE_LIST", nextCfgKey = $nextCfgKey, childRegionKey = $childRegionKey,
         listInfoTb = $listInfoTb, closeEvent = $closeEvent, leftEvent = $leftEvent, rightEvent = $rightEvent) 
-    --Test("SHOW_DEC_STORE_LIST", $listInfoTb)
-    --Test("SHOW_DEC_STORE_LIST", $closeEvent)
-    --Test("SHOW_DEC_STORE_LIST", $leftEvent)
-    --Test("SHOW_DEC_STORE_LIST", $rightEvent)
-
     $infoTb = {
         btnInfo = {
             btnType = 3,
@@ -893,12 +1006,31 @@ BUY_INSIDE_DOOR{
     If(not $cfg){
         Return()
     }
-    $buyMoney = GetEntityCfg(fullName = $cfg, key = "buyMoney") or 999999
-    $coinName = GetEntityCfg(fullName = $cfg, key = "coinName")
-    If(not PayCurrency(entity = $obj1, coinName = $coinName, count = $buyMoney)){
+    $buyMoney = GetEntityCfg(fullName = $cfg, key = "buyMoney") or GetEntityCfg(fullName = $cfg, key = "price") or 0
+    $coinId = GetEntityCfg(fullName = $cfg, key = "coinId")
+    If(3 ~= $coinId){
+        BuyGoods(player = $obj1, uniqueId = 20201000003,  coinId = $coinId, price = $buyMoney, cfg = $cfg, event = "BUY_DOOR_BY_APP" )
+        Return()
+    }
+    If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
         Return()
     }
+    CallTrigger(object = $obj1, event = "GIVE_DOOR", cfg = $cfg)
+}
+
+BUY_DOOR_BY_APP{
+    $dictValue = NewDictionary($response)
+    $cfg = DictionaryGet(dict = $dictValue, key = "cfg")
+    $obj1 = DictionaryGet(dict = $dictValue, key = "player")
+    If(not $isSucceed){
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
+        Return()
+    }
+    CallTrigger(object = $obj1, event = "GIVE_DOOR", cfg = $cfg)
+}
+
+GIVE_DOOR{
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
         $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
@@ -923,19 +1055,49 @@ BUY_INSIDE_DOOR{
 BUY_HOUSE_REGION_COLOR{
     Test("BUY_HOUSE_REGION_COLOR", $childRegionKey, $colorBlock)
     -- 如果换了墙纸或者地板，原有的不保留，当你没买     如果你原来买了A墙纸，你又换成了B，那么你要再花一遍钱去把A换回来
-    If($colorBlock){
-        $buyMoney = GetBlockConfigByName(block = $colorBlock, key = "buyMoney")
-        $coinName = GetBlockConfigByName(block = $colorBlock, key = "coinName")
-        If(not PayCurrency(entity = $obj1, coinName = $coinName, count = $buyMoney)){
-            ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", time = 40)
-            Return()
-        }
-    }
     $curInsideRegion = GetObjectVar(obj = $obj1, key = "curInsideRegion")
     If(not $curInsideRegion){
         Return()
     }
+
+    If($colorBlock){
+        $buyMoney = GetBlockConfigByName(block = $colorBlock, key = "buyMoney") or GetBlockConfigByName(block = $colorBlock, key = "price")
+        $coinId = GetBlockConfigByName(block = $colorBlock, key = "coinId")
+        If(not $coinId){
+            Return()
+        }
+        If(3 ~= $coinId){
+            BuyGoods(player = $obj1, uniqueId = 20201000004, coinId = $coinId, price = $buyMoney, 
+                childRegionKey = $childRegionKey, colorBlock = $colorBlock, event = "BUY_REGION_COLOR_BY_APP" )
+            Return()
+        }
+        Test($buyMoney)
+        If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
+            ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", time = 40)
+            Return()
+        }
+    }
     
+    CallTrigger(object = $obj1, event = "SET_REGION_COLOR", childRegionKey = $childRegionKey, colorBlock = $colorBlock)
+}
+
+BUY_REGION_COLOR_BY_APP{
+    $dictValue = NewDictionary($response)
+    $childRegionKey = DictionaryGet(dict = $dictValue, key = "childRegionKey")
+    $colorBlock = DictionaryGet(dict = $dictValue, key = "colorBlock")
+    $obj1 = DictionaryGet(dict = $dictValue, key = "player")
+    If(not $isSucceed){
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", time = 40)
+        Return()
+    }
+    CallTrigger(object = $obj1, event = "SET_REGION_COLOR", childRegionKey = $childRegionKey, colorBlock = $colorBlock)
+}
+
+SET_REGION_COLOR{
+    $curInsideRegion = GetObjectVar(obj = $obj1, key = "curInsideRegion")
+    If(not $curInsideRegion){
+        Return()
+    }
     $curInsideRegionKey = GetRegionKey(region = $curInsideRegion)
     $curInsideRegionChildReionArr = GetRegionConfig(region = $curInsideRegion, key = "childRegionKey")
     ForLoop(from = 1, to = ArraySize(array = $curInsideRegionChildReionArr), key = "index"){
@@ -1275,16 +1437,21 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
 {
     $skill = $skill or Concat(p1 = @skillPath, p2 = $state)
     $stateBase = $stateBase or GetSkillVar(fullName = $skill, key = "stateBase") or $state
+    $hadState = Concat(p1 = "had", p2 = $stateBase)
+    If(not GetObjectVar(obj = $obj1, key = $hadState))
+    {
+        Return()
+    }
+
+    RemoveSkill(entity = $obj1, name = $skill)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase), value = false)
+    CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
 
     $interactList = GetObjectVar(
         obj = $obj1,
         key = Concat(p1 = $stateBase, p2 = "InteractList")
     )
-
-    RemoveSkill(entity = $obj1, name = $skill)
-    SetObjectVar(obj = $obj1, key = $hadState, value = false)
-    CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
 
     If(not GetSkillVar(fullName = $skill, key = "hadReward"))
     {
@@ -1337,7 +1504,7 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     )
 }
 
-FUNC_STATE_RELEASE --params: state
+FUNC_STATE_RELEASE --params: state[, duration]
 {
     If(not $state)
     {
@@ -1347,18 +1514,19 @@ FUNC_STATE_RELEASE --params: state
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $hadState = Concat(p1 = "had", p2 = $stateBase)
-    If(not GetObjectVar(obj = $obj1, key = $hadState))
+    $releasingState = Concat(p1 = "releasing", p2 = $stateBase)
+    If(GetObjectVar(obj = $obj1, key = $hadState) && not GetObjectVar(obj = $obj1, key = $releasingState))
     {
-        Return()
-    }
-    $duration = GetSkillVar(fullName = $skill, key = "duration")
-    If($duration && $duration > 0)
-    {
-        CallTrigger(object = $obj1, event = "FUNC_STATE_START_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
-    }
-    Else
-    {
-        CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD", state = $state, stateBase = $stateBase, skill = $skill)
+        SetObjectVar(obj = $obj1, key = $releasingState, value = true)
+        $duration = $duration or GetSkillVar(fullName = $skill, key = "duration")
+        If($duration && $duration > 0)
+        {
+            CallTrigger(object = $obj1, event = "FUNC_STATE_START_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
+        }
+        Else
+        {
+            CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD", state = $state, stateBase = $stateBase, skill = $skill)
+        }
     }
 }
 
@@ -1372,14 +1540,15 @@ FUNC_STATE_RELEASE_SUSPEND --params: state
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $hadState = Concat(p1 = "had", p2 = $stateBase)
-    If(not GetObjectVar(obj = $obj1, key = $hadState))
+    $releasingState = Concat(p1 = "releasing", p2 = $stateBase)
+    If(GetObjectVar(obj = $obj1, key = $hadState) && GetObjectVar(obj = $obj1, key = $releasingState))
     {
-        Return()
-    }
-    $duration = GetSkillVar(fullName = $skill, key = "duration")
-    If($duration && $duration > 0)
-    {
-        CallTrigger(object = $obj1, event = "FUNC_STATE_SUSPEND_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
+        SetObjectVar(obj = $obj1, key = $releasingState, value = false)
+        $duration = GetSkillVar(fullName = $skill, key = "duration")
+        If($duration && $duration > 0)
+        {
+            CallTrigger(object = $obj1, event = "FUNC_STATE_SUSPEND_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
+        }   
     }
 }
 
@@ -1518,6 +1687,7 @@ FUNC_STATE_RESET_DATA --params: state
 FUNC_STATEBASE_RESET_DATA -- params: stateBase
 {
     SetObjectVar(obj = $obj1, key = Concat(p1 = "pre", p2 = $stateBase), value = nil)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = "releasing", p2 = $stateBase), value = nil)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "STime"), value = nil)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime"), value = nil)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
@@ -2770,23 +2940,43 @@ HTTP_PURCHASED_DRESS_CALL_BACK
 
 --打工
 GET_TASK_UI_DATA(){ --更新UI数据。
-    Test("-----------------UPdaUI")
     $count = $obj1.worktaskCount % 10
     If($count == 0 && $obj1.worktaskCount >0){
         $count = 10 
     }
-    $textCount = $count
-    $str = "/"
-    If($obj1.taskKey){
-        $str = "/rd"
-    }
+    $textCount = $obj1.worktaskCount
     $isTasking = false
     If($obj1.taskKey){
         $count = $count - 1
         $isTasking = true
     }
+    $str = "/"
+    If($obj1.taskKey){
+        If($textCount == 1){
+            $str = "/st"
+        }ElseIf($textCount == 2){
+            $str = "/nd"
+        }ElseIf($textCount == 3){
+            $str = "/rd"
+        }Else{
+            $str = "/th"
+        }
+    }
     $text = Concat(p1 = $textCount, p2 = $str, p3 = "40")
     $rate = $count / 10
+    $imgcount = $obj1.worktaskCount
+    If($obj1.taskKey){
+        $imgcount = $imgcount - 1
+    }
+    If($imgcount >=0 and $imgcount <10){
+        $btnImg = "set:indentImg.json image:btn1.png"
+    }ElseIf($imgcount >=10 &&  $imgcount <20){
+        $btnImg = "set:indentImg.json image:BtnGreen.png"
+    }ElseIf($imgcount >=20 && $imgcount <30){
+        $btnImg = "set:indentImg.json image:btnBule.png"
+    }ElseIf($imgcount >=30 && $imgcount <40){
+        $btnImg = "set:indentImg.json image:BtnRed.png"
+    }
     $taskData = Table(
         Progress =  $rate,
         BtnText = $text,
@@ -2794,35 +2984,32 @@ GET_TASK_UI_DATA(){ --更新UI数据。
         isTasking = $isTasking,
         closeOneceGps = $closeGps,
         showOneceGps = $showGps,
-        animation = $animation
+        animation = $animation,
+        btnImg = $btnImg
     )
     UpdateUIData(player = $obj1, ui = "circleProgress", data = $taskData)
 }
 GET_TASK_GPS(debug = false) --得到打工的GPS位置
 {
-    $mapOutPos = {
-        house1_map = {x = 120, y = 34, z = 187},
-        house2_map = {x = 120, y = 34, z = 187},
-        house3_map = {x = 120, y = 34, z = 187},
-        map001 = {x = 1639,y = 13, z = -574}
+    $map = GetPlayerMap(player = $obj1)
+    $owner = GetMapOwner(map = $map)
+    If($owner){
+        $door = GetObjectVar(obj = $owner , key = "insideDoor")
+        $obj1.gpsPos = GetEntityPosition(entity = $door)
+    }Else{
+        $obj1.gpsPos = $obj1.taskPos or  {x = 89, y = 18, z = 195}
     }
-    $pos = $obj1.taskPos or  { x = 170, y = 18, z = 343} --任务点，或者领任务点
-    $mapName = GetPlayerMap(player = $obj1, name = true)
-    $dict = NewDictionary($mapOutPos)
-    If( ($obj1.npcMap and $mapName ~= $obj1.npcMap) or (not $obj1.npcMap and $mapName ~= "map001") ){
-        $pos = DictionaryGet(dict = $dict, key = $mapName)
-    }
-    $obj1.gpsPos = $pos
 }
 INIT_WORK_TASK(){ --初始打工
     $index =  $obj1.taskIndex
-    Test("index=========",$index, $obj1.worktaskCount)
     If($index && $index > 0){
         $taskDict = ArrayGet(array = @TASK_TABLE, index = $index)
         $obj1.taskKey = DictionaryGet(dict = $taskDict, key = "taskKey") -- 随机到的任务
         $obj1.taskPos = DictionaryGet(dict = $taskDict, key = "pos") -- 随机到的任务NPC ,GPS位置
         $obj1.taskNpc = DictionaryGet(dict = $taskDict, key = "npcName") --npc的 fullName
         $obj1.npcMap = DictionaryGet(dict = $taskDict, key = "npcMap")
+        $obj1.succeedMsg = DictionaryGet(dict = $taskDict, key = "succeedMsg")
+        $obj1.failedMsg = DictionaryGet(dict = $taskDict, key = "failedMsg")
     }
     CallTrigger(event = "GET_TASK_GPS", object = $obj1)
     CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
@@ -2842,19 +3029,23 @@ FINISH_TASK(debug = false){ --完成打工的对话
         optionNpc = "myplugin/player1",
         talkList = [
             {
-                msg = "tr.37965",
+                msg =  $obj1.succeedMsg or "tr.37965",
                 npc = $obj1.taskNpc
             }
         ]
     )
 }
+TEST_SHOW_ITEM(){
+    $data1 = GetWorldVar(key = "titilePos1")
+    $data2 = GetWorldVar(key = "titilePos2")
+    Show3DUI(player = $obj1, show = true, data = $data1)
+    Show3DUI(player = $obj1, show = true, data = $data2)
+}
 FINISH_AWARD(){ --完成打工的奖励
-    Test("8888888888888888888888888")
     $money = GetConfigValue(type = "reward", fullName = "myplugin/task_money", key = $obj1.worktaskCount)
     If(not $money){
         $money = 1
     }
-    Test("-----------",$money)
     AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
     ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
     $taskItem = SearchBagItem(entity = $obj1, key = "fullName", val = "myplugin/taskItem")
@@ -2873,12 +3064,13 @@ FINISH_AWARD(){ --完成打工的奖励
         $recfg = GetConfigValue(type = "reward", fullName = "myplugin/task_reward", key = $proessLeve)
         AddItem(entity = $obj1, cfg = $recfg, count = 1)
         --ShowDialogTip(entity = $obj1, tipType = 4, p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
-        ShowRewardNotice(
-            entity = $obj1,
-            tiptext = "",
-            tittletext = "final.summary.reward",
-            cfg = $recfg
-        )
+        --ShowRewardNotice(
+         --   entity = $obj1,
+         --   tiptext = "",
+        --    tittletext = "final.summary.reward",
+        --    cfg = $recfg
+        --)
+        ShowRewardItemEffect(itemCfg = $recfg)
     }
     If($obj1.worktaskCount >= 40){
         $obj1.worktaskCount = 0
@@ -2889,7 +3081,6 @@ FINISH_AWARD(){ --完成打工的奖励
 }
 TASK_NPC_ADD_BUFF(debug = false)
 {
-    Test("+++++++++++++++++++++++++++++++")
     $map = GetPlayerMap(player = $obj1)
     $mapNpc = GetMapNpc(map = $map)
     Foreach(array = $mapNpc, key = "npc"){
@@ -2897,7 +3088,6 @@ TASK_NPC_ADD_BUFF(debug = false)
         If($name == $obj1.lastNpc){
             UnMarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
         }
-        Test("---------ccccc--------",$obj1.taskNpc, $name)
         If($name == $obj1.taskNpc){
             MarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
         }
@@ -2962,27 +3152,15 @@ ENTITY_BUY_APPSTOP(debug = false){
 --弹窗购买特权
 POP_UP_BUY_PRIVILEGE(debug = false)
 {
-    If(not $itemName ){
-        Return()
-    }
-    $PRIVILEGE_TABLE = {
-            vip_privilege = 100000,
-            dance_privilege = 20000,
-            action_privilege = 3000,
-            music_privilege = 40000,
-            home_privilege = 50000,
-            svip_privilege = 60000,
-    }
-    $dict = NewDictionary($PRIVILEGE_TABLE)
-    $price = DictionaryGet(dict = $dict, key = $itemName)
-    If(not $price){
+    If(not $shopIndex ){
         Return()
     }
     $obj1.checkprid = ($obj1.checkprid or 0 ) + 1
+    $price = GetShopItemKey(shopIndex = $shopIndex, key = "price")
+    $itemdesc = GetShopItemKey(shopIndex = $shopIndex, key = "desc")
     $Context = {
-        itemName = $itemName,
-        price = $price,
-        seccionid = $obj1.checkprid
+        seccionid = $obj1.checkprid,
+        shopIndex = $shopIndex
     }
     $btnInfo = {
         leftCoinId = nil,
@@ -2992,7 +3170,7 @@ POP_UP_BUY_PRIVILEGE(debug = false)
     }
     $content = {
         msg = "gui_you_want_to_buy_this",
-        args = [ $price, $itemName]
+        args = [ $price, $itemdesc]
     }
 
     ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_BUY_PRI", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
@@ -3003,55 +3181,64 @@ SURE_BUY_PRI(debug = false)
         Return()
     }
  
-    If($seccionid ~= $obj1.checkprid or not $itemName)
+    If($seccionid ~= $obj1.checkprid or not $shopIndex)
     {
         Return()
     }
 
-    BuyGoods(player = $obj1, uniqueId = 1000111,  coinId = 0, event = "BUY_PRI_GOODS" ,price = $price, itemName = $itemName, obj1 = $obj1)
-}
-BUY_PRI_GOODS(debug = false)
-{
-    $dict = NewDictionary($response)
-    $itemName = DictionaryGet(dict = $dict, key = "itemName")
-    $obj1 = DictionaryGet(dict = $dict, key = "obj1")
-    If($isSucceed){
-        ArrayAppend(array = $obj1.privilege, value = $itemName)
-        ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
-    }Else{
-        ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
-    }
+    RequestCanBuy(shopIndex = $shopIndex, palyer = $obj1, count = 1)
 }
 --
-PLAYER_BE_INVITE(debug = true){
+PLAYER_BE_INVITE(debug = false){
+    --party invite will call PLAYER_BE_INVITE_OTHER_SERVER
+    $userId = GetPlayerUserID(player = $obj1)
+    $inPartyOwnerId = $obj1.inPartyOwnerId
+    If($inPartyOwnerId ~= 0){
+        Return()--in party
+    }
     $obj1.visitTarget = $obj2
     $contentDict = NewDictionary($content)
     --todo: can close by showTime
     --showTime = DictionaryGet(dict = $contentDict, key = "showTime")
     ShowNotice(
 		buttonType = 2,
-		content = "gui_friend_invite_notice",
+		content = $guiText or "gui_friend_invite_notice",
 		eventYes = "PLAYER_ON_VISIT",
 		entity = $obj1,
 		textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
 	)
 }
-PLAYER_BE_INVITE_OTHER_SERVER(debug = true){
+PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
+    $userId = GetPlayerUserID(player = $obj1)
+    $inPartyOwnerId = $obj1.inPartyOwnerId
+    If($inPartyOwnerId ~= 0){
+        Return()--in party
+    }
     $contentDict = NewDictionary($content)
+    $fromParty = DictionaryGet(dict = $contentDict, key = "fromParty")
+    If($fromParty){
+        $guiText = "gui_party_invite_notice"
+        $obj1.toParty = true
+    }
     $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
     ShowNotice(
-		buttonType = 2,
-		content = "gui_friend_invite_notice",
-		eventYes = "PLAYER_ON_VISIT_OTHER_SERVER",
-		entity = $obj1,
-		textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
-	)
+        buttonType = 2,
+        content = $guiText or "gui_friend_invite_notice",
+        eventYes = "PLAYER_ON_VISIT_OTHER_SERVER",
+        entity = $obj1,
+        textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
+    )
 }
-PLAYER_ON_VISIT_OTHER_SERVER(debug = true){
-	GotoOtherServer(targetUserId = $targetUserId or $obj1.visitTargetUserId, player = $obj1)
+PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
+    $targetUserId = $targetUserId or $obj1.visitTargetUserId
+    If($obj1.toParty){
+        TryJoinParty(targetUserId = $targetUserId)
+    }
+    Else{
+        GotoOtherServer(targetUserId = $targetUserId, player = $obj1)
+    }
 }
-PLAYER_ON_VISIT(debug = true){
-    $fromInParty = false
+PLAYER_ON_VISIT(debug = false){
     $targetInRoom = false
     $targetRoomLocked = true
     $fromJustBeRemoved = false
@@ -3062,7 +3249,7 @@ PLAYER_ON_VISIT(debug = true){
         Return()
     }
     If($fromInParty){
-        SetEntityPosition(entity = $obj1, pos = GetEntityPosition(entity = $target))
+        SetEntityPosition(map = GetEntityMap(entity = $target), entity = $obj1, pos = GetEntityPosition(entity = $target))
     }
     Else{
         If($targetInRoom){
@@ -3073,6 +3260,45 @@ PLAYER_ON_VISIT(debug = true){
         }
     }
 }
+
+--场景商店门面
+SHOW_SHOP_TITLE(debug = false){
+    Return()
+    If($obj1.showShopTitleTimer){
+        StopTimer(timer = $obj1.showShopTitleTimer)
+    }
+    If(GetEntityMapName(entity = $obj1) == "map001" ){
+        $data1 = GetWorldVar(key = "titilePos1")
+        $data2 = GetWorldVar(key = "titilePos2")
+        Show3DUI(player = $obj1, show = true, data = $data1)
+        Show3DUI(player = $obj1, show = true, data = $data2)
+    }
+}
+JOIN_PARTY_SUCCESS(debug = false){
+    $obj1.inPartyOwnerId = $targetUserId
+    GotoOtherServer(player = $obj1, targetUserId = $targetUserId)
+}
+UPDATE_CREATE_PARTY_VIEW_INFO(debug = false){
+    $curHouseCfg = $obj1.curHouseCfg
+    $maxPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "partyMaxPlayerNumber")
+    $partyImage = GetEntityCfg(fullName = $curHouseCfg, key = "partyImage")
+}
+CREATE_PARTY_SUCCESS(debug = false){
+    $obj1.inPartyOwnerId = GetPlayerUserID(player = $obj1)
+    GotoOtherServer(player = $obj1)
+}
+CLOSE_PARTY_SUCCESS(debug = false){
+    --get all player, send tip, resetgame
+    $name = GetEntityName(entity = $obj1)
+    $players = NewDictionary(GetAllPlayers())
+    ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
+        ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
+        $player.inPartyOwnerId = 0
+        GotoOtherServer(player = $player)
+    }
+}
+PARTY_BE_LIKED(debug = false){}
+LIKE_PARTY(debug = false){}
 
 
 START_CAMERA_MODE

@@ -28,11 +28,15 @@ GET_TASK_KEY(debug = false) --随机任务key
     $taskPos = DictionaryGet(dict = $taskDict, key = "pos") -- 随机到的任务NPC ,GPS位置
     $taskNpc = DictionaryGet(dict = $taskDict, key = "npcName") --npc的 fullName
     $npcMap = DictionaryGet(dict = $taskDict, key = "npcMap") --npc的Map
+    $succeedMsg = DictionaryGet(dict = $taskDict, key = "succeedMsg")
+    $failedMsg = DictionaryGet(dict = $taskDict, key = "failedMsg")
     $taskMap = {
         taskKey = $taskKey,
         taskPos = $taskPos,
         taskNpc = $taskNpc,
-        npcMap = $npcMap
+        npcMap = $npcMap,
+        succeedMsg = $succeedMsg,
+        failedMsg = $failedMsg
     }
     DictionarySet(dict = @taskMap, key = GetObjectID(object = $obj2), value = $taskMap)
     $harray = [
@@ -40,7 +44,6 @@ GET_TASK_KEY(debug = false) --随机任务key
         "interactionUI_1"
     ]
     $headIndex = ArrayGet(array = $harray, index = $index)
-    Test("gggggggggggggg",$index, $headIndex)
     --UpdateObjectInteractionUI(cfgKey = $headIndex, player = $obj2, target = $obj1, show = true)
 }
 GET_TASK(debug = false)
@@ -61,7 +64,9 @@ GET_TASK(debug = false)
             taskKey = DictionaryGet(dict = $taskDict, key = "taskKey"),
             taskPos = DictionaryGet(dict = $taskDict, key = "pos"),
             taskNpc = DictionaryGet(dict = $taskDict, key = "npcName"), 
-            npcMap = DictionaryGet(dict = $taskDict, key = "npcMap") 
+            npcMap = DictionaryGet(dict = $taskDict, key = "npcMap"),
+            succeedMsg = DictionaryGet(dict = $taskDict, key = "succeedMsg"),
+            failedMsg = DictionaryGet(dict = $taskDict, key = "failedMsg")
         }
     }
     $dictTaskMap = NewDictionary($taskMap)
@@ -69,6 +74,8 @@ GET_TASK(debug = false)
     $obj2.taskPos = DictionaryGet(dict = $dictTaskMap, key = "taskPos")
     $obj2.taskNpc = DictionaryGet(dict = $dictTaskMap, key = "taskNpc")
     $obj2.npcMap = DictionaryGet(dict = $dictTaskMap, key = "npcMap")
+    $obj1.succeedMsg = DictionaryGet(dict = $dictTaskMap, key = "succeedMsg")
+    $obj1.failedMsg = DictionaryGet(dict = $dictTaskMap, key = "failedMsg")
     --接受任务，开始任务。
     StartTask(player = $obj2 ,fullName = $obj2.taskKey)
     AddItem(entity = $obj2, cfg = "myplugin/taskItem", count = 1)

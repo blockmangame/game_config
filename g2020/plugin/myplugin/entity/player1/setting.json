@@ -174,9 +174,9 @@
         "cfgKey": "interactionUI",
         "centerBtns":[
             {
-                "text":"name",
+                "showName":true,
                 "image":"plugin/myplugin/image/hand_click.png",
-                "event": "PLAYER_INTERACTION"
+                "nextCfgKey": "interaction_choices"
             }
         ],
         "followParams":{
@@ -188,108 +188,187 @@
         "aroundParams":{
             "startAngle": 0,
             "endAngle": 360,
-            "radius": 100
+            "radius": 150
         },
         "followParams":{
             "followScenePos": true,
-            "showRange": 5,
+            "showRange": 4,
             "resetWhenHide": true
         },
         "aroundBtns":[
             {
-                "text":"",
-                "image":"plugin/myplugin/image/interaction_add_friend.png",
-                "event": "INTERACTION_ADD_FRIEND"
+                "widgetFileName": "widget_button_2",
+                "text":"interact_add_friend",
+                "image":"set:party_interaction_ui.json image:interaction_add_friend",
+                "event": "INTERACTION_ADD_FRIEND",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
             },
             {
+                "widgetFileName": "widget_button_2",
                 "text":"interact_feed",
-                "image":"plugin/myplugin/image/interaction_feed.png",
-                "event": "INTERACTION_FEED"
+                "image":"set:party_interaction_ui.json image:interaction_feed",
+                "event": "INTERACTION_FEED",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
             },
             {
-                "text":"",
-                "image":"plugin/myplugin/image/interaction_banish.png",
-                "event": "INTERACTION_BANISH"
+                "widgetFileName": "widget_button_2",
+                "text":"interact_act",
+                "image":"set:party_interaction_ui.json image:interaction_act",
+                "event": "INTERACTION_ACT",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
             },
             {
-                "text":"",
-                "image":"plugin/myplugin/image/interaction_act.png",
-                "event": "INTERACTION_CHILD_OPEN"
-            },
-            {
-                "text":"",
-                "image":"plugin/myplugin/image/interaction_join_family.png",
-                "event": "INTERACTION_JOIN_FAMILY"
+                "widgetFileName": "widget_button_2",
+                "text":"interact_join_family",
+                "image":"set:party_interaction_ui.json image:interaction_join_family",
+                "event": "INTERACTION_JOIN_FAMILY",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
             }
         ]
     },
-    "interaction_child": {
+	"interaction_child": {
         "cfgKey": "interaction_child",
         "aroundParams":{
             "startAngle": 0,
             "endAngle": 360,
-            "radius": 100
+            "radius": 150
         },
         "followParams":{
             "followScenePos": true,
-            "showRange": 5,
+            "showRange": 4,
             "resetWhenHide": true
         },
         "aroundBtns":[
             {
+                "widgetFileName": "widget_button_2",
                 "text":"A1",
-                "image":"plugin/myplugin/image/interaction_feed.png",
-                "event": "INTERACTION_RIDE"
+                "image":"set:party_interaction_ui.json image:interaction_add_friend",
+                "event": "INTERACTION_RIDE",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
             },
             {
+                "widgetFileName": "widget_button_2",
                 "text":"A2",
-                "image":"plugin/myplugin/image/interaction_banish.png",
-                "event": "INTERACTION_HUG"
+                "image":"set:party_interaction_ui.json image:interaction_feed",
+                "event": "INTERACTION_HUG",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
             },
             {
+                "widgetFileName": "widget_button_2",
                 "text":"A3",
-                "image":"plugin/myplugin/image/interaction_banish.png",
-                "event": "INTERACTION_HAND_IN_HAND"
+                "image":"set:party_interaction_ui.json image:interaction_act",
+                "event": "INTERACTION_HAND_IN_HAND",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
             },
             {
+                "widgetFileName": "widget_button_2",
                 "text":"A4",
-                "image":"plugin/myplugin/image/interaction_act.png",
-                "event": "INTERACTION_FOLLOW"
+                "image":"set:party_interaction_ui.json image:interaction_join_family",
+                "event": "INTERACTION_FOLLOW",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
             }
         ]
     },
-    "interaction_adult": {
+	"interaction_adult": {
         "cfgKey": "interaction_adult",
         "aroundParams":{
             "startAngle": 0,
             "endAngle": 360,
-            "radius": 100
+            "radius": 150
         },
         "followParams":{
             "followScenePos": true,
-            "showRange": 5,
+            "showRange": 4,
             "resetWhenHide": true
         },
         "aroundBtns":[
             {
+                "widgetFileName": "widget_button_2",
                 "text":"B1",
-                "image":"plugin/myplugin/image/interaction_feed.png",
-                "event": "INTERACTION_HUG"
+                "image":"set:party_interaction_ui.json image:interaction_add_friend",
+                "event": "INTERACTION_HUG",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
             },
             {
+                "widgetFileName": "widget_button_2",
                 "text":"B2",
-                "image":"plugin/myplugin/image/interaction_banish.png",
-                "event": "INTERACTION_HANDSHAKE"
+                "image":"set:party_interaction_ui.json image:interaction_feed",
+                "event": "INTERACTION_HANDSHAKE",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
             },
             {
+                "widgetFileName": "widget_button_2",
                 "text":"B3",
-                "image":"plugin/myplugin/image/interaction_act.png",
-                "event": "INTERACTION_FOLLOW"
+                "image":"set:party_interaction_ui.json image:interaction_act",
+                "event": "INTERACTION_FOLLOW",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
             },
             {
+                "widgetFileName": "widget_button_2",
                 "text":"B4",
-                "image":"plugin/myplugin/image/interaction_act.png",
-                "event": "INTERACTION_PICK"
+                "image":"set:party_interaction_ui.json image:interaction_join_family",
+                "event": "INTERACTION_PICK",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
             }
         ]
     },
@@ -364,35 +443,30 @@
         {"nextCfgKey": "bathroomStore", "titleKey": "allDec", "text": "ui_decStoreList_bathroomStore", "image": "set:Edit_1.json image:Edit_Toilet_Icon.png", "event": "SHOW_DEC_STORE_LIST"},
         {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}}
     ],
-    "kitchenStore":[
-        {"type": "entity", "fullName": "myplugin/chairs_body_1"},
-        {"type": "entity", "fullName": "myplugin/chairs_body_11"},
-        {"type": "entity", "fullName": "myplugin/chairs_body_2024"},
-        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
-        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "parlorStore"}},
-        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
-    ],
-    "parlorStore": [
-        {"type": "entity", "fullName": "myplugin/chairs_body_2"},
-        {"type": "entity", "fullName": "myplugin/chairs_body_3"},
-        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
-        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "bedroomStore"}},
-        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
-    ],
-    "bedroomStore":[
-        {"type": "entity", "fullName": "myplugin/chairs_body_5"},
-        {"type": "entity", "fullName": "myplugin/chairs_body_2001"},
-        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
-        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "bathroomStore"}},
-        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
-    ],
-    "bathroomStore":[
-        {"type": "entity", "fullName": "myplugin/chairs_body_10"},
-        {"type": "entity", "fullName": "myplugin/chairs_body_19"},
-        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
-        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "kitchenStore"}},
-        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
-    ],
+    "kitchenStore":{
+        "storeInfo" : {"storeId": "kitchenStore", "type": "entity", "fullName": "myplugin/chairs_body_1"},
+        "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
+        "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "parlorStore"}},
+        "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
+    },
+    "parlorStore": {
+        "storeInfo" : {"storeId": "parlorStore", "type": "entity", "fullName": "myplugin/chairs_body_2"},
+        "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
+        "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "bedroomStore"}},
+        "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
+    },
+    "bedroomStore":{
+        "storeInfo" : {"storeId": "bedroomStore", "type": "entity", "fullName": "myplugin/chairs_body_5"},
+        "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
+        "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "bathroomStore"}},
+        "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
+    },
+    "bathroomStore":{
+        "storeInfo" : {"storeId": "bathroomStore", "type": "entity", "fullName": "myplugin/chairs_body_10"},
+        "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
+        "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "kitchenStore"}},
+        "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
+    },
 
     "editStoreList": [
         {"nextCfgKey": "floorBlockStore","childRegionKey": "floorRegion", "titleKey": "allEdit", 
@@ -403,27 +477,24 @@
             "image": "set:Edit_1.json image:Edit_Door_Icon.png", "event": "SHOW_DEC_STORE_LIST"},
         {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}}
     ],
-    "floorBlockStore": [
-        {"type": "block", "fullName": "myplugin/wool_2"},
-        {"type": "block", "fullName": "myplugin/wool_3"},
-        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
-        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "wallBlockStore", "childRegionKey": "wallRegion"}},
-        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
-    ],
-    "wallBlockStore": [
-        {"type": "block", "fullName": "myplugin/wool_2"},
-        {"type": "block", "fullName": "myplugin/wool_1"},
-        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
-        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "doorStore"}},
-        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
-    ],
-    "doorStore": [
-        {"type": "entity", "fullName": "myplugin/chairs_body_10", "event": "BUY_INSIDE_DOOR"},
-        {"type": "entity", "fullName": "myplugin/chairs_body_19", "event": "BUY_INSIDE_DOOR"},
-        {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
-        {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "floorBlockStore", "childRegionKey": "floorRegion"}},
-        {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
-    ],
+    "floorBlockStore": {
+        "storeInfo" : {"storeId": "floorBlockStore", "type": "block", "fullName": "myplugin/wool_2"},
+        "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
+        "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "wallBlockStore", "childRegionKey": "wallRegion"}},
+        "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
+    },
+    "wallBlockStore": {
+        "storeInfo" : {"storeId": "wallBlockStore", "type": "block", "fullName": "myplugin/wool_2"},
+        "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
+        "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "doorStore"}},
+        "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
+    },
+    "doorStore": {
+        "storeInfo" : {"storeId": "doorStore", "type": "entity", "fullName": "myplugin/chairs_body_10", "event": "BUY_INSIDE_DOOR"},
+        "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
+        "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "floorBlockStore", "childRegionKey": "floorRegion"}},
+        "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
+    },
     "freeWorksArchive" : 3,
     "worksArchivePrice" : 100,
     "publishWorksPrice" : 360,

@@ -1,15 +1,15 @@
-COOK_SHOW_CHOICES(debug = true){
+COOK_SHOW_CHOICES(debug = false){
     UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
 }
-COOK_SHOW_BACK(debug = true){
+COOK_SHOW_BACK(debug = false){
     UpdateObjectInteractionUI(cfgKey = "interactionUI", player = $obj2, target = $obj1, show = true)
 }
-COOK_1(debug = true){
+COOK_1(debug = false){
     AddItem(cfg = "myplugin/food_burger", count = 1, entity = $obj2)
     CallTrigger(event = "COOK_SHOW_BACK", object = $obj1, obj2 = $obj2)
 
 }
-COOK_2(debug = true){
+COOK_2(debug = false){
     AddItem(cfg = "myplugin/food_pizza", count = 1, entity = $obj2)
     CallTrigger(event = "COOK_SHOW_BACK", object = $obj1, obj2 = $obj2)
 }
