@@ -73,34 +73,62 @@
         }
     ],
     "canInteract": true,
-    "interactionUI": {
-        "cfgKey": "interactionUI",
-        "centerBtns": [
-            {
-                "text": "sit",
-                "image": "plugin/myplugin/image/hand_click.png",
-                "event": "ENTITY_CLICK_2"
+    "interactionUI":[
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_CLICK_1"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset":{
+                    "x":1,
+                    "y":0,
+                    "z":0
+                }
             }
-        ],
-        "aroundParams": {
-            "radius": 100
         },
-        "aroundBtns": [
-            {
-                "text": "1",
-                "image": "plugin/myplugin/image/hand_click.png",
-                "event": "ENTITY_CLICK_1"
-            },
-            {
-                "text": "2",
-                "image": "plugin/myplugin/image/hand_click.png",
-                "event": "ENTITY_CLICK_3"
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_CLICK_2"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset":{
+                    "x":0,
+                    "y":0,
+                    "z":0
+                }
             }
-        ],
-        "followParams": {
-            "followScenePos": false
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_CLICK_3"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset":{
+                    "x":-1,
+                    "y":0,
+                    "z":0
+                }
+            }
         }
-    },
+    ],
     "interaction": {
         "radius": 3,
         "offset": {
