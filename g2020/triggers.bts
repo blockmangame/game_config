@@ -345,7 +345,14 @@ LOAD_TOP_EXCELLENT_RESPONSE {
 
     @excellentWorks = $info
 }
-
+ENTITY_RIDE_OFF(debug = false){
+    If(not IsPlayer(entity = $obj2)){ Return() }
+    RecheckObjectInteractionUI(player = $obj2, target = $obj1)
+}
+ENTITY_RIDE_ON(debug = false){
+    If(not IsPlayer(entity = $obj2)){ Return() }
+    UpdateObjectInteractionUI(player = $obj2, target = $obj1, show = false)
+}
 REMOVE_ILL_BUFF
 {
     -- CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = "illEffect")
