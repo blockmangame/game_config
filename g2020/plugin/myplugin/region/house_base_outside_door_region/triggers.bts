@@ -9,8 +9,6 @@ REGION_ENTER {
         Return()
     }
     Test(" please in !! ")
-    ------------------------------------------ 设置出来的门的位置
-    SetObjectVar(obj = $obj1, key = "returnDoor", value = $door)
     ------------------------------------------ 传送进内部房子
     $map = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "houseInsideMap")
     $yaw = 0

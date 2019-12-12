@@ -31,11 +31,10 @@ INTER_WITH_DOOR{
         Return()
     }
     Test("get out here !")
-    $door = GetObjectVar(obj = $obj2, key = "returnDoor")
+    $door = GetObjectVar(obj = GetMapOwner(map = $map), key = "door")
     If(not $door){
         $door = GetObjectVar(obj = GetObjectVar(obj = $obj2, key = "house"), key = "door")
     }
-    SetObjectVar(obj = $obj2, key = "returnDoor", value = nil)
     SetEntityPosition(entity = $obj2, map = GetEntityMap(entity = $door), 
         pos = ComputeV3(p1 = GetEntityPosition(entity = $door), p2 = V3RotationYaw(vector = Table(x = 0, y = 0.5, z = 3), yaw = GetEntityYaw(entity = $door)), op = "add"))
     If(GetObjectID(object = GetObjectVar(obj = $obj2, key = "house")) == GetObjectID(object = GetObjectVar(obj = $obj1, key = "house"))){

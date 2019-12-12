@@ -194,7 +194,7 @@ ENTITY_ENTER
     }
     $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
     ------------------------------------------ 获得当前地图上的空出的区域，创建房子 * 
-    -- 区域 <region------owner> 房子 <house-------owner> 玩家，可通过区域获取区域上的房子，通过房子获得所属玩家。 反向同理
+    -- 区域 <region------owner(需要使用GetRegionOwner)> 房子 <house-------owner> 玩家，可通过区域获取区域上的房子，通过房子获得所属玩家。 反向同理
     $regions = GetAllRegion(map = GetEntityMap(entity = $obj1))
     Foreach(array = $regions, key = "region"){
         If(not GetRegionOwner(region = $region) and GetRegionConfig(region = $region, key = "isHouseRegion")){
@@ -207,7 +207,6 @@ ENTITY_ENTER
     ------------------------------------------ 玩家进入游戏就进入自己房间
     $house = GetObjectVar(obj = $obj1, key = "house")
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
-    SetObjectVar(obj = $obj1, key = "returnDoor", value = GetObjectVar(obj = $house, key = "door"))
     $yaw = 0
     If($obj1.curHouseCfg){
         $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
@@ -714,6 +713,7 @@ SAVE_FURNITURE{
         If($npc){
             DictionarySet(dict = $fDict, key = "pos", value = GetEntityPosition(entity = $npc))
             DictionarySet(dict = $fDict, key = "yaw", value = GetEntityYaw(entity = $npc))
+            DictionarySet(dict = $fDict, key = "pitch", value = GetEntityPitch(entity = $npc))
             -- 如果是衣架，有saveSkinList，则需要保存当前衣架的皮肤
             If(GetConfigVar(obj = $npc, key = "saveSkinList")){
                 $saveSkinList = {}
