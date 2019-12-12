@@ -1,0 +1,8 @@
+SHOW_CONVERSATION_UI
+{
+    $talkList = GetConfigVar(obj = $obj1, key = "talkList")
+    $optionList = GetConfigVar(obj = $obj1, key = "optionList")
+    $optionNpc = GetConfigVar(obj = $obj1, key = "optionNpc")
+
+    OpenConversation(entity = $obj2, talkList = $talkList, optionList = $optionList, optionNpc = $optionNpc)
+}

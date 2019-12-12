@@ -337,3 +337,9 @@ LOAD_TOP_EXCELLENT_RESPONSE {
 
     @excellentWorks = $info
 }
+
+REMOVE_ILL_BUFF
+{
+    -- CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = "illEffect")
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = "ill")
+}
