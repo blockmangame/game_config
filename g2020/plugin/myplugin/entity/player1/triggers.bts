@@ -1350,16 +1350,21 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
 {
     $skill = $skill or Concat(p1 = @skillPath, p2 = $state)
     $stateBase = $stateBase or GetSkillVar(fullName = $skill, key = "stateBase") or $state
-
-    $interactList = GetObjectVar(
-        obj = $obj1,
-        key = Concat(p1 = $stateBase, p2 = "InteractList")
-    )
+    $hadState = Concat(p1 = "had", p2 = $stateBase)
+    If(not GetObjectVar(obj = $obj1, key = $hadState))
+    {
+        Return()
+    }
 
     RemoveSkill(entity = $obj1, name = $skill)
     SetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase), value = false)
     CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
     CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
+
+    $interactList = GetObjectVar(
+        obj = $obj1,
+        key = Concat(p1 = $stateBase, p2 = "InteractList")
+    )
 
     If(not GetSkillVar(fullName = $skill, key = "hadReward"))
     {
@@ -1422,18 +1427,19 @@ FUNC_STATE_RELEASE --params: state
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $hadState = Concat(p1 = "had", p2 = $stateBase)
-    If(not GetObjectVar(obj = $obj1, key = $hadState))
+    $releasingState = Concat(p1 = "releasing", p2 = $stateBase)
+    If(GetObjectVar(obj = $obj1, key = $hadState) && not GetObjectVar(obj = $obj1, key = $releasingState))
     {
-        Return()
-    }
-    $duration = GetSkillVar(fullName = $skill, key = "duration")
-    If($duration && $duration > 0)
-    {
-        CallTrigger(object = $obj1, event = "FUNC_STATE_START_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
-    }
-    Else
-    {
-        CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD", state = $state, stateBase = $stateBase, skill = $skill)
+        SetObjectVar(obj = $obj1, key = $releasingState, value = true)
+        $duration = GetSkillVar(fullName = $skill, key = "duration")
+        If($duration && $duration > 0)
+        {
+            CallTrigger(object = $obj1, event = "FUNC_STATE_START_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
+        }
+        Else
+        {
+            CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD", state = $state, stateBase = $stateBase, skill = $skill)
+        }
     }
 }
 
@@ -1447,14 +1453,15 @@ FUNC_STATE_RELEASE_SUSPEND --params: state
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $hadState = Concat(p1 = "had", p2 = $stateBase)
-    If(not GetObjectVar(obj = $obj1, key = $hadState))
+    $releasingState = Concat(p1 = "releasing", p2 = $stateBase)
+    If(GetObjectVar(obj = $obj1, key = $hadState) && GetObjectVar(obj = $obj1, key = $releasingState))
     {
-        Return()
-    }
-    $duration = GetSkillVar(fullName = $skill, key = "duration")
-    If($duration && $duration > 0)
-    {
-        CallTrigger(object = $obj1, event = "FUNC_STATE_SUSPEND_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
+        SetObjectVar(obj = $obj1, key = $releasingState, value = false)
+        $duration = GetSkillVar(fullName = $skill, key = "duration")
+        If($duration && $duration > 0)
+        {
+            CallTrigger(object = $obj1, event = "FUNC_STATE_SUSPEND_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
+        }   
     }
 }
 
@@ -1593,6 +1600,7 @@ FUNC_STATE_RESET_DATA --params: state
 FUNC_STATEBASE_RESET_DATA -- params: stateBase
 {
     SetObjectVar(obj = $obj1, key = Concat(p1 = "pre", p2 = $stateBase), value = nil)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = "releasing", p2 = $stateBase), value = nil)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "STime"), value = nil)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime"), value = nil)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
