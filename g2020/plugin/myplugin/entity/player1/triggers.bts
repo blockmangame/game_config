@@ -1531,19 +1531,76 @@ FUNC_STATE_ACTION --params: state
     CallTrigger(object = $obj1, event = "FUNC_STATE_RIDEON", ride = GetRideOn(entity = $obj1)) --检查是否已经在骑乘并且该骑乘是否会触发解除状态
 }
 
+SHOW_BUY_PRIVILEGE_TIP
+{
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_sure",
+        rightCoinId = nil,
+        rightContent = "ui_cancel"
+    }
+
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "OPEN_PRIVILEGE_SHOP", p1 = "ui_tip", p2= "action_not_have_privilege", p3 = $btnInfo)
+}
+
+OPEN_PRIVILEGE_SHOP
+{
+    If($result && $button == "left")
+    {
+        OpenWindows(player = $obj1, win = "priShop")
+    }
+}
+
+INTERACTION_CHILD_OPEN
+{
+    If($obj2.role == @child)
+    {
+        UpdateObjectInteractionUI(cfgKey = "interaction_child", player = $obj2, target = $obj1, show = true)
+    }
+    Else
+    {
+        UpdateObjectInteractionUI(cfgKey = "interaction_adult", player = $obj2, target = $obj1, show = true)
+    }
+}
+
+INTERACTION_CHILD_BACK
+{
+    UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
+}
+
+
 INTERACTION_CLAP { --拍手 小孩和小孩
-    If($obj2.role == @child && $obj1.role == @child) {
+
+    If(GetSkillVar(fullName = "myplugin/action_clap", key = "privilege"))
+    {
+        If(not ArrayFind(array = $obj2.privilege, value = "action_clap"))
+        {
+            --CallTrigger(obj1 = $obj2, event = "SHOW_BUY_PRIVILEGE_TIP")
+            Test("=================================================================action_clap need privilege")
+            Return()
+        }
+    }
+
+    If($obj2.role == @child && $obj1.role == @child)
+    {
         CastSkill(skill = "myplugin/action_clap", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+    }
+    Else
+    {
+        ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_child")
     }
 }
 
 INTERACTION_HUG { --拥抱 小孩和小孩 or 大人和大人
+
     If($obj2.role == @child && $obj1.role == @child) {
         CastSkill(skill = "myplugin/action_hug", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
-    }
-
-    If($obj2.role == @adult && $obj1.role == @adult) {
+    } ElseIf($obj2.role == @adult && $obj1.role == @adult) {
         CastSkill(skill = "myplugin/action_hug", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+    }
+    Else
+    {
+        ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_child_or_adult")
     }
 }
 
@@ -1551,11 +1608,19 @@ INTERACTION_HANDSHAKE { --握手 大人和大人
     If($obj2.role == @adult && $obj1.role == @adult) {
         CastSkill(skill = "myplugin/action_handshake", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
     }
+    Else
+    {
+        ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_adult")
+    }
 }
 
 INTERACTION_RIDE { --骑乘 小孩和大人
     If($obj2.role == @child && $obj1.role == @adult) {
         CastSkill(skill = "myplugin/action_ride", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+    }
+    Else
+    {
+        ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_child_and_adult")
     }
 }
 
@@ -1563,16 +1628,23 @@ INTERACTION_HAND_IN_HAND { --手拉手 小孩和大人
     If($obj2.role == @child && $obj1.role == @child) {
         CastSkill(skill = "myplugin/action_handinhand", from = $obj1, packet = {targetID = GetObjectID(object = $obj2)})
     }
+    Else
+    {
+        ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_child_and_adult")
+    }
 }
 
 INTERACTION_FOLLOW { --跟随
     CastSkill(skill = "myplugin/action_follow", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
 }
 
-
-INTERACTION_PICK {
+INTERACTION_PICK {--大人向小孩发起
     If($obj2.role == @adult && $obj1.role == @child) {
         CastSkill(skill = "myplugin/action_pickup", from = $obj1, packet = {targetID = GetObjectID(object = $obj2)})
+    }
+    Else
+    {
+     ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
     }
 }
 
@@ -1583,8 +1655,8 @@ INTERACTION_BABY_TROLLEY {
 ENTITY_JUMP {
     CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     $ride = GetRideOn(entity = $obj1)
-    If ($ride){
-        ClearRide(entity = $ride)
+    If (GetRideOn(entity = $obj1)){
+        Dismount(entity = $obj1)
         CallTrigger(object = $obj1, event = "FUNC_STATE_RIDEON", ride = $ride, isCancel = true)
     }
 }
@@ -1917,6 +1989,83 @@ STORE_ITEM_STATUS_CHANGE
         $obj1.danceUseItem = $newDance
         $data = $dataRestore
         $def = false
+    }
+}
+
+ADD_DANCE_EXPIRY_DATE
+{
+    --TODO money obj1 index time
+    $danceStoreId = GetWorldVar(key = "danceStoreId")
+    $status = GetStoreItemStatus(player = $obj1, storeId = $danceStoreId, index = $index)
+    If($status == 1 || $status == 2 )
+    {
+        AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
+        Return()
+    }
+
+    $isNeedChange = true
+    Foreach(array = $obj1.danceExpiryDate, key = "value")
+    {
+        $dictValue = NewDictionary($value)
+        $dictIndex = DictionaryGet(dict = $dictValue, key = "index")
+        $dictTime = DictionaryGet(dict = $dictValue, key = "time")
+        If($index == $dictIndex)
+        {
+            $dictTime = $dictTime + $time
+            DictionarySet(dict = $dictValue, key = "time", value = $dictTime)
+            $value = DictionaryToTable(dict = $dictValue)
+            $isNeedChange = false
+            Break()
+        }
+    }
+
+    If($isNeedChange)
+    {
+        $expiryDate = GetTime() + $time
+        $dictValue = NewDictionary({})
+        DictionarySet(dict = $dictValue, key = "index", value = $index)
+        DictionarySet(dict = $dictValue, key = "time", value = $expiryDate)
+        ArrayAppend(array = $obj1.danceExpiryDate, value = DictionaryToTable(dict = $dictValue))
+    }
+
+    CallTrigger(event = "CHANGE_DANCE_EXPIRY_DATE", obj1 = $obj1)
+}
+
+CHANGE_DANCE_EXPIRY_DATE
+{
+    $newDances = {}
+    $minRemainTime = -1
+    $dances = $obj1.danceExpiryDate
+    $danceStoreId = GetWorldVar(key = "danceStoreId")
+    Foreach(array = $dances, key = "value")
+    {
+        $dictValue = NewDictionary($value)
+        $dictIndex = DictionaryGet(dict = $dictValue, key = "index")
+        $dictTime = DictionaryGet(dict = $dictValue, key = "time")
+        $remainTime = GetTime() - $dictTime
+
+        If($remainTime <= 0)
+        {
+            $remainTime = 0
+        }
+        Else
+        {
+            ArrayAppend(array = $newDances, value = DictionaryToTable(dict = $dictValue))
+        }
+
+        If($minRemainTime == -1 || $remainTime < $minRemainTime )
+        {
+            $minRemainTime = $remainTime
+        }
+
+        ChangeStoreItemRemainTime(player = $obj1, storeId = $danceStoreId, index = $dictIndex, remainTime = $remainTime)
+    }
+
+    $obj1.danceExpiryDate = $newDances
+
+    If($minRemainTime > 0)
+    {
+        StartTimer(rep = false, time = $minRemainTime * 20, object = $obj1, event = "CHANGE_DANCE_EXPIRY_DATE")
     }
 }
 
@@ -2923,4 +3072,10 @@ PLAYER_ON_VISIT(debug = true){
             SetEntityPosition(entity = $obj1, pos = GetEntityPosition(entity = $target))
         }
     }
+}
+
+
+START_CAMERA_MODE
+{
+    AddEntityBuff(entity = $obj1, cfg = "myplugin/camera_mode")
 }

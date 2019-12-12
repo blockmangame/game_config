@@ -170,8 +170,7 @@
             "view": false
         }
     ],
-    "interactionUI":
-    {
+    "interactionUI": {
         "cfgKey": "interactionUI",
         "centerBtns":[
             {
@@ -183,8 +182,7 @@
         "followParams":{
             "followScenePos": false
         }
-    }
-,
+    },
     "interaction_choices": {
         "cfgKey": "interaction_choices",
         "aroundParams":{
@@ -216,12 +214,82 @@
             {
                 "text":"",
                 "image":"plugin/myplugin/image/interaction_act.png",
-                "event": "INTERACTION_ACT"
+                "event": "INTERACTION_CHILD_OPEN"
             },
             {
                 "text":"",
                 "image":"plugin/myplugin/image/interaction_join_family.png",
                 "event": "INTERACTION_JOIN_FAMILY"
+            }
+        ]
+    },
+    "interaction_child": {
+        "cfgKey": "interaction_child",
+        "aroundParams":{
+            "startAngle": 0,
+            "endAngle": 360,
+            "radius": 100
+        },
+        "followParams":{
+            "followScenePos": true,
+            "showRange": 5,
+            "resetWhenHide": true
+        },
+        "aroundBtns":[
+            {
+                "text":"A1",
+                "image":"plugin/myplugin/image/interaction_feed.png",
+                "event": "INTERACTION_RIDE"
+            },
+            {
+                "text":"A2",
+                "image":"plugin/myplugin/image/interaction_banish.png",
+                "event": "INTERACTION_HUG"
+            },
+            {
+                "text":"A3",
+                "image":"plugin/myplugin/image/interaction_banish.png",
+                "event": "INTERACTION_HAND_IN_HAND"
+            },
+            {
+                "text":"A4",
+                "image":"plugin/myplugin/image/interaction_act.png",
+                "event": "INTERACTION_FOLLOW"
+            }
+        ]
+    },
+    "interaction_adult": {
+        "cfgKey": "interaction_adult",
+        "aroundParams":{
+            "startAngle": 0,
+            "endAngle": 360,
+            "radius": 100
+        },
+        "followParams":{
+            "followScenePos": true,
+            "showRange": 5,
+            "resetWhenHide": true
+        },
+        "aroundBtns":[
+            {
+                "text":"B1",
+                "image":"plugin/myplugin/image/interaction_feed.png",
+                "event": "INTERACTION_HUG"
+            },
+            {
+                "text":"B2",
+                "image":"plugin/myplugin/image/interaction_banish.png",
+                "event": "INTERACTION_HANDSHAKE"
+            },
+            {
+                "text":"B3",
+                "image":"plugin/myplugin/image/interaction_act.png",
+                "event": "INTERACTION_FOLLOW"
+            },
+            {
+                "text":"B4",
+                "image":"plugin/myplugin/image/interaction_act.png",
+                "event": "INTERACTION_PICK"
             }
         ]
     },
