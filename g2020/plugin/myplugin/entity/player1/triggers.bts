@@ -1417,7 +1417,7 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     )
 }
 
-FUNC_STATE_RELEASE --params: state
+FUNC_STATE_RELEASE --params: state[, duration]
 {
     If(not $state)
     {
@@ -1431,7 +1431,7 @@ FUNC_STATE_RELEASE --params: state
     If(GetObjectVar(obj = $obj1, key = $hadState) && not GetObjectVar(obj = $obj1, key = $releasingState))
     {
         SetObjectVar(obj = $obj1, key = $releasingState, value = true)
-        $duration = GetSkillVar(fullName = $skill, key = "duration")
+        $duration = $duration or GetSkillVar(fullName = $skill, key = "duration")
         If($duration && $duration > 0)
         {
             CallTrigger(object = $obj1, event = "FUNC_STATE_START_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
