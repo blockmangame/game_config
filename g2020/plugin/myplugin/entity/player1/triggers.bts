@@ -71,7 +71,7 @@ ASK_SHOW_PARTY_LIST(debug = false){
 }
 CHECK_CLOSE_PARTY(debug = false){
     If($result == false) {Return()}
-    CloseParty(object = $obj1)
+    CloseParty(player = $obj1)
 }
 CHECK_EXIT_PARTY(debug = false){
     If($result == false) {Return()}
@@ -319,7 +319,7 @@ ENTITY_LEAVE{
 }
 CHECK_LEAVE_PARTY(debug = false){
     If($obj1.inSelfParty == 1){
-        CloseParty(object = $obj1)
+        CloseParty(player = $obj1)
         Return()
     }
     If($obj1.inSelfParty == 0){
