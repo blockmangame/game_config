@@ -1721,7 +1721,7 @@ OPEN_PRIVILEGE_SHOP
     }
 }
 
-INTERACTION_CHILD_OPEN
+INTERACTION_ACT
 {
     If($obj2.role == @child)
     {
@@ -1732,12 +1732,6 @@ INTERACTION_CHILD_OPEN
         UpdateObjectInteractionUI(cfgKey = "interaction_adult", player = $obj2, target = $obj1, show = true)
     }
 }
-
-INTERACTION_CHILD_BACK
-{
-    UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
-}
-
 
 INTERACTION_CLAP { --拍手 小孩和小孩
 
