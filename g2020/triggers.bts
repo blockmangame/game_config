@@ -29,6 +29,12 @@ GAME_INIT(debug = false)
 
     @DECORATION_STORE = ReadGameCsv(path = "decoration_store.csv")
 
+    @CURRENT_ID_IMAGE = [
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:jail_break.json image:jail_break_currency"
+    ]
     CallTrigger(event = "WORKS_WALL_TIMER_START")
 }
 
@@ -336,4 +342,10 @@ LOAD_TOP_EXCELLENT_RESPONSE {
     }
 
     @excellentWorks = $info
+}
+
+REMOVE_ILL_BUFF
+{
+    -- CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = "illEffect")
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = "ill", duration = 0)
 }
