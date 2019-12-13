@@ -9,14 +9,16 @@ SUBMIT_ORDER(debug = false){
     If($obj2.taskKey == $key){
         DoFinishTask(player = $obj2, name = $key)
     }Else{
+        $fullName = GetConfigVar(obj = $obj1, key = "fullName")
+        $msg = DictionaryGet(dict = @failedMsg, key = $fullName)
         OpenConversation(
             entity = $obj2,
             optionList = [],
             optionNpc = "myplugin/player1",
             talkList = [
                 {
-                    msg =  $obj2.failedMsg ,
-                    npc = GetConfigVar(obj = $obj1, key = "fullName")
+                    msg =  $msg ,
+                    npc = $fullName
                 }
             ]
         )

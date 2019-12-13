@@ -1114,7 +1114,10 @@ SET_REGION_COLOR{
     
     Foreach(array = $childRegionArr, key = "cRegion"){
         $insideMap = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
-        $block = GetBlockConfig(map = $insideMap, pos = GetRegionMin(region = $cRegion), key = "fullName")
+        $center = GetRegionCenter(region = $cRegion)
+        $max = GetRegionMax(region = $cRegion)
+        $pos = {x = GetPosX(pos = $center), y = GetPosY(pos = $max), z = GetPosZ(pos = $center)}
+        $block = GetBlockConfig(map = $insideMap, pos = V3ToBlockPos(v3 = $pos), key = "fullName")
         ResetBlocksInRegion(map = $insideMap, region = $cRegion, 
             sourceBlock = $block, destBlock = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
     }
@@ -2990,7 +2993,9 @@ GET_TASK_GPS(debug = false) --得到打工的GPS位置
     $owner = GetMapOwner(map = $map)
     If($owner){
         $door = GetObjectVar(obj = $owner , key = "insideDoor")
-        $obj1.gpsPos = GetEntityPosition(entity = $door)
+        If($door){
+            $obj1.gpsPos = GetEntityPosition(entity = $door)
+        }
     }Else{
         $obj1.gpsPos = $obj1.taskPos or  {x = 89, y = 18, z = 195}
     }
@@ -3008,7 +3013,7 @@ INIT_WORK_TASK(){ --初始打工
     }
     CallTrigger(event = "GET_TASK_GPS", object = $obj1)
     CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
-    $obj1.taskTemer = StartTimer(rep = false, time = 20, object = $obj1, event = "TASK_UPDATE_DATA")
+    StartTimer(rep = false, time = 20, object = $obj1, event = "TASK_UPDATE_DATA")
 }
 FINISH_TASK(debug = false){ --完成打工的对话
     If($obj1.taskKey ~= $name){
@@ -3029,6 +3034,7 @@ FINISH_TASK(debug = false){ --完成打工的对话
             }
         ]
     )
+    $obj1.finishworkTime =  StartTimer(object = $obj1, event = "FINISH_AWARD", time = 40)
 }
 TEST_SHOW_ITEM(){
     $data1 = GetWorldVar(key = "titilePos1")
@@ -3037,12 +3043,20 @@ TEST_SHOW_ITEM(){
     Show3DUI(player = $obj1, show = true, data = $data2)
 }
 FINISH_AWARD(){ --完成打工的奖励
-    $money = GetConfigValue(type = "reward", fullName = "myplugin/task_money", key = $obj1.worktaskCount)
-    If(not $money){
-        $money = 1
+    If($obj1.finishworkTime){
+        StopTimer(timer = $obj1.finishworkTime)
     }
-    AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
-    ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
+    $rewDict = DictionaryGet(dict = @worlkMoeny, key =  $obj1.worktaskCount)
+    $money = DictionaryGet(dict = $rewDict, key = "money")
+    $recfg = DictionaryGet(dict = $rewDict, key = "item")
+    If($recfg){
+        AddItem(entity = $obj1, cfg = $recfg, count = 1)
+        ShowRewardItemEffect(itemCfg = $recfg, player = $obj1)
+    }
+    If($money){
+        AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
+        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
+    }
     $taskItem = SearchBagItem(entity = $obj1, key = "fullName", val = "myplugin/taskItem")
     ConsumeItem(item = $taskItem, num = 1)
     $proessLeve = NumberFloor(p1 = $obj1.worktaskCount / 10)
@@ -3054,19 +3068,6 @@ FINISH_AWARD(){ --完成打工的奖励
     $obj1.npcMap = nil
     $obj1.taskIndex = nil
     $animation = true
-    If($proessLeve > 0 and $proessCount == 0){
-        $animation = true
-        $recfg = GetConfigValue(type = "reward", fullName = "myplugin/task_reward", key = $proessLeve)
-        AddItem(entity = $obj1, cfg = $recfg, count = 1)
-        --ShowDialogTip(entity = $obj1, tipType = 4, p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
-        --ShowRewardNotice(
-         --   entity = $obj1,
-         --   tiptext = "",
-        --    tittletext = "final.summary.reward",
-        --    cfg = $recfg
-        --)
-        ShowRewardItemEffect(itemCfg = $recfg)
-    }
     If($obj1.worktaskCount >= 40){
         $obj1.worktaskCount = 0
     }
@@ -3238,26 +3239,45 @@ PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
         GotoOtherServer(targetUserId = $targetUserId, player = $obj1)
     }
 }
-PLAYER_ON_VISIT(debug = false){
-    $targetInRoom = false
-    $targetRoomLocked = true
-    $fromJustBeRemoved = false
+PLAYER_ON_VISIT(debug = false){--same server
     If(not $target){
         $target = $obj2 or $obj1.visitTarget
     }
     If(not $target){
         Return()
     }
-    If($fromInParty){
-        SetEntityPosition(map = GetEntityMap(entity = $target), entity = $obj1, pos = GetEntityPosition(entity = $target))
+    CallTrigger(object = $target, event = "GET_VISIT_TELE_POS", from = $obj1, fromInParty = $fromInParty)
+    If($obj1.telePos and $obj1.teleMap){
+        SetEntityPosition(map = $obj1.teleMap, entity = $obj1, pos = $obj1.telePos)
+        $obj1.teleMap = nil
+        $obj1.telePos = nil
+    }
+}
+
+GET_VISIT_TELE_POS(debug = false){
+    $house = $obj1.house
+    $isLock =$house.isLock
+    $inHouse = ($house == GetMapOwner(map = GetEntityMap(entity = $obj1)))
+    If($fromInParty or not $inHouse or not $isLock){
+        $toInside = true
     }
     Else{
-        If($targetInRoom){
-            --todo
+        $id1 = GetEntityTeam(entity = $obj1)
+        $id2 = GetEntityTeam(entity = $from)
+        If($id1 ~= 0 and $id1 == $id2){
+            $toInside = true
         }
-        Else{
-            SetEntityPosition(entity = $obj1, pos = GetEntityPosition(entity = $target))
-        }
+    }
+    If($toInside){
+        --transfer to the target's pos
+        $from.telePos = GetEntityPosition(entity = $obj1)
+        $from.teleMap = GetEntityMap(entity = $obj1)
+    }
+    Else{
+        ShowTip(entity = $from, tipType = 1, textKey = "house_lock")
+        $door = $house.door
+        $from.telePos = ComputeV3(p1 = GetEntityPosition(entity = $door), p2 = V3RotationYaw(vector = Table(x = 0, y = 0.5, z = 3), yaw = GetEntityYaw(entity = $door)), op = "add")
+        $from.teleMap = GetEntityMap(entity = $door)
     }
 }
 
