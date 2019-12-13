@@ -1114,7 +1114,10 @@ SET_REGION_COLOR{
     
     Foreach(array = $childRegionArr, key = "cRegion"){
         $insideMap = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
-        $block = GetBlockConfig(map = $insideMap, pos = GetRegionMin(region = $cRegion), key = "fullName")
+        $center = GetRegionCenter(region = $cRegion)
+        $max = GetRegionMax(region = $cRegion)
+        $pos = {x = GetPosX(pos = $center), y = GetPosY(pos = $max), z = GetPosZ(pos = $center)}
+        $block = GetBlockConfig(map = $insideMap, pos = V3ToBlockPos(v3 = $pos), key = "fullName")
         ResetBlocksInRegion(map = $insideMap, region = $cRegion, 
             sourceBlock = $block, destBlock = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
     }
