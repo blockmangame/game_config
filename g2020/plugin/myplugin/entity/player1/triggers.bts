@@ -102,62 +102,9 @@ CHECK_IN_PARTY(debug = false){
         }
     }
 }
-ENTITY_ENTER
-{
-    CallTrigger(event = "CHECK_IN_PARTY", object = $obj1)
-    UpdateUIData(player = $obj1, ui = "circleProgress", data = {})
-    OpenWindows(win = "workTask", player = $obj1)
-    CallTrigger(event = "INIT_WORK_TASK", object = $obj1) --初始化打工任务
-    If(IsPlayer(entity = $obj1))
-    {
-        $playerName = GetEntityName(entity = $obj1)
 
-        If($obj1.nickName == "defaultNickName")
-        {
-            $obj1.nickName = $playerName
-        }
-
-        If($obj1.nickName ~= $playerName)
-        {
-            SetEntityName(entity = $obj1, name = $nickName)
-        }
-
-        $obj1.isReadyReward = false
-        $obj1.role = @adult
-        $obj1.scaleBuff = nil
-        $obj1.boundingBuff = nil
-
-        $obj1.requestFamilyPlayer = nil
-
-        CallTrigger(event = "ADD_MONEY", object = $obj1)
-        If($obj1.inPartyOwnerId == 0){--in party
-            CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)
-        }
-		
-		CallTrigger(event = "SET_DRESS_ARCHIVE", object = $obj1)
-        CallTrigger(event = "INIT_PLAYER_DRESS", object = $obj1)
-
-
-        CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, newSkill = $obj1.danceUseItem)
-
-        LoadPlayerAppDress(player = $obj1, event = "HTTP_PURCHASED_DRESS_CALL_BACK")
-
-        -- test data
-        --SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = 25)
-        --SetSkin(entity = $obj1, skinName = "custom_scarf", skinValue = 3)
-        --SetSkin(entity = $obj1, skinName = "clothes_tops", skinValue = 20)
-        --SetSkin(entity = $obj1, skinName = "custom_shoes", skinValue = 40)
-        --SetSkin(entity = $obj1, skinName = "clothes_pants", skinValue = 35)
-        --SetSkin(entity = $obj1, skinName = "custom_hair", skinValue = 5)
-        --SetSkin(entity = $obj1, skinName = "custom_face", skinValue = 5)
-        --SetSkin(entity = $obj1, skinName = "custom_glasses", skinValue = 3)
-        --SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = 5)
-        --SetSkin(entity = $obj1, skinName = "custom_tail", skinValue = 5)
-
-        CallTrigger(event = "FUNC_LOAD_NEW_WORKS")
-        CallTrigger(event = "FUNC_LOAD_EXCELLENT_WORKS")
-    }
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
+CREATE_OWNER_HOUSE{
     ------------------------------------------ 当前选择存档 $curSelectHouse
     $curSelectHouse = {}
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
@@ -214,7 +161,65 @@ ENTITY_ENTER
     SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
         pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
+}
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
+
+ENTITY_ENTER
+{
+    CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
+    CallTrigger(event = "CHECK_IN_PARTY", object = $obj1)
+    UpdateUIData(player = $obj1, ui = "circleProgress", data = {})
+    OpenWindows(win = "workTask", player = $obj1)
+    CallTrigger(event = "INIT_WORK_TASK", object = $obj1) --初始化打工任务
+    If(IsPlayer(entity = $obj1))
+    {
+        $playerName = GetEntityName(entity = $obj1)
+
+        If($obj1.nickName == "defaultNickName")
+        {
+            $obj1.nickName = $playerName
+        }
+
+        If($obj1.nickName ~= $playerName)
+        {
+            SetEntityName(entity = $obj1, name = $nickName)
+        }
+
+        $obj1.isReadyReward = false
+        $obj1.role = @adult
+        $obj1.scaleBuff = nil
+        $obj1.boundingBuff = nil
+
+        $obj1.requestFamilyPlayer = nil
+
+        CallTrigger(event = "ADD_MONEY", object = $obj1)
+        If($obj1.inPartyOwnerId == 0){--in party
+            CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)
+        }
+		
+		CallTrigger(event = "SET_DRESS_ARCHIVE", object = $obj1)
+        CallTrigger(event = "INIT_PLAYER_DRESS", object = $obj1)
+
+
+        CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, newSkill = $obj1.danceUseItem)
+
+        LoadPlayerAppDress(player = $obj1, event = "HTTP_PURCHASED_DRESS_CALL_BACK")
+
+        -- test data
+        --SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = 25)
+        --SetSkin(entity = $obj1, skinName = "custom_scarf", skinValue = 3)
+        --SetSkin(entity = $obj1, skinName = "clothes_tops", skinValue = 20)
+        --SetSkin(entity = $obj1, skinName = "custom_shoes", skinValue = 40)
+        --SetSkin(entity = $obj1, skinName = "clothes_pants", skinValue = 35)
+        --SetSkin(entity = $obj1, skinName = "custom_hair", skinValue = 5)
+        --SetSkin(entity = $obj1, skinName = "custom_face", skinValue = 5)
+        --SetSkin(entity = $obj1, skinName = "custom_glasses", skinValue = 3)
+        --SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = 5)
+        --SetSkin(entity = $obj1, skinName = "custom_tail", skinValue = 5)
+
+        CallTrigger(event = "FUNC_LOAD_NEW_WORKS")
+        CallTrigger(event = "FUNC_LOAD_EXCELLENT_WORKS")
+    }
 }
 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
@@ -748,7 +753,7 @@ SAVE_FURNITURE{
         If($npc){
             DictionarySet(dict = $fDict, key = "pos", value = GetEntityPosition(entity = $npc))
             DictionarySet(dict = $fDict, key = "yaw", value = GetEntityYaw(entity = $npc))
-            -- DictionarySet(dict = $fDict, key = "pitch", value = GetEntityPitch(entity = $npc)) -- TODO 打开，此处是俯仰角，等碰撞盒旋转合过来之后打开
+            -- DictionarySet(dict = $fDict, key = "pitch", value = GetEntityPitch(entity = $npc))
             -- 如果是衣架，有saveSkinList，则需要保存当前衣架的皮肤
             If(GetConfigVar(obj = $npc, key = "saveSkinList")){
                 $saveSkinList = {}
@@ -1045,11 +1050,7 @@ GIVE_DOOR{
 
     $houseInsideDoor = GetObjectVar(obj = $house, key = "insideDoor")
     KillEntity(entity = $houseInsideDoor)
-    $newHouseInsideDoor = CreateNpc(map = $insideMap, cfgName = $cfg)
-    SetObjectVar(obj = $newHouseInsideDoor, key = "house", value = $house)
-    SetObjectVar(obj = $house, key = "insideDoor", value = $newHouseInsideDoor)
-
-    SetEntityPosition(map = $insideMap, entity = $newHouseInsideDoor, pos = GetConfigVar(obj = $house, key = "insideDoorPos") or {x = 0,y = 0, z = 0})
+    CallTrigger(object = $house, event = "CREATE_INSIDE_DOOR", map = $insideMap, cfgName = $cfg)
 }
 
 BUY_HOUSE_REGION_COLOR{
