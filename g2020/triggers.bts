@@ -362,10 +362,14 @@ LOAD_TOP_EXCELLENT_RESPONSE {
 ENTITY_RIDE_OFF(debug = false){
     If(not IsPlayer(entity = $obj2)){ Return() }
     RecheckObjectInteractionUI(player = $obj2, target = $obj1)
+    If(not IsPlayer(entity = $obj1)){ Return() }
+    RecheckObjectInteractionUI(player = $obj1, target = $obj2)
 }
 ENTITY_RIDE_ON(debug = false){
     If(not IsPlayer(entity = $obj2)){ Return() }
     UpdateObjectInteractionUI(player = $obj2, target = $obj1, show = false)
+    If(not IsPlayer(entity = $obj1)){ Return() }
+    UpdateObjectInteractionUI(player = $obj1, target = $obj2, show = false)
 }
 REMOVE_ILL_BUFF
 {
