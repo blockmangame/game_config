@@ -3161,7 +3161,8 @@ POP_UP_BUY_PRIVILEGE(debug = false)
     $itemdesc = GetShopItem(shopIndex = $shopIndex, key = "desc")
     $Context = {
         seccionid = $obj1.checkprid,
-        shopIndex = $shopIndex
+        shopIndex = $shopIndex,
+        buyResultEvent = $buyResultEvent
     }
     $btnInfo = {
         leftCoinId = nil,
@@ -3179,6 +3180,7 @@ POP_UP_BUY_PRIVILEGE(debug = false)
 SURE_BUY_PRI(debug = false)
 {
     If($button == "left"){
+        CallTrigger(object = $obj1, event = $buyResultEvent, succeed = false, shopIndex = $shopIndex)
         Return()
     }
  
@@ -3187,9 +3189,25 @@ SURE_BUY_PRI(debug = false)
         Return()
     }
 
+    $obj1.checkbuyData = [
+        $shopIndex,
+        $buyResultEvent
+    ]
     RequestCanBuy(shopIndex = $shopIndex, player = $obj1, count = 1)
 }
---
+
+ENTITY_BUY_RESULT()
+{
+    $nowBuyIndex = ArrayGet(array = $obj1.checkbuyData, index = 1)
+    $event = ArrayGet(array = $obj1.checkbuyData, index = 2)
+    If($nowBuyIndex == $itemIndex){
+        $obj1.checkbuyData = nil
+        CallTrigger(object = $obj1, event = $event, succeed = $succeed, shopIndex = $itemIndex)
+        ShowTip(textKey = $msg, tipType = 2, entity = $obj1, keepTime = 20)
+    }
+}
+
+
 PLAYER_BE_INVITE(debug = false){
     --party invite will call PLAYER_BE_INVITE_OTHER_SERVER
     $userId = GetPlayerUserID(player = $obj1)
