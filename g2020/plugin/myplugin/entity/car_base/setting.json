@@ -1,5 +1,4 @@
 {
-	"base": "food_base",
 	"canClick": true,
 	"carMove": true,
 	"carConfig": {
@@ -38,6 +37,7 @@
             }
         ]
     },
+    "canInteract": true,
 	"interactionUI":
         {
             "cfgKey": "interactionUI",
@@ -45,7 +45,12 @@
                 {
                     "text":"item_testlang",
                     "image":"plugin/myplugin/image/hand_click.png",
-                    "event": "FOOD_BUY"
+                    "event": "RIDE_ON",
+                    "imageSize":
+                    {
+                        "width": "100",
+                        "height": "100"
+                    }
                 }
             ],
             "followParams":{
