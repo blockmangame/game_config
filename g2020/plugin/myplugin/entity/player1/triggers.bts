@@ -2923,7 +2923,7 @@ HTTP_PURCHASED_DRESS_CALL_BACK
                     {
                         If($itemId == $responseItem)
                         {
-                            ChangeItemStatus(storeId = $storeId, index = $itemIndex, status = 1, player = $obj1)
+                            ChangeStoreItemStatus(storeId = $storeId, index = $itemIndex, status = 1, player = $obj1)
                         }
                     }
                 }
@@ -3142,13 +3142,17 @@ ENTITY_BUY_APPSTOP(debug = false){
         
         ArrayAppend(array = $obj1.privilege, value = $name)
         --Test("------------",$obj1.privilege)
+
+        CallTrigger(obj1 = $obj1, event = "BUY_PRIVILEGE_SUCCEED", shopIndex = $itemIndex, privilegeName = $name)
     }
 }
 
 --弹窗购买特权
 POP_UP_BUY_PRIVILEGE(debug = false)
 {
-    If(not $shopIndex ){
+    If(not $shopIndex || not GetShopItem(shopIndex = $shopIndex, key = "price"))
+    {
+        Test("event:POP_UP_BUY_PRIVILEGE, not shopIndex or not shop item...")
         Return()
     }
     $obj1.checkprid = ($obj1.checkprid or 0 ) + 1
@@ -3182,7 +3186,7 @@ SURE_BUY_PRI(debug = false)
         Return()
     }
 
-    RequestCanBuy(shopIndex = $shopIndex, palyer = $obj1, count = 1)
+    RequestCanBuy(shopIndex = $shopIndex, player = $obj1, count = 1)
 }
 --
 PLAYER_BE_INVITE(debug = false){
@@ -3305,4 +3309,24 @@ START_CAMERA_MODE
 STORE_ITEM_OPERATION_PRIVILEGE
 {
     CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $shopIndex)
+}
+
+BUY_PRIVILEGE_SUCCEED
+{
+    If($privilegeName == "dance_privilege")
+    {
+        $danceStoreId = GetWorldVar(key = "danceStoreId")
+        $storeItems = GetStoreById(storeId = $danceStoreId)
+        Foreach(array = $storeItems, key = "value")
+        {
+            $dictValue = NewDictionary($value)
+            $dictStoreId = DictionaryGet(dict = $dictValue, key = "storeId")
+            $dictShopIndex = DictionaryGet(dict = $dictValue, key = "shopIndex")
+            $dictStoreItemIndex = DictionaryGet(dict = $dictValue, key = "itemIndex")
+            If($dictShopIndex == $shopIndex)
+            {
+                SyncStoreItemStatus(player = $obj1, storeId = $dictStoreId, index = $dictStoreItemIndex, status = 1)
+            }
+        }
+    }
 }
