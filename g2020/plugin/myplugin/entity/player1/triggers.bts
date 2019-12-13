@@ -3143,7 +3143,6 @@ ENTITY_BUY_APPSTOP(debug = false){
         
         ArrayAppend(array = $obj1.privilege, value = $name)
         --Test("------------",$obj1.privilege)
-
         CallTrigger(obj1 = $obj1, event = "BUY_PRIVILEGE_SUCCEED", shopIndex = $itemIndex, privilegeName = $name)
     }
 }
@@ -3359,11 +3358,12 @@ BUY_PRIVILEGE_SUCCEED
         {
             $dictValue = NewDictionary($value)
             $dictStoreId = DictionaryGet(dict = $dictValue, key = "storeId")
+            $dictItemIndex = DictionaryGet(dict = $dictValue, key = "index")
             $dictShopIndex = DictionaryGet(dict = $dictValue, key = "shopIndex")
-            $dictStoreItemIndex = DictionaryGet(dict = $dictValue, key = "itemIndex")
+
             If($dictShopIndex == $shopIndex)
             {
-                SyncStoreItemStatus(player = $obj1, storeId = $dictStoreId, index = $dictStoreItemIndex, status = 1)
+                SyncStoreItemStatus(player = $obj1, storeId = $dictStoreId, index = $dictItemIndex, status = 1)
             }
         }
     }
