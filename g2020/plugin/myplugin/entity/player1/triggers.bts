@@ -2,10 +2,6 @@ PLAYER_INTERACTION(debug = false){
     UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
 }
 
-DEBARK {
-	Dismount(entity = $obj1)
-}
-
 INTERACTION_FEED(debug = false){
     -- If(not IsPlayer(entity = $obj1))
     -- {
@@ -3334,6 +3330,58 @@ CLOSE_PARTY_SUCCESS(debug = false){
         GotoOtherServer(player = $player)
     }
 }
+
+CREATE_CAR {
+    $mapName = GetEntityName(entity = GetEntityMap(entity = $obj1))
+    If($mapName ~= "map001")
+    {
+        Return()
+    }
+
+    $carName = "myplugin/car_1"
+
+    If(not $obj1.createdCars)
+    {
+        $obj1.createdCars = NewDictionary()
+    }
+
+    $createdCarOfCarName = DictionaryGet(dict = $obj1.createdCars, key = $carName)
+    $ownerInCar = false
+    If($createdCarOfCarName)
+    {
+        $passengers = GetPassengers(entity = $createdCarOfCarName)
+        Foreach(array = $passengers, key = "passenger")
+        {
+            If($passenger ~= GetObjectID(object = $obj1))
+            {
+                ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "gui_car_owner_already_remove_car", time = 40)
+            }
+            Else
+            {
+                $ownerInCar = true
+            }
+        }
+
+        KillEntity(entity = $createdCarOfCarName)
+        DictionaryRemove(dict = $obj1.createdCars, key = $carName)
+        If($ownerInCar)
+        {
+            Return()
+        }
+    }
+
+    $car = CreateNpc(cfgName = $carName, pos = GetEntityPosition(entity = $obj1), 
+        map = GetEntityMap(entity = $obj1), owner = $obj1)
+    RideOn(ctrl = true, entity = $obj1, target = $car)
+
+    DictionarySet(dict = $obj1.createdCars, key = $carName, value = $car)
+
+}
+
+DEBARK {
+	Dismount(entity = $obj1)
+}
+
 PARTY_BE_LIKED(debug = false){}
 LIKE_PARTY(debug = false){}
 
