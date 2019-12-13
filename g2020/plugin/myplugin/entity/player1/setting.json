@@ -255,7 +255,7 @@
         },
         "followParams":{
             "followScenePos": true,
-            "showRange": 4,
+            "showRange": 5,
             "resetWhenHide": true
         },
         "aroundBtns":[
@@ -263,7 +263,7 @@
                 "widgetFileName": "widget_button_2",
                 "text":"A1",
                 "image":"set:party_interaction_ui.json image:interaction_add_friend",
-                "event": "INTERACTION_RIDE",
+                "event": "INTERACTION_CLAP",
                 "imageSize":{
                     "width":200,
                     "height":97
@@ -300,6 +300,18 @@
                 "text":"A4",
                 "image":"set:party_interaction_ui.json image:interaction_join_family",
                 "event": "INTERACTION_FOLLOW",
+                "imageSize":{
+                    "width":200,
+                    "height":97
+                },
+                "imageStretchType": "NineGrid",
+                "imageStretchOffset": "100 20 0 0"
+            },
+            {
+                "widgetFileName": "widget_button_2",
+                "text":"A5",
+                "image":"set:party_interaction_ui.json image:interaction_add_friend",
+                "event": "INTERACTION_RIDE",
                 "imageSize":{
                     "width":200,
                     "height":97

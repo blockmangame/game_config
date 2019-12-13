@@ -1733,21 +1733,12 @@ INTERACTION_ACT
     }
 }
 
-INTERACTION_CLAP { --拍手 小孩和小孩
-
-    If(GetSkillVar(fullName = "myplugin/action_clap", key = "privilege"))
-    {
-        If(not ArrayFind(array = $obj2.privilege, value = "action_clap"))
-        {
-            $shopIndex = GetSkillVar(fullName = "myplugin/action_clap", key = "shopIndex")
-            CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $shopIndex)
-            Return()
-        }
-    }
+INTERACTION_CLAP
+{ --拍手 小孩和小孩
 
     If($obj2.role == @child && $obj1.role == @child)
     {
-        CastSkill(skill = "myplugin/action_clap", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+        CallTrigger(me = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_clap")
     }
     Else
     {
@@ -1755,12 +1746,16 @@ INTERACTION_CLAP { --拍手 小孩和小孩
     }
 }
 
-INTERACTION_HUG { --拥抱 小孩和小孩 or 大人和大人
+INTERACTION_HUG
+{ --拥抱 小孩和小孩 or 大人和大人
 
-    If($obj2.role == @child && $obj1.role == @child) {
-        CastSkill(skill = "myplugin/action_hug", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
-    } ElseIf($obj2.role == @adult && $obj1.role == @adult) {
-        CastSkill(skill = "myplugin/action_hug", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+    If($obj2.role == @child && $obj1.role == @child)
+    {
+        CallTrigger(me = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_hug")
+    }
+    ElseIf($obj2.role == @adult && $obj1.role == @adult)
+    {
+        CallTrigger(me = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_hug")
     }
     Else
     {
@@ -1768,9 +1763,11 @@ INTERACTION_HUG { --拥抱 小孩和小孩 or 大人和大人
     }
 }
 
-INTERACTION_HANDSHAKE { --握手 大人和大人
-    If($obj2.role == @adult && $obj1.role == @adult) {
-        CastSkill(skill = "myplugin/action_handshake", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+INTERACTION_HANDSHAKE
+{ --握手 大人和大人
+    If($obj2.role == @adult && $obj1.role == @adult)
+    {
+        CallTrigger(me = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_handshake")
     }
     Else
     {
@@ -1778,9 +1775,11 @@ INTERACTION_HANDSHAKE { --握手 大人和大人
     }
 }
 
-INTERACTION_RIDE { --骑乘 小孩和大人
-    If($obj2.role == @child && $obj1.role == @adult) {
-        CastSkill(skill = "myplugin/action_ride", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+INTERACTION_RIDE
+{ --骑乘 小孩和大人
+    If($obj2.role == @child && $obj1.role == @adult)
+    {
+        CallTrigger(me = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_ride")
     }
     Else
     {
@@ -1788,32 +1787,60 @@ INTERACTION_RIDE { --骑乘 小孩和大人
     }
 }
 
-INTERACTION_HAND_IN_HAND { --手拉手 小孩和大人
-    If($obj2.role == @child && $obj1.role == @child) {
-        CastSkill(skill = "myplugin/action_handinhand", from = $obj1, packet = {targetID = GetObjectID(object = $obj2)})
+INTERACTION_HAND_IN_HAND
+{ --手拉手 小孩和小孩
+    If($obj2.role == @child && $obj1.role == @child)
+    {
+        CallTrigger(me = $obj2, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_handinhand")
     }
     Else
     {
-        ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_child_and_adult")
+        ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_child")
     }
 }
 
-INTERACTION_FOLLOW { --跟随
-    CastSkill(skill = "myplugin/action_follow", from = $obj2, packet = {targetID = GetObjectID(object = $obj1)})
+INTERACTION_FOLLOW
+{ --跟随
+    CallTrigger(me = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_follow")
 }
 
-INTERACTION_PICK {--大人向小孩发起
-    If($obj2.role == @adult && $obj1.role == @child) {
-        CastSkill(skill = "myplugin/action_pickup", from = $obj1, packet = {targetID = GetObjectID(object = $obj2)})
+INTERACTION_PICK
+{ --大人向小孩发起
+    If($obj2.role == @adult && $obj1.role == @child)
+    {
+        CallTrigger(me = $obj2, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_pickup")
     }
     Else
     {
-     ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
+        ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
     }
 }
 
 INTERACTION_BABY_TROLLEY {
 
+}
+
+USER_INTERACTION_ACTION
+{
+    $toTeamId = GetEntityTeam(entity = $to)
+    $fromTeamId = GetEntityTeam(entity = $from)
+
+    --双人交互检查是不是相同家庭
+    If(not $fromTeamId || not $toTeamId || $fromTeamId ==  0 || $toTeamId == 0 || $fromTeamId ~= $toTeamId)
+    {
+        If(GetSkillVar(fullName = $skillName, key = "needPrivilege"))
+        {
+            $privilegeName = GetSkillVar(fullName = $skillName, key = "privilegeName")
+            If(not ArrayFind(array = $me.privilege, value = $privilegeName))
+            {
+                $shopIndex = GetSkillVar(fullName = $skillName, key = "shopIndex")
+                CallTrigger(obj1 = $me, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $shopIndex)
+                Return()
+            }
+        }
+    }
+
+    CastSkill(skill = $skillName, from = $from, packet = {targetID = GetObjectID(object = $to)})
 }
 
 ENTITY_JUMP {
@@ -3139,7 +3166,6 @@ ENTITY_BUY_APPSTOP(debug = false){
         
         ArrayAppend(array = $obj1.privilege, value = $name)
         --Test("------------",$obj1.privilege)
-
         CallTrigger(obj1 = $obj1, event = "BUY_PRIVILEGE_SUCCEED", shopIndex = $itemIndex, privilegeName = $name)
     }
 }
@@ -3194,12 +3220,14 @@ SURE_BUY_PRI(debug = false)
 
 ENTITY_BUY_RESULT()
 {
-    $nowBuyIndex = ArrayGet(array = $obj1.checkbuyData, index = 1)
-    $event = ArrayGet(array = $obj1.checkbuyData, index = 2)
-    If($nowBuyIndex == $itemIndex){
-        $obj1.checkbuyData = nil
-        CallTrigger(object = $obj1, event = $event, succeed = $succeed, shopIndex = $itemIndex)
-        ShowTip(textKey = $msg, tipType = 2, entity = $obj1, keepTime = 20)
+    If($obj1.checkbuyData){
+        $nowBuyIndex = ArrayGet(array = $obj1.checkbuyData, index = 1)
+        $event = ArrayGet(array = $obj1.checkbuyData, index = 2)
+        If($nowBuyIndex == $itemIndex){
+            $obj1.checkbuyData = nil
+            CallTrigger(object = $obj1, event = $event, succeed = $succeed, shopIndex = $itemIndex)
+            ShowTip(textKey = $msg, tipType = 2, entity = $obj1, keepTime = 20)
+        }
     }
 }
 
@@ -3295,6 +3323,19 @@ GET_VISIT_TELE_POS(debug = false){
     }
 }
 
+TRY_CREATE_PARTY(debug = false){
+    If(ArrayFind(array = $obj1.privilege, value = "create_party_privilege")){
+        $canCreate = true
+    }Else{
+        $canCreate = false
+        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 13, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
+    }
+}
+BUY_CREATE_PARTY_PRIVILEGE_RESULT(debug = false){
+    If($succeed){
+        TryCreateParty(player = $obj1)
+    }
+}
 --场景商店门面
 SHOW_SHOP_TITLE(debug = false){
     Return()
@@ -3316,6 +3357,8 @@ UPDATE_CREATE_PARTY_VIEW_INFO(debug = false){
     $curHouseCfg = $obj1.curHouseCfg
     $maxPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "partyMaxPlayerNumber")
     $partyImage = GetEntityCfg(fullName = $curHouseCfg, key = "partyImage")
+    $reachPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "reachGoodPartyPlayerNumber")
+    $lowerRate = GetEntityCfg(fullName = $curHouseCfg, key = "goodPartyPlayerNumberLowerRate")
 }
 CREATE_PARTY_SUCCESS(debug = false){
     $obj1.inPartyOwnerId = GetPlayerUserID(player = $obj1)
@@ -3413,11 +3456,12 @@ BUY_PRIVILEGE_SUCCEED
         {
             $dictValue = NewDictionary($value)
             $dictStoreId = DictionaryGet(dict = $dictValue, key = "storeId")
+            $dictItemIndex = DictionaryGet(dict = $dictValue, key = "index")
             $dictShopIndex = DictionaryGet(dict = $dictValue, key = "shopIndex")
-            $dictStoreItemIndex = DictionaryGet(dict = $dictValue, key = "itemIndex")
+
             If($dictShopIndex == $shopIndex)
             {
-                SyncStoreItemStatus(player = $obj1, storeId = $dictStoreId, index = $dictStoreItemIndex, status = 1)
+                SyncStoreItemStatus(player = $obj1, storeId = $dictStoreId, index = $dictItemIndex, status = 1)
             }
         }
     }
