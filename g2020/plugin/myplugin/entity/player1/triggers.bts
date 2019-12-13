@@ -3070,8 +3070,10 @@ FINISH_AWARD(){ --完成打工的奖励
         StopTimer(timer = $obj1.finishworkTime)
     }
     $rewDict = DictionaryGet(dict = @worlkMoeny, key =  $obj1.worktaskCount)
-    $money = DictionaryGet(dict = $rewDict, key = "money")
-    $recfg = DictionaryGet(dict = $rewDict, key = "item")
+    If($rewDict){
+        $money = DictionaryGet(dict = $rewDict, key = "money")
+        $recfg = DictionaryGet(dict = $rewDict, key = "item")
+    }
     If($recfg){
         AddItem(entity = $obj1, cfg = $recfg, count = 1)
         ShowRewardItemEffect(itemCfg = $recfg, player = $obj1)
