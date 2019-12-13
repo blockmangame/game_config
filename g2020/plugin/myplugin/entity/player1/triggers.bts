@@ -1159,7 +1159,7 @@ ADD_MONEY
     $cdTime = ArrayGet(array = $rewardArray, index = 1)
     $money = ArrayGet(array = $rewardArray, index = 2)
 
-    If(ArrayFind(array = $obj1.privilege, value = "vip_privilege"))
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/vip_privilege"))
     {
         $money = $money * 2
     }
@@ -3155,18 +3155,14 @@ ENTITY_BUY_APPSTOP(debug = false){
     $dict = NewDictionary($shop)
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
-    $name = FindStr(str = $itemName, where_ = "/", back_ = true)
-    $index = ArrayFind(array = $obj1.privilege, value = $name)
-    --Test("-----goodsinfo:",$obj1.goodsInfo)
-    --Test("-----privilege:",$obj1.privilege)
+    $index = ArrayFind(array = $obj1.privilege, value = $itemName)
     If($shopType == "1" && not $index){
         $addItem = false
         $goodsDict = NewDictionary($obj1.goodsInfo)
         $limit = $limit - DictionaryGet(dict = $goodsDict, key = $itemIndex)
         
-        ArrayAppend(array = $obj1.privilege, value = $name)
-        --Test("------------",$obj1.privilege)
-        CallTrigger(obj1 = $obj1, event = "BUY_PRIVILEGE_SUCCEED", shopIndex = $itemIndex, privilegeName = $name)
+        ArrayAppend(array = $obj1.privilege, value = $itemName)
+        CallTrigger(obj1 = $obj1, event = "BUY_PRIVILEGE_SUCCEED", shopIndex = $itemIndex, privilegeName = $itemName)
     }
 }
 
@@ -3311,7 +3307,7 @@ GET_VISIT_TELE_POS(debug = false){
         }
     }
     If($toInside){
-        --transfer to the target's pos
+        --transfer to the targets pos
         $from.telePos = GetEntityPosition(entity = $obj1)
         $from.teleMap = GetEntityMap(entity = $obj1)
     }
@@ -3324,7 +3320,7 @@ GET_VISIT_TELE_POS(debug = false){
 }
 
 TRY_CREATE_PARTY(debug = false){
-    If(ArrayFind(array = $obj1.privilege, value = "create_party_privilege")){
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/create_party_privilege")){
         $canCreate = true
     }Else{
         $canCreate = false
@@ -3448,7 +3444,7 @@ STORE_ITEM_OPERATION_PRIVILEGE
 
 BUY_PRIVILEGE_SUCCEED
 {
-    If($privilegeName == "dance_privilege")
+    If($privilegeName == "myplugin/dance_privilege")
     {
         $danceStoreId = GetWorldVar(key = "danceStoreId")
         $storeItems = GetStoreById(storeId = $danceStoreId)
