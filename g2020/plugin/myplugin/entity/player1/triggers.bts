@@ -1739,8 +1739,8 @@ INTERACTION_CLAP { --拍手 小孩和小孩
     {
         If(not ArrayFind(array = $obj2.privilege, value = "action_clap"))
         {
-            --CallTrigger(obj1 = $obj2, event = "SHOW_BUY_PRIVILEGE_TIP")
-            Test("=================================================================action_clap need privilege")
+            $shopIndex = GetSkillVar(fullName = "myplugin/action_clap", key = "shopIndex")
+            CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $shopIndex)
             Return()
         }
     }
@@ -3143,6 +3143,7 @@ ENTITY_BUY_APPSTOP(debug = false){
         --Test("------------",$obj1.privilege)
     }
 }
+
 --弹窗购买特权
 POP_UP_BUY_PRIVILEGE(debug = false)
 {
@@ -3298,4 +3299,9 @@ LIKE_PARTY(debug = false){}
 START_CAMERA_MODE
 {
     AddEntityBuff(entity = $obj1, cfg = "myplugin/camera_mode")
+}
+
+STORE_ITEM_OPERATION_PRIVILEGE
+{
+    CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $shopIndex)
 }
