@@ -3220,12 +3220,14 @@ SURE_BUY_PRI(debug = false)
 
 ENTITY_BUY_RESULT()
 {
-    $nowBuyIndex = ArrayGet(array = $obj1.checkbuyData, index = 1)
-    $event = ArrayGet(array = $obj1.checkbuyData, index = 2)
-    If($nowBuyIndex == $itemIndex){
-        $obj1.checkbuyData = nil
-        CallTrigger(object = $obj1, event = $event, succeed = $succeed, shopIndex = $itemIndex)
-        ShowTip(textKey = $msg, tipType = 2, entity = $obj1, keepTime = 20)
+    If($obj1.checkbuyData){
+        $nowBuyIndex = ArrayGet(array = $obj1.checkbuyData, index = 1)
+        $event = ArrayGet(array = $obj1.checkbuyData, index = 2)
+        If($nowBuyIndex == $itemIndex){
+            $obj1.checkbuyData = nil
+            CallTrigger(object = $obj1, event = $event, succeed = $succeed, shopIndex = $itemIndex)
+            ShowTip(textKey = $msg, tipType = 2, entity = $obj1, keepTime = 20)
+        }
     }
 }
 
@@ -3321,6 +3323,19 @@ GET_VISIT_TELE_POS(debug = false){
     }
 }
 
+TRY_CREATE_PARTY(debug = false){
+    If(ArrayFind(array = $obj1.privilege, value = "create_party_privilege")){
+        $canCreate = true
+    }Else{
+        $canCreate = false
+        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 13, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
+    }
+}
+BUY_CREATE_PARTY_PRIVILEGE_RESULT(debug = false){
+    If($succeed){
+        TryCreateParty(player = $obj1)
+    }
+}
 --场景商店门面
 SHOW_SHOP_TITLE(debug = false){
     Return()
@@ -3342,6 +3357,8 @@ UPDATE_CREATE_PARTY_VIEW_INFO(debug = false){
     $curHouseCfg = $obj1.curHouseCfg
     $maxPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "partyMaxPlayerNumber")
     $partyImage = GetEntityCfg(fullName = $curHouseCfg, key = "partyImage")
+    $reachPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "reachGoodPartyPlayerNumber")
+    $lowerRate = GetEntityCfg(fullName = $curHouseCfg, key = "goodPartyPlayerNumberLowerRate")
 }
 CREATE_PARTY_SUCCESS(debug = false){
     $obj1.inPartyOwnerId = GetPlayerUserID(player = $obj1)
