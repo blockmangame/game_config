@@ -3193,12 +3193,14 @@ SURE_BUY_PRI(debug = false)
 
 ENTITY_BUY_RESULT()
 {
-    $nowBuyIndex = ArrayGet(array = $obj1.checkbuyData, index = 1)
-    $event = ArrayGet(array = $obj1.checkbuyData, index = 2)
-    If($nowBuyIndex == $itemIndex){
-        $obj1.checkbuyData = nil
-        CallTrigger(object = $obj1, event = $event, succeed = $succeed, shopIndex = $itemIndex)
-        ShowTip(textKey = $msg, tipType = 2, entity = $obj1, keepTime = 20)
+    If($obj1.checkbuyData){
+        $nowBuyIndex = ArrayGet(array = $obj1.checkbuyData, index = 1)
+        $event = ArrayGet(array = $obj1.checkbuyData, index = 2)
+        If($nowBuyIndex == $itemIndex){
+            $obj1.checkbuyData = nil
+            CallTrigger(object = $obj1, event = $event, succeed = $succeed, shopIndex = $itemIndex)
+            ShowTip(textKey = $msg, tipType = 2, entity = $obj1, keepTime = 20)
+        }
     }
 }
 
