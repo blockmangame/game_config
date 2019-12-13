@@ -73,34 +73,62 @@
         }
     ],
     "canInteract": true,
-    "interactionUI": {
-        "cfgKey": "interactionUI",
-        "centerBtns": [
-            {
-                "text": "sit",
-                "image": "plugin/myplugin/image/hand_click.png",
-                "event": "ENTITY_CLICK_2"
+    "interactionUI": [
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_CLICK_1"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                }
             }
-        ],"aroundParams":{
-            "radius": 100
         },
-
-        "aroundBtns": [
-            {
-                "text": "1",
-                "image": "plugin/myplugin/image/hand_click.png",
-                "event": "ENTITY_CLICK_1"
-            },
-            {
-                "text": "2",
-                "image": "plugin/myplugin/image/hand_click.png",
-                "event": "ENTITY_CLICK_3"
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_CLICK_2"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
             }
-        ],
-        "followParams": {
-            "followScenePos": false
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_CLICK_3"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
         }
-    },
+    ],
     "interaction": {
         "radius": 3,
         "offset": {
@@ -110,5 +138,15 @@
         }
     },
     "actorName": "g2020_chairs.actor",
-    "base": "furniture_base_lowsit_base"
+    "base": "furniture_base_lowsit_base",
+    "itemsort": 4,
+    "desc": "fru.chairs_body_4.desc",
+    "coinId": 3,
+    "price": 300,
+    "buyMoney": 300,
+    "sellMoney": 303,
+    "showName": "fru.chairs_body_4.desc",
+    "sellByDiscountMoney": 303,
+    "image": "plugin/myplugin/image/fru/g1047_prop_2001.png",
+    "showDesc": "fru.chairs_body_4.desc"
 }

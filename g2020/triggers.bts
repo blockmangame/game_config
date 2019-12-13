@@ -4,6 +4,9 @@ GAME_INIT(debug = false)
     @skillPath = "myplugin/skill_state_"
     CallTrigger(event = "FUNC_STATE_STARTTIMER")
 
+    --打工配置表的读取
+    @worlkMoeny = NewDictionary({})
+    @failedMsg = NewDictionary({})
     @taskMap = NewDictionary({}) --
     @TASK_TABLE = NewArray() --打工的任务表
     @TASK_WEIGHT = NewArray()
@@ -13,22 +16,41 @@ GAME_INIT(debug = false)
         $arg = DictionaryGet( dict = $taskDict, key = "targets")
         $targets = NewDictionary(ArrayGet(array = $arg, index = 1)) 
         $value = NewDictionary()
+        $npcName = DictionaryGet(dict = $targets, key = "cfgName")
+        $msg = DictionaryGet(dict = $taskDict, key = "succeedMsg")
+        $pos = DictionaryGet(dict = $taskDict, key = "npcPos")
         DictionarySet(dict = $value,  key = "taskKey" , value = DictionaryGet(dict = $taskDict, key = "fullName"))
-        DictionarySet(dict = $value,  key = "pos" , value = DictionaryGet(dict = $taskDict, key = "npcPos"))
-        DictionarySet(dict = $value,  key = "npcName" , value = DictionaryGet(dict = $targets, key = "cfgName"))
+        DictionarySet(dict = $value,  key = "pos" , value = $pos)
+        DictionarySet(dict = $value,  key = "npcName" , value = $npcName)
         DictionarySet(dict = $value,  key = "npcMap" , value = DictionaryGet(dict = $taskDict, key = "npcMap"))
+        DictionarySet(dict = $value,  key = "failedMsg" , value = DictionaryGet(dict = $taskDict, key = "failedMsg"))
+        DictionarySet(dict = $value,  key = "succeedMsg" , value = $msg)
         $weight =  DictionaryGet(dict = $taskDict, key = "weight")
         DictionarySet(dict = $value,  key = "weight" , value = $weight)
         ArrayAppend(array = @TASK_WEIGHT, value = $weight)
         ArrayAppend(array = @TASK_TABLE, value = $value)
+        DictionarySet(dict = @failedMsg, key = $npcName, value = $msg)
+        CreateNpc(cfgName = $npcName, pos = Copy(value = $pos))
+    }
+    ForLoop(from=1, to = 40, key = "index"){
+        $redict = GetConfigValue(type = "reward", fullName = "myplugin/task_money", key = $index)
+        If(not $redict){
+            Break()
+        }
+        $mdict = NewDictionary($redict)
+        DictionarySet(dict = @worlkMoeny, key = DictionaryGet(dict = $mdict, key = "index"), value = $mdict)
     }
     CreateNpc(cfgName = "myplugin/indentModel", pos = {x = 89, y = 18, z = 195}  ,name = "订单")
-    CreateNpc(cfgName = "myplugin/xiaoming", pos = {x = 88, y = 18, z = 194}  ,name = "小明")
-    CreateNpc(cfgName = "myplugin/xiaohong", pos = {x = 85, y = 18, z = 194} ,name = "小红")
 	CreateNpc(cfgName = "myplugin/fishItem", pos = {x = 210, y = 18, z = 343} ,name = "小红")
 
     @DECORATION_STORE = ReadGameCsv(path = "decoration_store.csv")
 
+    @CURRENT_ID_IMAGE = [
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:jail_break.json image:jail_break_currency"
+    ]
     CallTrigger(event = "WORKS_WALL_TIMER_START")
 }
 
@@ -336,4 +358,21 @@ LOAD_TOP_EXCELLENT_RESPONSE {
     }
 
     @excellentWorks = $info
+}
+ENTITY_RIDE_OFF(debug = false){
+    If(not IsPlayer(entity = $obj2)){ Return() }
+    RecheckObjectInteractionUI(player = $obj2, target = $obj1)
+    If(not IsPlayer(entity = $obj1)){ Return() }
+    RecheckObjectInteractionUI(player = $obj1, target = $obj2)
+}
+ENTITY_RIDE_ON(debug = false){
+    If(not IsPlayer(entity = $obj2)){ Return() }
+    UpdateObjectInteractionUI(player = $obj2, target = $obj1, show = false)
+    If(not IsPlayer(entity = $obj1)){ Return() }
+    UpdateObjectInteractionUI(player = $obj1, target = $obj2, show = false)
+}
+REMOVE_ILL_BUFF
+{
+    -- CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = "illEffect")
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = "ill", duration = 0)
 }

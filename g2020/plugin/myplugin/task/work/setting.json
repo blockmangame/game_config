@@ -1,19 +1,11 @@
 {
-    "Editor_NameKey": "tr.95268",
-    "name": "tr.23569",
-    "sequenced": false,
-    "showOrder": 1,
     "tasks": [
         {
             "key": "key_1",
-			"icon": "icon_2.png",
 			"times": "loop",
-			"fromList": false,
-			"needTask": null,
-			"needVar": null,
-			"name": "myplugin/main/main_task01.name",
-			"desc": "myplugin/main/main_task01.desc",
 			"reward": "myplugin/work_reward",
+			"succeedMsg": "you_came",
+			"failedMsg": "works_save",
 			"npcMap": "map001",
 			"npcPos": { "x": 88, "y": 18, "z": 194},
             "weight": 50,			
@@ -21,19 +13,15 @@
 				{
 					"type": "SubmitForm",
 					"name":"main_task01_targets",
-					"cfgName":"myplugin/xiaoming"
+					"cfgName":"myplugin/xiaohong"
 				}
 			]
         },
         {
             "key": "key_2",
-			"icon": "icon_2.png",
 			"times": "loop",
-			"fromList": false,
-			"needTask": null,
-			"needVar": null,
-			"name": "myplugin/main/main_task02.name",
-			"desc": "myplugin/main/main_task01.desc",
+			"succeedMsg": "you_came",
+			"failedMsg": "works_save",
 			"reward": "myplugin/work_reward",
 			"npcMap": "map001",
 			"npcPos": { "x": 85, "y": 18, "z": 194},
@@ -42,10 +30,9 @@
 				{
 					"type": "SubmitForm",
 					"name":"main_task02_targets",
-					"cfgName":"myplugin/xiaohong"
+					"cfgName":"myplugin/xiaohong2"
 				}
 			]
         }
-    ],
-    "triggers": null
+    ]
 }
