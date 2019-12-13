@@ -2990,7 +2990,9 @@ GET_TASK_GPS(debug = false) --得到打工的GPS位置
     $owner = GetMapOwner(map = $map)
     If($owner){
         $door = GetObjectVar(obj = $owner , key = "insideDoor")
-        $obj1.gpsPos = GetEntityPosition(entity = $door)
+        If($door){
+            $obj1.gpsPos = GetEntityPosition(entity = $door)
+        }
     }Else{
         $obj1.gpsPos = $obj1.taskPos or  {x = 89, y = 18, z = 195}
     }
@@ -3008,7 +3010,7 @@ INIT_WORK_TASK(){ --初始打工
     }
     CallTrigger(event = "GET_TASK_GPS", object = $obj1)
     CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
-    $obj1.taskTemer = StartTimer(rep = false, time = 20, object = $obj1, event = "TASK_UPDATE_DATA")
+    StartTimer(rep = false, time = 20, object = $obj1, event = "TASK_UPDATE_DATA")
 }
 FINISH_TASK(debug = false){ --完成打工的对话
     If($obj1.taskKey ~= $name){
@@ -3029,6 +3031,7 @@ FINISH_TASK(debug = false){ --完成打工的对话
             }
         ]
     )
+    $obj1.finishworkTime =  StartTimer(object = $obj1, event = "FINISH_AWARD", time = 40)
 }
 TEST_SHOW_ITEM(){
     $data1 = GetWorldVar(key = "titilePos1")
@@ -3037,12 +3040,20 @@ TEST_SHOW_ITEM(){
     Show3DUI(player = $obj1, show = true, data = $data2)
 }
 FINISH_AWARD(){ --完成打工的奖励
-    $money = GetConfigValue(type = "reward", fullName = "myplugin/task_money", key = $obj1.worktaskCount)
-    If(not $money){
-        $money = 1
+    If($obj1.finishworkTime){
+        StopTimer(timer = $obj1.finishworkTime)
     }
-    AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
-    ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
+    $rewDict = DictionaryGet(dict = @worlkMoeny, key =  $obj1.worktaskCount)
+    $money = DictionaryGet(dict = $rewDict, key = "money")
+    $recfg = DictionaryGet(dict = $rewDict, key = "item")
+    If($recfg){
+        AddItem(entity = $obj1, cfg = $recfg, count = 1)
+        ShowRewardItemEffect(itemCfg = $recfg, player = $obj1)
+    }
+    If($money){
+        AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
+        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
+    }
     $taskItem = SearchBagItem(entity = $obj1, key = "fullName", val = "myplugin/taskItem")
     ConsumeItem(item = $taskItem, num = 1)
     $proessLeve = NumberFloor(p1 = $obj1.worktaskCount / 10)
@@ -3054,19 +3065,6 @@ FINISH_AWARD(){ --完成打工的奖励
     $obj1.npcMap = nil
     $obj1.taskIndex = nil
     $animation = true
-    If($proessLeve > 0 and $proessCount == 0){
-        $animation = true
-        $recfg = GetConfigValue(type = "reward", fullName = "myplugin/task_reward", key = $proessLeve)
-        AddItem(entity = $obj1, cfg = $recfg, count = 1)
-        --ShowDialogTip(entity = $obj1, tipType = 4, p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
-        --ShowRewardNotice(
-         --   entity = $obj1,
-         --   tiptext = "",
-        --    tittletext = "final.summary.reward",
-        --    cfg = $recfg
-        --)
-        ShowRewardItemEffect(itemCfg = $recfg)
-    }
     If($obj1.worktaskCount >= 40){
         $obj1.worktaskCount = 0
     }
