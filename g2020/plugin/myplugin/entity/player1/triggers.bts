@@ -758,7 +758,7 @@ SAVE_FURNITURE{
         If($npc){
             DictionarySet(dict = $fDict, key = "pos", value = GetEntityPosition(entity = $npc))
             DictionarySet(dict = $fDict, key = "yaw", value = GetEntityYaw(entity = $npc))
-            -- DictionarySet(dict = $fDict, key = "pitch", value = GetEntityPitch(entity = $npc))
+            DictionarySet(dict = $fDict, key = "pitch", value = GetEntityPitch(entity = $npc))
             -- 如果是衣架，有saveSkinList，则需要保存当前衣架的皮肤
             If(GetConfigVar(obj = $npc, key = "saveSkinList")){
                 $saveSkinList = {}
@@ -1068,10 +1068,7 @@ BUY_HOUSE_REGION_COLOR{
 
     If($colorBlock){
         $buyMoney = GetBlockConfigByName(block = $colorBlock, key = "buyMoney") or GetBlockConfigByName(block = $colorBlock, key = "price")
-        $coinId = GetBlockConfigByName(block = $colorBlock, key = "coinId")
-        If(not $coinId){
-            Return()
-        }
+        $coinId = GetBlockConfigByName(block = $colorBlock, key = "coinId") or 3
         If(3 ~= $coinId){
             BuyGoods(player = $obj1, uniqueId = 20201000004, coinId = $coinId, price = $buyMoney, 
                 childRegionKey = $childRegionKey, colorBlock = $colorBlock, event = "BUY_REGION_COLOR_BY_APP" )
@@ -1100,6 +1097,7 @@ BUY_REGION_COLOR_BY_APP{
 }
 
 SET_REGION_COLOR{
+    Test("d-----------------", $destBlock, $curInsideRegion)
     $curInsideRegion = GetObjectVar(obj = $obj1, key = "curInsideRegion")
     If(not $curInsideRegion){
         Return()
@@ -1117,14 +1115,12 @@ SET_REGION_COLOR{
     }
     $childRegionArr = GetRegionConfig(region = $curInsideRegion, key = $childRegionKey) or {}
     
+    $house = GetObjectVar(obj = $obj1, key = "house")
+    $insideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+    Test("d-----------------", $destBlock)
     Foreach(array = $childRegionArr, key = "cRegion"){
-        $insideMap = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
-        $center = GetRegionCenter(region = $cRegion)
-        $max = GetRegionMax(region = $cRegion)
-        $pos = {x = GetPosX(pos = $center), y = GetPosY(pos = $max), z = GetPosZ(pos = $center)}
-        $block = GetBlockConfig(map = $insideMap, pos = V3ToBlockPos(v3 = $pos), key = "fullName")
-        ResetBlocksInRegion(map = $insideMap, region = $cRegion, 
-            sourceBlock = $block, destBlock = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock"))
+        $destBlock = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock")
+        CallTrigger(object = $house, event = "CHANGE_HOUSE_REGION_COLOR", map = $insideMap, region = $cRegion, destBlock = $destBlock)
     }
 
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
