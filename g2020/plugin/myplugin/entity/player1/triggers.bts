@@ -3232,26 +3232,45 @@ PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
         GotoOtherServer(targetUserId = $targetUserId, player = $obj1)
     }
 }
-PLAYER_ON_VISIT(debug = false){
-    $targetInRoom = false
-    $targetRoomLocked = true
-    $fromJustBeRemoved = false
+PLAYER_ON_VISIT(debug = false){--same server
     If(not $target){
         $target = $obj2 or $obj1.visitTarget
     }
     If(not $target){
         Return()
     }
-    If($fromInParty){
-        SetEntityPosition(map = GetEntityMap(entity = $target), entity = $obj1, pos = GetEntityPosition(entity = $target))
+    CallTrigger(object = $target, event = "GET_VISIT_TELE_POS", from = $obj1, fromInParty = $fromInParty)
+    If($obj1.telePos and $obj1.teleMap){
+        SetEntityPosition(map = $obj1.teleMap, entity = $obj1, pos = $obj1.telePos)
+        $obj1.teleMap = nil
+        $obj1.telePos = nil
+    }
+}
+
+GET_VISIT_TELE_POS(debug = false){
+    $house = $obj1.house
+    $isLock =$house.isLock
+    $inHouse = ($house == GetMapOwner(map = GetEntityMap(entity = $obj1)))
+    If($fromInParty or not $inHouse or not $isLock){
+        $toInside = true
     }
     Else{
-        If($targetInRoom){
-            --todo
+        $id1 = GetEntityTeam(entity = $obj1)
+        $id2 = GetEntityTeam(entity = $from)
+        If($id1 ~= 0 and $id1 == $id2){
+            $toInside = true
         }
-        Else{
-            SetEntityPosition(entity = $obj1, pos = GetEntityPosition(entity = $target))
-        }
+    }
+    If($toInside){
+        --transfer to the target's pos
+        $from.telePos = GetEntityPosition(entity = $obj1)
+        $from.teleMap = GetEntityMap(entity = $obj1)
+    }
+    Else{
+        ShowTip(entity = $from, tipType = 1, textKey = "house_lock")
+        $door = $house.door
+        $from.telePos = ComputeV3(p1 = GetEntityPosition(entity = $door), p2 = V3RotationYaw(vector = Table(x = 0, y = 0.5, z = 3), yaw = GetEntityYaw(entity = $door)), op = "add")
+        $from.teleMap = GetEntityMap(entity = $door)
     }
 }
 
