@@ -41,6 +41,10 @@ INTER_WITH_DOOR{
         CallTrigger(object = $obj2, event = "SAVE_FURNITURE")
         ShowTitleBarPage(entity = $obj2, closeWin = true)
         ShowGenericActorShowStore(entity = $obj2, closeWin =true)
+        If(GetObjectVar(obj = $obj2, key = "curInteractionUiObjId")){
+            UpdateEntityEditContainer(player = $obj2, entityId = GetObjectVar(obj = $obj2, key = "curInteractionUiObjId"), show = false)
+            SetObjectVar(obj = $obj2, key = "curInteractionUiObjId", value = nil)
+        }
         CallTrigger(object = $obj2, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = true)
     }
     CallTrigger(object = $obj2, event = "FUNC_STATE_OPEN_GPS", rtVal = $obj2.gpsDestination) --如果有导航则继续导航
