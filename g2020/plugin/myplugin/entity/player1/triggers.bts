@@ -3339,6 +3339,12 @@ CREATE_CAR {
         Return()
     }
 
+    If(not GetEntityOnGround(entity = $obj1))
+    {
+        ShowTip(entity = $obj1, tipType = 2, textKey = "gui_create_car_in_the_air", time = 40)
+        Return()
+    }
+
     $carName = "myplugin/car_1"
 
     If(not $obj1.createdCars)
