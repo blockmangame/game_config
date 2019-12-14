@@ -1,42 +1,4 @@
 {
-	"collision": true,
-    "boundingVolume": {
-        "type": "Composite",
-        "params": [
-            {
-                "type": "Box",
-                "params": [
-                    3,
-                    1,
-                    1.5
-                ]
-            },
-            {
-                "type": "Box",
-                "params": [
-                    0.6,
-                    1,
-                    -0.75,
-                    1.2,
-                    1.6,
-                    0.75
-                ]
-            }
-        ]
-    },
-	"interactionUI":
-        {
-            "centerBtns":[
-                {
-                    "text":"item_testlang",
-                    "image":"plugin/myplugin/image/hand_click.png",
-                    "event": "FOOD_BUY"
-                }
-            ],
-            "followParams":{
-                "followScenePos": false
-            }
-        },
-    "actorName": "g2020_car03.actor",
-    "base": "food_base"
+    "base": "car_base",
+    "actorName": "g2020_car02.actor"
 }
