@@ -938,6 +938,8 @@ UPDATE_STORE_LIST{
                         index = (DictionaryGet(dict = $decorationDic, key = "coinId") or GetEntityCfg(fullName = $fullName, key = "coinId") or 3) + 1) 
                         or "set:jail_break.json image:jail_break_currency",
                     cfg = $fullName,
+                    showName = DictionaryGet(dict = $decorationDic, key = "showName"),
+                    showDesc = DictionaryGet(dict = $decorationDic, key = "showDesc"),
                     event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
                     context = {
                         cfg = $fullName
