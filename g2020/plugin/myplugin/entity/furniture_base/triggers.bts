@@ -26,7 +26,12 @@ SHOW_EDIT_UI{
 
 DEC_INTERACTION_MOVE_TOUCH_BEGIN{
     Test("----------------------------------DEC_INTERACTION_MOVE_TOUCH_BEGIN")
-
+    PlayAction(
+        entity = $obj1,
+        includeSelf = true,
+        actionName = "jump",
+        actionTime = -1
+    )
 }
 
 DEC_INTERACTION_MOVE_TOUCH_END{
