@@ -685,8 +685,16 @@ BUY_STORE{
     If(not $cfg){
         Return()
     }
-    $buyMoney = GetEntityCfg(fullName = $cfg, key = "buyMoney") or 0
+    $buyMoney = GetEntityCfg(fullName = $cfg, key = "buyMoney")
     $coinId = GetEntityCfg(fullName = $cfg, key = "coinId")
+    Foreach(array = @DECORATION_STORE, key = "decorationTb"){
+        $decorationDic = NewDictionary($decorationTb)
+        If(DictionaryGet(dict = $decorationDic, key = "fullName") == $cfg){
+            $buyMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "buyMoney") or 0)
+            $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
+        }
+    }
+    Test($buyMoney, $coinId)
     If(3 ~= $coinId){
         BuyGoods(player = $obj1, uniqueId = 20201000002,  coinId = $coinId, price = $buyMoney, cfg = $cfg, event = "BUY_STORE_BY_APP" )
         Return()
@@ -923,10 +931,11 @@ UPDATE_STORE_LIST{
             If(DictionaryGet(dict = $decorationDic, key = "storeId") == $storeId and "entity" == $type){
                 $fullName = DictionaryGet(dict = $decorationDic, key = "fullName")
                 ArrayAppend(array = $listInfoTb, value = {
-                    text = GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
-                    image = GetEntityCfg(fullName = $fullName, key = "image") or "",
-                    actorScale = GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
-                    coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, index = (GetEntityCfg(fullName = $fullName, key = "coinId") or 3) + 1) 
+                    text = DictionaryGet(dict = $decorationDic, key = "buyMoney") or GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
+                    image = DictionaryGet(dict = $decorationDic, key = "image") or GetEntityCfg(fullName = $fullName, key = "image") or "",
+                    actorScale = DictionaryGet(dict = $decorationDic, key = "showActorScale") or GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
+                    coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, 
+                        index = (DictionaryGet(dict = $decorationDic, key = "coinId") or GetEntityCfg(fullName = $fullName, key = "coinId") or 3) + 1) 
                         or "set:jail_break.json image:jail_break_currency",
                     cfg = $fullName,
                     event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
@@ -938,9 +947,10 @@ UPDATE_STORE_LIST{
             If(DictionaryGet(dict = $decorationDic, key = "storeId") == $storeId and "block" == $type){
                 $fullName = DictionaryGet(dict = $decorationDic, key = "fullName")
                 ArrayAppend(array = $listInfoTb, value = {
-                    text = GetBlockConfigByName(block = $fullName, key = "buyMoney") or 0,
-                    image = GetBlockConfigByName(block = $fullName, key = "image") or "",
-                    coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, index = (GetBlockConfigByName(block = $fullName, key = "coinId") or 3) + 1) 
+                    text = DictionaryGet(dict = $decorationDic, key = "buyMoney") or GetBlockConfigByName(block = $fullName, key = "buyMoney") or 0,
+                    image = DictionaryGet(dict = $decorationDic, key = "image") or GetBlockConfigByName(block = $fullName, key = "image") or "",
+                    coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, 
+                        index = (DictionaryGet(dict = $decorationDic, key = "coinId") or GetBlockConfigByName(block = $fullName, key = "coinId") or 3) + 1) 
                         or "set:jail_break.json image:jail_break_currency",
                     event = "BUY_HOUSE_REGION_COLOR",
                     context = {
@@ -1016,8 +1026,15 @@ BUY_INSIDE_DOOR{
     If(not $cfg){
         Return()
     }
-    $buyMoney = GetEntityCfg(fullName = $cfg, key = "buyMoney") or GetEntityCfg(fullName = $cfg, key = "price") or 0
+    $buyMoney = GetEntityCfg(fullName = $cfg, key = "buyMoney")
     $coinId = GetEntityCfg(fullName = $cfg, key = "coinId")
+    Foreach(array = @DECORATION_STORE, key = "decorationTb"){
+        $decorationDic = NewDictionary($decorationTb)
+        If(DictionaryGet(dict = $decorationDic, key = "fullName") == $cfg){
+            $buyMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "buyMoney") or 0)
+            $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
+        }
+    }
     If(3 ~= $coinId){
         BuyGoods(player = $obj1, uniqueId = 20201000003,  coinId = $coinId, price = $buyMoney, cfg = $cfg, event = "BUY_DOOR_BY_APP" )
         Return()
@@ -1067,8 +1084,15 @@ BUY_HOUSE_REGION_COLOR{
     }
 
     If($colorBlock){
-        $buyMoney = GetBlockConfigByName(block = $colorBlock, key = "buyMoney") or GetBlockConfigByName(block = $colorBlock, key = "price")
-        $coinId = GetBlockConfigByName(block = $colorBlock, key = "coinId") or 3
+        $buyMoney = GetBlockConfigByName(block = $colorBlock, key = "buyMoney")
+        $coinId = GetBlockConfigByName(block = $colorBlock, key = "coinId")
+        Foreach(array = @DECORATION_STORE, key = "decorationTb"){
+            $decorationDic = NewDictionary($decorationTb)
+            If(DictionaryGet(dict = $decorationDic, key = "fullName") == $colorBlock){
+                $buyMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "buyMoney") or 0)
+                $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
+            }
+        }
         If(3 ~= $coinId){
             BuyGoods(player = $obj1, uniqueId = 20201000004, coinId = $coinId, price = $buyMoney, 
                 childRegionKey = $childRegionKey, colorBlock = $colorBlock, event = "BUY_REGION_COLOR_BY_APP" )
