@@ -917,6 +917,10 @@ SHOW_DEC_STORE{
             closeEventInfo = $closeEvent
         }
     }
+    StartTimer(object =$obj1, obj1 =$obj1, infoTb = $infoTb, time = 1, event = "UPDATE_ACTOR_SHOW_STORE")
+}
+
+UPDATE_ACTOR_SHOW_STORE{
     ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
 }
 
@@ -1020,7 +1024,7 @@ SHOW_DEC_STORE_LIST{
             rightEventInfo = ArrayGet(array = $rightEvent, index = 1)
         }
     }
-    ShowGenericActorShowStore(entity = $obj1, infoTb = $infoTb, updateWin =true)
+    StartTimer(object =$obj1, obj1 =$obj1, infoTb = $infoTb, time = 1, event = "UPDATE_ACTOR_SHOW_STORE")
 }
 
 BUY_INSIDE_DOOR{
