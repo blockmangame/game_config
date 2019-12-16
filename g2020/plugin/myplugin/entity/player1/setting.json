@@ -207,8 +207,8 @@
     "interaction_choices": {
         "cfgKey": "interaction_choices",
         "aroundParams":{
-            "startAngle": 0,
-            "endAngle": 360,
+            "startAngle": 90,
+            "endAngle": 450,
             "widgetFileName": "widget_button_2",
             "radius": 150,
             "imageSize":{
@@ -226,11 +226,25 @@
         "aroundBtns":[
             {
                 "text":"interact_add_friend",
+                "checkHide": {
+                    "checkCond":{
+                        "funcName": "checkIsFriend"
+                    },
+                    "wishResult":true
+                },
                 "image":"set:party_interaction_ui.json image:interaction_add_friend"
             },
             {
                 "text":"interact_feed",
                 "image":"set:party_interaction_ui.json image:interaction_feed",
+                "checkHide": {
+                    "checkCond":{
+                        "funcName": "checkTypeHandItem",
+                        "key": "base",
+                        "value": "food_base"
+                    },
+                    "wishResult":false
+                },
                 "event": "INTERACTION_FEED"
             },
             {
@@ -241,6 +255,12 @@
             {
                 "text":"interact_join_family",
                 "image":"set:party_interaction_ui.json image:interaction_join_family",
+                "checkHide": {
+                    "checkCond":{
+                        "funcName": "checkInSameTeam"
+                    },
+                    "wishResult":true
+                },
                 "event": "INTERACTION_JOIN_FAMILY"
             }
         ]
