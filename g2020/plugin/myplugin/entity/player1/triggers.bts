@@ -1127,7 +1127,6 @@ BUY_REGION_COLOR_BY_APP{
 }
 
 SET_REGION_COLOR{
-    Test("d-----------------", $destBlock, $curInsideRegion)
     $curInsideRegion = GetObjectVar(obj = $obj1, key = "curInsideRegion")
     If(not $curInsideRegion){
         Return()
@@ -1147,7 +1146,6 @@ SET_REGION_COLOR{
     
     $house = GetObjectVar(obj = $obj1, key = "house")
     $insideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
-    Test("d-----------------", $destBlock)
     Foreach(array = $childRegionArr, key = "cRegion"){
         $destBlock = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock")
         CallTrigger(object = $house, event = "CHANGE_HOUSE_REGION_COLOR", map = $insideMap, region = $cRegion, destBlock = $destBlock)
