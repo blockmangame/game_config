@@ -3500,3 +3500,85 @@ BUY_PRIVILEGE_SUCCEED
         }
     }
 }
+
+
+SHOW_CASH_BOX_INPUT_DIALOG
+{
+    $title = {
+        name = "ui_cash_box_title_name"
+    }
+
+    $inputTitle = {
+        name = "ui_cash_box_input_name"
+    }
+
+    $buttons = [
+        {
+            event = "cancel",
+            normalImage = "set:tip_dialog.json image:btn_big_blue",
+            pushedImage = "set:tip_dialog.json image:btn_big_blue",
+            name = "ui_cancel"
+        },
+        {
+            event = "CASH_BOX_BUTTON_SURE",
+            normalImage = "set:tip_dialog.json image:btn_big_green",
+            pushedImage = "set:tip_dialog.json image:btn_big_green",
+            name = "ui_sure"
+        }
+    ]
+
+    $options = {
+        ownerId = $ownerId
+    }
+
+    $contents = {
+        title = $title,
+        inputTitle = $inputTitle,
+        buttons = $buttons,
+        text = $name,
+        inputMode = 2
+    }
+
+    ShowInputDialog(entity = $obj1, contents = $contents, options = $options)
+}
+
+CASH_BOX_BUTTON_SURE
+{
+    $money = ToNumber($name)
+    If(not IsNumber($money))
+    {
+        ShowTip(entity = $obj1, tipType = 2, textKey = "gui_cashbox_only_number", time = 40)
+        Return()
+    }
+
+    If($money // 1 ~= $money)
+    {
+        ShowTip(entity = $obj1, tipType = 2, textKey = "gui_cashbox_only_number", time = 40)
+        Return()
+    }
+    Else
+    {
+
+        If($money <= 0 or $money > 100)
+        {
+            ShowTip(entity = $obj1, tipType = 2, textKey = "gui_cashbox_only_number", time = 40)
+            Return()
+        }
+
+        $owner = GetObject(objID = $ownerId)
+        If(not $owner or not IsPlayer(entity = $owner))
+        {
+            Return()
+        }
+
+        If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $money))
+        {
+            ShowTip(entity = $obj1, tipType = 2, textKey = "gui_cashbox_not_enough_number", time = 40)
+            Return()
+        }
+
+        AddCurrency(entity = $owner, coinName = "green_currency", count = $money)
+        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $owner)
+        ShowTip(entity = $owner, tipType = 2, textKey = "gui_cashbox_get_money", textP1 = GetEntityName(entity = $obj1), textP2 = $money, time = 40)
+    }
+}
