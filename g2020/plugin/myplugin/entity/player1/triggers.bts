@@ -3455,7 +3455,15 @@ LIKE_PARTY(debug = false){}
 
 START_CAMERA_MODE
 {
-    AddEntityBuff(entity = $obj1, cfg = "myplugin/camera_mode")
+    If($obj1.cameraModeBuff ~= nil)
+    {
+        RemoveEntityBuff(entity = $obj1, buff = $obj1.cameraModeBuff)
+        $obj1.cameraModeBuff = nil
+    }
+    Else
+    {
+        $obj1.cameraModeBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/camera_mode")
+    }
 }
 
 STORE_ITEM_OPERATION_PRIVILEGE
