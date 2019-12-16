@@ -18,10 +18,27 @@
                 "endAngle": 90,
                 "radius": 100
             },
-            "centerBtns":[
+            "aroundBtns":[
                 {
-                    "text":"food.guide",
+                    "text":"pay me!",
                     "image":"plugin/myplugin/image/hand_click.png",
+                    "checkHide": {
+                        "checkCond":{
+                            "funcName": "checkOwnerInSameTeam"
+                        },
+                        "wishResult":true
+                    },
+                    "event": "FOOD_BUY"
+                },
+                {
+                    "text":"free!",
+                    "image":"plugin/myplugin/image/hand_click.png",
+                    "checkHide": {
+                        "checkCond":{
+                            "funcName": "checkOwnerInSameTeam"
+                        },
+                        "wishResult":false
+                    },
                     "event": "FOOD_BUY"
                 }
             ],
