@@ -2,6 +2,9 @@
     "actorName": "fish03.actor",
     "base":"cook_base",
     "name": "cook.demo",
+    "coinId": 3,
+    "image": "plugin/myplugin/image/fru/g1047_prop_2001.png",
+    "buyMoney": 300,
     "interaction_choices":{
         "cfgKey": "interaction_choices",
         "aroundParams":{
@@ -27,6 +30,23 @@
             {
                 "text":"$1",
                 "image":"plugin/myplugin/image/pizza.png",
+                "checkHide": {
+                    "checkCond":{
+                        "funcName": "checkOwnerInSameTeam"
+                    },
+                    "wishResult":true
+                },
+                "event": "COOK_1"
+            },
+            {
+                "text":"free!",
+                "image":"plugin/myplugin/image/pizza.png",
+                "checkHide": {
+                    "checkCond":{
+                        "funcName": "checkOwnerInSameTeam"
+                    },
+                    "wishResult":false
+                },
                 "event": "COOK_1"
             },
             {
@@ -41,6 +61,23 @@
             {
                 "text":"$2",
                 "image":"plugin/myplugin/image/burger.png",
+                "checkHide": {
+                    "checkCond":{
+                        "funcName": "checkOwnerInSameTeam"
+                    },
+                    "wishResult":true
+                },
+                "event": "COOK_2"
+            },
+            {
+                "text":"free!",
+                "image":"plugin/myplugin/image/burger.png",
+                "checkHide": {
+                    "checkCond":{
+                        "funcName": "checkOwnerInSameTeam"
+                    },
+                    "wishResult":false
+                },
                 "event": "COOK_2"
             }
         ]

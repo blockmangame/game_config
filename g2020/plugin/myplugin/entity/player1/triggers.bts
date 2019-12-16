@@ -154,9 +154,9 @@ CREATE_OWNER_HOUSE{
     If($obj1.curHouseCfg){
         $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
     }
-    --SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
-    --    pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-    --CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+    SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
+       pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
+    CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
 }
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 
@@ -182,15 +182,24 @@ ENTITY_ENTER
         }
 
         $obj1.isReadyReward = false
-        $obj1.role = @adult
-        $obj1.scaleBuff = nil
-        $obj1.boundingBuff = nil
-
         $obj1.requestFamilyPlayer = nil
 
         CallTrigger(event = "ADD_MONEY", object = $obj1)
-        If($obj1.inPartyOwnerId == 0){--in party
+        If($obj1.inPartyOwnerId == 0)   -- not in party
+        {
+            $obj1.role = @adult
             CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)
+        }
+        Else
+        {
+            If($obj1.role == @adult)
+            {
+                CallTrigger(object = $obj1, event = "CHANGE_PLAYER_SCALE_ADULT")
+            }
+            ElseIf($obj1.role == @child)
+            {
+                CallTrigger(object = $obj1, event = "CHANGE_PLAYER_SCALE_CHILD")
+            }
         }
 		
 		CallTrigger(event = "SET_DRESS_ARCHIVE", object = $obj1)
@@ -704,7 +713,7 @@ GIVE_STORE{
     ShowGenericActorShowStore(entity = $obj1, closeWin =true)
     
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
-    $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg, ry = 0, rp = 0)
+    $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg, ry = 0, rp = 0, owner = $obj1)
     SetObjectVar(obj = $npc, key = "house", value = GetObjectVar(obj = $obj1, key = "house"))
     
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
