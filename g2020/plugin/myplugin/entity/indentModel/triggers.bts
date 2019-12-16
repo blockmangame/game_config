@@ -1,6 +1,6 @@
 ENTITY_ENTER(debug = false)
 {
-    
+    @INDENT_MODEL = $obj1
 }
 GET_TASK_KEY(debug = false) --随机任务key
 {
@@ -46,8 +46,25 @@ GET_TASK_KEY(debug = false) --随机任务key
     $headIndex = ArrayGet(array = $harray, index = $index)
     --UpdateObjectInteractionUI(cfgKey = $headIndex, player = $obj2, target = $obj1, show = true)
 }
+CHANG_ACTOR(){
+    $changActor = GetConfigVar(obj = $obj1, key = $actorName) --changActor
+    SelfChangEntityActor(entity = $obj1, name =  $changActor, player = $obj2)
+}
 GET_TASK(debug = false)
 {
+    $today = GetYearDayStr(GetTime())
+    If($today ~= $obj2.workday){
+        $obj2.worktaskCount = $today
+        $obj2.fuckCount = 0
+        CallTrigger(object = $obj1, event = "CHANG_ACTOR", actorName = "actorName", obj2 = $obj2)
+    }
+    If(@workmaxCount <= ($obj2.fuckCount or 0) or $obj1.maxActor){
+        --提示。
+        --换模型
+        ShowTip(textKey = "sorry.please.go.tomorrow", tipType = 2, entity = $obj2, keepTime = 60)
+        $obj2.actorCD = true
+        Return()
+    }
     If($obj2.stakCD){ --玩家任务CD中
         Return()
     }
@@ -88,6 +105,9 @@ GET_TASK(debug = false)
     CallTrigger(event = "TASK_NPC_ADD_BUFF", object = $obj2, from = "adddddaaad stask")
     $obj2.stakCD = true
     $obj2.worktaskCount = $obj2.worktaskCount + 1
+    If($obj1.worktaskCount > 40){
+        $obj1.worktaskCount = 1
+    }
     CallTrigger(event = "GET_TASK_GPS", object = $obj2)
     CallTrigger(event = "GET_TASK_UI_DATA", object = $obj2, showGps = true)
 }

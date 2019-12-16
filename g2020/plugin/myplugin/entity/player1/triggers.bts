@@ -3052,6 +3052,8 @@ GET_TASK_GPS(debug = false) --得到打工的GPS位置
     }
 }
 INIT_WORK_TASK(){ --初始打工
+    $today = GetYearDayStr(GetTime())
+    $obj1.workday = $today
     $index =  $obj1.taskIndex
     If($index && $index > 0){
         $taskDict = ArrayGet(array = @TASK_TABLE, index = $index)
@@ -3094,6 +3096,11 @@ TEST_SHOW_ITEM(){
     Show3DUI(player = $obj1, show = true, data = $data2)
 }
 FINISH_AWARD(){ --完成打工的奖励
+    $obj1.fuckCount = ($obj1.fuckCount or 0 ) + 1
+    If($obj1.fuckCount >= @workmaxCount && not $obj1.maxActor){
+        $obj1.maxActor = true
+        CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "maxCountActor", obj2 = $obj1)
+    }
     If($obj1.finishworkTime){
         StopTimer(timer = $obj1.finishworkTime)
     }
@@ -3102,9 +3109,12 @@ FINISH_AWARD(){ --完成打工的奖励
         $money = DictionaryGet(dict = $rewDict, key = "money")
         $recfg = DictionaryGet(dict = $rewDict, key = "item")
     }
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege")){
+        $money = DictionaryGet(dict = $rewDict, key = "mvpmoney")
+    }
     If($recfg){
         AddItem(entity = $obj1, cfg = $recfg, count = 1)
-        ShowRewardItemEffect(itemCfg = $recfg, player = $obj1)
+        ShowRewardItemEffect(fullName = $recfg, player = $obj1)
     }
     If($money){
         AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
@@ -3121,12 +3131,12 @@ FINISH_AWARD(){ --完成打工的奖励
     $obj1.npcMap = nil
     $obj1.taskIndex = nil
     $animation = true
-    If($obj1.worktaskCount >= 40){
-        $obj1.worktaskCount = 0
-    }
     CallTrigger(event = "GET_TASK_GPS", object = $obj1, showGps = false)
-    CallTrigger(event = "TASK_NPC_ADD_BUFF", object = $obj1, from = "task_____ffffffff")
+    StartTimer(time = 1, event = "TASK_NPC_ADD_BUFF", object = $obj1, from = "task_____ffffffff")
     CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1, closeGps = true, animation = $animation)
+}
+TEST_ADD(){
+    AddItem(entity = $obj1, cfg = $recfg, count = 1)
 }
 TASK_NPC_ADD_BUFF(debug = false)
 {
@@ -3135,10 +3145,12 @@ TASK_NPC_ADD_BUFF(debug = false)
     Foreach(array = $mapNpc, key = "npc"){
         $name = GetConfigVar(obj = $npc, key = "fullName")
         If($name == $obj1.lastNpc){
-            UnMarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
+            PlayAction(entity = $npc, target = $obj1, actionName = "idle", actionTime = -1)
+            --UnMarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
         }
         If($name == $obj1.taskNpc){
-            MarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
+            PlayAction(entity = $npc, target = $obj1, actionName = "idle_1", actionTime = -1)
+            --MarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
         }
     }
 }
