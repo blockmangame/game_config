@@ -3147,13 +3147,13 @@ TASK_UPDATE_DATA(){
 	CallTrigger(event = "GET_TASK_GPS", object = $obj1)
     CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
 }
---场景商店的购买逻辑
+--公共区域购买，场景商店的购买逻辑
 SURE_BUY(debug = false){
    If($button == "left"){
       Return()
    }
    $obj2 = GetObject(objID = $objID)
-   If($checkId ~= $obj1.buySessionSS or not $obj2 or not IsValidObject($obj2))
+   If($checkId ~= $obj1.buySessionSS or not $obj2 or not IsValidObject(object = $obj2))
    {
       Return()
    }
@@ -3167,11 +3167,33 @@ SURE_BUY(debug = false){
          If($checkBag ~= false){
             ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
             PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
-            $owner = $obj2.owner
-            If($owner && IsValidObject($owner)){ --给领主加钱
+         }Else{ --背包满了
+            ShowTip(textKey = "gui_str_app_shop_inventory_is_full", tipType = 2, entity = $obj1, keepTime = 20)
+         }
+   }Else{ --不够钱
+      ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
+   }
+}
+--区域购买逻辑： 领主家里买厨具，食物，
+SURE_FURNITURE_BUY(debug = false){
+   If($button == "left"){
+      Return()
+   }
+   $coinName = "green_currency"
+   $itemName = GetItemCfg(fullName = $sellItem, key = "itemname")
+   $enoughMoney = CheckBalance(entity = $obj1, coinName = $coinName, price = $price)
+   If($enoughMoney){ --够钱
+         $checkBag = AddItem(entity = $obj1, cfg = $sellItem, count = 1)
+         If($checkBag ~= false){
+            PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
+            If(not $isTeam and $owner){ --不是一个家庭给领主加钱
+               ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
                $name = GetEntityName(entity = $obj1)
                ShowTip(textKey = "gui_buys_your_stuff",textP1 = $name, textP2 = $itemName, tipType = 1, entity = $owner, keepTime = 20)
                AddCurrency(entity = $owner, coinName = $coinName, count = $price)
+               ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $price), entity = $owner)
+            }Else{
+               ShowTip(textKey = "gui_gain_item_success",textP1 = $itemName, tipType = 1, entity = $obj1, keepTime = 20)
             }
          }Else{ --背包满了
             ShowTip(textKey = "gui_str_app_shop_inventory_is_full", tipType = 2, entity = $obj1, keepTime = 20)
