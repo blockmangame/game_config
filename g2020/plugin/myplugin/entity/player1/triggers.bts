@@ -154,9 +154,9 @@ CREATE_OWNER_HOUSE{
     If($obj1.curHouseCfg){
         $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
     }
-    SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
-        pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-    CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
+    --SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
+    --    pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
+    --CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
 }
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 
@@ -1721,6 +1721,11 @@ OPEN_PRIVILEGE_SHOP
     }
 }
 
+INTERACTION_BACK
+{
+    UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
+}
+
 INTERACTION_ACT
 {
     If($obj2.role == @child)
@@ -1818,6 +1823,18 @@ INTERACTION_PICK
 
 INTERACTION_BABY_TROLLEY {
 
+}
+
+INTERACTION_RAISE_HEIGHT
+{
+    If($obj2.role == @adult && $obj1.role == @child)
+    {
+        CallTrigger(obj1 = $obj2, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_raise_height")
+    }
+    Else
+    {
+        ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
+    }
 }
 
 USER_INTERACTION_ACTION
