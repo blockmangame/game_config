@@ -210,7 +210,13 @@
             "startAngle": 0,
             "endAngle": 360,
             "widgetFileName": "widget_button_2",
-            "radius": 150
+            "radius": 150,
+            "imageSize":{
+                "width":200,
+                "height":97
+            },
+            "imageStretchType": "NineGrid",
+            "imageStretchOffset": "100 20 0 0"
         },
         "followParams":{
             "followScenePos": true,
@@ -220,47 +226,22 @@
         "aroundBtns":[
             {
                 "text":"interact_add_friend",
-                "image":"set:party_interaction_ui.json image:interaction_add_friend",
-                "event": "INTERACTION_ADD_FRIEND",
-                "imageSize":{
-                    "width":200,
-                    "height":97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                "image":"set:party_interaction_ui.json image:interaction_add_friend"
             },
             {
                 "text":"interact_feed",
                 "image":"set:party_interaction_ui.json image:interaction_feed",
-                "event": "INTERACTION_FEED",
-                "imageSize":{
-                    "width":200,
-                    "height":97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                "event": "INTERACTION_FEED"
             },
             {
                 "text":"interact_act",
                 "image":"set:party_interaction_ui.json image:interaction_act",
-                "event": "INTERACTION_ACT",
-                "imageSize":{
-                    "width":200,
-                    "height":97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                "event": "INTERACTION_ACT"
             },
             {
                 "text":"interact_join_family",
                 "image":"set:party_interaction_ui.json image:interaction_join_family",
-                "event": "INTERACTION_JOIN_FAMILY",
-                "imageSize":{
-                    "width":200,
-                    "height":97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                "event": "INTERACTION_JOIN_FAMILY"
             }
         ]
     },
@@ -270,7 +251,13 @@
             "startAngle": 0,
             "endAngle": 360,
             "widgetFileName": "widget_button_2",
-            "radius": 200
+            "radius": 200,
+            "imageSize":{
+                "width":200,
+                "height":97
+            },
+            "imageStretchType": "NineGrid",
+            "imageStretchOffset": "100 20 0 0"
         },
         "followParams":{
             "followScenePos": true,
@@ -292,57 +279,27 @@
             {
                 "text":"A1",
                 "image":"set:party_interaction_ui.json image:interaction_add_friend",
-                "event": "INTERACTION_CLAP",
-                "imageSize":{
-                    "width":200,
-                    "height":97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                "event": "INTERACTION_CLAP"
             },
             {
                 "text":"A2",
                 "image":"set:party_interaction_ui.json image:interaction_feed",
-                "event": "INTERACTION_HUG",
-                "imageSize":{
-                    "width":200,
-                    "height":97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                "event": "INTERACTION_HUG"
             },
             {
                 "text":"A3",
                 "image":"set:party_interaction_ui.json image:interaction_act",
-                "event": "INTERACTION_HAND_IN_HAND",
-                "imageSize":{
-                    "width":200,
-                    "height":97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                "event": "INTERACTION_HAND_IN_HAND"
             },
             {
                 "text":"A4",
                 "image":"set:party_interaction_ui.json image:interaction_join_family",
-                "event": "INTERACTION_FOLLOW",
-                "imageSize":{
-                    "width":200,
-                    "height":97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                "event": "INTERACTION_FOLLOW"
             },
             {
                 "text":"A5",
                 "image":"set:party_interaction_ui.json image:interaction_add_friend",
-                "event": "INTERACTION_RIDE",
-                "imageSize":{
-                    "width":200,
-                    "height":97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                "event": "INTERACTION_RIDE"
             }
         ]
     },
@@ -352,7 +309,13 @@
             "startAngle": 0,
             "endAngle": 360,
             "widgetFileName": "widget_button_2",
-            "radius": 150
+            "radius": 150,
+            "imageSize":{
+                "width":200,
+                "height":97
+            },
+            "imageStretchType": "NineGrid",
+            "imageStretchOffset": "100 20 0 0"
         },
         "followParams":{
             "followScenePos": true,
@@ -374,35 +337,17 @@
             {
                 "text":"B1",
                 "image":"set:party_interaction_ui.json image:interaction_add_friend",
-                "event": "INTERACTION_HUG",
-                "imageSize":{
-                    "width":200,
-                    "height":97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                "event": "INTERACTION_HUG"
             },
             {
                 "text":"B2",
                 "image":"set:party_interaction_ui.json image:interaction_feed",
-                "event": "INTERACTION_HANDSHAKE",
-                "imageSize":{
-                    "width":200,
-                    "height":97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                "event": "INTERACTION_HANDSHAKE"
             },
             {
                 "text":"B3",
                 "image":"set:party_interaction_ui.json image:interaction_act",
-                "event": "INTERACTION_FOLLOW",
-                "imageSize":{
-                    "width":200,
-                    "height":97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                "event": "INTERACTION_FOLLOW"
             },
             {
                 "text":"B4",
