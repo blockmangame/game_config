@@ -111,7 +111,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
         } -- 这样拼接的原因是直接把pos传入会导致pos内部值多了个map，而这个是不需要的，故此处拼接一个临时的pos
         Test($fDict)
         $npc = CreateNpc(map = $map, cfgName = DictionaryGet(dict = $fDict, key = "cfg"), 
-            pos = $pos, ry = DictionaryGet(dict = $fDict, key = "yaw") or 0, rp = DictionaryGet(dict = $fDict, key = "pitch") or 0)
+            pos = $pos, ry = DictionaryGet(dict = $fDict, key = "yaw") or 0, rp = DictionaryGet(dict = $fDict, key = "pitch") or 0, owner = $obj1.owner)
         If(GetConfigVar(obj = $npc, key = "boundBoxRotateWithYawAndPitch")){
             UpdateEntityBoundBoxWithRotate(entity = $npc)
         }

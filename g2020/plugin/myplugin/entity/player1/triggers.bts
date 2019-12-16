@@ -713,7 +713,7 @@ GIVE_STORE{
     ShowGenericActorShowStore(entity = $obj1, closeWin =true)
     
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
-    $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg, ry = 0, rp = 0)
+    $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg, ry = 0, rp = 0, owner = $obj1)
     SetObjectVar(obj = $npc, key = "house", value = GetObjectVar(obj = $obj1, key = "house"))
     
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
