@@ -131,7 +131,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
 }
 
 CREATE_INSIDE_DOOR{
-    $insideDoor = CreateNpc(map = $map, cfgName = $cfgName, rp = 0, ry = 0)
+    $insideDoor = CreateNpc(map = $map, cfgName = $cfgName, rp = 0, ry = 0, owner = $obj1.owner)
     SetEntityPosition(map = $map, entity = $insideDoor, pos = GetConfigVar(obj = $obj1, key = "insideDoorPos") or {x = 0,y = 0, z = 0})
     StartTimer(time = 1, object = $insideDoor, event = "CREATE_DOOR_REGION")
     SetObjectVar(obj = $insideDoor, key = "house", value = $obj1)
