@@ -20,10 +20,10 @@ CREATR_SUBSIDIARY{
 
     StartTimer(rep = false, time = 1, object = $obj1, door = $door, event = "CHANGE_DOOR_YAW")
     ------------------------------------------ 创建内部房子（创建动态地图）
-    ------------------------------------------ 房子 <owner(需要使用GetMapOwner)-------houseInsideMap> 内部房子
+    ------------------------------------------ 房子 <owner-------houseInsideMap> 内部房子
     $map = CreateMap(name = GetConfigVar(obj = $obj1, key = "insideMap"))
     SetObjectVar(obj = $obj1, key = "houseInsideMap", value = $map)
-    SetMapOwner(map = $map, owner = $obj1)
+    SetMapVar(map = $map, key = "owner", value = $obj1)
     StartTimer(time = 1, object = $obj1, event = "CREATR_HOUSE_INSIDE_SUBSIDIARY") -- 延迟一帧是因为需要用到上一帧创建完才设置的owner
 }
 
@@ -70,22 +70,25 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
                 $childRegionColorArr = ArrayGet(array = $regionColorTb, index = 2) or {}
                 ForLoop(from = 1, to = ArraySize(array = $childRegionKeyArr), key = "index"){
                     $childRegionArr = GetRegionConfig(region = $region, key = ArrayGet(array = $childRegionKeyArr, index = $index)) or {}
+                    $destBlock = ArrayGet(array = $childRegionColorArr, index = $index) or 
+                                ArrayGet(array = $defaultChildRegionBlock, index = $index) or 
+                                GetRegionConfig(region = $region, key = "defaultBlock")
                     Foreach(array = $childRegionArr, key = "cRegion"){
-                        $destBlock = ArrayGet(array = $childRegionColorArr, index = $index) or 
-                                    ArrayGet(array = $defaultChildRegionBlock, index = $index) or 
-                                    GetRegionConfig(region = $region, key = "defaultBlock")
                         CallTrigger(object = $obj1, event = "CHANGE_HOUSE_REGION_COLOR", map = $map, region = $cRegion, destBlock = $destBlock)
                     }
+                    ReplaceBlockInRegions(map = $map, regions = $childRegionArr, replaceTb = GetBlockConfigByName(block = $destBlock, key = "destBlockMatrix"), filter = {blockType = "typeB"})
                 }
                 Break()
             }
         }
         If(not $hadRegion){
             Foreach(array = $childRegionKeyArr, key = "key"){
-                Foreach(array = GetRegionConfig(region = $region, key = $key) or {}, key = "cRegion"){
-                    $destBlock = GetRegionConfig(region = $region, key = "defaultBlock")
+                $childRegionArr = GetRegionConfig(region = $region, key = $key) or {}
+                $destBlock = GetRegionConfig(region = $region, key = "defaultBlock")
+                Foreach(array = $childRegionArr, key = "cRegion"){
                     CallTrigger(object = $obj1, event = "CHANGE_HOUSE_REGION_COLOR", map = $map, region = $cRegion, destBlock = $destBlock)
                 }
+                ReplaceBlockInRegions(map = $map, regions = $childRegionArr, replaceTb = GetBlockConfigByName(block = $destBlock, key = "destBlockMatrix"), filter = {blockType = "typeB"})
             }
         }
     }
@@ -122,7 +125,6 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
 }
 
 CHANGE_HOUSE_REGION_COLOR{
-    Test("d-----------------", $destBlock)
     $center = GetRegionCenter(region = $region)
     $max = GetRegionMax(region = $region)
     $pos = {x = GetPosX(pos = $center), y = GetPosY(pos = $max), z = GetPosZ(pos = $center)}
@@ -130,10 +132,10 @@ CHANGE_HOUSE_REGION_COLOR{
     If($destBlock and "" ~= $destBlock){
         $destBlockTypes = GetBlockConfigByName(block = $destBlock, key = "destBlockTypes")
         If($destBlockTypes){
-            ResetBlocksByKeyValueInRegion(map = $map, region = $region, key = "fullName", value = $block, destBlockName = $destBlock) -- TODO EDIT
+            ReplaceBlockInRegion(map = $map, region = $region, replaceTb = [{key = "fullName", value = $block, destBlock = $destBlock}])
         }
         Else{
-            ResetBlocksByKeyValueInRegion(map = $map, region = $region, key = "fullName", value = $block, destBlockName = $destBlock)
+            ReplaceBlockInRegion(map = $map, region = $region, replaceTb = [{key = "fullName", value = $block, destBlock = $destBlock}])
         }
     }
 }

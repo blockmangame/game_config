@@ -31,7 +31,7 @@ INTER_WITH_DOOR{
         Return()
     }
     Test("get out here !")
-    $door = GetObjectVar(obj = GetMapOwner(map = $map), key = "door")
+    $door = GetObjectVar(obj = GetMapVar(map = $map, key = "owner"), key = "door")
     If(not $door){
         $door = GetObjectVar(obj = GetObjectVar(obj = $obj2, key = "house"), key = "door")
     }

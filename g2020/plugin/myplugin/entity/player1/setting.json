@@ -505,7 +505,7 @@
     "wallBlockStore": {
         "storeInfo" : {"storeId": "wallBlockStore", "type": "block"},
         "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
-        "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "doorStore"}},
+        "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "floorBlockStore", "childRegionKey": "floorRegion"}},
         "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
     },
     "doorStore": {

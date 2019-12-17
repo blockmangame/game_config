@@ -1150,10 +1150,11 @@ SET_REGION_COLOR{
     
     $house = GetObjectVar(obj = $obj1, key = "house")
     $insideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+    $destBlock = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock")
     Foreach(array = $childRegionArr, key = "cRegion"){
-        $destBlock = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock")
         CallTrigger(object = $house, event = "CHANGE_HOUSE_REGION_COLOR", map = $insideMap, region = $cRegion, destBlock = $destBlock)
     }
+    ReplaceBlockInRegions(map = $insideMap, regions = $childRegionArr, replaceTb = GetBlockConfigByName(block = $colorBlock, key = "destBlockMatrix"), filter = {blockType = "typeB"})
 
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
@@ -3069,7 +3070,7 @@ GET_TASK_UI_DATA(){ --更新UI数据。
 GET_TASK_GPS(debug = false) --得到打工的GPS位置
 {
     $map = GetPlayerMap(player = $obj1)
-    $owner = GetMapOwner(map = $map)
+    $owner = GetMapVar(map = $map, key = "owner")
     If($owner){
         $door = GetObjectVar(obj = $owner , key = "insideDoor")
         If($door){
@@ -3387,7 +3388,7 @@ PLAYER_ON_VISIT(debug = false){--same server
 GET_VISIT_TELE_POS(debug = false){
     $house = $obj1.house
     $isLock =$house.isLock
-    $inHouse = ($house == GetMapOwner(map = GetEntityMap(entity = $obj1)))
+    $inHouse = ($house == GetMapVar(map = GetEntityMap(entity = $obj1), key = "owner"))
     If($fromInParty or not $inHouse or not $isLock){
         $toInside = true
     }
