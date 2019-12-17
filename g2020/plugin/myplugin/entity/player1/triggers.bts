@@ -1,7 +1,3 @@
-PLAYER_INTERACTION(debug = false){
-    UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
-}
-
 INTERACTION_FEED(debug = false){
     -- If(not IsPlayer(entity = $obj1))
     -- {
@@ -50,55 +46,6 @@ INTERACTION_FEED(debug = false){
         state = $state
     )
 }
-CHECK_LEAVE_PARTY_FROM_DOOR(debug = false){
-    If($obj1.inSelfParty == 1){
-        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.close", event = "CHECK_CLOSE_PARTY", tipType = 2)
-    }
-    Else{
-        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.exit", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
-    }
-}
-ASK_SHOW_PARTY_LIST(debug = false){
-    If($result == false) {
-        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
-        Return()
-    }
-    ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "CHECK_EXIT_PARTY", tipType = 2)
-}
-CHECK_CLOSE_PARTY(debug = false){
-    If($result == false) {Return()}
-    CloseParty(player = $obj1)
-}
-CHECK_EXIT_PARTY(debug = false){
-    If($result == false) {Return()}
-    LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
-}
-LEAVE_PARTY_SUCCESS(debug = false){
-    $obj1.inPartyOwnerId = 0
-    GotoOtherServer(player = $player)
-}
-CHECK_IN_PARTY(debug = false){
-    $userId = GetPlayerUserID(player = $obj1)
-    $inPartyOwnerId = $obj1.inPartyOwnerId
-    If($inPartyOwnerId ~= 0){
-        UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
-        If($userId == $inPartyOwnerId){
-            $obj1.inSelfParty = 1
-            --My Party!!!!
-            --broadcast!!!!!
-        }
-        Else{
-            --In Party
-            $obj1.inSelfParty = 0
-            $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
-            If(not $partyOwner){
-                Return()
-            }
-            CallTrigger(fromInParty = true, target = $partyOwner, event = "PLAYER_ON_VISIT", object = $obj1)
-        }
-    }
-}
-
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 CREATE_OWNER_HOUSE{
     ------------------------------------------ 当前选择存档 $curSelectHouse
@@ -329,15 +276,6 @@ ENTITY_LEAVE{
     ---------------------------------------玩家退出，删除掉暂存在数据库“dressArchive”字段中的bm装扮信息
     CallTrigger(object = $obj1, event = "REMOVE_BM_DRESS")
     CallTrigger(object = $obj1, event = "CHECK_LEAVE_PARTY")
-}
-CHECK_LEAVE_PARTY(debug = false){
-    If($obj1.inSelfParty == 1){
-        CloseParty(player = $obj1)
-        Return()
-    }
-    If($obj1.inSelfParty == 0){
-        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
-    }
 }
 UPDATE_FURNITURE_STATUS{
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
@@ -3370,112 +3308,6 @@ ENTITY_BUY_RESULT()
         }
     }
 }
-
-
-PLAYER_BE_INVITE(debug = false){
-    --party invite will call PLAYER_BE_INVITE_OTHER_SERVER
-    $userId = GetPlayerUserID(player = $obj1)
-    $inPartyOwnerId = $obj1.inPartyOwnerId
-    If($inPartyOwnerId ~= 0){
-        Return()--in party
-    }
-    $obj1.visitTarget = $obj2
-    $contentDict = NewDictionary($content)
-    --todo: can close by showTime
-    --showTime = DictionaryGet(dict = $contentDict, key = "showTime")
-    ShowNotice(
-		buttonType = 2,
-		content = $guiText or "gui_friend_invite_notice",
-		eventYes = "PLAYER_ON_VISIT",
-		entity = $obj1,
-		textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
-	)
-}
-PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
-    $userId = GetPlayerUserID(player = $obj1)
-    $inPartyOwnerId = $obj1.inPartyOwnerId
-    If($inPartyOwnerId ~= 0){
-        Return()--in party
-    }
-    $contentDict = NewDictionary($content)
-    $fromParty = DictionaryGet(dict = $contentDict, key = "fromParty")
-    If($fromParty){
-        $guiText = "gui_party_invite_notice"
-        $obj1.toParty = true
-    }
-    $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
-    ShowNotice(
-        buttonType = 2,
-        content = $guiText or "gui_friend_invite_notice",
-        eventYes = "PLAYER_ON_VISIT_OTHER_SERVER",
-        entity = $obj1,
-        textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
-    )
-}
-PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
-    $targetUserId = $targetUserId or $obj1.visitTargetUserId
-    If($obj1.toParty){
-        TryJoinParty(targetUserId = $targetUserId)
-    }
-    Else{
-        GotoOtherServer(targetUserId = $targetUserId, player = $obj1)
-    }
-}
-PLAYER_ON_VISIT(debug = false){--same server
-    If(not $target){
-        $target = $obj2 or $obj1.visitTarget
-    }
-    If(not $target){
-        Return()
-    }
-    CallTrigger(object = $target, event = "GET_VISIT_TELE_POS", from = $obj1, fromInParty = $fromInParty)
-    If($obj1.telePos and $obj1.teleMap){
-        SetEntityPosition(map = $obj1.teleMap, entity = $obj1, pos = $obj1.telePos)
-        $obj1.teleMap = nil
-        $obj1.telePos = nil
-    }
-}
-
-GET_VISIT_TELE_POS(debug = false){
-    $house = $obj1.house
-    $isLock =$house.isLock
-    $inHouse = ($house == GetMapVar(map = GetEntityMap(entity = $obj1), key = "owner"))
-    If($fromInParty or not $inHouse or not $isLock){
-        $toInside = true
-    }
-    Else{
-        $id1 = GetEntityTeam(entity = $obj1)
-        $id2 = GetEntityTeam(entity = $from)
-        If($id1 ~= 0 and $id1 == $id2){
-            $toInside = true
-        }
-    }
-    If($toInside){
-        --transfer to the targets pos
-        $from.telePos = GetEntityPosition(entity = $obj1)
-        $from.teleMap = GetEntityMap(entity = $obj1)
-    }
-    Else{
-        ShowTip(entity = $from, tipType = 1, textKey = "house_lock")
-        $door = $house.door
-        $from.telePos = ComputeV3(p1 = GetEntityPosition(entity = $door), p2 = V3RotationYaw(vector = Table(x = 0, y = 0.5, z = 3), yaw = GetEntityYaw(entity = $door)), op = "add")
-        $from.teleMap = GetEntityMap(entity = $door)
-    }
-}
-
-TRY_CREATE_PARTY(debug = false){
-    If(ArrayFind(array = $obj1.privilege, value = "myplugin/create_party_privilege")){
-        $canCreate = true
-    }Else{
-        $canCreate = false
-        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 13, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
-    }
-}
-BUY_CREATE_PARTY_PRIVILEGE_RESULT(debug = false){
-    If($succeed){
-        TryCreateParty(player = $obj1)
-    }
-}
 --场景商店门面
 SHOW_SHOP_TITLE(debug = false){
     Return()
@@ -3489,32 +3321,6 @@ SHOW_SHOP_TITLE(debug = false){
         Show3DUI(player = $obj1, show = true, data = $data2)
     }
 }
-JOIN_PARTY_SUCCESS(debug = false){
-    $obj1.inPartyOwnerId = $targetUserId
-    GotoOtherServer(player = $obj1, targetUserId = $targetUserId)
-}
-UPDATE_CREATE_PARTY_VIEW_INFO(debug = false){
-    $curHouseCfg = $obj1.curHouseCfg
-    $maxPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "partyMaxPlayerNumber")
-    $partyImage = GetEntityCfg(fullName = $curHouseCfg, key = "partyImage")
-    $reachPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "reachGoodPartyPlayerNumber")
-    $lowerRate = GetEntityCfg(fullName = $curHouseCfg, key = "goodPartyPlayerNumberLowerRate")
-}
-CREATE_PARTY_SUCCESS(debug = false){
-    $obj1.inPartyOwnerId = GetPlayerUserID(player = $obj1)
-    GotoOtherServer(player = $obj1)
-}
-CLOSE_PARTY_SUCCESS(debug = false){
-    --get all player, send tip, resetgame
-    $name = GetEntityName(entity = $obj1)
-    $players = NewDictionary(GetAllPlayers())
-    ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
-        ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
-        $player.inPartyOwnerId = 0
-        GotoOtherServer(player = $player)
-    }
-}
-
 CREATE_CAR {
     $mapName = GetEntityName(entity = GetEntityMap(entity = $obj1))
     If($mapName ~= "map001")
@@ -3571,10 +3377,6 @@ CREATE_CAR {
 DEBARK {
 	Dismount(entity = $obj1)
 }
-
-PARTY_BE_LIKED(debug = false){}
-LIKE_PARTY(debug = false){}
-
 
 START_CAMERA_MODE
 {
@@ -3813,3 +3615,206 @@ LEAVE_MAP
         }
     }
 }
+--↓↓↓↓↓↓ party
+CHECK_LEAVE_PARTY_FROM_DOOR(debug = false){
+    If($obj1.inSelfParty == 1){
+        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.close", event = "CHECK_CLOSE_PARTY", tipType = 2)
+    }
+    Else{
+        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.exit", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
+    }
+}
+PLAYER_BE_INVITE(debug = false){
+    --party invite will call PLAYER_BE_INVITE_OTHER_SERVER
+    $userId = GetPlayerUserID(player = $obj1)
+    $inPartyOwnerId = $obj1.inPartyOwnerId
+    If($inPartyOwnerId ~= 0){
+        Return()--in party
+    }
+    $obj1.visitTarget = $obj2
+    $contentDict = NewDictionary($content)
+    --todo: can close by showTime
+    --showTime = DictionaryGet(dict = $contentDict, key = "showTime")
+    ShowNotice(
+		buttonType = 2,
+		content = $guiText or "gui_friend_invite_notice",
+		eventYes = "PLAYER_ON_VISIT",
+		entity = $obj1,
+		textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
+	)
+}
+PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
+    $userId = GetPlayerUserID(player = $obj1)
+    $inPartyOwnerId = $obj1.inPartyOwnerId
+    If($inPartyOwnerId ~= 0){
+        Return()--in party
+    }
+    $contentDict = NewDictionary($content)
+    $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
+    If($partyInfo){
+        $guiText = "gui_party_invite_notice"
+        $obj1.partyInfo = $partyInfo
+    }
+    $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
+    ShowNotice(
+        buttonType = 2,
+        content = $guiText or "gui_friend_invite_notice",
+        eventYes = "PLAYER_ON_VISIT_OTHER_SERVER",
+        entity = $obj1,
+        textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
+    )
+}
+PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
+    $targetUserId = $targetUserId or $obj1.visitTargetUserId
+    If($obj1.partyInfo){
+        $partyDict = NewDictionary($obj1.partyInfo)
+        $partyId = DictionaryGet(dict = $partyDict, key = "partyId")
+        TryJoinParty(targetUserId = $targetUserId, partyId = $partyId)
+    }
+    Else{
+        GotoOtherServer(targetUserId = $targetUserId, player = $obj1)
+    }
+}
+PLAYER_ON_VISIT(debug = false){--same server
+    If(not $target){
+        $target = $obj2 or $obj1.visitTarget
+    }
+    If(not $target){
+        Return()
+    }
+    CallTrigger(object = $target, event = "GET_VISIT_TELE_POS", from = $obj1, fromInParty = $fromInParty)
+    If($obj1.telePos and $obj1.teleMap){
+        SetEntityPosition(map = $obj1.teleMap, entity = $obj1, pos = $obj1.telePos)
+        $obj1.teleMap = nil
+        $obj1.telePos = nil
+    }
+}
+GET_VISIT_TELE_POS(debug = false){
+    $house = $obj1.house
+    $isLock =$house.isLock
+    $inHouse = ($house == GetMapVar(map = GetEntityMap(entity = $obj1), key = "owner"))
+    If($fromInParty or not $inHouse or not $isLock){
+        $toInside = true
+    }
+    Else{
+        $id1 = GetEntityTeam(entity = $obj1)
+        $id2 = GetEntityTeam(entity = $from)
+        If($id1 ~= 0 and $id1 == $id2){
+            $toInside = true
+        }
+    }
+    If($toInside){
+        --transfer to the targets pos
+        $from.telePos = GetEntityPosition(entity = $obj1)
+        $from.teleMap = GetEntityMap(entity = $obj1)
+    }
+    Else{
+        ShowTip(entity = $from, tipType = 1, textKey = "house_lock")
+        $door = $house.door
+        $from.telePos = ComputeV3(p1 = GetEntityPosition(entity = $door), p2 = V3RotationYaw(vector = Table(x = 0, y = 0.5, z = 3), yaw = GetEntityYaw(entity = $door)), op = "add")
+        $from.teleMap = GetEntityMap(entity = $door)
+    }
+}
+TRY_JOIN_PARTY(debug = false){
+    If($obj1.excludedPartyId == $partyId){
+        $canJoin = false
+    }
+}
+TRY_CREATE_PARTY(debug = false){
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/create_party_privilege")){
+        $canCreate = true
+    }Else{
+        $canCreate = false
+        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 13, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
+    }
+}
+BUY_CREATE_PARTY_PRIVILEGE_RESULT(debug = false){
+    If($succeed){
+        TryCreateParty(player = $obj1)
+    }
+}
+CHECK_LEAVE_PARTY(debug = false){
+    If($obj1.inSelfParty == 1){
+        CloseParty(player = $obj1)
+        Return()
+    }
+    If($obj1.inSelfParty == 0){
+        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+    }
+}
+ASK_SHOW_PARTY_LIST(debug = false){
+    If($result == false) {
+        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+        Return()
+    }
+    ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "CHECK_EXIT_PARTY", tipType = 2)
+}
+CHECK_CLOSE_PARTY(debug = false){
+    If($result == false) {Return()}
+    CloseParty(player = $obj1)
+}
+CHECK_EXIT_PARTY(debug = false){
+    If($result == false) {Return()}
+    LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+}
+LEAVE_PARTY_SUCCESS(debug = false){
+    $obj1.inPartyOwnerId = 0
+    GotoOtherServer(player = $player)
+}
+CHECK_IN_PARTY(debug = false){
+    $userId = GetPlayerUserID(player = $obj1)
+    $inPartyOwnerId = $obj1.inPartyOwnerId
+    If($inPartyOwnerId ~= 0){
+        UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
+        If($userId == $inPartyOwnerId){
+            $obj1.inSelfParty = 1
+            --My Party!!!!
+            --broadcast!!!!!
+        }
+        Else{
+            --In Party
+            $obj1.inSelfParty = 0
+            $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
+            If(not $partyOwner){
+                Return()
+            }
+            CallTrigger(fromInParty = true, target = $partyOwner, event = "PLAYER_ON_VISIT", object = $obj1)
+        }
+    }
+}
+INTERACTION_BANISH(debug = false){
+    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.be.banished", time =  20)
+    $owner = GetPlayerByUserId(userId = $obj1.inPartyOwnerId)
+    $obj1.excludedPartyId = $owner.inPartyId
+    LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+}
+CREATE_PARTY_SUCCESS(debug = false){
+    $obj1.inPartyOwnerId = GetPlayerUserID(player = $obj1)
+    $obj1.inPartyId = $partyId
+    GotoOtherServer(player = $obj1)
+}
+JOIN_PARTY_SUCCESS(debug = false){
+    $obj1.inPartyOwnerId = $targetUserId
+    GotoOtherServer(player = $obj1, targetUserId = $targetUserId)
+}
+UPDATE_CREATE_PARTY_VIEW_INFO(debug = false){
+    $curHouseCfg = $obj1.curHouseCfg
+    $maxPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "partyMaxPlayerNumber")
+    $partyImage = GetEntityCfg(fullName = $curHouseCfg, key = "partyImage")
+    $reachPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "reachGoodPartyPlayerNumber")
+    $lowerRate = GetEntityCfg(fullName = $curHouseCfg, key = "goodPartyPlayerNumberLowerRate")
+}
+CLOSE_PARTY_SUCCESS(debug = false){
+    --get all player, send tip, resetgame
+    $name = GetEntityName(entity = $obj1)
+    $obj1.inPartyId = 0
+    $players = NewDictionary(GetAllPlayers())
+    ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
+        ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
+        $player.inPartyOwnerId = 0
+        GotoOtherServer(player = $player)
+    }
+}
+PARTY_BE_LIKED(debug = false){}
+LIKE_PARTY(debug = false){}
+--↑↑↑↑↑↑ party
