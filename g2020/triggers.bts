@@ -53,6 +53,16 @@ GAME_INIT(debug = false)
         "set:jail_break.json image:jail_break_currency"
     ]
     CallTrigger(event = "WORKS_WALL_TIMER_START")
+
+    --涂鸦墙文字初始化
+    $U3Dcfg = GetWorldVar(key = "sceneUI")
+    Foreach(array = $U3Dcfg, key = "ucfg")
+    {
+        $dict = NewDictionary($ucfg)
+        $index = DictionaryGet(dict = $dict, key = "index")
+        @graffitiWallText = NewDictionary()
+        DictionarySet(dict = @graffitiWallText, key = $index, value = "")
+    }
 }
 
 
