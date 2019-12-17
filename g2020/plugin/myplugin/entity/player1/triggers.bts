@@ -1555,42 +1555,36 @@ FUNC_STATE_OPEN_GPS --params: rtVal
         Return()
     }
 
-    $map = GetEntityMap(entity = $obj1)
-    $mapName = GetEntityName(entity = $map)
-    $type = GetConfigValue(type = "region", fullName = Concat(p1 = "myplugin/region_state_", p2 = $rtVal), key = "siteType")
-
-    $house = GetObjectVar(obj = $obj1, key = "house")
     $gps = { x = 0, y = 0, z = 0 }
-    If($mapName == "map001")
+    $reg = Concat(p1 = "myplugin/region_state_", p2 = $rtVal)
+
+    $map = GetPlayerMap(player = $obj1)
+    $mapName = GetEntityName(entity = $map)
+    $belongMap = GetConfigValue(type = "region", fullName = $reg, key = "belongMap")
+    $siteType = GetConfigValue(type = "region", fullName = $reg, key = "siteType")
+
+    ---等待新的获取地图领主的方法
+    ---$owner = GetMapOwner(map = $map)
+    ---If($owner)
+    ---{
+    ---    $door = GetObjectVar(obj = $owner , key = "insideDoor")
+    ---    If($siteType == "selfHouse" && $obj1 == $owner) --some error here
+    ---    {
+    ---        ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
+    ---        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+    ---        Return()
+    ---    }
+    ---    Else
+    ---    {
+    ---        $gps = GetEntityPosition(entity = $door)
+    ---    }
+    ---}
+    If($mapName == "house_default_inside_map")  ----暂时用这个方法，等待新的获取地图领主的方法
     {
-        If($type == "publicArea")
-        {
-            $region = GetRegionByName(map = $map, name = $rtVal)
-            If(not $region)
-            {
-                Return()
-            }
-            $tmpReg = {
-                min = GetRegionMin(region = $region),
-                max = GetRegionMax(region = $region) + V3(1, 1, 1)
-            }
-            If(IfEntityInArea(entity = $obj1, region = $tmpReg))
-            {
-                ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
-                CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
-                Return()
-            }
-            $gps = GetRegionCfgVar(region = $region, key = "gps")
-        }
-        ElseIf($type == "selfHouse")
-        {
-            $gps = ComputeV3(p1 = GetEntityPosition(entity = $house), p2 = GetConfigVar(obj = $house, key = "doorPos"), op = "add")
-        }
-    }
-    ElseIf($mapName == "house_default_inside_map")
-    {
+        $house = GetObjectVar(obj = $obj1, key = "house")
         $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
         $gps = GetConfigVar(obj = $house, key = "insideDoorPos")
+
         If($map == $houseInsideMap && $type == "selfHouse")
         {
             ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
@@ -1598,12 +1592,212 @@ FUNC_STATE_OPEN_GPS --params: rtVal
             Return()
         }
     }
+    Else
+    {
+        If($belongMap == $mapName && $siteType == "selfHouse")
+        {
+            $house = GetObjectVar(obj = $obj1, key = "house")
+            $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+            $gps = GetConfigVar(obj = $house, key = "insideDoorPos")
+        }
+        ElseIf($belongMap == $mapName && $siteType == "map")
+        {
+            $region = GetRegionByName(map = $map, name = $rtVal)
+            If($region)
+            {
+                $min = GetRegionMin(region = $region)
+                $max = GetRegionMax(region = $region)
+                $tmpReg = {
+                    min = $min,
+                    max = $max + V3(1, 1, 1)
+                }
+                If(IfEntityInArea(entity = $obj1, region = $tmpReg))
+                {
+                    ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
+                    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+                    Return()
+                }
+                $center = GetRegionCenter(region = $region)
+                $gps = V3(GetPosX(pos = $center), GetPosY(pos = $min), GetPosZ(pos = $center))
+            }
+            Else
+            {
+                ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
+                CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+                Return()
+            }
+        }
+        ElseIf($belongMap ~= $mapName)
+        {
+            $road = []
+            $maps = []
+            $roadIdx = 1
+
+            $ngt = GetObjectVar(obj = $obj1, key = "navigationDict")
+            If(not $ngt)
+            {
+                CallTrigger(
+                    object = $obj1,
+                    destination = $rtVal,
+                    event = "FUNC_CREATE_NEW_GPS",
+                    mapStart = $mapName,
+                    mapEnd = $belongMap
+                )
+                Return()
+            }
+            Else
+            {
+                $roadIdx = DictionaryGet(dict = $ngt, key = "roadIdx") + 1
+                $maps = DictionaryGet(dict = $ngt, key = "maps")
+                $road = DictionaryGet(dict = $ngt, key = "road")
+
+                $correctMap = ArrayGet(
+                    array = @allMaps,
+                    index = ArrayGet(
+                        array = $maps,
+                        index = $roadIdx
+                    )
+                )
+                If($correctMap ~= $mapName)
+                {
+                    CallTrigger(
+                        object = $obj1,
+                        destination = $rtVal,
+                        event = "FUNC_CREATE_NEW_GPS",
+                        mapStart = $mapName,
+                        mapEnd = $belongMap
+                    )
+                    Return()
+                }
+
+                $gps = GetConfigValue(
+                    type = "entity",
+                    key = "pos",
+                    fullName = ArrayGet(array = $road, index = $roadIdx)
+                )
+            }
+        }
+    }
 
     CallTrigger(
         object = $obj1,
         event = "FUNC_OPEN_GPS",
         destination = $rtVal,
-        pos = $gps
+        gps = $gps,
+        navigationDict = NewDictionary({
+            road = $road,
+            roadIdx = $roadIdx,
+            maps = $maps
+        })
+    )
+}
+
+FUNC_CREATE_NEW_GPS --params: mapStart, mapEnd, destination
+{
+    $road = []
+    $maps = []
+    $roadIdx = 1
+
+    $mapAToBKey = Concat(p1 = $mapStart, p2 = "To", p3 = $mapEnd)
+    $dwKey = Concat(p1 = $mapAToBKey, p2 = "DWs") --doorwayKey
+    $maps = GetGlobalVar(key = $mapAToBKey) --maps
+    $road = GetGlobalVar(key = $dwKey) --doorways
+    If(not $road || not $maps)
+    {
+        ShowTip(entity = $obj1, tipType = 3, textKey = "unable_to_navigate", textP1 = $mapEnd)
+        Return()
+    }
+    $mapSize = ArraySize(array = $maps)
+    $matrix = GetGlobalVar(key = "mapMatrixNeedDijkstra")
+    ForLoop(from = 1, to = $mapSize, key = "index")
+    {
+        $row = ArrayGet(array = $matrix, index = ArrayGet(array = $maps, index = $index))
+        ForLoop(from = $index + 1, to = $mapSize, key = "idx")
+        {
+            If(ArrayGet(array = $row, index = $idx)) --从地图A到地图B存在多个门，那么即存在最短路的问题
+            { 
+                --构建玩家在mapStart到mapEnd途径所有门的邻接矩阵
+                $mapS2mapEDWsMatrix = "mapS2mapEDWsMatrix"
+                CallTrigger(
+                    object = $obj1,
+                    allDWs = $road,
+                    saveName = $mapS2mapEDWsMatrix,
+                    event = "FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX"
+                )
+
+                --利用上面的邻接矩阵进行最短路的查找操作
+                $mapS2mapEDWs1Tother = Concat(p1 = $mapS2mapEDWsMatrix, p2 = "1Tother")
+                CallTrigger(
+                    object = $obj1,
+                    startIdx = 1,
+                    matrix = GetObjectVar(obj = $obj1, key = $mapS2mapEDWsMatrix),
+                    saveName = $mapS2mapEDWs1Tother,
+                    event = "FUNC_NAVIGATION_DIJKSTRA"
+                )
+
+                --利用上面的得到数据，再去找倒数第二张地图到最后一张地图需要经过的门，在这些门里找到dis最小的索引
+                $secLastMap = ArrayGet(
+                    array = @allMaps,
+                    index = ArrayGet(array = $maps, index = $mapSize - 1)
+                )
+                $lastMap = ArrayGet(
+                    array = @allMaps,
+                    index = ArrayGet(array = $maps, index = $mapSize)
+                )
+                $mapEntry = NewDictionary(GetMapConfig(name = $secLastMap, key = "mapEntry"))
+                $entries = DictionaryGet(dict = $mapEntry, key = $lastMap)
+                $min = @mathHuge
+                $index = 0
+                $disArr = GetObjectVar(obj = $obj1, key = Concat(p1 = $mapS2mapEDWs1Tother, p2 = "Dis"))
+                ForLoop(from = 1, to = ArraySize(array = $entries or []), key = "idx")
+                {
+                    $entryIdx = ArrayFind(
+                        value = ArrayGet(array = $entries, index = $idx),
+                        array = GetObjectVar(obj = $obj1, key = Concat(p1 = $mapS2mapEDWsMatrix, p2 = "ColVec"))
+                    )
+                    $curDis = ArrayGet(array = $disArr, index = $entryIdx)
+                    If($curDis < $min)
+                    {
+                        $min = $curDis
+                        $index = $entryIdx
+                    }
+                }
+
+                --经过上面的操作后得到了到达最终地图的最短路径的最后一个索引
+                $mapS2mapEDWsFinalPath = "mapS2mapEDWsFinalPath"
+                CallTrigger(
+                    object = $obj1,
+                    endIdx = $index,
+                    saveName = $mapS2mapEDWsFinalPath,
+                    event = "FUNC_NAVIGATION_GET_PATH",
+                    allPath = GetObjectVar(obj = $obj1, key = $mapS2mapEDWs1Tother)
+                )
+                $road = GetObjectVar(obj = $obj1, key = $mapS2mapEDWsFinalPath)
+
+                SetObjectVar(obj = $obj1, value = nil, key = $mapS2mapEDWsFinalPath)
+                SetObjectVar(obj = $obj1, value = nil, key = Concat(p1 = $mapS2mapEDWsMatrix, p2 = "ColVec"))
+                SetObjectVar(obj = $obj1, value = nil, key = Concat(p1 = $mapS2mapEDWs1Tother, p2 = "Dis"))
+                SetObjectVar(obj = $obj1, value = nil, key = $mapS2mapEDWs1Tother)
+                SetObjectVar(obj = $obj1, value = nil, key = $mapS2mapEDWsMatrix)
+                Break()
+            }
+        }
+    }
+    
+    CallTrigger(
+        object = $obj1,
+        event = "FUNC_OPEN_GPS",
+        destination = $destination,
+        gps = GetConfigValue(
+            type = "entity",
+            key = "pos",
+            fullName = ArrayGet(array = $road, index = $roadIdx)
+        ),
+        navigationDict = NewDictionary({
+            road = $road,
+            roadIdx = $roadIdx,
+            maps = $maps
+        })
     )
 }
 
