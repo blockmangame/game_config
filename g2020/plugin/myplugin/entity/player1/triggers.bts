@@ -1154,7 +1154,7 @@ SET_REGION_COLOR{
     Foreach(array = $childRegionArr, key = "cRegion"){
         CallTrigger(object = $house, event = "CHANGE_HOUSE_REGION_COLOR", map = $insideMap, region = $cRegion, destBlock = $destBlock)
     }
-    ReplaceBlockInRegions(map = $insideMap, regions = $childRegionArr, replaceTb = GetBlockConfigByName(block = $colorBlock, key = "destBlockMatrix"), filter = {blockType = "typeB"})
+    CallTrigger(object = $house, event = "CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION", map = $insideMap, childRegionArr = $childRegionArr, destBlock = $destBlock)
 
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){

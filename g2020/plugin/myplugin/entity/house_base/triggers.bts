@@ -76,7 +76,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
                     Foreach(array = $childRegionArr, key = "cRegion"){
                         CallTrigger(object = $obj1, event = "CHANGE_HOUSE_REGION_COLOR", map = $map, region = $cRegion, destBlock = $destBlock)
                     }
-                    ReplaceBlockInRegions(map = $map, regions = $childRegionArr, replaceTb = GetBlockConfigByName(block = $destBlock, key = "destBlockMatrix"), filter = {blockType = "typeB"})
+                    CallTrigger(object = $obj1, event = "CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION", map = $map, childRegionArr = $childRegionArr, destBlock = $destBlock)
                 }
                 Break()
             }
@@ -88,7 +88,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
                 Foreach(array = $childRegionArr, key = "cRegion"){
                     CallTrigger(object = $obj1, event = "CHANGE_HOUSE_REGION_COLOR", map = $map, region = $cRegion, destBlock = $destBlock)
                 }
-                ReplaceBlockInRegions(map = $map, regions = $childRegionArr, replaceTb = GetBlockConfigByName(block = $destBlock, key = "destBlockMatrix"), filter = {blockType = "typeB"})
+                CallTrigger(object = $obj1, event = "CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION", map = $map, childRegionArr = $childRegionArr, destBlock = $destBlock)
             }
         }
     }
@@ -137,6 +137,87 @@ CHANGE_HOUSE_REGION_COLOR{
         Else{
             ReplaceBlockInRegion(map = $map, region = $region, replaceTb = [{key = "fullName", value = $block, destBlock = $destBlock}])
         }
+    }
+}
+
+CREATE_HOUSE_REGION_DEST_BLOCK{
+    $filterDict = NewDictionary($filter or {})
+    ForeachDictionary(dict = $filterDict, keyName = "i", valueName = "v"){
+        If(GetBlockConfigByName(block = $sourceBlockCfg, key = $i) ~= $v){
+            Return()
+        }
+    }
+    RemoveBlock(map = $map, block = $pos)
+    CreateBlock(map = $map, pos = $pos, block = $destBlockCfg)
+}
+
+CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION{
+    --ReplaceBlockInRegions(map = $map, regions = $childRegionArr, replaceTb = GetBlockConfigByName(block = $destBlock, key = "destBlockMatrix"), filter = {blockType = "typeB"})
+    --Return()
+    $regions = $childRegionArr
+    $replaceTb = GetBlockConfigByName(block = $destBlock, key = "destBlockMatrix") or {}
+    $filter = GetBlockConfigByName(block = $destBlock, key = "filter") or {}
+    If(ArraySize(array = $replaceTb) == 0){
+        Return()
+    }
+    $lastRegion = nil
+    $matrixWidth = ArraySize(array = ArrayGet(array = $replaceTb, index = 1))
+    $matrixHeight = ArraySize(array = $replaceTb)
+    $widthCount = 0
+    $heightCount = 0
+    Foreach(array = $regions, key = "region"){
+        $min = GetRegionMin(region = $region)
+        $minX = GetPosX(pos = $min)
+        $minY = GetPosY(pos = $min)
+        $minZ = GetPosZ(pos = $min)
+        $max = GetRegionMax(region = $region)
+        $maxX = GetPosX(pos = $max)
+        $maxY = GetPosY(pos = $max)
+        $maxZ = GetPosZ(pos = $max)
+        If($maxY == $minY){
+            If($lastRegion and $minX == GetPosX(pos = GetRegionMin(region = $lastRegion))){
+                $heightCount = (GetPosZ(pos = GetRegionMax(region = $lastRegion)) - GetPosZ(pos = GetRegionMin(region = $lastRegion)))%$matrixHeight
+            }ElseIf($lastRegion and $minZ == GetPosZ(pos = GetRegionMin(region = $lastRegion))){
+                $widthCount = (GetPosX(pos = GetRegionMax(region = $lastRegion)) - GetPosX(pos = GetRegionMin(region = $lastRegion)))%$matrixWidth
+            }
+            ForLoop(from = $minX, to = $maxX, key = "i"){
+                ForLoop(from = $minZ, to = $maxZ, key = "j"){
+                    $destBlockCfg = ArrayGet(array = ArrayGet(array = $replaceTb, index = ($j - $minZ + $heightCount) % $matrixHeight + 1), index = ($i - $minX + $widthCount) % $matrixWidth + 1)
+                    $pos = {x = $i, y = $minY, z = $j}
+                    CallTrigger(object = $obj1, event = "CREATE_HOUSE_REGION_DEST_BLOCK", map = $map, filter = $filter, pos = $pos, 
+                        sourceBlockCfg = GetBlockFullName(map = $map, pos = $pos), destBlockCfg = $destBlockCfg)
+                }
+            }
+        }Else{
+            $isRotateXZ = false
+            $directionX = $maxX - $minX ~= 0
+            $directionZ = $maxZ - $minZ ~= 0
+            $tempMax = {x = $maxX, y = $minY, z = $maxZ}
+            If($lastRegion){
+                $lx = GetPosX(pos = GetRegionMax(region = $lastRegion)) - GetPosX(pos = GetRegionMin(region = $lastRegion))
+                $lz = GetPosZ(pos = GetRegionMax(region = $lastRegion)) - GetPosZ(pos = GetRegionMin(region = $lastRegion))
+                $widthCount = (0 < $lx and $lx * $matrixWidth) or (0 < $lz and $lz * $matrixWidth) or 0
+                If(GetPosDistance(pos1 = GetRegionMin(region = $lastRegion), pos2 = $min) > GetPosDistance(pos1 = GetRegionMin(region = $lastRegion), pos2 = $tempMax)){
+                    $isRotateXZ = true
+                }
+            }
+            ForLoop(from = $minX, to = $maxX, key = "i"){
+                ForLoop(from = $minY, to = $maxY, key = "j"){
+                    ForLoop(from = $minZ, to = $maxZ, key = "k"){
+                        $pos = {
+                            x = $directionX and ($isRotateXZ and ($minX - $i + $maxX)) or $i,
+                            y = $j,
+                            z = $directionZ and ($isRotateXZ and ($minZ - $k + $maxZ)) or $k
+                        }
+                        $destBlockCfg = ArrayGet(array = ArrayGet(array = $replaceTb, index = ($j - $minY + $heightCount) % $matrixHeight + 1), 
+                            index = (($directionX and ($i - $minX) or ($k - $minZ)) + $widthCount) % $matrixWidth + 1)
+                        CallTrigger(object = $obj1, event = "CREATE_HOUSE_REGION_DEST_BLOCK", map = $map, filter = $filter, pos = $pos, 
+                            sourceBlockCfg = GetBlockFullName(map = $map, pos = $pos), destBlockCfg = $destBlockCfg)
+                    }
+                }   
+            }
+        }
+        $lastRegion = $region
     }
 }
 
