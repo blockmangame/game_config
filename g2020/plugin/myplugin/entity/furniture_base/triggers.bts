@@ -11,7 +11,6 @@ ENTITY_CLICK{
         Return()
     }
     Test("ENTITY_CLICK-----------------------------------------", GetObjectID(object = $obj1) , GetObjectID(object = $obj2))
-    UpdateObjectInteractionUI(player = $obj2, target = $obj1, show = false)
     If(GetObjectVar(obj = $obj2, key = "curInteractionUiObjId")){
         UpdateEntityEditContainer(player = $obj2, entityId = GetObjectVar(obj = $obj2, key = "curInteractionUiObjId"), show = false)
         SetObjectVar(obj = $obj2, key = "curInteractionUiObjId", value = nil)

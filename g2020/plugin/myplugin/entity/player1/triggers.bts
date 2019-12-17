@@ -732,7 +732,6 @@ SHOW_TITLE_BAR{
     If($obj1.inPartyOwnerId ~= 0){
         Return()--in party
     }
-    UpdateObjectInteractionUI(player = $obj1, target = $obj1, show = true)
     $editBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/edit_house_buff")
     If($editBuff){
         RemoveEntityBuff(entity = $obj1, buff = $editBuff)
