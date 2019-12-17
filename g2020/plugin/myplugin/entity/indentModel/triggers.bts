@@ -39,40 +39,30 @@ GET_TASK_KEY(debug = false) --随机任务key
         failedMsg = $failedMsg
     }
     DictionarySet(dict = @taskMap, key = GetObjectID(object = $obj2), value = $taskMap)
-    $harray = [
-        "interactionUI",
-        "interactionUI_1"
-    ]
-    $headIndex = ArrayGet(array = $harray, index = $index)
-    --UpdateObjectInteractionUI(cfgKey = $headIndex, player = $obj2, target = $obj1, show = true)
 }
-CHANG_ACTOR(){
-    $changActor = GetConfigVar(obj = $obj1, key = $actorName) --changActor
-    SelfChangEntityActor(entity = $obj1, name =  $changActor, player = $obj2)
+CHANG_ACTOR(){ --变模型
+    If($obj1 and $obj2){
+        If($actorName == "actorName"){
+            $obj2.punishmentCD = false
+        }
+        $changActor = GetConfigVar(obj = $obj1, key = $actorName) --changActor
+        SelfChangEntityActor(entity = $obj1, name =  $changActor, player = $obj2)
+    }
 }
 GET_TASK(debug = false)
 {
-    $today = GetYearDayStr(GetTime())
-    If($today ~= $obj2.workday){
-        $obj2.worktaskCount = $today
-        $obj2.fuckCount = 0
-        CallTrigger(object = $obj1, event = "CHANG_ACTOR", actorName = "actorName", obj2 = $obj2)
+    If($obj2.taskKey){ --有任务接不到
+        ShowTip(textKey = "有任务在身，接不了", tipType = 2, entity = $obj2, keepTime = 60)
+        Return()
     }
-    If(@workmaxCount <= ($obj2.fuckCount or 0) or $obj1.maxActor){
+    If(@workmaxCount <= ($obj2.maxtaskCount or 0)){ --最大数量换模型。接不到任务
         --提示。
-        --换模型
-        ShowTip(textKey = "sorry.please.go.tomorrow", tipType = 2, entity = $obj2, keepTime = 60)
-        $obj2.actorCD = true
+        ShowTip(textKey = "超过最大限度，明天在来", tipType = 2, entity = $obj2, keepTime = 60)
         Return()
     }
-    If($obj2.stakCD){ --玩家任务CD中
+    If($obj2.punishmentCD){  --放弃任务的惩戒CD
+        ShowTip(textKey = "放弃任务，正在惩罚", tipType = 2, entity = $obj2, keepTime = 60)
         Return()
-    }
-    If($obj2.taskKey){
-       --放弃任务
-       $obj2.lastNpc = $obj2.taskNpc
-       $obj2.worktaskCount = $obj2.worktaskCount - 1
-       CancelTask(player = $obj2, name = $obj2.taskKey)
     }
     $taskMap = DictionaryGet(dict = @taskMap, key = GetObjectID(object = $obj2))
     If(not $taskMap){
@@ -95,15 +85,14 @@ GET_TASK(debug = false)
     $obj1.failedMsg = DictionaryGet(dict = $dictTaskMap, key = "failedMsg")
     --接受任务，开始任务。
     StartTask(player = $obj2 ,fullName = $obj2.taskKey)
+    --得到任务道具，手持
     AddItem(entity = $obj2, cfg = "myplugin/taskItem", count = 1)
-    --TO DO 得到任务道具
+    $item = SearchBagItem(entity = $obj2, key = "newTaskitem", val = true)
+    SetEntityHandItem(entity = $obj2, item = $item)
     --给模型加隐身buff，并定时CD，一定的时间不能点，
     HideObjectInteractionUI(player = $obj2, target = $obj1)
-    MarkEntityForPlayer(player = $obj2, entity = $obj1, buffName = "myplugin/transparent_buff")
-    StartTimer(rep = false, time = 20*4, object = $obj1, event = "TASK_REFRESH", obj2 = $obj2)
-    --给对应NPC加动作或者Buff
-    CallTrigger(event = "TASK_NPC_ADD_BUFF", object = $obj2, from = "adddddaaad stask")
-    $obj2.stakCD = true
+    --MarkEntityForPlayer(player = $obj2, entity = $obj1, buffName = "myplugin/transparent_buff")
+    --StartTimer(rep = false, time = @intervalTime, object = $obj1, event = "TASK_REFRESH", obj2 = $obj2)
     $obj2.worktaskCount = $obj2.worktaskCount + 1
     If($obj1.worktaskCount > 40){
         $obj1.worktaskCount = 1

@@ -3017,7 +3017,7 @@ HTTP_PURCHASED_DRESS_CALL_BACK
 }
 
 --打工
-GET_TASK_UI_DATA(){ --更新UI数据。
+GET_TASK_UI_DATA(){ --更新打工UI数据。
     $count = $obj1.worktaskCount % 10
     If($count == 0 && $obj1.worktaskCount >0){
         $count = 10 
@@ -3031,13 +3031,13 @@ GET_TASK_UI_DATA(){ --更新UI数据。
     $str = "/"
     If($obj1.taskKey){
         If($textCount == 1){
-            $str = "/st"
+            $str = "st/"
         }ElseIf($textCount == 2){
-            $str = "/nd"
+            $str = "nd/"
         }ElseIf($textCount == 3){
-            $str = "/rd"
+            $str = "rd/"
         }Else{
-            $str = "/th"
+            $str = "th/"
         }
     }
     $text = Concat(p1 = $textCount, p2 = $str, p3 = "40")
@@ -3080,9 +3080,77 @@ GET_TASK_GPS(debug = false) --得到打工的GPS位置
         $obj1.gpsPos = $obj1.taskPos or  {x = 89, y = 18, z = 195}
     }
 }
+TASK_NPC_ADD_BUFF(debug = false) --给任务npc还动作加buff
+{
+    $map = GetPlayerMap(player = $obj1)
+    $mapNpc = GetMapNpc(map = $map)
+    Foreach(array = $mapNpc, key = "npc"){
+        $name = GetConfigVar(obj = $npc, key = "fullName")
+        If($name == $obj1.lastNpc){
+            PlayAction(entity = $npc, target = $obj1, actionName = "idle", actionTime = -1)
+            --UnMarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
+        }
+        If($name == $obj1.taskNpc){
+            PlayAction(entity = $npc, target = $obj1, actionName = "idle_1", actionTime = -1)
+            --MarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
+        }
+    }
+}
+TASK_UPDATE_DATA(){ --更新数据
+    CallTrigger(event = "TASK_NPC_ADD_BUFF", object = $obj1)
+	CallTrigger(event = "GET_TASK_GPS", object = $obj1)
+    CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
+}
+PUNISH_END(){--惩罚结束
+    If($obj1 and $obj2){
+        $obj1.punishmentCD = false
+        --ShowEntityHeadCountDown(show = false, entity = $obj2, player = $obj1)
+        CallTrigger(object = $obj2, event = "CHANG_ACTOR", actorName = "actorName", obj2 = $obj1)
+    }
+}
+PLAYER_DELETE_ITEM(){ --放弃任务
+    If($fullName == "myplugin/taskItem" and $obj1.taskKey){
+        Test(" --canseltask：",$fullName, $obj1.taskKey)
+        $obj1.punishmentCD = true
+        If(@INDENT_MODEL){
+            --ShowEntityHeadCountDown(show = true, entity = @INDENT_MODEL, player = $obj1, time = @punishmentTime)
+            CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "punishmentActor", obj2 = $obj1)
+            StartTimer(object = $obj1, event = "PUNISH_END", obj2 = @INDENT_MODEL, time = @punishmentTime * 20)
+            --倒计时
+            --换模型
+        }
+        $taskItem = SearchBagItem(entity = $obj1, key = "newTaskitem", val = true)
+        If($taskItem){
+            ConsumeItem(item = $taskItem, num = 1)
+        }
+        CancelTask(player = $obj1, name = $obj1.taskKey)
+        $obj1.lastNpc = $obj1.taskNpc
+        $obj1.taskNpc = nil
+        $obj1.taskKey = nil
+        $obj1.taskPos = nil
+        $obj1.npcMap = nil
+        $obj1.taskIndex = nil
+        $obj1.worktaskCount = $obj1.worktaskCount - 1
+        CallTrigger(event = "GET_TASK_GPS", object = $obj1, showGps = false)
+        StartTimer(time = 1, event = "TASK_NPC_ADD_BUFF", object = $obj1)
+        CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1, closeGps = true)
+    }
+}
+MAC_TASK_COUNT_RESET(){--第二天，刷新最大累计
+    If($obj1 and IsValidObject(object = $obj1)){
+        $obj1.maxtaskCount = 0
+        If(@INDENT_MODEL and IsValidObject(object = @INDENT_MODEL)){
+            -- 换模型
+            CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "actorName", obj2 = $obj1)
+        }
+    }
+}
 INIT_WORK_TASK(){ --初始打工
-    $today = GetYearDayStr(GetTime())
+    $today = GetYearDayStr(time = GetTime())
+    $dayEnd = GetDayEndTime(time = GetTime()) - GetTime()
+    StartTimer(event = "MAC_TASK_COUNT_RESET", object = $obj1, rep = false, time = $dayEnd * 20)
     $obj1.workday = $today
+    $obj1.maxtaskCount = 0
     $index =  $obj1.taskIndex
     If($index && $index > 0){
         $taskDict = ArrayGet(array = @TASK_TABLE, index = $index)
@@ -3093,8 +3161,6 @@ INIT_WORK_TASK(){ --初始打工
         $obj1.succeedMsg = DictionaryGet(dict = $taskDict, key = "succeedMsg")
         $obj1.failedMsg = DictionaryGet(dict = $taskDict, key = "failedMsg")
     }
-    CallTrigger(event = "GET_TASK_GPS", object = $obj1)
-    CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
     StartTimer(rep = false, time = 20, object = $obj1, event = "TASK_UPDATE_DATA")
 }
 FINISH_TASK(debug = false){ --完成打工的对话
@@ -3116,17 +3182,16 @@ FINISH_TASK(debug = false){ --完成打工的对话
             }
         ]
     )
+    $obj1.nowSubmitTask = true
     $obj1.finishworkTime =  StartTimer(object = $obj1, event = "FINISH_AWARD", time = 40)
 }
-TEST_SHOW_ITEM(){
-    $data1 = GetWorldVar(key = "titilePos1")
-    $data2 = GetWorldVar(key = "titilePos2")
-    Show3DUI(player = $obj1, show = true, data = $data1)
-    Show3DUI(player = $obj1, show = true, data = $data2)
-}
 FINISH_AWARD(){ --完成打工的奖励
-    $obj1.fuckCount = ($obj1.fuckCount or 0 ) + 1
-    If($obj1.fuckCount >= @workmaxCount && not $obj1.maxActor){
+    If(not $obj1.nowSubmitTask){
+        Return()
+    }
+    $obj1.nowSubmitTask = false
+    $obj1.maxtaskCount = ($obj1.maxtaskCount or 0 ) + 1
+    If($obj1.maxtaskCount >= @workmaxCount && not $obj1.maxActor and @INDENT_MODEL){ --最大累计数，改变模型
         $obj1.maxActor = true
         CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "maxCountActor", obj2 = $obj1)
     }
@@ -3138,19 +3203,21 @@ FINISH_AWARD(){ --完成打工的奖励
         $money = DictionaryGet(dict = $rewDict, key = "money")
         $recfg = DictionaryGet(dict = $rewDict, key = "item")
     }
-    If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege")){
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege")){ --svip
         $money = DictionaryGet(dict = $rewDict, key = "mvpmoney")
     }
     If($recfg){
         AddItem(entity = $obj1, cfg = $recfg, count = 1)
-        ShowRewardItemEffect(fullName = $recfg, player = $obj1)
+        ShowRewardItemEffect(fullName = $recfg, player = $obj1) -- todo 改变弹窗
     }
     If($money){
         AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
         ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
     }
-    $taskItem = SearchBagItem(entity = $obj1, key = "fullName", val = "myplugin/taskItem")
-    ConsumeItem(item = $taskItem, num = 1)
+    $taskItem = SearchBagItem(entity = $obj1, key = "newTaskitem", val = true)
+    If($taskItem){
+        ConsumeItem(item = $taskItem, num = 1)
+    }
     $proessLeve = NumberFloor(p1 = $obj1.worktaskCount / 10)
     $proessCount = $obj1.worktaskCount % 10
     $obj1.lastNpc = $obj1.taskNpc
@@ -3161,38 +3228,21 @@ FINISH_AWARD(){ --完成打工的奖励
     $obj1.taskIndex = nil
     $animation = true
     CallTrigger(event = "GET_TASK_GPS", object = $obj1, showGps = false)
-    StartTimer(time = 1, event = "TASK_NPC_ADD_BUFF", object = $obj1, from = "task_____ffffffff")
+    StartTimer(time = 1, event = "TASK_NPC_ADD_BUFF", object = $obj1)
     CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1, closeGps = true, animation = $animation)
 }
-TEST_ADD(){
-    AddItem(entity = $obj1, cfg = $recfg, count = 1)
-}
-TASK_NPC_ADD_BUFF(debug = false)
-{
-    $map = GetPlayerMap(player = $obj1)
-    $mapNpc = GetMapNpc(map = $map)
-    Foreach(array = $mapNpc, key = "npc"){
-        $name = GetConfigVar(obj = $npc, key = "fullName")
-        If($name == $obj1.lastNpc){
-            PlayAction(entity = $npc, target = $obj1, actionName = "idle", actionTime = -1)
-            --UnMarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
-        }
-        If($name == $obj1.taskNpc){
-            PlayAction(entity = $npc, target = $obj1, actionName = "idle_1", actionTime = -1)
-            --MarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
-        }
-    }
-}
-TASK_UPDATE_DATA(){
-    CallTrigger(event = "TASK_NPC_ADD_BUFF", object = $obj1, from = "MMMMMMMaaaaaapppp")
-	CallTrigger(event = "GET_TASK_GPS", object = $obj1)
-    CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
+--场景商店的牌子
+SHOW_SHOP_TITLE(){
+    $data1 = GetWorldVar(key = "titilePos1")
+    $data2 = GetWorldVar(key = "titilePos2")
+    Show3DUI(player = $obj1, show = true, data = $data1)
+    Show3DUI(player = $obj1, show = true, data = $data2)
 }
 --公共区域购买，场景商店的购买逻辑
 SURE_BUY(debug = false){
    If($button == "left"){
       Return()
-   }
+   }    
    $obj2 = GetObject(objID = $objID)
    If($checkId ~= $obj1.buySessionSS or not $obj2 or not IsValidObject(object = $obj2))
    {
@@ -3225,6 +3275,7 @@ SURE_FURNITURE_BUY(debug = false){
    $enoughMoney = CheckBalance(entity = $obj1, coinName = $coinName, price = $price)
    If($enoughMoney){ --够钱
          $checkBag = AddItem(entity = $obj1, cfg = $sellItem, count = 1)
+         Test("--------------",$sellItem)
          If($checkBag ~= false){
             PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
             If(not $isTeam and $owner){ --不是一个家庭给领主加钱
