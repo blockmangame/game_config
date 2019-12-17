@@ -3616,3 +3616,120 @@ CASH_BOX_BUTTON_SURE
         ShowTip(entity = $owner, tipType = 2, textKey = "gui_cashbox_get_money", textP1 = GetEntityName(entity = $obj1), textP2 = $money, time = 40)
     }
 }
+
+SHOW_EDIT_INPUT_DIALOG
+{
+     $title = {
+        name = "ui_edit_title_name"
+    }
+
+    $inputTitle = {
+        name = "ui_edit_input_name"
+    }
+
+    $buttons = [
+        {
+            event = "cancel",
+            normalImage = "set:tip_dialog.json image:btn_big_blue",
+            pushedImage = "set:tip_dialog.json image:btn_big_blue",
+            name = "ui_cancel"
+        },
+        {
+            event = "EDIT_BUTTON_SURE",
+            normalImage = "set:tip_dialog.json image:btn_big_green",
+            pushedImage = "set:tip_dialog.json image:btn_big_green",
+            name = "ui_sure"
+        }
+    ]
+
+    $options = {
+        index = $index
+    }
+
+    $contents = {
+        title = $title,
+        inputTitle = $inputTitle,
+        buttons = $buttons,
+        text = $name,
+        textLength = 100,
+    }
+
+    ShowInputDialog(entity = $obj1, contents = $contents, options = $options)
+}
+
+EDIT_BUTTON_SURE
+{
+    $name = FilterWord(msg = $name)
+    If(not $name)
+    {
+        Return()
+    }
+
+    If($index ~= 0)
+    {
+        $U3Dcfg = GetWorldVar(key = "sceneUI")
+        Foreach(array = $U3Dcfg, key = "ucfg")
+        {
+            $dict = NewDictionary($ucfg)
+            $w_index = DictionaryGet(dict = $dict, key = "index")
+            If($index == $w_index)
+            {
+                DictionarySet(dict = @graffitiWallText, key = $w_index, value = $name)
+
+                $data = {
+                    name = DictionaryGet(dict = $dict, key = "name"),
+                    width = DictionaryGet(dict = $dict, key = "width"),
+                    height = DictionaryGet(dict = $dict, key = "height"),
+                    rotate = DictionaryGet(dict = $dict, key = "rotate"),
+                    position = DictionaryGet(dict = $dict, key = "position"),
+                    args = $name,
+                }
+
+                $map = GetEntityMap(entity = $obj1)
+                $players = GetMapPlayer(map = $map)
+                Foreach(array = $players, key = "player")
+                {
+                    Show3DUI(player = $player, show = true, data = $data)
+                }
+            }
+        }
+    }
+}
+
+ENTER_MAP
+{
+    If(GetEntityMapName(entity = $obj1) == "map001") 
+    {
+        $U3Dcfg = GetWorldVar(key = "sceneUI")      -- u3d ui
+        Foreach(array = $U3Dcfg, key = "ucfg")
+        {
+
+            $dict = NewDictionary($ucfg)
+            $index = DictionaryGet(dict = $dict, key = "index")
+
+             $data = {
+                name = DictionaryGet(dict = $dict, key = "name"),
+                width = DictionaryGet(dict = $dict, key = "width"),
+                height = DictionaryGet(dict = $dict, key = "height"),
+                rotate = DictionaryGet(dict = $dict, key = "rotate"),
+                position = DictionaryGet(dict = $dict, key = "position"),
+                args = DictionaryGet(dict = @graffitiWallText, key = $index),
+            }
+
+            Show3DUI(player = $obj1, show = true, data = $data)
+        }
+    }
+}
+
+LEAVE_MAP
+{
+    If(GetEntityMapName(entity = $obj1) == "map001") 
+    {
+        $U3Dcfg = GetWorldVar(key = "sceneUI")      -- u3d ui
+
+        Foreach(array = $U3Dcfg, key = "ucfg")
+        {
+            Show3DUI(player = $obj1, show = false, data = $ucfg)
+        }
+    }
+}

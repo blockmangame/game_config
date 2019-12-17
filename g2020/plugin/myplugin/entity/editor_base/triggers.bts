@@ -1,0 +1,5 @@
+SHOW_EDIT_UI
+{
+    $index = GetConfigVar(obj = $obj1, key = "index") or 0
+    CallTrigger(object = $obj2, event = "SHOW_EDIT_INPUT_DIALOG", index = $index)
+}
