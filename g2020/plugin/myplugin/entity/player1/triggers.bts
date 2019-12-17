@@ -538,7 +538,7 @@ SURE_BUY_HOUSE{
     $buyMoney = GetEntityCfg(fullName = $houseCfg, key = "buyMoney") or 0
     $coinId = GetEntityCfg(fullName = $houseCfg, key = "coinId")
     If(3 ~= $coinId){
-        BuyGoods(player = $obj1, uniqueId = 20201000001,  coinId = $coinId, price = $buyMoney, houseCfg = $houseCfg, event = "BUY_HOUSE_BY_APP" )
+        BuyGoods(player = $obj1, uniqueId = 20201001,  coinId = $coinId, price = $buyMoney, houseCfg = $houseCfg, event = "BUY_HOUSE_BY_APP" )
         Return()
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
@@ -699,7 +699,7 @@ BUY_STORE{
     }
     Test($buyMoney, $coinId)
     If(3 ~= $coinId){
-        BuyGoods(player = $obj1, uniqueId = 20201000002,  coinId = $coinId, price = $buyMoney, cfg = $cfg, event = "BUY_STORE_BY_APP" )
+        BuyGoods(player = $obj1, uniqueId = 20201002,  coinId = $coinId, price = $buyMoney, cfg = $cfg, event = "BUY_STORE_BY_APP" )
         Return()
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
@@ -1046,7 +1046,7 @@ BUY_INSIDE_DOOR{
         }
     }
     If(3 ~= $coinId){
-        BuyGoods(player = $obj1, uniqueId = 20201000003,  coinId = $coinId, price = $buyMoney, cfg = $cfg, event = "BUY_DOOR_BY_APP" )
+        BuyGoods(player = $obj1, uniqueId = 20201003,  coinId = $coinId, price = $buyMoney, cfg = $cfg, event = "BUY_DOOR_BY_APP" )
         Return()
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
@@ -1104,7 +1104,7 @@ BUY_HOUSE_REGION_COLOR{
             }
         }
         If(3 ~= $coinId){
-            BuyGoods(player = $obj1, uniqueId = 20201000004, coinId = $coinId, price = $buyMoney, 
+            BuyGoods(player = $obj1, uniqueId = 20201004, coinId = $coinId, price = $buyMoney, 
                 childRegionKey = $childRegionKey, colorBlock = $colorBlock, event = "BUY_REGION_COLOR_BY_APP" )
             Return()
         }
