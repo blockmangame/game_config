@@ -1,12 +1,12 @@
 {
-	"skyBox": {
-	"texture": "myplugin/sky/Sky03",
-	"rotate": {
-    "x": 0,
-    "y": 30,
-    "z": 0
-		}
-	},
+    "skyBox": {
+        "texture": "myplugin/sky/Sky03",
+        "rotate": {
+            "x": 0,
+            "y": 30,
+            "z": 0
+        }
+    },
     "canAttack": true,
     "region": {
         "house_region_1": {
@@ -1495,6 +1495,20 @@
                 "z": 170
             },
             "ry": 90
+        },
+        {
+            "cfg": "myplugin/doorway_map001_to_school",
+            "pitch": 0,
+            "pos": {
+                "x": 125,
+                "y": 18.1,
+                "z": 163
+            },
+            "ry": 90
         }
-    ]
+    ],
+    "mapEntry":{
+		"map001":["myplugin/doorway_map001_to_school"],
+		"/map002":["myplugin/tomap002"]
+	}
 }
