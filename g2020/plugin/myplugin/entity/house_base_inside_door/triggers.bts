@@ -9,7 +9,6 @@ CREATE_DOOR_REGION{
         min = ArrayGet(array = $curBoundingBox, index = 2),
         max = ArrayGet(array = $curBoundingBox, index = 3)
     )
-    Test($regionArea)
     $doorRegionCfg = GetConfigVar(obj = $obj1, key = "doorRegionCfg")
     $doorRegionKey = Concat(p1 = GetConfigVar(obj = $obj1, key = "doorRegionKey"), p2 = GetObjectID(object = $obj1))
 
@@ -30,7 +29,6 @@ INTER_WITH_DOOR{
     If(not IsPlayer(entity = $obj2)) {
         Return()
     }
-    Test("get out here !")
     $door = GetObjectVar(obj = GetMapVar(map = $map, key = "owner"), key = "door")
     If(not $door){
         $door = GetObjectVar(obj = GetObjectVar(obj = $obj2, key = "house"), key = "door")

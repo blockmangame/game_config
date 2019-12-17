@@ -4,7 +4,6 @@ ENTITY_ENTER
 }
 
 CREATR_SUBSIDIARY{
-    Test("CREATR_SUBSIDIARY")
     ------------------------------------------ 创建邮箱
     ------------------------------------------ 房子 <house-------mail> 邮箱
     $mail = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "mail"))
@@ -45,7 +44,6 @@ CHANGE_DOOR_YAW{
 }
 
 CREATR_HOUSE_INSIDE_SUBSIDIARY{
-    Test("CREATR_HOUSE_INSIDE_SUBSIDIARY")
     $houseVars = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "owner"), key = "houseVars")
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
         $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
@@ -103,7 +101,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
             y = GetPosY(pos = $temp),
             z = GetPosZ(pos = $temp)
         } -- 这样拼接的原因是直接把pos传入会导致pos内部值多了个map，而这个是不需要的，故此处拼接一个临时的pos
-        Test($fDict)
+
         $npc = CreateNpc(map = $map, cfgName = DictionaryGet(dict = $fDict, key = "cfg"), 
             pos = $pos, ry = DictionaryGet(dict = $fDict, key = "yaw") or 0, rp = DictionaryGet(dict = $fDict, key = "pitch") or 0, owner = $obj1.owner)
         If(GetConfigVar(obj = $npc, key = "boundBoxRotateWithYawAndPitch")){
@@ -234,11 +232,9 @@ ENTITY_CLICK{
         Return()
     }
     If(GetObjectVar(obj = $obj1, key = "isLock")){
-        Test(" don't touch me ! ")
         ShowTip(entity = $obj2, tipType = 1, textKey = "house_lock")
         Return()
     }
-    Test(" come in ! ")
 }
 
 OPEN_THE_DOOR{
@@ -250,7 +246,6 @@ OPEN_THE_DOOR{
     }
     -- 此处门entity播放动作即可？房子entity不播放？
     PlayAction(entity = $obj1, target = $player, actionName = "openDoor", actionTime = -1)
-    Test(" yes sir ! ")
 }
 
 CLOSE_THE_DOOR{
@@ -262,7 +257,6 @@ CLOSE_THE_DOOR{
     }
     -- 此处门entity播放动作即可？房子entity不播放？
     PlayAction(entity = $obj1, target = $player, actionName = "closeDoor", actionTime = -1)
-    Test(" yes madan ! ")
 }
 
 ENTITY_DIE{

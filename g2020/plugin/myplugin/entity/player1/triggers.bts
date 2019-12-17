@@ -52,7 +52,6 @@ CREATE_OWNER_HOUSE{
     $curSelectHouse = {}
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     If(not $houseVars or ArraySize(array = $houseVars) == 0){ -- 第一次进入游戏的玩家
-        Test("----------------------- First Login")
         $houseVars = [
                 {
                     houseCfg = "myplugin/house_default",
@@ -357,9 +356,7 @@ CHANGE_HOUSE{ -- 换房子/存档
 
 -------------------------------------- ui/btn/event
 HOUSE_TAB_EVENT{
-    Test("---------HOUSE_TAB_EVENT")
     If(not $key or "0" == $key){
-        Test("--------- u need buy")
         $listInfoTb = {}
         Foreach(array = GetConfigVar(obj = $obj1, key = "houseStore") or {}, key = "houseFullName"){
             $coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, index = (GetEntityCfg(fullName = $houseFullName, key = "coinId") or 3) + 1)
@@ -386,7 +383,6 @@ HOUSE_TAB_EVENT{
         }, isOpenChild = true)
         Return()
     }
-    Test("--------- u need show")
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
         $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
@@ -441,7 +437,6 @@ HOUSE_TAB_EVENT{
 
 EDIT_HOUSE_NAME{
     -- 房子改名
-    Test("EDIT_HOUSE_NAME", $houseKey, $upperLayerKey, $titleEditText)
     If(not $titleEditText or not $upperLayerKey){
         Return()
     }
@@ -465,7 +460,6 @@ UPDATE_HOUSE_TAB{
 }
 
 SURE_BUY_HOUSE{
-    Test("SURE_BUY_HOUSE", $houseCfg)
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
     If(not $houseCfg or ArraySize(array = $houseVars) >= (GetConfigVar(obj = $obj1, key = "maxHouseVarsSize") or 8)){
         -- 买房子 成功则关闭界面，失败则不关闭 -- 达到房子上限也不给买
@@ -520,7 +514,6 @@ GIVE_HOUSE{
 }
 
 SELL_HOUSE{
-    Test("SELL_HOUSE",$houseKey)
     $curSelectDict = nil
     Foreach(array = GetObjectVar(obj = $obj1, key = "houseVars") or {}, key = "houseVar"){
         $dict = NewDictionary($houseVar)
@@ -622,7 +615,6 @@ SELL_HOUSE_SURE{
 }
 
 BUY_STORE{
-    Test("BUY_STORE", $cfg)
     If(not $cfg){
         Return()
     }
@@ -635,7 +627,6 @@ BUY_STORE{
             $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
         }
     }
-    Test($buyMoney, $coinId)
     If(3 ~= $coinId){
         BuyGoods(player = $obj1, uniqueId = 20201002,  coinId = $coinId, price = $buyMoney, cfg = $cfg, event = "BUY_STORE_BY_APP" )
         Return()
@@ -686,7 +677,6 @@ GIVE_STORE{
 }
 
 CLICK_BUY_STORE{
-    Test("CLICK_BUY_STORE", GetObjectID(object = $npc))
     CastSkill(skill = "/click", from = $obj1, packet = {targetID = GetObjectID(object = $npc)})
 }
 
@@ -728,7 +718,6 @@ SAVE_FURNITURE{
 }
 
 SHOW_TITLE_BAR{
-    Test("SHOW_TITLE_BAR")
     If($obj1.inPartyOwnerId ~= 0){
         Return()--in party
     }
@@ -759,7 +748,6 @@ SHOW_TITLE_BAR{
 }
 
 EDIT_HOUSE{
-    Test("EDIT_HOUSE")
     ShowGenericActorShowStore(entity = $obj1, closeWin =true)
     $editBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/edit_house_buff")
     If(not $editBuff){
@@ -779,7 +767,6 @@ EDIT_HOUSE{
 }
 
 HOUSE_LOCK{
-    Test("HOUSE_LOCK")
     $house = GetObjectVar(obj = $obj1, key = "house")
     $isLock = GetObjectVar(obj = $house, key = "isLock")
     SetObjectVar(obj = $house, key = "isLock", value = not $isLock) -- 给房门上锁
@@ -806,7 +793,6 @@ UPDATE_EDIT_STORE_SELL_TAB{
 }
 
 SHOW_DEC_STORE{
-    Test("SHOW_DEC_STORE")
     ShowGenericActorShowStore(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, closeWin = true)
     If(not $titleKey){
@@ -817,9 +803,6 @@ SHOW_DEC_STORE{
     }
     $btnListTb = {}
     CallTrigger(object = $obj1, event = "UPDATE_EDIT_STORE_SELL_TAB", titleKey = $titleKey, nextCfgKey = $nextCfgKey, btnListTb = $btnListTb) 
-    --Test("SHOW_DEC_STORE", $titleKey)
-    --Test("SHOW_DEC_STORE", $nextCfgKey)
-    --Test("SHOW_DEC_STORE", $btnListTb)
 
     $listInfoTb = {}
     $closeEvent = {}
@@ -932,7 +915,6 @@ UPDATE_STORE_LIST{
 }
 
 SHOW_DEC_STORE_LIST{
-    Test("SHOW_DEC_STORE_LIST")
     ShowGenericActorShowStore(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, closeWin = true)
     If(not $titleKey){
@@ -969,7 +951,6 @@ SHOW_DEC_STORE_LIST{
 }
 
 BUY_INSIDE_DOOR{
-    Test("BUY_INSIDE_DOOR", $cfg)
     If(not $cfg){
         Return()
     }
@@ -1023,7 +1004,6 @@ GIVE_DOOR{
 }
 
 BUY_HOUSE_REGION_COLOR{
-    Test("BUY_HOUSE_REGION_COLOR", $childRegionKey, $colorBlock)
     -- 如果换了墙纸或者地板，原有的不保留，当你没买     如果你原来买了A墙纸，你又换成了B，那么你要再花一遍钱去把A换回来
     $curInsideRegion = GetObjectVar(obj = $obj1, key = "curInsideRegion")
     If(not $curInsideRegion){
@@ -1045,7 +1025,7 @@ BUY_HOUSE_REGION_COLOR{
                 childRegionKey = $childRegionKey, colorBlock = $colorBlock, event = "BUY_REGION_COLOR_BY_APP" )
             Return()
         }
-        Test($buyMoney)
+
         If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
             ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", time = 40)
             Return()
@@ -1816,11 +1796,9 @@ USER_INTERACTION_ACTION
 {
     $toTeamId = GetEntityTeam(entity = $to)
     $fromTeamId = GetEntityTeam(entity = $from)
-    Test("===================================1")
     --双人交互检查是不是相同家庭
     If(not $fromTeamId || not $toTeamId || $fromTeamId ==  0 || $toTeamId == 0 || $fromTeamId ~= $toTeamId)
     {
-        Test("===================================2")
         If(GetSkillVar(fullName = $skillName, key = "needPrivilege"))
         {
             $privilegeName = GetSkillVar(fullName = $skillName, key = "privilegeName")
@@ -1831,7 +1809,6 @@ USER_INTERACTION_ACTION
                 Return()
             }
         }
-        Test("===================================3")
     }
 
     CastSkill(skill = $skillName, from = $from, packet = {targetID = GetObjectID(object = $to)})
@@ -2604,7 +2581,6 @@ DRESS_STORE_ITEM_BUY
 
 SHOW_SAVE_WORKS_TIP
 {
-    Test("================================================== SHOW_SAVE_WORKS_TIP")
     $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
     $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = nil, rightContent = "works_save" }
     $context = { url = $url}
@@ -2613,8 +2589,6 @@ SHOW_SAVE_WORKS_TIP
 
 SAVE_WORKS_TIP_CLICK_EVENT
 {
-    Test("================================================== SAVE_WORKS_TIP_CLICK_EVENT")
-
     If(not $result) {
         Return()
     }
@@ -2641,15 +2615,11 @@ SAVE_WORKS_TIP_CLICK_EVENT
 
 CHECK_WORKS_ARCHIVE
 {
-    Test("================================================== CHECK_WORKS_ARCHIVE")
     GetWorksCount(player = $obj1, event = "CHECK_WORKS_ARCHIVE_RESPONSE", url = $url, isPublish = $isPublish)
 }
 
 CHECK_WORKS_ARCHIVE_RESPONSE
 {
-    Test("================================================== CHECK_WORKS_ARCHIVE_RESPONSE")
-    Test($response)
-
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
 
@@ -2681,7 +2651,6 @@ CHECK_WORKS_ARCHIVE_RESPONSE
 
 SHOW_BYU_WORKS_ARCHIVE_UI
 {
-    Test("================================================== SHOW_BYU_WORKS_ARCHIVE_UI")
     $price = GetConfigVar(obj = $obj1, key = "worksArchivePrice" )
     $btnInfo = { leftCoinId = 0, leftContent = $price, rightCoinId = nil, rightContent = "works_save_coverage_new" }
     $context = { url = $url, isPublish = $isPublish }
@@ -2690,7 +2659,6 @@ SHOW_BYU_WORKS_ARCHIVE_UI
 
 BUY_WORKS_ARCHIVE
 {
-    Test("================================================== BUY_WORKS_ARCHIVE")
     If($button == "close" || not $result)
     {
         Return()
@@ -2715,8 +2683,6 @@ BUY_WORKS_ARCHIVE
 
 BUY_WORKS_ARCHIVE_RESPONSE
 {
-    Test("================================================== BUY_WORKS_ARCHIVE_RESPONSE")
-    Test($response)
     $dictValue = NewDictionary($response)
 
     $url = DictionaryGet(dict = $dictValue, key = "url")
@@ -2783,15 +2749,11 @@ UPDATE_WORKS_RESPONSE
 
 CREATE_WORKS
 {
-    Test("================================================== CREATE_WORKS")
     CreateWorks(player = $obj1, picUrl = $url, isPublish = $isPublish, event = "CREATE_WORKS_RESPONSE")
 }
 
 CREATE_WORKS_RESPONSE
 {
-    Test("================================================== CREATE_WORKS_RESPONSE")
-    Test($response)
-
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
 
@@ -2824,7 +2786,6 @@ CREATE_WORKS_RESPONSE
 
 SHOW_PUBLISH_WORKS_UI
 {
-    Test("===========================================================SHOW_PUBLISH_WORKS_UI")
     $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
     $cubePrice = GetConfigVar(obj = $obj1, key = "publishWorksCubePrice" )
     $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = 0, rightContent = $cubePrice }
@@ -2859,7 +2820,6 @@ PUBLISH_WORKS
 
 PUBLISH_WORKS_RESPONSE
 {
-    Test($response)
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
     If($code == 1)
@@ -2877,8 +2837,6 @@ PUBLISH_WORKS_RESPONSE
 
 PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE
 {
-    Test("================================================== PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE")
-    Test($response)
     $dictValue = NewDictionary($response)
 
     $obj1 = DictionaryGet(dict = $dictValue, key = "player")
@@ -2896,8 +2854,6 @@ PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE
 
 PUBLISH_WORKS_BY_CUBE_RESPONSE
 {
-    Test("================================================== PUBLISH_WORKS_BY_CUBE_RESPONSE")
-    Test($response)
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
     If($code == 1)
@@ -2912,13 +2868,12 @@ PUBLISH_WORKS_BY_CUBE_RESPONSE
 
 COMMENT_WORKS
 {
-    Test($msg)
     CommentWorks(player = $obj1, id = $id, msg = $msg, event = "HTTP_TEST")
 }
 
 HTTP_TEST
 {
-    Test($response)
+
 }
 
 HTTP_PURCHASED_DRESS_CALL_BACK
@@ -3047,7 +3002,6 @@ PUNISH_END(){--惩罚结束
 }
 PLAYER_DELETE_ITEM(){ --放弃任务
     If($fullName == "myplugin/taskItem" and $obj1.taskKey){
-        Test(" --canseltask：",$fullName, $obj1.taskKey)
         $obj1.punishmentCD = true
         If(@INDENT_MODEL){
             --ShowEntityHeadCountDown(show = true, entity = @INDENT_MODEL, player = $obj1, time = @punishmentTime)
@@ -3212,7 +3166,6 @@ SURE_FURNITURE_BUY(debug = false){
    $enoughMoney = CheckBalance(entity = $obj1, coinName = $coinName, price = $price)
    If($enoughMoney){ --够钱
          $checkBag = AddItem(entity = $obj1, cfg = $sellItem, count = 1)
-         Test("--------------",$sellItem)
          If($checkBag ~= false){
             PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
             If(not $isTeam and $owner){ --不是一个家庭给领主加钱
@@ -3252,7 +3205,6 @@ POP_UP_BUY_PRIVILEGE(debug = false)
 {
     If(not $shopIndex || not GetShopItem(shopIndex = $shopIndex, key = "price"))
     {
-        Test("event:POP_UP_BUY_PRIVILEGE, not shopIndex or not shop item...")
         Return()
     }
     $obj1.checkprid = ($obj1.checkprid or 0 ) + 1

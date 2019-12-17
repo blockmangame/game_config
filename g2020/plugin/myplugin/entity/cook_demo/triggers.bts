@@ -10,8 +10,7 @@ ENTITY_CLICK{
     If(not $editBuff){
         Return()
     }
-    Test("ENTITY_CLICK-----------------------------------------", GetObjectID(object = $obj1) , GetObjectID(object = $obj2))
-
+ 
     If(GetObjectVar(obj = $obj2, key = "curInteractionUiObjId")){
         UpdateEntityEditContainer(player = $obj2, entityId = GetObjectVar(obj = $obj2, key = "curInteractionUiObjId"), show = false)
     }
@@ -24,17 +23,14 @@ SHOW_EDIT_UI{
 }
 
 DEC_INTERACTION_MOVE_TOUCH_BEGIN{
-    Test("----------------------------------DEC_INTERACTION_MOVE_TOUCH_BEGIN")
-
+ 
 }
 
 DEC_INTERACTION_MOVE_TOUCH_END{
-    Test("----------------------------------DEC_INTERACTION_MOVE_TOUCH_END", $entityPos)
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = $entityPos or GetEntityPosition(entity = $obj1))
 }
 
 DEC_INTERACTION_SALE{
-    Test("----------------------------------DEC_INTERACTION_SALE", $objID)
     $owner = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "owner")
     $houseVars = GetObjectVar(obj = $owner, key = "houseVars")
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
@@ -67,7 +63,6 @@ DEC_INTERACTION_SALE{
 }
 
 DEC_INTERACTION_LEFT_ROTATION{ -- TODO 旋转时需要注意是否卡墙里（碰撞盒）
-    Test("----------------------------------DEC_INTERACTION_LEFT_ROTATION", GetEntityYaw(entity = $obj1))
     $yaw = (GetEntityYaw(entity = $obj1) or 0) + (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)
     SetEntityYaw(entity = $obj1, rotationYaw = $yaw)
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw, time = 2, event = "ROTATION_BODY_YAW")
@@ -122,10 +117,6 @@ ROTATION_BODY_YAW{
 }
 
 DEC_INTERACTION_TEST{
-    Test("DEC_INTERACTION_TEST")
-
-
-
 
 }
 --上面是编辑，下面是购买逻辑

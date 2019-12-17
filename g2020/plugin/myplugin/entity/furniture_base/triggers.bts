@@ -10,7 +10,6 @@ ENTITY_CLICK{
     If(not $editBuff){
         Return()
     }
-    Test("ENTITY_CLICK-----------------------------------------", GetObjectID(object = $obj1) , GetObjectID(object = $obj2))
     If(GetObjectVar(obj = $obj2, key = "curInteractionUiObjId")){
         UpdateEntityEditContainer(player = $obj2, entityId = GetObjectVar(obj = $obj2, key = "curInteractionUiObjId"), show = false)
         SetObjectVar(obj = $obj2, key = "curInteractionUiObjId", value = nil)
@@ -24,7 +23,6 @@ SHOW_EDIT_UI{
 }
 
 DEC_INTERACTION_MOVE_TOUCH_BEGIN{
-    Test("----------------------------------DEC_INTERACTION_MOVE_TOUCH_BEGIN")
     PlayAction(
         entity = $obj1,
         includeSelf = true,
@@ -34,7 +32,6 @@ DEC_INTERACTION_MOVE_TOUCH_BEGIN{
 }
 
 DEC_INTERACTION_MOVE_TOUCH_END{
-    Test("----------------------------------DEC_INTERACTION_MOVE_TOUCH_END", $entityPos)
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = $entityPos or GetEntityPosition(entity = $obj1)
         , ry = $entityYaw or GetEntityYaw(entity = $obj1), rp = $entityPitch or GetEntityPitch(entity = $obj1))
     If(GetConfigVar(obj = $obj1, key = "boundBoxRotateWithYawAndPitch")){
@@ -43,7 +40,6 @@ DEC_INTERACTION_MOVE_TOUCH_END{
 }
 
 DEC_INTERACTION_SALE{
-    Test("----------------------------------DEC_INTERACTION_SALE", $objID)
     $owner = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "owner")
     $houseVars = GetObjectVar(obj = $owner, key = "houseVars")
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
@@ -79,7 +75,6 @@ DEC_INTERACTION_SALE{
 }
 
 DEC_INTERACTION_LEFT_ROTATION{
-    Test("----------------------------------DEC_INTERACTION_LEFT_ROTATION", GetEntityYaw(entity = $obj1))
     $yaw = ((GetEntityYaw(entity = $obj1) or 0) + (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)) % 360
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1)
         , ry = $yaw or GetEntityYaw(entity = $obj1), rp = GetEntityPitch(entity = $obj1))
@@ -104,9 +99,5 @@ ROTATION_BODY_YAW{
 }
 
 DEC_INTERACTION_TEST{
-    Test("DEC_INTERACTION_TEST")
-
-
-
 
 }
