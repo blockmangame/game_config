@@ -220,7 +220,7 @@
         },
         "followParams":{
             "followScenePos": true,
-            "showRange": 4,
+            "showRange": 5,
             "resetWhenHide": true
         },
         "aroundBtns":[
@@ -246,6 +246,17 @@
                     "wishResult":false
                 },
                 "event": "INTERACTION_FEED"
+            },
+            {
+                "text":"interact_banish",
+                "image":"set:party_interaction_ui.json image:interaction_banish",
+                "checkHide": {
+                    "checkCond":{
+                        "funcName": "checkInSelfParty"
+                    },
+                    "wishResult":false
+                },
+                "event": "INTERACTION_BANISH"
             },
             {
                 "text":"interact_act",
@@ -281,7 +292,7 @@
         },
         "followParams":{
             "followScenePos": true,
-            "showRange": 6,
+            "showRange": 5,
             "resetWhenHide": true
         },
         "aroundBtns":[
@@ -339,7 +350,7 @@
         },
         "followParams":{
             "followScenePos": true,
-            "showRange": 6,
+            "showRange": 5,
             "resetWhenHide": true
         },
         "aroundBtns":[
