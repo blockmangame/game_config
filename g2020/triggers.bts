@@ -306,6 +306,12 @@ WORKS_WALL_UPDATE_EXCELLENT_WORKS
     {
         @excellentWorksIndex = 0
     }
+
+    If(not @excellentWorks )
+    {
+        @excellentWorks = {}
+    }
+
     $worksIndex = 1
     $size = ArraySize(array = @excellentWorks)
     Foreach(array = @excellentWorks, key = "works")
