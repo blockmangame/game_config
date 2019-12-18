@@ -1850,11 +1850,9 @@ USER_INTERACTION_ACTION
 {
     $toTeamId = GetEntityTeam(entity = $to)
     $fromTeamId = GetEntityTeam(entity = $from)
-    Test("===================================1")
     --双人交互检查是不是相同家庭
     If(not $fromTeamId || not $toTeamId || $fromTeamId ==  0 || $toTeamId == 0 || $fromTeamId ~= $toTeamId)
     {
-        Test("===================================2")
         If(GetSkillVar(fullName = $skillName, key = "needPrivilege"))
         {
             $privilegeName = GetSkillVar(fullName = $skillName, key = "privilegeName")
@@ -1873,8 +1871,7 @@ USER_INTERACTION_ACTION
 
 ENTITY_JUMP {
     CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
-    $ride = GetRideOn(entity = $obj1)
-    If (GetRideOn(entity = $obj1)){
+    If (GetRideOn(entity = $obj1) && not IsCameraMode(player = $obj1)){
         Dismount(entity = $obj1)
         CallTrigger(object = $obj1, event = "FUNC_STATE_RIDEON", ride = $ride, isCancel = true)
     }
