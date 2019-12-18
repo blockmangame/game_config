@@ -1,0 +1,251 @@
+{
+    "actorName": "",
+    "bodyPitch": true,
+    "boundBoxRotateWithYawAndPitch": true,
+    "posSyncDelay": 1,
+    "canInteract": true,
+    "name": "",
+    "showActorScale": 1,
+    "rotationYawModlus": 90,
+    "supportingForce": false,
+    "isStatic": true,
+    "hpBarColor": 0,
+    "collision": true,
+    "canClick": true,
+    "ridePos": [
+        {
+            "/yaw": "3人1号坐1_index1",
+            "yaw": 0,
+            "pos": {
+                "y": 0.2,
+                "z": 0.3,
+                "x": 1
+            },
+            "out": {
+                "y": 1,
+                "z": 0,
+                "x": 1
+            },
+            "passengerAction": {
+                "base": "sit1"
+            },
+            "ctrl": false,
+            "view": false
+        },
+        {
+            "/yaw": "3人2号坐1_index2",
+            "yaw": 0,
+            "pos": {
+                "y": 0.2,
+                "z": 0.3,
+                "x": 0
+            },
+            "out": {
+                "y": 1,
+                "z": 0,
+                "x": 0
+            },
+            "passengerAction": {
+                "base": "sit1"
+            },
+            "ctrl": false,
+            "view": false
+        },
+        {
+            "/yaw": "3人3号坐1_index3",
+            "yaw": 0,
+            "pos": {
+                "y": 0.2,
+                "z": 0.3,
+                "x": -1
+            },
+            "out": {
+                "y": 1,
+                "z": 0,
+                "x": -1
+            },
+            "passengerAction": {
+                "base": "sit1"
+            },
+            "ctrl": false,
+            "view": false
+        },
+        {
+            "/yaw": "1人1号坐1_index4",
+            "yaw": 0,
+            "pos": {
+                "y": 0.1,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "passengerAction": {
+                "base": "sit1"
+            },
+            "ctrl": false,
+            "view": false
+        },
+        {
+            "/yaw": "2人1号坐1_index5",
+            "yaw": 0,
+            "pos": {
+                "y": -0.1,
+                "z": 0.3,
+                "x": 0.5
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "passengerAction": {
+                "base": "sit1"
+            },
+            "ctrl": false,
+            "view": false
+        },
+        {
+            "/yaw": "2人2号坐1_index6",
+            "yaw": 0,
+            "pos": {
+                "y": -0.1,
+                "z": 0.3,
+                "x": -0.5
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "passengerAction": {
+                "base": "sit1"
+            },
+            "ctrl": false,
+            "view": false
+        }
+    ],
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "aroundParams": {
+            "startAngle": 0,
+            "endAngle": 90,
+            "radius": 100
+        },
+        "centerBtns": [
+            {
+                "text": "cook.guide",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "nextCfgKey": "interaction_choices"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false
+        }
+    },
+    "editUI": {
+        "cfgKey": "editUI",
+        "eventTb": "events",
+        "followParams": {
+            "offset": {
+                "x": 0,
+                "y": 1.5,
+                "z": 0
+            },
+            "isOffsetRotateByYaw": true
+        },
+        "moveWidget": {
+            "text": "MOVE",
+            "image": "set:Edit_1.json image:Edit_Move_Icon.png",
+            "touchBeginEventIndex": 1,
+            "touchEndEventIndex": 2,
+            "btnType": 4,
+            "pos": {
+                "x": -50,
+                "y": 0
+            },
+            "context": {}
+        },
+        "aroundWidget": [
+            {
+                "text": "SALE",
+                "image": "set:Edit_1.json image:Edit_Sell_Icon.png",
+                "tipContent": {
+                    "eventIndex": 3,
+                    "content": {
+                        "titleText": "ui_tip",
+                        "msgText": "ui_sure_to_sell_furniture",
+                        "leftText": "ui_sure",
+                        "rightText": "ui_cancel"
+                    }
+                },
+                "btnType": 4,
+                "pos": {
+                    "x": 50,
+                    "y": 0
+                },
+                "context": {}
+            },
+            {
+                "text": "COLOR",
+                "image": "set:Edit_1.json image:Edit_Edit_Color_Icon.png",
+                "btnType": 4,
+                "pos": {
+                    "x": -150,
+                    "y": 0
+                },
+                "context": {}
+            },
+            {
+                "text": "LEFT_ROTATION",
+                "image": "set:Edit_1.json image:Edit_Left_Rotation_Icon.png",
+                "eventIndex": 4,
+                "btnType": 4,
+                "pos": {
+                    "x": -100,
+                    "y": 150
+                },
+                "context": {}
+            },
+            {
+                "text": "RIGHT_ROTATION",
+                "image": "set:Edit_1.json image:Edit_Right_Rotation_Icon.png",
+                "eventIndex": 5,
+                "btnType": 4,
+                "pos": {
+                    "x": 0,
+                    "y": 150
+                },
+                "context": {}
+            }
+        ],
+        "events": [
+            {
+                "event": "DEC_INTERACTION_MOVE_TOUCH_BEGIN"
+            },
+            {
+                "event": "DEC_INTERACTION_MOVE_TOUCH_END"
+            },
+            {
+                "event": "DEC_INTERACTION_SALE"
+            },
+            {
+                "event": "DEC_INTERACTION_LEFT_ROTATION"
+            },
+            {
+                "event": "DEC_INTERACTION_RIGHT_ROTATION"
+            }
+        ]
+    },
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    }
+}

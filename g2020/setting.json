@@ -5,6 +5,7 @@
     "needSave": true,
     "personalShop": false,
     "hideTeamStatusBar": true,
+    "disableMoveState": true,
     "isShowFriendUI": true,
     "isShowSignInUI": true,
     "isDragControl": true,
@@ -311,6 +312,12 @@
                 "deltaAngle":45
             }
         ],
+        "AJackArea": [
+            [ 0, -50 ],
+            [ 0, -50 ],
+            [ 0, 150 ],
+            [ 0, 150 ]
+        ],
         "topJackSize":60,
         "txOffset":0,
         "tyOffset":100,
@@ -319,6 +326,8 @@
         "midJackSize":60,
         "imageHolder":"set:endless_main.json image:skill_hole.png"
     },
+    "jumpIcon": "plugin\/myplugin\/image\/jump.png",
+    "jumpProgressIcon": "plugin\/myplugin\/image\/jump.png",
     "danceStoreId" : 2,
 	"dressArchiveNum": 10,
     "dressStoreIds": [3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
