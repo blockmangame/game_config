@@ -3099,6 +3099,17 @@ HTTP_PURCHASED_DRESS_CALL_BACK
 }
 
 --打工
+WORK_SHOW_GPS(debug = true){
+    If($showGps){
+        SetGuidePostion(entity = $obj1, pos = $obj1.gpsPos)
+        If($obj1.gpsPos){
+            $obj1.showColseBtn = true
+        }
+    }Else{
+        SetGuidePostion(entity = $obj1, pos = nil)
+        $obj1.showColseBtn = false
+    }
+}
 GET_TASK_UI_DATA(){ --更新打工UI数据。
     $count = $obj1.worktaskCount % 10
     If($count == 0 && $obj1.worktaskCount >0){
@@ -3137,13 +3148,23 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
     }ElseIf($imgcount >=30 && $imgcount <40){
         $btnImg = "set:indentImg.json image:BtnRed.png"
     }
+    If($closeGps){
+        SetGuidePostion(entity = $obj1,pos = nil)
+        $obj1.showColseBtn = false
+    }
+    If($showGps){
+        SetGuidePostion(entity = $obj1,pos = $obj1.gpsPos)
+        $obj1.showColseBtn = true
+    }
+    If($obj1.showColseBtn){
+        SetGuidePostion(entity = $obj1,pos = $obj1.gpsPos)
+    }
     $taskData = Table(
         Progress =  $rate,
         BtnText = $text,
         gpsPos = $obj1.gpsPos,
         isTasking = $isTasking,
-        closeOneceGps = $closeGps,
-        showOneceGps = $showGps,
+        showColseBtn = $obj1.showColseBtn,
         animation = $animation,
         btnImg = $btnImg
     )
@@ -3331,6 +3352,11 @@ SURE_BUY(debug = false){
    }
    $itemfullName = GetConfigVar(obj = $obj2, key = "sellItem")
    $price = GetConfigVar(obj = $obj2, key = "sellPrice")
+   $coinId = GetConfigVar(obj = $obj2, key = "coinId")
+   If($coinId == 0 ){
+       BuyGoods(player = $obj1, uniqueId = 20201999,  coinId = $coinId, price = $price, event = "SHOP_BUY_COIN", objID = GetObjectID(object = $obj1))
+       Return()
+   }
    $coinName = "green_currency"
    $itemName = GetItemCfg(fullName = $itemfullName, key = "itemname")
    $enoughMoney = CheckBalance(entity = $obj1, coinName = $coinName, price = $price)
@@ -3345,6 +3371,16 @@ SURE_BUY(debug = false){
    }Else{ --不够钱
       ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
    }
+}
+SHOP_BUY_COIN(debug = false){
+    $dict = NewDictionary($response)
+    $objID = DictionaryGet(dict = $dict, key = "objID")
+    $obj1 = GetObject(objID = $objID)
+    If($isSucceed and $obj1){
+        ShowTip(textKey = "ui_buy_success", tipType = 2, entity = $obj1, keepTime = 20)
+    }ElseIf($obj1){
+        ShowTip(textKey = "app_shop_lack_of_money", tipType = 1, entity = $obj1, keepTime = 20)
+    }
 }
 --区域购买逻辑： 领主家里买厨具，食物，
 SURE_FURNITURE_BUY(debug = false){
