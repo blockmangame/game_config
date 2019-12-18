@@ -1559,55 +1559,75 @@ FUNC_STATE_OPEN_GPS --params: rtVal
     {
         Return()
     }
+    
+    CallTrigger(
+        object = $obj1,
+        event = "FUNC_CLOSE_GPS"
+    )
 
-    $gps = { x = 0, y = 0, z = 0 }
     $reg = Concat(p1 = "myplugin/region_state_", p2 = $rtVal)
+    $gpsDict = NewDictionary(GetConfigValue(type = "region", fullName = $reg, key = "gpsDict")) 
 
-    $map = GetPlayerMap(player = $obj1)
-    $mapName = GetEntityName(entity = $map)
-    $belongMap = GetConfigValue(type = "region", fullName = $reg, key = "belongMap")
-    $siteType = GetConfigValue(type = "region", fullName = $reg, key = "siteType")
+    CallTrigger(
+        object = $obj1,
+        gpsDict = $gpsDict,
+        destination = $destination,
+        event = "FUNC_GPS_SET_OR_SYNC"
+    )
+}
 
-    ---等待新的获取地图领主的方法
-    ---$owner = GetMapOwner(map = $map)
-    ---If($owner)
-    ---{
-    ---    $door = GetObjectVar(obj = $owner , key = "insideDoor")
-    ---    If($siteType == "selfHouse" && $obj1 == $owner) --some error here
-    ---    {
-    ---        ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
-    ---        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
-    ---        Return()
-    ---    }
-    ---    Else
-    ---    {
-    ---        $gps = GetEntityPosition(entity = $door)
-    ---    }
-    ---}
-    If($mapName == "house_default_inside_map")  ----暂时用这个方法，等待新的获取地图领主的方法
+FUNC_GPS_SET_OR_SYNC --params: gpsDict[, destination]
+{
+    If(not $gpsDict || DictionarySize(dict = $gpsDict) == 0)
     {
-        $house = GetObjectVar(obj = $obj1, key = "house")
-        $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
-        $gps = GetConfigVar(obj = $house, key = "insideDoorPos")
-
-        If($map == $houseInsideMap && $siteType == "selfHouse")
+        Return()
+    }
+    
+    $type = DictionaryGet(dict = $gpsDict, key = "type")
+    If(not $type)
+    {
+        Return()
+    }
+    
+    $belongMap = DictionaryGet(dict = $gpsDict, key = "belongMap")
+    $pos = DictionaryGet(dict = $gpsDict, key = "pos")
+    
+    $conA = (($type == "map" || $type == "selfHouse" || $type == "region") && not $belongMap)
+    $conB = $type == "entity" && (not $belongMap || not $pos)
+    If($conA || $conB)
+    {
+        Return()
+    }
+    
+    $curMapEntity = GetEntityMap(entity = $obj1)
+    $curMap = GetEntityName(entity = $curMapEntity)
+    $gps = { x = 0, y = 0, z = 0 }
+    
+    $owner = GetMapVar(map = $curMapEntity, key = "owner")
+    $house = GetObjectVar(obj = $obj1, key = "house")
+    If($owner)
+    {
+        $door = GetObjectVar(obj = $owner, key = "insideDoor")
+        Test("type = ", $type)
+        If($type == "selfHouse" && $curMapEntity == GetConfigVar(obj = $house, key = "houseInsideMap"))
         {
             ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
             CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
             Return()
         }
+        $gps = GetEntityPosition(entity = $door)
     }
-    Else
+    ElseIf($curMap == $belongMap)
     {
-        If($belongMap == $mapName && $siteType == "selfHouse")
+        If($type == "map")
         {
-            $house = GetObjectVar(obj = $obj1, key = "house")
-            $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
-            $gps = GetConfigVar(obj = $house, key = "insideDoorPos")
+            ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
+            CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+            Return()
         }
-        ElseIf($belongMap == $mapName && $siteType == "map")
+        ElseIf($type == "region")
         {
-            $region = GetRegionByName(map = $map, name = $rtVal)
+            $region = GetRegionByName(map = $map, name = DictionaryGet(dict = $gpsDict, key = "regionName"))
             If($region)
             {
                 $min = GetRegionMin(region = $region)
@@ -1625,79 +1645,92 @@ FUNC_STATE_OPEN_GPS --params: rtVal
                 $center = GetRegionCenter(region = $region)
                 $gps = V3(GetPosX(pos = $center), GetPosY(pos = $min), GetPosZ(pos = $center))
             }
-            Else
-            {
-                ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
-                CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
-                Return()
-            }
         }
-        ElseIf($belongMap ~= $mapName)
+        ElseIf($type == "entity")
         {
-            $road = []
-            $maps = []
-            $roadIdx = 1
+            $gps = DictionaryGet(dict = $gpsDict, key = "pos")
+        }
+        ElseIf($type == "selfHouse")
+        {
+            $housePos = GetEntityPosition(entity = $house)
+            $gps = ComputeV3(p1 = $housePos, p2 = GetConfigVar(obj = $house, key = "doorPos") or {x = 0,y = 2, z = 0}, op = "add")
+        }
+    }
+    Else
+    {
+        $road = []
+        $maps = []
+        $roadIdx = 1
 
-            $ngt = GetObjectVar(obj = $obj1, key = "navigationDict")
-            If(not $ngt)
+        $ngt = DictionaryGet(dict = $gpsDict, key = "navigateDict")
+        If(not $ngt)
+        {
+            CallTrigger(
+                object = $obj1,
+                event = "FUNC_GPS_RECALCULATE",
+                mapStart = $curMap,
+                mapEnd = $belongMap,
+                gpsDict = $gpsDict,
+                destination = $destination or GetObjectVar(obj = $obj1, key = "gpsDestination")
+            )
+            Return()
+        }
+        Else
+        {
+            $roadIdx = DictionaryGet(dict = $ngt, key = "roadIdx") + 1
+            $maps = DictionaryGet(dict = $ngt, key = "maps")
+            $road = DictionaryGet(dict = $ngt, key = "road")
+        
+            $correctMap = ArrayGet(
+                array = @allMaps,
+                index = ArrayGet(
+                    array = $maps,
+                    index = $roadIdx
+                )
+            )
+            If($correctMap ~= $mapName)
             {
                 CallTrigger(
                     object = $obj1,
-                    destination = $rtVal,
-                    event = "FUNC_CREATE_NEW_GPS",
-                    mapStart = $mapName,
-                    mapEnd = $belongMap
+                    event = "FUNC_GPS_RECALCULATE",
+                    mapStart = $curMap,
+                    mapEnd = $belongMap,
+                    gpsDict = $gpsDict,
+                    destination = $destination or GetObjectVar(obj = $obj1, key = "gpsDestination")
                 )
                 Return()
             }
-            Else
-            {
-                $roadIdx = DictionaryGet(dict = $ngt, key = "roadIdx") + 1
-                $maps = DictionaryGet(dict = $ngt, key = "maps")
-                $road = DictionaryGet(dict = $ngt, key = "road")
+        
+            $gps = GetConfigValue(
+                type = "entity",
+                key = "pos",
+                fullName = ArrayGet(array = $road, index = $roadIdx)
+            )
+            
+            $navigateDict = NewDictionary({
+                road = $road,
+                roadIdx = $roadIdx,
+                maps = $maps
+            })
 
-                $correctMap = ArrayGet(
-                    array = @allMaps,
-                    index = ArrayGet(
-                        array = $maps,
-                        index = $roadIdx
-                    )
-                )
-                If($correctMap ~= $mapName)
-                {
-                    CallTrigger(
-                        object = $obj1,
-                        destination = $rtVal,
-                        event = "FUNC_CREATE_NEW_GPS",
-                        mapStart = $mapName,
-                        mapEnd = $belongMap
-                    )
-                    Return()
-                }
-
-                $gps = GetConfigValue(
-                    type = "entity",
-                    key = "pos",
-                    fullName = ArrayGet(array = $road, index = $roadIdx)
-                )
-            }
+            DictionarySet(
+                dict = $gpsDict,
+                key = "navigateDict",
+                value = $navigateDict
+            )
         }
     }
 
     CallTrigger(
         object = $obj1,
         event = "FUNC_OPEN_GPS",
-        destination = $rtVal,
         gps = $gps,
-        navigationDict = NewDictionary({
-            road = $road,
-            roadIdx = $roadIdx,
-            maps = $maps
-        })
+        gpsDict = $gpsDict,
+        destination = $destination or GetObjectVar(obj = $obj1, key = "gpsDestination")
     )
 }
 
-FUNC_CREATE_NEW_GPS --params: mapStart, mapEnd, destination
+FUNC_GPS_RECALCULATE --params: mapStart, mapEnd, gpsDict[, destination]
 {
     $road = []
     $maps = []
@@ -1720,12 +1753,33 @@ FUNC_CREATE_NEW_GPS --params: mapStart, mapEnd, destination
         ForLoop(from = $index + 1, to = $mapSize, key = "idx")
         {
             If(ArrayGet(array = $row, index = $idx)) --从地图A到地图B存在多个门，那么即存在最短路的问题
-            { 
+            {   
+                $type = DictionaryGet(dict = $gpsDict, key = "type")
+                $belongMap = DictionaryGet(dict = $gpsDict, key = "belongMap")
+                $targetPos = nil
+
+                If($type == "selfHouse")
+                {
+                    $house = GetObjectVar(obj = $obj1, key = "house")
+                    $housePos = GetEntityPosition(entity = $house)
+                    $targetPos = ComputeV3(p1 = $housePos, p2 = GetConfigVar(obj = $house, key = "doorPos") or {x = 0,y = 2, z = 0}, op = "add")
+                }
+                ElseIf($type == "entity")
+                {
+                    $targetPos = DictionaryGet(dict = $gpsDict, key = "pos")
+                }
+
+                $targetDict = NewDictionary({
+                    pos = $targetPos,
+                    belongMap = $belongMap
+                })
+
                 --构建玩家在mapStart到mapEnd途径所有门的邻接矩阵
                 $mapS2mapEDWsMatrix = "mapS2mapEDWsMatrix"
                 CallTrigger(
                     object = $obj1,
                     allDWs = $road,
+                    targetDict = $targetDict,
                     saveName = $mapS2mapEDWsMatrix,
                     event = "FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX"
                 )
@@ -1741,30 +1795,33 @@ FUNC_CREATE_NEW_GPS --params: mapStart, mapEnd, destination
                 )
 
                 --利用上面的得到数据，再去找倒数第二张地图到最后一张地图需要经过的门，在这些门里找到dis最小的索引
-                $secLastMap = ArrayGet(
-                    array = @allMaps,
-                    index = ArrayGet(array = $maps, index = $mapSize - 1)
-                )
-                $lastMap = ArrayGet(
-                    array = @allMaps,
-                    index = ArrayGet(array = $maps, index = $mapSize)
-                )
-                $mapEntry = NewDictionary(GetMapConfig(name = $secLastMap, key = "mapEntry"))
-                $entries = DictionaryGet(dict = $mapEntry, key = $lastMap)
-                $min = @mathHuge
-                $index = 0
-                $disArr = GetObjectVar(obj = $obj1, key = Concat(p1 = $mapS2mapEDWs1Tother, p2 = "Dis"))
-                ForLoop(from = 1, to = ArraySize(array = $entries or []), key = "idx")
+                $index = 2
+                If(not $targetPos)
                 {
-                    $entryIdx = ArrayFind(
-                        value = ArrayGet(array = $entries, index = $idx),
-                        array = GetObjectVar(obj = $obj1, key = Concat(p1 = $mapS2mapEDWsMatrix, p2 = "ColVec"))
+                    $secLastMap = ArrayGet(
+                        array = @allMaps,
+                        index = ArrayGet(array = $maps, index = $mapSize - 1)
                     )
-                    $curDis = ArrayGet(array = $disArr, index = $entryIdx)
-                    If($curDis < $min)
+                    $lastMap = ArrayGet(
+                        array = @allMaps,
+                        index = ArrayGet(array = $maps, index = $mapSize)
+                    )
+                    $mapEntry = NewDictionary(GetMapConfig(name = $secLastMap, key = "mapEntry"))
+                    $entries = DictionaryGet(dict = $mapEntry, key = $lastMap)
+                    $min = @mathHuge
+                    $disArr = GetObjectVar(obj = $obj1, key = Concat(p1 = $mapS2mapEDWs1Tother, p2 = "Dis"))
+                    ForLoop(from = 1, to = ArraySize(array = $entries or []), key = "idx")
                     {
-                        $min = $curDis
-                        $index = $entryIdx
+                        $entryIdx = ArrayFind(
+                            value = ArrayGet(array = $entries, index = $idx),
+                            array = GetObjectVar(obj = $obj1, key = Concat(p1 = $mapS2mapEDWsMatrix, p2 = "ColVec"))
+                        )
+                        $curDis = ArrayGet(array = $disArr, index = $entryIdx)
+                        If($curDis < $min)
+                        {
+                            $min = $curDis
+                            $index = $entryIdx
+                        }
                     }
                 }
 
@@ -1789,21 +1846,29 @@ FUNC_CREATE_NEW_GPS --params: mapStart, mapEnd, destination
             }
         }
     }
-    
+
+    $navigateDict = NewDictionary({
+        road = $road,
+        roadIdx = $roadIdx,
+        maps = $maps
+    })
+
+    DictionarySet(
+        dict = $gpsDict,
+        key = "navigateDict",
+        value = $navigateDict
+    )
+
     CallTrigger(
         object = $obj1,
         event = "FUNC_OPEN_GPS",
-        destination = $destination,
         gps = GetConfigValue(
             type = "entity",
             key = "pos",
             fullName = ArrayGet(array = $road, index = $roadIdx)
         ),
-        navigationDict = NewDictionary({
-            road = $road,
-            roadIdx = $roadIdx,
-            maps = $maps
-        })
+        gpsDict = $gpsDict,
+        destination = $destination or GetObjectVar(obj = $obj1, key = "gpsDestination")
     )
 }
 
