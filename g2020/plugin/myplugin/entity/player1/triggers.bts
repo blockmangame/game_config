@@ -52,7 +52,7 @@ CREATE_OWNER_HOUSE{
     $curSelectHouse = {}
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     If(not $houseVars or ArraySize(array = $houseVars) == 0){ -- 第一次进入游戏的玩家
-        $houseCfg = "myplugin/house_1"
+        $houseCfg = "myplugin/house1"
         $houseVars = [
                 {
                     houseCfg = $houseCfg,
