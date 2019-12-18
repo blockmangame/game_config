@@ -670,6 +670,7 @@ FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX --params: allDWs(map00xTomap00yDWs)
         ArrayInsert(array = $allDWs, index = 1, value = $obj1)
     }
 
+    $matrix = []
     ForLoop(from = 1, to = ArraySize(array = $allDWs or []), key = "index")
     {
         $curModel = []
@@ -689,12 +690,12 @@ FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX --params: allDWs(map00xTomap00yDWs)
 
         ForLoop(from = 1, to = ArraySize(array = $allDWs), key = "idx")
         {
+            $val = 0
             If($idx ~= $index)
             {
-                $val = 0
                 $colDW = ArrayGet(array = $allDWs, index = $idx)
-                $colMap = GetConfigValue(type = "entity", fullName = $colDW, key = "belongMap") --因为obj1永远插入index=1位置，所以这里不需要判断了
-                $colPos = GetConfigValue(type = "entity", fullName = $colDW, key = "pos")
+                $colMap = $colDW == $obj1 and GetEntityMap(entity = $obj1) or GetConfigValue(type = "entity", fullName = $colDW, key = "belongMap")
+                $colPos = $colDW == $obj1 and GetEntityPosition(entity = $obj1) or GetConfigValue(type = "entity", fullName = $colDW, key = "pos")
                 $colX = GetPosX(pos = $colPos)
                 $colY = GetPosY(pos = $colPos)
                 $colZ = GetPosZ(pos = $colPos)

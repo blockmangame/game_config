@@ -1585,7 +1585,7 @@ FUNC_STATE_OPEN_GPS --params: rtVal
         $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
         $gps = GetConfigVar(obj = $house, key = "insideDoorPos")
 
-        If($map == $houseInsideMap && $type == "selfHouse")
+        If($map == $houseInsideMap && $siteType == "selfHouse")
         {
             ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
             CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
@@ -1773,6 +1773,7 @@ FUNC_CREATE_NEW_GPS --params: mapStart, mapEnd, destination
                     allPath = GetObjectVar(obj = $obj1, key = $mapS2mapEDWs1Tother)
                 )
                 $road = GetObjectVar(obj = $obj1, key = $mapS2mapEDWsFinalPath)
+                $roadIdx = $roadIdx + 1 ---因为新的road第一个数据是obj1，如果是仅有唯一路径，则第一个数据就是第一个应该去的地方。
 
                 SetObjectVar(obj = $obj1, value = nil, key = $mapS2mapEDWsFinalPath)
                 SetObjectVar(obj = $obj1, value = nil, key = Concat(p1 = $mapS2mapEDWsMatrix, p2 = "ColVec"))
