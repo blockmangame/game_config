@@ -3959,3 +3959,35 @@ CLOSE_PARTY_SUCCESS(debug = false){
 PARTY_BE_LIKED(debug = false){}
 LIKE_PARTY(debug = false){}
 --↑↑↑↑↑↑ party
+
+START_PLAY_BGM(debug = false) {
+    $cfg = ArrayGet(array = @BGMConfigs, index = $index)
+    If(not $cfg) {
+        Return()
+    }
+    $cfg = NewDictionary($cfg)
+    If(DictionaryGet(dict = $cfg, key = "needPrivilege") == "TRUE"
+        and not ArrayFind(array = $obj1.privilege, value = "music_privilege"))
+    {
+        -- 没有特权，调用弹窗购买
+        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 3)
+        Return()
+    }
+    If($obj1.house ~= GetEntityMap(entity = $obj1).owner) {
+        ShowTip(entity = $obj1, tipType = 2, textKey = "party_tip_not_your_sound")
+        Return()
+    }
+
+    Foreach(array = GetMapNpc(map = GetEntityMap(entity = $obj1)), key = "entity") {
+        If(GetConfigVar(obj = $entity, key = "fullName") == "myplugin/chess_body_12") {
+            If($entity.bgmBuff) {
+                RemoveEntityBuff(entity = $entity, buff = $entity.bgmBuff)
+            }
+            $entity.bgmBuff = AddEntityBuff(entity = $entity, cfg = DictionaryGet(dict = $cfg, key = "buff"), buffTime = nil)
+        }
+    }
+    HideBgmList(player = $obj1, playingIndex = $index)
+    Foreach(array = GetMapPlayer(map = GetEntityMap(entity = $obj1)), key = "player") {
+        SendUpdatePlayingBgmIndex(player = $player, playingIndex = $index)
+    }
+}
