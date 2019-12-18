@@ -1,0 +1,77 @@
+{
+    "skin": {
+        "body": "12"
+    },
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    0.7,
+                    1,
+                    0.7
+                ]
+            }
+        ]
+    },"interactionUI": [
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit1",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_sit1_3_1"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit2",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_sit1_3_2"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit3333333",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_sit1_3_3"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "name": "3人凳",
+    "releaseState": "dirty",
+    "actorName": "g2020_fru_chairs.actor",
+    "base": "fur_base"
+}
