@@ -1249,7 +1249,17 @@ FUNC_STATE_RIDEON --params: ride[, isCancel = false]
     }
 }
 
-FUNC_STATE_CHECK_IS_IN_REGION --params: state
+FUNC_STATE_CHECK_MAP --params: state
+{
+    $map = GetEntityMap(entity = $obj1)
+    CallTrigger(
+        object = $obj1,
+        event = "FUNC_STATE_RELEASE",
+        state = $map.cfg.releaseState
+    )
+}
+
+FUNC_STATE_CHECK_REGION --params: state
 {   
     -- 判断状态生成时是否就已经在区域里面了
     If("region" ~= GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "releaseType"))
@@ -1842,7 +1852,8 @@ FUNC_STATE_ACTION --params: state
 {
     CallTrigger(object = $obj1, event = "FUNC_STATE_ADD_EFFECT", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_START_AFFECT", state = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_IS_IN_REGION", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_REGION", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_MAP", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_RIDEON", ride = GetRideOn(entity = $obj1)) --检查是否已经在骑乘并且该骑乘是否会触发解除状态
 }
 
@@ -3742,6 +3753,11 @@ ENTER_MAP
             Show3DUI(player = $obj1, show = true, data = $data)
         }
     }
+    CallTrigger(
+        object = $obj1,
+        event = "FUNC_STATE_RELEASE",
+        state = $map.cfg.releaseState
+    )
 }
 
 LEAVE_MAP
@@ -3755,6 +3771,11 @@ LEAVE_MAP
             Show3DUI(player = $obj1, show = false, data = $ucfg)
         }
     }
+    CallTrigger(
+        object = $obj1,
+        event = "FUNC_STATE_RELEASE_SUSPEND",
+        state = $map.cfg.releaseState
+    )
 }
 --↓↓↓↓↓↓ party
 CHECK_LEAVE_PARTY_FROM_DOOR(debug = false){
