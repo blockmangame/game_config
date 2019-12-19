@@ -5,27 +5,66 @@ ENTITY_ENTER
 ENTITY_TOUCH_ALL{
 }
 
+EDIT_OBJECT_ACTION{
+    Test($params, $action, "EDIT_OBJECT_ACTION")
+    If($action == "startEdit"){
+        CallTrigger(object = $obj1, event = "START_EDIT_ENTITY", obj2 = $obj2, params = $params)
+    }ElseIf($action == "stopEdit"){
+        CallTrigger(object = $obj1, event = "STOP_EDIT_ENTITY", obj2 = $obj2, params = $params)
+    }Else{
+        CallTrigger(object = $obj1, event = "EXECUTION_EDIT_ACTION", obj2 = $obj2, params = $params, action = $action)
+    }
+}
+
+START_EDIT_ENTITY{
+    CallTrigger(object = $obj1, event = "ADD_EDIT_BUFF")
+    SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = GetObjectID(object = $obj1))
+}
+
+EXECUTION_EDIT_ACTION{
+    $decEditBuff = GetConfigVar(obj = $obj1, key = "editBuff")
+    If(not $decEditBuff){
+        Return()
+    }
+    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $decEditBuff) -- 不在编辑状态下玩家不能编辑房子的家具
+    If(not $buff){
+        Return()
+    }
+    $event = nil
+    If($action == "beginMove"){
+        $event = "DEC_INTERACTION_MOVE_TOUCH_BEGIN"
+    }ElseIf($action == "endMove"){
+        $event = "DEC_INTERACTION_MOVE_TOUCH_END"
+    }ElseIf($action == "sale"){
+        $event = "DEC_INTERACTION_SALE"
+    }ElseIf($action == "leftRotation"){
+        $event = "DEC_INTERACTION_LEFT_ROTATION"
+    }ElseIf($action == "rightRotation"){
+        $event = "DEC_INTERACTION_RIGHT_ROTATION"
+    }ElseIf($action == "exit"){
+        $event = "DEC_INTERACTION_EXIT_EDIT"
+    }
+    CallTrigger(object = $obj1, event = $event, objID = GetObjectID(object = $obj1), params = $params)
+}
+
+STOP_EDIT_ENTITY{
+    CallTrigger(object = $obj1, event = "REMOVE_EDIT_BUFF")
+}
+
 ENTITY_CLICK{
     $editBuff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/edit_house_buff") -- 不在编辑状态下玩家不能编辑房子的家具
     If(not $editBuff){
         Return()
     }
-
     $lastInteractionUiObjId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")
     If($lastInteractionUiObjId){
-        $entity = GetObject(objID = $lastInteractionUiObjId)
-        CallTrigger(object = $entity, event = "REMOVE_EDIT_BUFF")
         UpdateEntityEditContainer(player = $obj2, entityId = $lastInteractionUiObjId, show = false)
-        SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     }
-
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, obj2 = $obj2, time = 1, event = "SHOW_EDIT_UI")
 }   
 
 SHOW_EDIT_UI{
-    CallTrigger(object = $obj1, event = "ADD_EDIT_BUFF")
     UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = true)
-    SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = GetObjectID(object = $obj1))
 }
 
 DEC_INTERACTION_MOVE_TOUCH_BEGIN{
@@ -38,8 +77,10 @@ DEC_INTERACTION_MOVE_TOUCH_BEGIN{
 }
 
 DEC_INTERACTION_MOVE_TOUCH_END{
-    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = $entityPos or GetEntityPosition(entity = $obj1)
-        , ry = $entityYaw or GetEntityYaw(entity = $obj1), rp = $entityPitch or GetEntityPitch(entity = $obj1))
+    -- entityPos = $entityPos, entityYaw = $entityYaw, entityPitch = $entityPitch, entityScale = $entityScale)
+    $dict = NewDictionary($params or {})
+    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = DictionaryGet(dict = $dict, key = "entityPos") or GetEntityPosition(entity = $obj1)
+        , ry = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), rp = DictionaryGet(dict = $dict, key = "entityPitch") or GetEntityPitch(entity = $obj1))
     If(GetConfigVar(obj = $obj1, key = "boundBoxRotateWithYawAndPitch")){
         UpdateEntityBoundBoxWithRotate(entity = $obj1)
     }
@@ -59,7 +100,7 @@ DEC_INTERACTION_SALE{
     $furnitures = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing")
     ForLoop(from = 1, to = ArraySize(array = $furnitures), key = "index"){
         $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $index))
-        If(DictionaryGet(dict = $fDict, key = "furnishingId") == $objID){
+        If(DictionaryGet(dict = $fDict, key = "furnishingId") == GetObjectID(object = $obj1)){
             $cfg = DictionaryGet(dict = $fDict, key = "cfg")
             $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
             If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
@@ -106,8 +147,6 @@ ROTATION_BODY_YAW{
 
 DEC_INTERACTION_EXIT_EDIT{
     UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = false)
-    SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
-    CallTrigger(object = $obj1, event = "REMOVE_EDIT_BUFF")
 }
 
 ADD_EDIT_BUFF{

@@ -42,8 +42,6 @@ INTER_WITH_DOOR{
 
         $lastInteractionUiObjId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")
         If($lastInteractionUiObjId){
-            $entity = GetObject(objID = $lastInteractionUiObjId)
-            CallTrigger(object = $entity, event = "REMOVE_EDIT_BUFF")
             UpdateEntityEditContainer(player = $obj2, entityId = $lastInteractionUiObjId, show = false)
             SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
         }

@@ -246,6 +246,7 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
 CREATE_HOUSE_OUTSIDE{
     $yaw = GetRegionConfig(region = $region, key = "regionHouseYaw")
     $housePosOffset = GetEntityCfg(fullName = $houseCfg, key = "housePosOffset") or {x = 0, y = 0, z = 0}
+    Test("$housePosOffset--------------",$housePosOffset,$yaw)
     $house = CreateNpc(pos = ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)), 
         map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
     SetEntityYaw(entity = $house, rotationYaw = $yaw)
@@ -732,8 +733,6 @@ SHOW_TITLE_BAR{
     
     $lastInteractionUiObjId = GetObjectVar(obj = $obj1, key = "lastInteractionUiObjId")
     If($lastInteractionUiObjId){
-        $entity = GetObject(objID = $lastInteractionUiObjId)
-        CallTrigger(object = $entity, event = "REMOVE_EDIT_BUFF")
         UpdateEntityEditContainer(player = $obj1, entityId = $lastInteractionUiObjId, show = false)
         SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     }
