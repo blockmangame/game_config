@@ -730,9 +730,12 @@ SHOW_TITLE_BAR{
         RemoveEntityBuff(entity = $obj1, buff = $editBuff)
     }
     
-    If(GetObjectVar(obj = $obj1, key = "curInteractionUiObjId")){
-        UpdateEntityEditContainer(player = $obj1, entityId = GetObjectVar(obj = $obj1, key = "curInteractionUiObjId"), show = false)
-        SetObjectVar(obj = $obj2, key = "curInteractionUiObjId", value = nil)
+    $lastInteractionUiObjId = GetObjectVar(obj = $obj1, key = "lastInteractionUiObjId")
+    If($lastInteractionUiObjId){
+        $entity = GetObject(objID = $lastInteractionUiObjId)
+        CallTrigger(object = $entity, event = "REMOVE_EDIT_BUFF")
+        UpdateEntityEditContainer(player = $obj1, entityId = $lastInteractionUiObjId, show = false)
+        SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     }
 
     CallTrigger(object = $obj1, event = "SAVE_FURNITURE")
@@ -3419,8 +3422,8 @@ FINISH_AWARD(){ --完成打工的奖励
 SHOW_SHOP_TITLE(){
     $data1 = GetWorldVar(key = "titilePos1")
     $data2 = GetWorldVar(key = "titilePos2")
-    Show3DUI(player = $obj1, show = true, data = $data1)
-    Show3DUI(player = $obj1, show = true, data = $data2)
+    Show3DUI(player = $obj1, show = $show, data = $data1)
+    Show3DUI(player = $obj1, show = $show, data = $data2)
 }
 --公共区域购买，场景商店的购买逻辑
 SURE_BUY(debug = false){
@@ -3853,6 +3856,7 @@ ENTER_MAP
     CallTrigger(object = $obj1, event = "PICK_HAND_ITEM", obj1 = $obj1)
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
+        CallTrigger(event = "SHOW_SHOP_TITLE", object = $obj1, show = true)
         $U3Dcfg = GetWorldVar(key = "sceneUI")      -- u3d ui
         Foreach(array = $U3Dcfg, key = "ucfg")
         {
@@ -3883,6 +3887,7 @@ LEAVE_MAP
 {
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
+        CallTrigger(event = "SHOW_SHOP_TITLE", object = $obj1, show = false)
         $U3Dcfg = GetWorldVar(key = "sceneUI")      -- u3d ui
 
         Foreach(array = $U3Dcfg, key = "ucfg")

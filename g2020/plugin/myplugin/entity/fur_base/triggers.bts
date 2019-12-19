@@ -10,16 +10,16 @@ ENTITY_CLICK{
     If(not $editBuff){
         Return()
     }
-    If(GetObjectVar(obj = $obj2, key = "curInteractionUiObjId")){
-        UpdateEntityEditContainer(player = $obj2, entityId = GetObjectVar(obj = $obj2, key = "curInteractionUiObjId"), show = false)
-        SetObjectVar(obj = $obj2, key = "curInteractionUiObjId", value = nil)
+    If(GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")){
+        UpdateEntityEditContainer(player = $obj2, entityId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId"), show = false)
+        SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     }
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, obj2 = $obj2, time = 1, event = "SHOW_EDIT_UI")
 }   
 
 SHOW_EDIT_UI{
     UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = true)
-    SetObjectVar(obj = $obj2, key = "curInteractionUiObjId", value = GetObjectID(object = $obj1))
+    SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = GetObjectID(object = $obj1))
 }
 
 DEC_INTERACTION_MOVE_TOUCH_BEGIN{
@@ -69,7 +69,7 @@ DEC_INTERACTION_SALE{
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
 
     UpdateEntityEditContainer(player = $owner, entityId = GetObjectID(object = $obj1), show = false)
-    SetObjectVar(obj = $owner, key = "curInteractionUiObjId", value = nil)
+    SetObjectVar(obj = $owner, key = "lastInteractionUiObjId", value = nil)
 
     KillEntity(entity = $obj1)
 }
@@ -100,6 +100,61 @@ ROTATION_BODY_YAW{
 
 DEC_INTERACTION_TEST{
 
+}
+--上面是编辑，这里是cashbox
+ROTATION_BOUNDING_BOX_RIGHT{
+    $buff90 = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/rotate_bounding_box_buff_90")
+    $buff180 = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/rotate_bounding_box_buff_180")
+    $buff270 = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/rotate_bounding_box_buff_270")
+    If($buff90){
+        RemoveEntityBuff(entity = $obj1, buff = $buff90)
+    }ElseIf($buff180){
+        RemoveEntityBuff(entity = $obj1, buff = $buff180)
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_270")
+    }ElseIf($buff270){
+        RemoveEntityBuff(entity = $obj1, buff = $buff270)
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_180")
+    }Else{
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_90")
+    }  
+}
+ROTATION_BOUNDING_BOX_LEFT{
+    $buff90 = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/rotate_bounding_box_buff_90")
+    $buff180 = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/rotate_bounding_box_buff_180")
+    $buff270 = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/rotate_bounding_box_buff_270")
+    If($buff90){
+        RemoveEntityBuff(entity = $obj1, buff = $buff90)
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_180")
+    }ElseIf($buff180){
+        RemoveEntityBuff(entity = $obj1, buff = $buff180)
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_90")
+    }ElseIf($buff270){
+        RemoveEntityBuff(entity = $obj1, buff = $buff270)
+    }Else{
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_270")
+    }  
+}
+
+SHOW_DONATE_UI
+{
+    $owner = GetOwner(entity = $obj1)
+    If(not $owner)
+    {
+        Return()
+    }
+
+    $objID = GetObjectID(object = $obj1)
+    $ownerId = GetObjectID(object = $owner)
+    $playerId = GetObjectID(object = $obj2)
+
+    If($owner == $obj2)
+    {
+        ShowTip(entity = $obj2, tipType = 2, textKey = "gui_cashbox_cannot_give_money", time = 40)
+    }
+    Else
+    {
+        CallTrigger(object = $obj2, ownerId = GetObjectID(object = $owner), event = "SHOW_CASH_BOX_INPUT_DIALOG")
+    }
 }
 
 --上面是编辑，这里是ride
@@ -176,6 +231,49 @@ COOK_5(debug = false){
     CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
 FOOD_BUY(debug = false){
+   $owner = GetOwner(entity = $obj1)
+   $myTeamId = GetEntityTeam(entity = $obj2)
+   $ownerName = "nil"
+   $isTeam = false
+   If($owner){
+      $ownTeamId = GetEntityTeam(entity = $owner)
+      $ownerName = GetObjectID(object = $owner)
+   }
+   If(($ownTeamId ~= nil and $ownTeamId ~= 0 and $myTeamId == $ownTeamId )or SameObj(entity = $obj2, entity2 = $owner)){ --领主自己家庭成员不要钱。
+       $isTeam = true
+   }
+   If($price == 0 or not $price){ --不要钱的
+        ShowTip(textKey = "gui_gain_item_success",textP1 = $sellItem, tipType = 1, entity = $obj1, keepTime = 20)
+        Return()
+   }
+   If($isTeam){ --不要钱不弹窗直接购买
+      CallTrigger(event = "SURE_FURNITURE_BUY", object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam)
+   }Else{
+      $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = nil,
+        rightContent = "ui_sure"
+      }
+      
+      $content = {
+         msg = "gui_you_want_to_buy_this",
+         args = [ $price, $sellItem]
+      }
+      $Context = {
+         objID = GetObjectID(object = $obj1),
+         price = $price,
+         sellItem = $sellItem,
+         isTeam = $isTeam,
+         owner = $owner
+      }
+      ShowDialogTip(entity = $obj2, tipType = 5, event = "SURE_FURNITURE_BUY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
+   }
+}
+--上面是编辑的，下面是购买食物或者道具的
+FOOD_BUY(debug = false){
+   $price = GetConfigVar(obj = $obj1, key = "sellPrice")
+   $sellItem = GetConfigVar(obj = $obj1, key = "sellItem")
    $owner = GetOwner(entity = $obj1)
    $myTeamId = GetEntityTeam(entity = $obj2)
    $ownerName = "nil"

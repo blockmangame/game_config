@@ -23,6 +23,24 @@
         "myplugin/random_commodity",
         "myplugin/angel_wings"
     ],
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "aroundParams": {
+            "startAngle": 0,
+            "endAngle": 90,
+            "radius": 100
+        },
+        "centerBtns": [
+            {
+                "text": "cook.guide",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "nextCfgKey": "interaction_choices"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false
+        }
+    },
     "interaction_choices": {
         "cfgKey": "interaction_choices",
         "aroundParams": {

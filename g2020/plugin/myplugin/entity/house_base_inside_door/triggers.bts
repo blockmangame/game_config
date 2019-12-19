@@ -39,10 +39,15 @@ INTER_WITH_DOOR{
         CallTrigger(object = $obj2, event = "SAVE_FURNITURE")
         ShowTitleBarPage(entity = $obj2, closeWin = true)
         ShowGenericActorShowStore(entity = $obj2, closeWin =true)
-        If(GetObjectVar(obj = $obj2, key = "curInteractionUiObjId")){
-            UpdateEntityEditContainer(player = $obj2, entityId = GetObjectVar(obj = $obj2, key = "curInteractionUiObjId"), show = false)
-            SetObjectVar(obj = $obj2, key = "curInteractionUiObjId", value = nil)
+
+        $lastInteractionUiObjId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")
+        If($lastInteractionUiObjId){
+            $entity = GetObject(objID = $lastInteractionUiObjId)
+            CallTrigger(object = $entity, event = "REMOVE_EDIT_BUFF")
+            UpdateEntityEditContainer(player = $obj2, entityId = $lastInteractionUiObjId, show = false)
+            SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
         }
+        
         CallTrigger(object = $obj2, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = true)
     }
     CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj2, gpsDict = GetObjectVar(obj = $obj2, key = "gpsDict")) --如果有导航则继续导航

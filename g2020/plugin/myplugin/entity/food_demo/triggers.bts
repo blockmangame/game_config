@@ -11,15 +11,15 @@ ENTITY_CLICK{
         Return()
     }
    
-    If(GetObjectVar(obj = $obj2, key = "curInteractionUiObjId")){
-        UpdateEntityEditContainer(player = $obj2, entityId = GetObjectVar(obj = $obj2, key = "curInteractionUiObjId"), show = false)
+    If(GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")){
+        UpdateEntityEditContainer(player = $obj2, entityId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId"), show = false)
     }
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, obj2 = $obj2, time = 1, event = "SHOW_EDIT_UI")
 }   
 
 SHOW_EDIT_UI{
     UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = true)
-    SetObjectVar(obj = $obj2, key = "curInteractionUiObjId", value = GetObjectID(object = $obj1))
+    SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = GetObjectID(object = $obj1))
 }
 
 DEC_INTERACTION_MOVE_TOUCH_BEGIN{

@@ -1,7 +1,8 @@
 {
     "actorName": "fish03.actor",
-    "base":"cook_base",
+    "base": "cook_base",
     "name": "cook.demo",
+    "editBuff": "myplugin/dec_edit_buff",
     "coinId": 3,
     "image": "plugin/myplugin/image/fru/g1047_prop_2001.png",
     "buyMoney": 300,
@@ -13,78 +14,78 @@
         "myplugin/random_commodity",
         "myplugin/angel_wings"
     ],
-    "interaction_choices":{
+    "interaction_choices": {
         "cfgKey": "interaction_choices",
-        "aroundParams":{
+        "aroundParams": {
             "startAngle": 270,
             "endAngle": 90,
-            "background":"plugin/myplugin/image/food_bg.png",
-            "backgroundSize":{
-                "width":100,
-                "height":100
+            "background": "plugin/myplugin/image/food_bg.png",
+            "backgroundSize": {
+                "width": 100,
+                "height": 100
             },
-            "imageSize":{
-                "width":80,
-                "height":80
+            "imageSize": {
+                "width": 80,
+                "height": 80
             },
             "textFontSize": "HT24",
             "radius": 100
         },
-        "followParams":{
+        "followParams": {
             "followScenePos": false,
             "resetWhenHide": true
         },
-        "aroundBtns":[
+        "aroundBtns": [
             {
-                "text":"$1",
-                "image":"plugin/myplugin/image/pizza.png",
+                "text": "$1",
+                "image": "plugin/myplugin/image/pizza.png",
                 "checkHide": {
-                    "checkCond":{
+                    "checkCond": {
                         "funcName": "checkOwnerInSameTeam"
                     },
-                    "wishResult":true
+                    "wishResult": true
                 },
                 "event": "COOK_1"
             },
             {
-                "text":"free!",
-                "image":"plugin/myplugin/image/pizza.png",
+                "text": "free!",
+                "image": "plugin/myplugin/image/pizza.png",
                 "checkHide": {
-                    "checkCond":{
+                    "checkCond": {
                         "funcName": "checkOwnerInSameTeam"
                     },
-                    "wishResult":false
+                    "wishResult": false
                 },
                 "event": "COOK_1"
             },
             {
-                "image":"plugin/myplugin/image/back.png",
-                "imageSize":{
-                    "width":100,
-                    "height":100
+                "image": "plugin/myplugin/image/back.png",
+                "imageSize": {
+                    "width": 100,
+                    "height": 100
                 },
-                "background":"",
+                "background": "",
                 "nextCfgKey": "interactionUI"
             },
             {
-                "text":"$2",
-                "image":"plugin/myplugin/image/burger.png",
+                "text": "$2",
+                "image": "plugin/myplugin/image/burger.png",
                 "checkHide": {
-                    "checkCond":{
+                    "checkCond": {
                         "funcName": "checkOwnerInSameTeam"
                     },
-                    "wishResult":true
+                    "wishResult": true
                 },
                 "event": "COOK_2"
             },
             {
-                "text":"free!",
-                "image":"plugin/myplugin/image/burger.png",
+                "text": "free!",
+                "image": "plugin/myplugin/image/burger.png",
                 "checkHide": {
-                    "checkCond":{
+                    "checkCond": {
                         "funcName": "checkOwnerInSameTeam"
                     },
-                    "wishResult":false
+                    "wishResult": false
                 },
                 "event": "COOK_2"
             }
