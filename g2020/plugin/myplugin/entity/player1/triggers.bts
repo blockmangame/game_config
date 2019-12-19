@@ -1306,24 +1306,6 @@ FUNC_REGION_STATE_OPERATION --parmas: opt, state
         {
             Return()
         }
-        ElseIf(GetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase)))
-        {
-            $subdivided = GetSkillVar(fullName = $skill, key = "subdivided")
-            If(ArraySize(array = $subdivided or []) > 0)
-            {
-                $kind = ArrayGet(
-                    array = $subdivided,
-                    index = GetObjectVar(
-                        obj = $obj1,
-                        key = Concat(p1 = $stateBase, p2 = "Idx")
-                    )
-                )
-                If($kind ~= $state)
-                {
-                    Return()
-                }
-            }
-        }
     }
 
     CallTrigger(
@@ -1477,25 +1459,22 @@ FUNC_STATE_RELEASE --params: state[, duration]
     $releasingState = Concat(p1 = "releasing", p2 = $stateBase)
     If(GetObjectVar(obj = $obj1, key = $hadState) && not GetObjectVar(obj = $obj1, key = $releasingState))
     {
-        If(GetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase)))
+        $subdivided = GetSkillVar(fullName = $skill, key = "subdivided")
+        If(ArraySize(array = $subdivided or []) > 0)
         {
-            $subdivided = GetSkillVar(fullName = $skill, key = "subdivided")
-            If(ArraySize(array = $subdivided or []) > 0)
-            {
-                $kind = ArrayGet(
-                    array = $subdivided,
-                    index = GetObjectVar(
-                        obj = $obj1,
-                        key = Concat(p1 = $stateBase, p2 = "Idx")
-                    )
+            $kind = ArrayGet(
+                array = $subdivided,
+                index = GetObjectVar(
+                    obj = $obj1,
+                    key = Concat(p1 = $stateBase, p2 = "Idx")
                 )
-                If($kind ~= $state)
-                {
-                    Return()
-                }
+            )
+            If($kind ~= $state)
+            {
+                Return()
             }
         }
-        
+
         SetObjectVar(obj = $obj1, key = $releasingState, value = true)
         $duration = $duration or GetSkillVar(fullName = $skill, key = "duration")
         If($duration && $duration > 0)
