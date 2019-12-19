@@ -3820,8 +3820,28 @@ EDIT_BUTTON_SURE
     }
 }
 
+PICK_HAND_ITEM {
+    $canHandMap = GetConfigVar(obj = GetEntityHandItem(entity = $obj1), key = "canHandMap")
+    $playerCurMap = GetEntityMapName(entity = $obj1)
+    If ($canHandMap and $playerCurMap ~= $canHandMap)
+    {
+        SetHandItem(player = $obj1)
+    }
+}
+
+ENTER_EQUIPMEN {
+    $canHandMap = GetConfigVar(obj = $item, key = "canHandMap")
+    $playerCurMap = GetEntityMapName(entity = $obj1)
+    If ($canHandMap and $playerCurMap ~= $canHandMap)
+    {
+        Return()
+    }
+    SetHandItem(player = $obj1, item = $item)
+}
+
 ENTER_MAP
 {
+    CallTrigger(object = $obj1, event = "PICK_HAND_ITEM", obj1 = $obj1)
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
         $U3Dcfg = GetWorldVar(key = "sceneUI")      -- u3d ui
