@@ -2080,8 +2080,7 @@ USER_INTERACTION_ACTION
 
 ENTITY_JUMP {
     CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
-    $ride = GetRideOn(entity = $obj1)
-    If (GetRideOn(entity = $obj1)){
+    If (GetRideOn(entity = $obj1) && not IsCameraMode(player = $obj1)){
         Dismount(entity = $obj1)
         CallTrigger(object = $obj1, event = "FUNC_STATE_RIDEON", ride = $ride, isCancel = true)
     }
@@ -3631,15 +3630,7 @@ DEBARK {
 
 START_CAMERA_MODE
 {
-    If($obj1.cameraModeBuff ~= nil)
-    {
-        RemoveEntityBuff(entity = $obj1, buff = $obj1.cameraModeBuff)
-        $obj1.cameraModeBuff = nil
-    }
-    Else
-    {
-        $obj1.cameraModeBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/camera_mode")
-    }
+    SetCameraMode(player = $obj1, isOpen = not IsCameraMode(player = $obj1))
 }
 
 STORE_ITEM_OPERATION_PRIVILEGE
@@ -3829,8 +3820,28 @@ EDIT_BUTTON_SURE
     }
 }
 
+PICK_HAND_ITEM {
+    $canHandMap = GetConfigVar(obj = GetEntityHandItem(entity = $obj1), key = "canHandMap")
+    $playerCurMap = GetEntityMapName(entity = $obj1)
+    If ($canHandMap and $playerCurMap ~= $canHandMap)
+    {
+        SetHandItem(player = $obj1)
+    }
+}
+
+ENTER_EQUIPMEN {
+    $canHandMap = GetConfigVar(obj = $item, key = "canHandMap")
+    $playerCurMap = GetEntityMapName(entity = $obj1)
+    If ($canHandMap and $playerCurMap ~= $canHandMap)
+    {
+        Return()
+    }
+    SetHandItem(player = $obj1, item = $item)
+}
+
 ENTER_MAP
 {
+    CallTrigger(object = $obj1, event = "PICK_HAND_ITEM", obj1 = $obj1)
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
         $U3Dcfg = GetWorldVar(key = "sceneUI")      -- u3d ui
@@ -3899,10 +3910,17 @@ PLAYER_BE_INVITE(debug = false){
     ShowNotice(
 		buttonType = 2,
 		content = $guiText or "gui_friend_invite_notice",
-		eventYes = "PLAYER_ON_VISIT",
+        eventYes = "PLAYER_ON_VISIT",
+        eventNo = "PLAYER_BE_INVITE_REFUSE",
 		entity = $obj1,
 		textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
 	)
+}
+PLAYER_BE_INVITE_REFUSE(){
+
+}
+PLAYER_BE_INVITE_OTHER_SERVER_REFUSE(){
+    $obj1.partyInfo = nil
 }
 PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
@@ -3914,19 +3932,25 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
     If($partyInfo){
         $guiText = "gui_party_invite_notice"
-        $obj1.partyInfo = $partyInfo
+        $obj1.partyInfo = $partyInfo--todo:need reset
     }
     $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
     ShowNotice(
         buttonType = 2,
         content = $guiText or "gui_friend_invite_notice",
         eventYes = "PLAYER_ON_VISIT_OTHER_SERVER",
+        eventNo = "PLAYER_BE_INVITE_OTHER_SERVER_REFUSE",
         entity = $obj1,
         textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
     )
 }
 PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
     $targetUserId = $targetUserId or $obj1.visitTargetUserId
+    $contentDict = NewDictionary($content)
+    $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
+    If($partyInfo){--can be set by PLAYER_BE_INVITE_OTHER_SERVER
+        $obj1.partyInfo = $partyInfo
+    }
     If($obj1.partyInfo){
         $partyDict = NewDictionary($obj1.partyInfo)
         $partyId = DictionaryGet(dict = $partyDict, key = "partyId")
