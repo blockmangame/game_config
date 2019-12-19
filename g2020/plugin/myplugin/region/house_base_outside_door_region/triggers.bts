@@ -20,6 +20,6 @@ REGION_ENTER {
         CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
         CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = false)
     }
-    CallTrigger(object = $obj1, event = "FUNC_STATE_OPEN_GPS", rtVal = $obj1.gpsDestination)--如果有导航则继续导航
+    CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj1, gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict"))--如果有导航则继续导航
     StartTimer(time = 20,object = $obj1, event = "TASK_UPDATE_DATA") --打工导航
 }

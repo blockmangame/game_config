@@ -214,21 +214,24 @@ CHANGE_PLAYER_SCALE_CHILD
 
 FUNC_CLOSE_GPS --params: destination
 {
-    If(not $destination || $destination == GetObjectVar(obj = $obj1, key = "gpsDestination"))
+    $gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict")
+    If($gpsDict)
+    {
+        $dictDestination = DictionaryGet(dict = $gpsDict, key = "destination")
+    }
+    If(not $destination || $destination == $dictDestination)
     {
         SetGuidePostion(entity = $obj1)
         RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
-        SetObjectVar(obj = $obj1, key = "gpsDestination", value = nil)
-        SetObjectVar(obj = $obj1, key = "navigationDict", value = nil)
+        SetObjectVar(obj = $obj1, key = "gpsDict", value = nil)
     }
 }
 
-FUNC_OPEN_GPS --params: destination, navigation, gps
+FUNC_OPEN_GPS --params: gpsDict
 {
     SetGuidePostion(pos = $gps, entity = $obj1)
     AddSkill(entity = $obj1, name = "myplugin/close_gps")
-    SetObjectVar(obj = $obj1, key = "gpsDestination", value = $destination)
-    SetObjectVar(obj = $obj1, key = "navigationDict", value = $navigation)
+    SetObjectVar(obj = $obj1, key = "gpsDict", value = $gpsDict)
     ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
 }
 
@@ -660,7 +663,7 @@ FUNC_NAVIGATION_GET_DOORWAY_LIST --params: mapS(玩家当前所在地图名), ma
     }
 }
 
-FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX --params: allDWs(map00xTomap00yDWs)[, saveName, type = "global"/"entity"]
+FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX --params: allDWs(map00xTomap00yDWs)[, tgtDict, saveName, type = "global"/"entity"]
 {
     If(ArraySize(array = $allDWs) == 1)
     {
@@ -669,6 +672,14 @@ FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX --params: allDWs(map00xTomap00yDWs)
     If($obj1)
     {
         ArrayInsert(array = $allDWs, index = 1, value = $obj1)
+        $objMap = GetEntityMap(entity = $obj1)
+        $objPos = GetEntityPosition(entity = $obj1)
+    }
+    If($tgtDict and DictionaryGet(dict = $tgtDict, key = "pos"))
+    {
+        ArrayInsert(array = $allDWs, index = 2, value = $tgtDict)
+        $tgMap = DictionaryGet(dict = $tgtDict, key = "belongMap")
+        $tgPos = DictionaryGet(dict = $tgtDict, key = "pos")
     }
 
     $matrix = []
@@ -676,10 +687,27 @@ FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX --params: allDWs(map00xTomap00yDWs)
     {
         $curModel = []
         $rowDW = ArrayGet(array = $allDWs, index = $index)
-        $rowMap = $rowDW == $obj1 and GetEntityMap(entity = $obj1) or GetConfigValue(type = "entity", fullName = $rowDW, key = "belongMap")
-        $rowPos = $rowDW == $obj1 and GetEntityPosition(entity = $obj1) or GetConfigValue(type = "entity", fullName = $rowDW, key = "pos")
-        $rowToMap = $rowDW == $obj1 and $rowMap or GetConfigValue(type = "entity", fullName = $rowDW, key = "toMap")
-        $rowToPos = $rowDW == $obj1 and $rowPos or GetConfigValue(type = "entity", fullName = $rowDW, key = "toPos")
+        If($obj1 == $rowDW)
+        {
+            $rowMap = $objMap
+            $rowPos = $objPos
+            $rowToMap = $rowMap
+            $rowToPos = $rowPos
+        }
+        ElseIf($rowDW == $tgtDict)
+        {
+            $rowMap = $tgMap
+            $rowPos = $tgPos
+            $rowToMap = $rowMap
+            $rowToPos = $rowPos
+        }
+        Else
+        {
+            $rowMap = GetConfigValue(type = "entity", fullName = $rowDW, key = "belongMap")
+            $rowPos = GetConfigValue(type = "entity", fullName = $rowDW, key = "pos")
+            $rowToMap = GetConfigValue(type = "entity", fullName = $rowDW, key = "toMap")
+            $rowToPos = GetConfigValue(type = "entity", fullName = $rowDW, key = "toPos")
+        }
         
         $rowX = GetPosX(pos = $rowPos)
         $rowY = GetPosY(pos = $rowPos)
@@ -695,8 +723,28 @@ FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX --params: allDWs(map00xTomap00yDWs)
             If($idx ~= $index)
             {
                 $colDW = ArrayGet(array = $allDWs, index = $idx)
-                $colMap = $colDW == $obj1 and GetEntityMap(entity = $obj1) or GetConfigValue(type = "entity", fullName = $colDW, key = "belongMap")
-                $colPos = $colDW == $obj1 and GetEntityPosition(entity = $obj1) or GetConfigValue(type = "entity", fullName = $colDW, key = "pos")
+                If($obj1 == $colDW)
+                {
+                    $colMap = $objMap
+                    $colPos = $objPos
+                    $colToMap = $colMap
+                    $colToPos = $colPos
+                }
+                ElseIf($colDW == $tgtDict)
+                {
+                    $colMap = $tgMap
+                    $colPos = $tgPos
+                    $colToMap = $colMap
+                    $colToPos = $colPos
+                }
+                Else
+                {
+                    $colMap = GetConfigValue(type = "entity", fullName = $colDW, key = "belongMap")
+                    $colPos = GetConfigValue(type = "entity", fullName = $colDW, key = "pos")
+                    $colToMap = GetConfigValue(type = "entity", fullName = $colDW, key = "toMap")
+                    $colToPos = GetConfigValue(type = "entity", fullName = $colDW, key = "toPos")
+                }
+
                 $colX = GetPosX(pos = $colPos)
                 $colY = GetPosY(pos = $colPos)
                 $colZ = GetPosZ(pos = $colPos)
