@@ -1,10 +1,9 @@
 {
-	"canClick": true,
-	"carMove": true,
-	"carConfig": {
-	},
-	"collision": true,
-	"ridePos": [
+    "canClick": true,
+    "carMove": true,
+    "carConfig": [],
+    "collision": true,
+    "ridePos": [
         {
             "yaw": 0,
             "pos": {
@@ -19,11 +18,11 @@
             },
             "ctrl": true,
             "view": true,
-			"passengerAction": {
-				"base": "riding"
-			}
+            "passengerAction": {
+                "base": "riding"
+            }
         }
-	],
+    ],
     "boundingVolume": {
         "type": "Composite",
         "params": [
@@ -38,24 +37,22 @@
         ]
     },
     "canInteract": true,
-	"interactionUI":
-        {
-            "cfgKey": "interactionUI",
-            "centerBtns":[
-                {
-                    "text":"item_testlang",
-                    "image":"plugin/myplugin/image/hand_click.png",
-                    "event": "RIDE_ON",
-                    "imageSize":
-                    {
-                        "width": "100",
-                        "height": "100"
-                    }
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "item_testlang",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": "RIDE_ON",
+                "imageSize": {
+                    "width": "100",
+                    "height": "100"
                 }
-            ],
-            "followParams":{
-                "followScenePos": false
             }
-        },
+        ],
+        "followParams": {
+            "followScenePos": false
+        }
+    },
     "actorName": "g2020_car01.actor"
 }

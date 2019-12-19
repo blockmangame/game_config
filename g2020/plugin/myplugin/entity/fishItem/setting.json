@@ -2,27 +2,27 @@
     "actorName": "fish02.actor",
     "sellItem": "myplugin/random_commodity",
     "sellPrice": 10,
-    "canInteract":true,
-    "interactionUI":{
+    "canInteract": true,
+    "interactionUI": {
         "cfgKey": "interactionUI",
-        "followParams":{
-            "followScenePos":false
+        "followParams": {
+            "followScenePos": false
         },
-        "centerBtns":[
+        "centerBtns": [
             {
-                "text":"苹果：$100",
-                "widgetFileName":"widget_button",
-                "image":"set:add_sub.json image:add",
+                "text": "苹果：$100",
+                "widgetFileName": "widget_button",
+                "image": "set:add_sub.json image:add",
                 "event": "BUY_SHOP"
             }
         ]
     },
-    "interaction":{
-      "radius": 7,
-      "offset":{
-          "x": 0,
-          "y": -1,
-          "z": 2
-      }
+    "interaction": {
+        "radius": 7,
+        "offset": {
+            "x": 0,
+            "y": -1,
+            "z": 2
+        }
     }
 }

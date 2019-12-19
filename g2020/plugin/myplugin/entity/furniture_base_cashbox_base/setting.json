@@ -35,7 +35,7 @@
                 "x": -50,
                 "y": 0
             },
-            "context": {}
+            "context": []
         },
         "aroundWidget": [
             {
@@ -43,7 +43,7 @@
                 "image": "set:Edit_1.json image:Edit_Sell_Icon.png",
                 "tipContent": {
                     "eventIndex": 3,
-                    "content": { 
+                    "content": {
                         "titleText": "ui_tip",
                         "msgText": "ui_sure_to_sell_furniture",
                         "leftText": "ui_sure",
@@ -55,7 +55,7 @@
                     "x": 50,
                     "y": 0
                 },
-                "context": {}
+                "context": []
             },
             {
                 "text": "COLOR",
@@ -65,7 +65,7 @@
                     "x": -150,
                     "y": 0
                 },
-                "context": {}
+                "context": []
             },
             {
                 "text": "LEFT_ROTATION",
@@ -76,7 +76,7 @@
                     "x": -100,
                     "y": 150
                 },
-                "context": {}
+                "context": []
             },
             {
                 "text": "RIGHT_ROTATION",
@@ -87,33 +87,43 @@
                     "x": 0,
                     "y": 150
                 },
-                "context": {}
+                "context": []
             }
         ],
-        "events":[
-            {"event":"DEC_INTERACTION_MOVE_TOUCH_BEGIN"},
-            {"event":"DEC_INTERACTION_MOVE_TOUCH_END"},
-            {"event":"DEC_INTERACTION_SALE"},
-            {"event":"DEC_INTERACTION_LEFT_ROTATION"},
-            {"event":"DEC_INTERACTION_RIGHT_ROTATION"}
+        "events": [
+            {
+                "event": "DEC_INTERACTION_MOVE_TOUCH_BEGIN"
+            },
+            {
+                "event": "DEC_INTERACTION_MOVE_TOUCH_END"
+            },
+            {
+                "event": "DEC_INTERACTION_SALE"
+            },
+            {
+                "event": "DEC_INTERACTION_LEFT_ROTATION"
+            },
+            {
+                "event": "DEC_INTERACTION_RIGHT_ROTATION"
+            }
         ]
     },
     "canInteract": true,
-    "interactionUI":{
+    "interactionUI": {
         "cfgKey": "interactionUI",
-        "centerBtns":[
+        "centerBtns": [
             {
                 "text": "",
-                "image":"plugin/myplugin/image/hand_click.png",
+                "image": "plugin/myplugin/image/hand_click.png",
                 "event": "SHOW_DONATE_UI"
             }
         ],
-        "followParams":{
-            "followScenePos":false,
-            "offset":{
-                "x" : 0,
-                "y" : 1,
-                "z" : 0
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
             }
         }
     },
