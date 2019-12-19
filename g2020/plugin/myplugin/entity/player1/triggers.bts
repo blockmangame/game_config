@@ -3182,7 +3182,7 @@ HTTP_PURCHASED_DRESS_CALL_BACK
 }
 
 --打工
-WORK_SHOW_GPS(debug = true){
+WORK_SHOW_GPS(debug = false){
     If($showGps){
         SetGuidePostion(entity = $obj1, pos = $obj1.gpsPos)
         If($obj1.gpsPos){
@@ -4071,11 +4071,19 @@ CHECK_EXIT_PARTY(debug = false){
 }
 LEAVE_PARTY_SUCCESS(debug = false){
     $obj1.inPartyOwnerId = 0
-    GotoOtherServer(player = $player)
+    GotoOtherServer(player = $obj1)
 }
 CHECK_IN_PARTY(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
+    $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
+    If(not $partyOwner){
+        ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.no.owner", time =  20)
+        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+        $obj1.inPartyOwnerId = 0--just in case
+        GotoOtherServer(player = $obj1)
+        Return()
+    }
     If($inPartyOwnerId ~= 0){
         UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
         If($userId == $inPartyOwnerId){
@@ -4086,10 +4094,6 @@ CHECK_IN_PARTY(debug = false){
         Else{
             --In Party
             $obj1.inSelfParty = 0
-            $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
-            If(not $partyOwner){
-                Return()
-            }
             CallTrigger(fromInParty = true, target = $partyOwner, event = "PLAYER_ON_VISIT", object = $obj1)
         }
     }
