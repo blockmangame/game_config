@@ -6,7 +6,6 @@
     "name": "indentModel",
     "clickDistance": 5,
     "canClick": true,
-    "hideHp": true,
     "sex": 1,
     "hideDeep": 0.1,
     "boundingVolume": {
@@ -17,27 +16,27 @@
             0.5
         ]
     },
-    "canInteract":true,
-    "interactionUI":{
+    "canInteract": true,
+    "interactionUI": {
         "cfgKey": "interactionUI",
-        "followParams":{
-            "followScenePos":false
+        "followParams": {
+            "followScenePos": false
         },
-        "centerBtns":[
+        "centerBtns": [
             {
-                "text":"领取订单",
-                "widgetFileName":"widget_button",
-                "image":"set:add_sub.json image:add",
+                "text": "领取订单",
+                "widgetFileName": "widget_button",
+                "image": "set:add_sub.json image:add",
                 "event": "GET_TASK"
             }
         ]
     },
-    "interaction":{
-      "radius": 1,
-      "offset":{
-          "x": 0,
-          "y": 0,
-          "z": 2
-      }
+    "interaction": {
+        "radius": 1,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 2
+        }
     }
 }

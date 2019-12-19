@@ -1,0 +1,59 @@
+{
+    "skin": {
+        "body": "4"
+    },
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    0.7,
+                    1,
+                    0.7
+                ]
+            }
+        ]
+    },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "aroundParams": {
+            "startAngle": 0,
+            "endAngle": 90,
+            "radius": 100
+        },
+        "aroundBtns": [
+            {
+                "text": "pay me!",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "checkHide": {
+                    "checkCond": {
+                        "funcName": "checkOwnerInSameTeam"
+                    },
+                    "wishResult": true
+                },
+                "event": "FOOD_BUY"
+            },
+            {
+                "text": "free!",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "checkHide": {
+                    "checkCond": {
+                        "funcName": "checkOwnerInSameTeam"
+                    },
+                    "wishResult": false
+                },
+                "event": "FOOD_BUY"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false
+        }
+    },
+    "sellItem": "myplugin/random_commodity",
+    "sellPrice": 4500,
+    "name": "食物",
+    "releaseState": "dirty",
+    "actorName": "g2020_fru_chairs.actor",
+    "base": "fur_base"
+}

@@ -1,13 +1,13 @@
 {
-	"canClick": false,
+    "canClick": false,
     "actorName": "g2020_car02.actor",
-	"coinId": 0,
+    "coinId": 0,
     "sellPrice": 999,
-	"sellItem": "myplugin/car_item_2",
-	"collision": true,
-	"name": "",
-	"pushable": true,
-	"boundingVolume": {
+    "sellItem": "myplugin/car_item_2",
+    "collision": true,
+    "name": "",
+    "pushable": true,
+    "boundingVolume": {
         "type": "Composite",
         "params": [
             {
@@ -16,60 +16,62 @@
                     -2.5,
                     0.8,
                     -1.5,
-					2.5,
-					1.7,
-					1.5
+                    2.5,
+                    1.7,
+                    1.5
                 ]
             },
-			{
+            {
                 "type": "VerticalBox",
                 "params": [
                     -0.5,
                     1.7,
                     -1.5,
-					2.5,
-					2.3,
-					1.5
+                    2.5,
+                    2.3,
+                    1.5
                 ]
             }
         ]
     },
-    "canInteract":true,
-    "interactionUI":{
+    "canInteract": true,
+    "interactionUI": {
         "cfgKey": "interactionUI",
-        "followParams":{
-            "followScenePos":false
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
         },
-        "centerBtns":[
+        "centerBtns": [
             {
-                "text":"磁悬浮汽车：★999",
-                "widgetFileName":"widget_button",
-                "image":"plugin/myplugin/image/hand_click.png",
-				"imageSize":
-                    {
-                        "width": "80",
-                        "height": "80"
-                    },
+                "text": "磁悬浮汽车：★999",
+                "widgetFileName": "widget_button",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "imageSize": {
+                    "width": "80",
+                    "height": "80"
+                },
                 "event": "BUY_SHOP"
             }
         ],
-		"followParams": 
-		{
-			"followScenePos": false,
-			"offset": 
-			{
-				"x": 0,
-				"y": 1,
-				"z": 0
-			}
-		}
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        }
     },
-    "interaction":{
-      "radius": 7,
-      "offset":{
-          "x": 0,
-          "y": -1,
-          "z": 2
-      }
+    "interaction": {
+        "radius": 7,
+        "offset": {
+            "x": 0,
+            "y": -1,
+            "z": 2
+        }
     }
 }
