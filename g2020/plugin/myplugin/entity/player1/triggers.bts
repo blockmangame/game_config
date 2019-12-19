@@ -3633,7 +3633,22 @@ DEBARK {
 
 START_CAMERA_MODE
 {
-    SetCameraMode(player = $obj1, isOpen = not IsCameraMode(player = $obj1))
+    If(not IsCameraMode(player = $obj1))
+    {
+        SetCameraMode(player = $obj1, isOpen = true)
+        $obj1.cameraModeCloseBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/camera_mode_close")
+        $obj1.cameraModeTakePhotosBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/camera_mode_take_photos")
+    }
+}
+
+ClOSE_CAMERA_MODE
+{
+    If(IsCameraMode(player = $obj1))
+    {
+        SetCameraMode(player = $obj1, isOpen = false)
+        RemoveEntityBuff(entity = $obj1, buff = $obj1.cameraModeBuff)
+        $obj1.cameraModeBuff = nil
+    }
 }
 
 STORE_ITEM_OPERATION_PRIVILEGE
