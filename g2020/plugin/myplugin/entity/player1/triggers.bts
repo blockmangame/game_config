@@ -149,9 +149,6 @@ ENTITY_ENTER
 		CallTrigger(event = "SET_DRESS_ARCHIVE", object = $obj1)
         CallTrigger(event = "INIT_PLAYER_DRESS", object = $obj1)
 
-
-        CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, newSkill = $obj1.danceUseItem)
-
         LoadPlayerAppDress(player = $obj1, event = "HTTP_PURCHASED_DRESS_CALL_BACK")
 
         -- test data
@@ -169,6 +166,18 @@ ENTITY_ENTER
         CallTrigger(event = "FUNC_LOAD_NEW_WORKS")
         CallTrigger(event = "FUNC_LOAD_EXCELLENT_WORKS")
     }
+}
+
+OPEN_DANCE
+{
+    CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, newSkill = $obj1.danceUseItem)
+    AddSkill(entity = $obj1, name = "myplugin/open_dance")
+}
+
+CLOSE_DANCE
+{
+    CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, oldSkill = $obj1.danceUseItem)
+    RemoveSkill(entity = $obj1, name = "myplugin/open_dance")
 }
 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
@@ -237,6 +246,7 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
 CREATE_HOUSE_OUTSIDE{
     $yaw = GetRegionConfig(region = $region, key = "regionHouseYaw")
     $housePosOffset = GetEntityCfg(fullName = $houseCfg, key = "housePosOffset") or {x = 0, y = 0, z = 0}
+    Test("$housePosOffset--------------",$housePosOffset,$yaw)
     $house = CreateNpc(pos = ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)), 
         map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
     SetEntityYaw(entity = $house, rotationYaw = $yaw)
@@ -723,8 +733,6 @@ SHOW_TITLE_BAR{
     
     $lastInteractionUiObjId = GetObjectVar(obj = $obj1, key = "lastInteractionUiObjId")
     If($lastInteractionUiObjId){
-        $entity = GetObject(objID = $lastInteractionUiObjId)
-        CallTrigger(object = $entity, event = "REMOVE_EDIT_BUFF")
         UpdateEntityEditContainer(player = $obj1, entityId = $lastInteractionUiObjId, show = false)
         SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     }
@@ -2085,7 +2093,6 @@ ENTITY_JUMP {
     CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     If (GetRideOn(entity = $obj1) && not IsCameraMode(player = $obj1)){
         Dismount(entity = $obj1)
-        CallTrigger(object = $obj1, event = "FUNC_STATE_RIDEON", ride = $ride, isCancel = true)
     }
 }
 

@@ -9,6 +9,21 @@
     },
     "canAttack": true,
     "region": {
+        "dance_region": {
+            "regionCfg": "myplugin/dance_region",
+            "box": {
+                "min": {
+                    "x": 168,
+                    "y": 18,
+                    "z": 165
+                },
+                "max": {
+                    "x": 175,
+                    "y": 19,
+                    "z": 180
+                }
+            }
+        },
         "house_region_1": {
             "regionCfg": "myplugin/house_region_180",
             "box": {
@@ -725,14 +740,33 @@
                 "z": 390
             },
             "ry": 0
-        },
-        {
+        }, {
             "cfg": "myplugin/interaction_demo",
             "pitch": 0,
             "pos": {
                 "x": 258,
                 "y": 19.1,
                 "z": 375
+            },
+            "ry": 180
+        },
+        {
+            "cfg": "myplugin/fru_chairs_body_35",
+            "pitch": 0,
+            "pos": {
+                "x": 254,
+                "y": 19.1,
+                "z": 390
+            },
+            "ry": 180
+        },
+        {
+            "cfg": "myplugin/fru_chairs_body_36",
+            "pitch": 0,
+            "pos": {
+                "x": 250,
+                "y": 19.1,
+                "z": 390
             },
             "ry": 180
         },

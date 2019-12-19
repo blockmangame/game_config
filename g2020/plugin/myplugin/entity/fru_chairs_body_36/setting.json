@@ -1,6 +1,6 @@
 {
     "skin": {
-        "body": "3"
+        "body": "15"
     },
     "boundingVolume": {
         "type": "Composite",
@@ -19,16 +19,21 @@
         "cfgKey": "interactionUI",
         "centerBtns": [
             {
-                "text": "sit",
+                "text": "",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "event": "ENTITY_sit1_1_1"
+                "event": "SHOW_DONATE_UI"
             }
         ],
         "followParams": {
-            "followScenePos": false
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
         }
     },
-    "name": "没有自己的bts，test+++",
+    "name": "收钱箱",
     "releaseState": "dirty",
     "actorName": "g2020_fru_chairs.actor",
     "base": "fur_base"

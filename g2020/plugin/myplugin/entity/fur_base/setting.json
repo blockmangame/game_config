@@ -12,6 +12,9 @@
     "hpBarColor": 0,
     "collision": true,
     "canClick": false,
+    "/name": "这是food_base里面的东西",
+    "deadInRed": false,
+    "destroyTime": 40,
     "ridePos": [
         {
             "/yaw": "3人1号坐1_index1",
@@ -128,24 +131,6 @@
             "view": false
         }
     ],
-    "interactionUI": {
-        "cfgKey": "interactionUI",
-        "aroundParams": {
-            "startAngle": 0,
-            "endAngle": 90,
-            "radius": 100
-        },
-        "centerBtns": [
-            {
-                "text": "cook.guide",
-                "image": "plugin/myplugin/image/hand_click.png",
-                "nextCfgKey": "interaction_choices"
-            }
-        ],
-        "followParams": {
-            "followScenePos": false
-        }
-    },
     "editUI": {
         "cfgKey": "editUI",
         "eventTb": "events",
@@ -167,7 +152,7 @@
                 "x": -50,
                 "y": 0
             },
-            "context": {}
+            "context": []
         },
         "aroundWidget": [
             {
@@ -187,7 +172,7 @@
                     "x": 50,
                     "y": 0
                 },
-                "context": {}
+                "context": []
             },
             {
                 "text": "COLOR",
@@ -197,7 +182,7 @@
                     "x": -150,
                     "y": 0
                 },
-                "context": {}
+                "context": []
             },
             {
                 "text": "LEFT_ROTATION",
@@ -208,7 +193,7 @@
                     "x": -100,
                     "y": 150
                 },
-                "context": {}
+                "context": []
             },
             {
                 "text": "RIGHT_ROTATION",
@@ -219,7 +204,7 @@
                     "x": 0,
                     "y": 150
                 },
-                "context": {}
+                "context": []
             }
         ],
         "events": [
