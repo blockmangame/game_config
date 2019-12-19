@@ -152,6 +152,9 @@ CREATE_HOUSE_REGION_DEST_BLOCK{
 CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION{
     --ReplaceBlockInRegions(map = $map, regions = $childRegionArr, replaceTb = GetBlockConfigByName(block = $destBlock, key = "destBlockMatrix"), filter = {blockType = "typeB"})
     --Return()
+    If(not $destBlock or "" == $destBlock){
+        Return()
+    }
     $regions = $childRegionArr
     $replaceTb = GetBlockConfigByName(block = $destBlock, key = "destBlockMatrix") or {}
     $filter = GetBlockConfigByName(block = $destBlock, key = "filter") or {}
