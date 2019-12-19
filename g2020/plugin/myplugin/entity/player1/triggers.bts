@@ -721,9 +721,12 @@ SHOW_TITLE_BAR{
         RemoveEntityBuff(entity = $obj1, buff = $editBuff)
     }
     
-    If(GetObjectVar(obj = $obj1, key = "curInteractionUiObjId")){
-        UpdateEntityEditContainer(player = $obj1, entityId = GetObjectVar(obj = $obj1, key = "curInteractionUiObjId"), show = false)
-        SetObjectVar(obj = $obj2, key = "curInteractionUiObjId", value = nil)
+    $lastInteractionUiObjId = GetObjectVar(obj = $obj1, key = "lastInteractionUiObjId")
+    If($lastInteractionUiObjId){
+        $entity = GetObject(objID = $lastInteractionUiObjId)
+        CallTrigger(object = $entity, event = "REMOVE_EDIT_BUFF")
+        UpdateEntityEditContainer(player = $obj1, entityId = $lastInteractionUiObjId, show = false)
+        SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     }
 
     CallTrigger(object = $obj1, event = "SAVE_FURNITURE")

@@ -16,6 +16,7 @@
     "rotationYawModlus": 90,
     "supportingForce": false,
     "isStatic": true,
+    "editBuff": "myplugin/dec_edit_buff",
     "editUI": {
         "cfgKey": "editUI",
         "eventTb": "events",
@@ -26,6 +27,10 @@
                 "z": 0
             },
             "isOffsetRotateByYaw": true
+        },
+        "exitEditEntityEventTb": {
+            "eventIndex": 6,
+            "context": {}
         },
         "moveWidget": {
             "text": "MOVE",
@@ -97,7 +102,8 @@
             {"event":"DEC_INTERACTION_MOVE_TOUCH_END"},
             {"event":"DEC_INTERACTION_SALE"},
             {"event":"DEC_INTERACTION_LEFT_ROTATION"},
-            {"event":"DEC_INTERACTION_RIGHT_ROTATION"}
+            {"event":"DEC_INTERACTION_RIGHT_ROTATION"},
+            {"event":"DEC_INTERACTION_EXIT_EDIT"}
         ]
     },
     "interaction": {
