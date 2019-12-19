@@ -1,0 +1,11 @@
+ENTITY_TOUCH_ALL
+{
+    EnterMap(
+        entity = $obj2,
+        map = GetConfigVar(obj = $obj1, key = "toMap"),
+        pos = GetConfigVar(obj = $obj1, key = "toPos"),
+        ry = GetConfigVar(obj = $obj1, key = "toRy")
+    )
+
+    CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj2, gpsDict = GetObjectVar(obj = $obj2, key = "gpsDict"))
+}

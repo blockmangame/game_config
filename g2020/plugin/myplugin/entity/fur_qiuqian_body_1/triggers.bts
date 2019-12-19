@@ -1,0 +1,217 @@
+ENTITY_ENTER
+{
+}
+
+ENTITY_TOUCH_ALL{
+}
+
+ENTITY_CLICK{
+    $editBuff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/edit_house_buff") -- 不在编辑状态下玩家不能编辑房子的家具
+    If(not $editBuff){
+        Return()
+    }
+    If(GetObjectVar(obj = $obj2, key = "curInteractionUiObjId")){
+        UpdateEntityEditContainer(player = $obj2, entityId = GetObjectVar(obj = $obj2, key = "curInteractionUiObjId"), show = false)
+        SetObjectVar(obj = $obj2, key = "curInteractionUiObjId", value = nil)
+    }
+    StartTimer(rep = false, object =$obj1, obj1 =$obj1, obj2 = $obj2, time = 1, event = "SHOW_EDIT_UI")
+}   
+
+SHOW_EDIT_UI{
+    UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = true)
+    SetObjectVar(obj = $obj2, key = "curInteractionUiObjId", value = GetObjectID(object = $obj1))
+}
+
+DEC_INTERACTION_MOVE_TOUCH_BEGIN{
+    PlayAction(
+        entity = $obj1,
+        includeSelf = true,
+        actionName = "jump",
+        actionTime = -1
+    )
+}
+
+DEC_INTERACTION_MOVE_TOUCH_END{
+    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = $entityPos or GetEntityPosition(entity = $obj1)
+        , ry = $entityYaw or GetEntityYaw(entity = $obj1), rp = $entityPitch or GetEntityPitch(entity = $obj1))
+    If(GetConfigVar(obj = $obj1, key = "boundBoxRotateWithYawAndPitch")){
+        UpdateEntityBoundBoxWithRotate(entity = $obj1)
+    }
+}
+
+DEC_INTERACTION_SALE{
+    $owner = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "owner")
+    $houseVars = GetObjectVar(obj = $owner, key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            DictionarySet(dict = $dict, key = "curHouseVarsIndex", value = $index)
+            $curHousedict = $dict
+            Break()
+        }
+    }
+    $furnitures = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing")
+    ForLoop(from = 1, to = ArraySize(array = $furnitures), key = "index"){
+        $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $index))
+        If(DictionaryGet(dict = $fDict, key = "furnishingId") == $objID){
+            $cfg = DictionaryGet(dict = $fDict, key = "cfg")
+            $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
+            If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
+                $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
+            }
+            AddCurrency(entity = $owner, coinName = "green_currency", count = $sellMoney)
+            ArrayRemove(array = $furnitures, index = $index)
+            Break()
+        }
+    }
+    $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
+    DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
+    ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
+
+    UpdateEntityEditContainer(player = $owner, entityId = GetObjectID(object = $obj1), show = false)
+    SetObjectVar(obj = $owner, key = "curInteractionUiObjId", value = nil)
+
+    KillEntity(entity = $obj1)
+}
+
+DEC_INTERACTION_LEFT_ROTATION{
+    $yaw = ((GetEntityYaw(entity = $obj1) or 0) + (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)) % 360
+    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1)
+        , ry = $yaw or GetEntityYaw(entity = $obj1), rp = GetEntityPitch(entity = $obj1))
+    If(GetConfigVar(obj = $obj1, key = "boundBoxRotateWithYawAndPitch")){
+        UpdateEntityBoundBoxWithRotate(entity = $obj1)
+    }
+    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
+}
+
+DEC_INTERACTION_RIGHT_ROTATION{
+    $yaw = ((GetEntityYaw(entity = $obj1) or 0) - (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)) % 360
+    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1)
+        , ry = $yaw or GetEntityYaw(entity = $obj1), rp = GetEntityPitch(entity = $obj1))
+    If(GetConfigVar(obj = $obj1, key = "boundBoxRotateWithYawAndPitch")){
+        UpdateEntityBoundBoxWithRotate(entity = $obj1)
+    }
+    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
+}
+
+ROTATION_BODY_YAW{
+    SetBodyYaw(entity = $obj1, yaw = $yaw)
+}
+
+DEC_INTERACTION_TEST{
+
+}
+
+--上面是编辑，这里是ride
+TEST_SHOW_NEW_UI(debug = false){
+    UpdateObjectInteractionUI(cfgKey = "interactionUI_1", player = $obj2, target = $obj1, show = true)
+}
+
+ENTITY_qiuqian {
+	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 1 )
+}
+
+ENTITY_sit1_3_2 {
+	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 2 )
+}
+
+ENTITY_sit1_3_3 {
+	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 3)
+}
+
+
+ENTITY_sit1_1_1 {
+	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 4 )
+}
+
+
+ENTITY_sit1_2_1 {
+	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 5 )
+}
+
+ENTITY_sit1_2_2 {
+	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 6 )
+}
+--上面是编辑，下面是购买逻辑
+
+COOK_SHOW_CHOICES(debug = false){
+    UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
+}
+COOK_SHOW_BACK(debug = false){
+    UpdateObjectInteractionUI(cfgKey = "interactionUI", player = $obj2, target = $obj1, show = true)
+}
+COOK_1(debug = false){
+    $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
+    $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
+    $price = ArrayGet(array = $arrayPrice, index = 1)
+    $sellItem = ArrayGet(array = $arrayItems, index = 1)
+    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+}
+COOK_2(debug = false){
+    $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
+    $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
+    $price = ArrayGet(array = $arrayPrice, index = 2)
+    $sellItem = ArrayGet(array = $arrayItems, index = 2)
+    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+}
+COOK_3(debug = false){
+    $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
+    $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
+    $price = ArrayGet(array = $arrayPrice, index = 3)
+    $sellItem = ArrayGet(array = $arrayItems, index = 3)
+    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+}
+COOK_4(debug = false){
+    $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
+    $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
+    $price = ArrayGet(array = $arrayPrice, index = 4)
+    $sellItem = ArrayGet(array = $arrayItems, index = 4)
+    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+}
+COOK_5(debug = false){
+    $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
+    $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
+    $price = ArrayGet(array = $arrayPrice, index = 5)
+    $sellItem = ArrayGet(array = $arrayItems, index = 5)
+    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+}
+FOOD_BUY(debug = false){
+   $owner = GetOwner(entity = $obj1)
+   $myTeamId = GetEntityTeam(entity = $obj2)
+   $ownerName = "nil"
+   $isTeam = false
+   If($owner){
+      $ownTeamId = GetEntityTeam(entity = $owner)
+      $ownerName = GetObjectID(object = $owner)
+   }
+   If(($ownTeamId ~= nil and $ownTeamId ~= 0 and $myTeamId == $ownTeamId )or SameObj(entity = $obj2, entity2 = $owner)){ --领主自己家庭成员不要钱。
+       $isTeam = true
+   }
+   If($price == 0 or not $price){ --不要钱的
+        ShowTip(textKey = "gui_gain_item_success",textP1 = $sellItem, tipType = 1, entity = $obj1, keepTime = 20)
+        Return()
+   }
+   If($isTeam){ --不要钱不弹窗直接购买
+      CallTrigger(event = "SURE_FURNITURE_BUY", object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam)
+   }Else{
+      $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = nil,
+        rightContent = "ui_sure"
+      }
+      
+      $content = {
+         msg = "gui_you_want_to_buy_this",
+         args = [ $price, $sellItem]
+      }
+      $Context = {
+         objID = GetObjectID(object = $obj1),
+         price = $price,
+         sellItem = $sellItem,
+         isTeam = $isTeam,
+         owner = $owner
+      }
+      ShowDialogTip(entity = $obj2, tipType = 5, event = "SURE_FURNITURE_BUY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
+   }
+}

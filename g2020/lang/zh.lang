@@ -21,6 +21,12 @@ item.money_03.name=30000金钱
 item.money_04.name=40000金钱
 item.money_05.name=50000金钱
 item.money_06.name=60000金钱
+gui.vip_privilege=VIP特权
+gui.dance_privilege=跳舞特权
+gui.action_privilege=动作特权
+gui.music_privilege=音乐特权
+gui.home_privilege=家庭特权
+gui.svip_privilege=SVIP特权
 item.create_party_privilege.name=开派对的特权
 create_party_privilege=开派对的特权
 
@@ -45,6 +51,12 @@ buy_store_not_enough_money=没钱的快爬！
 buy_house_not_enough_money=没钱的快爬！@@@
 buy_house_region_color_not_enough_money=没钱的快爬！@@@TTTTTTTTTTTTT
 
+g2020-bag=背包
+g2020-baby-bed=婴儿车
+g2020-food=食物
+g2020-car=汽车
+g2020-toy=玩具
+g2020-task-item=任务物品
 
 ui_sure=确定
 ui_cancel=取消
@@ -127,6 +139,9 @@ ui_family_ask_for_family={},我想和你组成家庭
 ui_cash_box_title_name=提示
 ui_cash_box_input_name=请输入金额[1 ~ 100]
 
+ui_edit_title_name=提示
+ui_edit_input_name=请输入
+
 ui_pick_child=▢FF68F1E8选择▢FFFFFFFF小孩\n▢FF68F1E8被人收养
 ui_pick_adult=▢FF68F1E8选择▢FFFFFFFF大人\n▢FF68F1E8收养一个孩子
 ui_title_select_role=选择一个角色
@@ -145,10 +160,13 @@ tip.user.no.party=不存在派对
 tip.user.party.reach.capacity=派对人数已满
 tip.user.no.right.update=没有权限修改派对
 tip.user.like.already=用户已经点赞
+tip.user.join.party.failed=无法参加派对
+tip.user.create.party.failed=派对创建失败
 gui.party.default.name={}的派对
 party.fromInfo=来自房主: {}
 party.memberLimit=至: {}人
 gui.party.be.closed=派对被{}关闭了
+gui.party.be.banished=你被赶出派对了!
 gui.party.ask.exit=确定离开当前派对?
 gui.party.ask.close=确定关闭当前派对?
 gui.party.ask.show.party=是否去其他派对看看?
@@ -177,6 +195,7 @@ state_subtitle=进度:
 
 you_came=你来了
 openning_gps=正在开启导航
+unable_to_navigate=无法导航至{}
 state_out_of_time=状态已超时
 
 reward_takeCare=照顾收益
@@ -194,8 +213,8 @@ gui_buys_your_stuff={}购买了你的{}。
 gui_gain_item_success=获取{}成功。
 
 interact_feed=投喂
+interact_banish=驱赶
 interact_add_friend=添加好友
-interact_add_banish=驱赶
 interact_act=动作
 interact_join_family=家庭
 
@@ -242,3 +261,5 @@ gui.the.7.day=第七天
 
 gui_car_owner_already_remove_car=车主已经销毁该辆车
 gui_create_car_in_the_air=在空中无法骑乘
+
+party_tip_not_your_sound=仅限房主可以操作

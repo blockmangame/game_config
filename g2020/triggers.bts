@@ -1,16 +1,19 @@
 GAME_INIT(debug = false)
 {
+    @BGMConfigs = ReadGameCsv(path = "bgm.csv")
     @Generate_State_List = ["hunger", "thirsty", "dirty", "fatigue", "ill", "region"]
     @skillPath = "myplugin/skill_state_"
     CallTrigger(event = "FUNC_STATE_STARTTIMER")
+    @mathHuge = 10000000
 
     --打工配置表的读取
-    @worlkMoeny = NewDictionary({})
-    @failedMsg = NewDictionary({})
+    @worlkMoeny = NewDictionary({}) --奖励表
+    @failedMsg = NewDictionary({})  --对话表
     @taskMap = NewDictionary({}) --
     @TASK_TABLE = NewArray() --打工的任务表
-    @TASK_WEIGHT = NewArray()
-    @workmaxCount = GetConfigValue(type = "task", fullName = "myplugin/work", key = "maxCount")
+    @TASK_WEIGHT = NewArray() --打工随机比重表
+    @workmaxCount = GetConfigValue(type = "task", fullName = "myplugin/work", key = "maxCount") --最大限度
+    @punishmentTime = GetConfigValue(type = "task", fullName = "myplugin/work", key = "punishmentTime") --惩罚时间
     $taskData = GetConfigValue(type = "task", fullName = "myplugin/work", key = "tasks")
     Foreach(array = $taskData, key = "Dict"){
         $taskDict = NewDictionary($Dict)
@@ -41,7 +44,7 @@ GAME_INIT(debug = false)
         $mdict = NewDictionary($redict)
         DictionarySet(dict = @worlkMoeny, key = DictionaryGet(dict = $mdict, key = "index"), value = $mdict)
     }
-    CreateNpc(cfgName = "myplugin/indentModel", pos = {x = 89, y = 18, z = 195}  ,name = "订单")
+    CreateNpc(cfgName = "myplugin/indentModel", pos = {x = 89, y = 18.5, z = 195}  ,name = "订单")
 	CreateNpc(cfgName = "myplugin/fishItem", pos = {x = 92, y = 19, z = 195} ,name = "买鱼")
 
     @DECORATION_STORE = ReadGameCsv(path = "decoration_store.csv")
@@ -53,6 +56,18 @@ GAME_INIT(debug = false)
         "set:jail_break.json image:jail_break_currency"
     ]
     CallTrigger(event = "WORKS_WALL_TIMER_START")
+
+    --涂鸦墙文字初始化
+    $U3Dcfg = GetWorldVar(key = "sceneUI")
+    Foreach(array = $U3Dcfg, key = "ucfg")
+    {
+        $dict = NewDictionary($ucfg)
+        $index = DictionaryGet(dict = $dict, key = "index")
+        @graffitiWallText = NewDictionary()
+        DictionarySet(dict = @graffitiWallText, key = $index, value = "")
+    }
+    
+    CallTrigger(event = "FUNC_NAVIGATION_GET_MAPS_ALL_PATH")
 }
 
 
@@ -199,19 +214,24 @@ CHANGE_PLAYER_SCALE_CHILD
 
 FUNC_CLOSE_GPS --params: destination
 {
-    If(not $destination || $destination == GetObjectVar(obj = $obj1, key = "gpsDestination"))
+    $gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict")
+    If($gpsDict)
+    {
+        $dictDestination = DictionaryGet(dict = $gpsDict, key = "destination")
+    }
+    If(not $destination || $destination == $dictDestination)
     {
         SetGuidePostion(entity = $obj1)
         RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
-        SetObjectVar(obj = $obj1, key = "gpsDestination", value = nil)
+        SetObjectVar(obj = $obj1, key = "gpsDict", value = nil)
     }
 }
 
-FUNC_OPEN_GPS --params: destination
+FUNC_OPEN_GPS --params: gpsDict
 {
-    SetGuidePostion(pos = $pos, entity = $obj1)
+    SetGuidePostion(pos = $gps, entity = $obj1)
     AddSkill(entity = $obj1, name = "myplugin/close_gps")
-    SetObjectVar(obj = $obj1, key = "gpsDestination", value = $destination)
+    SetObjectVar(obj = $obj1, key = "gpsDict", value = $gpsDict)
     ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
 }
 
@@ -295,6 +315,12 @@ WORKS_WALL_UPDATE_EXCELLENT_WORKS
     {
         @excellentWorksIndex = 0
     }
+
+    If(not @excellentWorks )
+    {
+        @excellentWorks = {}
+    }
+
     $worksIndex = 1
     $size = ArraySize(array = @excellentWorks)
     Foreach(array = @excellentWorks, key = "works")
@@ -376,4 +402,389 @@ REMOVE_ILL_BUFF
 {
     -- CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = "illEffect")
     CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = "ill", duration = 0)
+}
+
+FUNC_NAVIGATION_GET_MAPS_ALL_PATH
+{
+    CallTrigger(event = "FUNC_NAVIGATION_SET_MAP_ADJACENCY_MATRIX")
+
+    ForLoop(from = 1, to = ArraySize(array = @allMaps or []), key = "index")
+    {
+        $mapA = ArrayGet(array = @allMaps, index = $index)
+        $curMapToOther = Concat(p1 = $mapA, p2 = "ToOther")
+
+        CallTrigger(
+            event = "FUNC_NAVIGATION_DIJKSTRA",
+            startIdx = $index,
+            type = "global",
+            matrix = GetGlobalVar(key = "mapAdjacencyMatrix"),
+            saveName = $curMapToOther
+        )
+
+        ForLoop(from = 1, to = ArraySize(array = @allMaps), key = "idx")
+        {
+            If($idx == $index)
+            {
+                Continue()
+            }
+
+            $mapB = ArrayGet(array = @allMaps, index = $idx)
+            $mapATomapB = Concat(p1 = $mapA, p2 = "To", p3 = $mapB)
+            CallTrigger(
+                event = "FUNC_NAVIGATION_GET_PATH",
+                allPath = GetGlobalVar(key = $curMapToOther),
+                endIdx = $idx,
+                type = "global",
+                saveName = $mapATomapB
+            )
+
+            $mapATomapBDWs = Concat(p1 = $mapATomapB, p2 = "DWs")
+            CallTrigger(
+                event = "FUNC_NAVIGATION_GET_DOORWAY_LIST",
+                mapS = $mapA,
+                mapE = $mapB,
+                type = "global",
+                saveName = $mapATomapBDWs
+            )
+
+            CallTrigger(
+                event = "FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX",
+                allDWs = GetGlobalVar(key = $mapATomapBDWs),
+                type = "global",
+                saveName = Concat(p1 = $mapATomapBDWs, p2 = "Matrix")
+            )
+        }
+    }
+}
+
+FUNC_NAVIGATION_SET_MAP_ADJACENCY_MATRIX
+{
+    $needDJ = []
+    $mapModel = []
+    ForLoop(from = 1, to = ArraySize(array = @allMaps or []), key = "index")
+    {
+        $colMap = ArrayGet(array = @allMaps, index = $index)
+        $mapEntry = NewDictionary(GetMapConfig(name = $colMap, key = "mapEntry"))
+        $curMapModel = []
+        $curNeedDJ = []
+
+        ForLoop(from = 1, to = ArraySize(array = @allMaps), key = "idx")
+        {
+            $map = ArrayGet(array = @allMaps, index = $idx)
+            $rowMap = DictionaryGet(dict = $mapEntry, key = $map)
+            $size = ArraySize(array = $rowMap or [])
+            $value = $size == 0 and @mathHuge or 1
+            If($idx == $index)
+            {
+                $value = 0
+            }
+            ArrayInsert(array = $curMapModel, index = $idx, value = $value)
+
+            --用来在跨地图寻路时判断是否还需要用Dijkstra，如果地图A到地图B只有一扇门，也就不存在什么最短路了。
+            ArrayInsert(array = $curNeedDJ, index = $idx, value = ($size > 1 and true or false))
+        }
+
+        ArrayInsert(array = $needDJ, index = $index, value = $curNeedDJ)
+        ArrayInsert(array = $mapModel, index = $index, value = $curMapModel)
+    }
+    SetGlobalVar(key = "mapMatrixNeedDijkstra", value = $needDJ)
+    SetGlobalVar(key = "mapAdjacencyMatrix", value = $mapModel)
+}
+
+FUNC_NAVIGATION_DIJKSTRA --params: startIdx(开始的索引), matrix[, mapS(开始的地图名), saveName, type = "global"/"entity"]
+{
+    ---如果是查找地图A开始的最短路，可以使用mapS或者startIdx
+    ---注！但如果是查找途径门X开始的最短路，必须使用startIdx，固定传1就行，因为设置的doorways的邻接矩阵时是固定将player插入index=1的位置。
+
+    $startIdx = $startIdx or ArrayFind(array = @allMaps or [], value = $mapS)
+    If(not $startIdx)
+    {
+        Return()
+    }
+    $rowInfo = ArrayGet(array = $matrix, index = $startIdx)
+    If(not $rowInfo)
+    {
+        Return()
+    }
+    $dis = []
+    $vis = []
+    $path = []
+    $rowNum = ArraySize(array = $matrix)
+    ForLoop(from = 1, to = $rowNum, key = "index")
+    {
+        ArraySet(array = $vis, value = false, index = $index)
+        ArraySet(
+            array = $dis,
+            index = $index,
+            value = ArrayGet(array = $rowInfo, index = $index)
+        )
+        $ttDis = ArrayGet(array = $rowInfo, index = $index)
+        ArraySet(array = $path, index = $index, value = $ttDis < @mathHuge and $startIdx or -1)
+    }
+    ArraySet(array = $vis, index = $startIdx, value = true)
+    ArraySet(array = $path, index = $startIdx, value = -1)
+
+    $tmpIdx = 0
+    ForLoop(from = 1, to = $rowNum, key = "index")
+    {
+        $min = @mathHuge
+        ForLoop(from = 1, to = $rowNum, key = "idx")
+        {
+            $tmpVis = ArrayGet(array = $vis, index = $idx)
+            $tmpDis = ArrayGet(array = $dis, index = $idx)
+            If(not $tmpVis && $tmpDis < $min)
+            {
+                $min = $tmpDis
+                $tmpIdx = $idx
+            }
+        }
+        -- If($tmpIdx == 0)
+        -- {
+        --     Continue()
+        -- }
+        ArraySet(array = $vis, index = $tmpIdx, value = true)
+
+        $tmpInfo = ArrayGet(array = $matrix, index = $tmpIdx)
+        $midDis = ArrayGet(array = $dis, index = $tmpIdx)
+        ForLoop(from = 1, to = $rowNum, key = "idx")
+        {
+            $tmpVis = ArrayGet(array = $vis, index = $idx)
+            $oldDis = ArrayGet(array = $dis, index = $idx)
+            $calMapDisToIdx = ArrayGet(array = $tmpInfo, index = $idx)
+            If(not $tmpVis && ($oldDis > $midDis + $calMapDisToIdx))
+            {
+                ArraySet(
+                    array = $dis,
+                    index = $idx,
+                    value = $midDis + $calMapDisToIdx
+                )
+                ArraySet(array = $path, index = $idx, value = $tmpIdx)
+            }
+        }
+    }
+
+    If($saveName && $saveName ~= "")
+    {
+        $disKey = Concat(p1 = $saveName, p2 = "Dis")
+        If($type == "global")
+        {
+            SetGlobalVar(key = $saveName, value = $path)
+            SetGlobalVar(key = $disKey, value = $dis)
+        }
+        ElseIf($obj1)
+        {
+            SetObjectVar(obj = $obj1, key = $saveName, value = $path)
+            SetObjectVar(obj = $obj1, key = $disKey, value = $dis)
+        }
+    }
+}
+
+FUNC_NAVIGATION_GET_PATH --allPath, endIdx[, mapE(结束的地图名称), saveName, type = "global"/"entity"]
+{
+    ---需要分开是获取地图路径 还是 获取途径门的路径。
+    ---如果是获取跨越的地图路径话，推荐使用mapE
+    ---注意如果是获取途径门的路径，必须传入endIdx
+
+    $idx = 1
+    $path = []
+    $allPathSize = ArraySize(array = $allPath or [])
+    $endIdx = $endIdx or ArrayFind(array = @allMaps or [], value = $mapE)
+    If(not $endIdx || $allPathSize == 0)
+    {
+        Return()
+    }
+    $val = ArrayGet(array = $allPath, index = $endIdx)
+    ArrayInsert(array = $path, index = 1, value = $endIdx)
+    ForLoop(from = 1, to = $allPathSize, key = "index")
+    {
+        If($val == -1)
+        {
+            Break()
+        }
+        ArrayInsert(array = $path, index = 1, value = $val)
+        $idx = $idx + 1
+        $val = ArrayGet(array = $allPath, index = $val)
+    }
+
+    If($saveName && $saveName ~= "")
+    {
+        If($type == "global")
+        {
+            SetGlobalVar(key = $saveName, value = $path)
+        }
+        ElseIf($obj1)
+        {
+            SetObjectVar(obj = $obj1, key = $saveName, value = $path)
+        }
+    }
+}
+
+FUNC_NAVIGATION_GET_DOORWAY_LIST --params: mapS(玩家当前所在地图名), mapE(目标所在地图名)[, saveName, type = "global"/"entity"]
+{
+    $mapPath = GetGlobalVar(key = Concat(p1 = $mapS, p2 = "To", p3 = $mapE))
+    If(not $mapPath)
+    {
+        Return()
+    }
+    
+    $i = 1
+    $allDWs = [] -- all doorways
+    $mapPathSize = ArraySize(array = $mapPath)
+    
+    ForLoop(from = 1, to = $mapPathSize, key = "index")
+    {
+        $idx = $index + 1
+        If($idx > $mapPathSize)
+        {
+            Break()
+        }
+        $nextMap = ArrayGet(array = @allMaps, index = ArrayGet(array = $mapPath, index = $idx))
+        $mapEntryDict = NewDictionary(GetMapConfig(name = $mapS, key = "mapEntry"))
+        $mapEntryArr = DictionaryGet(dict = $mapEntryDict, key = $nextMap)
+        $mapS = $nextMap
+
+        Foreach(array = $mapEntryArr, key = "entry")
+        {
+            ArraySet(array = $allDWs, index = $i, value = $entry)
+            $i = $i + 1
+        }
+    }
+
+    If($saveName && $saveName ~= "")
+    {
+        If($type == "global")
+        {
+            SetGlobalVar(key = $saveName, value = $allDWs)
+        }
+        ElseIf($obj1)
+        {
+            SetObjectVar(obj = $obj1, key = $saveName, value = $allDWs)
+        }
+    }
+}
+
+FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX --params: allDWs(map00xTomap00yDWs)[, tgtDict, saveName, type = "global"/"entity"]
+{
+    If(ArraySize(array = $allDWs) == 1)
+    {
+        Return()
+    }
+    If($obj1)
+    {
+        ArrayInsert(array = $allDWs, index = 1, value = $obj1)
+        $objMap = GetEntityMap(entity = $obj1)
+        $objPos = GetEntityPosition(entity = $obj1)
+    }
+    If($tgtDict and DictionaryGet(dict = $tgtDict, key = "pos"))
+    {
+        ArrayInsert(array = $allDWs, index = 2, value = $tgtDict)
+        $tgMap = DictionaryGet(dict = $tgtDict, key = "belongMap")
+        $tgPos = DictionaryGet(dict = $tgtDict, key = "pos")
+    }
+
+    $matrix = []
+    ForLoop(from = 1, to = ArraySize(array = $allDWs or []), key = "index")
+    {
+        $curModel = []
+        $rowDW = ArrayGet(array = $allDWs, index = $index)
+        If($obj1 == $rowDW)
+        {
+            $rowMap = $objMap
+            $rowPos = $objPos
+            $rowToMap = $rowMap
+            $rowToPos = $rowPos
+        }
+        ElseIf($rowDW == $tgtDict)
+        {
+            $rowMap = $tgMap
+            $rowPos = $tgPos
+            $rowToMap = $rowMap
+            $rowToPos = $rowPos
+        }
+        Else
+        {
+            $rowMap = GetConfigValue(type = "entity", fullName = $rowDW, key = "belongMap")
+            $rowPos = GetConfigValue(type = "entity", fullName = $rowDW, key = "pos")
+            $rowToMap = GetConfigValue(type = "entity", fullName = $rowDW, key = "toMap")
+            $rowToPos = GetConfigValue(type = "entity", fullName = $rowDW, key = "toPos")
+        }
+        
+        $rowX = GetPosX(pos = $rowPos)
+        $rowY = GetPosY(pos = $rowPos)
+        $rowZ = GetPosZ(pos = $rowPos)
+
+        $rowTX = GetPosX(pos = $rowToPos)
+        $rowTY = GetPosY(pos = $rowToPos)
+        $rowTZ = GetPosZ(pos = $rowToPos)
+
+        ForLoop(from = 1, to = ArraySize(array = $allDWs), key = "idx")
+        {
+            $val = 0
+            If($idx ~= $index)
+            {
+                $colDW = ArrayGet(array = $allDWs, index = $idx)
+                If($obj1 == $colDW)
+                {
+                    $colMap = $objMap
+                    $colPos = $objPos
+                    $colToMap = $colMap
+                    $colToPos = $colPos
+                }
+                ElseIf($colDW == $tgtDict)
+                {
+                    $colMap = $tgMap
+                    $colPos = $tgPos
+                    $colToMap = $colMap
+                    $colToPos = $colPos
+                }
+                Else
+                {
+                    $colMap = GetConfigValue(type = "entity", fullName = $colDW, key = "belongMap")
+                    $colPos = GetConfigValue(type = "entity", fullName = $colDW, key = "pos")
+                    $colToMap = GetConfigValue(type = "entity", fullName = $colDW, key = "toMap")
+                    $colToPos = GetConfigValue(type = "entity", fullName = $colDW, key = "toPos")
+                }
+
+                $colX = GetPosX(pos = $colPos)
+                $colY = GetPosY(pos = $colPos)
+                $colZ = GetPosZ(pos = $colPos)
+                If($rowMap == $colMap)
+                {
+                    $tmpX = ($colX - $rowX)
+                    $tmpY = ($colY - $rowY)
+                    $tmpZ = ($colZ - $rowZ)
+                    $val = $tmpX * $tmpX + $tmpY * $tmpY + $tmpZ * $tmpZ
+                }
+                ElseIf($rowToMap == $colMap)
+                {
+                    $tmpX = ($colX - $rowTX)
+                    $tmpY = ($colY - $rowTY)
+                    $tmpZ = ($colZ - $rowTZ)
+                    
+                    $val = $tmpX * $tmpX + $tmpY * $tmpY + $tmpZ * $tmpZ
+                }
+                Else
+                {
+                    $val = @mathHuge
+                }
+            }
+            ArrayInsert(array = $curModel, index = $idx, value = $val)
+        }
+        ArrayInsert(array = $matrix, index = $index, value = $curModel)
+    }
+
+    If($saveName && $saveName ~= "")
+    {
+        $colVec = Concat(p1 = $saveName, p2 = "ColVec")
+        If($type == "global")
+        {
+            SetGlobalVar(key = $saveName, value = $matrix)
+            SetGlobalVar(key = $colVec, value = $allDWs)
+        }
+        ElseIf($obj1)
+        {
+            SetObjectVar(obj = $obj1, key = $saveName, value = $matrix)
+            SetObjectVar(obj = $obj1, key = $colVec, value = $allDWs)
+        }
+    }
 }

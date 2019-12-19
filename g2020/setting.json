@@ -5,6 +5,7 @@
     "needSave": true,
     "personalShop": false,
     "hideTeamStatusBar": true,
+    "disableMoveState": true,
     "isShowFriendUI": true,
     "isShowSignInUI": true,
     "isDragControl": true,
@@ -194,6 +195,17 @@
             {
                 "key": "skillJackDown",
                 "value": 100
+            },
+            {
+                "key": "graffitiWallText",
+                "value": []
+            },
+            {
+                "key": "allMaps",
+                "value": [
+                    "map001",
+                    "indoor_school"
+                ]
             }
         ],
         "entity": [
@@ -262,7 +274,9 @@
                 "value": [], 
                 "save": true
             },
-            {"key":"inPartyOwnerId", "value":0, "save":true}
+            {"key":"inPartyOwnerId", "value":0, "save":true},
+            {"key":"inPartyId", "value":"0", "save":true},
+            {"key":"excludedPartyId", "value":"0", "save":true}
         ]
     },
     "allColor": [
@@ -298,6 +312,12 @@
                 "deltaAngle":45
             }
         ],
+        "AJackArea": [
+            [ 0, -50 ],
+            [ 0, -50 ],
+            [ 0, 150 ],
+            [ 0, 150 ]
+        ],
         "topJackSize":60,
         "txOffset":0,
         "tyOffset":100,
@@ -306,6 +326,9 @@
         "midJackSize":60,
         "imageHolder":"set:endless_main.json image:skill_hole.png"
     },
+    "jumpIcon": "plugin\/myplugin\/image\/jump.png",
+    "jumpProgressIcon": "plugin\/myplugin\/image\/jump.png",
+    "jumpProgressIconIncrementSize": 0,
     "danceStoreId" : 2,
 	"dressArchiveNum": 10,
     "dressStoreIds": [3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -439,5 +462,23 @@
             "y": 14.5,
             "z": -581
           }
-    }
+    },
+    "sceneUI": [
+        {
+            "index": 1,
+            "name": "graffitiWall",
+            "width": 19,
+            "height": 10,
+            "rotate": {
+                "x": 0,
+                "y": 180,
+                "z": 0
+            },
+            "position": {
+                "x": 100,
+                "y": 21,
+                "z": 190
+            }
+        }
+    ]
 }

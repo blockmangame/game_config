@@ -3,53 +3,101 @@
     "houseDefaultName": "house4_type_name",
     "houseType": "house4_type_name",
     "insideMap": "house4_map",
-
-    "coinName": "green_currency",
-    "buyMoney": 250,
-    "sellMoney": 250,
-
-   
+    "coinName": null,
+    "buyMoney": 5000,
+    "sellMoney": 2500,
     "defaultColor": "myplugin/house_color_buff_1",
-    "defaultColorImage":"plugin/myplugin/image/house_big/COLOR4_1.png",
+    "defaultColorImage": "plugin/myplugin/image/house_big/COLOR4_1.png",
     "allColor": [
-        ["house1_1","plugin/myplugin/image/house_big/COLOR4_1.png"],
-        ["house1_2","plugin/myplugin/image/house_big/COLOR4_2.png"],
-        ["house1_3","plugin/myplugin/image/house_big/COLOR4_3.png"],
-        ["house1_4","plugin/myplugin/image/house_big/COLOR4_4.png"],
-        ["house1_5","plugin/myplugin/image/house_big/COLOR4_5.png"],
-        ["house1_6","plugin/myplugin/image/house_big/COLOR4_6.png"]
+        [
+            "house1_1",
+            "plugin/myplugin/image/house_big/COLOR4_1.png"
+        ],
+        [
+            "house1_2",
+            "plugin/myplugin/image/house_big/COLOR4_2.png"
+        ],
+        [
+            "house1_3",
+            "plugin/myplugin/image/house_big/COLOR4_3.png"
+        ],
+        [
+            "house1_4",
+            "plugin/myplugin/image/house_big/COLOR4_4.png"
+        ],
+        [
+            "house1_5",
+            "plugin/myplugin/image/house_big/COLOR4_5.png"
+        ],
+        [
+            "house1_6",
+            "plugin/myplugin/image/house_big/COLOR4_6.png"
+        ]
     ],
-
-
     "boundingVolume": {
         "type": "Composite",
         "params": [
             {
                 "type": "Box",
                 "params": [
-                    7,4,7
+                    7,
+                    4,
+                    7
                 ]
             }
         ]
     },
     "door": "myplugin/house1_outside_door",
-    "doorPos":{
+    "doorPos": {
         "x": 0,
         "y": 0.1,
         "z": 3.2
     },
-    
-
-
-
-    
-    "houseDefaultInsideMapColorTb":[
-        ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
-        ["house_default_inside_map_area_2",["myplugin/cotton_stage_0","myplugin/dark_oak_stairs04","myplugin/acacia_door_10"]]
-    ], 
-    "houseDefaultFurniture":[
-        {"pos":{"x":1648, "y":13,"z":-574},"yaw":0,"cfg":"myplugin/chess_body_12","furnishingId":"10001","isOldFurnishing":"true"},
-        {"pos":{"x":1650, "y":13,"z":-574},"yaw":90,"cfg":"myplugin/chess_body_22","furnishingId":"10002","isOldFurnishing":"false"}
+    "houseDefaultInsideMapColorTb": [
+        [
+            "house_default_inside_map_area_1",
+            [
+                "myplugin/acacia_door_10",
+                "myplugin/dark_oak_stairs04",
+                "myplugin/cotton_stage_0"
+            ]
+        ],
+        [
+            "house_default_inside_map_area_2",
+            [
+                "myplugin/cotton_stage_0",
+                "myplugin/dark_oak_stairs04",
+                "myplugin/acacia_door_10"
+            ]
+        ]
     ],
-    "base": "house_base"
+    "houseDefaultFurniture": [
+        {
+            "pos": {
+                "x": 1648,
+                "y": 13,
+                "z": -574
+            },
+            "yaw": 0,
+            "cfg": "myplugin/chess_body_12",
+            "furnishingId": "10001",
+            "isOldFurnishing": "true"
+        },
+        {
+            "pos": {
+                "x": 1650,
+                "y": 13,
+                "z": -574
+            },
+            "yaw": 90,
+            "cfg": "myplugin/chess_body_22",
+            "furnishingId": "10002",
+            "isOldFurnishing": "false"
+        }
+    ],
+    "base": "house_base",
+    "coinId": 3,
+    "reachGoodPartyPlayerNumber": 22,
+    "partyMaxPlayerNumber": 30,
+    "goodPartyPlayerNumberLowerRate": 50
 }

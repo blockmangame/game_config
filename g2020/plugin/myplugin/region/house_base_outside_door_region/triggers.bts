@@ -1,5 +1,4 @@
-REGION_ENTER { 
-    Test("REGION_ENTER")
+REGION_ENTER {
     $door = GetRegionOwner(region = $region)
     $ownerPlayer = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "owner")
     $isLock = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "isLock")
@@ -8,7 +7,6 @@ REGION_ENTER {
         or ($isLock and $ownerPlayer.teamId ~= $obj1.teamId)){
         Return()
     }
-    Test(" please in !! ")
     ------------------------------------------ 传送进内部房子
     $map = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "houseInsideMap")
     $yaw = 0
@@ -17,12 +15,11 @@ REGION_ENTER {
     }
     SetEntityPosition(map = $map, entity = $obj1, ry = $yaw,
         pos = ComputeV3(p1 = GetMapInitPos(map = $map) or GetEntityPosition(entity = $obj1), p2 = Table(x = 0, y = 0.5, z = 0), op = "add"))
-    Test(GetObjectID(object = $ownerPlayer))
-    Test(GetObjectID(object = $obj1))
+
     If(GetObjectID(object = $ownerPlayer) == GetObjectID(object = $obj1)){
         CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
         CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = false)
     }
-    CallTrigger(object = $obj1, event = "FUNC_STATE_OPEN_GPS", rtVal = $obj1.gpsDestination)--如果有导航则继续导航
+    CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj1, gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict"))--如果有导航则继续导航
     StartTimer(time = 20,object = $obj1, event = "TASK_UPDATE_DATA") --打工导航
 }

@@ -1,0 +1,60 @@
+{
+    "skin": {
+        "body": "4"
+    },
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    0.7,
+                    1,
+                    0.7
+                ]
+            }
+        ]
+    },
+    "interactionUI": [
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit1",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_sit1_2_1"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.5,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit2",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_sit1_2_2"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.5,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "name": "2人凳",
+    "releaseState": "dirty",
+    "actorName": "g2020_fru_chairs.actor",
+    "base": "fur_base"
+}

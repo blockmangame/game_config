@@ -1,73 +1,117 @@
 {
 	"sign_in_items": [
-		[
-			{
-				"icon": "active_skill_book.png",
-				"reward": [
-					{
-						"type": "List",
-						"array": [
-							{
-								"type": "Item",
-								"name":"myplugin/taskItem",
-								"weight": 1,
-								"count": 2
-							}
-						]
-					}
-				]
-			},
-			{
-				"icon": "active_skill_book.png",
-				"reward": [
-					{
-						"type": "List",
-						"array": [
-							{
-								"type": "Item",
-								"name":"myplugin/taskItem",
-								"weight": 1,
-								"count": 2
-							}
-						]
-					}
-				]
-			}
-		],
-		[
-			{
-				"icon": "exp_potion_1.png",
-				"reward": [
-					{
-						"type": "List",
-						"array": [
-							{
-								"type": "Item",
-								"name":"myplugin/dance_privilege",
-								"weight": 1,
-								"count": 2
-							}
-						]
-					}
-				]
-			},
-			{
-				"icon": "exp_potion_1.png",
-				"reward": [
-					{
-						"type": "List",
-						"array": [
-							{
-								"type": "Item",
-								"name":"myplugin/dance_privilege",
-								"weight": 1,
-								"count": 2
-							}
-						]
-					}
-				]
-			}	
-		]
+		{
+			"icon": "coin_1.png",
+			"reward": [
+				{
+					"type": "List",
+					"array": [
+						{
+							"type": "Coin",
+							"name":"green_currency",
+							"weight": 1,
+							"count": 20
+						}
+					]
+				}
+			]
+		},
+		{
+			"icon": "coin_2.png",
+			"reward": [
+				{
+					"type": "List",
+					"array": [
+						{
+							"type": "Coin",
+							"name":"green_currency",
+							"weight": 1,
+							"count": 30
+						}
+					]
+				}
+			]
+		},
+		{
+			"icon": "coin_3.png",
+			"reward": [
+				{
+					"type": "List",
+					"array": [
+						{
+							"type": "Coin",
+							"name":"green_currency",
+							"weight": 1,
+							"count": 50
+						}
+					]
+				}
+			]
+		},
+		{
+			"icon": "coin_4.png",
+			"reward": [
+				{
+					"type": "List",
+					"array": [
+						{
+							"type": "Coin",
+							"name":"green_currency",
+							"weight": 1,
+							"count": 70
+						}
+					]
+				}
+			]
+		},
+		{
+			"icon": "coin_5.png",
+			"reward": [
+				{
+					"type": "List",
+					"array": [
+						{
+							"type": "Coin",
+							"name":"green_currency",
+							"weight": 1,
+							"count": 100
+						}
+					]
+				}
+			]
+		},
+		{
+			"icon": "coin_6.png",
+			"reward": [
+				{
+					"type": "List",
+					"array": [
+						{
+							"type": "Coin",
+							"name":"green_currency",
+							"weight": 1,
+							"count": 120
+						}
+					]
+				}
+			]
+		},
+		{
+			"icon": "coin_7.png",
+			"reward": [
+				{
+					"type": "List",
+					"array": [
+						{
+							"type": "Coin",
+							"name":"green_currency",
+							"weight": 1,
+							"count": 200
+						}
+					]
+				}
+			]
+		}
 	],
 	"showOrder": 2,
 
@@ -75,5 +119,5 @@
 	"startType":"needPre",
 	"repeatType":"weekly",
 	"canMiss":"0",
-	"randomItem": true
+	"randomItem": false
 }

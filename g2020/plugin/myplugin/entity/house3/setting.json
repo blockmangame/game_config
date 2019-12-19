@@ -3,73 +3,126 @@
     "houseDefaultName": "house3_type_name",
     "houseType": "house3_type_name",
     "insideMap": "house3_map",
-
-    "coinName": "green_currency",
-    "buyMoney": 250,
-    "sellMoney": 250,
-
-   
+    "coinName": null,
+    "buyMoney": 3000,
+    "sellMoney": 1500,
     "defaultColor": "myplugin/house_color_buff_1",
-    "defaultColorImage":"plugin/myplugin/image/house_big/COLOR3_1.png",
+    "defaultColorImage": "plugin/myplugin/image/house_big/COLOR3_1.png",
     "allColor": [
-        ["house1_1","plugin/myplugin/image/house_big/COLOR3_1.png"],
-        ["house1_2","plugin/myplugin/image/house_big/COLOR3_2.png"],
-        ["house1_3","plugin/myplugin/image/house_big/COLOR3_3.png"],
-        ["house1_4","plugin/myplugin/image/house_big/COLOR3_4.png"],
-        ["house1_5","plugin/myplugin/image/house_big/COLOR3_5.png"],
-        ["house1_6","plugin/myplugin/image/house_big/COLOR3_6.png"]
+        [
+            "house1_1",
+            "plugin/myplugin/image/house_big/COLOR3_1.png"
+        ],
+        [
+            "house1_2",
+            "plugin/myplugin/image/house_big/COLOR3_2.png"
+        ],
+        [
+            "house1_3",
+            "plugin/myplugin/image/house_big/COLOR3_3.png"
+        ],
+        [
+            "house1_4",
+            "plugin/myplugin/image/house_big/COLOR3_4.png"
+        ],
+        [
+            "house1_5",
+            "plugin/myplugin/image/house_big/COLOR3_5.png"
+        ],
+        [
+            "house1_6",
+            "plugin/myplugin/image/house_big/COLOR3_6.png"
+        ]
     ],
-
-
     "boundingVolume": {
         "type": "Composite",
         "params": [
             {
                 "type": "Box",
                 "params": [
-                    6.5,4,6,2,0,-5
+                    6.5,
+                    4,
+                    6,
+                    2,
+                    0,
+                    -5
                 ]
             },
             {
                 "type": "Box",
                 "params": [
-                    -7,4,6,0.8,0,-5
+                    -7,
+                    4,
+                    6,
+                    0.8,
+                    0,
+                    -5
                 ]
             },
             {
                 "type": "Box",
                 "params": [
-                    2,6.5,5,0.8,0,-5
+                    2,
+                    6.5,
+                    5,
+                    0.8,
+                    0,
+                    -5
                 ]
             },
             {
                 "type": "Box",
                 "params": [
-                    -5,8,6,0,0,7.2
+                    -5,
+                    8,
+                    6,
+                    0,
+                    0,
+                    7.2
                 ]
             },
             {
                 "type": "Box",
                 "params": [
-                    -7,6.5,6,3,3,-5
+                    -7,
+                    6.5,
+                    6,
+                    3,
+                    3,
+                    -5
                 ]
             },
             {
                 "type": "Box",
                 "params": [
-                    0.6,0,6.8,2.3,0.3,5
+                    0.6,
+                    0,
+                    6.8,
+                    2.3,
+                    0.3,
+                    5
                 ]
             },
             {
                 "type": "Box",
                 "params": [
-                    0.6,0,6.5,2.3,0.6,5
+                    0.6,
+                    0,
+                    6.5,
+                    2.3,
+                    0.6,
+                    5
                 ]
             },
             {
                 "type": "Box",
                 "params": [
-                    0.6,0,6.2,2.3,0.85,5
+                    0.6,
+                    0,
+                    6.2,
+                    2.3,
+                    0.85,
+                    5
                 ]
             }
         ]
@@ -80,23 +133,56 @@
         "z": 0
     },
     "door": "myplugin/house3_outside_door",
-    "doorPos":{
+    "doorPos": {
         "x": 1.45,
         "y": 0.95,
         "z": 5.6
     },
-    
-
-
-
-    
-    "houseDefaultInsideMapColorTb":[
-        ["house_default_inside_map_area_1",["myplugin/acacia_door_10","myplugin/dark_oak_stairs04","myplugin/cotton_stage_0"]],
-        ["house_default_inside_map_area_2",["myplugin/cotton_stage_0","myplugin/dark_oak_stairs04","myplugin/acacia_door_10"]]
-    ], 
-    "houseDefaultFurniture":[
-        {"pos":{"x":1648, "y":13,"z":-574},"yaw":0,"cfg":"myplugin/chess_body_12","furnishingId":"10001","isOldFurnishing":"true"},
-        {"pos":{"x":1650, "y":13,"z":-574},"yaw":90,"cfg":"myplugin/chess_body_22","furnishingId":"10002","isOldFurnishing":"false"}
+    "houseDefaultInsideMapColorTb": [
+        [
+            "house_default_inside_map_area_1",
+            [
+                "myplugin/acacia_door_10",
+                "myplugin/dark_oak_stairs04",
+                "myplugin/cotton_stage_0"
+            ]
+        ],
+        [
+            "house_default_inside_map_area_2",
+            [
+                "myplugin/cotton_stage_0",
+                "myplugin/dark_oak_stairs04",
+                "myplugin/acacia_door_10"
+            ]
+        ]
     ],
-    "base": "house_base"
+    "houseDefaultFurniture": [
+        {
+            "pos": {
+                "x": 1648,
+                "y": 13,
+                "z": -574
+            },
+            "yaw": 0,
+            "cfg": "myplugin/chess_body_12",
+            "furnishingId": "10001",
+            "isOldFurnishing": "true"
+        },
+        {
+            "pos": {
+                "x": 1650,
+                "y": 13,
+                "z": -574
+            },
+            "yaw": 90,
+            "cfg": "myplugin/chess_body_22",
+            "furnishingId": "10002",
+            "isOldFurnishing": "false"
+        }
+    ],
+    "base": "house_base",
+    "coinId": 3,
+    "reachGoodPartyPlayerNumber": 15,
+    "partyMaxPlayerNumber": 20,
+    "goodPartyPlayerNumberLowerRate": 50
 }

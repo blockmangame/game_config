@@ -220,7 +220,7 @@
         },
         "followParams":{
             "followScenePos": true,
-            "showRange": 4,
+            "showRange": 5,
             "resetWhenHide": true
         },
         "aroundBtns":[
@@ -246,6 +246,17 @@
                     "wishResult":false
                 },
                 "event": "INTERACTION_FEED"
+            },
+            {
+                "text":"interact_banish",
+                "image":"set:party_interaction_ui.json image:interaction_banish",
+                "checkHide": {
+                    "checkCond":{
+                        "funcName": "checkInSelfParty"
+                    },
+                    "wishResult":false
+                },
+                "event": "INTERACTION_BANISH"
             },
             {
                 "text":"interact_act",
@@ -281,7 +292,7 @@
         },
         "followParams":{
             "followScenePos": true,
-            "showRange": 6,
+            "showRange": 5,
             "resetWhenHide": true
         },
         "aroundBtns":[
@@ -339,7 +350,7 @@
         },
         "followParams":{
             "followScenePos": true,
-            "showRange": 6,
+            "showRange": 5,
             "resetWhenHide": true
         },
         "aroundBtns":[
@@ -465,25 +476,25 @@
         {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}}
     ],
     "kitchenStore":{
-        "storeInfo" : {"storeId": "kitchenStore", "type": "entity", "fullName": "myplugin/chairs_body_1"},
+        "storeInfo" : {"storeId": "kitchenStore", "type": "entity"},
         "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
         "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "parlorStore"}},
         "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
     },
     "parlorStore": {
-        "storeInfo" : {"storeId": "parlorStore", "type": "entity", "fullName": "myplugin/chairs_body_2"},
+        "storeInfo" : {"storeId": "parlorStore", "type": "entity"},
         "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
         "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "bedroomStore"}},
         "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
     },
     "bedroomStore":{
-        "storeInfo" : {"storeId": "bedroomStore", "type": "entity", "fullName": "myplugin/chairs_body_5"},
+        "storeInfo" : {"storeId": "bedroomStore", "type": "entity"},
         "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
         "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "bathroomStore"}},
         "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
     },
     "bathroomStore":{
-        "storeInfo" : {"storeId": "bathroomStore", "type": "entity", "fullName": "myplugin/chairs_body_10"},
+        "storeInfo" : {"storeId": "bathroomStore", "type": "entity"},
         "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}},
         "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allDec", "nextCfgKey": "kitchenStore"}},
         "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allDec", "nextCfgKey": "decStoreList"}}
@@ -494,24 +505,22 @@
             "text": "ui_editStoreList_floorBlockStore", "image": "set:Edit_1.json image:Edit_Floor_Icon.png", "event": "SHOW_DEC_STORE_LIST"},
         {"nextCfgKey": "wallBlockStore","childRegionKey": "wallRegion", "titleKey": "allEdit", 
             "text": "ui_editStoreList_wallBlockStore", "image": "set:Edit_1.json image:Edit_Wall_Page_Icon.png", "event": "SHOW_DEC_STORE_LIST"},
-        {"nextCfgKey": "doorStore", "titleKey": "allEdit", "text": "ui_editStoreList_doorStore", 
-            "image": "set:Edit_1.json image:Edit_Door_Icon.png", "event": "SHOW_DEC_STORE_LIST"},
         {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allDec"}}
     ],
     "floorBlockStore": {
-        "storeInfo" : {"storeId": "floorBlockStore", "type": "block", "fullName": "myplugin/wool_2"},
+        "storeInfo" : {"storeId": "floorBlockStore", "type": "block"},
         "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
         "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "wallBlockStore", "childRegionKey": "wallRegion"}},
         "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
     },
     "wallBlockStore": {
-        "storeInfo" : {"storeId": "wallBlockStore", "type": "block", "fullName": "myplugin/wool_2"},
+        "storeInfo" : {"storeId": "wallBlockStore", "type": "block"},
         "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
-        "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "doorStore"}},
+        "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "floorBlockStore", "childRegionKey": "floorRegion"}},
         "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
     },
     "doorStore": {
-        "storeInfo" : {"storeId": "doorStore", "type": "entity", "fullName": "myplugin/chairs_body_10", "event": "BUY_INSIDE_DOOR"},
+        "storeInfo" : {"storeId": "doorStore", "type": "entity", "event": "BUY_INSIDE_DOOR"},
         "closeInfo" : {"closeEvent": "EDIT_HOUSE", "context":{"titleKey": "allEdit"}},
         "rightInfo" : {"rightEvent": "SHOW_DEC_STORE_LIST", "context":{"titleKey": "allEdit", "nextCfgKey": "floorBlockStore", "childRegionKey": "floorRegion"}},
         "leftInfo" : {"leftEvent": "SHOW_DEC_STORE", "context":{"titleKey": "allEdit", "nextCfgKey": "editStoreList"}}
@@ -519,5 +528,32 @@
     "freeWorksArchive" : 3,
     "worksArchivePrice" : 100,
     "publishWorksPrice" : 360,
-    "publishWorksCubePrice" : 360
+    "publishWorksCubePrice" : 360,
+    "trays": [
+        {
+            "type": 21,
+            "cap": 100,
+            "maxCap": 100
+        },
+        {
+            "type": 22,
+            "cap": 100,
+            "maxCap": 100
+        },
+        {
+            "type": 23,
+            "cap": 100,
+            "maxCap": 100
+        },
+        {
+            "type": 24,
+            "cap": 100,
+            "maxCap": 100
+        },
+        {
+            "type": 25,
+            "cap": 100,
+            "maxCap": 100
+        }
+    ]
 }

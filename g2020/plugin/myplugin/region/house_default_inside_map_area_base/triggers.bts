@@ -1,9 +1,7 @@
-REGION_ENTER { 
-    Test(" REGION_ENTER !!! ",GetRegionKey(region = $region))
+REGION_ENTER {
     SetObjectVar(obj = $obj1, key = "curInsideRegion", value = $region)
 }
 
 REGION_LEAVE {
-    Test(" REGION_LEAVE !!! ",GetRegionKey(region = $region))
     -- SetObjectVar(obj = $obj1, key = "curInsideRegion", value = nil)
 }

@@ -1,5 +1,4 @@
-REGION_ENTER { 
-    Test(" open the door ??!!! ")
+REGION_ENTER {
     $house = GetRegionOwner(region = $region)
     If(not $house){
         Return()
@@ -8,7 +7,6 @@ REGION_ENTER {
 }
 
 REGION_LEAVE {
-    Test(" close the door ??!!! ")
     $house = GetRegionOwner(region = $region)
     If(not $house){
         Return()

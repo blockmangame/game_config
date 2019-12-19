@@ -9,7 +9,6 @@ CREATE_DOOR_REGION{
         min = ArrayGet(array = $curBoundingBox, index = 2),
         max = ArrayGet(array = $curBoundingBox, index = 3)
     )
-    Test($regionArea)
     $doorRegionCfg = GetConfigVar(obj = $obj1, key = "doorRegionCfg")
     $doorRegionKey = Concat(p1 = GetConfigVar(obj = $obj1, key = "doorRegionKey"), p2 = GetObjectID(object = $obj1))
 
@@ -30,8 +29,7 @@ INTER_WITH_DOOR{
     If(not IsPlayer(entity = $obj2)) {
         Return()
     }
-    Test("get out here !")
-    $door = GetObjectVar(obj = GetMapOwner(map = $map), key = "door")
+    $door = GetObjectVar(obj = GetMapVar(map = $map, key = "owner"), key = "door")
     If(not $door){
         $door = GetObjectVar(obj = GetObjectVar(obj = $obj2, key = "house"), key = "door")
     }
@@ -47,7 +45,7 @@ INTER_WITH_DOOR{
         }
         CallTrigger(object = $obj2, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = true)
     }
-    CallTrigger(object = $obj2, event = "FUNC_STATE_OPEN_GPS", rtVal = $obj2.gpsDestination) --如果有导航则继续导航
+    CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj2, gpsDict = GetObjectVar(obj = $obj2, key = "gpsDict")) --如果有导航则继续导航
     CallTrigger(object = $obj2, event = "TASK_UPDATE_DATA") --打工导航
 }
 
