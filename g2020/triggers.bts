@@ -214,11 +214,15 @@ CHANGE_PLAYER_SCALE_CHILD
 
 FUNC_CLOSE_GPS --params: destination
 {
-    If(not $destination || $destination == GetObjectVar(obj = $obj1, key = "gpsDestination"))
+    $gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict")
+    If($gpsDict)
+    {
+        $dictDestination = DictionaryGet(dict = $gpsDict, key = "destination")
+    }
+    If(not $destination || $destination == $dictDestination)
     {
         SetGuidePostion(entity = $obj1)
         RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
-        SetObjectVar(obj = $obj1, key = "gpsDestination", value = nil)
         SetObjectVar(obj = $obj1, key = "gpsDict", value = nil)
     }
 }
@@ -227,7 +231,6 @@ FUNC_OPEN_GPS --params: gpsDict
 {
     SetGuidePostion(pos = $gps, entity = $obj1)
     AddSkill(entity = $obj1, name = "myplugin/close_gps")
-    SetObjectVar(obj = $obj1, key = "gpsDestination", value = $destination)
     SetObjectVar(obj = $obj1, key = "gpsDict", value = $gpsDict)
     ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
 }

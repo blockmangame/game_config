@@ -1292,10 +1292,15 @@ FUNC_STATE_CHECK_REGION --params: state
 
 FUNC_REGION_STATE_OPERATION --parmas: opt, state
 {
-    If($state == GetObjectVar(obj = $obj1, key = "gpsDestination"))
+    $gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict")
+    If($gpsDict)
     {
-        ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
-        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+        $dictDestination = DictionaryGet(dict = $gpsDict, key = "destination")
+        If($state == $dictDestination)
+        {
+            ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
+            CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+        }
     }
 
     If($opt ~= "INNER")
@@ -1569,12 +1574,11 @@ FUNC_STATE_OPEN_GPS --params: rtVal
     CallTrigger(
         object = $obj1,
         gpsDict = $gpsDict,
-        destination = $destination,
         event = "FUNC_GPS_SET_OR_SYNC"
     )
 }
 
-FUNC_GPS_SET_OR_SYNC --params: gpsDict[, destination]
+FUNC_GPS_SET_OR_SYNC --params: gpsDict
 {
     If(not $gpsDict || DictionarySize(dict = $gpsDict) == 0)
     {
@@ -1669,7 +1673,6 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict[, destination]
                 mapStart = $curMap,
                 mapEnd = $belongMap,
                 gpsDict = $gpsDict,
-                destination = $destination or GetObjectVar(obj = $obj1, key = "gpsDestination")
             )
             Return()
         }
@@ -1694,7 +1697,6 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict[, destination]
                     mapStart = $curMap,
                     mapEnd = $belongMap,
                     gpsDict = $gpsDict,
-                    destination = $destination or GetObjectVar(obj = $obj1, key = "gpsDestination")
                 )
                 Return()
             }
@@ -1723,12 +1725,11 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict[, destination]
         object = $obj1,
         event = "FUNC_OPEN_GPS",
         gps = $gps,
-        gpsDict = $gpsDict,
-        destination = $destination or GetObjectVar(obj = $obj1, key = "gpsDestination")
+        gpsDict = $gpsDict
     )
 }
 
-FUNC_GPS_RECALCULATE --params: mapStart, mapEnd, gpsDict[, destination]
+FUNC_GPS_RECALCULATE --params: mapStart, mapEnd, gpsDict
 {
     $road = []
     $maps = []
@@ -1865,8 +1866,7 @@ FUNC_GPS_RECALCULATE --params: mapStart, mapEnd, gpsDict[, destination]
             key = "pos",
             fullName = ArrayGet(array = $road, index = $roadIdx)
         ),
-        gpsDict = $gpsDict,
-        destination = $destination or GetObjectVar(obj = $obj1, key = "gpsDestination")
+        gpsDict = $gpsDict
     )
 }
 
