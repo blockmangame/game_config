@@ -149,9 +149,6 @@ ENTITY_ENTER
 		CallTrigger(event = "SET_DRESS_ARCHIVE", object = $obj1)
         CallTrigger(event = "INIT_PLAYER_DRESS", object = $obj1)
 
-
-        CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, newSkill = $obj1.danceUseItem)
-
         LoadPlayerAppDress(player = $obj1, event = "HTTP_PURCHASED_DRESS_CALL_BACK")
 
         -- test data
@@ -169,6 +166,18 @@ ENTITY_ENTER
         CallTrigger(event = "FUNC_LOAD_NEW_WORKS")
         CallTrigger(event = "FUNC_LOAD_EXCELLENT_WORKS")
     }
+}
+
+OPEN_DANCE
+{
+    CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, newSkill = $obj1.danceUseItem)
+    AddSkill(entity = $obj1, name = "myplugin/open_dance")
+}
+
+CLOSE_DANCE
+{
+    CallTrigger(event = "CHANGE_DANCE_SKILL", obj1 = $obj1, oldSkill = $obj1.danceUseItem)
+    RemoveSkill(entity = $obj1, name = "myplugin/open_dance")
 }
 
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
