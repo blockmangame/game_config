@@ -3910,10 +3910,17 @@ PLAYER_BE_INVITE(debug = false){
     ShowNotice(
 		buttonType = 2,
 		content = $guiText or "gui_friend_invite_notice",
-		eventYes = "PLAYER_ON_VISIT",
+        eventYes = "PLAYER_ON_VISIT",
+        eventNo = "PLAYER_BE_INVITE_REFUSE",
 		entity = $obj1,
 		textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
 	)
+}
+PLAYER_BE_INVITE_REFUSE(){
+
+}
+PLAYER_BE_INVITE_OTHER_SERVER_REFUSE(){
+    $obj1.partyInfo = nil
 }
 PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
@@ -3925,19 +3932,25 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
     If($partyInfo){
         $guiText = "gui_party_invite_notice"
-        $obj1.partyInfo = $partyInfo
+        $obj1.partyInfo = $partyInfo--todo:need reset
     }
     $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
     ShowNotice(
         buttonType = 2,
         content = $guiText or "gui_friend_invite_notice",
         eventYes = "PLAYER_ON_VISIT_OTHER_SERVER",
+        eventNo = "PLAYER_BE_INVITE_OTHER_SERVER_REFUSE",
         entity = $obj1,
         textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
     )
 }
 PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
     $targetUserId = $targetUserId or $obj1.visitTargetUserId
+    $contentDict = NewDictionary($content)
+    $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
+    If($partyInfo){--can be set by PLAYER_BE_INVITE_OTHER_SERVER
+        $obj1.partyInfo = $partyInfo
+    }
     If($obj1.partyInfo){
         $partyDict = NewDictionary($obj1.partyInfo)
         $partyId = DictionaryGet(dict = $partyDict, key = "partyId")
