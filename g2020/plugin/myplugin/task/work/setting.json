@@ -1,40 +1,47 @@
 {
-    "maxCount": 2,
+	"maxCount": 15,
 	"punishmentTime": 5,
-    "tasks": [
-        {
-            "key": "key_1",
+	"tasks": [
+		{
+			"key": "key_1",
 			"times": "loop",
 			"reward": "myplugin/work_reward",
 			"succeedMsg": "you_came",
 			"failedMsg": "works_save",
 			"npcMap": "map001",
-			"npcPos": { "x": 88, "y": 18, "z": 194},
-            "weight": 50,			
-			"targets": [
-				{
-					"type": "SubmitForm",
-					"name":"main_task01_targets",
-					"cfgName":"myplugin/xiaohong"
-				}
-			]
-        },
-        {
-            "key": "key_2",
-			"times": "loop",
-			"succeedMsg": "you_came",
-			"failedMsg": "works_save",
-			"reward": "myplugin/work_reward",
-			"npcMap": "map001",
-			"npcPos": { "x": 85, "y": 18, "z": 194},
+			"npcPos": {
+				"x": 274,
+				"y": 19,
+				"z": 364
+			},
 			"weight": 50,
 			"targets": [
 				{
 					"type": "SubmitForm",
-					"name":"main_task02_targets",
-					"cfgName":"myplugin/xiaohong2"
+					"cfgName": "myplugin/xiaohong"
 				}
 			]
-        }
-    ]
+		},
+		{
+			"key": "key_2",
+			"times": "loop",
+			"succeedMsg": "you_came",
+			"failedMsg": "works_save",
+			"reward": "myplugin/work_reward",
+			"npcMap": "map001",
+			"npcPos": {
+				"x": 274,
+				"y": 19,
+				"z": 368
+			},
+			"weight": 50,
+			"targets": [
+				{
+					"type": "SubmitForm",
+					"name": "main_task02_targets",
+					"cfgName": "myplugin/xiaohong2"
+				}
+			]
+		}
+	]
 }

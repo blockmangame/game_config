@@ -44,7 +44,7 @@ GAME_INIT(debug = false)
         $mdict = NewDictionary($redict)
         DictionarySet(dict = @worlkMoeny, key = DictionaryGet(dict = $mdict, key = "index"), value = $mdict)
     }
-    CreateNpc(cfgName = "myplugin/indentModel", pos = {x = 89, y = 18.5, z = 195}  ,name = "订单")
+    --CreateNpc(cfgName = "myplugin/indentModel", pos = {x = 89, y = 18.5, z = 195}  ,name = "订单")
 	CreateNpc(cfgName = "myplugin/fishItem", pos = {x = 92, y = 19, z = 195} ,name = "买鱼")
 
     @DECORATION_STORE = ReadGameCsv(path = "decoration_store.csv")
