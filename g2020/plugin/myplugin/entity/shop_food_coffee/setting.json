@@ -1,0 +1,55 @@
+{
+    "canClick": false,
+    "actorName": "g2020_food.actor",
+    "coinId": 5,
+    "sellPrice": 5,
+    "sellItem": "myplugin/food_coffee",
+    "collision": true,
+    "name": "",
+    "pushable": true,
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "VerticalBox",
+                "params": [
+                    1,
+                    1,
+                    1
+                ]
+            }
+        ]
+    },
+    "canInteract": true,
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        },
+        "centerBtns": [
+            {
+                "text": "food_coffee.buy",
+                "widgetFileName": "widget_button",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "imageSize": {
+                    "width": "80",
+                    "height": "80"
+                },
+                "event": "BUY_SHOP"
+            }
+        ]
+    },
+    "interaction": {
+        "radius": 7,
+        "offset": {
+            "x": 0,
+            "y": -1,
+            "z": 2
+        }
+    }
+}
