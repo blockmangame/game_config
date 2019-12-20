@@ -165,6 +165,8 @@ COOK_5(debug = false){
 FOOD_BUY(debug = false){
    $owner = GetOwner(entity = $obj1)
    $myTeamId = GetEntityTeam(entity = $obj2)
+   $coinId = GetConfigVar(obj = $obj1, key = "coinId")
+   $Name = GetItemCfg(fullName = $sellItem, key = "name")
    $ownerName = "nil"
    $isTeam = false
    If($owner){
@@ -184,13 +186,13 @@ FOOD_BUY(debug = false){
       $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
-        rightCoinId = nil,
-        rightContent = "ui_sure"
+        rightCoinId = $coinId,
+        rightContent = $price
       }
       
       $content = {
          msg = "gui_you_want_to_buy_this",
-         args = [ $price, $sellItem]
+         args = [$Name]
       }
       $Context = {
          objID = GetObjectID(object = $obj1),
