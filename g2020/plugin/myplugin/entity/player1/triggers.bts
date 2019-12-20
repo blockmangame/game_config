@@ -4076,15 +4076,15 @@ LEAVE_PARTY_SUCCESS(debug = false){
 CHECK_IN_PARTY(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
-    $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
-    If(not $partyOwner){
-        ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.no.owner", time =  20)
-        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
-        $obj1.inPartyOwnerId = 0--just in case
-        GotoOtherServer(player = $obj1)
-        Return()
-    }
     If($inPartyOwnerId ~= 0){
+        $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
+        If(not $partyOwner){
+            ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.no.owner", time =  20)
+            LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+            $obj1.inPartyOwnerId = 0--just in case
+            GotoOtherServer(player = $obj1)
+            Return()
+        }
         UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
         If($userId == $inPartyOwnerId){
             $obj1.inSelfParty = 1
