@@ -11,6 +11,30 @@
     },
     "name": "",
     "collision": true,
+    "canAttack": false,
+    "canClick": true,
     "bounceHeight": 8,
-    "viewDistance": 32
+    "viewDistance": 32,
+    "canInteract": true,
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": "CLICK_BUTTON"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false
+        }
+    },
+    "interaction": {
+        "radius": 3,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    }
 }
