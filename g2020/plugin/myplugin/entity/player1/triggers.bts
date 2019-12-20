@@ -109,7 +109,7 @@ ENTITY_ENTER
     CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
     CallTrigger(event = "CHECK_IN_PARTY", object = $obj1)
     UpdateUIData(player = $obj1, ui = "circleProgress", data = {})
-    OpenWindows(win = "workTask", player = $obj1)
+    OperationWindows(win = "workTask", isOpen = true, player = $obj1)
     CallTrigger(event = "INIT_WORK_TASK", object = $obj1) --初始化打工任务
     If(IsPlayer(entity = $obj1))
     {
@@ -1947,7 +1947,7 @@ OPEN_PRIVILEGE_SHOP
 {
     If($result && $button == "left")
     {
-        OpenWindows(player = $obj1, win = "priShop")
+        OperationWindows(player = $obj1, isOpen = true, win = "priShop")
     }
 }
 
@@ -3182,15 +3182,14 @@ HTTP_PURCHASED_DRESS_CALL_BACK
 }
 
 --打工
-WORK_SHOW_GPS(debug = false){
-    If($showGps){
-        SetGuidePostion(entity = $obj1, pos = $obj1.gpsPos)
-        If($obj1.gpsPos){
-            $obj1.showColseBtn = true
+GUIDE_POSITION_CHANGE(debug = true){
+    If($key == "taskWork"){
+        $obj1.taskShowGps = $show
+        If($show){
+           CallTrigger(event = "TASK_UPDATE_DATA", object = $obj1)
         }
-    }Else{
-        SetGuidePostion(entity = $obj1, pos = nil)
-        $obj1.showColseBtn = false
+    }ElseIf($show == false){
+        $obj1.taskShowGps = false
     }
 }
 GET_TASK_UI_DATA(){ --更新打工UI数据。
@@ -3217,7 +3216,8 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
         }
     }
     $text = Concat(p1 = $textCount, p2 = $str, p3 = "40")
-    $rate = $count / 10
+    $rateArray = [0.02, 0.11, 0.35, 0.485, 0.5, 0.52, 0.61, 0.9485, 1]
+    $rate = 1 - (ArrayGet(array = $rateArray, index = $count) or 0)
     $imgcount = $obj1.worktaskCount
     If($obj1.taskKey){
         $imgcount = $imgcount - 1
@@ -3231,26 +3231,17 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
     }ElseIf($imgcount >=30 && $imgcount <40){
         $btnImg = "set:indentImg.json image:BtnRed.png"
     }
-    If($closeGps){
-        SetGuidePostion(entity = $obj1,pos = nil)
-        $obj1.showColseBtn = false
-    }
-    If($showGps){
-        SetGuidePostion(entity = $obj1,pos = $obj1.gpsPos)
-        $obj1.showColseBtn = true
-    }
-    If($obj1.showColseBtn){
-        SetGuidePostion(entity = $obj1,pos = $obj1.gpsPos)
-    }
     $taskData = Table(
         Progress =  $rate,
         BtnText = $text,
         gpsPos = $obj1.gpsPos,
         isTasking = $isTasking,
-        showColseBtn = $obj1.showColseBtn,
         animation = $animation,
         btnImg = $btnImg
     )
+    If($obj1.taskShowGps){
+       SetGuidePostion(entity = $obj1, pos = $obj1.gpsPos)
+    }
     UpdateUIData(player = $obj1, ui = "circleProgress", data = $taskData)
 }
 GET_TASK_GPS(debug = false) --得到打工的GPS位置
@@ -3294,7 +3285,14 @@ PUNISH_END(){--惩罚结束
         CallTrigger(object = $obj2, event = "CHANG_ACTOR", actorName = "actorName", obj2 = $obj1)
     }
 }
-PLAYER_DELETE_ITEM(){ --放弃任务
+DELETE_ITEM(){
+    --出售
+    $price = GetItemCfg(fullName = $fullName, key = "recyclePrice")
+    If($price and $price>0){
+        AddCurrency(entity = $obj1, coinName = "green_currency", count = $price)
+        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $price), entity = $obj1)
+    }
+    --放弃任务
     If($fullName == "myplugin/taskItem" and $obj1.taskKey){
         $obj1.punishmentCD = true
         If(@INDENT_MODEL){
@@ -3304,10 +3302,6 @@ PLAYER_DELETE_ITEM(){ --放弃任务
             --倒计时
             --换模型
         }
-        $taskItem = SearchBagItem(entity = $obj1, key = "newTaskitem", val = true)
-        If($taskItem){
-            ConsumeItem(item = $taskItem, num = 1)
-        }
         CancelTask(player = $obj1, name = $obj1.taskKey)
         $obj1.lastNpc = $obj1.taskNpc
         $obj1.taskNpc = nil
@@ -3316,6 +3310,10 @@ PLAYER_DELETE_ITEM(){ --放弃任务
         $obj1.npcMap = nil
         $obj1.taskIndex = nil
         $obj1.worktaskCount = $obj1.worktaskCount - 1
+        If($obj1.taskShowGps){
+            SetGuidePostion(entity = $obj1)
+        }
+        $obj1.taskShowGps = false
         CallTrigger(event = "GET_TASK_GPS", object = $obj1, showGps = false)
         StartTimer(time = 1, event = "TASK_NPC_ADD_BUFF", object = $obj1)
         CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1, closeGps = true)
@@ -3367,8 +3365,12 @@ FINISH_TASK(debug = false){ --完成打工的对话
             }
         ]
     )
+    If($obj1.taskShowGps){
+        SetGuidePostion(entity = $obj1)
+    }
+    $obj1.taskShowGps = false
     $obj1.nowSubmitTask = true
-    $obj1.finishworkTime =  StartTimer(object = $obj1, event = "FINISH_AWARD", time = 40)
+    --$obj1.finishworkTime =  StartTimer(object = $obj1, event = "FINISH_AWARD", time = 40)
 }
 FINISH_AWARD(){ --完成打工的奖励
     If(not $obj1.nowSubmitTask){
@@ -3393,7 +3395,7 @@ FINISH_AWARD(){ --完成打工的奖励
     }
     If($recfg){
         AddItem(entity = $obj1, cfg = $recfg, count = 1)
-        ShowRewardItemEffect(fullName = $recfg, player = $obj1) -- todo 改变弹窗
+        ShowRewardItemEffect(type = "Item", count = 1, fullName = $recfg, player = $obj1) -- todo 改变弹窗
     }
     If($money){
         AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
@@ -3645,6 +3647,7 @@ START_CAMERA_MODE
         SetCameraMode(player = $obj1, isOpen = true)
         $obj1.cameraModeCloseBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/camera_mode_close")
         $obj1.cameraModeTakePhotosBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/camera_mode_take_photos")
+        OperationWindows(player = $obj1, isOpen = false, win = "main_tray_g2020")
     }
 }
 

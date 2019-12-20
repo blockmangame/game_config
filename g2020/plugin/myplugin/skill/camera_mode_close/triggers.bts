@@ -5,6 +5,7 @@ SKILL_CAST
         SetCameraMode(player = $obj1, isOpen = false)
         RemoveEntityBuff(entity = $obj1, buff = $obj1.cameraModeCloseBuff)
         RemoveEntityBuff(entity = $obj1, buff = $obj1.cameraModeTakePhotosBuff)
+        OperationWindows(player = $obj1, isOpen = true, win = "main_tray_g2020")
         $obj1.cameraModeCloseBuff = nil
         $obj1.cameraModeTakePhotosBuff = nil
     }

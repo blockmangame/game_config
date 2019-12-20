@@ -49,7 +49,7 @@ INTER_WITH_DOOR{
         CallTrigger(object = $obj2, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = true)
     }
     CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj2, gpsDict = GetObjectVar(obj = $obj2, key = "gpsDict")) --如果有导航则继续导航
-    CallTrigger(object = $obj2, event = "TASK_UPDATE_DATA") --打工导航
+    CallTrigger(object = $obj2, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
 }
 
 ENTITY_DIE{
