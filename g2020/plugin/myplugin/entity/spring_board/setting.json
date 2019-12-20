@@ -1,41 +1,38 @@
 {
-	"base": "fur_base",
-    "actorName": "object_jumppad.actor",
-    "hpBarColor": 0,
-    "boundingVolume": {
-        "type": "Box",
-        "params": [
-            1,
-            0.5,
-            1
-        ]
-    },
-    "name": "",
-    "collision": true,
-    "canAttack": false,
-    "canClick": true,
     "bounceHeight": 8,
     "viewDistance": 32,
-    "canInteract": true,
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    1,
+                    0.5,
+                    1
+                ]
+            }
+        ]
+    },
     "interactionUI": {
         "cfgKey": "interactionUI",
         "centerBtns": [
             {
                 "text": "",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "event": "CLICK_BUTTON"
+                "event": "CLICK_TRAMPOLINE"
             }
         ],
         "followParams": {
-            "followScenePos": false
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
         }
     },
-    "interaction": {
-        "radius": 3,
-        "offset": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-        }
-    }
+    "name": "弹簧",
+    "actorName": "object_jumppad.actor",
+    "base": "fur_base"
 }
