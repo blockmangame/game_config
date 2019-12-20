@@ -14,6 +14,10 @@
             }
         ]
     },
+    "collision":true,
+    "canAttack":false,
+    "canClick":true,
+    "canInteract":true,
     "interactionUI": {
         "cfgKey": "interactionUI",
         "centerBtns": [
@@ -32,7 +36,14 @@
             }
         }
     },
-    "name": "弹簧",
-    "actorName": "object_jumppad.actor",
-    "base": "fur_base"
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "name": "",
+    "actorName": "object_jumppad.actor"
 }
