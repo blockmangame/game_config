@@ -3439,7 +3439,7 @@ SHOW_SHOP_TITLE(){
     Show3DUI(player = $obj1, show = $show, data = $data2)
 }
 --公共区域购买，场景商店的购买逻辑
-SURE_BUY(debug = true){
+SURE_BUY(debug = false){
    If($button == "left"){
       Return()
    }    
