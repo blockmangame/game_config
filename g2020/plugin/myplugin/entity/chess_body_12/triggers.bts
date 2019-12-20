@@ -1,8 +1,0 @@
-
-ENTITY_CLICK {
-    If($obj2.house ~= $obj1.house) {
-        ShowTip(entity = $obj2, tipType = 2, textKey = "party_tip_not_your_sound")
-    } Else {
-        ShowBgmList(player = $obj2)
-    }
-}
