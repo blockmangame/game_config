@@ -3545,12 +3545,12 @@ POP_UP_BUY_PRIVILEGE
     $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
-        rightCoinId = nil,
-        rightContent = "ui_sure"
+        rightCoinId = 0,
+        rightContent = $price
     }
     $content = {
         msg = "gui_you_want_to_buy_this",
-        args = [ $price, $itemdesc]
+        args = [$itemdesc]
     }
 
     ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_BUY_PRI", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
