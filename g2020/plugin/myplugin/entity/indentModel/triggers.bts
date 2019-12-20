@@ -46,7 +46,7 @@ CHANG_ACTOR(){ --变模型
             $obj2.punishmentCD = false
         }
         $changActor = GetConfigVar(obj = $obj1, key = $actorName) --changActor
-        ChangeEntityActorOneself(entity = $obj1, name =  $changActor, player = $obj2)
+        ChangeEntityActorAlone(entity = $obj1, name =  $changActor, player = $obj2)
     }
 }
 GET_TASK(debug = false)

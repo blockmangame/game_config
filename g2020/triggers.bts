@@ -12,6 +12,7 @@ GAME_INIT(debug = false)
     @taskMap = NewDictionary({}) --
     @TASK_TABLE = NewArray() --打工的任务表
     @TASK_WEIGHT = NewArray() --打工随机比重表
+    @INDENT_POS = GetConfigValue(type = "task", fullName = "myplugin/work", key = "indentPos")
     @workmaxCount = GetConfigValue(type = "task", fullName = "myplugin/work", key = "maxCount") --最大限度
     @punishmentTime = GetConfigValue(type = "task", fullName = "myplugin/work", key = "punishmentTime") --惩罚时间
     $taskData = GetConfigValue(type = "task", fullName = "myplugin/work", key = "tasks")
