@@ -58,7 +58,7 @@ CREATE_OWNER_HOUSE{
                     houseCfg = $houseCfg,
                     houseSelectColor = GetEntityCfg(fullName = $houseCfg, key = "defaultColor"),
                     houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
-                    houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or ["", "", ""],
+                    houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or {},
                     isCurEquip = "enable",
                     houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
                     houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
@@ -246,9 +246,12 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
 CREATE_HOUSE_OUTSIDE{
     $yaw = GetRegionConfig(region = $region, key = "regionHouseYaw")
     $housePosOffset = GetEntityCfg(fullName = $houseCfg, key = "housePosOffset") or {x = 0, y = 0, z = 0}
-    Test("$housePosOffset--------------",$housePosOffset,$yaw)
-    $house = CreateNpc(pos = ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)), 
-        map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
+    --Test("$housePosOffset--------------",$region,GetRegionCenter(region = $region),$housePosOffset,$yaw,V3RotationYaw(vector = $housePosOffset, yaw = $yaw),
+        --ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)))
+    $house = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
+    UpdateEntityBoundBoxWithRotate(entity = $house)
+    $pos = ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw))
+    SetEntityPosition(entity = $house, pos = $pos, map = GetEntityMap(entity = $house))
     SetEntityYaw(entity = $house, rotationYaw = $yaw)
     SetBodyYaw(entity = $house, yaw = $yaw)
 
@@ -505,7 +508,7 @@ GIVE_HOUSE{
             houseCfg = $houseCfg,
             houseSelectColor = $curSelect,
             houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
-            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or ["", "", ""],
+            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or {},
             isCurEquip = "disable",
             houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
             houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
@@ -1058,7 +1061,7 @@ SET_REGION_COLOR{
     If(not $curInsideRegion){
         Return()
     }
-    $curInsideRegionKey = GetRegionKey(region = $curInsideRegion)
+    $curInsideRegionKey = GetRegionConfig(region = $curInsideRegion, key = "regionkey")
     $curInsideRegionChildReionArr = GetRegionConfig(region = $curInsideRegion, key = "childRegionKey")
     ForLoop(from = 1, to = ArraySize(array = $curInsideRegionChildReionArr), key = "index"){
         If(ArrayGet(array = $curInsideRegionChildReionArr, index = $index) == $childRegionKey){
@@ -1074,10 +1077,11 @@ SET_REGION_COLOR{
     $house = GetObjectVar(obj = $obj1, key = "house")
     $insideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     $destBlock = $colorBlock or GetRegionConfig(region = $curInsideRegion, key = "defaultBlock")
-    Foreach(array = $childRegionArr, key = "cRegion"){
-        CallTrigger(object = $house, event = "CHANGE_HOUSE_REGION_COLOR", map = $insideMap, region = $cRegion, destBlock = $destBlock)
-    }
-    CallTrigger(object = $house, event = "CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION", map = $insideMap, childRegionArr = $childRegionArr, destBlock = $destBlock)
+    -- Foreach(array = $childRegionArr, key = "cRegion"){
+        -- CallTrigger(object = $house, event = "CHANGE_HOUSE_REGION_COLOR", map = $insideMap, region = $cRegion, destBlock = $destBlock)
+    -- }
+    CallTrigger(object = $house, event = "CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION", map = $insideMap, 
+        childRegionKey = $childRegionKey, childRegionArr = $childRegionArr, destBlock = $destBlock)
 
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
@@ -1089,10 +1093,19 @@ SET_REGION_COLOR{
         }
     }
     $curSelectHouseRegionColor = DictionaryGet(dict = $curHousedict, key = "houseInsideRegionColors") or {}
+    $hadRegion = false
     Foreach(array = $curSelectHouseRegionColor, key = "childRegionColorArr"){
         If(ArrayGet(array = $childRegionColorArr, index = 1) == $curInsideRegionKey){
             ArraySet(array = ArrayGet(array = $childRegionColorArr, index = 2), index = $curInsideRegionChildReionIndex, value = $colorBlock)
+            $hadRegion = true
+            Break()
         }
+    }
+    If(not $hadRegion){
+        $defaultChildRegionBlock = GetRegionConfig(region = $curInsideRegion, key = "defaultChildRegionBlock")
+        ArraySet(array = $defaultChildRegionBlock, index = $curInsideRegionChildReionIndex, value = $colorBlock)
+        $regionkey = GetRegionConfig(region = $curInsideRegion, key = "regionkey")
+        ArrayAppend(array = $curSelectHouseRegionColor, value = [$regionkey,$defaultChildRegionBlock])
     }
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
