@@ -3267,7 +3267,7 @@ GET_TASK_GPS(debug = false) --得到打工的GPS位置
             $obj1.gpsPos = GetEntityPosition(entity = $door)
         }
     }Else{
-        $obj1.gpsPos = $obj1.taskPos or  {x = 89, y = 18, z = 195}
+        $obj1.gpsPos = $obj1.taskPos or  @INDENT_POS
     }
 }
 TASK_NPC_ADD_BUFF(debug = false) --给任务npc还动作加buff
@@ -3439,7 +3439,7 @@ SHOW_SHOP_TITLE(){
     Show3DUI(player = $obj1, show = $show, data = $data2)
 }
 --公共区域购买，场景商店的购买逻辑
-SURE_BUY(debug = false){
+SURE_BUY(debug = true){
    If($button == "left"){
       Return()
    }    
@@ -3451,18 +3451,21 @@ SURE_BUY(debug = false){
    $itemfullName = GetConfigVar(obj = $obj2, key = "sellItem")
    $price = GetConfigVar(obj = $obj2, key = "sellPrice")
    $coinId = GetConfigVar(obj = $obj2, key = "coinId")
-   If($coinId == 0 ){
-       BuyGoods(player = $obj1, uniqueId = 20201999,  coinId = $coinId, price = $price, event = "SHOP_BUY_COIN", objID = GetObjectID(object = $obj1))
-       Return()
-   }
    $coinName = "green_currency"
+   If($coinId == 0){
+       $coinName = "gDiamonds"
+   }
    $itemName = GetItemCfg(fullName = $itemfullName, key = "itemname")
    $enoughMoney = CheckBalance(entity = $obj1, coinName = $coinName, price = $price)
    If($enoughMoney){ --够钱
          $checkBag = AddItem(entity = $obj1, cfg = $itemfullName, count = 1)
          If($checkBag ~= false){
-            ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
-            PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
+            If($coinId == 0){
+                BuyGoods(player = $obj1, uniqueId = 20201999,  coinId = $coinId, price = $price, event = "SHOP_BUY_COIN", objID = GetObjectID(object = $obj1))
+            }Else{
+                ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
+                PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
+            }
          }Else{ --背包满了
             ShowTip(textKey = "gui_str_app_shop_inventory_is_full", tipType = 2, entity = $obj1, keepTime = 20)
          }
