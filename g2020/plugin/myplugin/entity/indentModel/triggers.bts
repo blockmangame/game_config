@@ -46,7 +46,7 @@ CHANG_ACTOR(){ --变模型
             $obj2.punishmentCD = false
         }
         $changActor = GetConfigVar(obj = $obj1, key = $actorName) --changActor
-        SelfChangEntityActor(entity = $obj1, name =  $changActor, player = $obj2)
+        ChangeEntityActorOneself(entity = $obj1, name =  $changActor, player = $obj2)
     }
 }
 GET_TASK(debug = false)
@@ -88,7 +88,7 @@ GET_TASK(debug = false)
     --得到任务道具，手持
     AddItem(entity = $obj2, cfg = "myplugin/taskItem", count = 1)
     $item = SearchBagItem(entity = $obj2, key = "newTaskitem", val = true)
-    SetEntityHandItem(entity = $obj2, item = $item)
+    --SetHandItem(entity = $obj2, item = $item)
     --给模型加隐身buff，并定时CD，一定的时间不能点，
     HideObjectInteractionUI(player = $obj2, target = $obj1)
     --MarkEntityForPlayer(player = $obj2, entity = $obj1, buffName = "myplugin/transparent_buff")
@@ -97,8 +97,9 @@ GET_TASK(debug = false)
     If($obj1.worktaskCount > 40){
         $obj1.worktaskCount = 1
     }
-    CallTrigger(event = "GET_TASK_GPS", object = $obj2)
-    CallTrigger(event = "GET_TASK_UI_DATA", object = $obj2, showGps = true)
+    $obj2.taskShowGps = true
+    CallTrigger(event = "GET_TASK_GPS", object = $obj2, showGps = true)
+    CallTrigger(event = "GET_TASK_UI_DATA", object = $obj2)
 }
 TASK_REFRESH()
 {
