@@ -1,3 +1,22 @@
+WEAR_EQUIPMEN {
+    $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
+    If($typeIndex == 3)
+    {
+        -- on car
+        $carName = GetConfigVar(obj = $item, key = "carName")
+        CallTrigger(event = "CREATE_CAR", obj1 = $obj1, carName = $carName)
+    }
+}
+
+TAKEOFF_EQUIPMEN {
+    $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
+    If($typeIndex == 3)
+    {
+        --off car
+        --todo kill car
+    }
+}
+
 INTERACTION_FEED {
     -- If(not IsPlayer(entity = $obj1))
     -- {
@@ -3620,9 +3639,6 @@ CREATE_CAR {
         ShowTip(entity = $obj1, tipType = 2, textKey = "gui_create_car_in_the_air", time = 40)
         Return()
     }
-
-    $carName = "myplugin/car_1"
-
     If(not $obj1.createdCars)
     {
         $obj1.createdCars = NewDictionary()
@@ -3883,6 +3899,11 @@ PICK_HAND_ITEM {
 }
 
 ENTER_EQUIPMEN {
+    $disableHand = GetConfigVar(obj = $item, key = "disableHand")
+    If($disableHand)
+    {
+        Return()
+    }
     $canHandMap = GetConfigVar(obj = $item, key = "canHandMap")
     $playerCurMap = GetEntityMapName(entity = $obj1)
     If ($canHandMap and $playerCurMap ~= $canHandMap)
