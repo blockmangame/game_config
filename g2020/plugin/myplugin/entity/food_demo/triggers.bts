@@ -120,9 +120,11 @@ DEC_INTERACTION_TEST{
 
 }
 --上面是编辑的，下面是购买食物或者道具的
-FOOD_BUY(debug = false){
+FOOD_BUY {
    $price = GetConfigVar(obj = $obj1, key = "sellPrice")
    $sellItem = GetConfigVar(obj = $obj1, key = "sellItem")
+   $coinId = GetConfigVar(obj = $obj1, key = "coinId")
+   $Name = GetItemCfg(fullName = $sellItem, key = "name")
    $owner = GetOwner(entity = $obj1)
    $myTeamId = GetEntityTeam(entity = $obj2)
    $ownerName = "nil"
@@ -144,13 +146,13 @@ FOOD_BUY(debug = false){
       $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
-        rightCoinId = nil,
-        rightContent = "ui_sure"
+        rightCoinId = $coinId,
+        rightContent = $price
       }
       
       $content = {
          msg = "gui_you_want_to_buy_this",
-         args = [ $price, $sellItem]
+         args = [$Name]
       }
       $Context = {
          objID = GetObjectID(object = $obj1),
