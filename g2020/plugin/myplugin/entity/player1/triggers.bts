@@ -4238,3 +4238,22 @@ SAVE_PHOTO
 
     UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
 }
+
+DELETE_FAMILY_ALBUM
+{
+    $familyAlbum = GetObjectVar(obj = $obj1, key = "familyAlbum")
+    If(not $familyAlbum)
+    {
+        Return()
+    }
+    If(not $index)
+    {
+        Return()
+    }
+
+    If($index <= ArraySize(array = $familyAlbum) and $index > 0)
+    {
+        ArrayRemove(array = $familyAlbum, index = $index)
+        UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
+    }
+}
