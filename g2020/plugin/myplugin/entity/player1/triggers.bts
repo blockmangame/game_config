@@ -76,8 +76,8 @@ CREATE_OWNER_HOUSE{
                 {
                     houseCfg = $houseCfg,
                     houseSelectColor = GetEntityCfg(fullName = $houseCfg, key = "defaultColor"),
-                    houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
-                    houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or {},
+                    houseInsideFurnishing = Copy(value = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or []),
+                    houseInsideRegionColors = Copy(value = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or {}),
                     isCurEquip = "enable",
                     houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
                     houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
@@ -526,8 +526,8 @@ GIVE_HOUSE{
     ArrayAppend(array = $houseVars, value = { -- 购买成功后拼接一个新的房子数据放进entity的houseVars中 -- TEST CODE
             houseCfg = $houseCfg,
             houseSelectColor = $curSelect,
-            houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
-            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or {},
+            houseInsideFurnishing = Copy(value = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or []),
+            houseInsideRegionColors = Copy(value = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or {}),
             isCurEquip = "disable",
             houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
             houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
@@ -1121,7 +1121,7 @@ SET_REGION_COLOR{
         }
     }
     If(not $hadRegion){
-        $defaultChildRegionBlock = GetRegionConfig(region = $curInsideRegion, key = "defaultChildRegionBlock")
+        $defaultChildRegionBlock = Copy(value = GetRegionConfig(region = $curInsideRegion, key = "defaultChildRegionBlock"))
         ArraySet(array = $defaultChildRegionBlock, index = $curInsideRegionChildReionIndex, value = $colorBlock)
         $regionkey = GetRegionConfig(region = $curInsideRegion, key = "regionkey")
         ArrayAppend(array = $curSelectHouseRegionColor, value = [$regionkey,$defaultChildRegionBlock])
