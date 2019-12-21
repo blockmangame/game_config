@@ -4185,3 +4185,26 @@ START_PLAY_BGM(debug = false) {
         SendUpdatePlayingBgmIndex(player = $player, playingIndex = $index)
     }
 }
+
+CALLBACK_PHOTOGRAPH
+{
+    UploadPhoto(player = $obj1, info = $info, event = "SAVE_PHOTO")
+}
+
+SAVE_PHOTO
+{
+    $familyAlbum = GetObjectVar(obj = $obj1, key = "familyAlbum")
+    If(not $familyAlbum)
+    {
+        Return()
+    }
+    
+    $photo = {
+        image = $data,
+        name = "unNamed"
+    }
+
+    ArrayAppend(array = $familyAlbum, value = $photo)
+
+    UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
+}
