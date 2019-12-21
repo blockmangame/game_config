@@ -1,8 +1,8 @@
-ENTITY_ENTER(debug = false)
+ENTITY_ENTER 
 {
     @INDENT_MODEL = $obj1
 }
-GET_TASK_KEY(debug = false) --随机任务key
+GET_TASK_KEY  --随机任务key
 {
     If(not $obj1 or not $obj2){
         Return()
@@ -49,7 +49,7 @@ CHANG_ACTOR(){ --变模型
         ChangeEntityActorAlone(entity = $obj1, name =  $changActor, player = $obj2)
     }
 }
-GET_TASK(debug = false)
+GET_TASK 
 {
     If($obj2.taskKey){ --有任务接不到
         ShowTip(textKey = "有任务在身，接不了", tipType = 2, entity = $obj2, keepTime = 60)
