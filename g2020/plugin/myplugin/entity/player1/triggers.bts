@@ -3300,11 +3300,11 @@ PUNISH_END(){--惩罚结束
 }
 DELETE_ITEM(){
     --出售
-    $price = GetItemCfg(fullName = $fullName, key = "recyclePrice")
-    If($price and $price>0){
-        AddCurrency(entity = $obj1, coinName = "green_currency", count = $price)
-        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $price), entity = $obj1)
-    }
+    --$price = GetItemCfg(fullName = $fullName, key = "recyclePrice")
+    --If($price and $price>0){
+    --   AddCurrency(entity = $obj1, coinName = "green_currency", count = $price)
+    --    ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $price), entity = $obj1)
+    --}
     --放弃任务
     If($fullName == "myplugin/taskItem" and $obj1.taskKey){
         $obj1.punishmentCD = true
@@ -3359,15 +3359,14 @@ INIT_WORK_TASK(){ --初始打工
     }
     StartTimer(rep = false, time = 20, object = $obj1, event = "TASK_UPDATE_DATA")
 }
-FINISH_TASK { --完成打工的对话
-    If($obj1.taskKey ~= $name){
-       Return()
-    }
+DO_SUBMIT_ORDER(){ --对话
+    $obj1.nowSubmitTask = true
+    $obj1.taskobjID = GetObjectID(object = $obj2)
     OpenConversation(
         entity = $obj1,
         optionList = [
             {
-                triggerName = "FINISH_AWARD"
+                triggerName = "SUBMIT_ORDER"
             }
         ],
         optionNpc = "myplugin/player1",
@@ -3378,18 +3377,28 @@ FINISH_TASK { --完成打工的对话
             }
         ]
     )
+}
+SUBMIT_ORDER(){ --对话提交
+    If(not $obj1.nowSubmitTask or not $obj1.taskobjID){
+        Return()
+    }
+    $obj2 = GetObject(objID = $obj1.taskobjID)
+    $obj1.nowSubmitTask = false
+    AddTarget(entity = $obj1, target = $obj2, type = "SubmitForm")
+    DoFinishTask(player = $obj1, name = $obj1.taskKey)
+    $obj1.taskobjID = nil
+}
+FINISH_TASK(debug = false){ --完成打工的对话
+    If($obj1.taskKey ~= $name){
+       Return()
+    }
     If($obj1.taskShowGps){
         SetGuidePostion(entity = $obj1)
     }
     $obj1.taskShowGps = false
-    $obj1.nowSubmitTask = true
-    --$obj1.finishworkTime =  StartTimer(object = $obj1, event = "FINISH_AWARD", time = 40)
+    $obj1.finishworkTime =  StartTimer(object = $obj1, event = "FINISH_AWARD", time = 20)
 }
 FINISH_AWARD(){ --完成打工的奖励
-    If(not $obj1.nowSubmitTask){
-        Return()
-    }
-    $obj1.nowSubmitTask = false
     $obj1.maxtaskCount = ($obj1.maxtaskCount or 0 ) + 1
     If($obj1.maxtaskCount >= @workmaxCount && not $obj1.maxActor and @INDENT_MODEL){ --最大累计数，改变模型
         $obj1.maxActor = true

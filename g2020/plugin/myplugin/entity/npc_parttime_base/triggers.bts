@@ -3,10 +3,9 @@ ENTITY_ENTER
     
 }
 SUBMIT_ORDER {
-    AddTarget(entity = $obj2, target = $obj1, type = "SubmitForm")
     $key = GetConfigVar(obj = $obj1, key = "taskKey")
     If($obj2.taskKey == $key){
-        DoFinishTask(player = $obj2, name = $key)
+        CallTrigger(event = "DO_SUBMIT_ORDER", object = $obj2, key = $key, obj2 = $obj1)
     }Else{
         $fullName = GetConfigVar(obj = $obj1, key = "fullName")
         $msg = DictionaryGet(dict = @failedMsg, key = $fullName)
