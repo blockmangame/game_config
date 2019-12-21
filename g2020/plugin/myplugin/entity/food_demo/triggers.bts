@@ -120,7 +120,7 @@ DEC_INTERACTION_TEST{
 
 }
 --上面是编辑的，下面是购买食物或者道具的
-FOOD_BUY(debug = false){
+FOOD_BUY {
    $price = GetConfigVar(obj = $obj1, key = "sellPrice")
    $sellItem = GetConfigVar(obj = $obj1, key = "sellItem")
    $coinId = GetConfigVar(obj = $obj1, key = "coinId")

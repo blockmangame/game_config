@@ -1,4 +1,4 @@
-GAME_INIT(debug = false)
+GAME_INIT 
 {
     @BGMConfigs = ReadGameCsv(path = "bgm.csv")
     @Generate_State_List = ["hunger", "thirsty", "dirty", "fatigue", "ill", "region"]
@@ -387,7 +387,7 @@ LOAD_TOP_EXCELLENT_RESPONSE {
 
     @excellentWorks = $info
 }
-ENTITY_RIDE_OFF(debug = false){
+ENTITY_RIDE_OFF {
     If(not IsPlayer(entity = $obj2)){ Return() }
     RecheckObjectInteractionUI(player = $obj2, target = $obj1)
     CallTrigger(object = $obj2, event = "FUNC_STATE_RIDEON", ride = $obj1, isCancel = true)
@@ -395,7 +395,7 @@ ENTITY_RIDE_OFF(debug = false){
     If(not IsPlayer(entity = $obj1)){ Return() }
     RecheckObjectInteractionUI(player = $obj1, target = $obj2)
 }
-ENTITY_RIDE_ON(debug = false){
+ENTITY_RIDE_ON {
     If(not IsPlayer(entity = $obj2)){ Return() }
     UpdateObjectInteractionUI(player = $obj2, target = $obj1, show = false)
     CallTrigger(object = $obj2, event = "FUNC_STATE_RIDEON", ride = $obj1)
