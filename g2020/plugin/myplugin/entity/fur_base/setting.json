@@ -4,14 +4,18 @@
     "boundBoxRotateWithYawAndPitch": true,
     "posSyncDelay": 1,
     "canInteract": true,
+    "image": "",
+    "buyMoney": 0,
+    "sellMoney": 0,
+    "sellByDiscountMoney": 0,
+    "hpBarColor": 0,
+    "collision": true,
     "name": "",
     "showActorScale": 1,
+    "canClick": true,
     "rotationYawModlus": 90,
     "supportingForce": false,
     "isStatic": true,
-    "hpBarColor": 0,
-    "collision": true,
-    "canClick": true,
     "/name": "这是food_base里面的东西",
     "deadInRed": false,
     "destroyTime": 40,
@@ -131,9 +135,9 @@
             "view": false
         }
     ],
+    "editBuff": "myplugin/dec_edit_buff",
     "editUI": {
         "cfgKey": "editUI",
-        "eventTb": "events",
         "followParams": {
             "offset": {
                 "x": 0,
@@ -145,21 +149,21 @@
         "moveWidget": {
             "text": "MOVE",
             "image": "set:Edit_1.json image:Edit_Move_Icon.png",
-            "touchBeginEventIndex": 1,
-            "touchEndEventIndex": 2,
+            "beginMoveAction": true,
+            "endMoveAction": true,
             "btnType": 4,
             "pos": {
                 "x": -50,
                 "y": 0
             },
-            "context": []
+            "params": {}
         },
         "aroundWidget": [
             {
                 "text": "SALE",
                 "image": "set:Edit_1.json image:Edit_Sell_Icon.png",
                 "tipContent": {
-                    "eventIndex": 3,
+                    "action": "sale",
                     "content": {
                         "titleText": "ui_tip",
                         "msgText": "ui_sure_to_sell_furniture",
@@ -172,7 +176,7 @@
                     "x": 50,
                     "y": 0
                 },
-                "context": []
+                "params": {}
             },
             {
                 "text": "COLOR",
@@ -182,48 +186,41 @@
                     "x": -150,
                     "y": 0
                 },
-                "context": []
+                "params": {}
             },
             {
                 "text": "LEFT_ROTATION",
                 "image": "set:Edit_1.json image:Edit_Left_Rotation_Icon.png",
-                "eventIndex": 4,
+                "action": "leftRotation",
                 "btnType": 4,
                 "pos": {
                     "x": -100,
                     "y": 150
                 },
-                "context": []
+                "params": {}
             },
             {
                 "text": "RIGHT_ROTATION",
                 "image": "set:Edit_1.json image:Edit_Right_Rotation_Icon.png",
-                "eventIndex": 5,
+                "action": "rightRotation",
                 "btnType": 4,
                 "pos": {
                     "x": 0,
                     "y": 150
                 },
-                "context": []
+                "params": {}
             }
         ],
-        "events": [
-            {
-                "event": "DEC_INTERACTION_MOVE_TOUCH_BEGIN"
-            },
-            {
-                "event": "DEC_INTERACTION_MOVE_TOUCH_END"
-            },
-            {
-                "event": "DEC_INTERACTION_SALE"
-            },
-            {
-                "event": "DEC_INTERACTION_LEFT_ROTATION"
-            },
-            {
-                "event": "DEC_INTERACTION_RIGHT_ROTATION"
-            }
-        ]
+        "events":{
+            "startEdit": "START_EDIT_ENTITY",
+            "stopEdit": "STOP_EDIT_ENTITY",
+            "beginMove":"DEC_INTERACTION_MOVE_TOUCH_BEGIN",
+            "endMove":"DEC_INTERACTION_MOVE_TOUCH_END",
+            "sale":"DEC_INTERACTION_SALE",
+            "leftRotation":"DEC_INTERACTION_LEFT_ROTATION",
+            "rightRotation":"DEC_INTERACTION_RIGHT_ROTATION",
+            "exit":"DEC_INTERACTION_EXIT_EDIT"
+        }
     },
     "interaction": {
         "radius": 5,
