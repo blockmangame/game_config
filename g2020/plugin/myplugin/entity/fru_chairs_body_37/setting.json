@@ -17,11 +17,37 @@
     },
     "interactionUI": {
         "cfgKey": "interactionUI",
-        "centerBtns": [
+        "aroundParams": {
+            "startAngle": 0,
+            "endAngle": 90,
+            "radius": 100
+        },
+        "aroundBtns": [
             {
                 "text": "",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "event": "SHOW_DONATE_UI"
+                "checkHide": {
+                    "checkCond": {
+                        "funcName": "checkProp",
+                        "p1": "lightState",
+                        "p2": 0
+                    },
+                    "wishResult": false
+                },
+                "event": "LIGHT_ON"
+            },
+            {
+                "text": "",
+                "image": "plugin/myplugin/image/back.png",
+                "checkHide": {
+                    "checkCond": {
+                        "funcName": "checkProp",
+                        "p1": "lightState",
+                        "p2": 1
+                    },
+                    "wishResult": false
+                },
+                "event": "LIGHT_OFF"
             }
         ],
         "followParams": {
@@ -35,5 +61,6 @@
     },
     "name": "灯测试",
     "actorName": "g2020_fru_chairs.actor",
-    "base": "fur_base"
+    "base": "fur_base",
+    "buffName": "light_on_buff_2045"
 }
