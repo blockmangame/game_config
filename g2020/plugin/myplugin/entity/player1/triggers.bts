@@ -4257,3 +4257,32 @@ DELETE_FAMILY_ALBUM
         UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
     }
 }
+
+RENAME_FAMILY_ALBUM
+{
+    $familyAlbum = GetObjectVar(obj = $obj1, key = "familyAlbum")
+    If(not $familyAlbum)
+    {
+        Return()
+    }
+
+    If(not $index)
+    {
+        Return()
+    }
+
+    If($index <= ArraySize(array = $familyAlbum) and $index > 0)
+    {
+        $photo = ArrayGet(array = $familyAlbum, index = $index)
+        If($photo)
+        {
+            SetObjectVar(obj = $photo, key = "name", value = $name)
+        }
+    }
+
+    $data = {
+        index = $index,
+        name = $name
+    } 
+    UpdateUIData(player = $obj1, ui = "win_familyAlbumRename", data = $data) 
+}
