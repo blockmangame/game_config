@@ -3955,6 +3955,10 @@ PLAYER_ON_VISIT {--same server
     }
     CallTrigger(object = $target, event = "GET_VISIT_TELE_POS", from = $obj1, fromInParty = $fromInParty)
     If($obj1.telePos and $obj1.teleMap){
+        $isInHouse = ($obj1.house == GetMapVar(map = GetEntityMap(entity = $obj1), key = "owner"))
+        If($isInHouse and $obj1.teleMap ~= GetEntityMap(entity = $obj1)){
+            ShowTitleBarPage(entity = $obj1, closeWin = true)
+        }
         SetEntityPosition(map = $obj1.teleMap, entity = $obj1, pos = $obj1.telePos)
         $obj1.teleMap = nil
         $obj1.telePos = nil
@@ -4045,6 +4049,7 @@ CHECK_IN_PARTY {
             Return()
         }
         UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
+        UpdateExtensionBtn(entity = $obj1, btnList = [{name = "party"}])
         If($userId == $inPartyOwnerId){
             $obj1.inSelfParty = 1
             --My Party!!!!
