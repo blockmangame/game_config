@@ -3937,12 +3937,12 @@ ENTER_MAP
 
             Show3DUI(player = $obj1, show = true, data = $data)
         }
+
+        $worksWallConfig = GetWorldVar(key = "worksWall")
+        Show3DUI(player = $obj1, show = true, data = $worksWallConfig)
     }
-    CallTrigger(
-        object = $obj1,
-        event = "FUNC_STATE_RELEASE",
-        state = $map.cfg.releaseState
-    )
+
+    CallTrigger( object = $obj1, event = "FUNC_STATE_RELEASE", state = $map.cfg.releaseState)
 }
 
 LEAVE_MAP
@@ -3956,12 +3956,11 @@ LEAVE_MAP
         {
             Show3DUI(player = $obj1, show = false, data = $ucfg)
         }
+
+        $worksWallConfig = GetWorldVar(key = "worksWall")
+        Show3DUI(player = $obj1, show = false, data = $worksWallConfig)
     }
-    CallTrigger(
-        object = $obj1,
-        event = "FUNC_STATE_RELEASE_SUSPEND",
-        state = $map.cfg.releaseState
-    )
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $map.cfg.releaseState)
 }
 --↓↓↓↓↓↓ party
 CHECK_LEAVE_PARTY_FROM_DOOR {
