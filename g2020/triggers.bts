@@ -222,7 +222,6 @@ FUNC_CLOSE_GPS --params: destination
     If(not $destination || $destination == $dictDestination)
     {
         SetGuidePostion(entity = $obj1)
-        RemoveSkill(entity = $obj1, name = "myplugin/close_gps")
         SetObjectVar(obj = $obj1, key = "gpsDict", value = nil)
     }
 }
@@ -230,7 +229,6 @@ FUNC_CLOSE_GPS --params: destination
 FUNC_OPEN_GPS --params: gpsDict
 {
     SetGuidePostion(pos = $gps, entity = $obj1)
-    AddSkill(entity = $obj1, name = "myplugin/close_gps")
     SetObjectVar(obj = $obj1, key = "gpsDict", value = $gpsDict)
     ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
 }
@@ -450,13 +448,6 @@ FUNC_NAVIGATION_GET_MAPS_ALL_PATH
                 type = "global",
                 saveName = $mapATomapBDWs
             )
-
-            CallTrigger(
-                event = "FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX",
-                allDWs = GetGlobalVar(key = $mapATomapBDWs),
-                type = "global",
-                saveName = Concat(p1 = $mapATomapBDWs, p2 = "Matrix")
-            )
         }
     }
 }
@@ -663,132 +654,6 @@ FUNC_NAVIGATION_GET_DOORWAY_LIST --params: mapS(玩家当前所在地图名), ma
         ElseIf($obj1)
         {
             SetObjectVar(obj = $obj1, key = $saveName, value = $allDWs)
-        }
-    }
-}
-
-FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX --params: allDWs(map00xTomap00yDWs)[, tgtDict, saveName, type = "global"/"entity"]
-{
-    If(ArraySize(array = $allDWs) == 1)
-    {
-        Return()
-    }
-    If($obj1)
-    {
-        ArrayInsert(array = $allDWs, index = 1, value = $obj1)
-        $objMap = GetEntityMap(entity = $obj1)
-        $objPos = GetEntityPosition(entity = $obj1)
-    }
-    If($tgtDict and DictionaryGet(dict = $tgtDict, key = "pos"))
-    {
-        ArrayInsert(array = $allDWs, index = 2, value = $tgtDict)
-        $tgMap = DictionaryGet(dict = $tgtDict, key = "belongMap")
-        $tgPos = DictionaryGet(dict = $tgtDict, key = "pos")
-    }
-
-    $matrix = []
-    ForLoop(from = 1, to = ArraySize(array = $allDWs or []), key = "index")
-    {
-        $curModel = []
-        $rowDW = ArrayGet(array = $allDWs, index = $index)
-        If($obj1 == $rowDW)
-        {
-            $rowMap = $objMap
-            $rowPos = $objPos
-            $rowToMap = $rowMap
-            $rowToPos = $rowPos
-        }
-        ElseIf($rowDW == $tgtDict)
-        {
-            $rowMap = $tgMap
-            $rowPos = $tgPos
-            $rowToMap = $rowMap
-            $rowToPos = $rowPos
-        }
-        Else
-        {
-            $rowMap = GetConfigValue(type = "entity", fullName = $rowDW, key = "belongMap")
-            $rowPos = GetConfigValue(type = "entity", fullName = $rowDW, key = "pos")
-            $rowToMap = GetConfigValue(type = "entity", fullName = $rowDW, key = "toMap")
-            $rowToPos = GetConfigValue(type = "entity", fullName = $rowDW, key = "toPos")
-        }
-        
-        $rowX = GetPosX(pos = $rowPos)
-        $rowY = GetPosY(pos = $rowPos)
-        $rowZ = GetPosZ(pos = $rowPos)
-
-        $rowTX = GetPosX(pos = $rowToPos)
-        $rowTY = GetPosY(pos = $rowToPos)
-        $rowTZ = GetPosZ(pos = $rowToPos)
-
-        ForLoop(from = 1, to = ArraySize(array = $allDWs), key = "idx")
-        {
-            $val = 0
-            If($idx ~= $index)
-            {
-                $colDW = ArrayGet(array = $allDWs, index = $idx)
-                If($obj1 == $colDW)
-                {
-                    $colMap = $objMap
-                    $colPos = $objPos
-                    $colToMap = $colMap
-                    $colToPos = $colPos
-                }
-                ElseIf($colDW == $tgtDict)
-                {
-                    $colMap = $tgMap
-                    $colPos = $tgPos
-                    $colToMap = $colMap
-                    $colToPos = $colPos
-                }
-                Else
-                {
-                    $colMap = GetConfigValue(type = "entity", fullName = $colDW, key = "belongMap")
-                    $colPos = GetConfigValue(type = "entity", fullName = $colDW, key = "pos")
-                    $colToMap = GetConfigValue(type = "entity", fullName = $colDW, key = "toMap")
-                    $colToPos = GetConfigValue(type = "entity", fullName = $colDW, key = "toPos")
-                }
-
-                $colX = GetPosX(pos = $colPos)
-                $colY = GetPosY(pos = $colPos)
-                $colZ = GetPosZ(pos = $colPos)
-                If($rowMap == $colMap)
-                {
-                    $tmpX = ($colX - $rowX)
-                    $tmpY = ($colY - $rowY)
-                    $tmpZ = ($colZ - $rowZ)
-                    $val = $tmpX * $tmpX + $tmpY * $tmpY + $tmpZ * $tmpZ
-                }
-                ElseIf($rowToMap == $colMap)
-                {
-                    $tmpX = ($colX - $rowTX)
-                    $tmpY = ($colY - $rowTY)
-                    $tmpZ = ($colZ - $rowTZ)
-                    
-                    $val = $tmpX * $tmpX + $tmpY * $tmpY + $tmpZ * $tmpZ
-                }
-                Else
-                {
-                    $val = @mathHuge
-                }
-            }
-            ArrayInsert(array = $curModel, index = $idx, value = $val)
-        }
-        ArrayInsert(array = $matrix, index = $index, value = $curModel)
-    }
-
-    If($saveName && $saveName ~= "")
-    {
-        $colVec = Concat(p1 = $saveName, p2 = "ColVec")
-        If($type == "global")
-        {
-            SetGlobalVar(key = $saveName, value = $matrix)
-            SetGlobalVar(key = $colVec, value = $allDWs)
-        }
-        ElseIf($obj1)
-        {
-            SetObjectVar(obj = $obj1, key = $saveName, value = $matrix)
-            SetObjectVar(obj = $obj1, key = $colVec, value = $allDWs)
         }
     }
 }
