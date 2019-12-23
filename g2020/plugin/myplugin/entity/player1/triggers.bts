@@ -4,7 +4,7 @@ WEAR_EQUIPMEN {
     {
         -- on car
         $carName = GetConfigVar(obj = $item, key = "carName")
-        CallTrigger(event = "CREATE_CAR", obj1 = $obj1, carName = $carName)
+        CallTrigger(event = "EQUIP_CAR", obj1 = $obj1, carName = $carName)
     }
 }
 
@@ -12,8 +12,8 @@ TAKEOFF_EQUIPMEN {
     $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
     If($typeIndex == 3)
     {
-        --off car
-        --todo kill car
+        $carName = GetConfigVar(obj = $item, key = "carName")
+        CallTrigger(event = "TAKEOFF_EQUIP_CAR", obj1 = $obj1, carName = $carName)
     }
 }
 
@@ -3627,7 +3627,8 @@ SHOW_SHOP_TITLE {
         Show3DUI(player = $obj1, show = true, data = $data2)
     }
 }
-CREATE_CAR {
+
+EQUIP_CAR {
     $mapName = GetEntityName(entity = GetEntityMap(entity = $obj1))
     If($mapName ~= "map001")
     {
@@ -3636,7 +3637,7 @@ CREATE_CAR {
 
     If(not GetEntityOnGround(entity = $obj1))
     {
-        ShowTip(entity = $obj1, tipType = 2, textKey = "gui_create_car_in_the_air", time = 40)
+        ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", time = 40)
         Return()
     }
     If(not $obj1.createdCars)
@@ -3653,7 +3654,7 @@ CREATE_CAR {
         {
             If($passenger ~= GetObjectID(object = $obj1))
             {
-                ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "gui_car_owner_already_remove_car", time = 40)
+                ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", time = 40)
             }
             Else
             {
@@ -3679,6 +3680,30 @@ CREATE_CAR {
 
 DEBARK {
 	Dismount(entity = $obj1)
+}
+
+TAKEOFF_EQUIP_CAR
+{
+    If(not $obj1.createdCars)
+    {
+        Return()
+    }
+
+    $createdCarOfCarName = DictionaryGet(dict = $obj1.createdCars, key = $carName)
+    If($createdCarOfCarName)
+    {
+        $passengers = GetPassengers(entity = $createdCarOfCarName)
+        Foreach(array = $passengers, key = "passenger")
+        {
+            If($passenger ~= GetObjectID(object = $obj1))
+            {
+                ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", time = 40)
+            }
+        }
+
+        KillEntity(entity = $createdCarOfCarName)
+        DictionaryRemove(dict = $obj1.createdCars, key = $carName)
+    }
 }
 
 START_CAMERA_MODE
