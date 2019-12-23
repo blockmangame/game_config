@@ -274,8 +274,8 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
                     $tempPos = ComputeV3(p1 = $curBlockPos, p2 = $imcV3, op = "add")
                     If(PosToV3(pos = $tempPos) ~= PosToV3(pos = $lastBlockPos) and PosToV3(pos = $tempPos) ~= PosToV3(pos = $nextBlockPos)){
                         $tempPosInRegion = false
-                        Foreach(array = $regions, key = $region){
-                            If(IsPosInRegion(pos = $tempPos, region = $region)){
+                        Foreach(array = $regions, key = "cregion"){
+                            If(IsPosInRegion(pos = $tempPos, region = $cregion)){
                                 $tempPosInRegion = true
                                 Break()
                             } 
