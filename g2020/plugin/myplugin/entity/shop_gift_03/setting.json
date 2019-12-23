@@ -1,0 +1,58 @@
+{
+    "canClick": false,
+    "actorName": "g2020_gift.actor",
+    "coinId": 3,
+    "sellPrice": 799,
+    "sellItem": "myplugin/toy_gift_03",
+    "collision": true,
+    "name": "",
+    "pushable": true,
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "VerticalBox",
+                "params": [
+                    1,
+                    1,
+                    1
+                ]
+            }
+        ]
+    },
+    "canInteract": true,
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        },
+        "centerBtns": [
+            {
+                "text": "gift_03.buy",
+                "widgetFileName": "widget_button",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "event": "BUY_SHOP"
+            }
+        ]
+    },
+    "interaction": {
+        "radius": 7,
+        "offset": {
+            "x": 0,
+            "y": -1,
+            "z": 2
+        }
+    },
+    "skin": {
+        "body": "3"
+    }
+}

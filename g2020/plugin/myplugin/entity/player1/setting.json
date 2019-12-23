@@ -196,11 +196,20 @@
             {
                 "showName": true,
                 "image": "plugin/myplugin/image/hand_click.png",
-                "nextCfgKey": "interaction_choices"
+                "nextCfgKey": "interaction_choices",
+				"imageSize": {
+                    "width": "60",
+                    "height": "60"
+                }
             }
         ],
         "followParams": {
-            "followScenePos": false
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
         }
     },
     "interaction_choices": {
@@ -416,11 +425,11 @@
     ],
     "canInteract": true,
     "interaction": {
-        "radius": 5,
+        "radius": 7,
         "offset": {
             "x": 0,
-            "y": 0,
-            "z": 0
+            "y": -1,
+            "z": 2
         }
     },
     "uiEvents": {
@@ -727,6 +736,11 @@
     "publishWorksPrice": 360,
     "publishWorksCubePrice": 360,
     "trays": [
+        {
+            "type": 2,
+            "cap": 1,
+            "maxCap": 1
+        },
         {
             "type": 21,
             "cap": 100,

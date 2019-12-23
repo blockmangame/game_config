@@ -103,7 +103,7 @@ DEC_INTERACTION_TEST{
 }
 
 --上面是编辑，这里是ride
-TEST_SHOW_NEW_UI(debug = false){
+TEST_SHOW_NEW_UI {
     UpdateObjectInteractionUI(cfgKey = "interactionUI_1", player = $obj2, target = $obj1, show = true)
 }
 
@@ -134,48 +134,48 @@ ENTITY_sit1_2_2 {
 }
 --上面是编辑，下面是购买逻辑
 
-COOK_SHOW_CHOICES(debug = false){
+COOK_SHOW_CHOICES {
     UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
 }
-COOK_SHOW_BACK(debug = false){
+COOK_SHOW_BACK {
     UpdateObjectInteractionUI(cfgKey = "interactionUI", player = $obj2, target = $obj1, show = true)
 }
-COOK_1(debug = false){
+COOK_1 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 1)
     $sellItem = ArrayGet(array = $arrayItems, index = 1)
     CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
-COOK_2(debug = false){
+COOK_2 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 2)
     $sellItem = ArrayGet(array = $arrayItems, index = 2)
     CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
-COOK_3(debug = false){
+COOK_3 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 3)
     $sellItem = ArrayGet(array = $arrayItems, index = 3)
     CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
-COOK_4(debug = false){
+COOK_4 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 4)
     $sellItem = ArrayGet(array = $arrayItems, index = 4)
     CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
-COOK_5(debug = false){
+COOK_5 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 5)
     $sellItem = ArrayGet(array = $arrayItems, index = 5)
     CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
-FOOD_BUY(debug = false){
+FOOD_BUY {
    $owner = GetOwner(entity = $obj1)
    $myTeamId = GetEntityTeam(entity = $obj2)
    $ownerName = "nil"

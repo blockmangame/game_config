@@ -1,4 +1,23 @@
-INTERACTION_FEED(debug = false){
+WEAR_EQUIPMEN {
+    $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
+    If($typeIndex == 3)
+    {
+        -- on car
+        $carName = GetConfigVar(obj = $item, key = "carName")
+        CallTrigger(event = "CREATE_CAR", obj1 = $obj1, carName = $carName)
+    }
+}
+
+TAKEOFF_EQUIPMEN {
+    $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
+    If($typeIndex == 3)
+    {
+        --off car
+        --todo kill car
+    }
+}
+
+INTERACTION_FEED {
     -- If(not IsPlayer(entity = $obj1))
     -- {
     --     Return()
@@ -57,8 +76,8 @@ CREATE_OWNER_HOUSE{
                 {
                     houseCfg = $houseCfg,
                     houseSelectColor = GetEntityCfg(fullName = $houseCfg, key = "defaultColor"),
-                    houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
-                    houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or {},
+                    houseInsideFurnishing = Copy(value = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or []),
+                    houseInsideRegionColors = Copy(value = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or {}),
                     isCurEquip = "enable",
                     houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
                     houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
@@ -507,8 +526,8 @@ GIVE_HOUSE{
     ArrayAppend(array = $houseVars, value = { -- 购买成功后拼接一个新的房子数据放进entity的houseVars中 -- TEST CODE
             houseCfg = $houseCfg,
             houseSelectColor = $curSelect,
-            houseInsideFurnishing = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or [],
-            houseInsideRegionColors = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or {},
+            houseInsideFurnishing = Copy(value = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or []),
+            houseInsideRegionColors = Copy(value = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or {}),
             isCurEquip = "disable",
             houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
             houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
@@ -1102,7 +1121,7 @@ SET_REGION_COLOR{
         }
     }
     If(not $hadRegion){
-        $defaultChildRegionBlock = GetRegionConfig(region = $curInsideRegion, key = "defaultChildRegionBlock")
+        $defaultChildRegionBlock = Copy(value = GetRegionConfig(region = $curInsideRegion, key = "defaultChildRegionBlock"))
         ArraySet(array = $defaultChildRegionBlock, index = $curInsideRegionChildReionIndex, value = $colorBlock)
         $regionkey = GetRegionConfig(region = $curInsideRegion, key = "regionkey")
         ArrayAppend(array = $curSelectHouseRegionColor, value = [$regionkey,$defaultChildRegionBlock])
@@ -3195,7 +3214,7 @@ HTTP_PURCHASED_DRESS_CALL_BACK
 }
 
 --打工
-GUIDE_POSITION_CHANGE(debug = true){
+GUIDE_POSITION_CHANGE {
     If($key == "taskWork"){
         $obj1.taskShowGps = $show
         If($show){
@@ -3257,7 +3276,7 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
     }
     UpdateUIData(player = $obj1, ui = "circleProgress", data = $taskData)
 }
-GET_TASK_GPS(debug = false) --得到打工的GPS位置
+GET_TASK_GPS  --得到打工的GPS位置
 {
     $map = GetPlayerMap(player = $obj1)
     $owner = GetMapVar(map = $map, key = "owner")
@@ -3270,7 +3289,7 @@ GET_TASK_GPS(debug = false) --得到打工的GPS位置
         $obj1.gpsPos = $obj1.taskPos or  @INDENT_POS
     }
 }
-TASK_NPC_ADD_BUFF(debug = false) --给任务npc还动作加buff
+TASK_NPC_ADD_BUFF  --给任务npc还动作加buff
 {
     $map = GetPlayerMap(player = $obj1)
     $mapNpc = GetMapNpc(map = $map)
@@ -3300,11 +3319,11 @@ PUNISH_END(){--惩罚结束
 }
 DELETE_ITEM(){
     --出售
-    $price = GetItemCfg(fullName = $fullName, key = "recyclePrice")
-    If($price and $price>0){
-        AddCurrency(entity = $obj1, coinName = "green_currency", count = $price)
-        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $price), entity = $obj1)
-    }
+    --$price = GetItemCfg(fullName = $fullName, key = "recyclePrice")
+    --If($price and $price>0){
+    --   AddCurrency(entity = $obj1, coinName = "green_currency", count = $price)
+    --    ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $price), entity = $obj1)
+    --}
     --放弃任务
     If($fullName == "myplugin/taskItem" and $obj1.taskKey){
         $obj1.punishmentCD = true
@@ -3359,15 +3378,14 @@ INIT_WORK_TASK(){ --初始打工
     }
     StartTimer(rep = false, time = 20, object = $obj1, event = "TASK_UPDATE_DATA")
 }
-FINISH_TASK(debug = false){ --完成打工的对话
-    If($obj1.taskKey ~= $name){
-       Return()
-    }
+DO_SUBMIT_ORDER(){ --对话
+    $obj1.nowSubmitTask = true
+    $obj1.taskobjID = GetObjectID(object = $obj2)
     OpenConversation(
         entity = $obj1,
         optionList = [
             {
-                triggerName = "FINISH_AWARD"
+                triggerName = "SUBMIT_ORDER"
             }
         ],
         optionNpc = "myplugin/player1",
@@ -3378,18 +3396,28 @@ FINISH_TASK(debug = false){ --完成打工的对话
             }
         ]
     )
+}
+SUBMIT_ORDER(){ --对话提交
+    If(not $obj1.nowSubmitTask or not $obj1.taskobjID){
+        Return()
+    }
+    $obj2 = GetObject(objID = $obj1.taskobjID)
+    $obj1.nowSubmitTask = false
+    AddTarget(entity = $obj1, target = $obj2, type = "SubmitForm")
+    DoFinishTask(player = $obj1, name = $obj1.taskKey)
+    $obj1.taskobjID = nil
+}
+FINISH_TASK(debug = false){ --完成打工的对话
+    If($obj1.taskKey ~= $name){
+       Return()
+    }
     If($obj1.taskShowGps){
         SetGuidePostion(entity = $obj1)
     }
     $obj1.taskShowGps = false
-    $obj1.nowSubmitTask = true
-    --$obj1.finishworkTime =  StartTimer(object = $obj1, event = "FINISH_AWARD", time = 40)
+    $obj1.finishworkTime =  StartTimer(object = $obj1, event = "FINISH_AWARD", time = 20)
 }
 FINISH_AWARD(){ --完成打工的奖励
-    If(not $obj1.nowSubmitTask){
-        Return()
-    }
-    $obj1.nowSubmitTask = false
     $obj1.maxtaskCount = ($obj1.maxtaskCount or 0 ) + 1
     If($obj1.maxtaskCount >= @workmaxCount && not $obj1.maxActor and @INDENT_MODEL){ --最大累计数，改变模型
         $obj1.maxActor = true
@@ -3439,7 +3467,7 @@ SHOW_SHOP_TITLE(){
     Show3DUI(player = $obj1, show = $show, data = $data2)
 }
 --公共区域购买，场景商店的购买逻辑
-SURE_BUY(debug = false){
+SURE_BUY {
    If($button == "left"){
       Return()
    }    
@@ -3473,7 +3501,7 @@ SURE_BUY(debug = false){
       ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
    }
 }
-SHOP_BUY_COIN(debug = false){
+SHOP_BUY_COIN {
     $dict = NewDictionary($response)
     $objID = DictionaryGet(dict = $dict, key = "objID")
     $obj1 = GetObject(objID = $objID)
@@ -3484,7 +3512,7 @@ SHOP_BUY_COIN(debug = false){
     }
 }
 --区域购买逻辑： 领主家里买厨具，食物，
-SURE_FURNITURE_BUY(debug = false){
+SURE_FURNITURE_BUY {
    If($button == "left"){
       Return()
    }
@@ -3512,7 +3540,7 @@ SURE_FURNITURE_BUY(debug = false){
    }
 }
 --特权购买成功
-ENTITY_BUY_APPSTOP(debug = false){
+ENTITY_BUY_APPSTOP {
     $dict = NewDictionary($shop)
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
@@ -3528,7 +3556,7 @@ ENTITY_BUY_APPSTOP(debug = false){
 }
 
 --弹窗购买特权
-POP_UP_BUY_PRIVILEGE(debug = false)
+POP_UP_BUY_PRIVILEGE 
 {
     If(not $shopIndex || not GetShopItem(shopIndex = $shopIndex, key = "price"))
     {
@@ -3545,17 +3573,17 @@ POP_UP_BUY_PRIVILEGE(debug = false)
     $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
-        rightCoinId = nil,
-        rightContent = "ui_sure"
+        rightCoinId = 0,
+        rightContent = $price
     }
     $content = {
         msg = "gui_you_want_to_buy_this",
-        args = [ $price, $itemdesc]
+        args = [$itemdesc]
     }
 
     ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_BUY_PRI", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
 }
-SURE_BUY_PRI(debug = false)
+SURE_BUY_PRI 
 {
     If($button == "left"){
         CallTrigger(object = $obj1, event = $buyResultEvent, succeed = false, shopIndex = $shopIndex)
@@ -3587,7 +3615,7 @@ ENTITY_BUY_RESULT()
     }
 }
 --场景商店门面
-SHOW_SHOP_TITLE(debug = false){
+SHOW_SHOP_TITLE {
     Return()
     If($obj1.showShopTitleTimer){
         StopTimer(timer = $obj1.showShopTitleTimer)
@@ -3611,9 +3639,6 @@ CREATE_CAR {
         ShowTip(entity = $obj1, tipType = 2, textKey = "gui_create_car_in_the_air", time = 40)
         Return()
     }
-
-    $carName = "myplugin/car_1"
-
     If(not $obj1.createdCars)
     {
         $obj1.createdCars = NewDictionary()
@@ -3874,6 +3899,11 @@ PICK_HAND_ITEM {
 }
 
 ENTER_EQUIPMEN {
+    $disableHand = GetConfigVar(obj = $item, key = "disableHand")
+    If($disableHand)
+    {
+        Return()
+    }
     $canHandMap = GetConfigVar(obj = $item, key = "canHandMap")
     $playerCurMap = GetEntityMapName(entity = $obj1)
     If ($canHandMap and $playerCurMap ~= $canHandMap)
@@ -3934,7 +3964,7 @@ LEAVE_MAP
     )
 }
 --↓↓↓↓↓↓ party
-CHECK_LEAVE_PARTY_FROM_DOOR(debug = false){
+CHECK_LEAVE_PARTY_FROM_DOOR {
     If($obj1.inSelfParty == 1){
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.close", event = "CHECK_CLOSE_PARTY", tipType = 2)
     }
@@ -3942,7 +3972,7 @@ CHECK_LEAVE_PARTY_FROM_DOOR(debug = false){
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.exit", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
     }
 }
-PLAYER_BE_INVITE(debug = false){
+PLAYER_BE_INVITE {
     --party invite will call PLAYER_BE_INVITE_OTHER_SERVER
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
@@ -3968,7 +3998,7 @@ PLAYER_BE_INVITE_REFUSE(){
 PLAYER_BE_INVITE_OTHER_SERVER_REFUSE(){
     $obj1.partyInfo = nil
 }
-PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
+PLAYER_BE_INVITE_OTHER_SERVER {
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
     If($inPartyOwnerId ~= 0){
@@ -3990,7 +4020,7 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
         textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
     )
 }
-PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
+PLAYER_ON_VISIT_OTHER_SERVER {
     $targetUserId = $targetUserId or $obj1.visitTargetUserId
     $contentDict = NewDictionary($content)
     $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
@@ -4006,7 +4036,7 @@ PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
         GotoOtherServer(targetUserId = $targetUserId, player = $obj1)
     }
 }
-PLAYER_ON_VISIT(debug = false){--same server
+PLAYER_ON_VISIT {--same server
     If(not $target){
         $target = $obj2 or $obj1.visitTarget
     }
@@ -4020,7 +4050,7 @@ PLAYER_ON_VISIT(debug = false){--same server
         $obj1.telePos = nil
     }
 }
-GET_VISIT_TELE_POS(debug = false){
+GET_VISIT_TELE_POS {
     $house = $obj1.house
     $isLock =$house.isLock
     $inHouse = ($house == GetMapVar(map = GetEntityMap(entity = $obj1), key = "owner"))
@@ -4046,12 +4076,12 @@ GET_VISIT_TELE_POS(debug = false){
         $from.teleMap = GetEntityMap(entity = $door)
     }
 }
-TRY_JOIN_PARTY(debug = false){
+TRY_JOIN_PARTY {
     If($obj1.excludedPartyId == $partyId){
         $canJoin = false
     }
 }
-TRY_CREATE_PARTY(debug = false){
+TRY_CREATE_PARTY {
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/create_party_privilege")){
         $canCreate = true
     }Else{
@@ -4059,12 +4089,12 @@ TRY_CREATE_PARTY(debug = false){
         CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 13, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
     }
 }
-BUY_CREATE_PARTY_PRIVILEGE_RESULT(debug = false){
+BUY_CREATE_PARTY_PRIVILEGE_RESULT {
     If($succeed){
         TryCreateParty(player = $obj1)
     }
 }
-CHECK_LEAVE_PARTY(debug = false){
+CHECK_LEAVE_PARTY {
     If($obj1.inSelfParty == 1){
         CloseParty(player = $obj1)
         Return()
@@ -4073,26 +4103,26 @@ CHECK_LEAVE_PARTY(debug = false){
         LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
     }
 }
-ASK_SHOW_PARTY_LIST(debug = false){
+ASK_SHOW_PARTY_LIST {
     If($result == false) {
         LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
         Return()
     }
     ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "CHECK_EXIT_PARTY", tipType = 2)
 }
-CHECK_CLOSE_PARTY(debug = false){
+CHECK_CLOSE_PARTY {
     If($result == false) {Return()}
     CloseParty(player = $obj1)
 }
-CHECK_EXIT_PARTY(debug = false){
+CHECK_EXIT_PARTY {
     If($result == false) {Return()}
     LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
 }
-LEAVE_PARTY_SUCCESS(debug = false){
+LEAVE_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = 0
     GotoOtherServer(player = $obj1)
 }
-CHECK_IN_PARTY(debug = false){
+CHECK_IN_PARTY {
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
     If($inPartyOwnerId ~= 0){
@@ -4117,29 +4147,29 @@ CHECK_IN_PARTY(debug = false){
         }
     }
 }
-INTERACTION_BANISH(debug = false){
+INTERACTION_BANISH {
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.be.banished", time =  20)
     $owner = GetPlayerByUserId(userId = $obj1.inPartyOwnerId)
     $obj1.excludedPartyId = $owner.inPartyId
     LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
 }
-CREATE_PARTY_SUCCESS(debug = false){
+CREATE_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = GetPlayerUserID(player = $obj1)
     $obj1.inPartyId = $partyId
     GotoOtherServer(player = $obj1)
 }
-JOIN_PARTY_SUCCESS(debug = false){
+JOIN_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = $targetUserId
     GotoOtherServer(player = $obj1, targetUserId = $targetUserId)
 }
-UPDATE_CREATE_PARTY_VIEW_INFO(debug = false){
+UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
     $maxPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "partyMaxPlayerNumber")
     $partyImage = GetEntityCfg(fullName = $curHouseCfg, key = "partyImage")
     $reachPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "reachGoodPartyPlayerNumber")
     $lowerRate = GetEntityCfg(fullName = $curHouseCfg, key = "goodPartyPlayerNumberLowerRate")
 }
-CLOSE_PARTY_SUCCESS(debug = false){
+CLOSE_PARTY_SUCCESS {
     --get all player, send tip, resetgame
     $name = GetEntityName(entity = $obj1)
     $obj1.inPartyId = 0
@@ -4150,11 +4180,11 @@ CLOSE_PARTY_SUCCESS(debug = false){
         GotoOtherServer(player = $player)
     }
 }
-PARTY_BE_LIKED(debug = false){}
-LIKE_PARTY(debug = false){}
+PARTY_BE_LIKED {}
+LIKE_PARTY {}
 --↑↑↑↑↑↑ party
 
-START_PLAY_BGM(debug = false) {
+START_PLAY_BGM  {
     $cfg = ArrayGet(array = @BGMConfigs, index = $index)
     If(not $cfg) {
         Return()
@@ -4183,5 +4213,47 @@ START_PLAY_BGM(debug = false) {
     HideBgmList(player = $obj1, playingIndex = $index)
     Foreach(array = GetMapPlayer(map = GetEntityMap(entity = $obj1)), key = "player") {
         SendUpdatePlayingBgmIndex(player = $player, playingIndex = $index)
+    }
+}
+
+CALLBACK_PHOTOGRAPH
+{
+    UploadPhoto(player = $obj1, info = $info, event = "SAVE_PHOTO")
+}
+
+SAVE_PHOTO
+{
+    $familyAlbum = GetObjectVar(obj = $obj1, key = "familyAlbum")
+    If(not $familyAlbum)
+    {
+        Return()
+    }
+    
+    $photo = {
+        image = $data,
+        name = "unNamed"
+    }
+
+    ArrayAppend(array = $familyAlbum, value = $photo)
+
+    UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
+}
+
+DELETE_FAMILY_ALBUM
+{
+    $familyAlbum = GetObjectVar(obj = $obj1, key = "familyAlbum")
+    If(not $familyAlbum)
+    {
+        Return()
+    }
+    If(not $index)
+    {
+        Return()
+    }
+
+    If($index <= ArraySize(array = $familyAlbum) and $index > 0)
+    {
+        ArrayRemove(array = $familyAlbum, index = $index)
+        UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
     }
 }
