@@ -1304,11 +1304,6 @@ FUNC_STATE_CHECK_MAP --params: state
 FUNC_STATE_CHECK_REGION --params: state
 {   
     -- 判断状态生成时是否就已经在区域里面了
-    If("region" ~= GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "releaseType"))
-    {
-        Return()
-    }
-
     $reg = GetRegionByName(
         map = GetEntityMap(entity = $obj1),
         name = $state 
@@ -1324,7 +1319,6 @@ FUNC_STATE_CHECK_REGION --params: state
     )
     {
         CallTrigger(
-            opt = "INNER",
             object = $obj1,
             state = $state,
             event = "FUNC_REGION_STATE_OPERATION",
@@ -1342,16 +1336,6 @@ FUNC_REGION_STATE_OPERATION --parmas: opt, state
         {
             ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
             CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
-        }
-    }
-
-    If($opt ~= "INNER")
-    {
-        $skill = Concat(p1 = @skillPath, p2 = $state)
-        $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
-        If("region" ~= GetSkillVar(fullName = $skill, key = "releaseType"))
-        {
-            Return()
         }
     }
 

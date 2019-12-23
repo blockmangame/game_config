@@ -1,24 +1,17 @@
 {
     "type":"Base",
-    "base": "skill_state_base",
+    "base": "skill_state_region",
     "icon":"set:state_detail.json image:ill",
     "pushImage": "set:state_detail.json image:ill_chosen",
 
     "state": "ill",
-    "generateType": "A",
-    "releaseType": "interact",
+    "stateBase": "region",
     
     "affectDis": 5,
     "affectTimeSpanSec": 5,
 
-    "/effect": "myplugin/buff_state_ill_effect",
-
-    "hadReward": false,
-    
-    "generateTime":[0.3, 0.6, 1, 1.5, 55],
+    "effect": "myplugin/buff_state_ill_effect",
     "duration": 20,
-
-    
     "tipContents": {
         "text": {
             "textKey": "state_get",

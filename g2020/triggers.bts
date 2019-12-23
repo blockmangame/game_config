@@ -1,7 +1,7 @@
 GAME_INIT 
 {
     @BGMConfigs = ReadGameCsv(path = "bgm.csv")
-    @Generate_State_List = ["hunger", "thirsty", "dirty", "fatigue", "ill", "region"]
+    @Generate_State_List = ["hunger", "thirsty", "dirty", "fatigue", "region"]
     @skillPath = "myplugin/skill_state_"
     CallTrigger(event = "FUNC_STATE_STARTTIMER")
     @mathHuge = 10000000
