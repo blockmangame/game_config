@@ -1,12 +1,7 @@
 {
-    "canClick": false,
-    "actorName": "g2020_food.actor",
-    "coinId": 7,
-    "sellPrice": 4,
-    "sellItem": "myplugin/food_cookie",
-    "collision": true,
-    "name": "",
-    "pushable": true,
+    "skin": {
+        "body": "5"
+    },
     "boundingVolume": {
         "type": "Composite",
         "params": [
@@ -20,7 +15,8 @@
             }
         ]
     },
-    "canInteract": true,
+    "actorName": "g2020_food.actor",
+    "base": "fur_base",
     "interactionUI": {
         "cfgKey": "interactionUI",
         "followParams": {
@@ -44,15 +40,6 @@
             }
         ]
     },
-    "interaction": {
-        "radius": 7,
-        "offset": {
-            "x": 0,
-            "y": -1,
-            "z": 2
-        }
-    },
-    "skin": {
-        "body": "5"
-    }
+    "sellPrice": 4,
+    "sellItem": "myplugin/food_cookie"
 }

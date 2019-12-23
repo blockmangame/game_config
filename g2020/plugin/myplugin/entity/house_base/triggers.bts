@@ -106,9 +106,6 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
 
         $npc = CreateNpc(map = $map, cfgName = DictionaryGet(dict = $fDict, key = "cfg"), 
             pos = $pos, ry = DictionaryGet(dict = $fDict, key = "yaw") or 0, rp = DictionaryGet(dict = $fDict, key = "pitch") or 0, owner = $obj1.owner)
-        If(GetConfigVar(obj = $npc, key = "boundBoxRotateWithYawAndPitch")){
-            UpdateEntityBoundBoxWithRotate(entity = $npc)
-        }
         Foreach(array = DictionaryGet(dict = $fDict, key = "saveSkinList") or {}, key = "skinTb"){
             $skinDict = NewDictionary($skinTb)
             If(DictionaryGet(dict = $skinDict, key = "skin")){
