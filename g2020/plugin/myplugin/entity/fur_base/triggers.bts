@@ -5,21 +5,66 @@ ENTITY_ENTER
 ENTITY_TOUCH_ALL{
 }
 
+EDIT_OBJECT_ACTION{
+    Test($params, $action, "EDIT_OBJECT_ACTION")
+    If($action == "startEdit"){
+        CallTrigger(object = $obj1, event = "START_EDIT_ENTITY", obj2 = $obj2, params = $params)
+    }ElseIf($action == "stopEdit"){
+        CallTrigger(object = $obj1, event = "STOP_EDIT_ENTITY", obj2 = $obj2, params = $params)
+    }Else{
+        CallTrigger(object = $obj1, event = "EXECUTION_EDIT_ACTION", obj2 = $obj2, params = $params, action = $action)
+    }
+}
+
+START_EDIT_ENTITY{
+    CallTrigger(object = $obj1, event = "ADD_EDIT_BUFF")
+    SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = GetObjectID(object = $obj1))
+}
+
+EXECUTION_EDIT_ACTION{
+    $decEditBuff = GetConfigVar(obj = $obj1, key = "editBuff")
+    If(not $decEditBuff){
+        Return()
+    }
+    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $decEditBuff) -- 不在编辑状态下玩家不能编辑房子的家具
+    If(not $buff){
+        Return()
+    }
+    $event = nil
+    If($action == "beginMove"){
+        $event = "DEC_INTERACTION_MOVE_TOUCH_BEGIN"
+    }ElseIf($action == "endMove"){
+        $event = "DEC_INTERACTION_MOVE_TOUCH_END"
+    }ElseIf($action == "sale"){
+        $event = "DEC_INTERACTION_SALE"
+    }ElseIf($action == "leftRotation"){
+        $event = "DEC_INTERACTION_LEFT_ROTATION"
+    }ElseIf($action == "rightRotation"){
+        $event = "DEC_INTERACTION_RIGHT_ROTATION"
+    }ElseIf($action == "exit"){
+        $event = "DEC_INTERACTION_EXIT_EDIT"
+    }
+    CallTrigger(object = $obj1, event = $event, objID = GetObjectID(object = $obj1), params = $params)
+}
+
+STOP_EDIT_ENTITY{
+    CallTrigger(object = $obj1, event = "REMOVE_EDIT_BUFF")
+}
+
 ENTITY_CLICK{
     $editBuff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/edit_house_buff") -- 不在编辑状态下玩家不能编辑房子的家具
     If(not $editBuff){
         Return()
     }
-    If(GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")){
-        UpdateEntityEditContainer(player = $obj2, entityId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId"), show = false)
-        SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
+    $lastInteractionUiObjId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")
+    If($lastInteractionUiObjId){
+        UpdateEntityEditContainer(player = $obj2, entityId = $lastInteractionUiObjId, show = false)
     }
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, obj2 = $obj2, time = 1, event = "SHOW_EDIT_UI")
 }   
 
 SHOW_EDIT_UI{
     UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = true)
-    SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = GetObjectID(object = $obj1))
 }
 
 DEC_INTERACTION_MOVE_TOUCH_BEGIN{
@@ -32,11 +77,10 @@ DEC_INTERACTION_MOVE_TOUCH_BEGIN{
 }
 
 DEC_INTERACTION_MOVE_TOUCH_END{
-    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = $entityPos or GetEntityPosition(entity = $obj1)
-        , ry = $entityYaw or GetEntityYaw(entity = $obj1), rp = $entityPitch or GetEntityPitch(entity = $obj1))
-    If(GetConfigVar(obj = $obj1, key = "boundBoxRotateWithYawAndPitch")){
-        UpdateEntityBoundBoxWithRotate(entity = $obj1)
-    }
+    -- entityPos = $entityPos, entityYaw = $entityYaw, entityPitch = $entityPitch, entityScale = $entityScale)
+    $dict = NewDictionary($params or {})
+    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = DictionaryGet(dict = $dict, key = "entityPos") or GetEntityPosition(entity = $obj1)
+        , ry = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), rp = DictionaryGet(dict = $dict, key = "entityPitch") or GetEntityPitch(entity = $obj1))
 }
 
 DEC_INTERACTION_SALE{
@@ -53,7 +97,7 @@ DEC_INTERACTION_SALE{
     $furnitures = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing")
     ForLoop(from = 1, to = ArraySize(array = $furnitures), key = "index"){
         $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $index))
-        If(DictionaryGet(dict = $fDict, key = "furnishingId") == $objID){
+        If(DictionaryGet(dict = $fDict, key = "furnishingId") == GetObjectID(object = $obj1)){
             $cfg = DictionaryGet(dict = $fDict, key = "cfg")
             $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
             If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
@@ -78,9 +122,6 @@ DEC_INTERACTION_LEFT_ROTATION{
     $yaw = ((GetEntityYaw(entity = $obj1) or 0) + (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)) % 360
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1)
         , ry = $yaw or GetEntityYaw(entity = $obj1), rp = GetEntityPitch(entity = $obj1))
-    If(GetConfigVar(obj = $obj1, key = "boundBoxRotateWithYawAndPitch")){
-        UpdateEntityBoundBoxWithRotate(entity = $obj1)
-    }
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
 }
 
@@ -88,9 +129,6 @@ DEC_INTERACTION_RIGHT_ROTATION{
     $yaw = ((GetEntityYaw(entity = $obj1) or 0) - (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)) % 360
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1)
         , ry = $yaw or GetEntityYaw(entity = $obj1), rp = GetEntityPitch(entity = $obj1))
-    If(GetConfigVar(obj = $obj1, key = "boundBoxRotateWithYawAndPitch")){
-        UpdateEntityBoundBoxWithRotate(entity = $obj1)
-    }
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
 }
 
@@ -98,43 +136,36 @@ ROTATION_BODY_YAW{
     SetBodyYaw(entity = $obj1, yaw = $yaw)
 }
 
+DEC_INTERACTION_EXIT_EDIT{
+    UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = false)
+}
+
+ADD_EDIT_BUFF{
+    $decEditBuff = GetConfigVar(obj = $obj1, key = "editBuff")
+    If(not $decEditBuff){
+        Return()
+    }
+    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $decEditBuff) -- 不在编辑状态下玩家不能编辑房子的家具
+    If(not $buff){
+        AddEntityBuff(entity = $obj1, cfg = $decEditBuff)
+    }
+}
+
+REMOVE_EDIT_BUFF{
+    $decEditBuff = GetConfigVar(obj = $obj1, key = "editBuff")
+    If(not $decEditBuff){
+        Return()
+    }
+    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $decEditBuff) -- 不在编辑状态下玩家不能编辑房子的家具
+    If(not $buff){
+        Return()
+    }
+    RemoveEntityBuff(entity = $obj1, buff = $buff)
+}
+
 DEC_INTERACTION_TEST{
 
 }
---上面是编辑，这里是cashbox
-ROTATION_BOUNDING_BOX_RIGHT{
-    $buff90 = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/rotate_bounding_box_buff_90")
-    $buff180 = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/rotate_bounding_box_buff_180")
-    $buff270 = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/rotate_bounding_box_buff_270")
-    If($buff90){
-        RemoveEntityBuff(entity = $obj1, buff = $buff90)
-    }ElseIf($buff180){
-        RemoveEntityBuff(entity = $obj1, buff = $buff180)
-        AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_270")
-    }ElseIf($buff270){
-        RemoveEntityBuff(entity = $obj1, buff = $buff270)
-        AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_180")
-    }Else{
-        AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_90")
-    }  
-}
-ROTATION_BOUNDING_BOX_LEFT{
-    $buff90 = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/rotate_bounding_box_buff_90")
-    $buff180 = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/rotate_bounding_box_buff_180")
-    $buff270 = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/rotate_bounding_box_buff_270")
-    If($buff90){
-        RemoveEntityBuff(entity = $obj1, buff = $buff90)
-        AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_180")
-    }ElseIf($buff180){
-        RemoveEntityBuff(entity = $obj1, buff = $buff180)
-        AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_90")
-    }ElseIf($buff270){
-        RemoveEntityBuff(entity = $obj1, buff = $buff270)
-    }Else{
-        AddEntityBuff(entity = $obj1, cfg = "myplugin/rotate_bounding_box_buff_270")
-    }  
-}
-
 SHOW_DONATE_UI
 {
     $owner = GetOwner(entity = $obj1)
@@ -242,11 +273,7 @@ FOOD_BUY {
    If(($ownTeamId ~= nil and $ownTeamId ~= 0 and $myTeamId == $ownTeamId )or SameObj(entity = $obj2, entity2 = $owner)){ --领主自己家庭成员不要钱。
        $isTeam = true
    }
-   If($price == 0 or not $price){ --不要钱的
-        ShowTip(textKey = "gui_gain_item_success",textP1 = $sellItem, tipType = 1, entity = $obj1, keepTime = 20)
-        Return()
-   }
-   If($isTeam){ --不要钱不弹窗直接购买
+   If($isTeam or $price == 0 or not $price){ --不要钱不弹窗直接购买
       CallTrigger(event = "SURE_FURNITURE_BUY", object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam)
    }Else{
       $btnInfo = {
@@ -314,16 +341,44 @@ FOOD_BUY {
    }
 }
 
+--上面是编辑的，下面是购买食物或者道具的222222222222222222222222222222222222222222222
+BUY_SHOP(){
+   $price = GetConfigVar(obj = $obj1, key = "sellPrice")
+   $itemName = GetConfigVar(obj = $obj1, key = "itemName")
+   $obj2.buySessionSS = ($obj2.buySessionSS or 0 ) + 1
+   If(not $price or $price == 0){ --不要钱不弹窗直接购买
+      CallTrigger(event = "SURE_BUY", object = $obj2)
+   }Else{
+      $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = nil,
+        rightContent = "ui_sure"
+      }
+      
+      $content = {
+         msg = "gui_you_want_to_buy_this",
+         args = [ $price, $itemName]
+      }
+      $Context = {
+         objID = GetObjectID(object = $obj1),
+         checkId = $obj2.buySessionSS
+      }
+
+      ShowDialogTip(entity = $obj2, tipType = 5, event = "SURE_BUY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
+   }
+}
+
+
 LIGHT_ON
 {
     $cfg = Concat(p1 = "myplugin/", p2 = $obj1.cfg.buffName)
     AddEntityBuff(entity = $obj1, cfg = $cfg)
-    RecheckObjectInteractionUI(player = $obj2, target = $obj1)
 }
 
 LIGHT_OFF
 {
     $cfg = Concat(p1 = "myplugin/", p2 = $obj1.cfg.buffName)
-    RemoveEntityBuff(entity = $obj1, cfg = $cfg)
-    RecheckObjectInteractionUI(player = $obj2, target = $obj1)
+    RemoveEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
 }
+

@@ -81,9 +81,7 @@ DEC_INTERACTION_MOVE_TOUCH_END{
     $dict = NewDictionary($params or {})
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = DictionaryGet(dict = $dict, key = "entityPos") or GetEntityPosition(entity = $obj1)
         , ry = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), rp = DictionaryGet(dict = $dict, key = "entityPitch") or GetEntityPitch(entity = $obj1))
-    If(GetConfigVar(obj = $obj1, key = "boundBoxRotateWithYawAndPitch")){
-        UpdateEntityBoundBoxWithRotate(entity = $obj1)
-    }
+    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
 }
 
 DEC_INTERACTION_SALE{
@@ -125,9 +123,6 @@ DEC_INTERACTION_LEFT_ROTATION{
     $yaw = ((GetEntityYaw(entity = $obj1) or 0) + (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)) % 360
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1)
         , ry = $yaw or GetEntityYaw(entity = $obj1), rp = GetEntityPitch(entity = $obj1))
-    If(GetConfigVar(obj = $obj1, key = "boundBoxRotateWithYawAndPitch")){
-        UpdateEntityBoundBoxWithRotate(entity = $obj1)
-    }
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
 }
 
@@ -135,9 +130,6 @@ DEC_INTERACTION_RIGHT_ROTATION{
     $yaw = ((GetEntityYaw(entity = $obj1) or 0) - (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)) % 360
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1)
         , ry = $yaw or GetEntityYaw(entity = $obj1), rp = GetEntityPitch(entity = $obj1))
-    If(GetConfigVar(obj = $obj1, key = "boundBoxRotateWithYawAndPitch")){
-        UpdateEntityBoundBoxWithRotate(entity = $obj1)
-    }
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
 }
 

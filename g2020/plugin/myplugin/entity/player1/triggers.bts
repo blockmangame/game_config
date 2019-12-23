@@ -268,7 +268,6 @@ CREATE_HOUSE_OUTSIDE{
     --Test("$housePosOffset--------------",$region,GetRegionCenter(region = $region),$housePosOffset,$yaw,V3RotationYaw(vector = $housePosOffset, yaw = $yaw),
         --ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)))
     $house = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
-    UpdateEntityBoundBoxWithRotate(entity = $house)
     $pos = ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw))
     SetEntityPosition(entity = $house, pos = $pos, map = GetEntityMap(entity = $house))
     SetEntityYaw(entity = $house, rotationYaw = $yaw)
@@ -1474,8 +1473,9 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         If($count < $rewardCount && $dis < $rewardDis)
         {
             SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
-            $rewardSum = $myTeamId == $teamId and $rewardFamily or $rewardOther
-            $textKey = $myTeamId == $teamId and "reward_family" or "reward_takeCare"
+            $isSameFamily = $teamId ~= 0 && $teamId == $myTeamId
+            $rewardSum = $isSameFamily and $rewardFamily or $rewardOther
+            $textKey = $isSameFamily and "reward_family" or "reward_takeCare"
             CallTrigger(
                 object = $entity,
                 event = "FUNC_STATE_REWARD_AND_TIP",
@@ -4236,4 +4236,52 @@ SAVE_PHOTO
     ArrayAppend(array = $familyAlbum, value = $photo)
 
     UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
+}
+
+DELETE_FAMILY_ALBUM
+{
+    $familyAlbum = GetObjectVar(obj = $obj1, key = "familyAlbum")
+    If(not $familyAlbum)
+    {
+        Return()
+    }
+    If(not $index)
+    {
+        Return()
+    }
+
+    If($index <= ArraySize(array = $familyAlbum) and $index > 0)
+    {
+        ArrayRemove(array = $familyAlbum, index = $index)
+        UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
+    }
+}
+
+RENAME_FAMILY_ALBUM
+{
+    $familyAlbum = GetObjectVar(obj = $obj1, key = "familyAlbum")
+    If(not $familyAlbum)
+    {
+        Return()
+    }
+
+    If(not $index)
+    {
+        Return()
+    }
+
+    If($index <= ArraySize(array = $familyAlbum) and $index > 0)
+    {
+        $photo = ArrayGet(array = $familyAlbum, index = $index)
+        If($photo)
+        {
+            SetObjectVar(obj = $photo, key = "name", value = $name)
+        }
+    }
+
+    $data = {
+        index = $index,
+        name = $name
+    } 
+    UpdateUIData(player = $obj1, ui = "win_familyAlbumRename", data = $data) 
 }
