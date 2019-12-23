@@ -3484,6 +3484,9 @@ SURE_BUY {
        $coinName = "gDiamonds"
    }
    $itemName = GetItemCfg(fullName = $itemfullName, key = "itemname")
+   If(not $price){
+       $price = 0
+   }
    $enoughMoney = CheckBalance(entity = $obj1, coinName = $coinName, price = $price)
    If($enoughMoney){ --够钱
          $checkBag = AddItem(entity = $obj1, cfg = $itemfullName, count = 1)
