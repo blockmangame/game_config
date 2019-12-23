@@ -16,6 +16,10 @@ RIDE_ON
             {
                 $canDrive = true
             }
+            Else
+            {
+                ShowTip(entity = $obj2, tipType = 2, textKey = "condition_with_equip_other_car", time = 40)
+            }
         }
     }
     If($canDrive)

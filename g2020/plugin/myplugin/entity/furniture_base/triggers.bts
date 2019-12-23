@@ -81,6 +81,7 @@ DEC_INTERACTION_MOVE_TOUCH_END{
     $dict = NewDictionary($params or {})
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = DictionaryGet(dict = $dict, key = "entityPos") or GetEntityPosition(entity = $obj1)
         , ry = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), rp = DictionaryGet(dict = $dict, key = "entityPitch") or GetEntityPitch(entity = $obj1))
+    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
 }
 
 DEC_INTERACTION_SALE{
