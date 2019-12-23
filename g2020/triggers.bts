@@ -95,11 +95,10 @@ FUNC_STATE_STARTTIMER
 FUNC_BROADCAST_STATE
 {
     Foreach(array = GetAllPlayers(), key = "player"){
-        --TODO 完善状态的生成
-        --If(player in party)
-        --{
-        --    Continue()
-        --}
+        $inPartyOwnerId = $player.inPartyOwnerId
+        If($inPartyOwnerId ~= 0){
+            Continue()
+        }
         SetObjectVar(obj = $player, value = 0, key = Concat(p1 = $stateBase, p2 = "RewardCount"))
 
         $skill = Concat(p1 = @skillPath, p2 = $stateBase)

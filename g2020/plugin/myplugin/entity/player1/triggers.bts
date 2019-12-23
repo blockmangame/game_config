@@ -1474,8 +1474,9 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         If($count < $rewardCount && $dis < $rewardDis)
         {
             SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
-            $rewardSum = $myTeamId == $teamId and $rewardFamily or $rewardOther
-            $textKey = $myTeamId == $teamId and "reward_family" or "reward_takeCare"
+            $isSameFamily = $teamId ~= 0 && $teamId == $myTeamId
+            $rewardSum = $isSameFamily and $rewardFamily or $rewardOther
+            $textKey = $isSameFamily and "reward_family" or "reward_takeCare"
             CallTrigger(
                 object = $entity,
                 event = "FUNC_STATE_REWARD_AND_TIP",
