@@ -269,8 +269,8 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
                 $lastBlockPos = $curBlockPos
                 $curBlockPos = $nextBlockPos
             }Else{
-                ForLoop(from = 1, to = 4, key = "index"){
-                    $imcV3 = ArrayGet(array = $directionMap, index = $index)
+                ForLoop(from = 1, to = 4, key = "cindex"){
+                    $imcV3 = ArrayGet(array = $directionMap, index = $cindex)
                     $tempPos = ComputeV3(p1 = $curBlockPos, p2 = $imcV3, op = "add")
                     If(PosToV3(pos = $tempPos) ~= PosToV3(pos = $lastBlockPos) and PosToV3(pos = $tempPos) ~= PosToV3(pos = $nextBlockPos)){
                         $tempPosInRegion = false
@@ -283,7 +283,7 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
                         If($tempPosInRegion){
                             $lastBlockPos = $curBlockPos
                             $curBlockPos = $tempPos
-                            $directionIndex = $index
+                            $directionIndex = $cindex
                             Break()
                         }
                     }
