@@ -358,12 +358,10 @@ LIGHT_ON
 {
     $cfg = Concat(p1 = "myplugin/", p2 = $obj1.cfg.buffName)
     AddEntityBuff(entity = $obj1, cfg = $cfg)
-    RecheckObjectInteractionUI(player = $obj2, target = $obj1)
 }
 
 LIGHT_OFF
 {
     $cfg = Concat(p1 = "myplugin/", p2 = $obj1.cfg.buffName)
-    RemoveEntityBuff(entity = $obj1, cfg = $cfg)
-    RecheckObjectInteractionUI(player = $obj2, target = $obj1)
+    RemoveEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
 }
