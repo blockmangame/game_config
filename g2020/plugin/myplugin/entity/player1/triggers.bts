@@ -1202,6 +1202,28 @@ FUNC_STATE_ADD --params: state
     CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state)
 }
 
+FUNC_STATE_START_AUTO_VANISH_TIME --parmas: state
+{
+    $skill = Concat(p1 = @skillPath, p2 = $state)
+    $autoVanishT = GetSkillVar(fullName = $skill, key = "autoVanishT")
+    If(not $autoVanishT || $autoVanishT <= 0)
+    {
+        Return()
+    }
+    SetObjectVar(
+        obj = $obj1,
+        key = Concat(p1 = $state, p2 = "AUTOVANISH_TIMER"),
+        value = StartTimer(
+            rep = false,
+            object = $obj1,
+            state = $state,
+            skill = $skill,
+            event = "FUNC_STATESKILL_REMOVE",
+            time = ($autoVanishT * 20) // 1
+        )
+    )
+}
+
 FUNC_STATE_ADD_EFFECT --params: state
 {
     $effect = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "effect")
@@ -1230,7 +1252,7 @@ FUNC_STATE_START_AFFECT --params: state
 
     SetObjectVar(
         obj = $obj1,
-        key = $timerStr,
+        key = Concat(p1 = $state, p2 = "AFFECT_TIMER"),
         value = StartTimer(
             rep = true,
             object = $obj1,
@@ -1416,10 +1438,7 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         Return()
     }
 
-    RemoveSkill(entity = $obj1, name = $skill)
-    SetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase), value = false)
-    CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATESKILL_REMOVE", state = $state, skill = $skill)
 
     $interactList = GetObjectVar(
         obj = $obj1,
@@ -1478,6 +1497,21 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     )
 }
 
+FUNC_STATESKILL_REMOVE --params: state, skill
+{
+    $stateBase = $stateBase or GetSkillVar(fullName = $skill, key = "stateBase") or $state
+    $hadState = Concat(p1 = "had", p2 = $stateBase)
+    If(not GetObjectVar(obj = $obj1, key = $hadState))
+    {
+        Return()
+    }
+
+    RemoveSkill(entity = $obj1, name = $skill)
+    SetObjectVar(obj = $obj1, key = $hadState, value = false)
+    CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
+}
+
 FUNC_STATE_RELEASE --params: state[, duration]
 {
     If(not $state)
@@ -1508,6 +1542,7 @@ FUNC_STATE_RELEASE --params: state[, duration]
         }
 
         SetObjectVar(obj = $obj1, key = $releasingState, value = true)
+        CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "AUTOVANISH_TIMER"))
         $duration = $duration or GetSkillVar(fullName = $skill, key = "duration")
         If($duration && $duration > 0)
         {
@@ -1843,6 +1878,7 @@ FUNC_STATE_ACTION --params: state
     CallTrigger(object = $obj1, event = "FUNC_STATE_START_AFFECT", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_REGION", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_MAP", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_START_AUTO_VANISH_TIME", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_RIDEON", ride = GetRideOn(entity = $obj1)) --检查是否已经在骑乘并且该骑乘是否会触发解除状态
 }
 
