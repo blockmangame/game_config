@@ -20,13 +20,18 @@
             "attachPoint": "attachPoints1",
             "ctrl": false,
             "view": false,
-            "rideAction": "sit1"
+            "rideAction": {
+                "idle" : "run"
+            },
+            "passengerAction": {
+                "base": "sit1"
+            }
         }
     ],
-    "attachPoints1": [
+    "attachPoints": [
         {
-            "name": "我确实扑街了",
-            "bone": "Bone003",
+            "name": "attachPoints1",
+            "bone": "s_guadian_1",
             "position": {
                 "y": 0,
                 "z": 0,
