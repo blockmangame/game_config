@@ -1438,12 +1438,12 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         Return()
     }
 
-    CallTrigger(object = $obj1, event = "FUNC_STATESKILL_REMOVE", state = $state, skill = $skill)
-
     $interactList = GetObjectVar(
         obj = $obj1,
         key = Concat(p1 = $stateBase, p2 = "InteractList")
     )
+    
+    CallTrigger(object = $obj1, event = "FUNC_STATESKILL_REMOVE", state = $state, skill = $skill)
 
     If(not GetSkillVar(fullName = $skill, key = "hadReward"))
     {
@@ -1472,7 +1472,7 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         $count = GetObjectVar(obj = $entity, key = $countKey)
         $dis = GetObjectDistance(obj1 = $obj1, obj2 = $entity)
         $myTeamId =  GetEntityTeam(entity = $entity)
-    
+
         If($count < $rewardCount && $dis < $rewardDis)
         {
             SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
