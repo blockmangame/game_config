@@ -4194,6 +4194,31 @@ SAVE_PHOTO
         ArrayAppend(array = $familyAlbum, value = $photo)
 
         UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
+
+        $btnInfo = {
+            leftCoinId = nil,
+            leftContent = "ui_sure",
+            rightCoinId = nil,
+            rightContent = "ui_check"
+        }
+        ShowDialogTip(entity = $obj1,tipType = 5, event = "CLICK_SAVE_FAMILY_ALBUM_TIP", p1 = "ui_tip", p2 = "ui_save_photo", p3 = $btnInfo)
+    }
+    Else
+    {
+        $btnInfo = {
+            leftCoinId = nil,
+            leftContent = "ui_cancel",
+            rightCoinId = nil,
+            rightContent = "ui_sure"
+        }
+        ShowDialogTip(entity = $obj1,tipType = 5, event = "CLICK_SAVE_FAMILY_ALBUM_TIP", p1 = "ui_tip", p2 = "ui_family_album_full", p3 = $btnInfo)
+    }
+}
+
+CLICK_SAVE_FAMILY_ALBUM_TIP
+{
+    If($button == "right"){
+        OperationWindows(win = "familyAlbum", isOpen = true, player = $obj1)
     }
 }
 
