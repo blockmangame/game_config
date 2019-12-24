@@ -4240,27 +4240,26 @@ START_PLAY_BGM  {
     }
 }
 
-CALLBACK_PHOTOGRAPH
-{
-    UploadPhoto(player = $obj1, info = $info, event = "SAVE_PHOTO")
-}
-
 SAVE_PHOTO
 {
+    Test("photo...", $data)
     $familyAlbum = GetObjectVar(obj = $obj1, key = "familyAlbum")
     If(not $familyAlbum)
     {
         Return()
     }
-    
-    $photo = {
-        image = $data,
-        name = "unNamed"
+
+    If(ArraySize(array = $familyAlbum) < GetWorldVar(key = "familyAlbumNum"))
+    {
+        $photo = {
+            image = $data,
+            name = "dafault_name"
+        }
+
+        ArrayAppend(array = $familyAlbum, value = $photo)
+
+        UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
     }
-
-    ArrayAppend(array = $familyAlbum, value = $photo)
-
-    UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
 }
 
 DELETE_FAMILY_ALBUM
