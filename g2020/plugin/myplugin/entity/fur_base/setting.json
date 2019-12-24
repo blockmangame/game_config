@@ -19,6 +19,7 @@
     "rotationYawModlus": 90,
     "supportingForce": false,
     "isStatic": true,
+ 
     "/name": "这是food_base里面的东西",
     "deadInRed": false,
     "destroyTime": 40,
@@ -136,6 +137,130 @@
             },
             "ctrl": false,
             "view": false
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "attachPoints1",
+            "ctrl": false,
+            "view": false,
+            "rideAction": {
+                "idle" : "run"
+            },
+            "passengerAction": {
+                "base": "sit1"
+            }
+        },
+        {
+            "/yaw": "qiaoqiaoban_l_index8",
+            "yaw": 90,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "attachPoints2",
+            "ctrl": false,
+            "view": false,
+            "rideAction": {
+                "idle" : "run"
+            },
+            "passengerAction": {
+                "base": "sit3"
+            }
+        },
+        {
+            "/yaw": "qiaoqiaoban_r_index9",
+            "yaw": 270,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "attachPoints3",
+            "ctrl": false,
+            "view": false,
+            "rideAction": {
+                "idle" : "run"
+            },
+            "passengerAction": {
+                "base": "sit3"
+            }
+        }
+    ],
+    "attachPoints": [
+        {
+            "name": "attachPoints1",
+            "bone": "s_guadian_1",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints2",
+            "bone": "s_guadian_1",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints3",
+            "bone": "s_guadian_2",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
         }
     ],
     "editBuff": "myplugin/dec_edit_buff",
@@ -225,6 +350,7 @@
             "exit":"DEC_INTERACTION_EXIT_EDIT"
         }
     },
+    
     "interaction": {
         "radius": 5,
         "offset": {

@@ -15,6 +15,45 @@
             }
         ]
     },
+    "interactionUI": [
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit1111",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_qiaoqiaoban_l"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit2",
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "ENTITY_qiaoqiaoban_r"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "name":"伟艺在调",
     "actorName": "g2020_fru_qiaoqiaoban.actor",
     "base": "fur_base"
 }
