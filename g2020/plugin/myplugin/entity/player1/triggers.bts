@@ -1671,14 +1671,13 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
     $house = GetObjectVar(obj = $obj1, key = "house")
     If($owner)
     {
-        $door = GetObjectVar(obj = $owner, key = "insideDoor")
-        Test("type = ", $type)
-        If($type == "selfHouse" && $curMapEntity == GetConfigVar(obj = $house, key = "houseInsideMap"))
+        If($type == "selfHouse" && $owner == $house)
         {
             ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
             CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
             Return()
         }
+        $door = GetObjectVar(obj = $owner, key = "insideDoor")
         $gps = GetEntityPosition(entity = $door)
     }
     ElseIf($curMap == $belongMap)
@@ -1716,8 +1715,7 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
         }
         ElseIf($type == "selfHouse")
         {
-            $housePos = GetEntityPosition(entity = $house)
-            $gps = ComputeV3(p1 = $housePos, p2 = GetConfigVar(obj = $house, key = "doorPos") or {x = 0,y = 2, z = 0}, op = "add")
+            $gps = ComputeV3(p1 = GetEntityPosition(entity = $house), p2 = V3RotationYaw(vector = GetConfigVar(obj = $house, key = "doorPos") or {x = 0,y = 0, z = 0}, yaw = GetEntityYaw(entity = $house)), op = "add")
         }
     }
     Else
@@ -3141,6 +3139,7 @@ GUIDE_POSITION_CHANGE {
         }
     }ElseIf($show == false){
         $obj1.taskShowGps = false
+        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
     }
 }
 GET_TASK_UI_DATA(){ --更新打工UI数据。
