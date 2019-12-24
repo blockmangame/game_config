@@ -6,13 +6,40 @@ GAME_INIT
     CallTrigger(event = "FUNC_STATE_STARTTIMER")
     @mathHuge = 10000000
 
-    --打工配置表的读取
+    
+	CreateNpc(cfgName = "myplugin/fishItem", pos = {x = 92, y = 19, z = 195} ,name = "买鱼")
+
+    @DECORATION_STORE = ReadGameCsv(path = "decoration_store.csv")
+
+    @CURRENT_ID_IMAGE = [
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:diamond.json image:Diamond-icon2.png",
+        "set:jail_break.json image:jail_break_currency"
+    ]
+    CallTrigger(event = "WORKS_WALL_TIMER_START")
+
+    --涂鸦墙文字初始化
+    $U3Dcfg = GetWorldVar(key = "sceneUI")
+    Foreach(array = $U3Dcfg, key = "ucfg")
+    {
+        $dict = NewDictionary($ucfg)
+        $index = DictionaryGet(dict = $dict, key = "index")
+        @graffitiWallText = NewDictionary()
+        DictionarySet(dict = @graffitiWallText, key = $index, value = "")
+    }
+    CallTrigger(event = "INIT_WORK_TASK_DATA")
+    CallTrigger(event = "FUNC_NAVIGATION_GET_MAPS_ALL_PATH")
+}
+
+INIT_WORK_TASK_DATA(){    --打工配置表的读取
     @worlkMoeny = NewDictionary({}) --奖励表
     @failedMsg = NewDictionary({})  --对话表
     @taskMap = NewDictionary({}) --
     @TASK_TABLE = NewArray() --打工的任务表
     @TASK_WEIGHT = NewArray() --打工随机比重表
-    @INDENT_POS = GetConfigValue(type = "task", fullName = "myplugin/work", key = "indentPos")
+    @INDENT_POS = GetConfigValue(type = "task", fullName = "myplugin/work", key = "indentPos")--订单领取位置
+    @CircleNum = GetConfigValue(type = "task", fullName = "myplugin/work", key = "circleNum")
     @workmaxCount = GetConfigValue(type = "task", fullName = "myplugin/work", key = "maxCount") --最大限度
     @punishmentTime = GetConfigValue(type = "task", fullName = "myplugin/work", key = "punishmentTime") --惩罚时间
     $taskData = GetConfigValue(type = "task", fullName = "myplugin/work", key = "tasks")
@@ -35,9 +62,13 @@ GAME_INIT
         ArrayAppend(array = @TASK_WEIGHT, value = $weight)
         ArrayAppend(array = @TASK_TABLE, value = $value)
         DictionarySet(dict = @failedMsg, key = $npcName, value = $msg)
-        CreateNpc(cfgName = $npcName, pos = Copy(value = $pos))
+        --
+        $nickName = DictionaryGet(dict = $targets, key = "name")
+        $NPC = CreateNpc(cfgName = $npcName, pos = Copy(value = $pos), name = $nickName)
+        $taskKey = DictionaryGet( dict = $taskDict, key = "key")
+        $NPC.taskKey = Concat(p1 = "myplugin/work/", p2 = $taskKey)
     }
-    ForLoop(from=1, to = 40, key = "index"){
+    ForLoop(from=1, to = @CircleNum, key = "index"){
         $redict = GetConfigValue(type = "reward", fullName = "myplugin/task_money", key = $index)
         If(not $redict){
             Break()
@@ -45,32 +76,8 @@ GAME_INIT
         $mdict = NewDictionary($redict)
         DictionarySet(dict = @worlkMoeny, key = DictionaryGet(dict = $mdict, key = "index"), value = $mdict)
     }
-    --CreateNpc(cfgName = "myplugin/indentModel", pos = {x = 89, y = 18.5, z = 195}  ,name = "订单")
-	CreateNpc(cfgName = "myplugin/fishItem", pos = {x = 92, y = 19, z = 195} ,name = "买鱼")
-
-    @DECORATION_STORE = ReadGameCsv(path = "decoration_store.csv")
-
-    @CURRENT_ID_IMAGE = [
-        "set:diamond.json image:Diamond-icon2.png",
-        "set:diamond.json image:Diamond-icon2.png",
-        "set:diamond.json image:Diamond-icon2.png",
-        "set:jail_break.json image:jail_break_currency"
-    ]
-    CallTrigger(event = "WORKS_WALL_TIMER_START")
-
-    --涂鸦墙文字初始化
-    $U3Dcfg = GetWorldVar(key = "sceneUI")
-    Foreach(array = $U3Dcfg, key = "ucfg")
-    {
-        $dict = NewDictionary($ucfg)
-        $index = DictionaryGet(dict = $dict, key = "index")
-        @graffitiWallText = NewDictionary()
-        DictionarySet(dict = @graffitiWallText, key = $index, value = "")
-    }
-    
-    CallTrigger(event = "FUNC_NAVIGATION_GET_MAPS_ALL_PATH")
+    CreateNpc(cfgName = "myplugin/npc_indent_model", pos = Copy(value = @INDENT_POS)  ,name = "店长")
 }
-
 
 FUNC_STATE_STARTTIMER
 {

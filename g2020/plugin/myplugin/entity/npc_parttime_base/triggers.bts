@@ -3,12 +3,12 @@ ENTITY_ENTER
     
 }
 SUBMIT_ORDER {
-    $key = GetConfigVar(obj = $obj1, key = "taskKey")
-    If($obj2.taskKey == $key){
+    If($obj2.taskKey == $obj1.taskKey){
         CallTrigger(event = "DO_SUBMIT_ORDER", object = $obj2, key = $key, obj2 = $obj1)
     }Else{
         $fullName = GetConfigVar(obj = $obj1, key = "fullName")
-        $msg = DictionaryGet(dict = @failedMsg, key = $fullName)
+        --$msg = DictionaryGet(dict = @failedMsg, key = $obj2.taskKey)
+        $msg = $obj2.failedMsg
         OpenConversation(
             entity = $obj2,
             optionList = [],

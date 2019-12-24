@@ -4,8 +4,17 @@
 		"y": 19,
 		"z": 371
 	},
-	"maxCount": 2,
-	"punishmentTime": 5,
+	"circleNum": 40,
+	"maxCount": 15,
+	"punishmentTime": 8,
+	"msgNotTask": "gui_not_task_msg",
+	"msgDoingTask": "gui_doing_task_msg",
+	"msgPunishTask": "gui_punish_task_msg",
+	"msgMoreMaxTask": "gui_more_max_task_msg",
+	"buffNotTask": "myplugin/task_not",
+	"buffDoingTask": "myplugin/task_doing",
+	"buffPunishTask": "myplugin/task_punish",
+	"buffMoreMaxTask": "myplugin/task_more_max",
 	"tasks": [
 		{
 			"key": "key_1",
@@ -15,9 +24,9 @@
 			"failedMsg": "结束了",
 			"npcMap": "map001",
 			"npcPos": {
-				"x": 204,
+				"x": 257,
 				"y": 19.1,
-				"z": 332
+				"z": 371
 			},
 			"weight": 50,
 			"targets": [
@@ -161,7 +170,7 @@
 			"succeedMsg": "你来看",
 			"failedMsg": "结束了",
 			"npcMap": "map001",
-			"npcPos": {
+			"npcPos": { 
 				"x": 236,
 				"y": 19.1,
 				"z": 312
