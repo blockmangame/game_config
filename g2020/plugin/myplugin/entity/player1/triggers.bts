@@ -4095,11 +4095,9 @@ CHECK_IN_PARTY {
         UpdateExtensionBtn(entity = $obj1, btnList = [{name = "party"}])
         If($userId == $inPartyOwnerId){
             $obj1.inSelfParty = 1
-            --My Party!!!!
-            --broadcast!!!!!
+            BroadcastPartyInvite(player = $obj1)
         }
         Else{
-            --In Party
             $obj1.inSelfParty = 0
             CallTrigger(fromInParty = true, target = $partyOwner, event = "PLAYER_ON_VISIT", object = $obj1)
         }
