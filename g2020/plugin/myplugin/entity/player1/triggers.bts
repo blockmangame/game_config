@@ -3395,20 +3395,20 @@ SURE_BUY {
    {
       Return()
    }
-   $itemfullName = GetConfigVar(obj = $obj2, key = "sellItem")
+   $sellItem = GetConfigVar(obj = $obj2, key = "sellItem")
    $price = GetConfigVar(obj = $obj2, key = "sellPrice")
    $coinId = GetConfigVar(obj = $obj2, key = "coinId")
    $coinName = "green_currency"
    If($coinId == 0){
        $coinName = "gDiamonds"
    }
-   $itemName = GetItemCfg(fullName = $itemfullName, key = "itemname")
+   $itemName = GetItemCfg(fullName = $sellItem, key = "itemname")
    If(not $price){
        $price = 0
    }
    $enoughMoney = CheckBalance(entity = $obj1, coinName = $coinName, price = $price)
    If($enoughMoney){ --够钱
-         $checkBag = AddItem(entity = $obj1, cfg = $itemfullName, count = 1)
+         $checkBag = AddItem(entity = $obj1, cfg = $sellItem, count = 1)
          If($checkBag ~= false){
             If($coinId == 0){
                 BuyGoods(player = $obj1, uniqueId = 20201999,  coinId = $coinId, price = $price, event = "SHOP_BUY_COIN", objID = GetObjectID(object = $obj1))
@@ -3438,6 +3438,12 @@ SURE_FURNITURE_BUY {
    If($button == "left"){
       Return()
    }
+   If(not $owner and $obj2){
+       $owner = GetOwner(entity = $obj2)
+   }
+   If(not $price){
+       $price = 0
+   }
    $coinName = "green_currency"
    $itemName = GetItemCfg(fullName = $sellItem, key = "itemname")
    $enoughMoney = CheckBalance(entity = $obj1, coinName = $coinName, price = $price)
@@ -3448,9 +3454,11 @@ SURE_FURNITURE_BUY {
             If(not $isTeam and $owner){ --不是一个家庭给领主加钱
                ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
                $name = GetEntityName(entity = $obj1)
-               ShowTip(textKey = "gui_buys_your_stuff",textP1 = $name, textP2 = $itemName, tipType = 1, entity = $owner, keepTime = 20)
-               AddCurrency(entity = $owner, coinName = $coinName, count = $price)
-               ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $price), entity = $owner)
+               If(IsPlayer(entity = $owner)){
+                    ShowTip(textKey = "gui_buys_your_stuff",textP1 = $name, textP2 = $itemName, tipType = 1, entity = $owner, keepTime = 20)
+                    AddCurrency(entity = $owner, coinName = $coinName, count = $price)
+                    ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $price), entity = $owner)
+               }
             }Else{
                ShowTip(textKey = "gui_gain_item_success",textP1 = $itemName, tipType = 1, entity = $obj1, keepTime = 20)
             }
