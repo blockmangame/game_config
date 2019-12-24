@@ -3987,7 +3987,7 @@ PLAYER_ON_VISIT_OTHER_SERVER {
         TryJoinParty(player = $obj1, targetUserId = $targetUserId, partyId = $partyId)
     }
     Else{
-        GotoOtherServer(targetUserId = $targetUserId, player = $obj1)
+        CrossServerVisitPlayerByUserId(targetUserId = $targetUserId, player = $obj1)
     }
 }
 PLAYER_ON_VISIT {--same server
@@ -4078,7 +4078,7 @@ CHECK_EXIT_PARTY {
 }
 LEAVE_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = 0
-    GotoOtherServer(player = $obj1)
+    ReenterGame(player = $obj1)
 }
 CHECK_IN_PARTY {
     $userId = GetPlayerUserID(player = $obj1)
@@ -4089,7 +4089,7 @@ CHECK_IN_PARTY {
             ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.no.owner", time =  20)
             LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
             $obj1.inPartyOwnerId = 0--just in case
-            GotoOtherServer(player = $obj1)
+            ReenterGame(player = $obj1)
             Return()
         }
         UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
@@ -4115,11 +4115,11 @@ INTERACTION_BANISH {
 CREATE_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = GetPlayerUserID(player = $obj1)
     $obj1.inPartyId = $partyId
-    GotoOtherServer(player = $obj1)
+    ReenterGame(player = $obj1)
 }
 JOIN_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = $targetUserId
-    GotoOtherServer(player = $obj1, targetUserId = $targetUserId)
+    CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
@@ -4136,7 +4136,7 @@ CLOSE_PARTY_SUCCESS {
     ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
         ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
         $player.inPartyOwnerId = 0
-        GotoOtherServer(player = $player)
+        ReenterGame(player = $player)
     }
 }
 PARTY_BE_LIKED {}
