@@ -399,6 +399,7 @@ ENTITY_RIDE_ON {
 
     If(not IsPlayer(entity = $obj1)){ Return() }
     UpdateObjectInteractionUI(player = $obj1, target = $obj2, show = false)
+    CallTrigger(event = "FUNC_STATE_ADD_INTERACTLIST", entities = [$obj1, $obj2])
 }
 REMOVE_ILL_BUFF
 {

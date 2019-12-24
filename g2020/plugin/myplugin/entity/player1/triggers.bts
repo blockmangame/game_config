@@ -1438,12 +1438,12 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         Return()
     }
 
-    CallTrigger(object = $obj1, event = "FUNC_STATESKILL_REMOVE", state = $state, skill = $skill)
-
     $interactList = GetObjectVar(
         obj = $obj1,
         key = Concat(p1 = $stateBase, p2 = "InteractList")
     )
+    
+    CallTrigger(object = $obj1, event = "FUNC_STATESKILL_REMOVE", state = $state, skill = $skill)
 
     If(not GetSkillVar(fullName = $skill, key = "hadReward"))
     {
@@ -1472,7 +1472,7 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         $count = GetObjectVar(obj = $entity, key = $countKey)
         $dis = GetObjectDistance(obj1 = $obj1, obj2 = $entity)
         $myTeamId =  GetEntityTeam(entity = $entity)
-    
+
         If($count < $rewardCount && $dis < $rewardDis)
         {
             SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
@@ -2226,7 +2226,7 @@ TEAM_CREATE_RESULT
         }
         ElseIf($button == "right")
         {
-            ShowFamilyAlbum(entity = $obj1)
+            OperationWindows(win = "familyAlbum", isOpen = true, player = $obj1)
         }
     }
 }
@@ -2268,7 +2268,7 @@ INIT_TEAM_UI
 
 SHOW_FAMILY_ALBUM
 {
-    ShowFamilyAlbum(entity = $obj1)
+    OperationWindows(win = "familyAlbum", isOpen = true, player = $obj1)
 }
 
 STORE_ITEM_STATUS_CHANGE
@@ -3987,7 +3987,7 @@ PLAYER_ON_VISIT_OTHER_SERVER {
         TryJoinParty(player = $obj1, targetUserId = $targetUserId, partyId = $partyId)
     }
     Else{
-        GotoOtherServer(targetUserId = $targetUserId, player = $obj1)
+        CrossServerVisitPlayerByUserId(targetUserId = $targetUserId, player = $obj1)
     }
 }
 PLAYER_ON_VISIT {--same server
@@ -4078,7 +4078,7 @@ CHECK_EXIT_PARTY {
 }
 LEAVE_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = 0
-    GotoOtherServer(player = $obj1)
+    ReenterGame(player = $obj1)
 }
 CHECK_IN_PARTY {
     $userId = GetPlayerUserID(player = $obj1)
@@ -4089,7 +4089,7 @@ CHECK_IN_PARTY {
             ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.no.owner", time =  20)
             LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
             $obj1.inPartyOwnerId = 0--just in case
-            GotoOtherServer(player = $obj1)
+            ReenterGame(player = $obj1)
             Return()
         }
         UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
@@ -4115,11 +4115,11 @@ INTERACTION_BANISH {
 CREATE_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = GetPlayerUserID(player = $obj1)
     $obj1.inPartyId = $partyId
-    GotoOtherServer(player = $obj1)
+    ReenterGame(player = $obj1)
 }
 JOIN_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = $targetUserId
-    GotoOtherServer(player = $obj1, targetUserId = $targetUserId)
+    CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
@@ -4136,7 +4136,7 @@ CLOSE_PARTY_SUCCESS {
     ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
         ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
         $player.inPartyOwnerId = 0
-        GotoOtherServer(player = $player)
+        ReenterGame(player = $player)
     }
 }
 PARTY_BE_LIKED {}
@@ -4194,6 +4194,31 @@ SAVE_PHOTO
         ArrayAppend(array = $familyAlbum, value = $photo)
 
         UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
+
+        $btnInfo = {
+            leftCoinId = nil,
+            leftContent = "ui_sure",
+            rightCoinId = nil,
+            rightContent = "ui_check"
+        }
+        ShowDialogTip(entity = $obj1,tipType = 5, event = "CLICK_SAVE_FAMILY_ALBUM_TIP", p1 = "ui_tip", p2 = "ui_save_photo", p3 = $btnInfo)
+    }
+    Else
+    {
+        $btnInfo = {
+            leftCoinId = nil,
+            leftContent = "ui_cancel",
+            rightCoinId = nil,
+            rightContent = "ui_sure"
+        }
+        ShowDialogTip(entity = $obj1,tipType = 5, event = "CLICK_SAVE_FAMILY_ALBUM_TIP", p1 = "ui_tip", p2 = "ui_family_album_full", p3 = $btnInfo)
+    }
+}
+
+CLICK_SAVE_FAMILY_ALBUM_TIP
+{
+    If($button == "right"){
+        OperationWindows(win = "familyAlbum", isOpen = true, player = $obj1)
     }
 }
 
