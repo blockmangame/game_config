@@ -204,6 +204,15 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
         Return()
     }
     $regions = $childRegionArr
+    $regionArea = 0
+    Foreach(array = $regions, key = "region"){
+        $min = GetRegionMin(region = $region)
+        $max = GetRegionMax(region = $region)
+        $x = GetPosX(pos = $max) - GetPosX(pos = $min)
+        $y = GetPosY(pos = $max) - GetPosY(pos = $min)
+        $z = GetPosZ(pos = $max) - GetPosZ(pos = $min)
+        $regionArea = $regionArea + ($x * $y + $x * $z + $y * $z) * 2
+    }
     $replaceTb = GetBlockConfigByName(block = $destBlock, key = "destBlockMatrix") or {}
     $filter = GetBlockConfigByName(block = $destBlock, key = "filter") or {}
     $filterDict = NewDictionary($filter or {})
@@ -232,7 +241,7 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
     ]
     $directionIndex = 1
 
-    ForLoop(from = 1, to = 99999, key = "index"){
+    ForLoop(from = 1, to = $regionArea, key = "index"){
         $sourceBlockCfg = GetBlockFullName(map = $map, pos = $curBlockPos)
         $needReplace = true
         ForeachDictionary(dict = $filterDict, keyName = "i", valueName = "v"){
@@ -246,7 +255,37 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
             RemoveBlock(map = $map, block = $curBlockPos)
             CreateBlock(map = $map, pos = $curBlockPos, block = $destBlockCfg)
         }
+        -- 计算nextBlock
         $nextBlockPos = ComputeV3(p1 = ArrayGet(array = $directionMap, index = $directionIndex), p2 = $curBlockPos, op = "add")
+        ForLoop(from = 1, to = 4, key = "tindex"){
+            -- Break()
+            $imcV3 = ArrayGet(array = $directionMap, index = $tindex)
+            $tempPos = ComputeV3(p1 = $curBlockPos, p2 = $imcV3, op = "add")
+            $tempPosInRegion = false
+            Foreach(array = $regions, key = "region"){
+                If(IsPosInRegion(pos = $tempPos, region = $region)){
+                    $tempPosInRegion = true
+                    Break()
+                } 
+            }
+            If($tempPosInRegion){
+                $tempPosBlockCfg = GetBlockFullName(map = $map, pos = $tempPos)
+                $tempPosNeedReplace = true
+                If(PosToV3(pos = $tempPos) ~= PosToV3(pos = $lastBlockPos)){
+                    ForeachDictionary(dict = $filterDict, keyName = "i", valueName = "v"){
+                        If(GetBlockConfigByName(block = $tempPosBlockCfg, key = $i) ~= $v){
+                            $tempPosNeedReplace = false
+                            Break()
+                        }
+                    }
+                    If($tempPosNeedReplace){
+                        $nextBlockPos = $tempPos
+                        $directionIndex = $tindex
+                        Break()
+                    }
+                }
+            }
+        }
         If(PosToV3(pos = $nextBlockPos) == PosToV3(pos = $firstBlockPos)){
             $tempPos = ComputeV3(p1 = $firstBlockPos, p2 = {x = 0, y = 1, z = 0}, op = "add")
             If(GetPosY(pos = $tempPos) > $maxHeight){
