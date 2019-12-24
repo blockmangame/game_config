@@ -2226,7 +2226,7 @@ TEAM_CREATE_RESULT
         }
         ElseIf($button == "right")
         {
-            ShowFamilyAlbum(entity = $obj1)
+            OperationWindows(win = "familyAlbum", isOpen = true, player = $obj1)
         }
     }
 }
@@ -2268,7 +2268,7 @@ INIT_TEAM_UI
 
 SHOW_FAMILY_ALBUM
 {
-    ShowFamilyAlbum(entity = $obj1)
+    OperationWindows(win = "familyAlbum", isOpen = true, player = $obj1)
 }
 
 STORE_ITEM_STATUS_CHANGE
