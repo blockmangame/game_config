@@ -1202,6 +1202,28 @@ FUNC_STATE_ADD --params: state
     CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state)
 }
 
+FUNC_STATE_START_AUTO_VANISH_TIME --parmas: state
+{
+    $skill = Concat(p1 = @skillPath, p2 = $state)
+    $autoVanishT = GetSkillVar(fullName = $skill, key = "autoVanishT")
+    If(not $autoVanishT || $autoVanishT <= 0)
+    {
+        Return()
+    }
+    SetObjectVar(
+        obj = $obj1,
+        key = Concat(p1 = $state, p2 = "AUTOVANISH_TIMER"),
+        value = StartTimer(
+            rep = false,
+            object = $obj1,
+            state = $state,
+            skill = $skill,
+            event = "FUNC_STATESKILL_REMOVE",
+            time = ($autoVanishT * 20) // 1
+        )
+    )
+}
+
 FUNC_STATE_ADD_EFFECT --params: state
 {
     $effect = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "effect")
@@ -1230,7 +1252,7 @@ FUNC_STATE_START_AFFECT --params: state
 
     SetObjectVar(
         obj = $obj1,
-        key = $timerStr,
+        key = Concat(p1 = $state, p2 = "AFFECT_TIMER"),
         value = StartTimer(
             rep = true,
             object = $obj1,
@@ -1304,11 +1326,6 @@ FUNC_STATE_CHECK_MAP --params: state
 FUNC_STATE_CHECK_REGION --params: state
 {   
     -- 判断状态生成时是否就已经在区域里面了
-    If("region" ~= GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "releaseType"))
-    {
-        Return()
-    }
-
     $reg = GetRegionByName(
         map = GetEntityMap(entity = $obj1),
         name = $state 
@@ -1324,7 +1341,6 @@ FUNC_STATE_CHECK_REGION --params: state
     )
     {
         CallTrigger(
-            opt = "INNER",
             object = $obj1,
             state = $state,
             event = "FUNC_REGION_STATE_OPERATION",
@@ -1342,16 +1358,6 @@ FUNC_REGION_STATE_OPERATION --parmas: opt, state
         {
             ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
             CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
-        }
-    }
-
-    If($opt ~= "INNER")
-    {
-        $skill = Concat(p1 = @skillPath, p2 = $state)
-        $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
-        If("region" ~= GetSkillVar(fullName = $skill, key = "releaseType"))
-        {
-            Return()
         }
     }
 
@@ -1432,10 +1438,7 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         Return()
     }
 
-    RemoveSkill(entity = $obj1, name = $skill)
-    SetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase), value = false)
-    CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATESKILL_REMOVE", state = $state, skill = $skill)
 
     $interactList = GetObjectVar(
         obj = $obj1,
@@ -1494,6 +1497,21 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     )
 }
 
+FUNC_STATESKILL_REMOVE --params: state, skill
+{
+    $stateBase = $stateBase or GetSkillVar(fullName = $skill, key = "stateBase") or $state
+    $hadState = Concat(p1 = "had", p2 = $stateBase)
+    If(not GetObjectVar(obj = $obj1, key = $hadState))
+    {
+        Return()
+    }
+
+    RemoveSkill(entity = $obj1, name = $skill)
+    SetObjectVar(obj = $obj1, key = $hadState, value = false)
+    CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
+}
+
 FUNC_STATE_RELEASE --params: state[, duration]
 {
     If(not $state)
@@ -1524,6 +1542,7 @@ FUNC_STATE_RELEASE --params: state[, duration]
         }
 
         SetObjectVar(obj = $obj1, key = $releasingState, value = true)
+        CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "AUTOVANISH_TIMER"))
         $duration = $duration or GetSkillVar(fullName = $skill, key = "duration")
         If($duration && $duration > 0)
         {
@@ -1787,107 +1806,6 @@ FUNC_GPS_RECALCULATE --params: mapStart, mapEnd, gpsDict
         ShowTip(entity = $obj1, tipType = 3, textKey = "unable_to_navigate", textP1 = $mapEnd)
         Return()
     }
-    $mapSize = ArraySize(array = $maps)
-    $matrix = GetGlobalVar(key = "mapMatrixNeedDijkstra")
-    ForLoop(from = 1, to = $mapSize, key = "index")
-    {
-        $row = ArrayGet(array = $matrix, index = ArrayGet(array = $maps, index = $index))
-        ForLoop(from = $index + 1, to = $mapSize, key = "idx")
-        {
-            If(ArrayGet(array = $row, index = $idx)) --从地图A到地图B存在多个门，那么即存在最短路的问题
-            {   
-                $type = DictionaryGet(dict = $gpsDict, key = "type")
-                $belongMap = DictionaryGet(dict = $gpsDict, key = "belongMap")
-                $targetPos = nil
-
-                If($type == "selfHouse")
-                {
-                    $house = GetObjectVar(obj = $obj1, key = "house")
-                    $housePos = GetEntityPosition(entity = $house)
-                    $targetPos = ComputeV3(p1 = $housePos, p2 = GetConfigVar(obj = $house, key = "doorPos") or {x = 0,y = 2, z = 0}, op = "add")
-                }
-                ElseIf($type == "entity")
-                {
-                    $targetPos = DictionaryGet(dict = $gpsDict, key = "pos")
-                }
-
-                $targetDict = NewDictionary({
-                    pos = $targetPos,
-                    belongMap = $belongMap
-                })
-
-                --构建玩家在mapStart到mapEnd途径所有门的邻接矩阵
-                $mapS2mapEDWsMatrix = "mapS2mapEDWsMatrix"
-                CallTrigger(
-                    object = $obj1,
-                    allDWs = $road,
-                    targetDict = $targetDict,
-                    saveName = $mapS2mapEDWsMatrix,
-                    event = "FUNC_NAVIGATION_SET_DOORWAY_ADJACENCY_MATRIX"
-                )
-
-                --利用上面的邻接矩阵进行最短路的查找操作
-                $mapS2mapEDWs1Tother = Concat(p1 = $mapS2mapEDWsMatrix, p2 = "1Tother")
-                CallTrigger(
-                    object = $obj1,
-                    startIdx = 1,
-                    matrix = GetObjectVar(obj = $obj1, key = $mapS2mapEDWsMatrix),
-                    saveName = $mapS2mapEDWs1Tother,
-                    event = "FUNC_NAVIGATION_DIJKSTRA"
-                )
-
-                --利用上面的得到数据，再去找倒数第二张地图到最后一张地图需要经过的门，在这些门里找到dis最小的索引
-                $index = 2
-                If(not $targetPos)
-                {
-                    $secLastMap = ArrayGet(
-                        array = @allMaps,
-                        index = ArrayGet(array = $maps, index = $mapSize - 1)
-                    )
-                    $lastMap = ArrayGet(
-                        array = @allMaps,
-                        index = ArrayGet(array = $maps, index = $mapSize)
-                    )
-                    $mapEntry = NewDictionary(GetMapConfig(name = $secLastMap, key = "mapEntry"))
-                    $entries = DictionaryGet(dict = $mapEntry, key = $lastMap)
-                    $min = @mathHuge
-                    $disArr = GetObjectVar(obj = $obj1, key = Concat(p1 = $mapS2mapEDWs1Tother, p2 = "Dis"))
-                    ForLoop(from = 1, to = ArraySize(array = $entries or []), key = "idx")
-                    {
-                        $entryIdx = ArrayFind(
-                            value = ArrayGet(array = $entries, index = $idx),
-                            array = GetObjectVar(obj = $obj1, key = Concat(p1 = $mapS2mapEDWsMatrix, p2 = "ColVec"))
-                        )
-                        $curDis = ArrayGet(array = $disArr, index = $entryIdx)
-                        If($curDis < $min)
-                        {
-                            $min = $curDis
-                            $index = $entryIdx
-                        }
-                    }
-                }
-
-                --经过上面的操作后得到了到达最终地图的最短路径的最后一个索引
-                $mapS2mapEDWsFinalPath = "mapS2mapEDWsFinalPath"
-                CallTrigger(
-                    object = $obj1,
-                    endIdx = $index,
-                    saveName = $mapS2mapEDWsFinalPath,
-                    event = "FUNC_NAVIGATION_GET_PATH",
-                    allPath = GetObjectVar(obj = $obj1, key = $mapS2mapEDWs1Tother)
-                )
-                $road = GetObjectVar(obj = $obj1, key = $mapS2mapEDWsFinalPath)
-                $roadIdx = $roadIdx + 1 ---因为新的road第一个数据是obj1，如果是仅有唯一路径，则第一个数据就是第一个应该去的地方。
-
-                SetObjectVar(obj = $obj1, value = nil, key = $mapS2mapEDWsFinalPath)
-                SetObjectVar(obj = $obj1, value = nil, key = Concat(p1 = $mapS2mapEDWsMatrix, p2 = "ColVec"))
-                SetObjectVar(obj = $obj1, value = nil, key = Concat(p1 = $mapS2mapEDWs1Tother, p2 = "Dis"))
-                SetObjectVar(obj = $obj1, value = nil, key = $mapS2mapEDWs1Tother)
-                SetObjectVar(obj = $obj1, value = nil, key = $mapS2mapEDWsMatrix)
-                Break()
-            }
-        }
-    }
 
     $navigateDict = NewDictionary({
         road = $road,
@@ -1960,6 +1878,7 @@ FUNC_STATE_ACTION --params: state
     CallTrigger(object = $obj1, event = "FUNC_STATE_START_AFFECT", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_REGION", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_MAP", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_START_AUTO_VANISH_TIME", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_RIDEON", ride = GetRideOn(entity = $obj1)) --检查是否已经在骑乘并且该骑乘是否会触发解除状态
 }
 
@@ -3484,6 +3403,9 @@ SURE_BUY {
        $coinName = "gDiamonds"
    }
    $itemName = GetItemCfg(fullName = $itemfullName, key = "itemname")
+   If(not $price){
+       $price = 0
+   }
    $enoughMoney = CheckBalance(entity = $obj1, coinName = $coinName, price = $price)
    If($enoughMoney){ --够钱
          $checkBag = AddItem(entity = $obj1, cfg = $itemfullName, count = 1)
@@ -4054,7 +3976,7 @@ PLAYER_ON_VISIT_OTHER_SERVER {
     If($obj1.partyInfo){
         $partyDict = NewDictionary($obj1.partyInfo)
         $partyId = DictionaryGet(dict = $partyDict, key = "partyId")
-        TryJoinParty(targetUserId = $targetUserId, partyId = $partyId)
+        TryJoinParty(player = $obj1, targetUserId = $targetUserId, partyId = $partyId)
     }
     Else{
         GotoOtherServer(targetUserId = $targetUserId, player = $obj1)
@@ -4069,6 +3991,10 @@ PLAYER_ON_VISIT {--same server
     }
     CallTrigger(object = $target, event = "GET_VISIT_TELE_POS", from = $obj1, fromInParty = $fromInParty)
     If($obj1.telePos and $obj1.teleMap){
+        $isInHouse = ($obj1.house == GetMapVar(map = GetEntityMap(entity = $obj1), key = "owner"))
+        If($isInHouse and $obj1.teleMap ~= GetEntityMap(entity = $obj1)){
+            ShowTitleBarPage(entity = $obj1, closeWin = true)
+        }
         SetEntityPosition(map = $obj1.teleMap, entity = $obj1, pos = $obj1.telePos)
         $obj1.teleMap = nil
         $obj1.telePos = nil
@@ -4159,6 +4085,7 @@ CHECK_IN_PARTY {
             Return()
         }
         UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
+        UpdateExtensionBtn(entity = $obj1, btnList = [{name = "party"}])
         If($userId == $inPartyOwnerId){
             $obj1.inSelfParty = 1
             --My Party!!!!

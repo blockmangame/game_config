@@ -6,19 +6,22 @@
 
     "state": "ill",
     "generateType": "A",
-    "releaseType": "interact",
+    "generateTime":[1, 2, 26],
+    "autoVanishT": 10,
     
     "affectDis": 5,
     "affectTimeSpanSec": 5,
 
-    "/effect": "myplugin/buff_state_ill_effect",
+    "hadReward": true,
+    "rewardSelf": 8,
+    "rewardOther": 12,
+    "rewardFamily": 16,
+    "rewardDis": 5,
+    "rewardCount": 3,
+    "rewardType": "green_currency",
 
-    "hadReward": false,
-    
-    "generateTime":[0.3, 0.6, 1, 1.5, 55],
+    "effect": "myplugin/buff_state_ill_effect",
     "duration": 20,
-
-    
     "tipContents": {
         "text": {
             "textKey": "state_get",
