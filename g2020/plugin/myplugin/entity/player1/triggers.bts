@@ -4414,3 +4414,8 @@ RENAME_FAMILY_ALBUM
     } 
     UpdateUIData(player = $obj1, ui = "win_familyAlbumRename", data = $data) 
 }
+
+SHOW_PALETTE_HELP
+{
+    ShowLongTextTip(player = $obj1, text = "palette_help_msg", title = "palette_help_title")
+}
