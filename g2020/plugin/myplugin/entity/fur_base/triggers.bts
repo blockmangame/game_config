@@ -272,39 +272,41 @@ COOK_1 {
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 1)
     $sellItem = ArrayGet(array = $arrayItems, index = 1)
-    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+    CallTrigger(event = "COOK_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
 COOK_2 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 2)
     $sellItem = ArrayGet(array = $arrayItems, index = 2)
-    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+    CallTrigger(event = "COOK_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
 COOK_3 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 3)
     $sellItem = ArrayGet(array = $arrayItems, index = 3)
-    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+    CallTrigger(event = "COOK_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
 COOK_4 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 4)
     $sellItem = ArrayGet(array = $arrayItems, index = 4)
-    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+    CallTrigger(event = "COOK_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
 COOK_5 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 5)
     $sellItem = ArrayGet(array = $arrayItems, index = 5)
-    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+    CallTrigger(event = "COOK_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
-FOOD_BUY {
+COOK_BUY {
    $owner = GetOwner(entity = $obj1)
    $myTeamId = GetEntityTeam(entity = $obj2)
+   $coinId = GetConfigVar(obj = $obj1, key = "coinId")
+   $Name = GetItemCfg(fullName = $sellItem, key = "name")
    $ownerName = "nil"
    $isTeam = false
    If($owner){
@@ -314,19 +316,19 @@ FOOD_BUY {
    If(($ownTeamId ~= nil and $ownTeamId ~= 0 and $myTeamId == $ownTeamId )or SameObj(entity = $obj2, entity2 = $owner)){ --领主自己家庭成员不要钱。
        $isTeam = true
    }
-   If($isTeam or $price == 0 or not $price){ --不要钱不弹窗直接购买
-      CallTrigger(event = "SURE_FURNITURE_BUY", object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam)
+   If($isTeam or not $price or $price ==0){ --不要钱不弹窗直接购买
+      CallTrigger(event = "SURE_FURNITURE_BUY", obj2 = $obj1,object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam, owner = $owner)
    }Else{
       $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
-        rightCoinId = nil,
-        rightContent = "ui_sure"
+        rightCoinId = $coinId,
+        rightContent = $price
       }
       
       $content = {
          msg = "gui_you_want_to_buy_this",
-         args = [ $price, $sellItem]
+         args = [$Name]
       }
       $Context = {
          objID = GetObjectID(object = $obj1),
@@ -342,6 +344,8 @@ FOOD_BUY {
 FOOD_BUY {
    $price = GetConfigVar(obj = $obj1, key = "sellPrice")
    $sellItem = GetConfigVar(obj = $obj1, key = "sellItem")
+   $coinId = GetConfigVar(obj = $obj1, key = "coinId")
+   $Name = GetItemCfg(fullName = $sellItem, key = "name")
    $owner = GetOwner(entity = $obj1)
    $myTeamId = GetEntityTeam(entity = $obj2)
    $ownerName = "nil"
@@ -353,23 +357,19 @@ FOOD_BUY {
    If(($ownTeamId ~= nil and $ownTeamId ~= 0 and $myTeamId == $ownTeamId )or SameObj(entity = $obj2, entity2 = $owner)){ --领主自己家庭成员不要钱。
        $isTeam = true
    }
-   If($price == 0 or not $price){ --不要钱的
-        ShowTip(textKey = "gui_gain_item_success",textP1 = $sellItem, tipType = 1, entity = $obj1, keepTime = 20)
-        Return()
-   }
-   If($isTeam){ --不要钱不弹窗直接购买
-      CallTrigger(event = "SURE_FURNITURE_BUY", object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam)
+   If($isTeam or not $price or $price ==0 ){ --不要钱不弹窗直接购买
+      CallTrigger(event = "SURE_FURNITURE_BUY", obj2 = $obj1, object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam, owner = $owner)
    }Else{
       $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
-        rightCoinId = nil,
-        rightContent = "ui_sure"
+        rightCoinId = $coinId,
+        rightContent = $price
       }
       
       $content = {
          msg = "gui_you_want_to_buy_this",
-         args = [ $price, $sellItem]
+         args = [$Name]
       }
       $Context = {
          objID = GetObjectID(object = $obj1),
