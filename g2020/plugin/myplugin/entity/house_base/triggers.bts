@@ -20,6 +20,7 @@ CREATR_SUBSIDIARY{
     StartTimer(rep = false, time = 1, object = $obj1, door = $door, event = "CHANGE_DOOR_YAW")
     ------------------------------------------ 创建内部房子（创建动态地图）
     ------------------------------------------ 房子 <owner-------houseInsideMap> 内部房子
+    -- Test("GetConfigVar(obj = $obj1, key = nsideMap)",GetConfigVar(obj = $obj1, key = "insideMap"))
     $map = CreateMap(name = GetConfigVar(obj = $obj1, key = "insideMap"))
     SetObjectVar(obj = $obj1, key = "houseInsideMap", value = $map)
     SetMapVar(map = $map, key = "owner", value = $obj1)

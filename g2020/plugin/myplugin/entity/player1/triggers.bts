@@ -265,10 +265,11 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
 CREATE_HOUSE_OUTSIDE{
     $yaw = GetRegionConfig(region = $region, key = "regionHouseYaw")
     $housePosOffset = GetEntityCfg(fullName = $houseCfg, key = "housePosOffset") or {x = 0, y = 0, z = 0}
-    --Test("$housePosOffset--------------",$region,GetRegionCenter(region = $region),$housePosOffset,$yaw,V3RotationYaw(vector = $housePosOffset, yaw = $yaw),
-        --ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)))
+    -- Test("$housePosOffset--------------",$region,GetRegionCenter(region = $region),$housePosOffset,$yaw,V3RotationYaw(vector = $housePosOffset, yaw = $yaw),
+    --     ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)))
     $house = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
-    $pos = ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw))
+    $pos = ComputeV3(p1 = V3ToBlockPos(v3 = GetRegionCenter(region = $region)), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw))
+    $pos = ComputeV3(p1 = $pos, op = "add", p2 = Table(x = 0.5,y = 0,z = 0.5))
     SetEntityPosition(entity = $house, pos = $pos, map = GetEntityMap(entity = $house))
     SetEntityYaw(entity = $house, rotationYaw = $yaw)
     SetBodyYaw(entity = $house, yaw = $yaw)
