@@ -1,0 +1,58 @@
+{
+    "canClick": false,
+    "actorName": "g2020_food.actor",
+    "skin": {
+        "body": "7"
+    },
+    "coinId": 3,
+    "sellPrice": 2,
+    "sellItem": "myplugin/food_drink_milk",
+    "collision": false,
+    "name": "",
+    "pushable": null,
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "VerticalBox",
+                "params": [
+                    1,
+                    1,
+                    1
+                ]
+            }
+        ]
+    },
+    "canInteract": true,
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        },
+        "centerBtns": [
+            {
+                "text": "drink_milk.buy",
+                "widgetFileName": "widget_button",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "event": "BUY_SHOP"
+            }
+        ]
+    },
+    "interaction": {
+        "radius": 7,
+        "offset": {
+            "x": 0,
+            "y": -1,
+            "z": 2
+        }
+    }
+}

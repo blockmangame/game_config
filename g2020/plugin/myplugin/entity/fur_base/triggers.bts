@@ -81,6 +81,9 @@ DEC_INTERACTION_MOVE_TOUCH_END{
     $dict = NewDictionary($params or {})
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = DictionaryGet(dict = $dict, key = "entityPos") or GetEntityPosition(entity = $obj1)
         , ry = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), rp = DictionaryGet(dict = $dict, key = "entityPitch") or GetEntityPitch(entity = $obj1))
+    SetEntityRoll(entity = $obj1, rotationRoll = DictionaryGet(dict = $dict, key = "entityRoll") or GetEntityPosition(entity = $obj1))
+    $obj1.lastSideNormal = DictionaryGet(dict = $dict, key = "lastSideNormal") or Table(x = 0,y = 0,z = 0)
+    StartTimer(rep = false, object =$obj1, obj1 =$obj1, time = 2, yaw = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), event = "ROTATION_BODY_YAW")
 }
 
 DEC_INTERACTION_SALE{
@@ -119,17 +122,37 @@ DEC_INTERACTION_SALE{
 }
 
 DEC_INTERACTION_LEFT_ROTATION{
-    $yaw = ((GetEntityYaw(entity = $obj1) or 0) + (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)) % 360
-    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1)
-        , ry = $yaw or GetEntityYaw(entity = $obj1), rp = GetEntityPitch(entity = $obj1))
-    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
+    CallTrigger(object = $obj1, event = "POS_AROUND", params = $params, scale = GetConfigVar(obj = $obj1, key = "rotationYawModlus"))
 }
 
 DEC_INTERACTION_RIGHT_ROTATION{
-    $yaw = ((GetEntityYaw(entity = $obj1) or 0) - (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)) % 360
-    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1)
-        , ry = $yaw or GetEntityYaw(entity = $obj1), rp = GetEntityPitch(entity = $obj1))
-    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
+    CallTrigger(object = $obj1, event = "POS_AROUND", params = $params, scale = -GetConfigVar(obj = $obj1, key = "rotationYawModlus"))
+}
+
+POS_AROUND{
+    $dict = NewDictionary($params or {})
+    $sideNormal = $obj1.lastSideNormal or Table(x = 0,y = 0,z = 0)
+    $sideNormalX = GetPosX(pos = $sideNormal)
+    $sideNormalY = GetPosY(pos = $sideNormal)
+    $sideNormalZ = GetPosZ(pos = $sideNormal)
+    If($sideNormalX == 0 and $sideNormalY == 0 and $sideNormalZ == 0){ -- First In The Floor
+        $sideNormalY = 1
+    }
+    $yaw = GetEntityYaw(entity = $obj1)
+    $pitch = GetEntityPitch(entity = $obj1)
+    $imcYaw = 0
+    $imcPitch = 0
+    If($sideNormalY == -1 or $sideNormalY == 1){
+        $imcYaw = $sideNormalY == -1 and -$scale or $scale
+        SetEntityYaw(entity = $obj1, rotationYaw = $yaw + $imcYaw)
+        StartTimer(rep = false, object =$obj1, obj1 =$obj1, time = 2, yaw = $yaw + $imcYaw, event = "ROTATION_BODY_YAW")
+    }ElseIf($sideNormalX == -1 or $sideNormalX == 1){
+        $imcPitch = $sideNormalX == 1 and -$scale or $scale
+        SetEntityPitch(entity = $obj1, rotationPitch = $pitch + $imcPitch)
+    }Else{
+        $imcPitch = $sideNormalZ == 1 and -$scale or $scale
+        SetEntityPitch(entity = $obj1, rotationPitch = $pitch + $imcPitch)
+    }
 }
 
 ROTATION_BODY_YAW{
@@ -249,39 +272,41 @@ COOK_1 {
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 1)
     $sellItem = ArrayGet(array = $arrayItems, index = 1)
-    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+    CallTrigger(event = "COOK_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
 COOK_2 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 2)
     $sellItem = ArrayGet(array = $arrayItems, index = 2)
-    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+    CallTrigger(event = "COOK_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
 COOK_3 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 3)
     $sellItem = ArrayGet(array = $arrayItems, index = 3)
-    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+    CallTrigger(event = "COOK_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
 COOK_4 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 4)
     $sellItem = ArrayGet(array = $arrayItems, index = 4)
-    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+    CallTrigger(event = "COOK_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
 COOK_5 {
     $arrayPrice = GetConfigVar(obj = $obj1, key = "sellPrice")
     $arrayItems = GetConfigVar(obj = $obj1, key = "sellItem")
     $price = ArrayGet(array = $arrayPrice, index = 5)
     $sellItem = ArrayGet(array = $arrayItems, index = 5)
-    CallTrigger(event = "FOOD_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
+    CallTrigger(event = "COOK_BUY", object = $obj1, obj2 = $obj2, price = $price, sellItem = $sellItem)
 }
-FOOD_BUY {
+COOK_BUY {
    $owner = GetOwner(entity = $obj1)
    $myTeamId = GetEntityTeam(entity = $obj2)
+   $coinId = GetConfigVar(obj = $obj1, key = "coinId")
+   $Name = GetItemCfg(fullName = $sellItem, key = "name")
    $ownerName = "nil"
    $isTeam = false
    If($owner){
@@ -291,19 +316,19 @@ FOOD_BUY {
    If(($ownTeamId ~= nil and $ownTeamId ~= 0 and $myTeamId == $ownTeamId )or SameObj(entity = $obj2, entity2 = $owner)){ --领主自己家庭成员不要钱。
        $isTeam = true
    }
-   If($isTeam or $price == 0 or not $price){ --不要钱不弹窗直接购买
-      CallTrigger(event = "SURE_FURNITURE_BUY", object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam)
+   If($isTeam or not $price or $price ==0){ --不要钱不弹窗直接购买
+      CallTrigger(event = "SURE_FURNITURE_BUY", obj2 = $obj1,object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam, owner = $owner)
    }Else{
       $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
-        rightCoinId = nil,
-        rightContent = "ui_sure"
+        rightCoinId = $coinId,
+        rightContent = $price
       }
       
       $content = {
          msg = "gui_you_want_to_buy_this",
-         args = [ $price, $sellItem]
+         args = [$Name]
       }
       $Context = {
          objID = GetObjectID(object = $obj1),
@@ -319,6 +344,8 @@ FOOD_BUY {
 FOOD_BUY {
    $price = GetConfigVar(obj = $obj1, key = "sellPrice")
    $sellItem = GetConfigVar(obj = $obj1, key = "sellItem")
+   $coinId = GetConfigVar(obj = $obj1, key = "coinId")
+   $Name = GetItemCfg(fullName = $sellItem, key = "name")
    $owner = GetOwner(entity = $obj1)
    $myTeamId = GetEntityTeam(entity = $obj2)
    $ownerName = "nil"
@@ -330,23 +357,19 @@ FOOD_BUY {
    If(($ownTeamId ~= nil and $ownTeamId ~= 0 and $myTeamId == $ownTeamId )or SameObj(entity = $obj2, entity2 = $owner)){ --领主自己家庭成员不要钱。
        $isTeam = true
    }
-   If($price == 0 or not $price){ --不要钱的
-        ShowTip(textKey = "gui_gain_item_success",textP1 = $sellItem, tipType = 1, entity = $obj1, keepTime = 20)
-        Return()
-   }
-   If($isTeam){ --不要钱不弹窗直接购买
-      CallTrigger(event = "SURE_FURNITURE_BUY", object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam)
+   If($isTeam or not $price or $price ==0 ){ --不要钱不弹窗直接购买
+      CallTrigger(event = "SURE_FURNITURE_BUY", obj2 = $obj1, object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam, owner = $owner)
    }Else{
       $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
-        rightCoinId = nil,
-        rightContent = "ui_sure"
+        rightCoinId = $coinId,
+        rightContent = $price
       }
       
       $content = {
          msg = "gui_you_want_to_buy_this",
-         args = [ $price, $sellItem]
+         args = [$Name]
       }
       $Context = {
          objID = GetObjectID(object = $obj1),
