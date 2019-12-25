@@ -4272,6 +4272,7 @@ SAVE_PHOTO
 
     If(ArraySize(array = $familyAlbum) < GetWorldVar(key = "familyAlbumNum"))
     {
+        Test("can add familyAlbum....")
         $photo = {
             image = $data,
             name = "dafault_name"
@@ -4280,6 +4281,7 @@ SAVE_PHOTO
         ArrayAppend(array = $familyAlbum, value = $photo)
 
         UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
+        Test("familyAlbum data....", $familyAlbum)
 
         $btnInfo = {
             leftCoinId = nil,
@@ -4291,6 +4293,7 @@ SAVE_PHOTO
     }
     Else
     {
+        Test("familyAlbum full ....")
         $btnInfo = {
             leftCoinId = nil,
             leftContent = "ui_cancel",
