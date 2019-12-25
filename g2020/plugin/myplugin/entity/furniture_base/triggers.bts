@@ -81,7 +81,9 @@ DEC_INTERACTION_MOVE_TOUCH_END{
     $dict = NewDictionary($params or {})
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = DictionaryGet(dict = $dict, key = "entityPos") or GetEntityPosition(entity = $obj1)
         , ry = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), rp = DictionaryGet(dict = $dict, key = "entityPitch") or GetEntityPitch(entity = $obj1))
-    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
+    SetEntityRoll(entity = $obj1, rotationRoll = DictionaryGet(dict = $dict, key = "entityRoll") or GetEntityPosition(entity = $obj1))
+    $obj1.lastSideNormal = DictionaryGet(dict = $dict, key = "lastSideNormal") or Table(x = 0,y = 0,z = 0)
+    StartTimer(rep = false, object =$obj1, obj1 =$obj1, time = 2, yaw = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), event = "ROTATION_BODY_YAW")
 }
 
 DEC_INTERACTION_SALE{
@@ -120,17 +122,37 @@ DEC_INTERACTION_SALE{
 }
 
 DEC_INTERACTION_LEFT_ROTATION{
-    $yaw = ((GetEntityYaw(entity = $obj1) or 0) + (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)) % 360
-    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1)
-        , ry = $yaw or GetEntityYaw(entity = $obj1), rp = GetEntityPitch(entity = $obj1))
-    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
+    CallTrigger(object = $obj1, event = "POS_AROUND", params = $params, scale = GetConfigVar(obj = $obj1, key = "rotationYawModlus"))
 }
 
 DEC_INTERACTION_RIGHT_ROTATION{
-    $yaw = ((GetEntityYaw(entity = $obj1) or 0) - (GetConfigVar(obj = $obj1, key = "rotationYawModlus") or 0)) % 360
-    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1)
-        , ry = $yaw or GetEntityYaw(entity = $obj1), rp = GetEntityPitch(entity = $obj1))
-    StartTimer(rep = false, object =$obj1, obj1 =$obj1, yaw = $yaw or GetEntityYaw(entity = $obj1), time = 2, event = "ROTATION_BODY_YAW")
+    CallTrigger(object = $obj1, event = "POS_AROUND", params = $params, scale = -GetConfigVar(obj = $obj1, key = "rotationYawModlus"))
+}
+
+POS_AROUND{
+    $dict = NewDictionary($params or {})
+    $sideNormal = $obj1.lastSideNormal or Table(x = 0,y = 0,z = 0)
+    $sideNormalX = GetPosX(pos = $sideNormal)
+    $sideNormalY = GetPosY(pos = $sideNormal)
+    $sideNormalZ = GetPosZ(pos = $sideNormal)
+    If($sideNormalX == 0 and $sideNormalY == 0 and $sideNormalZ == 0){ -- First In The Floor
+        $sideNormalY = 1
+    }
+    $yaw = GetEntityYaw(entity = $obj1)
+    $pitch = GetEntityPitch(entity = $obj1)
+    $imcYaw = 0
+    $imcPitch = 0
+    If($sideNormalY == -1 or $sideNormalY == 1){
+        $imcYaw = $sideNormalY == -1 and -$scale or $scale
+        SetEntityYaw(entity = $obj1, rotationYaw = $yaw + $imcYaw)
+        StartTimer(rep = false, object =$obj1, obj1 =$obj1, time = 2, yaw = $yaw + $imcYaw, event = "ROTATION_BODY_YAW")
+    }ElseIf($sideNormalX == -1 or $sideNormalX == 1){
+        $imcPitch = $sideNormalX == 1 and -$scale or $scale
+        SetEntityPitch(entity = $obj1, rotationPitch = $pitch + $imcPitch)
+    }Else{
+        $imcPitch = $sideNormalZ == 1 and -$scale or $scale
+        SetEntityPitch(entity = $obj1, rotationPitch = $pitch + $imcPitch)
+    }
 }
 
 ROTATION_BODY_YAW{
