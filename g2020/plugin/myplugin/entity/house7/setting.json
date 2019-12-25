@@ -1,13 +1,9 @@
 {
-    "actorName": "g2020_house7.actor",
-    "houseDefaultName": "house7_type_name",
-    "houseType": "house7_type_name",
+    "base": "house_base",
     "insideMap": "house7_map",
-    "coinName": null,
-    "buyMoney": 299,
-    "sellMoney": 1000,
-    "defaultColor": "myplugin/house_color_buff_1",
-    "defaultColorImage": "plugin/myplugin/image/house_big/COLOR7_1.png",
+    "actorName": "g2020_house7.actor",
+    "houseType": "house7_type_name",
+    "houseDefaultName": "house7_type_name",
     "allColor": [
         [
             "house1_1",
@@ -34,22 +30,16 @@
             "plugin/myplugin/image/house_big/COLOR7_6.png"
         ]
     ],
-    "boundingVolume": {
-        "type": "Composite",
-        "params": [
-            {
-                "type": "Box",
-                "params": [
-                    -3.5,
-                    7,
-                    -3.5,
-                    3.5,
-                    0,
-                    2.5
-                ]
-            }
-        ]
-    },
+    "defaultColorImage": "plugin/myplugin/image/house_big/COLOR7_1.png",
+    "defaultColor": "myplugin/house_color_buff_1",
+    "houseDefaultInsideMapColorTb": [],
+    "coinId": 0,
+    "buyMoney": 299,
+    "sellMoney": 1000,
+    "partyMaxPlayerNumber": 30,
+    "goodPartyPlayerNumberLowerRate": 50,
+    "reachGoodPartyPlayerNumber": 22,
+    "partyImage": "set:add_sub.json image:add",
     "door": "myplugin/house1_outside_door",
     "doorPos": {
         "x": 0,
@@ -66,24 +56,27 @@
         "y": 0.1,
         "z": 4.5
     },
-    "houseDefaultInsideMapColorTb": [
-        [
-            "house_default_inside_map_area_1",
-            [
-                "myplugin/acacia_door_10",
-                "myplugin/dark_oak_stairs04",
-                "myplugin/cotton_stage_0"
-            ]
-        ],
-        [
-            "house_default_inside_map_area_2",
-            [
-                "myplugin/cotton_stage_0",
-                "myplugin/dark_oak_stairs04",
-                "myplugin/acacia_door_10"
-            ]
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    -3.5,
+                    7,
+                    -3.5,
+                    3.5,
+                    0,
+                    2.5
+                ]
+            }
         ]
-    ],
+    },
+    "insideDoorPos": {
+        "x": 14,
+        "y": 2,
+        "z": 9
+    },
     "houseDefaultFurniture": [
         {
             "pos": {
@@ -107,10 +100,5 @@
             "furnishingId": "10002",
             "isOldFurnishing": "false"
         }
-    ],
-    "base": "house_base",
-    "coinId": 0,
-    "reachGoodPartyPlayerNumber": 22,
-    "partyMaxPlayerNumber": 30,
-    "goodPartyPlayerNumberLowerRate": 50
+    ]
 }

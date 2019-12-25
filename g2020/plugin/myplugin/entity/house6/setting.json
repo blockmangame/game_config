@@ -1,13 +1,9 @@
 {
-    "actorName": "g2020_house6.actor",
-    "houseDefaultName": "house6_type_name",
-    "houseType": "house6_type_name",
+    "base": "house_base",
     "insideMap": "house6_map",
-    "coinName": null,
-    "buyMoney": 7500,
-    "sellMoney": 3750,
-    "defaultColor": "myplugin/house_color_buff_1",
-    "defaultColorImage": "plugin/myplugin/image/house_big/COLOR6_1.png",
+    "actorName": "g2020_house6.actor",
+    "houseType": "house6_type_name",
+    "houseDefaultName": "house6_type_name",
     "allColor": [
         [
             "house1_1",
@@ -34,6 +30,32 @@
             "plugin/myplugin/image/house_big/COLOR6_6.png"
         ]
     ],
+    "defaultColorImage": "plugin/myplugin/image/house_big/COLOR6_1.png",
+    "defaultColor": "myplugin/house_color_buff_1",
+    "houseDefaultInsideMapColorTb": [],
+    "coinId": 3,
+    "buyMoney": 7500,
+    "sellMoney": 3750,
+    "partyMaxPlayerNumber": 20,
+    "goodPartyPlayerNumberLowerRate": 50,
+    "reachGoodPartyPlayerNumber": 15,
+    "partyImage": "set:add_sub.json image:add",
+    "door": "myplugin/house1_outside_door",
+    "doorPos": {
+        "x": 0,
+        "y": 0.1,
+        "z": 3.2
+    },
+    "housePosOffset": {
+        "x": 0,
+        "y": 0,
+        "z": 3
+    },
+    "mailPos": {
+        "x": 4,
+        "y": 0.1,
+        "z": 8
+    },
     "boundingVolume": {
         "type": "Composite",
         "params": [
@@ -50,62 +72,10 @@
             }
         ]
     },
-    "door": "myplugin/house1_outside_door",
-    "doorPos": {
-        "x": 0,
-        "y": 0.1,
-        "z": 3.2
+    "insideDoorPos": {
+        "x": 14,
+        "y": 2,
+        "z": 9
     },
-    "mailPos": {
-        "x": 4,
-        "y": 0.1,
-        "z": 3.5
-    },
-    "houseDefaultInsideMapColorTb": [
-        [
-            "house_default_inside_map_area_1",
-            [
-                "myplugin/acacia_door_10",
-                "myplugin/dark_oak_stairs04",
-                "myplugin/cotton_stage_0"
-            ]
-        ],
-        [
-            "house_default_inside_map_area_2",
-            [
-                "myplugin/cotton_stage_0",
-                "myplugin/dark_oak_stairs04",
-                "myplugin/acacia_door_10"
-            ]
-        ]
-    ],
-    "houseDefaultFurniture": [
-        {
-            "pos": {
-                "x": 1648,
-                "y": 13,
-                "z": -574
-            },
-            "yaw": 0,
-            "cfg": "myplugin/test_doufu",
-            "furnishingId": "10001",
-            "isOldFurnishing": "true"
-        },
-        {
-            "pos": {
-                "x": 1650,
-                "y": 13,
-                "z": -574
-            },
-            "yaw": 90,
-            "cfg": "myplugin/test_doufu",
-            "furnishingId": "10002",
-            "isOldFurnishing": "false"
-        }
-    ],
-    "base": "house_base",
-    "coinId": 3,
-    "reachGoodPartyPlayerNumber": 15,
-    "partyMaxPlayerNumber": 20,
-    "goodPartyPlayerNumberLowerRate": 50
+    "houseDefaultFurniture": []
 }

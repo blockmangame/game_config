@@ -1,18 +1,9 @@
 {
-    "actorName": "g2020_house1.actor",
-    "partyMaxPlayerNumber": 10,
-    "reachGoodPartyPlayerNumber": 7,
-    "goodPartyPlayerNumberLowerRate": 50,
-    "partyImage": "set:add_sub.json image:add",
+    "base": "house_base",
     "insideMap": "house1_map",
-    "insideMapRotationYaw": 0,
+    "actorName": "g2020_house1.actor",
     "houseType": "house1_type_name",
     "houseDefaultName": "house1_type_name",
-    "coinName": null,
-    "buyMoney": 500,
-    "sellMoney": 250,
-    "defaultColor": "myplugin/house_color_buff_1",
-    "defaultColorImage": "plugin/myplugin/entity/house1/test.png",
     "allColor": [
         [
             "house1_1",
@@ -39,6 +30,32 @@
             "plugin/myplugin/image/house_big/COLOR1_6.png"
         ]
     ],
+    "defaultColorImage": "plugin/myplugin/entity/house1/test.png",
+    "defaultColor": "myplugin/house_color_buff_1",
+    "houseDefaultInsideMapColorTb": [],
+    "coinId": 3,
+    "buyMoney": 500,
+    "sellMoney": 250,
+    "partyMaxPlayerNumber": 10,
+    "goodPartyPlayerNumberLowerRate": 50,
+    "reachGoodPartyPlayerNumber": 7,
+    "partyImage": "set:add_sub.json image:add",
+    "door": "myplugin/house1_outside_door",
+    "doorPos": {
+        "x": 0,
+        "y": 0.2,
+        "z": 3
+    },
+    "housePosOffset": {
+        "x": 0,
+        "y": 0,
+        "z": 3
+    },
+    "mailPos": {
+        "x": 4,
+        "y": 0.1,
+        "z": 5
+    },
     "boundingVolume": {
         "type": "Composite",
         "params": [
@@ -77,21 +94,10 @@
             }
         ]
     },
-    "door": "myplugin/house1_outside_door",
-    "doorPos": {
-        "x": 0,
-        "y": 0.2,
-        "z": 3
-    },
-    "housePosOffset": {
-        "x": 0,
-        "y": 0,
-        "z": 3
-    },
-    "mailPos": {
-        "x": 4,
-        "y": 0.1,
-        "z": 5
+    "insideDoorPos": {
+        "x": 12,
+        "y": 2,
+        "z": 4
     },
     "houseDefaultFurniture": [
         {
@@ -116,23 +122,5 @@
             "furnishingId": "10002",
             "isOldFurnishing": "false"
         }
-    ],
-    "houseDefaultInsideMapColorTb": [
-        [
-            "house_default_inside_map_area_1",
-            [
-                "myplugin/acacia_door_10",
-                "myplugin/dark_oak_stairs04",
-                "myplugin/cotton_stage_0"
-            ]
-        ]
-    ],
-    "insideDoor": "myplugin/house_base_inside_door",
-    "insideDoorPos": {
-        "x": 12,
-        "y": 2,
-        "z": 4
-    },
-    "base": "house_base",
-    "coinId": 3
+    ]
 }
