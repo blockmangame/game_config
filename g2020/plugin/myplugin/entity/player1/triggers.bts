@@ -4043,7 +4043,7 @@ PLAYER_BE_INVITE_REFUSE(){
 PLAYER_BE_INVITE_OTHER_SERVER_REFUSE(){
     $obj1.partyInfo = nil
 }
-PLAYER_BE_INVITE_OTHER_SERVER {
+PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
     If($inPartyOwnerId ~= 0){
@@ -4051,11 +4051,17 @@ PLAYER_BE_INVITE_OTHER_SERVER {
     }
     $contentDict = NewDictionary($content)
     $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
+    $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
     If($partyInfo){
         $guiText = "gui_party_invite_notice"
-        $obj1.partyInfo = $partyInfo--todo:need reset
+        $obj1.partyInfo = $partyInfo
+        $partyInfoDict = NewDictionary($partyInfo)
+        $targetPartyId = DictionaryGet(dict = $partyInfoDict, key = "partyId")
+        $ownerId = DictionaryGet(dict = $partyInfoDict, key = "userId")
+        If($targetPartyId == $obj1.excludedPartyId and $ownerId == $obj1.visitTargetUserId){--party owner invited me
+            $obj1.excludedPartyId = "0"
+        }
     }
-    $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
     ShowNotice(
         buttonType = 2,
         content = $guiText or "gui_friend_invite_notice",
@@ -4065,7 +4071,7 @@ PLAYER_BE_INVITE_OTHER_SERVER {
         textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
     )
 }
-PLAYER_ON_VISIT_OTHER_SERVER {
+PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
     $targetUserId = $targetUserId or $obj1.visitTargetUserId
     $contentDict = NewDictionary($content)
     $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
@@ -4125,7 +4131,7 @@ GET_VISIT_TELE_POS {
         $from.teleMap = GetEntityMap(entity = $door)
     }
 }
-TRY_JOIN_PARTY {
+TRY_JOIN_PARTY(debug = false){
     If($obj1.excludedPartyId == $partyId){
         $canJoin = false
     }
@@ -4171,7 +4177,7 @@ LEAVE_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = 0
     ReenterGame(player = $obj1)
 }
-CHECK_IN_PARTY {
+CHECK_IN_PARTY(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
     If($inPartyOwnerId ~= 0){
@@ -4195,7 +4201,7 @@ CHECK_IN_PARTY {
         }
     }
 }
-INTERACTION_BANISH {
+INTERACTION_BANISH(debug = false){
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.be.banished", time =  20)
     $owner = GetPlayerByUserId(userId = $obj1.inPartyOwnerId)
     $obj1.excludedPartyId = $owner.inPartyId
@@ -4220,7 +4226,7 @@ UPDATE_CREATE_PARTY_VIEW_INFO {
 CLOSE_PARTY_SUCCESS {
     --get all player, send tip, resetgame
     $name = GetEntityName(entity = $obj1)
-    $obj1.inPartyId = 0
+    $obj1.inPartyId = "0"
     $players = NewDictionary(GetAllPlayers())
     ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
         ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
