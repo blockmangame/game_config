@@ -4025,17 +4025,38 @@ PLAYER_BE_INVITE {
         Return()--in party
     }
     $obj1.visitTarget = $obj2
+
     $contentDict = NewDictionary($content)
-    --todo: can close by showTime
-    --showTime = DictionaryGet(dict = $contentDict, key = "showTime")
-    ShowNotice(
-		buttonType = 2,
-		content = $guiText or "gui_friend_invite_notice",
-        eventYes = "PLAYER_ON_VISIT",
-        eventNo = "PLAYER_BE_INVITE_REFUSE",
-		entity = $obj1,
-		textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
-	)
+    $nickName = DictionaryGet(dict = $contentDict, key = "nickName")
+    $showTime = DictionaryGet(dict = $contentDict, key = "showTime")
+    $picUrl = DictionaryGet(dict = $contentDict, key = "picUrl")
+    
+    $buttonInfo = [
+        {
+            normalImage = "set:invite_tip.json image:green_btn",
+            pushedImage = "set:invite_tip.json image:green_btn",
+            event = "PLAYER_ON_VISIT",
+            text = "ui_sure"
+        },
+        {
+            normalImage = "set:invite_tip.json image:blue_btn",
+            pushedImage = "set:invite_tip.json image:blue_btn",
+            event = "PLAYER_BE_INVITE_REFUSE",
+            text = "ui_cancel"
+        }
+    ]
+
+    $content = {
+        msg = "gui_friend_invite_notice",
+        args = [
+            $nickName
+        ]
+    }
+
+    $fullName = "myplugin/friendInviteView"
+
+    ShowInviteTip(entity = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, content = $content, fullName = $fullName, showTime = $showTime)
+
 }
 PLAYER_BE_INVITE_REFUSE(){
 
@@ -4050,26 +4071,48 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
         Return()--in party
     }
     $contentDict = NewDictionary($content)
+    $nickName = DictionaryGet(dict = $contentDict, key = "nickName")
+    $showTime = DictionaryGet(dict = $contentDict, key = "showTime")
+    $picUrl = DictionaryGet(dict = $contentDict, key = "picUrl")
     $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
     $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
+    $likeNum = 0
+
     If($partyInfo){
-        $guiText = "gui_party_invite_notice"
         $obj1.partyInfo = $partyInfo
         $partyInfoDict = NewDictionary($partyInfo)
         $targetPartyId = DictionaryGet(dict = $partyInfoDict, key = "partyId")
         $ownerId = DictionaryGet(dict = $partyInfoDict, key = "userId")
+        $likeNum = DictionaryGet(dict = $partyInfoDict, key = "likeNum")
         If($targetPartyId == $obj1.excludedPartyId and $ownerId == $obj1.visitTargetUserId){--party owner invited me
             $obj1.excludedPartyId = "0"
         }
     }
-    ShowNotice(
-        buttonType = 2,
-        content = $guiText or "gui_friend_invite_notice",
-        eventYes = "PLAYER_ON_VISIT_OTHER_SERVER",
-        eventNo = "PLAYER_BE_INVITE_OTHER_SERVER_REFUSE",
-        entity = $obj1,
-        textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
-    )
+
+    $buttonInfo = [
+        {
+            normalImage = "set:invite_tip.json image:green_btn",
+            pushedImage = "set:invite_tip.json image:green_btn",
+            event = "PLAYER_ON_VISIT_OTHER_SERVER",
+            text = "ui_sure"
+        },
+        {
+            normalImage = "set:invite_tip.json image:blue_btn",
+            pushedImage = "set:invite_tip.json image:blue_btn",
+            event = "PLAYER_BE_INVITE_OTHER_SERVER_REFUSE",
+            text = "ui_cancel"
+        }
+    ]
+
+    $content = {
+        msg = "gui_party_invite_notice",
+        args = [
+            $nickName
+        ]
+    }
+
+    $fullName = "myplugin/partyInviteView"
+    ShowInviteTip(entity = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, titleText = $likeNum, content = $content, fullName = $fullName, showTime = $showTime)
 }
 PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
     $targetUserId = $targetUserId or $obj1.visitTargetUserId
