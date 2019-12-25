@@ -1,0 +1,59 @@
+{
+    "canClick": true,
+    "carMove": true,
+    "carConfig": [],
+    "collision": true,
+    "ridePos": [
+        {
+            "yaw": 0,
+            "pos": {
+                "y": -0.1,
+                "z": -0.7,
+                "x": 0.6
+            },
+            "out": {
+                "y": 2,
+                "z": 0,
+                "x": 0.5
+            },
+            "ctrl": true,
+            "view": true,
+            "passengerAction": {
+                "base": "riding"
+            }
+        }
+    ],
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    3,
+                    1.2,
+                    5
+                ]
+            }
+        ]
+    },
+    "canInteract": true,
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "item_testlang",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": "RIDE_ON",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                }
+            }
+        ],
+        "followParams": {
+            "followScenePos": false
+        }
+    },
+    "actorName": "g2020_car03.actor",
+    "base": "car_base"
+}
