@@ -21,22 +21,16 @@
             {
                 "text": "pay me!",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "checkHide": {
-                    "checkCond": {
-                        "funcName": "checkOwnerInSameTeam"
-                    },
-                    "wishResult": true
+                "checkCanHide":{
+                    "funcName": "checkOwnerInSameTeam"
                 },
                 "event": "FOOD_BUY"
             },
             {
                 "text": "free!",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "checkHide": {
-                    "checkCond": {
-                        "funcName": "checkOwnerInSameTeam"
-                    },
-                    "wishResult": false
+                "checkCanShow":{
+                    "funcName": "checkOwnerInSameTeam"
                 },
                 "event": "FOOD_BUY"
             }

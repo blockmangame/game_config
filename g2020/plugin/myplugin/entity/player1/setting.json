@@ -234,35 +234,27 @@
         "aroundBtns": [
             {
                 "text": "interact_add_friend",
-                "checkHide": {
-                    "checkCond": {
-                        "funcName": "checkIsFriend"
-                    },
-                    "wishResult": true
+                "checkCanHide":{
+                    "funcName": "checkIsFriend"
                 },
+                "event": "EVENT_FRIEND_OPERACTION_ADD_FRIEND",
                 "image": "set:party_interaction_ui.json image:interaction_add_friend"
             },
             {
                 "text": "interact_feed",
                 "image": "set:party_interaction_ui.json image:interaction_feed",
-                "checkHide": {
-                    "checkCond": {
-                        "funcName": "checkTypeHandItem",
-                        "key": "base",
-                        "value": "food_base"
-                    },
-                    "wishResult": false
+                "checkCanShow":{
+                    "funcName": "checkTypeHandItem",
+                    "key": "base",
+                    "value": "food_base"
                 },
                 "event": "INTERACTION_FEED"
             },
             {
                 "text": "interact_banish",
                 "image": "set:party_interaction_ui.json image:interaction_banish",
-                "checkHide": {
-                    "checkCond": {
-                        "funcName": "checkInSelfParty"
-                    },
-                    "wishResult": false
+                "checkCanShow":{
+                    "funcName": "checkInSelfParty"
                 },
                 "event": "INTERACTION_BANISH"
             },
@@ -274,11 +266,8 @@
             {
                 "text": "interact_join_family",
                 "image": "set:party_interaction_ui.json image:interaction_join_family",
-                "checkHide": {
-                    "checkCond": {
-                        "funcName": "checkInSameTeam"
-                    },
-                    "wishResult": true
+                "checkCanHide":{
+                    "funcName": "checkInSameTeam"
                 },
                 "event": "INTERACTION_JOIN_FAMILY"
             }

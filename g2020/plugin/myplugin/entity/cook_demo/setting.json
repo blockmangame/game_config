@@ -39,22 +39,16 @@
             {
                 "text": "$1",
                 "image": "plugin/myplugin/image/pizza.png",
-                "checkHide": {
-                    "checkCond": {
-                        "funcName": "checkOwnerInSameTeam"
-                    },
-                    "wishResult": true
+                "checkCanHide":{
+                    "funcName": "checkOwnerInSameTeam"
                 },
                 "event": "COOK_1"
             },
             {
                 "text": "free!",
                 "image": "plugin/myplugin/image/pizza.png",
-                "checkHide": {
-                    "checkCond": {
-                        "funcName": "checkOwnerInSameTeam"
-                    },
-                    "wishResult": false
+                "checkCanShow":{
+                    "funcName": "checkOwnerInSameTeam"
                 },
                 "event": "COOK_1"
             },
@@ -70,22 +64,16 @@
             {
                 "text": "$2",
                 "image": "plugin/myplugin/image/burger.png",
-                "checkHide": {
-                    "checkCond": {
-                        "funcName": "checkOwnerInSameTeam"
-                    },
-                    "wishResult": true
+                "checkCanHide":{
+                    "funcName": "checkOwnerInSameTeam"
                 },
                 "event": "COOK_2"
             },
             {
                 "text": "free!",
                 "image": "plugin/myplugin/image/burger.png",
-                "checkHide": {
-                    "checkCond": {
-                        "funcName": "checkOwnerInSameTeam"
-                    },
-                    "wishResult": false
+                "checkCanShow":{
+                    "funcName": "checkOwnerInSameTeam"
                 },
                 "event": "COOK_2"
             }

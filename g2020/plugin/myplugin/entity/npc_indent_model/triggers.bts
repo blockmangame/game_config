@@ -1,0 +1,50 @@
+ENTITY_ENTER 
+{
+    @INDENT_MODEL = $obj1
+}
+TALK_TASK(){ --交互
+    $checkMax = @workmaxCount <= ($obj2.maxtaskCount or 0)
+    If(not $obj2.taskKey &&  not $checkMax && not $obj2.punishmentCD)--未接单
+    { 
+        $event = "GET_TASK"
+        $msg = GetConfigValue(type = "task", fullName = "myplugin/work", key = "msgNotTask")
+    }ElseIf($obj2.taskKey)--接单后
+    {   
+        $obj2.taskShowGps = true
+        CallTrigger(event = "GET_TASK_GPS", object = $obj2) 
+        CallTrigger(event = "GET_TASK_UI_DATA", object = $obj2) 
+        $msg = GetConfigValue(type = "task", fullName = "myplugin/work", key = "msgDoingTask")
+    }ElseIf($obj2.punishmentCD)--放弃惩罚中
+    {
+        $msg = GetConfigValue(type = "task", fullName = "myplugin/work", key = "msgPunishTask")
+    }ElseIf($checkMax) -- 上限后
+    {
+        $msg = GetConfigValue(type = "task", fullName = "myplugin/work", key = "msgMoreMaxTask")
+    }
+    OpenConversation(
+        entity = $obj2,
+        optionList = [
+            {
+                triggerName = $event
+            }
+        ],
+        optionNpc = "myplugin/player1",
+        talkList = [
+            {
+                msg =  $msg or "error",
+                npc = "myplugin/npc_indent_model"
+            }
+        ]
+    )
+}
+CHANG_ACTOR(){ --变模型
+    If($obj1 and $obj2){
+        If($actorName == "actorName"){
+            $obj2.punishmentCD = false
+        }
+        $changActor = GetConfigVar(obj = $obj1, key = $actorName) --changActor
+        If($changActor and $changActor ~= ""){
+            ChangeEntityActorAlone(entity = $obj1, name =  $changActor, player = $obj2)
+        }
+    }
+}

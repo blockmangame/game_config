@@ -22,7 +22,7 @@ ENTITY_CLICK{
 }
 
 INTER_WITH_DOOR{
-    If($obj1.inPartyOwnerId ~= 0){
+    If($obj2.inPartyOwnerId ~= 0){
         CallTrigger(object = $obj2, event = "CHECK_LEAVE_PARTY_FROM_DOOR")
         Return()
     }
