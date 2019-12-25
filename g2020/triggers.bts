@@ -79,7 +79,23 @@ INIT_WORK_TASK_DATA(){    --打工配置表的读取
     }
     $indentRy = GetConfigValue(type = "task", fullName = "myplugin/work", key = "indentRy")
 
+
+    --涂鸦墙文字初始化
+    $U3Dcfg = GetWorldVar(key = "sceneUI")
+    Foreach(array = $U3Dcfg, key = "ucfg")
+    {
+        $dict = NewDictionary($ucfg)
+        $index = DictionaryGet(dict = $dict, key = "index")
+        @graffitiWallText = NewDictionary()
+        DictionarySet(dict = @graffitiWallText, key = $index, value = "")
+    }
+    
+    CallTrigger(event = "FUNC_NAVIGATION_GET_MAPS_ALL_PATH")
+
+    CallTrigger(event = "FUNC_LOAD_WORKS_WALL_TOP")
+
     CreateNpc(cfgName = "myplugin/npc_indent_model", pos = Copy(value = @INDENT_POS)  ,name = "shoManager", ry = $indentRy)
+
 }
 
 FUNC_STATE_STARTTIMER
@@ -314,39 +330,110 @@ FUNC_STATE_ADD_INTERACTLIST --params: entities
 
 WORKS_WALL_TIMER_START
 {
-    StartTimer(rep = true, time = 1200, event = "WORKS_WALL_UPDATE_EXCELLENT_WORKS")
+    --StartTimer(rep = true, time = 100, event = "WORKS_WALL_UPDATE_NEW_WORKS")
+    --StartTimer(rep = true, time = 100, event = "WORKS_WALL_UPDATE_EXCELLENT_WORKS")
+    $worksWallConfig = GetWorldVar(key = "worksWalls")
+    Foreach(array = $worksWallConfig, key = "data")
+    {
+        $dict = NewDictionary($data)
+        $name = DictionaryGet(dict = $dict, key = "name")
+        StartTimer(rep = true, time = 100, event = "WORKS_WALL_UPDATE", wallName = $name)
+    }
 }
 
-WORKS_WALL_UPDATE_EXCELLENT_WORKS
+PLAYER_PUBLISH_WORKS
 {
-    If(not @excellentWorksIndex)
+    --$worksId
+    $wallName = "curServerPublishWorks"
+
+    If(not @worksWalls)
     {
-        @excellentWorksIndex = 0
+       @worksWalls = {}
     }
 
-    If(not @excellentWorks )
+    $dictValue = NewDictionary(@worksWalls)
+    $worksList = DictionaryGet(dict = $dictValue, key = $wallName)
+    If(not $worksList)
     {
-        @excellentWorks = {}
+       $worksList = {}
     }
 
-    $worksIndex = 1
-    $size = ArraySize(array = @excellentWorks)
-    Foreach(array = @excellentWorks, key = "works")
+    ArrayAppend(array= $worksList, value = {graffitiId = $worksId})
+    DictionarySet(dict = $dictValue, key = $wallName, value = $worksList)
+    @worksWalls = DictionaryToTable(dict = $dictValue)
+
+    Foreach(array = GetAllPlayers(), key = "player")
     {
-        If(@excellentWorksIndex < $worksIndex || (@excellentWorksIndex == $size && $worksIndex == 1))
+        UpdateUIData(player =$player, ui = $wallName, data = {graffitiId = $worksId})
+    }
+}
+
+SET_WORKS_WALL_INDEX
+{
+    If(not @worksWallIndex)
+    {
+        @worksWallIndex = {}
+    }
+    $dictValue = NewDictionary(@worksWallIndex)
+    DictionarySet(dict = $dictValue, key = $wallName, value = $wallIndex)
+    @worksWallIndex = DictionaryToTable(dict = $dictValue)
+}
+
+UPDATE_WORKS_WALL_DATA
+{
+    If(not @worksWalls)
+    {
+        @worksWalls = {}
+    }
+    $dictValue = NewDictionary(@worksWalls)
+    DictionarySet(dict = $dictValue, key = $wallName, value = $works)
+    @worksWalls = DictionaryToTable(dict = $dictValue)
+}
+
+WORKS_WALL_UPDATE
+{
+    $worksList = {}
+    $worksIndex = 0
+    If(@worksWallIndex)
+    {
+        $dictValue = NewDictionary(@worksWallIndex)
+        $worksIndex = DictionaryGet(dict = $dictValue, key = $wallName)
+        If (not $worksIndex)
         {
-            @excellentWorksIndex = $worksIndex
+            $worksIndex = 0
+        }
+    }
+
+    If(@worksWalls)
+    {
+       $dictValue = NewDictionary(@worksWalls)
+       $worksList = DictionaryGet(dict = $dictValue, key = $wallName)
+       If(not $worksList)
+       {
+           $worksList = {}
+       }
+    }
+
+    $index = 1
+    $size = ArraySize(array = $worksList)
+    Foreach(array = $worksList, key = "works")
+    {
+        If($worksIndex < $index || ($worksIndex == $size && $index == 1))
+        {
+            $worksIndex = $index
+            CallTrigger(event = "SET_WORKS_WALL_INDEX", wallName = $wallName , wallIndex = $worksIndex)
+
             Foreach(array = GetAllPlayers(), key = "player")
             {
-                UpdateUIData(player =$player, ui = "win_worksWall", data = $works)
+                UpdateUIData(player = $player, ui = $wallName, data = $works)
             }
             Break()
         }
-        $worksIndex = $worksIndex + 1
+        $index = $index + 1
     }
 }
 
-FUNC_LOAD_NEW_WORKS {
+FUNC_LOAD_NEW_WORKS { --获取最新作品
     $currentCount = 20
     $othersCount = 20
     $userIds = {}
@@ -371,14 +458,18 @@ LOAD_NEW_WORKS_RESPONSE {
     {
         UpdateUIData(player =$player, ui = "works_appreciate", data = $info)
     }
+
+    CallTrigger(event = "UPDATE_WORKS_WALL_DATA", wallName = "newWorksWall", works = $info)
+    @newWorks = $info
 }
 
-FUNC_LOAD_EXCELLENT_WORKS {
+FUNC_LOAD_EXCELLENT_WORKS {--获取优秀作品
     $count = 180
-    GetExcellentWorks(count = $count, limit = 0, event = "LOAD_TOP_EXCELLENT_RESPONSE" )
+    $praiseNum = 100
+    GetExcellentWorks(count = $count, limit = -1, event = "FUNC_LOAD_EXCELLENT_RESPONSE" )
 }
 
-LOAD_TOP_EXCELLENT_RESPONSE {
+FUNC_LOAD_EXCELLENT_RESPONSE {
     $info = {}
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
@@ -392,8 +483,33 @@ LOAD_TOP_EXCELLENT_RESPONSE {
         UpdateUIData(player =$player, ui = "works_excellent", data = $info)
     }
 
-    @excellentWorks = $info
+    CallTrigger(event = "UPDATE_WORKS_WALL_DATA", wallName = "excellentWorksWall", works = $info)
 }
+
+
+FUNC_LOAD_WORKS_WALL_TOP {--获取上周前10名
+    $count = 10
+    GetTopWorks(count = $count, event = "FUNC_LOAD_WORKS_WALL_TOP_RESPONSE" )
+}
+
+FUNC_LOAD_WORKS_WALL_TOP_RESPONSE {
+    $info = {}
+    $dictValue = NewDictionary($response)
+    $code = DictionaryGet(dict = $dictValue, key = "code")
+    If($code == 1)
+    {
+        $info = DictionaryGet(dict = $dictValue, key = "data")
+    }
+
+    Foreach(array = GetAllPlayers(), key = "player")
+    {
+        UpdateUIData(player =$player, ui = "topWorksWall", data = $info)
+    }
+
+    CallTrigger(event = "UPDATE_WORKS_WALL_DATA", wallName = "topWorksWall", works = $info)
+}
+
+
 ENTITY_RIDE_OFF {
     If(not IsPlayer(entity = $obj2)){ Return() }
     RecheckObjectInteractionUI(player = $obj2, target = $obj1)
