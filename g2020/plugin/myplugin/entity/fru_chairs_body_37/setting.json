@@ -26,26 +26,20 @@
             {
                 "text": "",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "checkHide": {
-                    "checkCond": {
-                        "funcName": "checkTargetProp",
-                        "key": "lightState",
-                        "value": "on"
-                    },
-                    "wishResult": true
+                "checkCanHide":{
+                    "funcName": "checkTargetProp",
+                    "key": "lightState",
+                    "value": "on"
                 },
                 "event": "LIGHT_ON"
             },
             {
                 "text": "",
                 "image": "plugin/myplugin/image/back.png",
-                "checkHide": {
-                    "checkCond": {
-                        "funcName": "checkTargetProp",
-                        "key": "lightState",
-                        "value": "off"
-                    },
-                    "wishResult": true
+                "checkCanHide":{
+                    "funcName": "checkTargetProp",
+                    "key": "lightState",
+                    "value": "off"
                 },
                 "event": "LIGHT_OFF"
             }

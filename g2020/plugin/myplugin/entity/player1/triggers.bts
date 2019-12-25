@@ -1671,14 +1671,13 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
     $house = GetObjectVar(obj = $obj1, key = "house")
     If($owner)
     {
-        $door = GetObjectVar(obj = $owner, key = "insideDoor")
-        Test("type = ", $type)
-        If($type == "selfHouse" && $curMapEntity == GetConfigVar(obj = $house, key = "houseInsideMap"))
+        If($type == "selfHouse" && $owner == $house)
         {
             ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
             CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
             Return()
         }
+        $door = GetObjectVar(obj = $owner, key = "insideDoor")
         $gps = GetEntityPosition(entity = $door)
     }
     ElseIf($curMap == $belongMap)
@@ -1716,8 +1715,7 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
         }
         ElseIf($type == "selfHouse")
         {
-            $housePos = GetEntityPosition(entity = $house)
-            $gps = ComputeV3(p1 = $housePos, p2 = GetConfigVar(obj = $house, key = "doorPos") or {x = 0,y = 2, z = 0}, op = "add")
+            $gps = ComputeV3(p1 = GetEntityPosition(entity = $house), p2 = V3RotationYaw(vector = GetConfigVar(obj = $house, key = "doorPos") or {x = 0,y = 0, z = 0}, yaw = GetEntityYaw(entity = $house)), op = "add")
         }
     }
     Else
@@ -2980,6 +2978,7 @@ CREATE_WORKS_RESPONSE
 {
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
+    $data = DictionaryGet(dict = $dictValue, key = "data")
 
     If($code == 1)
     {
@@ -2989,10 +2988,13 @@ CREATE_WORKS_RESPONSE
             PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
             ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
             UpdateUIData(player =$obj1, ui = "works_person", data = true)
+            OperationWindows(player = $obj1, isOpen = false, win = "palette")
+            CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $data)
         }
         Else
         {
             ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_succeed", time = 20)
+            OperationWindows(player = $obj1, isOpen = false, win = "palette")
         }
     }
     Else
@@ -3052,6 +3054,7 @@ PUBLISH_WORKS_RESPONSE
         PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
         ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
         UpdateUIData(player =$obj1, ui = "works_person", data = true)
+        CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId)
     }
     Else
     {
@@ -3083,6 +3086,7 @@ PUBLISH_WORKS_BY_CUBE_RESPONSE
     If($code == 1)
     {
         ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
+        CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId)
     }
     Else
     {
@@ -3133,7 +3137,82 @@ HTTP_PURCHASED_DRESS_CALL_BACK
 }
 
 --打工
-GUIDE_POSITION_CHANGE {
+GET_TASK_KEY  --随机任务key
+{
+    If(not $obj1){
+        Return()
+    }
+    $idx = 1
+    $count = 0
+    Foreach(array = @TASK_WEIGHT, key = "weight"){
+        $count = $count + $weight
+    }
+    $sum = Random(min = 1, max = $count)
+    Foreach(array = @TASK_WEIGHT, key = "weight"){
+        $sum = $sum - $weight
+        If($sum <= 0){
+           $index = $idx
+           Break()
+        }
+        $idx = $idx + 1
+    }
+    $taskIndex = $index
+    $taskDict = ArrayGet(array = @TASK_TABLE, index = $index)
+    $taskKey = DictionaryGet(dict = $taskDict, key = "taskKey") -- 随机到的任务
+    $taskPos = DictionaryGet(dict = $taskDict, key = "pos") -- 随机到的任务NPC ,GPS位置
+    $taskNpc = DictionaryGet(dict = $taskDict, key = "npcName") --npc的 fullName
+    $npcMap = DictionaryGet(dict = $taskDict, key = "npcMap") --npc的Map
+    $succeedMsg = DictionaryGet(dict = $taskDict, key = "succeedMsg")
+    $failedMsg = DictionaryGet(dict = $taskDict, key = "failedMsg")
+    $taskMap = {
+        index = $index,
+        taskKey = $taskKey,
+        taskPos = $taskPos,
+        taskNpc = $taskNpc,
+        npcMap = $npcMap,
+        succeedMsg = $succeedMsg,
+        failedMsg = $failedMsg
+    }
+    $obj1.dicttaskMap = $taskMap
+}
+GET_TASK  --接单
+{
+    CallTrigger(event = "GET_TASK_KEY", object = $obj1)
+    $taskMap = $obj1.dicttaskMap
+    If(not $taskMap){
+        $taskDict = ArrayGet(array = @TASK_TABLE, index = 1)
+        $taskMap = {
+            taskKey = DictionaryGet(dict = $taskDict, key = "taskKey"),
+            taskPos = DictionaryGet(dict = $taskDict, key = "pos"),
+            taskNpc = DictionaryGet(dict = $taskDict, key = "npcName"), 
+            npcMap = DictionaryGet(dict = $taskDict, key = "npcMap"),
+            succeedMsg = DictionaryGet(dict = $taskDict, key = "succeedMsg"),
+            failedMsg = DictionaryGet(dict = $taskDict, key = "failedMsg")
+        }
+    }
+    $dictTaskMap = NewDictionary($taskMap)
+    $obj1.taskIndex = DictionaryGet(dict = $dictTaskMap, key = "index")
+    $obj1.taskKey = DictionaryGet(dict = $dictTaskMap, key = "taskKey")
+    $obj1.taskPos = DictionaryGet(dict = $dictTaskMap, key = "taskPos")
+    $obj1.taskNpc = DictionaryGet(dict = $dictTaskMap, key = "taskNpc")
+    $obj1.npcMap = DictionaryGet(dict = $dictTaskMap, key = "npcMap")
+    $obj1.succeedMsg = DictionaryGet(dict = $dictTaskMap, key = "succeedMsg")
+    $obj1.failedMsg = DictionaryGet(dict = $dictTaskMap, key = "failedMsg")
+    --接受任务，开始任务。
+    StartTask(player = $obj1 ,fullName = $obj1.taskKey)
+    --得到任务道具，手持
+    AddItem(entity = $obj1, cfg = "myplugin/taskItem", count = 1)
+    --总数加1
+    $obj1.worktaskCount = $obj1.worktaskCount + 1
+    If($obj1.worktaskCount > @CircleNum){
+        $obj1.worktaskCount = 1
+    }
+    --显示接单GPS
+    $obj1.taskShowGps = true
+    --更新数据
+    CallTrigger(event = "TASK_UPDATE_DATA", object = $obj1)
+}
+GUIDE_POSITION_CHANGE { --客户端关闭GPS
     If($key == "taskWork"){
         $obj1.taskShowGps = $show
         If($show){
@@ -3141,10 +3220,11 @@ GUIDE_POSITION_CHANGE {
         }
     }ElseIf($show == false){
         $obj1.taskShowGps = false
+        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
     }
 }
 GET_TASK_UI_DATA(){ --更新打工UI数据。
-    $count = $obj1.worktaskCount % 10
+    $count = ($obj1.worktaskCount or 0) % 10
     If($count == 0 && $obj1.worktaskCount >0){
         $count = 10 
     }
@@ -3166,20 +3246,20 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
             $str = "th/"
         }
     }
-    $text = Concat(p1 = $textCount, p2 = $str, p3 = "40")
-    $rateArray = [0.02, 0.11, 0.35, 0.485, 0.5, 0.52, 0.61, 0.9485, 1]
+    $text = Concat(p1 = $textCount, p2 = $str, p3 = @CircleNum)
+    $rateArray = [0.02, 0.11, 0.35, 0.485, 0.5, 0.52, 0.61, 0.9485, 0.98, 1]
     $rate = 1 - (ArrayGet(array = $rateArray, index = $count) or 0)
     $imgcount = $obj1.worktaskCount
     If($obj1.taskKey){
         $imgcount = $imgcount - 1
     }
-    If($imgcount >=0 and $imgcount <10){
+    If($imgcount >=0 and $imgcount <=10){
         $btnImg = "set:indentImg.json image:btn1.png"
-    }ElseIf($imgcount >=10 &&  $imgcount <20){
+    }ElseIf($imgcount >10 &&  $imgcount <=20){
         $btnImg = "set:indentImg.json image:BtnGreen.png"
-    }ElseIf($imgcount >=20 && $imgcount <30){
+    }ElseIf($imgcount >20 && $imgcount <= 30){
         $btnImg = "set:indentImg.json image:btnBule.png"
-    }ElseIf($imgcount >=30 && $imgcount <40){
+    }ElseIf($imgcount >30){
         $btnImg = "set:indentImg.json image:BtnRed.png"
     }
     $taskData = Table(
@@ -3208,53 +3288,73 @@ GET_TASK_GPS  --得到打工的GPS位置
         $obj1.gpsPos = $obj1.taskPos or  @INDENT_POS
     }
 }
-TASK_NPC_ADD_BUFF  --给任务npc还动作加buff
+TASK_NPC_ADD_BUFF  --给任务npc还动作加buff, 订单NPC加buff动作
 {
     $map = GetPlayerMap(player = $obj1)
     $mapNpc = GetMapNpc(map = $map)
+    --任务NPC
     Foreach(array = $mapNpc, key = "npc"){
-        $name = GetConfigVar(obj = $npc, key = "fullName")
-        If($name == $obj1.lastNpc){
-            PlayAction(entity = $npc, target = $obj1, actionName = "idle", actionTime = -1)
-            --UnMarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
+        --$name = GetConfigVar(obj = $npc, key = "fullName")
+        $name = $npc.taskKey
+        If($obj1.lastTaskKey and $name == $obj1.lastTaskKey){
+            --PlayAction(entity = $npc, target = $obj1, actionName = "idle", actionTime = -1)
+            UnMarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/task_npc_buff")
         }
-        If($name == $obj1.taskNpc){
-            PlayAction(entity = $npc, target = $obj1, actionName = "idle_1", actionTime = -1)
-            --MarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/hand_point_effect")
+        If($obj1.taskKey and $name == $obj1.taskKey){
+            --PlayAction(entity = $npc, target = $obj1, actionName = "idle_1", actionTime = -1)
+            MarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/task_npc_buff")
         }
     }
+    --订单NPC
+    $checkMax = @workmaxCount <= ($obj1.maxtaskCount or 0)
+    $action = "idle"
+    If(not $obj1.taskKey &&  not $checkMax && not $obj1.punishmentCD)--未接单
+    {
+        $buff = GetConfigValue(type = "task", fullName = "myplugin/work", key = "buffNotTask")
+    }ElseIf($obj1.taskKey)--接单后
+    { 
+        $buff = GetConfigValue(type = "task", fullName = "myplugin/work", key = "buffDoingTask")
+    }ElseIf($obj1.punishmentCD)--放弃惩罚中
+    {
+        $buff = GetConfigValue(type = "task", fullName = "myplugin/work", key = "buffPunishTask")
+    }ElseIf($checkMax) -- 上限后
+    {
+        $buff = GetConfigValue(type = "task", fullName = "myplugin/work", key = "buffMoreMaxTask")
+    }
+    If($buff and @INDENT_MODEL and $buff ~= $obj1.lastTaskBuff){
+        If($obj1.lastTaskBuff){
+            UnMarkEntityForPlayer(player = $obj1, entity = @INDENT_MODEL, buffName = $obj1.lastTaskBuff)
+        }
+        MarkEntityForPlayer(player = $obj1, entity = @INDENT_MODEL, buffName = $buff)
+        $obj1.lastTaskBuff = $buff
+    }
 }
-TASK_UPDATE_DATA(){ --更新数据
-    CallTrigger(event = "TASK_NPC_ADD_BUFF", object = $obj1)
-	CallTrigger(event = "GET_TASK_GPS", object = $obj1)
-    CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
+T_BUFF(){
+    MarkEntityForPlayer(player = $obj1, entity = @TNPC, buffName = "myplugin/task_npc_buff", buffTime = 1200)
+}
+TASK_UPDATE_DATA(){ --更新打工数据
+    CallTrigger(event = "TASK_NPC_ADD_BUFF", object = $obj1) --给对应npc加buff或者换动作
+	CallTrigger(event = "GET_TASK_GPS", object = $obj1) --得到GPS位置
+    CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1) --更新客户端
 }
 PUNISH_END(){--惩罚结束
     If($obj1 and $obj2){
         $obj1.punishmentCD = false
-        --ShowEntityHeadCountDown(show = false, entity = $obj2, player = $obj1)
         CallTrigger(object = $obj2, event = "CHANG_ACTOR", actorName = "actorName", obj2 = $obj1)
+        CallTrigger(event = "TASK_UPDATE_DATA", object = $obj1)
     }
 }
-DELETE_ITEM(){
-    --出售
-    --$price = GetItemCfg(fullName = $fullName, key = "recyclePrice")
-    --If($price and $price>0){
-    --   AddCurrency(entity = $obj1, coinName = "green_currency", count = $price)
-    --    ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $price), entity = $obj1)
-    --}
+DELETE_ITEM(){--267.0,19.0,371.0
     --放弃任务
     If($fullName == "myplugin/taskItem" and $obj1.taskKey){
         $obj1.punishmentCD = true
         If(@INDENT_MODEL){
-            --ShowEntityHeadCountDown(show = true, entity = @INDENT_MODEL, player = $obj1, time = @punishmentTime)
+            ShowEntityHeadCountDown(show = true, entity = @INDENT_MODEL, player = $obj1, time = @punishmentTime)
             CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "punishmentActor", obj2 = $obj1)
             StartTimer(object = $obj1, event = "PUNISH_END", obj2 = @INDENT_MODEL, time = @punishmentTime * 20)
-            --倒计时
-            --换模型
         }
         CancelTask(player = $obj1, name = $obj1.taskKey)
-        $obj1.lastNpc = $obj1.taskNpc
+        $obj1.lastTaskKey = $obj1.taskKey
         $obj1.taskNpc = nil
         $obj1.taskKey = nil
         $obj1.taskPos = nil
@@ -3265,17 +3365,16 @@ DELETE_ITEM(){
             SetGuidePostion(entity = $obj1)
         }
         $obj1.taskShowGps = false
-        CallTrigger(event = "GET_TASK_GPS", object = $obj1, showGps = false)
+        CallTrigger(event = "GET_TASK_GPS", object = $obj1)
         StartTimer(time = 1, event = "TASK_NPC_ADD_BUFF", object = $obj1)
-        CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1, closeGps = true)
+        CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1)
     }
 }
 MAC_TASK_COUNT_RESET(){--第二天，刷新最大累计
     If($obj1 and IsValidObject(object = $obj1)){
         $obj1.maxtaskCount = 0
         If(@INDENT_MODEL and IsValidObject(object = @INDENT_MODEL)){
-            -- 换模型
-            CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "actorName", obj2 = $obj1)
+            CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "actorName", obj2 = $obj1)-- 换模型
         }
     }
 }
@@ -3365,16 +3464,14 @@ FINISH_AWARD(){ --完成打工的奖励
     If($taskItem){
         ConsumeItem(item = $taskItem, num = 1)
     }
-    $proessLeve = NumberFloor(p1 = $obj1.worktaskCount / 10)
-    $proessCount = $obj1.worktaskCount % 10
-    $obj1.lastNpc = $obj1.taskNpc
+    $obj1.lastTaskKey = $obj1.taskKey
     $obj1.taskNpc = nil
     $obj1.taskKey = nil
     $obj1.taskPos = nil
     $obj1.npcMap = nil
     $obj1.taskIndex = nil
     $animation = true
-    CallTrigger(event = "GET_TASK_GPS", object = $obj1, showGps = false)
+    CallTrigger(event = "GET_TASK_GPS", object = $obj1)
     StartTimer(time = 1, event = "TASK_NPC_ADD_BUFF", object = $obj1)
     CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1, closeGps = true, animation = $animation)
 }
@@ -3893,8 +3990,7 @@ ENTER_MAP
             Show3DUI(player = $obj1, show = true, data = $data)
         }
 
-        $worksWallConfig = GetWorldVar(key = "worksWall")
-        Show3DUI(player = $obj1, show = true, data = $worksWallConfig)
+        WorksWallsOperation(player = $obj1, isOpen = true)
     }
 
     CallTrigger( object = $obj1, event = "FUNC_STATE_RELEASE", state = $map.cfg.releaseState)
@@ -3912,8 +4008,7 @@ LEAVE_MAP
             Show3DUI(player = $obj1, show = false, data = $ucfg)
         }
 
-        $worksWallConfig = GetWorldVar(key = "worksWall")
-        Show3DUI(player = $obj1, show = false, data = $worksWallConfig)
+        WorksWallsOperation(player = $obj1, isOpen = false)
     }
     CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $map.cfg.releaseState)
 }
@@ -3934,17 +4029,38 @@ PLAYER_BE_INVITE {
         Return()--in party
     }
     $obj1.visitTarget = $obj2
+
     $contentDict = NewDictionary($content)
-    --todo: can close by showTime
-    --showTime = DictionaryGet(dict = $contentDict, key = "showTime")
-    ShowNotice(
-		buttonType = 2,
-		content = $guiText or "gui_friend_invite_notice",
-        eventYes = "PLAYER_ON_VISIT",
-        eventNo = "PLAYER_BE_INVITE_REFUSE",
-		entity = $obj1,
-		textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
-	)
+    $nickName = DictionaryGet(dict = $contentDict, key = "nickName")
+    $showTime = DictionaryGet(dict = $contentDict, key = "showTime")
+    $picUrl = DictionaryGet(dict = $contentDict, key = "picUrl")
+    
+    $buttonInfo = [
+        {
+            normalImage = "set:invite_tip.json image:green_btn",
+            pushedImage = "set:invite_tip.json image:green_btn",
+            event = "PLAYER_ON_VISIT",
+            text = "ui_sure"
+        },
+        {
+            normalImage = "set:invite_tip.json image:blue_btn",
+            pushedImage = "set:invite_tip.json image:blue_btn",
+            event = "PLAYER_BE_INVITE_REFUSE",
+            text = "ui_cancel"
+        }
+    ]
+
+    $content = {
+        msg = "gui_friend_invite_notice",
+        args = [
+            $nickName
+        ]
+    }
+
+    $fullName = "myplugin/friendInviteView"
+
+    ShowInviteTip(entity = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, content = $content, fullName = $fullName, showTime = $showTime)
+
 }
 PLAYER_BE_INVITE_REFUSE(){
 
@@ -3952,29 +4068,57 @@ PLAYER_BE_INVITE_REFUSE(){
 PLAYER_BE_INVITE_OTHER_SERVER_REFUSE(){
     $obj1.partyInfo = nil
 }
-PLAYER_BE_INVITE_OTHER_SERVER {
+PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
     If($inPartyOwnerId ~= 0){
         Return()--in party
     }
     $contentDict = NewDictionary($content)
+    $nickName = DictionaryGet(dict = $contentDict, key = "nickName")
+    $showTime = DictionaryGet(dict = $contentDict, key = "showTime")
+    $picUrl = DictionaryGet(dict = $contentDict, key = "picUrl")
     $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
-    If($partyInfo){
-        $guiText = "gui_party_invite_notice"
-        $obj1.partyInfo = $partyInfo--todo:need reset
-    }
     $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
-    ShowNotice(
-        buttonType = 2,
-        content = $guiText or "gui_friend_invite_notice",
-        eventYes = "PLAYER_ON_VISIT_OTHER_SERVER",
-        eventNo = "PLAYER_BE_INVITE_OTHER_SERVER_REFUSE",
-        entity = $obj1,
-        textP1 = DictionaryGet(dict = $contentDict, key = "nickName")
-    )
+    $likeNum = 0
+
+    If($partyInfo){
+        $obj1.partyInfo = $partyInfo
+        $partyInfoDict = NewDictionary($partyInfo)
+        $targetPartyId = DictionaryGet(dict = $partyInfoDict, key = "partyId")
+        $ownerId = DictionaryGet(dict = $partyInfoDict, key = "userId")
+        $likeNum = DictionaryGet(dict = $partyInfoDict, key = "likeNum")
+        If($targetPartyId == $obj1.excludedPartyId and $ownerId == $obj1.visitTargetUserId){--party owner invited me
+            $obj1.excludedPartyId = "0"
+        }
+    }
+
+    $buttonInfo = [
+        {
+            normalImage = "set:invite_tip.json image:green_btn",
+            pushedImage = "set:invite_tip.json image:green_btn",
+            event = "PLAYER_ON_VISIT_OTHER_SERVER",
+            text = "ui_sure"
+        },
+        {
+            normalImage = "set:invite_tip.json image:blue_btn",
+            pushedImage = "set:invite_tip.json image:blue_btn",
+            event = "PLAYER_BE_INVITE_OTHER_SERVER_REFUSE",
+            text = "ui_cancel"
+        }
+    ]
+
+    $content = {
+        msg = "gui_party_invite_notice",
+        args = [
+            $nickName
+        ]
+    }
+
+    $fullName = "myplugin/partyInviteView"
+    ShowInviteTip(entity = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, titleText = $likeNum, content = $content, fullName = $fullName, showTime = $showTime)
 }
-PLAYER_ON_VISIT_OTHER_SERVER {
+PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
     $targetUserId = $targetUserId or $obj1.visitTargetUserId
     $contentDict = NewDictionary($content)
     $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
@@ -4034,7 +4178,7 @@ GET_VISIT_TELE_POS {
         $from.teleMap = GetEntityMap(entity = $door)
     }
 }
-TRY_JOIN_PARTY {
+TRY_JOIN_PARTY(debug = false){
     If($obj1.excludedPartyId == $partyId){
         $canJoin = false
     }
@@ -4080,7 +4224,7 @@ LEAVE_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = 0
     ReenterGame(player = $obj1)
 }
-CHECK_IN_PARTY {
+CHECK_IN_PARTY(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
     If($inPartyOwnerId ~= 0){
@@ -4096,17 +4240,15 @@ CHECK_IN_PARTY {
         UpdateExtensionBtn(entity = $obj1, btnList = [{name = "party"}])
         If($userId == $inPartyOwnerId){
             $obj1.inSelfParty = 1
-            --My Party!!!!
-            --broadcast!!!!!
+            BroadcastPartyInvite(player = $obj1)
         }
         Else{
-            --In Party
             $obj1.inSelfParty = 0
             CallTrigger(fromInParty = true, target = $partyOwner, event = "PLAYER_ON_VISIT", object = $obj1)
         }
     }
 }
-INTERACTION_BANISH {
+INTERACTION_BANISH(debug = false){
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.be.banished", time =  20)
     $owner = GetPlayerByUserId(userId = $obj1.inPartyOwnerId)
     $obj1.excludedPartyId = $owner.inPartyId
@@ -4131,7 +4273,7 @@ UPDATE_CREATE_PARTY_VIEW_INFO {
 CLOSE_PARTY_SUCCESS {
     --get all player, send tip, resetgame
     $name = GetEntityName(entity = $obj1)
-    $obj1.inPartyId = 0
+    $obj1.inPartyId = "0"
     $players = NewDictionary(GetAllPlayers())
     ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
         ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
@@ -4186,6 +4328,7 @@ SAVE_PHOTO
 
     If(ArraySize(array = $familyAlbum) < GetWorldVar(key = "familyAlbumNum"))
     {
+        Test("can add familyAlbum....")
         $photo = {
             image = $data,
             name = "dafault_name"
@@ -4194,6 +4337,7 @@ SAVE_PHOTO
         ArrayAppend(array = $familyAlbum, value = $photo)
 
         UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
+        Test("familyAlbum data....", $familyAlbum)
 
         $btnInfo = {
             leftCoinId = nil,
@@ -4205,6 +4349,7 @@ SAVE_PHOTO
     }
     Else
     {
+        Test("familyAlbum full ....")
         $btnInfo = {
             leftCoinId = nil,
             leftContent = "ui_cancel",
