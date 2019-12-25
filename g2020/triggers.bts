@@ -63,8 +63,9 @@ INIT_WORK_TASK_DATA(){    --打工配置表的读取
         ArrayAppend(array = @TASK_TABLE, value = $value)
         DictionarySet(dict = @failedMsg, key = $npcName, value = $msg)
         --
+        $npcRy = DictionaryGet(dict = $taskDict, key = "npcRy")
         $nickName = DictionaryGet(dict = $targets, key = "name")
-        $NPC = CreateNpc(cfgName = $npcName, pos = Copy(value = $pos), name = $nickName)
+        $NPC = CreateNpc(cfgName = $npcName, pos = Copy(value = $pos), name = $nickName, ry = $npcRy)
         $taskKey = DictionaryGet( dict = $taskDict, key = "key")
         $NPC.taskKey = Concat(p1 = "myplugin/work/", p2 = $taskKey)
     }
@@ -76,7 +77,9 @@ INIT_WORK_TASK_DATA(){    --打工配置表的读取
         $mdict = NewDictionary($redict)
         DictionarySet(dict = @worlkMoeny, key = DictionaryGet(dict = $mdict, key = "index"), value = $mdict)
     }
-    CreateNpc(cfgName = "myplugin/npc_indent_model", pos = Copy(value = @INDENT_POS)  ,name = "店长")
+    $indentRy = GetConfigValue(type = "task", fullName = "myplugin/work", key = "indentRy")
+
+    CreateNpc(cfgName = "myplugin/npc_indent_model", pos = Copy(value = @INDENT_POS)  ,name = "shoManager", ry = $indentRy)
 }
 
 FUNC_STATE_STARTTIMER

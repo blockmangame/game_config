@@ -3290,11 +3290,11 @@ TASK_NPC_ADD_BUFF  --给任务npc还动作加buff, 订单NPC加buff动作
     Foreach(array = $mapNpc, key = "npc"){
         --$name = GetConfigVar(obj = $npc, key = "fullName")
         $name = $npc.taskKey
-        If($name == $obj1.lastTaskKey){
+        If($obj1.lastTaskKey and $name == $obj1.lastTaskKey){
             --PlayAction(entity = $npc, target = $obj1, actionName = "idle", actionTime = -1)
             UnMarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/task_npc_buff")
         }
-        If($name == $obj1.taskKey){
+        If($obj1.taskKey and $name == $obj1.taskKey){
             --PlayAction(entity = $npc, target = $obj1, actionName = "idle_1", actionTime = -1)
             MarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/task_npc_buff")
         }
@@ -3322,6 +3322,9 @@ TASK_NPC_ADD_BUFF  --给任务npc还动作加buff, 订单NPC加buff动作
         MarkEntityForPlayer(player = $obj1, entity = @INDENT_MODEL, buffName = $buff)
         $obj1.lastTaskBuff = $buff
     }
+}
+T_BUFF(){
+    MarkEntityForPlayer(player = $obj1, entity = @TNPC, buffName = "myplugin/task_npc_buff", buffTime = 1200)
 }
 TASK_UPDATE_DATA(){ --更新打工数据
     CallTrigger(event = "TASK_NPC_ADD_BUFF", object = $obj1) --给对应npc加buff或者换动作

@@ -8,7 +8,7 @@ SUBMIT_ORDER {
     }Else{
         $fullName = GetConfigVar(obj = $obj1, key = "fullName")
         --$msg = DictionaryGet(dict = @failedMsg, key = $obj2.taskKey)
-        $msg = $obj2.failedMsg
+        $msg = $obj2.failedMsg or "gui.failed.Msg"
         OpenConversation(
             entity = $obj2,
             optionList = [],
