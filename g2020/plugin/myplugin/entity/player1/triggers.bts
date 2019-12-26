@@ -3514,7 +3514,7 @@ SURE_BUY {
          $checkBag = AddItem(entity = $obj1, cfg = $sellItem, count = 1)
          If($checkBag ~= false){
             If($coinId == 0){
-                BuyGoods(player = $obj1, uniqueId = 20201999,  coinId = $coinId, price = $price, event = "SHOP_BUY_COIN", objID = GetObjectID(object = $obj1))
+                BuyGoods(player = $obj1, uniqueId = 20201999,  coinId = $coinId, price = $price, event = "SHOP_BUY_COIN", objID = GetObjectID(object = $obj1), sellItem = $sellItem)
             }Else{
                 --ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
                 ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
@@ -3531,8 +3531,10 @@ SHOP_BUY_COIN {
     $dict = NewDictionary($response)
     $objID = DictionaryGet(dict = $dict, key = "objID")
     $obj1 = GetObject(objID = $objID)
+    $sellItem = DictionaryGet(dict = $dict, key = "sellItem")
     If($isSucceed and $obj1){
-        ShowTip(textKey = "ui_buy_success", tipType = 2, entity = $obj1, keepTime = 20)
+        ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
+        --ShowTip(textKey = "ui_buy_success", tipType = 2, entity = $obj1, keepTime = 20)
     }ElseIf($obj1){
         ShowTip(textKey = "app_shop_lack_of_money", tipType = 1, entity = $obj1, keepTime = 20)
     }
@@ -3556,7 +3558,8 @@ SURE_FURNITURE_BUY {
          If($checkBag ~= false){
             PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
             If(not $isTeam and $owner){ --不是一个家庭给领主加钱
-               ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
+               --ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
+                ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
                $name = GetEntityName(entity = $obj1)
                If(IsPlayer(entity = $owner)){
                     ShowTip(textKey = "gui_buys_your_stuff",textP1 = $name, textP2 = $itemName, tipType = 1, entity = $owner, keepTime = 20)
@@ -3564,7 +3567,8 @@ SURE_FURNITURE_BUY {
                     ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $price), entity = $owner)
                }
             }Else{
-               ShowTip(textKey = "gui_gain_item_success",textP1 = $itemName, tipType = 1, entity = $obj1, keepTime = 20)
+               ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
+               --ShowTip(textKey = "gui_gain_item_success",textP1 = $itemName, tipType = 1, entity = $obj1, keepTime = 20)
             }
          }Else{ --背包满了
             ShowTip(textKey = "gui_str_app_shop_inventory_is_full", tipType = 2, entity = $obj1, keepTime = 20)
