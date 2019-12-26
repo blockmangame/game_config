@@ -425,7 +425,10 @@ WORKS_WALL_UPDATE
 
             Foreach(array = GetAllPlayers(), key = "player")
             {
-                UpdateUIData(player = $player, ui = $wallName, data = $works)
+                If(GetEntityMapName(entity = $player) == "map001")
+                {
+                    UpdateUIData(player = $player, ui = $wallName, data = $works)
+                }
             }
             Break()
         }
