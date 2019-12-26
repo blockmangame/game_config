@@ -1132,6 +1132,14 @@ SET_REGION_COLOR{
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
 }
+
+ROTATION_WHEN_RIDE_ON{
+    SetEntityYaw(entity = $obj1, rotationYaw = GetEntityYaw(entity = $obj2))
+    SetBodyYaw(entity = $obj1, yaw = GetEntityYaw(entity = $obj2))
+    SetEntityPitch(entity = $obj1, rotationYaw = GetEntityPitch(entity = $obj2))
+    SetEntityRoll(entity = $obj1, rotationYaw = GetEntityRoll(entity = $obj2))
+}
+
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 
 ADD_MONEY
