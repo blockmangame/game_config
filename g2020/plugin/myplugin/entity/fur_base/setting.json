@@ -30,66 +30,73 @@
     "ridePos": [
         {
             "/yaw": "3人1号坐1_index1",
+            
             "yaw": 0,
             "pos": {
-                "y": 0.2,
-                "z": 0.3,
-                "x": 1
+                "y": 0,
+                "z": 0,
+                "x": 0
             },
             "out": {
-                "y": 1,
+                "y": 0,
                 "z": 0,
-                "x": 1
+                "x": 0
             },
+            "attachPoint": "attachPoints_3sit1",
+            "ctrl": false,
+            "view": false,
+            
             "passengerAction": {
                 "base": "sit1"
-            },
-            "ctrl": false,
-            "view": false
+            }
         },
         {
             "/yaw": "3人2号坐1_index2",
             "yaw": 0,
             "pos": {
-                "y": 0.2,
-                "z": 0.3,
-                "x": 0
-            },
-            "out": {
-                "y": 1,
+                "y": 0,
                 "z": 0,
                 "x": 0
             },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "attachPoints_3sit2",
+            "ctrl": false,
+            "view": false,
+            
             "passengerAction": {
                 "base": "sit1"
-            },
-            "ctrl": false,
-            "view": false
+            }
         },
         {
             "/yaw": "3人3号坐1_index3",
             "yaw": 0,
             "pos": {
-                "y": 0.2,
-                "z": 0.3,
-                "x": -1
+                "y": 0,
+                "z": 0,
+                "x": 0
             },
             "out": {
-                "y": 1,
+                "y": 0,
                 "z": 0,
-                "x": -1
+                "x": 0
             },
+            "attachPoint": "attachPoints_3sit3",
+            "ctrl": false,
+            "view": false,
+            
             "passengerAction": {
                 "base": "sit1"
-            },
-            "ctrl": false,
-            "view": false
+            }
         },
         {
             "/yaw": "1人1号坐1_index4",
             "yaw": 0,
             "pos": {
-                "y": 0.1,
+                "y": 0,
                 "z": 0,
                 "x": 0
             },
@@ -98,51 +105,58 @@
                 "z": 0,
                 "x": 0
             },
+            "attachPoint": "attachPoints_1sit",
+            "ctrl": false,
+            "view": false,
+            
             "passengerAction": {
                 "base": "sit1"
-            },
-            "ctrl": false,
-            "view": false
+            }
         },
         {
             "/yaw": "2人1号坐1_index5",
             "yaw": 0,
             "pos": {
-                "y": -0.1,
-                "z": 0.3,
-                "x": 0.5
+                "y": 0,
+                "z": 0,
+                "x": 0
             },
             "out": {
                 "y": 0,
                 "z": 0,
                 "x": 0
             },
+            "attachPoint": "attachPoints_2sit1",
+            "ctrl": false,
+            "view": false,
+            
             "passengerAction": {
                 "base": "sit1"
-            },
-            "ctrl": false,
-            "view": false
+            }
         },
         {
             "/yaw": "2人2号坐1_index6",
             "yaw": 0,
             "pos": {
-                "y": -0.1,
-                "z": 0.3,
-                "x": -0.5
+                "y": 0,
+                "z": 0,
+                "x": 0
             },
             "out": {
                 "y": 0,
                 "z": 0,
                 "x": 0
             },
+            "attachPoint": "attachPoints_2sit2",
+            "ctrl": false,
+            "view": false,
+            
             "passengerAction": {
                 "base": "sit1"
-            },
-            "ctrl": false,
-            "view": false
+            }
         },
         {
+            "/yaw": "qiuqian_l_index7",
             "yaw": 0,
             "pos": {
                 "y": 0,
@@ -161,7 +175,7 @@
                 "idle" : "run"
             },
             "passengerAction": {
-                "base": "sit1"
+                "base": "qiuqian"
             }
         },
         {
@@ -232,7 +246,7 @@
         },
         {
             "name": "attachPoints2",
-            "bone": "s_guadian_l",
+            "bone": "s_guadian_r",
             "position": {
                 "y": 0,
                 "z": 0,
@@ -250,7 +264,116 @@
         },
         {
             "name": "attachPoints3",
-            "bone": "s_guadian_r",
+            "bone": "s_guadian_l",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        }
+        ,
+        {
+            "name": "attachPoints_1sit",
+            "bone": "s_chair",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_2sit1",
+            "bone": "s_sofa_2",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_2sit2",
+            "bone": "s_sofa_1",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_3sit1",
+            "bone": "s_bench_3",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_3sit2",
+            "bone": "s_bench_2",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_3sit3",
+            "bone": "s_bench_1",
             "position": {
                 "y": 0,
                 "z": 0,
