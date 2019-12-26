@@ -192,7 +192,10 @@ SHOW_SELECT_ROLE
 
 CHANGE_PLAYER_SCALE_ADULT
 {
-    CheckSignInShow(player = $obj1)
+    If(not $obj1.checkSignIn){
+        CheckSignInShow(player = $obj1)
+        $obj1.checkSignIn = true
+    }
     If($obj1.scaleBuff)
     {
         RemoveEntityBuff(entity = $obj1, buff = $obj1.scaleBuff)
@@ -217,7 +220,10 @@ CHANGE_PLAYER_SCALE_ADULT
 
 CHANGE_PLAYER_SCALE_CHILD
 {
-    CheckSignInShow(player = $obj1)
+    If(not $obj1.checkSignIn){
+        CheckSignInShow(player = $obj1)
+        $obj1.checkSignIn = true
+    }
     If($obj1.scaleBuff)
     {
         RemoveEntityBuff(entity = $obj1, buff = $obj1.scaleBuff)
