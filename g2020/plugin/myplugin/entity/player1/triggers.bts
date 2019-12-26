@@ -774,7 +774,7 @@ SHOW_TITLE_BAR{
     }
 
     ShowTitleBarPage(entity = $obj1, infoTb = {})
-    ShowTitleBarPage(entity = $obj1, infoTb = $infoTb, updateWin = true)
+    StartTimer(object =$obj1, obj1 =$obj1, infoTb = $infoTb, time = 1, event = "UPDATE_TITLE_SHOW_BAR")
 }
 
 EDIT_HOUSE{
@@ -793,6 +793,10 @@ EDIT_HOUSE{
         }
     }
     ShowTitleBarPage(entity = $obj1, infoTb = {})
+    StartTimer(object =$obj1, obj1 =$obj1, infoTb = $infoTb, time = 1, event = "UPDATE_TITLE_SHOW_BAR")
+}
+
+UPDATE_TITLE_SHOW_BAR{
     ShowTitleBarPage(entity = $obj1, infoTb = $infoTb, updateWin = true)
 }
 
