@@ -4411,15 +4411,16 @@ RENAME_FAMILY_ALBUM
         $photo = ArrayGet(array = $familyAlbum, index = $index)
         If($photo)
         {
-            SetObjectVar(obj = $photo, key = "name", value = $name)
+            $photoDict = NewDictionary($photo)
+            $photoImage = DictionaryGet(dict = $photoDict, key = "image")
+            $newPhoto = {
+                image = $photoImage,
+                name = $name
+            }
+            ArraySet(index = $index, value = $newPhoto)
+            UpdateUIData(player = $obj1, ui = "win_familyAlbumRename", data = $newPhoto) 
         }
     }
-
-    $data = {
-        index = $index,
-        name = $name
-    } 
-    UpdateUIData(player = $obj1, ui = "win_familyAlbumRename", data = $data) 
 }
 
 SHOW_PALETTE_HELP
