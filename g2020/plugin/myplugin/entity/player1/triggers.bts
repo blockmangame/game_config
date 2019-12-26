@@ -4286,6 +4286,12 @@ JOIN_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = $targetUserId
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
 }
+UPDATE_PARTY_SETTING_INFO{
+    $curHouseCfg = $obj1.curHouseCfg
+    $broadcastCost = GetEntityCfg(fullName = $curHouseCfg, key = "broadcastCost")
+    $broadcastCurrencyType = GetEntityCfg(fullName = $curHouseCfg, key = "broadcastCurrencyType")
+
+}
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
     $maxPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "partyMaxPlayerNumber")
