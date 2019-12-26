@@ -4288,8 +4288,8 @@ JOIN_PARTY_SUCCESS {
 }
 UPDATE_PARTY_SETTING_INFO{
     $curHouseCfg = $obj1.curHouseCfg
-    $broadcastCost = GetEntityCfg(fullName = $curHouseCfg, key = "broadcastCost")
-    $broadcastCurrencyType = GetEntityCfg(fullName = $curHouseCfg, key = "broadcastCurrencyType")
+    $broadcastCost = GetEntityCfg(fullName = $curHouseCfg, key = "partyBroadcastCost")
+    $broadcastCurrencyType = GetEntityCfg(fullName = $curHouseCfg, key = "partyBroadcastCoinId")
 
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
