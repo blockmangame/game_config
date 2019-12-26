@@ -3499,7 +3499,10 @@ SURE_BUY {
    $price = GetConfigVar(obj = $obj2, key = "sellPrice")
    $coinId = GetConfigVar(obj = $obj2, key = "coinId")
    $coinName = "green_currency"
-   If($coinId == 0){
+   If(not $coinId){
+       $coinId = 3
+   }
+   If($coinId and $coinId == 0){
        $coinName = "gDiamonds"
    }
    $itemName = GetItemCfg(fullName = $sellItem, key = "itemname")
@@ -3513,7 +3516,8 @@ SURE_BUY {
             If($coinId == 0){
                 BuyGoods(player = $obj1, uniqueId = 20201999,  coinId = $coinId, price = $price, event = "SHOP_BUY_COIN", objID = GetObjectID(object = $obj1))
             }Else{
-                ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
+                --ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
+                ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
                 PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
             }
          }Else{ --背包满了
