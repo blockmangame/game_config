@@ -1,51 +1,65 @@
 {
-	"skyBox": {
-	"texture": "myplugin/sky/Sky03",
-	"rotate": {
-    "x": 0,
-    "y": 30,
-    "z": 0
-		}
-	},
+    "skyBox": {
+        "texture": "myplugin/sky/Sky03",
+        "rotate": {
+            "x": 0,
+            "y": 30,
+            "z": 0
+        }
+    },
     "canAttack": false,
     "canBreak": false,
     "initPos": {
-        "x": 1641,
-        "y": 14,
-        "z": -574
+        "x": 12.5,
+        "y": 3,
+        "z": 8.5
     },
     "region": {
-        "house_default_inside_map_area_2": {
-            "regionCfg": "myplugin/house_default_inside_map_area_2",
+        "h10_area_01_1": {
+            "regionCfg": "myplugin/house10_area01",
             "box": {
                 "min": {
-                    "x": 1620,
-                    "y": 12,
-                    "z": -570
+                    "x": 9,
+                    "y": 2,
+                    "z": 4
                 },
                 "max": {
-                    "x": 1640,
-                    "y": 20,
-                    "z": -550
+                    "x": 17,
+                    "y": 6,
+                    "z": 17
                 }
             }
         },
-        "house_default_inside_map_area_1": {
-            "regionCfg": "myplugin/house_default_inside_map_area_1",
+        "h10_area_02_1": {
+            "regionCfg": "myplugin/house10_area02",
             "box": {
                 "min": {
-                    "x": 1620,
-                    "y": 12,
-                    "z": -550
+                    "x": 3,
+                    "y": 2,
+                    "z": 4
                 },
                 "max": {
-                    "x": 1640,
-                    "y": 20,
-                    "z": -530
+                    "x": 8,
+                    "y": 6,
+                    "z": 9
+                }
+            }
+        },
+        "h10_area_03_1": {
+            "regionCfg": "myplugin/house10_area03",
+            "box": {
+                "min": {
+                    "x": 3,
+                    "y": 2,
+                    "z": 10
+                },
+                "max": {
+                    "x": 8,
+                    "y": 6,
+                    "z": 17
                 }
             }
         }
     },
-    "entity": [
-    ]
+    "entity": []
 }

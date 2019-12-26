@@ -1,22 +1,22 @@
-{	
-	"skyBox": {
-	"texture": "myplugin/sky/Sky03",
-	"rotate": {
-    "x": 0,
-    "y": 30,
-    "z": 0
-		}
-	},
+{
+    "skyBox": {
+        "texture": "myplugin/sky/Sky03",
+        "rotate": {
+            "x": 0,
+            "y": 30,
+            "z": 0
+        }
+    },
     "canAttack": false,
     "canBreak": false,
     "initPos": {
         "x": 12,
         "y": 3,
-        "z": 6
+        "z": 8.5
     },
     "region": {
-        "house_default_inside_map_area_2": {
-            "regionCfg": "myplugin/test_",
+        "h01_area_01_1": {
+            "regionCfg": "myplugin/house01_area01",
             "box": {
                 "min": {
                     "x": 9,
@@ -29,8 +29,37 @@
                     "z": 17
                 }
             }
+        },
+        "h01_area_02_1": {
+            "regionCfg": "myplugin/house01_area02",
+            "box": {
+                "min": {
+                    "x": 3,
+                    "y": 2,
+                    "z": 4
+                },
+                "max": {
+                    "x": 8,
+                    "y": 6,
+                    "z": 9
+                }
+            }
+        },
+        "h01_area_03_1": {
+            "regionCfg": "myplugin/house01_area03",
+            "box": {
+                "min": {
+                    "x": 3,
+                    "y": 2,
+                    "z": 10
+                },
+                "max": {
+                    "x": 8,
+                    "y": 6,
+                    "z": 17
+                }
+            }
         }
     },
-    "entity": [
-    ]
+    "entity": []
 }

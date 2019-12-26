@@ -1,51 +1,95 @@
-{	
-	"skyBox": {
-	"texture": "myplugin/sky/Sky03",
-	"rotate": {
-    "x": 0,
-    "y": 30,
-    "z": 0
-		}
-	},
+{
+    "skyBox": {
+        "texture": "myplugin/sky/Sky03",
+        "rotate": {
+            "x": 0,
+            "y": 30,
+            "z": 0
+        }
+    },
     "canAttack": false,
     "canBreak": false,
     "initPos": {
-        "x": 1641,
-        "y": 14,
-        "z": -574
+        "x": 13.5,
+        "y": 3,
+        "z": 11
     },
     "region": {
-        "house_default_inside_map_area_2": {
-            "regionCfg": "myplugin/house_default_inside_map_area_2",
+        "h06_area_01_1": {
+            "regionCfg": "myplugin/house06_area01",
             "box": {
                 "min": {
-                    "x": 1620,
-                    "y": 12,
-                    "z": -570
+                    "x": 7,
+                    "y": 10,
+                    "z": 9
                 },
                 "max": {
-                    "x": 1640,
-                    "y": 20,
-                    "z": -550
+                    "x": 16,
+                    "y": 15,
+                    "z": 15
                 }
             }
         },
-        "house_default_inside_map_area_1": {
-            "regionCfg": "myplugin/house_default_inside_map_area_1",
+        "h06_area_02_1": {
+            "regionCfg": "myplugin/house06_area02",
             "box": {
                 "min": {
-                    "x": 1620,
-                    "y": 12,
-                    "z": -550
+                    "x": 7,
+                    "y": 10,
+                    "z": 16
                 },
                 "max": {
-                    "x": 1640,
-                    "y": 20,
-                    "z": -530
+                    "x": 14,
+                    "y": 15,
+                    "z": 25
+                }
+            }
+        },
+        "h06_area_03_1": {
+            "regionCfg": "myplugin/house06_area03",
+            "box": {
+                "min": {
+                    "x": 15,
+                    "y": 10,
+                    "z": 16
+                },
+                "max": {
+                    "x": 23,
+                    "y": 15,
+                    "z": 25
+                }
+            }
+        },
+        "h06_area_03_2": {
+            "regionCfg": "myplugin/house06_area03",
+            "box": {
+                "min": {
+                    "x": 17,
+                    "y": 10,
+                    "z": 9
+                },
+                "max": {
+                    "x": 23,
+                    "y": 15,
+                    "z": 16
+                }
+            }
+        },
+        "h06_area_04_1": {
+            "regionCfg": "myplugin/house06_area04",
+            "box": {
+                "min": {
+                    "x": 7,
+                    "y": 2,
+                    "z": 9
+                },
+                "max": {
+                    "x": 22,
+                    "y": 7,
+                    "z": 25
                 }
             }
         }
     },
-    "entity": [
-    ]
+    "entity": []
 }
