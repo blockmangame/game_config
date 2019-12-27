@@ -220,46 +220,47 @@ TEST_SHOW_NEW_UI {
     UpdateObjectInteractionUI(cfgKey = "interactionUI_1", player = $obj2, target = $obj1, show = true)
 }
 
+FUR_ENTITY_RIDE_ON
+{
+    CallTrigger(obj1 = $me, event = "ENTITY_REMOVE_INTERACTION")
+    ClearRide(entity = $me)
+    RideOn(ctrl = $ctrl, entity = $me, target = $obj1, targetIndex = $index)
+}
+
 ENTITY_sit1_3_1 {
-	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 1 )
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 1)
 }
 
 ENTITY_sit1_3_2 {
-	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 2 )
+    CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 2)
 }
 
 ENTITY_sit1_3_3 {
-	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 3)
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 3)
 }
-
 
 ENTITY_sit1_1_1 {
-	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 4 )
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 4)
 }
-
 
 ENTITY_sit1_2_1 {
-	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 5 )
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 5)
 }
 
 ENTITY_sit1_2_2 {
-	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 6 )
-}
-
-ENTITY_sit1_2_2 {
-	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 6 )
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 6)
 }
 
 ENTITY_qiuqian {
-	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 7 )
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 7)
 }
 
 ENTITY_qiaoqiaoban_l {
-	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 8 )
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 8)
 }
 
 ENTITY_qiaoqiaoban_r {
-	RideOn(ctrl = false, entity = $obj2, target = $obj1, targetIndex = 9 )
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 9)
 }
 
 
