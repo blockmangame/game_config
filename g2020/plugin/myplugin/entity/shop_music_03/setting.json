@@ -1,12 +1,12 @@
 {
     "canClick": true,
-    "actorName": "g2020_food.actor",
+    "actorName": "g2020_yueqi.actor",
     "skin": {
-        "body": "4"
+        "body": "3"
     },
     "coinId": 3,
-    "sellPrice": 5,
-    "sellItem": "myplugin/food_drink_coke",
+    "sellPrice": 200,
+    "sellItem": "myplugin/toy_music_01",
     "collision": false,
     "name": "",
     "pushable": null,
@@ -29,14 +29,14 @@
         "followParams": {
             "followScenePos": false,
             "offset": {
-                "x": -0.1,
-                "y": 0.2,
-                "z": -0.1
+                "x": 0,
+                "y": 1,
+                "z": 0
             }
         },
         "centerBtns": [
             {
-                "text": "drink_coke.buy",
+                "text": "music_03.buy",
                 "widgetFileName": "widget_button",
                 "image": "plugin/myplugin/image/hand_click.png",
                 "imageSize": {
@@ -50,7 +50,7 @@
     "interaction": {
         "radius": 7,
         "offset": {
-            "x": 0.2,
+            "x": 0,
             "y": -1,
             "z": 2
         }
