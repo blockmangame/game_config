@@ -4421,8 +4421,13 @@ RENAME_FAMILY_ALBUM
                 image = $photoImage,
                 name = $name
             }
-            ArraySet(index = $index, value = $newPhoto)
-            UpdateUIData(player = $obj1, ui = "win_familyAlbumRename", data = $newPhoto) 
+            ArraySet(array = $familyAlbum, index = $index, value = $newPhoto)
+
+            $uiData = {
+                index = $index,
+                name = $name
+            }
+            UpdateUIData(player = $obj1, ui = "win_familyAlbumRename", data = $uiData) 
         }
     }
 }
