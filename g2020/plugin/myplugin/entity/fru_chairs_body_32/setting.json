@@ -15,99 +15,12 @@
             }
         ]
     },
-    "sellPrice": [
-        4500,
-        100
-    ],
-    "sellItem": [
-        "myplugin/random_commodity",
-        "myplugin/angel_wings"
-    ],
-    "interactionUI": {
-        "cfgKey": "interactionUI",
-        "aroundParams": {
-            "startAngle": 0,
-            "endAngle": 90,
-            "radius": 100
-        },
-        "centerBtns": [
-            {
-                "text": "cook.guide",
-                "image": "plugin/myplugin/image/hand_click.png",
-                "nextCfgKey": "interaction_choices"
-            }
-        ],
-        "followParams": {
-            "followScenePos": false
-        }
-    },
-    "interaction_choices": {
-        "cfgKey": "interaction_choices",
-        "aroundParams": {
-            "startAngle": 270,
-            "endAngle": 90,
-            "background": "plugin/myplugin/image/food_bg.png",
-            "backgroundSize": {
-                "width": 100,
-                "height": 100
-            },
-            "imageSize": {
-                "width": 80,
-                "height": 80
-            },
-            "textFontSize": "HT24",
-            "radius": 100
-        },
-        "followParams": {
-            "followScenePos": false,
-            "resetWhenHide": true
-        },
-        "aroundBtns": [
-            {
-                "text": "$1",
-                "image": "plugin/myplugin/image/pizza.png",
-                "checkCanHide":{
-                    "funcName": "checkOwnerInSameTeam"
-                },
-                "event": "COOK_1"
-            },
-            {
-                "text": "free!",
-                "image": "plugin/myplugin/image/pizza.png",
-                "checkCanShow":{
-                    "funcName": "checkOwnerInSameTeam"
-                },
-                "event": "COOK_1"
-            },
-            {
-                "image": "plugin/myplugin/image/back.png",
-                "imageSize": {
-                    "width": 100,
-                    "height": 100
-                },
-                "background": "",
-                "nextCfgKey": "interactionUI"
-            },
-            {
-                "text": "$2",
-                "image": "plugin/myplugin/image/burger.png",
-                "checkCanHide":{
-                    "funcName": "checkOwnerInSameTeam"
-                },
-                "event": "COOK_2"
-            },
-            {
-                "text": "free!",
-                "image": "plugins/myplugin/image/burger.png",
-                "checkCanShow":{
-                    "funcName": "checkOwnerInSameTeam"
-                },
-                "event": "COOK_2"
-            }
-        ]
-    },
+    "sellPrice": null,
+    "sellItem": null,
+    "interactionUI": null,
+    "interaction_choices": null,
     "name": "厨具，没有",
-    "releaseState": "dirty",
+    "releaseState": null,
     "actorName": "g2020_fru_chairs.actor",
     "base": "fur_base"
 }
