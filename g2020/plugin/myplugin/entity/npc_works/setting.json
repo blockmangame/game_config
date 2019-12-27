@@ -1,8 +1,55 @@
 {
     "canTouch": false,
-    "actorName": "pig.actor",
-    "name": "npc_pig",
-    "clickDistance": 5,
-    "hpBarColor": 0,
-    "canClick": true
+    "actorName": "g2020_tuyalifangti.actor",
+    "name": "",
+	"boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    -1.2,
+                    0.5,
+                    -0.8,
+					1.2,
+					3,
+					1.4
+                ]
+            }
+        ]
+    },
+	"canClick": false,
+	"collision": true,
+	"canInteract": true,
+	"interactionUI": {
+        "cfgKey": "interactionUI",
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0.2,
+                "y": 1.8,
+                "z": 0.5
+            }
+        },
+        "centerBtns": [
+            {
+                "text": "",
+                "widgetFileName": "widget_button",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "event": "TUYA_LIFANGTI"
+            }
+        ]
+    },
+    "interaction": {
+        "radius": 7,
+        "offset": {
+            "x": 0,
+            "y": -1,
+            "z": 2
+        }
+    }
 }

@@ -1,8 +1,66 @@
 {
     "canTouch": false,
-    "actorName": "pig.actor",
-    "name": "npc_pig",
-    "clickDistance": 5,
-    "hpBarColor": 0,
-    "canClick": true
+    "actorName": "g2020_tuyahuaban.actor",
+    "name": "",
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    -0.4,
+                    0.0,
+                    -0.7,
+					0.6,
+					2.5,
+					0.5
+                ]
+            },
+			{
+                "type": "Box",
+                "params": [
+                    -0.9,
+                    1.2,
+                    0.1,
+					0.9,
+					1.8,
+					0.2
+                ]
+            }
+        ]
+	},
+	"canClick": false,
+	"collision": false,
+	"canInteract": true,
+	"interactionUI": {
+        "cfgKey": "interactionUI",
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": -0.1,
+                "y":1.5,
+                "z": 0.2
+            }
+        },
+        "centerBtns": [
+            {
+                "text": "",
+                "widgetFileName": "widget_button",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "event": "TUYA_HUABAN"
+            }
+        ]
+    },
+    "interaction": {
+        "radius": 7,
+        "offset": {
+            "x": 0,
+            "y": -1,
+            "z": 2
+        }
+    }
 }
