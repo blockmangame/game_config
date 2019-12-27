@@ -3339,10 +3339,48 @@ TASK_NPC_ADD_BUFF  --给任务npc还动作加buff, 订单NPC加buff动作
     }
     If($buff and @INDENT_MODEL and $buff ~= $obj1.lastTaskBuff){
         If($obj1.lastTaskBuff){
-            UnMarkEntityForPlayer(player = $obj1, entity = @INDENT_MODEL, buffName = $obj1.lastTaskBuff)
+            --UnMarkEntityForPlayer(player = $obj1, entity = @INDENT_MODEL, buffName = $obj1.lastTaskBuff)
         }
-        MarkEntityForPlayer(player = $obj1, entity = @INDENT_MODEL, buffName = $buff)
+        --MarkEntityForPlayer(player = $obj1, entity = @INDENT_MODEL, buffName = $buff)
         $obj1.lastTaskBuff = $buff
+    }
+    --订单NPC新的计算buff方法：
+    If(not $obj1.taskKey &&  not $checkMax && not $obj1.punishmentCD && $obj1.lastTaskStatus ~= 1)--未接单
+    {   
+        $npctaskKey = "myplugin/orderNpc/key_1"
+        $obj1.lastTaskStatus = 1
+        If($obj1.lastOrderTask){
+            CancelTask(player = $obj1, name = $obj1.lastOrderTask)
+        }
+        StartTask(player = $obj1, fullName = $npctaskKey)
+        $obj1.lastOrderTask = $npctaskKey 
+    }ElseIf($obj1.taskKey && $obj1.lastTaskStatus ~= 2)--接单后
+    { 
+        $npctaskKey = "myplugin/orderNpc/key_2"
+        $obj1.lastTaskStatus = 2
+        If($obj1.lastOrderTask){
+            CancelTask(player = $obj1, name = $obj1.lastOrderTask)
+        }
+        StartTask(player = $obj1, fullName = $npctaskKey)
+        $obj1.lastOrderTask = $npctaskKey
+    }ElseIf($obj1.punishmentCD && $obj1.lastTaskStatus ~= 3)--放弃惩罚中
+    {
+        $npctaskKey = "myplugin/orderNpc/key_3"
+        $obj1.lastTaskStatus = 3
+        If($obj1.lastOrderTask){
+            CancelTask(player = $obj1, name = $obj1.lastOrderTask)
+        }
+        StartTask(player = $obj1, fullName = $npctaskKey)
+        $obj1.lastOrderTask = $npctaskKey
+    }ElseIf($checkMax && $obj1.lastTaskStatus ~= 4) -- 上限后
+    {
+        $npctaskKey = "myplugin/orderNpc/key_4"
+        $obj1.lastTaskStatus = 4
+        If($obj1.lastOrderTask){
+            CancelTask(player = $obj1, name = $obj1.lastOrderTask)
+        }
+        StartTask(player = $obj1, fullName = $npctaskKey)
+        $obj1.lastOrderTask = $npctaskKey
     }
 }
 T_BUFF(){

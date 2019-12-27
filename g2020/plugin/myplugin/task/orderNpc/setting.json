@@ -1,0 +1,60 @@
+{
+	"buffNotTask": "myplugin/task_not",
+	"buffDoingTask": "myplugin/task_doing",
+	"buffPunishTask": "myplugin/task_punish",
+	"buffMoreMaxTask": "myplugin/task_more_max",
+	"tasks": [
+		{
+			"key": "key_1",
+			"times": "loop",
+			"reward": "myplugin/work_reward",
+			"targets": [
+				{
+					"targetBuff": "myplugin/task_not",
+					"type": "KillNpc",
+					"name": "task_not",
+					"cfgName": "myplugin/npc_indent_model"
+				}
+			]
+		},
+		{
+			"key": "key_2",
+			"times": "loop",
+			"reward": "myplugin/work_reward",
+			"targets": [
+				{
+					"targetBuff": "myplugin/task_doing",
+					"type": "KillNpc",
+					"name": "task_doing",
+					"cfgName": "myplugin/npc_indent_model"
+				}
+			]
+		},
+		{
+			"key": "key_3",
+			"times": "loop",
+			"reward": "myplugin/work_reward",
+			"targets": [
+				{
+					"targetBuff": "myplugin/task_punish",
+					"type": "KillNpc",
+					"name": "task_punishing",
+					"cfgName": "myplugin/npc_indent_model"
+				}
+			]
+		},
+		{
+			"key": "key_4",
+			"times": "loop",
+			"reward": "myplugin/work_reward",
+			"targets": [
+				{
+					"targetBuff": "myplugin/task_npc_buff",
+					"type": "KillNpc",
+					"name": "task_more",
+					"cfgName": "myplugin/npc_indent_model"
+				}
+			]
+		}
+	]
+}
