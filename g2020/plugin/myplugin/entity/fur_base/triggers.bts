@@ -2,6 +2,10 @@ ENTITY_ENTER
 {
 }
 
+ENTITY_RIDE_ON{
+    CallTrigger(object = $obj2, obj2 = $obj1, event = "ROTATION_WHEN_RIDE_ON")
+}
+
 ENTITY_TOUCH_ALL{
 }
 

@@ -774,7 +774,7 @@ SHOW_TITLE_BAR{
     }
 
     ShowTitleBarPage(entity = $obj1, infoTb = {})
-    ShowTitleBarPage(entity = $obj1, infoTb = $infoTb, updateWin = true)
+    StartTimer(object =$obj1, obj1 =$obj1, infoTb = $infoTb, time = 1, event = "UPDATE_TITLE_SHOW_BAR")
 }
 
 EDIT_HOUSE{
@@ -793,6 +793,10 @@ EDIT_HOUSE{
         }
     }
     ShowTitleBarPage(entity = $obj1, infoTb = {})
+    StartTimer(object =$obj1, obj1 =$obj1, infoTb = $infoTb, time = 1, event = "UPDATE_TITLE_SHOW_BAR")
+}
+
+UPDATE_TITLE_SHOW_BAR{
     ShowTitleBarPage(entity = $obj1, infoTb = $infoTb, updateWin = true)
 }
 
@@ -1132,6 +1136,14 @@ SET_REGION_COLOR{
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
 }
+
+ROTATION_WHEN_RIDE_ON{
+    SetEntityYaw(entity = $obj1, rotationYaw = GetEntityYaw(entity = $obj2))
+    SetBodyYaw(entity = $obj1, yaw = GetEntityYaw(entity = $obj2))
+    SetEntityPitch(entity = $obj1, rotationYaw = GetEntityPitch(entity = $obj2))
+    SetEntityRoll(entity = $obj1, rotationYaw = GetEntityRoll(entity = $obj2))
+}
+
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 
 ADD_MONEY
@@ -4273,6 +4285,12 @@ CREATE_PARTY_SUCCESS {
 JOIN_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = $targetUserId
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
+}
+UPDATE_PARTY_SETTING_INFO{
+    $curHouseCfg = $obj1.curHouseCfg
+    $broadcastCost = GetEntityCfg(fullName = $curHouseCfg, key = "partyBroadcastCost")
+    $broadcastCurrencyType = GetEntityCfg(fullName = $curHouseCfg, key = "partyBroadcastCoinId")
+
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
