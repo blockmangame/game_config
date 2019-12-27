@@ -167,6 +167,7 @@ ENTITY_ENTER
 		
 		CallTrigger(event = "SET_DRESS_ARCHIVE", object = $obj1)
         CallTrigger(event = "INIT_PLAYER_DRESS", object = $obj1)
+        CallTrigger(event = "INIT_FAMILY_ALBUM", object = $obj1)
 
         LoadPlayerAppDress(player = $obj1, event = "HTTP_PURCHASED_DRESS_CALL_BACK")
 
@@ -4344,6 +4345,16 @@ START_PLAY_BGM  {
     Foreach(array = GetMapPlayer(map = GetEntityMap(entity = $obj1)), key = "player") {
         SendUpdatePlayingBgmIndex(player = $player, playingIndex = $index)
     }
+}
+
+INIT_FAMILY_ALBUM
+{
+    $familyAlbum = GetObjectVar(obj = $obj1, key = "familyAlbum")
+    If(not $familyAlbum)
+    {
+        Return()
+    }
+    UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
 }
 
 SAVE_PHOTO
