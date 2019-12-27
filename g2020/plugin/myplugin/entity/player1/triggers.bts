@@ -3538,7 +3538,7 @@ SHOW_SHOP_TITLE(){
 }
 --公共区域购买，场景商店的购买逻辑
 SURE_BUY {
-   If($button == "left"){
+   If($button == "left" or $button == "close"){
       Return()
    }    
    $obj2 = GetObject(objID = $objID)
@@ -3592,7 +3592,7 @@ SHOP_BUY_COIN {
 }
 --区域购买逻辑： 领主家里买厨具，食物，
 SURE_FURNITURE_BUY {
-   If($button == "left"){
+   If($button == "left" or $button == "close"){
       Return()
    }
    If(not $owner and $obj2){
@@ -3674,7 +3674,7 @@ POP_UP_BUY_PRIVILEGE
 }
 SURE_BUY_PRI 
 {
-    If($button == "left"){
+    If($button == "left" or $button == "close"){
         CallTrigger(object = $obj1, event = $buyResultEvent, succeed = false, shopIndex = $shopIndex)
         Return()
     }
