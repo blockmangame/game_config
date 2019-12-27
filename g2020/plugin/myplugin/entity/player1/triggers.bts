@@ -4029,6 +4029,9 @@ ENTER_EQUIPMEN {
 
 ENTER_MAP
 {
+    CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
+    ClearRide(entity = $obj1)
+
     CallTrigger(object = $obj1, event = "PICK_HAND_ITEM", obj1 = $obj1)
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
@@ -4060,6 +4063,10 @@ ENTER_MAP
 
 LEAVE_MAP
 {
+
+    CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
+    ClearRide(entity = $obj1)
+
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
         CallTrigger(event = "SHOW_SHOP_TITLE", object = $obj1, show = false)
