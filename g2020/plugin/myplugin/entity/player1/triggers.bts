@@ -4242,6 +4242,7 @@ GET_VISIT_TELE_POS {
 }
 TRY_JOIN_PARTY(debug = false){
     If($obj1.excludedPartyId == $partyId){
+        $tip = "gui.party.be.excluded"
         $canJoin = false
     }
 }
@@ -4250,6 +4251,7 @@ TRY_CREATE_PARTY {
         $canCreate = true
     }Else{
         $canCreate = false
+        $tip = "gui.party.buy.privilege"
         CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 13, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
     }
 }
@@ -4283,6 +4285,7 @@ CHECK_EXIT_PARTY {
     LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
 }
 LEAVE_PARTY_SUCCESS {
+    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
     $obj1.inPartyOwnerId = 0
     ReenterGame(player = $obj1)
 }
@@ -4319,6 +4322,7 @@ INTERACTION_BANISH(debug = false){
 CREATE_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = GetPlayerUserID(player = $obj1)
     $obj1.inPartyId = $partyId
+    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.create.success", time =  100)
     ReenterGame(player = $obj1)
 }
 JOIN_PARTY_SUCCESS {
