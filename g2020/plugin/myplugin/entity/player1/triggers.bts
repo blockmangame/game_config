@@ -1045,6 +1045,35 @@ BUY_HOUSE_REGION_COLOR{
         Return()
     }
 
+    $curInsideRegionKey = GetRegionConfig(region = $curInsideRegion, key = "regionkey")
+    $curInsideRegionChildReionArr = GetRegionConfig(region = $curInsideRegion, key = "childRegionKey")
+    ForLoop(from = 1, to = ArraySize(array = $curInsideRegionChildReionArr), key = "index"){
+        If(ArrayGet(array = $curInsideRegionChildReionArr, index = $index) == $childRegionKey){
+            $curInsideRegionChildReionIndex = $index
+            Break()
+        }
+    }
+    If(not $curInsideRegionChildReionIndex){
+        Return()
+    }
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            DictionarySet(dict = $dict, key = "curHouseVarsIndex", value = $index)
+            $curHousedict = $dict
+            Break()
+        }
+    }
+    $curSelectHouseRegionColor = DictionaryGet(dict = $curHousedict, key = "houseInsideRegionColors") or {}
+    Foreach(array = $curSelectHouseRegionColor, key = "childRegionColorArr"){
+        If(ArrayGet(array = $childRegionColorArr, index = 1) == $curInsideRegionKey){
+            If(ArrayGet(array = ArrayGet(array = $childRegionColorArr, index = 2), index = $curInsideRegionChildReionIndex) == $colorBlock){
+                Return()
+            }
+        }
+    }
+
     If($colorBlock){
         $buyMoney = GetBlockConfigByName(block = $colorBlock, key = "buyMoney")
         $coinId = GetBlockConfigByName(block = $colorBlock, key = "coinId")
