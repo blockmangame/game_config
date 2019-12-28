@@ -31,5 +31,54 @@
     },
     "actorName": "g2020_fru_chairs3.actor",
     "base": "fur_base",
-    "name": "fru_chairs3_body_2034"
+    "name": "fru_chairs3_body_2034",
+    "buffName": "light_on_buff",
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "aroundParams": {
+            "startAngle": 0,
+            "endAngle": 90,
+            "radius": 0
+        },
+        "aroundBtns": [
+            {
+                "text": "",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "checkCanHide": {
+                    "funcName": "checkTargetProp",
+                    "key": "lightState",
+                    "value": "on"
+                },
+                "event": "LIGHT_ON",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "widgetFileName": "widget_button"
+            },
+            {
+                "text": "",
+                "image": "plugin/myplugin/image/back.png",
+                "checkCanHide": {
+                    "funcName": "checkTargetProp",
+                    "key": "lightState",
+                    "value": "off"
+                },
+                "event": "LIGHT_OFF",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "widgetFileName": "widget_button"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        }
+    }
 }

@@ -17,5 +17,29 @@
     },
     "actorName": "g2020_fru_chairs.actor",
     "base": "fur_base",
-    "name": "fru_chairs_body_24"
+    "name": "fru_chairs_body_24",
+    "buffName": "",
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "sit",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": "ENTITY_sit1_1_1",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "widgetFileName": "widget_button"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        }
+    }
 }
