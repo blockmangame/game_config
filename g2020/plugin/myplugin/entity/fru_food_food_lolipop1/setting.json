@@ -18,29 +18,46 @@
     "actorName": "g2020_food.actor",
     "base": "fur_base",
     "name": "fru_food_food_lolipop1",
-    "sellItem": "myplugin/food_food_lolipop1",
     "interactionUI": {
         "cfgKey": "interactionUI",
+        "aroundBtns": [
+            {
+                "text": "payme!",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "checkCanHide": {
+                    "funcName": "checkOwnerInSameTeam"
+                },
+                "event": "FOOD_BUY",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "widgetFileName": "widget_button"
+            },
+            {
+                "text": "free!",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "checkCanShow": {
+                    "funcName": "checkOwnerInSameTeam"
+                },
+                "event": "FOOD_BUY",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "widgetFileName": "widget_button"
+            }
+        ],
         "followParams": {
             "followScenePos": false,
             "offset": {
                 "x": -0.1,
                 "y": 0.2,
-                "z": -0.1
+                "z": 0.1
             }
-        },
-        "centerBtns": [
-            {
-                "text": "food_lolipop1.buy",
-                "widgetFileName": "widget_button",
-                "image": "plugin/myplugin/image/hand_click.png",
-                "imageSize": {
-                    "width": "60",
-                    "height": "60"
-                },
-                "event": "FOOD_BUY"
-            }
-        ]
+        }
     },
+    "buffName": "",
+    "sellItem": "myplugin/food_food_lolipop1",
     "sellPrice": 3
 }
