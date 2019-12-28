@@ -1074,6 +1074,14 @@ BUY_HOUSE_REGION_COLOR{
         }
     }
 
+    If(not $colorBlock)
+    {
+        Return()
+    }
+
+    $buyMoney = 0
+    $coinId = 3
+
     If($colorBlock){
         $buyMoney = GetBlockConfigByName(block = $colorBlock, key = "buyMoney")
         $coinId = GetBlockConfigByName(block = $colorBlock, key = "coinId")
@@ -1082,6 +1090,45 @@ BUY_HOUSE_REGION_COLOR{
             If(DictionaryGet(dict = $decorationDic, key = "fullName") == $colorBlock){
                 $buyMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "buyMoney") or 0)
                 $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
+                Break()
+            }
+        }
+    }
+
+    $btnInfo = {
+            leftCoinId = nil,
+            leftContent = "ui_cancel",
+            rightCoinId = $coinId,
+            rightContent = $buyMoney
+    }
+    
+    $content = "ui_sure_to_pay"
+
+    $context = {
+        colorBlock = $colorBlock,
+        childRegionKey = $childRegionKey
+    }
+
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_BUY_SET_REGION_COLOR", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $context)
+}
+
+SURE_BUY_SET_REGION_COLOR
+{
+    If($button == "right")
+    {
+        If(not $colorBlock)
+        {
+            Return()
+        }
+
+        $buyMoney = GetBlockConfigByName(block = $colorBlock, key = "buyMoney")
+        $coinId = GetBlockConfigByName(block = $colorBlock, key = "coinId")
+        Foreach(array = @DECORATION_STORE, key = "decorationTb"){
+            $decorationDic = NewDictionary($decorationTb)
+            If(DictionaryGet(dict = $decorationDic, key = "fullName") == $colorBlock){
+                $buyMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "buyMoney") or 0)
+                $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
+                Break()
             }
         }
         If(3 ~= $coinId){
@@ -1094,9 +1141,9 @@ BUY_HOUSE_REGION_COLOR{
             ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", time = 40)
             Return()
         }
+
+        CallTrigger(object = $obj1, event = "SET_REGION_COLOR", childRegionKey = $childRegionKey, colorBlock = $colorBlock)    
     }
-    
-    CallTrigger(object = $obj1, event = "SET_REGION_COLOR", childRegionKey = $childRegionKey, colorBlock = $colorBlock)
 }
 
 BUY_REGION_COLOR_BY_APP{
