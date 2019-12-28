@@ -4029,9 +4029,7 @@ ENTER_EQUIPMEN {
 
 ENTER_MAP
 {
-    CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
-    ClearRide(entity = $obj1)
-
+    CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
     CallTrigger(object = $obj1, event = "PICK_HAND_ITEM", obj1 = $obj1)
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
@@ -4063,10 +4061,7 @@ ENTER_MAP
 
 LEAVE_MAP
 {
-
-    CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
-    ClearRide(entity = $obj1)
-
+    CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
         CallTrigger(event = "SHOW_SHOP_TITLE", object = $obj1, show = false)
@@ -4510,4 +4505,10 @@ RENAME_FAMILY_ALBUM
 SHOW_PALETTE_HELP
 {
     ShowLongTextTip(player = $obj1, text = "palette_help_msg", title = "palette_help_title")
+}
+
+PLAYER_CLEAR_RIDE
+{
+    CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
+    ClearRide(entity = $obj1)
 }
