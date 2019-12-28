@@ -30,6 +30,7 @@ GAME_INIT
     }
     CallTrigger(event = "INIT_WORK_TASK_DATA")
     CallTrigger(event = "FUNC_NAVIGATION_GET_MAPS_ALL_PATH")
+    CallTrigger(event = "FUNC_LOAD_WORKS_WALL_TOP")
 }
 
 INIT_WORK_TASK_DATA(){    --打工配置表的读取
@@ -91,8 +92,6 @@ INIT_WORK_TASK_DATA(){    --打工配置表的读取
     }
     
     CallTrigger(event = "FUNC_NAVIGATION_GET_MAPS_ALL_PATH")
-
-    CallTrigger(event = "FUNC_LOAD_WORKS_WALL_TOP")
 
     CreateNpc(cfgName = "myplugin/npc_indent_model", pos = Copy(value = @INDENT_POS)  ,name = "shoManager", ry = $indentRy)
 
@@ -426,7 +425,7 @@ WORKS_WALL_UPDATE
     $size = ArraySize(array = $worksList)
     Foreach(array = $worksList, key = "works")
     {
-        If($worksIndex < $index || ($worksIndex == $size && $index == 1))
+        If($worksIndex < $index || ($worksIndex >= $size && $index == 1))
         {
             $worksIndex = $index
             CallTrigger(event = "SET_WORKS_WALL_INDEX", wallName = $wallName , wallIndex = $worksIndex)
