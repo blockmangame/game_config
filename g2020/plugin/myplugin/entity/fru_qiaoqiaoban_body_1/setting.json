@@ -15,6 +15,10 @@
             }
         ]
     },
+    "actorName": "g2020_fru_qiaoqiaoban.actor",
+    "base": "fur_base",
+    "name": "fru_qiaoqiaoban_body_1",
+    "buffName": "",
     "interactionUI": [
         {
             "cfgKey": "interactionUI",
@@ -22,7 +26,12 @@
                 {
                     "text": "sit1111",
                     "image": "plugin/myplugin/image/hand_click.png",
-                    "event": "ENTITY_qiaoqiaoban_l"
+                    "event": "ENTITY_qiaoqiaoban_l",
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
                 }
             ],
             "followParams": {
@@ -40,7 +49,12 @@
                 {
                     "text": "sit2",
                     "image": "plugin/myplugin/image/hand_click.png",
-                    "event": "ENTITY_qiaoqiaoban_r"
+                    "event": "ENTITY_qiaoqiaoban_r",
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
                 }
             ],
             "followParams": {
@@ -52,8 +66,5 @@
                 }
             }
         }
-    ],
-    "name":"在调",
-    "actorName": "g2020_fru_qiaoqiaoban.actor",
-    "base": "fur_base"
+    ]
 }

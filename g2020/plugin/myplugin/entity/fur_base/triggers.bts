@@ -226,7 +226,7 @@ FUR_ENTITY_RIDE_ON
     ClearRide(entity = $me)
     RideOn(ctrl = $ctrl, entity = $me, target = $obj1, targetIndex = $index)
 }
-
+--上面是编辑，这里是ride
 ENTITY_sit1_3_1 {
 	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 1)
 }
@@ -262,7 +262,32 @@ ENTITY_qiaoqiaoban_l {
 ENTITY_qiaoqiaoban_r {
 	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 9)
 }
+ENTITY_sit2_3_1 {
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 10)
+}
 
+ENTITY_sit2_3_2 {
+    CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 11)
+}
+
+ENTITY_sit2_3_3 {
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 12)
+}
+
+ENTITY_sit2_1_1 {
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 13)
+}
+
+ENTITY_sit2_2_1 {
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 14)
+}
+
+ENTITY_sit2_2_2 {
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 15)
+}
+ENTITY_sleep1 {
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 16)
+}
 
 --上面是编辑，下面是购买逻辑
 
