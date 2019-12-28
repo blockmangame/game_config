@@ -678,8 +678,9 @@ BUY_STORE_BY_APP{
 }
 
 GIVE_STORE{
+    $obj1.hadCloseActorStore = true
     ShowGenericActorShowStore(entity = $obj1, closeWin =true)
-    
+
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
     $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg, ry = 0, rp = 0, owner = $obj1)
     SetObjectVar(obj = $npc, key = "house", value = GetObjectVar(obj = $obj1, key = "house"))
@@ -773,13 +774,15 @@ SHOW_TITLE_BAR{
             ]
         }
     }
-
+    $obj1.hadCloseActorStore = false
     ShowTitleBarPage(entity = $obj1, infoTb = {})
     StartTimer(object =$obj1, obj1 =$obj1, infoTb = $infoTb, time = 1, event = "UPDATE_TITLE_SHOW_BAR")
 }
 
 EDIT_HOUSE{
-    ShowGenericActorShowStore(entity = $obj1, closeWin =true)
+    If(not $obj1.hadCloseActorStore){
+        ShowGenericActorShowStore(entity = $obj1, closeWin =true)
+    }
     $editBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/edit_house_buff")
     If(not $editBuff){
         AddEntityBuff(entity = $obj1, cfg = "myplugin/edit_house_buff")
@@ -828,6 +831,7 @@ UPDATE_EDIT_STORE_SELL_TAB{
 }
 
 SHOW_DEC_STORE{
+    $obj1.hadCloseActorStore = false
     ShowGenericActorShowStore(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, closeWin = true)
     If(not $titleKey){
