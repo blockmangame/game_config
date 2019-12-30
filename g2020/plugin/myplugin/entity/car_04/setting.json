@@ -9,7 +9,61 @@
             "pos": {
                 "y": -0.1,
                 "z": -0.7,
-                "x": 0.6
+                "x": 0.65
+            },
+            "out": {
+                "y": 2,
+                "z": 0,
+                "x": 0.5
+            },
+            "ctrl": true,
+            "view": true,
+            "passengerAction": {
+                "base": "riding"
+            }
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": -0.1,
+                "z": -0.7,
+                "x": 0.7
+            },
+            "out": {
+                "y": 2,
+                "z": 0,
+                "x": 0.5
+            },
+            "ctrl": true,
+            "view": true,
+            "passengerAction": {
+                "base": "riding"
+            }
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": -0.1,
+                "z": -0.7,
+                "x": 0.75
+            },
+            "out": {
+                "y": 2,
+                "z": 0,
+                "x": 0.5
+            },
+            "ctrl": true,
+            "view": true,
+            "passengerAction": {
+                "base": "riding"
+            }
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": -0.1,
+                "z": -0.7,
+                "x": 0.8
             },
             "out": {
                 "y": 2,
@@ -29,16 +83,24 @@
             {
                 "type": "Box",
                 "params": [
-                    3,
-                    1.2,
+                    2.6,
+                    1.8,
                     5
                 ]
             }
         ]
     },
-    
+    "canInteract": true,
     "interactionUI": {
         "cfgKey": "interactionUI",
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        },
         "centerBtns": [
             {
                 "text": "item_testlang",
@@ -50,8 +112,13 @@
                 }
             }
         ],
-        "followParams": {
-            "followScenePos": false
+        "interaction": {
+            "radius": 11,
+            "offset": {
+                "x": 0,
+                "y": -1,
+                "z": 2
+            }
         }
     },
     "actorName": "g2020_car04.actor",
