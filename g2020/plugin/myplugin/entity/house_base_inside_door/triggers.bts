@@ -40,8 +40,9 @@ INTER_WITH_DOOR{
     SetEntityPosition(entity = $obj2, map = GetEntityMap(entity = $door), ry = GetEntityYaw(entity = $door),
         pos = ComputeV3(p1 = GetEntityPosition(entity = $door), p2 = V3RotationYaw(vector = Table(x = 0, y = 0.5, z = 3), yaw = GetEntityYaw(entity = $door)), op = "add"))
     If(GetObjectID(object = GetObjectVar(obj = $obj2, key = "house")) == GetObjectID(object = GetObjectVar(obj = $obj1, key = "house"))){
+        $obj2.inOutSide = true
         CallTrigger(object = $obj2, event = "SAVE_FURNITURE")
-        StartTimer(object =$obj1, obj1 =$obj1, obj2 = $obj2, time = 3, event = "UPDATE_TITLE_SHOW_BAR")
+        ShowTitleBarPage(entity = $obj2, closeWin = true)
         ShowGenericActorShowStore(entity = $obj2, closeWin =true)
 
         $lastInteractionUiObjId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")
@@ -54,10 +55,6 @@ INTER_WITH_DOOR{
     }
     CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj2, gpsDict = GetObjectVar(obj = $obj2, key = "gpsDict")) --如果有导航则继续导航
     CallTrigger(object = $obj2, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
-}
-
-UPDATE_TITLE_SHOW_BAR{
-    ShowTitleBarPage(entity = $obj2, closeWin = true)
 }
 
 ENTITY_DIE{
