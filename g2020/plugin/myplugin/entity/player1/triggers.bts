@@ -4426,6 +4426,8 @@ UPDATE_PARTY_SETTING_INFO{
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
+    --todo: get the party's likeNum from curHouseVars
+    --$likeNum = 0
     $maxPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "partyMaxPlayerNumber")
     $partyImage = GetEntityCfg(fullName = $curHouseCfg, key = "partyImage")
     $reachPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "reachGoodPartyPlayerNumber")
@@ -4441,6 +4443,12 @@ CLOSE_PARTY_SUCCESS {
         $player.inPartyOwnerId = 0
         ReenterGame(player = $player)
     }
+}
+PARTY_BE_LIKED{
+    --todo: update the party likeNumber in curHouseVars
+    -- $partyInfoDict = NewDictionary($partyInfo)
+    -- $likeNum = DictionaryGet(dict = $partyInfoDict, key = "likeNum")
+
 }
 --↑↑↑↑↑↑ party
 
