@@ -4446,9 +4446,20 @@ CLOSE_PARTY_SUCCESS {
 }
 PARTY_BE_LIKED{
     --todo: update the party likeNumber in curHouseVars
-    -- $partyInfoDict = NewDictionary($partyInfo)
-    -- $likeNum = DictionaryGet(dict = $partyInfoDict, key = "likeNum")
+    $partyInfoDict = NewDictionary($partyInfo)
+    $likeNum = DictionaryGet(dict = $partyInfoDict, key = "likeNum")
 
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            $curHousedict = $dict
+            $curHouseIndex = $index
+            Break()
+        }
+    }
+    DictionarySet(dict = $curHousedict, key = "likeNum", value = $likeNum)
+    ArraySet(array = $houseVars, index = $curHouseIndex, value = DictionaryToTable(dict = $curHousedict))
 }
 --↑↑↑↑↑↑ party
 
