@@ -107,18 +107,20 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
 
         $npc = CreateNpc(map = $map, cfgName = DictionaryGet(dict = $fDict, key = "cfg"), 
             pos = $pos, ry = DictionaryGet(dict = $fDict, key = "yaw") or 0, rp = DictionaryGet(dict = $fDict, key = "pitch") or 0, owner = $obj1.owner)
-        SetEntityRoll(entity = $npc, rotationRoll = DictionaryGet(dict = $fDict, key = "roll") or 0)
-        -- Test("DictionaryGet(dict = $fDict, key = roll) ", DictionaryGet(dict = $fDict, key = "roll"), DictionaryGet(dict = $fDict, key = "pitch"),DictionaryGet(dict = $fDict, key = "yaw") )
-        $npc.lastSideNormal = DictionaryGet(dict = $fDict, key = "lastSideNormal") or Table(x = 0,y = 0,z = 0)
-        Foreach(array = DictionaryGet(dict = $fDict, key = "saveSkinList") or {}, key = "skinTb"){
-            $skinDict = NewDictionary($skinTb)
-            If(DictionaryGet(dict = $skinDict, key = "skin")){
-                SetSkin(entity = $npc, skinName = DictionaryGet(dict = $skinDict, key = "skinName"), skinValue = DictionaryGet(dict = $skinDict, key = "skin"))
+        If($npc){
+            SetEntityRoll(entity = $npc, rotationRoll = DictionaryGet(dict = $fDict, key = "roll") or 0)
+            -- Test("DictionaryGet(dict = $fDict, key = roll) ", DictionaryGet(dict = $fDict, key = "roll"), DictionaryGet(dict = $fDict, key = "pitch"),DictionaryGet(dict = $fDict, key = "yaw") )
+            $npc.lastSideNormal = DictionaryGet(dict = $fDict, key = "lastSideNormal") or Table(x = 0,y = 0,z = 0)
+            Foreach(array = DictionaryGet(dict = $fDict, key = "saveSkinList") or {}, key = "skinTb"){
+                $skinDict = NewDictionary($skinTb)
+                If(DictionaryGet(dict = $skinDict, key = "skin")){
+                    SetSkin(entity = $npc, skinName = DictionaryGet(dict = $skinDict, key = "skinName"), skinValue = DictionaryGet(dict = $skinDict, key = "skin"))
+                }
             }
+            DictionarySet(dict = $fDict, key = "furnishingId", value = GetObjectID(object = $npc))
+            SetObjectVar(obj = $npc, key = "house", value = $obj1)
+            ArraySet(array = $furnitures, index = $findex, value = DictionaryToTable(dict = $fDict))
         }
-        DictionarySet(dict = $fDict, key = "furnishingId", value = GetObjectID(object = $npc))
-        SetObjectVar(obj = $npc, key = "house", value = $obj1)
-        ArraySet(array = $furnitures, index = $findex, value = DictionaryToTable(dict = $fDict))
     }
     ------------------------------------------ 内部门
     ------------------------------------------ 房子 <house-------insideDoor> 内部门
