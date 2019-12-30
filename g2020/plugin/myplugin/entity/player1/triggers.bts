@@ -749,7 +749,9 @@ SAVE_FURNITURE{
 }
 
 SHOW_TITLE_BAR{
-    If($obj1.inPartyOwnerId ~= 0 or $obj2.inOutSide){
+    $obj1Map = GetEntityMap(entity = $obj1)
+    $obj1MapOwner = GetMapVar(map = $obj1Map, key = "owner")
+    If($obj1.inPartyOwnerId ~= 0 or not $obj1MapOwner or ($obj1MapOwner ~= GetObjectVar(obj = $obj1, key = "house"))){
         Return()--in party
     }
     $editBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/edit_house_buff")
