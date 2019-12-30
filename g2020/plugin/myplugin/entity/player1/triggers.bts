@@ -749,7 +749,9 @@ SAVE_FURNITURE{
 }
 
 SHOW_TITLE_BAR{
-    If($obj1.inPartyOwnerId ~= 0){
+    $obj1Map = GetEntityMap(entity = $obj1)
+    $obj1MapOwner = GetMapVar(map = $obj1Map, key = "owner")
+    If($obj1.inPartyOwnerId ~= 0 or not $obj1MapOwner or ($obj1MapOwner ~= GetObjectVar(obj = $obj1, key = "house"))){
         Return()--in party
     }
     $editBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/edit_house_buff")
@@ -4109,6 +4111,11 @@ ENTER_EQUIPMEN {
 
 ENTER_MAP
 {
+    $obj1Map = GetEntityMap(entity = $obj1)
+    $obj1MapOwner = GetMapVar(map = $obj1Map, key = "owner")
+    If(not $obj1MapOwner or ($obj1MapOwner ~= GetObjectVar(obj = $obj1, key = "house"))){
+        ShowTitleBarPage(entity = $obj1, closeWin = true)
+    }
     CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
     CallTrigger(object = $obj1, event = "PICK_HAND_ITEM", obj1 = $obj1)
     If(GetEntityMapName(entity = $obj1) == "map001") 
@@ -4419,6 +4426,16 @@ UPDATE_PARTY_SETTING_INFO{
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
+    --todo: get the party's likeNum from curHouseVars
+    $likeNum = 0
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    Foreach(array = $houseVars, key = "houseVar"){
+        $dict = NewDictionary($houseVar)
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            $likeNum = DictionaryGet(dict = $dict, key = "likeNum")
+            Break()
+        }
+    }
     $maxPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "partyMaxPlayerNumber")
     $partyImage = GetEntityCfg(fullName = $curHouseCfg, key = "partyImage")
     $reachPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "reachGoodPartyPlayerNumber")
@@ -4434,6 +4451,23 @@ CLOSE_PARTY_SUCCESS {
         $player.inPartyOwnerId = 0
         ReenterGame(player = $player)
     }
+}
+PARTY_BE_LIKED{
+    --todo: update the party likeNumber in curHouseVars
+    $partyInfoDict = NewDictionary($partyInfo)
+    $likeNum = DictionaryGet(dict = $partyInfoDict, key = "likeNum")
+
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            $curHousedict = $dict
+            $curHouseIndex = $index
+            Break()
+        }
+    }
+    DictionarySet(dict = $curHousedict, key = "likeNum", value = $likeNum)
+    ArraySet(array = $houseVars, index = $curHouseIndex, value = DictionaryToTable(dict = $curHousedict))
 }
 --↑↑↑↑↑↑ party
 

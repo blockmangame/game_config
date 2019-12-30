@@ -8,7 +8,7 @@
     "rotateNearBoxAngle": true,
     "posSyncDelay": 1,
     "stopChangeYaw":1,
-    "canInteract": true,
+    
     "image": "",
     "buyMoney": 0,
     "sellMoney": 0,
@@ -23,7 +23,6 @@
     "rotationYawModlus": 90,
     "supportingForce": false,
     "isStatic": true,
- 
     "/name": "这是food_base里面的东西",
     "deadInRed": false,
     "destroyTime": 40,
@@ -352,7 +351,7 @@
             "/yaw": "1人床_index16",
             "yaw": 0,
             "pos": {
-                "y": 0,
+                "y": 0.1,
                 "z": 0,
                 "x": 0
             },
@@ -361,12 +360,12 @@
                 "z": 0,
                 "x": 0
             },
-            "attachPoint": "attachPoints_2sit2",
+            "/attachPoint": "attachPoints_1sit",
             "ctrl": false,
             "view": false,
             
             "passengerAction": {
-                "base": "sleep"
+                "base": "sleep1"
             }
         }
     ],

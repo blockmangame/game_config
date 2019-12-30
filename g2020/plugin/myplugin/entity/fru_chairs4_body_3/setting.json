@@ -18,5 +18,28 @@
     "actorName": "g2020_fru_chairs4.actor",
     "base": "fur_base",
     "name": "fru_chairs4_body_3",
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "sit",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": "ENTITY_sleep1",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "widgetFileName": "widget_button"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        }
+    },
     "buffName": ""
 }
