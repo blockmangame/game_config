@@ -6,6 +6,11 @@ WEAR_EQUIPMEN {
         $carName = GetConfigVar(obj = $item, key = "carName")
         CallTrigger(event = "EQUIP_CAR", obj1 = $obj1, carName = $carName)
     }
+    ElseIf($typeIndex == 1)
+    {
+        --baby trolley
+        CallTrigger(event = "EQUIP_BABY_TROLLEY", object = $obj1, cfgPath = GetConfigVar(obj = $item, key = "trolleyEntity"))
+    }
 }
 
 TAKEOFF_EQUIPMEN {
@@ -14,6 +19,12 @@ TAKEOFF_EQUIPMEN {
     {
         $carName = GetConfigVar(obj = $item, key = "carName")
         CallTrigger(event = "TAKEOFF_EQUIP_CAR", obj1 = $obj1, carName = $carName)
+    }
+    ElseIf($typeIndex == 1)
+    {
+        --baby trolley
+        SetObjectVar(obj = $obj1, key = "equipTakeOff", value = true)
+        CallTrigger(event = "DEMOUNT_BABY_TROLLEY", object = $obj1)
     }
 }
 
@@ -2099,7 +2110,14 @@ INTERACTION_PICK
 }
 
 INTERACTION_BABY_TROLLEY {
-
+    If($obj2.createdTrolley && $obj2.role == @adult && $obj1.role == @child)
+    {
+        RideOn(entity = $obj1, ctrl = false, target = $obj2.createdTrolley, targetIndex = 3) --乘车人
+    }
+    Else
+    {
+        ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
+    }
 }
 
 INTERACTION_RAISE_HEIGHT
@@ -2138,7 +2156,12 @@ USER_INTERACTION_ACTION
 
 ENTITY_JUMP {
     CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
-    If (GetRideOn(entity = $obj1) && not IsCameraMode(player = $obj1)){
+    $ride = GetRideOn(entity = $obj1)
+    If ($ride && not IsCameraMode(player = $obj1)){
+        If(GetOwner(entity = $ride) == $obj1 && GetConfigVar(obj = $ride, key = "driverJumpShiled"))
+        {
+            Return()
+        }
         Dismount(entity = $obj1)
     }
 }
@@ -3877,6 +3900,80 @@ TAKEOFF_EQUIP_CAR
     }
 }
 
+EQUIP_ITEM_IMMEDIATELY --params: item
+{
+    $immediately = $item and GetConfigVar(obj = $item, key = "equipImmediately")
+    If(not $immediately)
+    {
+        Return()
+    }
+    $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
+    $equipTakeOff = GetObjectVar(obj = $obj1, key = "equipTakeOff")
+    If($equipTakeOff)
+    {
+        SetObjectVar(obj = $obj1, key = "equipTakeOff", value = false)
+        Return()
+    }
+    If($typeIndex == 1)
+    {
+        --baby trolley
+        CallTrigger(event = "EQUIP_BABY_TROLLEY", object = $obj1, cfgPath = GetConfigVar(obj = $item, key = "trolleyEntity"))
+    }
+}
+
+EQUIP_BABY_TROLLEY --params: cfgPath
+{
+    If(not $cfgPath)
+    {
+        Return()
+    }
+    If(not GetEntityOnGround(entity = $obj1))
+    {
+        ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", time = 40)
+        Return()
+    }
+    
+    If($obj1.createdTrolley)
+    {
+        CallTrigger(object = $obj1, event = "DEMOUNT_BABY_TROLLEY")
+    }
+
+    $trolley = CreateNpc(
+        cfgName = $cfgPath,
+        pos = GetEntityPosition(entity = $obj1),
+        map = GetEntityMap(entity = $obj1), owner = $obj1
+    )
+    If($trolley)
+    {
+        $trolley.scaleBuff = AddEntityBuff(
+            entity = $trolley, 
+            cfg = $obj1.role == @adult and "myplugin/item_adult_scale" or "myplugin/item_child_scale" 
+        )
+        SetObjectVar(obj = $obj1, key = "createdTrolley", value = $trolley)
+        RideOn(entity = $obj1, ctrl = true, target = $obj1.createdTrolley, targetIndex = $obj1.role == @adult and 2 or 1) --推车人
+        AddSkill(entity = $obj1, name = "myplugin/kill_trolley")
+    }
+}
+
+DEMOUNT_BABY_TROLLEY
+{
+    If($obj1.createdTrolley)
+    {
+        $passengers = GetPassengers(entity = $obj1.createdTrolley)
+        Foreach(array = $passengers, key = "passenger")
+        {
+            If($passenger ~= GetObjectID(object = $obj1))
+            {
+                ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", time = 40)
+            }
+        }
+        RemoveEntityBuff(entity = $obj1.createdTrolley, buff = GetObjectVar(obj = $obj1.createdTrolley, key = "scaleBuff"))
+        KillEntity(entity = $obj1.createdTrolley)
+        SetObjectVar(obj = $obj1, key = "createdTrolley", value = nil)
+        RemoveSkill(entity = $obj1, name = "myplugin/kill_trolley")
+    }
+}
+
 START_CAMERA_MODE
 {
     If(not IsCameraMode(player = $obj1))
@@ -4096,14 +4193,15 @@ PICK_HAND_ITEM {
 
 ENTER_EQUIPMEN {
     $disableHand = GetConfigVar(obj = $item, key = "disableHand")
-    If($disableHand)
-    {
-        Return()
-    }
     $canHandMap = GetConfigVar(obj = $item, key = "canHandMap")
     $playerCurMap = GetEntityMapName(entity = $obj1)
     If ($canHandMap and $playerCurMap ~= $canHandMap)
     {
+        Return()
+    }
+    If($disableHand)
+    {
+        CallTrigger(object = $obj1, event = "EQUIP_ITEM_IMMEDIATELY", item = $item)
         Return()
     }
     SetHandItem(player = $obj1, item = $item)
