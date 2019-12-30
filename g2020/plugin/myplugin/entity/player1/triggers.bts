@@ -2112,7 +2112,7 @@ INTERACTION_PICK
 INTERACTION_BABY_TROLLEY {
     If($obj2.createdTrolley && $obj2.role == @adult && $obj1.role == @child)
     {
-        RideOn(entity = $obj1, ctrl = false, target = $obj2.createdTrolley, targetIndex = 2) --乘车人
+        RideOn(entity = $obj1, ctrl = false, target = $obj2.createdTrolley, targetIndex = 3) --乘车人
     }
     Else
     {
