@@ -17,7 +17,7 @@
     },
     "actorName": "g2020_food.actor",
     "base": "fur_base",
-    "name": "fru_food_food_lolipop2",
+    "sellItem": "myplugin/food_food_lolipop2",
     "interactionUI": {
         "cfgKey": "interactionUI",
         "aroundBtns": [
@@ -60,7 +60,15 @@
             "radius": 1
         }
     },
-    "sellItem": "myplugin/food_food_lolipop2",
-    "sellPrice": 3,
-    "buffName": ""
+    "disableShadow ": false,
+    "buffName": "",
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "sellPrice": 3
 }
