@@ -1238,6 +1238,9 @@ ROTATION_WHEN_RIDE_ON{
     SetEntityRoll(entity = $obj1, rotationYaw = GetEntityRoll(entity = $obj2))
 }
 
+UPDATE_OBJ_HOUSE_INSIDE_REGION{
+    SetObjectVar(obj = $obj1, key = "curInsideRegion", value = $region)
+}
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 
 ADD_MONEY
