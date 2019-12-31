@@ -3844,6 +3844,7 @@ EQUIP_CAR {
 
     $createdCarOfCarName = DictionaryGet(dict = $obj1.createdCars, key = $carName)
     $ownerInCar = false
+
     If($createdCarOfCarName)
     {
         $passengers = GetPassengers(entity = $createdCarOfCarName)
@@ -4617,7 +4618,6 @@ INIT_FAMILY_ALBUM
 
 SAVE_PHOTO
 {
-    Test("photo...", $data)
     $familyAlbum = GetObjectVar(obj = $obj1, key = "familyAlbum")
     If(not $familyAlbum)
     {
@@ -4626,7 +4626,6 @@ SAVE_PHOTO
 
     If(ArraySize(array = $familyAlbum) < GetWorldVar(key = "familyAlbumNum"))
     {
-        Test("can add familyAlbum....")
         $photo = {
             image = $data,
             name = "dafault_name"
@@ -4635,7 +4634,6 @@ SAVE_PHOTO
         ArrayAppend(array = $familyAlbum, value = $photo)
 
         UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
-        Test("familyAlbum data....", $familyAlbum)
 
         $btnInfo = {
             leftCoinId = nil,
@@ -4647,7 +4645,6 @@ SAVE_PHOTO
     }
     Else
     {
-        Test("familyAlbum full ....")
         $btnInfo = {
             leftCoinId = nil,
             leftContent = "ui_cancel",
