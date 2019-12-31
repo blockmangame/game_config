@@ -4536,8 +4536,6 @@ UPDATE_PARTY_SETTING_INFO{
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
-    --todo: get the partys likeNum from curHouseVars
-    $likeNum = 0
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     Foreach(array = $houseVars, key = "houseVar"){
         $dict = NewDictionary($houseVar)
@@ -4545,6 +4543,9 @@ UPDATE_CREATE_PARTY_VIEW_INFO {
             $likeNum = DictionaryGet(dict = $dict, key = "likeNum")
             Break()
         }
+    }
+    If(not $likeNum){
+        $likeNum = 0
     }
     $maxPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "partyMaxPlayerNumber")
     $partyImage = GetEntityCfg(fullName = $curHouseCfg, key = "partyImage")
@@ -4563,7 +4564,6 @@ CLOSE_PARTY_SUCCESS {
     }
 }
 PARTY_BE_LIKED{
-    --todo: update the party likeNumber in curHouseVars
     $partyInfoDict = NewDictionary($partyInfo)
     $likeNum = DictionaryGet(dict = $partyInfoDict, key = "likeNum")
 
