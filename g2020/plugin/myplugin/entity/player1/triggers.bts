@@ -2780,10 +2780,13 @@ RENAME_DRESS_ARCHIVE
         If($archive)
         {
             SetObjectVar(obj = $archive, key = "name", value = $name)
+            $uiData = {
+                index = $index,
+                name = $name
+            }
+            UpdateUIData(player = $obj1, ui = "win_dressArchiveRename", data = $uiData) 
         }
     }
-    
-    UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $dressArchive) 
 }
 
 REMOVE_BM_DRESS
@@ -2876,7 +2879,7 @@ CHANGE_PLAYER_NAME
 {
     SetEntityName(entity = $obj1, name = $name)
     $obj1.nickName = $name
-    UpdateUIData(player = $obj1, ui = "win_dressArchiveName", data = $name)
+    UpdateUIData(player = $obj1, ui = "win_dressArchivePlayerName", data = $name)
 }
 
 SHOW_OPERATE_DRESS_STORE_ITEM
