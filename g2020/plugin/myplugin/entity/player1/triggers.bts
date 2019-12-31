@@ -2933,7 +2933,7 @@ SHOW_SAVE_WORKS_TIP
 {
     $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
     $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = nil, rightContent = "works_save" }
-    $context = { url = $url}
+    $context = { url = $url, isEdit = $isEdit, worksId = $worksId}
     ShowDialogTip(entity = $obj1, tipType = 5, event = "SAVE_WORKS_TIP_CLICK_EVENT", p1 = "ui_tip", p2= "publish_works_tip", p3 = $btnInfo, context = $context)
 }
 
@@ -2958,8 +2958,14 @@ SAVE_WORKS_TIP_CLICK_EVENT
         }
     }
 
-    $content = { url = $url, isPublish = $isPublish }
-    CallTrigger(event = "CHECK_WORKS_ARCHIVE", obj1 = $obj1, url = $url, isPublish = $isPublish)
+    If($isEdit && $worksId ~= nil)
+    {
+        CallTrigger(event = "UPDATE_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish, worksId = $worksId, isEdit = $isEdit)
+    }
+    Else
+    {
+        CallTrigger(event = "CHECK_WORKS_ARCHIVE", obj1 = $obj1, url = $url, isPublish = $isPublish)
+    }
 }
 
 
@@ -3070,30 +3076,56 @@ GET_NEW_UN_PUBLISH_RESPONSE
 
 UPDATE_WORKS
 {
-    UpdateWorks(player = $obj1, url = $url, isPublish = $isPublish, worksId = $worksId, event = "UPDATE_WORKS_RESPONSE")
+    UpdateWorks(player = $obj1, url = $url, isPublish = $isPublish, worksId = $worksId, isEdit = $isEdit, event = "UPDATE_WORKS_RESPONSE")
 }
 
 UPDATE_WORKS_RESPONSE
 {
      $dictValue = NewDictionary($response)
      $code = DictionaryGet(dict = $dictValue, key = "code")
+
      If($code == 1)
      {
         If($isPublish)
         {
             $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
             PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
-            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_and_publish_new_works_succeed", time = 20)
+            If($isEdit)
+            {
+                ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_edit_and_publish_new_works_succeed", time = 20)
+            }
+            Else
+            {
+                ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_and_publish_new_works_succeed", time = 20)
+            }
+
             UpdateUIData(player =$obj1, ui = "works_person", data = true)
+            CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId)
         }
         Else
         {
-            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_succeed", time = 20)
+            If($isEdit)
+            {
+                ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_edit_new_works_succeed", time = 20)
+            }
+            Else
+            {
+                ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_succeed", time = 20)
+            }
         }
+
+        OperationWindows(player = $obj1, isOpen = false, win = "palette")
      }
      Else
      {
-        ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_failure", time = 20)
+        If($isEdit)
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_edit_new_works_failure", time = 20)
+        }
+        Else
+        {
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_failure", time = 20)
+        }
      }
 }
 
@@ -3116,14 +3148,13 @@ CREATE_WORKS_RESPONSE
             PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
             ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
             UpdateUIData(player =$obj1, ui = "works_person", data = true)
-            OperationWindows(player = $obj1, isOpen = false, win = "palette")
             CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $data)
         }
         Else
         {
             ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_succeed", time = 20)
-            OperationWindows(player = $obj1, isOpen = false, win = "palette")
         }
+        OperationWindows(player = $obj1, isOpen = false, win = "palette")
     }
     Else
     {

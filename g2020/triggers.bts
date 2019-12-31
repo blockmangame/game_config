@@ -261,6 +261,7 @@ FUNC_CLOSE_GPS --params: destination
 
 FUNC_OPEN_GPS --params: gpsDict
 {
+    $obj1.taskShowGps = false
     SetGuidePostion(pos = $gps, entity = $obj1)
     SetObjectVar(obj = $obj1, key = "gpsDict", value = $gpsDict)
     ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
