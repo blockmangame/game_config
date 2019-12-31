@@ -136,6 +136,7 @@ CREATE_OWNER_HOUSE{
 
 ENTITY_ENTER
 {
+    --CallTrigger(event = "CHECK_SHOW_SVIP_UI", object = $obj1)
     CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
     CallTrigger(event = "CHECK_IN_PARTY", object = $obj1)
     UpdateUIData(player = $obj1, ui = "circleProgress", data = {})
@@ -3752,6 +3753,9 @@ ENTITY_BUY_APPSTOP {
         
         ArrayAppend(array = $obj1.privilege, value = $itemName)
         CallTrigger(obj1 = $obj1, event = "BUY_PRIVILEGE_SUCCEED", shopIndex = $itemIndex, privilegeName = $itemName)
+        If($itemName == "myplugin/svip_privilege"){
+            ShowToolBarButton(name = "svip", show = true, player = $obj1)
+        }
     }
 }
 
@@ -4532,7 +4536,7 @@ UPDATE_PARTY_SETTING_INFO{
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
-    --todo: get the party's likeNum from curHouseVars
+    --todo: get the partys likeNum from curHouseVars
     $likeNum = 0
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     Foreach(array = $houseVars, key = "houseVar"){
@@ -4728,4 +4732,21 @@ PLAYER_CLEAR_RIDE
 {
     CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     ClearRide(entity = $obj1)
+}
+
+CHECK_SHOW_SVIP_UI()
+{
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
+    {
+        ShowToolBarButton(name = "svip", show = true, player = $obj1)
+    }
+}
+GET_SVIP_REWARD()
+{
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
+    {
+        $money = GetWorldVar(key = "svipMoney")
+        ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
+        ShowToolBarButton(name = "svip", show = false, player = $obj1)
+    }
 }

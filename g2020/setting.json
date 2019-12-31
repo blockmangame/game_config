@@ -697,5 +697,32 @@
     "customProp": {
         "lightState": "off",
         "hideDeep": 0.75
+    },
+    "toolBarSetting": {
+        "addButons": [
+            {
+                "name": "friend",
+                "clientEvent": "EVENT_SHOW_FRIEND",
+                "clientEventArgs": [ true ],
+                "redPointEvent": "EVENT_SHOW_RED_POINT",
+                "normalImage": "set:toorbar_botton.json image:friend",
+                "pushedImage": "set:toorbar_botton.json image:friend"
+            },
+            {
+                "name": "signIn",
+                "clientEvent": "EVENT_SHOW_NEW_SIGIN_IN",
+                "clientEventArgs": [ true ],
+                "defaultHide": true,
+                "normalImage": "set:toorbar_botton.json image:check_in",
+                "pushedImage": "set:toorbar_botton.json image:check_in"
+            },
+            {
+                "name": "svip",
+                "serverEvent": "GET_SVIP_REWARD",
+                "defaultHide": true,
+                "normalImage": "set:Svip.json image:SVIP.png",
+                "pushedImage": "set:Svip.json image:SVIP.png"
+            }
+        ]
     }
 }
