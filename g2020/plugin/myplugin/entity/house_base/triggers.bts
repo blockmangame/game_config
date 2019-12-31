@@ -210,7 +210,7 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
         Return()
     }
     $regions = $childRegionArr
-    $regionArea = 0
+    $regionArea = 99
     Foreach(array = $regions, key = "region"){
         $min = GetRegionMin(region = $region)
         $max = GetRegionMax(region = $region)
@@ -230,10 +230,6 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
     $firstRegionMax = GetRegionMax(region = $firstRegion)
     $maxHeight = GetPosY(pos = $firstRegionMax)
 
-    $firstBlockPos = $firstRegionMin
-    $curBlockPos = $firstRegionMin
-    $lastBlockPos = $firstRegionMin
-
     $matrixWidth = ArraySize(array = ArrayGet(array = $replaceTb, index = 1))
     $matrixHeight = ArraySize(array = $replaceTb)
     $widthCount = 0
@@ -247,6 +243,27 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
     ]
     $directionIndex = 1
 
+    $firstBlockPos = $firstRegionMin
+    $curBlockPos = $firstRegionMin
+    $lastBlockPos = $firstRegionMin
+
+    ForLoop(from = 1, to = (GetPosX(pos = $firstRegionMax) - GetPosX(pos = $firstRegionMin) + GetPosZ(pos = $firstRegionMax) - GetPosZ(pos = $firstRegionMin)), key = "index"){
+        $firstSourceBlockCfg = GetBlockFullName(map = $map, pos = $firstBlockPos)
+        $firstNeedReplace = true
+        ForeachDictionary(dict = $filterDict, keyName = "i", valueName = "v"){
+            If(GetBlockConfigByName(block = $firstSourceBlockCfg, key = $i) ~= $v){
+                $firstNeedReplace = false
+                Break()
+            }
+        }
+        If($firstNeedReplace){
+            $curBlockPos = $firstBlockPos
+            $lastBlockPos = $firstBlockPos
+            Break()
+        }
+        $firstBlockPos = ComputeV3(p1 = ArrayGet(array = $directionMap, index = $directionIndex), p2 = $firstBlockPos, op = "add")
+    }
+    
     ForLoop(from = 1, to = $regionArea, key = "index"){
         $sourceBlockCfg = GetBlockFullName(map = $map, pos = $curBlockPos)
         $needReplace = true
