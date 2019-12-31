@@ -4279,7 +4279,7 @@ CHECK_LEAVE_PARTY_FROM_DOOR {
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.close", event = "CHECK_CLOSE_PARTY", tipType = 2)
     }
     Else{
-        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.exit", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
+        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.exit", event = "ASK_LEAVE_PARTY", tipType = 2)
     }
 }
 PLAYER_BE_INVITE {
@@ -4468,25 +4468,36 @@ CHECK_LEAVE_PARTY {
         LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
     }
 }
-ASK_SHOW_PARTY_LIST {
+ASK_LEAVE_PARTY{
     If($result == false) {
-        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
         Return()
     }
-    ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "CHECK_EXIT_PARTY", tipType = 2)
+    $obj1.needAskShowPartyList = true
+    LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+}
+ASK_SHOW_PARTY_LIST {
+    If($result == false) {
+        ReenterGame(player = $obj1)
+        Return()
+    }
+    ShowPartyList(player = $obj1, closeEvent = "REENTER_GAME")
 }
 CHECK_CLOSE_PARTY {
     If($result == false) {Return()}
     CloseParty(player = $obj1)
 }
-CHECK_EXIT_PARTY {
-    If($result == false) {Return()}
-    LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+REENTER_GAME(debug = true){
+    ReenterGame(player = $obj1)
 }
 LEAVE_PARTY_SUCCESS {
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
     $obj1.inPartyOwnerId = 0
-    ReenterGame(player = $obj1)
+    If($obj1.needAskShowPartyList){
+        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
+    }
+    Else{
+        ReenterGame(player = $obj1)
+    }
 }
 CHECK_IN_PARTY(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
