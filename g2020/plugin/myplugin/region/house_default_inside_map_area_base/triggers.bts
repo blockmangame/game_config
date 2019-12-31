@@ -1,7 +1,7 @@
 REGION_ENTER {
-    SetObjectVar(obj = $obj1, key = "curInsideRegion", value = $region)
+    StartTimer(time = 3, object = $obj1, obj1 = $obj1, region = $region, event = "UPDATE_OBJ_HOUSE_INSIDE_REGION")
 }
 
 REGION_LEAVE {
-    -- SetObjectVar(obj = $obj1, key = "curInsideRegion", value = nil)
+    SetObjectVar(obj = $obj1, key = "curInsideRegion", value = nil)
 }

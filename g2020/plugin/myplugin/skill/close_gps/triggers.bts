@@ -1,7 +1,0 @@
-SKILL_CAST  {
-    If(not IsPlayer(entity = $obj1))
-    {
-        Return()
-    }
-    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
-}
