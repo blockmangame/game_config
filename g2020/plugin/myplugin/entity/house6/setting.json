@@ -54,7 +54,7 @@
     "mailPos": {
         "x": 4,
         "y": 0.1,
-        "z": 8
+        "z": 5
     },
     "boundingVolume": {
         "type": "Composite",
@@ -73,9 +73,54 @@
         ]
     },
     "insideDoorPos": {
-        "x": 14,
+        "x": 15,
         "y": 2,
-        "z": 9
+        "z": 9.5
     },
-    "houseDefaultFurniture": []
+    "houseDefaultFurniture": [
+        {
+            "pos": {
+                "x": 9.5,
+                "y": 10,
+                "z": 11
+            },
+            "yaw": 0,
+            "cfg": "myplugin/fru_chairs4_body_1",
+            "furnishingId": "10001",
+            "isOldFurnishing": "true"
+        },
+        {
+            "pos": {
+                "x": 9,
+                "y": 10,
+                "z": 17.5
+            },
+            "yaw": 0,
+            "cfg": "myplugin/fru_chairs_body_15",
+            "furnishingId": "10001",
+            "isOldFurnishing": "true"
+        },
+        {
+            "pos": {
+                "x": 9,
+                "y": 10,
+                "z": 23.5
+            },
+            "yaw": 180,
+            "cfg": "myplugin/fru_chairs_body_2051",
+            "furnishingId": "10001",
+            "isOldFurnishing": "true"
+        },
+        {
+            "pos": {
+                "x": 13.5,
+                "y": 10,
+                "z": 24
+            },
+            "yaw": 90,
+            "cfg": "myplugin/fru_chairs4_body_3",
+            "furnishingId": "10001",
+            "isOldFurnishing": "true"
+        }
+    ]
 }

@@ -31,7 +31,15 @@
     },
     "actorName": "g2020_fru_chairs3.actor",
     "base": "fur_base",
-    "name": "fru_chairs3_body_2034",
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "buffName": "light_on_buff",
     "interactionUI": {
         "cfgKey": "interactionUI",
         "aroundParams": {
@@ -80,5 +88,5 @@
             }
         }
     },
-    "buffName": "light_on_buff"
+    "disableShadow ": false
 }

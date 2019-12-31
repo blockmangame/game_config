@@ -136,6 +136,7 @@ CREATE_OWNER_HOUSE{
 
 ENTITY_ENTER
 {
+    --CallTrigger(event = "CHECK_SHOW_SVIP_UI", object = $obj1)
     CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
     CallTrigger(event = "CHECK_IN_PARTY", object = $obj1)
     UpdateUIData(player = $obj1, ui = "circleProgress", data = {})
@@ -1238,6 +1239,9 @@ ROTATION_WHEN_RIDE_ON{
     SetEntityRoll(entity = $obj1, rotationYaw = GetEntityRoll(entity = $obj2))
 }
 
+UPDATE_OBJ_HOUSE_INSIDE_REGION{
+    SetObjectVar(obj = $obj1, key = "curInsideRegion", value = $region)
+}
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 
 ADD_MONEY
@@ -1578,7 +1582,7 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         }
         
         $countKey = Concat(p1 = $stateBase, p2 = "RewardCount")
-        $count = GetObjectVar(obj = $entity, key = $countKey)
+        $count = GetObjectVar(obj = $entity, key = $countKey) or 0
         $dis = GetObjectDistance(obj1 = $obj1, obj2 = $entity)
         $myTeamId =  GetEntityTeam(entity = $entity)
 
@@ -2112,7 +2116,7 @@ INTERACTION_PICK
 INTERACTION_BABY_TROLLEY {
     If($obj2.createdTrolley && $obj2.role == @adult && $obj1.role == @child)
     {
-        RideOn(entity = $obj1, ctrl = false, target = $obj2.createdTrolley, targetIndex = 2) --乘车人
+        RideOn(entity = $obj1, ctrl = false, target = $obj2.createdTrolley, targetIndex = 3) --乘车人
     }
     Else
     {
@@ -2777,10 +2781,13 @@ RENAME_DRESS_ARCHIVE
         If($archive)
         {
             SetObjectVar(obj = $archive, key = "name", value = $name)
+            $uiData = {
+                index = $index,
+                name = $name
+            }
+            UpdateUIData(player = $obj1, ui = "win_dressArchiveRename", data = $uiData) 
         }
     }
-    
-    UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $dressArchive) 
 }
 
 REMOVE_BM_DRESS
@@ -2873,7 +2880,7 @@ CHANGE_PLAYER_NAME
 {
     SetEntityName(entity = $obj1, name = $name)
     $obj1.nickName = $name
-    UpdateUIData(player = $obj1, ui = "win_dressArchiveName", data = $name)
+    UpdateUIData(player = $obj1, ui = "win_dressArchivePlayerName", data = $name)
 }
 
 SHOW_OPERATE_DRESS_STORE_ITEM
@@ -3777,6 +3784,9 @@ ENTITY_BUY_APPSTOP {
         
         ArrayAppend(array = $obj1.privilege, value = $itemName)
         CallTrigger(obj1 = $obj1, event = "BUY_PRIVILEGE_SUCCEED", shopIndex = $itemIndex, privilegeName = $itemName)
+        If($itemName == "myplugin/svip_privilege"){
+            ShowToolBarButton(name = "svip", show = true, player = $obj1)
+        }
     }
 }
 
@@ -3872,6 +3882,7 @@ EQUIP_CAR {
 
     $createdCarOfCarName = DictionaryGet(dict = $obj1.createdCars, key = $carName)
     $ownerInCar = false
+
     If($createdCarOfCarName)
     {
         $passengers = GetPassengers(entity = $createdCarOfCarName)
@@ -3895,12 +3906,13 @@ EQUIP_CAR {
         }
     }
 
-    $car = CreateNpc(cfgName = $carName, pos = GetEntityPosition(entity = $obj1), 
-        map = GetEntityMap(entity = $obj1), owner = $obj1)
+    $pos = GetEntityPosition(entity = $obj1)
+    $newPos = ComputeV3(op = "add", p1= $pos, p2 = {x = 0, y = 2, z = 0})
+    $car = CreateNpc(cfgName = $carName, pos = $newPos, map = GetEntityMap(entity = $obj1), owner = $obj1)
+
     RideOn(ctrl = true, entity = $obj1, target = $car)
 
     DictionarySet(dict = $obj1.createdCars, key = $carName, value = $car)
-
 }
 
 DEBARK {
@@ -4298,7 +4310,7 @@ CHECK_LEAVE_PARTY_FROM_DOOR {
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.close", event = "CHECK_CLOSE_PARTY", tipType = 2)
     }
     Else{
-        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.exit", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
+        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.exit", event = "ASK_LEAVE_PARTY", tipType = 2)
     }
 }
 PLAYER_BE_INVITE {
@@ -4487,25 +4499,36 @@ CHECK_LEAVE_PARTY {
         LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
     }
 }
-ASK_SHOW_PARTY_LIST {
+ASK_LEAVE_PARTY{
     If($result == false) {
-        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
         Return()
     }
-    ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "CHECK_EXIT_PARTY", tipType = 2)
+    $obj1.needAskShowPartyList = true
+    LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+}
+ASK_SHOW_PARTY_LIST {
+    If($result == false) {
+        ReenterGame(player = $obj1)
+        Return()
+    }
+    ShowPartyList(player = $obj1, closeEvent = "REENTER_GAME")
 }
 CHECK_CLOSE_PARTY {
     If($result == false) {Return()}
     CloseParty(player = $obj1)
 }
-CHECK_EXIT_PARTY {
-    If($result == false) {Return()}
-    LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+REENTER_GAME(debug = true){
+    ReenterGame(player = $obj1)
 }
 LEAVE_PARTY_SUCCESS {
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
     $obj1.inPartyOwnerId = 0
-    ReenterGame(player = $obj1)
+    If($obj1.needAskShowPartyList){
+        ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
+    }
+    Else{
+        ReenterGame(player = $obj1)
+    }
 }
 CHECK_IN_PARTY(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
@@ -4555,8 +4578,6 @@ UPDATE_PARTY_SETTING_INFO{
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
-    --todo: get the party's likeNum from curHouseVars
-    $likeNum = 0
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     Foreach(array = $houseVars, key = "houseVar"){
         $dict = NewDictionary($houseVar)
@@ -4564,6 +4585,9 @@ UPDATE_CREATE_PARTY_VIEW_INFO {
             $likeNum = DictionaryGet(dict = $dict, key = "likeNum")
             Break()
         }
+    }
+    If(not $likeNum){
+        $likeNum = 0
     }
     $maxPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "partyMaxPlayerNumber")
     $partyImage = GetEntityCfg(fullName = $curHouseCfg, key = "partyImage")
@@ -4582,7 +4606,6 @@ CLOSE_PARTY_SUCCESS {
     }
 }
 PARTY_BE_LIKED{
-    --todo: update the party likeNumber in curHouseVars
     $partyInfoDict = NewDictionary($partyInfo)
     $likeNum = DictionaryGet(dict = $partyInfoDict, key = "likeNum")
 
@@ -4644,7 +4667,6 @@ INIT_FAMILY_ALBUM
 
 SAVE_PHOTO
 {
-    Test("photo...", $data)
     $familyAlbum = GetObjectVar(obj = $obj1, key = "familyAlbum")
     If(not $familyAlbum)
     {
@@ -4653,7 +4675,6 @@ SAVE_PHOTO
 
     If(ArraySize(array = $familyAlbum) < GetWorldVar(key = "familyAlbumNum"))
     {
-        Test("can add familyAlbum....")
         $photo = {
             image = $data,
             name = "dafault_name"
@@ -4662,7 +4683,6 @@ SAVE_PHOTO
         ArrayAppend(array = $familyAlbum, value = $photo)
 
         UpdateUIData(player = $obj1, ui = "win_familyAlbum", data = $familyAlbum)
-        Test("familyAlbum data....", $familyAlbum)
 
         $btnInfo = {
             leftCoinId = nil,
@@ -4674,7 +4694,6 @@ SAVE_PHOTO
     }
     Else
     {
-        Test("familyAlbum full ....")
         $btnInfo = {
             leftCoinId = nil,
             leftContent = "ui_cancel",
@@ -4755,4 +4774,21 @@ PLAYER_CLEAR_RIDE
 {
     CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     ClearRide(entity = $obj1)
+}
+
+CHECK_SHOW_SVIP_UI()
+{
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
+    {
+        ShowToolBarButton(name = "svip", show = true, player = $obj1)
+    }
+}
+GET_SVIP_REWARD()
+{
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
+    {
+        $money = GetWorldVar(key = "svipMoney")
+        ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
+        ShowToolBarButton(name = "svip", show = false, player = $obj1)
+    }
 }
