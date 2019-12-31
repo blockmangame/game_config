@@ -1581,7 +1581,7 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         }
         
         $countKey = Concat(p1 = $stateBase, p2 = "RewardCount")
-        $count = GetObjectVar(obj = $entity, key = $countKey)
+        $count = GetObjectVar(obj = $entity, key = $countKey) or 0
         $dis = GetObjectDistance(obj1 = $obj1, obj2 = $entity)
         $myTeamId =  GetEntityTeam(entity = $entity)
 
