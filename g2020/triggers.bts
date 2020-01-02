@@ -214,6 +214,7 @@ CHANGE_PLAYER_SCALE_ADULT
     If(IsPlayer(entity = $obj1))
     {
         UpdateUIData(player = $obj1, ui = "win_dressArchiveScale", data = 1)
+        CallTrigger(object = $obj1, event = "CHANGE_BABY_TROLLEY_SCALE")
     }
 }
 
@@ -242,6 +243,7 @@ CHANGE_PLAYER_SCALE_CHILD
     If(IsPlayer(entity = $obj1))
     {
         UpdateUIData(player = $obj1, ui = "win_dressArchiveScale", data = 0.8)
+        CallTrigger(object = $obj1, event = "CHANGE_BABY_TROLLEY_SCALE")
     }
 }
 
