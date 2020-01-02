@@ -564,21 +564,6 @@
                 }
             }
         },
-        "dances": {
-            "regionCfg": "myplugin/region_state_dances",
-            "box": {
-                "min": {
-                    "x": 300,
-                    "y": 18,
-                    "z": 400
-                },
-                "max": {
-                    "x": 305,
-                    "y": 50,
-                    "z": 405
-                }
-            }
-        },
         "pool": {
             "regionCfg": "myplugin/region_state_pool",
             "box": {
@@ -608,6 +593,21 @@
                     "z": 388
                 }
             }
+        },
+        "dance_region": {
+            "regionCfg": "myplugin/dance_region",
+            "box": {
+                "min": {
+                    "x": 0,
+                    "y": 17,
+                    "z": 0
+                },
+                "max": {
+                    "x": 520,
+                    "y": 57,
+                    "z": 520
+                }
+            }
         }
     },
     "entity": [
@@ -630,6 +630,16 @@
                 "z": 375
             },
             "ry": 180
+        },
+        {
+            "cfg": "myplugin/npc_select_role",
+            "pitch": 0,
+            "pos": {
+                "x": 265,
+                "y": 19.1,
+                "z": 380
+            },
+            "ry": 90
         },
         {
             "cfg": "myplugin/npc_model",
@@ -1808,86 +1818,6 @@
                 "x": 271.5,
                 "y": 19,
                 "z": 453.5
-            },
-            "ry": 0
-        },
-        {
-            "cfg": "myplugin/fru_chairs_body_3",
-            "pitch": 0,
-            "pos": {
-                "x": 262,
-                "y": 19,
-                "z": 400
-            },
-            "ry": 0
-        },
-        {
-            "cfg": "myplugin/fru_chairs_body_8",
-            "pitch": 0,
-            "pos": {
-                "x": 260,
-                "y": 19,
-                "z": 400
-            },
-            "ry": 0
-        },
-        {
-            "cfg": "myplugin/fru_chairs_body_16",
-            "pitch": 0,
-            "pos": {
-                "x": 258,
-                "y": 19,
-                "z": 400
-            },
-            "ry": 0
-        },
-        {
-            "cfg": "myplugin/fru_chairs_body_27",
-            "pitch": 0,
-            "pos": {
-                "x": 256,
-                "y": 19,
-                "z": 400
-            },
-            "ry": 0
-        },
-        {
-            "cfg": "myplugin/fru_chairs_body_28",
-            "pitch": 0,
-            "pos": {
-                "x": 254,
-                "y": 19,
-                "z": 400
-            },
-            "ry": 0
-        },
-        {
-            "cfg": "myplugin/fru_chairs_body_2051",
-            "pitch": 0,
-            "pos": {
-                "x": 252,
-                "y": 19,
-                "z": 400
-            },
-            "ry": 0
-        },
-        {
-            "cfg": "myplugin/fru_qiaoqiaoban_body_1",
-            "pitch": 0,
-            "pos": {
-                "x": 250,
-                "y": 19,
-                "z": 400
-            },
-            "ry": 0
-        },
-        {
-            "cfg": "myplugin/fru_qiuqian_body_1",
-            "pitch": 0,
-            "pos": {
-                "x": 248,
-                "y": 19,
-                "z": 400
             },
             "ry": 0
         }
