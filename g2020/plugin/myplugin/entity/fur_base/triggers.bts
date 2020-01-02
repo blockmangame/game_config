@@ -452,4 +452,8 @@ LIGHT_OFF
     $cfg = Concat(p1 = "myplugin/", p2 = $obj1.cfg.buffName)
     RemoveEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
 }
-
+----上面是编辑，下面是选择体型
+SHOW_SELECT_ROLE_UI 
+{
+   CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj2)  
+}
