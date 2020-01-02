@@ -17,7 +17,7 @@ CREATE_DOOR_REGION{
     SetObjectVar(obj = $obj1, key = "curDoorRegionKey", value = $doorRegionKey)
 }
 
-ENTITY_CLICK{
+ENTITY_inside_door{
     CallTrigger(object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "INTER_WITH_DOOR")
 }
 

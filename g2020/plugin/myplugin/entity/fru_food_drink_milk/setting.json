@@ -17,7 +17,17 @@
     },
     "actorName": "g2020_food.actor",
     "base": "fur_base",
+    "disableShadow": false,
+    "sellPrice": 2,
     "sellItem": "myplugin/food_drink_milk",
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
     "interactionUI": {
         "cfgKey": "interactionUI",
         "aroundBtns": [
@@ -59,16 +69,5 @@
             "endAngle": 0,
             "radius": 1
         }
-    },
-    "disableShadow ": false,
-    "buffName": "",
-    "interaction": {
-        "radius": 5,
-        "offset": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-        }
-    },
-    "sellPrice": 2
+    }
 }

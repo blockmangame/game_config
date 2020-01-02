@@ -6,5 +6,36 @@
     "canClick": true,
     "doorRegionCfg": "myplugin/house_base_inside_door_region",
     "doorRegionKey": "house_base_inside_door_region",
-    "base": "house_base_inside_door"
+    "base": "house_base_inside_door",
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "inside_door",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": "ENTITY_inside_door",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "widgetFileName": "widget_button"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        }
+    }
 }
