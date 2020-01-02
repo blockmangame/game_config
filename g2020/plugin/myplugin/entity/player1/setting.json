@@ -9,8 +9,6 @@
     "saveVars": {
         "houseVars": []
     },
-    "waterline":0.8,
-    "canBoat":true,
     "ridePos": [
         {
             "yaw": 180,
@@ -298,51 +296,59 @@
         },
         "aroundBtns": [
             {
-                "text": "Back",
-                "image": "set:party_interaction_ui.json image:interaction_add_friend",
+                "text": "",
+                "image": "plugin/myplugin/image/back.png",
                 "event": "INTERACTION_BACK",
                 "imageSize": {
-                    "width": 200,
-                    "height": 97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                    "width": 60,
+                    "height": 60
+                }
             },
             {
-                "text": "A1",
-                "image": "set:party_interaction_ui.json image:interaction_add_friend",
-                "event": "INTERACTION_CLAP"
+                "text": "",
+                "image": "plugin/myplugin/image/clap.png",
+                "event": "INTERACTION_CLAP",
+				"imageSize": {
+                    "width": 60,
+                    "height": 60
+                }
             },
             {
-                "text": "A2",
-                "image": "set:party_interaction_ui.json image:interaction_feed",
-                "event": "INTERACTION_HUG"
+                "text": "",
+                "image": "plugin/myplugin/image/hug.png",
+                "event": "INTERACTION_HUG",
+				"imageSize": {
+                    "width": 60,
+                    "height": 60
+                }
             },
             {
-                "text": "A3",
+                "text": "",
                 "image": "set:party_interaction_ui.json image:interaction_act",
                 "event": "INTERACTION_HAND_IN_HAND"
             },
             {
-                "text": "A4",
+                "text": "",
                 "image": "set:party_interaction_ui.json image:interaction_join_family",
                 "event": "INTERACTION_FOLLOW"
             },
             {
-                "text": "A5",
-                "image": "set:party_interaction_ui.json image:interaction_add_friend",
-                "event": "INTERACTION_RIDE"
+                "text": "",
+                "image": "plugin/myplugin/image/rideon.png",
+                "event": "INTERACTION_RIDE",
+				"imageSize": {
+                    "width": 60,
+                    "height": 60
+                }
             },
             {
-                "text": "TROLLEY",
-                "image": "set:party_interaction_ui.json image:interaction_join_family",
+                "text": "",
+                "image": "plugin/myplugin/image/trolley.png",
                 "event": "INTERACTION_BABY_TROLLEY",
-                "imageSize": {
-                    "width": 200,
-                    "height": 97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+				"imageSize": {
+                    "width": 60,
+                    "height": 60
+                }
             }
         ]
     },
@@ -367,63 +373,63 @@
         },
         "aroundBtns": [
             {
-                "text": "Back",
-                "image": "set:party_interaction_ui.json image:interaction_add_friend",
+                "text": "",
+                "image": "plugin/myplugin/image/back.png",
                 "event": "INTERACTION_BACK",
                 "imageSize": {
-                    "width": 200,
-                    "height": 97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+                    "width": 60,
+                    "height": 60
+                }
             },
             {
-                "text": "B1",
-                "image": "set:party_interaction_ui.json image:interaction_add_friend",
-                "event": "INTERACTION_HUG"
+                "text": "",
+                "image": "plugin/myplugin/image/hug.png",
+                "event": "INTERACTION_HUG",
+				"imageSize": {
+                    "width": 60,
+                    "height": 60
+                }
             },
             {
-                "text": "B2",
-                "image": "set:party_interaction_ui.json image:interaction_feed",
-                "event": "INTERACTION_HANDSHAKE"
+                "text": "",
+                "image": "plugin/myplugin/image/handshake.png",
+                "event": "INTERACTION_HANDSHAKE",
+				"imageSize": {
+                    "width": 60,
+                    "height": 60
+                }
             },
             {
-                "text": "B3",
+                "text": "",
                 "image": "set:party_interaction_ui.json image:interaction_act",
                 "event": "INTERACTION_FOLLOW"
             },
             {
-                "text": "B4",
-                "image": "set:party_interaction_ui.json image:interaction_join_family",
+                "text": "",
+                "image": "plugin/myplugin/image/pikeup.png",
                 "event": "INTERACTION_PICK",
-                "imageSize": {
-                    "width": 200,
-                    "height": 97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+				"imageSize": {
+                    "width": 60,
+                    "height": 60
+                }
             },
             {
-                "text": "B5",
-                "image": "set:party_interaction_ui.json image:interaction_join_family",
+                "text": "",
+                "image": "plugin/myplugin/image/raiseheight.png",
                 "event": "INTERACTION_RAISE_HEIGHT",
-                "imageSize": {
-                    "width": 200,
-                    "height": 97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+				"imageSize": {
+                    "width": 60,
+                    "height": 60
+                }
             },
             {
-                "text": "TROLLEY",
-                "image": "set:party_interaction_ui.json image:interaction_join_family",
+                "text": "",
+                "image": "plugin/myplugin/image/trolley.png",
                 "event": "INTERACTION_BABY_TROLLEY",
-                "imageSize": {
-                    "width": 200,
-                    "height": 97
-                },
-                "imageStretchType": "NineGrid",
-                "imageStretchOffset": "100 20 0 0"
+				"imageSize": {
+                    "width": 60,
+                    "height": 60
+                }
             }
         ]
     },
