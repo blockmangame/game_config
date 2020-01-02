@@ -150,11 +150,8 @@ ENTITY_ENTER
         {
             $obj1.nickName = $playerName
         }
-
-        If($obj1.nickName ~= $playerName)
-        {
-            SetEntityName(entity = $obj1, name = $nickName)
-        }
+        
+        SetEntityName(entity = $obj1, name = $obj1.nickName)
 
         $obj1.isReadyReward = false
         $obj1.requestFamilyPlayer = nil
