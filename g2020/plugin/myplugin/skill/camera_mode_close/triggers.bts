@@ -2,6 +2,7 @@ SKILL_CAST
 {
     If(IsCameraMode(player = $obj1))
     {
+        ShowInteractionWindow(player = $obj1)
         SetCameraMode(player = $obj1, isOpen = false)
         RemoveEntityBuff(entity = $obj1, buff = $obj1.cameraModeCloseBuff)
         RemoveEntityBuff(entity = $obj1, buff = $obj1.cameraModeTakePhotosBuff)
