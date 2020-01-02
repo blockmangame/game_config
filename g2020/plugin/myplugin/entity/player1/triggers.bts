@@ -4022,19 +4022,10 @@ START_CAMERA_MODE
     If(not IsCameraMode(player = $obj1))
     {
         SetCameraMode(player = $obj1, isOpen = true)
+        HideInteractionWindow(player = $obj1)
         $obj1.cameraModeCloseBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/camera_mode_close")
         $obj1.cameraModeTakePhotosBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/camera_mode_take_photos")
         OperationWindows(player = $obj1, isOpen = false, win = "main_tray_g2020")
-    }
-}
-
-ClOSE_CAMERA_MODE
-{
-    If(IsCameraMode(player = $obj1))
-    {
-        SetCameraMode(player = $obj1, isOpen = false)
-        RemoveEntityBuff(entity = $obj1, buff = $obj1.cameraModeBuff)
-        $obj1.cameraModeBuff = nil
     }
 }
 
