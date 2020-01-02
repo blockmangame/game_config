@@ -3818,7 +3818,7 @@ SURE_FURNITURE_BUY {
 }
 --特权购买成功
 ENTITY_BUY_APPSTOP {
-    $dict = NewDictionary($shop)
+    $dict = NewDictionary(Copy(value = $shop))
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
     $index = ArrayFind(array = $obj1.privilege, value = $itemName)
