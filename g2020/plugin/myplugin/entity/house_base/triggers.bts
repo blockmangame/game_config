@@ -263,7 +263,6 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
         }
         $firstBlockPos = ComputeV3(p1 = ArrayGet(array = $directionMap, index = $directionIndex), p2 = $firstBlockPos, op = "add")
     }
-    
     ForLoop(from = 1, to = $regionArea, key = "index"){
         $sourceBlockCfg = GetBlockFullName(map = $map, pos = $curBlockPos)
         $needReplace = true
@@ -279,9 +278,8 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
             CreateBlock(map = $map, pos = $curBlockPos, block = $destBlockCfg)
         }
         -- 计算nextBlock
-        $nextBlockPos = ComputeV3(p1 = ArrayGet(array = $directionMap, index = $directionIndex), p2 = $curBlockPos, op = "add")
+        $nextBlockPos = nil
         ForLoop(from = 1, to = 4, key = "tindex"){
-            -- Break()
             $imcV3 = ArrayGet(array = $directionMap, index = $tindex)
             $tempPos = ComputeV3(p1 = $curBlockPos, p2 = $imcV3, op = "add")
             $tempPosInRegion = false
@@ -309,6 +307,39 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
                 }
             }
         }
+        -- 处理断层
+        If(not $nextBlockPos){
+            $nextBlockPos = ComputeV3(p1 = ArrayGet(array = $directionMap, index = $directionIndex), p2 = $curBlockPos, op = "add")
+            $nextBlockPosInRegion = false
+            Foreach(array = $regions, key = "region"){
+                If(IsPosInRegion(pos = $nextBlockPos, region = $region)){
+                    $nextBlockPosInRegion = true
+                    Break()
+                } 
+            }
+            If(not $nextBlockPosInRegion){
+                ForLoop(from = 1, to = 4, key = "tindex"){
+                    $imcV3 = ArrayGet(array = $directionMap, index = $tindex)
+                    $tempPos = ComputeV3(p1 = $curBlockPos, p2 = $imcV3, op = "add")
+                    $tempPosInRegion = false
+                    Foreach(array = $regions, key = "region"){
+                        If(IsPosInRegion(pos = $tempPos, region = $region)){
+                            $tempPosInRegion = true
+                            Break()
+                        } 
+                    }
+                    If($tempPosInRegion){
+                        If(PosToV3(pos = $tempPos) ~= PosToV3(pos = $lastBlockPos)){
+                            -- If(PosToV3(pos = $nextBlockPos) == PosToV3({x = 26,y = 15, z = 41})){
+                            -- Test($tempPos, $lastBlockPos, $tindex)
+                            $nextBlockPos = $tempPos
+                            $directionIndex = $tindex
+                            Break()
+                        }
+                    }
+                }
+            }
+        }
         If(PosToV3(pos = $nextBlockPos) == PosToV3(pos = $firstBlockPos)){
             $tempPos = ComputeV3(p1 = $firstBlockPos, p2 = {x = 0, y = 1, z = 0}, op = "add")
             If(GetPosY(pos = $tempPos) > $maxHeight){
@@ -320,37 +351,8 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
             $curBlockPos = $tempPos
             $lastBlockPos = $tempPos
         }Else{
-            $inRegion = false
-            Foreach(array = $regions, key = "region"){
-                If(IsPosInRegion(pos = $nextBlockPos, region = $region)){
-                    $inRegion = true
-                    Break()
-                } 
-            }
-            If($inRegion){
-                $lastBlockPos = $curBlockPos
-                $curBlockPos = $nextBlockPos
-            }Else{
-                ForLoop(from = 1, to = 4, key = "cindex"){
-                    $imcV3 = ArrayGet(array = $directionMap, index = $cindex)
-                    $tempPos = ComputeV3(p1 = $curBlockPos, p2 = $imcV3, op = "add")
-                    If(PosToV3(pos = $tempPos) ~= PosToV3(pos = $lastBlockPos) and PosToV3(pos = $tempPos) ~= PosToV3(pos = $nextBlockPos)){
-                        $tempPosInRegion = false
-                        Foreach(array = $regions, key = "cregion"){
-                            If(IsPosInRegion(pos = $tempPos, region = $cregion)){
-                                $tempPosInRegion = true
-                                Break()
-                            } 
-                        }
-                        If($tempPosInRegion){
-                            $lastBlockPos = $curBlockPos
-                            $curBlockPos = $tempPos
-                            $directionIndex = $cindex
-                            Break()
-                        }
-                    }
-                }
-            }
+            $lastBlockPos = $curBlockPos
+            $curBlockPos = $nextBlockPos
             $widthCount = $widthCount + 1
         }
     }
