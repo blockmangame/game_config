@@ -482,7 +482,6 @@ LOAD_NEW_WORKS_RESPONSE {
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
 
-    Test("========================================LOAD_NEW_WORKS_RESPONSE", $response)
     If($code == 1)
     {
         $info = DictionaryGet(dict = $dictValue, key = "data")
@@ -508,8 +507,6 @@ FUNC_LOAD_EXCELLENT_RESPONSE {
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
 
-    Test("========================================FUNC_LOAD_EXCELLENT_RESPONSE", $response)
-
     If($code == 1)
     {
         $info = DictionaryGet(dict = $dictValue, key = "data")
@@ -533,7 +530,6 @@ FUNC_LOAD_WORKS_WALL_TOP_RESPONSE {
     $info = {}
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
-    Test("========================================FUNC_LOAD_WORKS_WALL_TOP_RESPONSE", $response)
     If($code == 1)
     {
         $info = DictionaryGet(dict = $dictValue, key = "data")
