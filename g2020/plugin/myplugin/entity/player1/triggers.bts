@@ -4541,6 +4541,7 @@ CHECK_LEAVE_PARTY {
     }
     If($obj1.inSelfParty == 0){
         LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+        $obj1.inPartyOwnerId = 0
     }
 }
 ASK_LEAVE_PARTY{
@@ -4565,7 +4566,9 @@ REENTER_GAME(debug = true){
     ReenterGame(player = $obj1)
 }
 LEAVE_PARTY_SUCCESS(debug = true){
-    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
+    If($obj1.excludedPartyId == "0"){
+        ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
+    }
     $obj1.inPartyOwnerId = 0
     If($obj1.needAskShowPartyList){
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
