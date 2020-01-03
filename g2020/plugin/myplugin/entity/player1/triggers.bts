@@ -1270,7 +1270,7 @@ ADD_MONEY
     If($obj1.isReadyReward)
     {
         AddCurrency(count = $money, coinName = "green_currency", entity = $obj1)
-        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
+        ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
         $obj1.rewardCounts = $obj1.rewardCounts + 1
     }
     StartTimer(rep = false, time = $cdTime, object = $obj1, event = "ADD_MONEY")
@@ -3896,7 +3896,7 @@ SHOW_SHOP_TITLE {
 
 EQUIP_CAR {
     $mapName = GetEntityName(entity = GetEntityMap(entity = $obj1))
-    If($mapName ~= "map001")
+    If($mapName ~= "map001" && $mapName ~= "map002")
     {
         Return()
     }
@@ -3941,7 +3941,7 @@ EQUIP_CAR {
     $newPos = ComputeV3(op = "add", p1= $pos, p2 = {x = 0, y = 2, z = 0})
     $car = CreateNpc(cfgName = $carName, pos = $newPos, map = GetEntityMap(entity = $obj1), owner = $obj1)
 
-    RideOn(ctrl = true, entity = $obj1, target = $car)
+    RideOn(entity = $obj1, target = $car)
 
     DictionarySet(dict = $obj1.createdCars, key = $carName, value = $car)
 }
@@ -3971,6 +3971,7 @@ TAKEOFF_EQUIP_CAR
 
         KillEntity(entity = $createdCarOfCarName)
         DictionaryRemove(dict = $obj1.createdCars, key = $carName)
+        CallTrigger(event = "DEBARK", object = $obj1)
     }
 }
 
@@ -4331,6 +4332,7 @@ ENTER_MAP
         }
 
         WorksWallsOperation(player = $obj1, isOpen = true)
+        CallTrigger(player = $obj1, event = "SYNC_CUR_WALL_WORKS")
     }
 
     CallTrigger(object = $obj1, event = "DEMOUNT_BABY_TROLLEY")
@@ -4547,6 +4549,7 @@ CHECK_LEAVE_PARTY {
     }
     If($obj1.inSelfParty == 0){
         LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+        $obj1.inPartyOwnerId = 0
     }
 }
 ASK_LEAVE_PARTY{
@@ -4571,7 +4574,9 @@ REENTER_GAME(debug = true){
     ReenterGame(player = $obj1)
 }
 LEAVE_PARTY_SUCCESS(debug = true){
-    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
+    If($obj1.excludedPartyId == "0"){
+        ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
+    }
     $obj1.inPartyOwnerId = 0
     If($obj1.needAskShowPartyList){
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "ASK_SHOW_PARTY_LIST", tipType = 2)

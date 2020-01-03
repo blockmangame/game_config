@@ -24,6 +24,23 @@ RIDE_ON
     }
     If($canDrive)
     {
-        RideOn(ctrl = false, entity = $obj2, target = $obj1)
+        RideOn(entity = $obj2, target = $obj1)
+    }
+}
+
+ENTITY_RIDE_ON
+{
+    $hidePlayer = GetConfigVar(obj = $obj1, key = "hidePlayer")
+    If($hidePlayer)
+    {
+        $obj2.driveHideBuff = AddEntityBuff(entity = $obj2, cfg = "myplugin/driveHide_buff")
+    }
+}
+
+ENTITY_RIDE_OFF
+{
+    If($obj2.driveHideBuff)
+    {
+        RemoveEntityBuff(entity = $obj2, buff = $obj2.driveHideBuff)
     }
 }
