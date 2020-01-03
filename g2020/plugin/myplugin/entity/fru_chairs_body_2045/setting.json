@@ -18,7 +18,7 @@
     "actorName": "g2020_fru_chairs.actor",
     "base": "fur_base",
     "buffName": "light_on_buff_2045",
-    "disableShadow": false,
+    "disableShadow": true,
     "interaction": {
         "radius": 5,
         "offset": {
@@ -36,7 +36,7 @@
         },
         "aroundBtns": [
             {
-                "text": "",
+                "text": "light_on.text",
                 "image": "plugin/myplugin/image/hand_click.png",
                 "checkCanHide": {
                     "funcName": "checkTargetProp",
@@ -51,7 +51,7 @@
                 "widgetFileName": "widget_button"
             },
             {
-                "text": "",
+                "text": "light_off.text",
                 "image": "plugin/myplugin/image/back.png",
                 "checkCanHide": {
                     "funcName": "checkTargetProp",
