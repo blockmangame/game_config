@@ -190,6 +190,27 @@
             },
             "ctrl": false,
             "view": false
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0.2,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0.5
+            },
+            "rideAction": {
+                "idle": "double_coax"
+            },
+            "passengerAction": {
+                "double_coax": "double_coaxed"
+            },
+            "ctrl": false,
+            "view": false
         }
     ],
     "interactionUI": {
@@ -426,6 +447,15 @@
                 "text": "",
                 "image": "plugin/myplugin/image/trolley.png",
                 "event": "INTERACTION_BABY_TROLLEY",
+				"imageSize": {
+                    "width": 60,
+                    "height": 60
+                }
+            },
+            {
+                "text": "",
+                "image": "plugin/myplugin/image/burger.png",
+                "event": "INTERACTION_COAX",
 				"imageSize": {
                     "width": 60,
                     "height": 60
