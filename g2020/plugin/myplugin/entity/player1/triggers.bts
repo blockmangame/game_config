@@ -1270,7 +1270,7 @@ ADD_MONEY
     If($obj1.isReadyReward)
     {
         AddCurrency(count = $money, coinName = "green_currency", entity = $obj1)
-        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
+        ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
         $obj1.rewardCounts = $obj1.rewardCounts + 1
     }
     StartTimer(rep = false, time = $cdTime, object = $obj1, event = "ADD_MONEY")
