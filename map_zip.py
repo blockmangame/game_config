@@ -35,12 +35,12 @@ def zip_dir(dirName):
         for fs in files:
             path = os.path.join(dir, fs)
             arcname = path[pre_len:].strip(os.path.sep)
-            if dir == rootPath :
-                if fs.find(".iml") < 0 :
+            size = os.path.getsize(path)
+            if size > 0 :
+                if fs.find(".bat") < 0 and fs.find(".iml") < 0 :
                     zip.write(path, arcname)
             else :
-                if fs.find(".bat") < 0 :
-                    zip.write(path, arcname)
+                print("file {0}, size == 0.".format(path))
     zip.close()
 
 def parse_args():
