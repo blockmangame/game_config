@@ -1,48 +1,47 @@
 {
-    "isOpaqueFullCube": false,
-    "lightOpacity": 0,
-    "collisionBoxes": [
-        {
-            "max": {
-                "z": 1,
-                "y": 0.3,
-                "x": 1
-            },
-            "min": {
-                "z": 0,
-                "y": 0,
-                "x": 0
-            }
-        }
-    ],
-    "quads": [
-        {
-            "texture": "iron_block.png",
-            "pos": [
-                {
-                    "z": 1,
-                    "y": 0.3,
-                    "x": 1
-                },
-                {
-                    "z": 0,
-                    "y": 0.3,
-                    "x": 1
-                },
-                {
-                    "z": 0,
-                    "y": 0.3,
-                    "x": 0
-                },
-                {
-                    "z": 1,
-                    "y": 0.3,
-                    "x": 0
-                }
-            ]
-        }
-    ],
-    "breakTime": 20,
-    "renderPass": null,
-    "blockObjectOnCollision": false
-}
+		"blockObjectOnCollision":false,
+		"breakTime":20,
+		"collisionBoxes":[
+			{
+				"max":{
+					"x":1,
+					"z":1,
+					"y":0.3
+				},
+				"min":{
+					"x":0,
+					"z":0,
+					"y":0
+				}
+			}
+		],
+		"lightOpacity":0,
+		"isOpaqueFullCube":false,
+		"quads":[
+			{
+				"pos":[
+					{
+						"x":1,
+						"z":1,
+						"y":0.3
+					},
+					{
+						"x":1,
+						"z":0,
+						"y":0.3
+					},
+					{
+						"x":0,
+						"z":0,
+						"y":0.3
+					},
+					{
+						"x":0,
+						"z":1,
+						"y":0.3
+					}
+				],
+				"texture":"iron_block.png"
+			}
+		]
+	}

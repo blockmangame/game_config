@@ -1,6 +1,10 @@
 REGION_ENTER {
     If(IsPlayer(entity = $obj1))
     {
+        If($inRegionKey == "dances")
+        {
+            CallTrigger(object = $obj1, event = "OPEN_DANCE")
+        }
         CallTrigger(
             event = "FUNC_REGION_STATE_OPERATION", 
             object = $obj1, 
@@ -13,6 +17,10 @@ REGION_ENTER {
 REGION_LEAVE {
     If(IsPlayer(entity = $obj1))
     {
+        If($inRegionKey == "dances")
+        {
+            CallTrigger(object = $obj1, event = "CLOSE_DANCE")
+        }
         CallTrigger(
             event = "FUNC_REGION_STATE_OPERATION",
             object = $obj1,
