@@ -4581,7 +4581,7 @@ LEAVE_PARTY_SUCCESS(debug = true){
     If($obj1.needAskShowPartyList){
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
     }
-    ElseIf($obj1.$dontReenterGame){
+    ElseIf($obj1.dontReenterGame){
         $obj1.dontReenterGame = false
     }
     Else{
