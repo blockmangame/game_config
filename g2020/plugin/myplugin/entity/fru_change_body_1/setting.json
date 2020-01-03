@@ -8,16 +8,16 @@
             {
                 "type": "VerticalBox",
                 "params": [
-                    1,
-                    1,
-                    1
+                    2.2,
+                    4,
+                    2.2
                 ]
             }
         ]
     },
     "actorName": "g2020_fru_change.actor",
     "base": "fur_base",
-    "disableShadow": false,
+    "disableShadow": true,
     "interaction": {
         "radius": 5,
         "offset": {
@@ -30,7 +30,7 @@
         "cfgKey": "interactionUI",
         "centerBtns": [
             {
-                "text": "npc_pig",
+                "text": "npc_pig.text",
                 "image": "plugin/myplugin/image/hand_click.png",
                 "event": "SHOW_SELECT_ROLE_UI",
                 "imageSize": {
