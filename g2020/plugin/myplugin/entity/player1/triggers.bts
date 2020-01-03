@@ -2112,9 +2112,17 @@ INTERACTION_PICK
 }
 
 INTERACTION_BABY_TROLLEY {
-    If($obj2.createdTrolley && $obj2.role == @adult && $obj1.role == @child)
+    If($obj2.role == @adult && $obj1.role == @child)
     {
-        RideOn(entity = $obj1, ctrl = false, target = $obj2.createdTrolley, targetIndex = 3) --乘车人
+        $trolley = $obj2.createdTrolley
+        If($trolley && ArraySize(array = GetPassengers(entity = $trolley)) < 2)
+        {
+            RideOn(entity = $obj1, ctrl = false, target = $obj2.createdTrolley, targetIndex = 3) --乘车人
+        }
+        ElseIf(not $trolley)
+        {
+            ShowDialogTip(tipType = 2, entity = $obj2, p1 = "trolley_pls_equip")
+        }
     }
     Else
     {
@@ -3888,7 +3896,7 @@ SHOW_SHOP_TITLE {
 
 EQUIP_CAR {
     $mapName = GetEntityName(entity = GetEntityMap(entity = $obj1))
-    If($mapName ~= "map001")
+    If($mapName ~= "map001" && $mapName ~= "map002")
     {
         Return()
     }
@@ -3960,10 +3968,9 @@ TAKEOFF_EQUIP_CAR
                 ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", time = 40)
             }
         }
-
+        ClearRide(entity = $createdCarOfCarName)
         KillEntity(entity = $createdCarOfCarName)
         DictionaryRemove(dict = $obj1.createdCars, key = $carName)
-        CallTrigger(event = "DEBARK", object = $obj1)
     }
 }
 
@@ -4699,7 +4706,7 @@ START_PLAY_BGM  {
     }
 
     Foreach(array = GetMapNpc(map = GetEntityMap(entity = $obj1)), key = "entity") {
-        If(GetConfigVar(obj = $entity, key = "fullName") == "myplugin/chess_body_12") {
+        If(GetConfigVar(obj = $entity, key = "isBgmSpeakers")) {
             If($entity.bgmBuff) {
                 RemoveEntityBuff(entity = $entity, buff = $entity.bgmBuff)
             }
