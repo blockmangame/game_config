@@ -1,0 +1,48 @@
+{
+    "skin": {
+        "body": "3"
+    },
+    "isBgmSpeakers": true,
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    0.7,
+                    1,
+                    0.7
+                ]
+            }
+        ]
+    },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "sit",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": "OPEN_BGM_LIST"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        }
+    },
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "name": "我是音响！",
+    "actorName": "g2020_fru_chairs.actor",
+    "base": "fur_base"
+}

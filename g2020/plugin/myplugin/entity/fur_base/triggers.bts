@@ -457,3 +457,12 @@ SHOW_SELECT_ROLE_UI
 {
    CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj2)  
 }
+
+OPEN_BGM_LIST{
+    $owner = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "owner")
+    If(GetObjectID(object = $owner) == GetObjectID(object = $obj2)){
+        ShowBgmList(player = $obj2)
+    }Else{
+        ShowTip(entity = $obj2, tipType = 2, textKey = "bgm_sound_just_owner_can_use")
+    }
+}

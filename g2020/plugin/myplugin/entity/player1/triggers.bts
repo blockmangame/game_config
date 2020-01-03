@@ -4707,7 +4707,7 @@ START_PLAY_BGM  {
     }
 
     Foreach(array = GetMapNpc(map = GetEntityMap(entity = $obj1)), key = "entity") {
-        If(GetConfigVar(obj = $entity, key = "fullName") == "myplugin/chess_body_12") {
+        If(GetConfigVar(obj = $entity, key = "isBgmSpeakers")) {
             If($entity.bgmBuff) {
                 RemoveEntityBuff(entity = $entity, buff = $entity.bgmBuff)
             }
