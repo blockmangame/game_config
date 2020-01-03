@@ -3971,7 +3971,6 @@ TAKEOFF_EQUIP_CAR
 
         KillEntity(entity = $createdCarOfCarName)
         DictionaryRemove(dict = $obj1.createdCars, key = $carName)
-        CallTrigger(event = "DEBARK", object = $obj1)
     }
 }
 
