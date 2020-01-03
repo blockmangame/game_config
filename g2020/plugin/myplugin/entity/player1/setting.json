@@ -211,6 +211,53 @@
             },
             "ctrl": false,
             "view": false
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": 0.7,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0.5
+            },
+            "rideAction": {
+                "idle": "double_piggyback",
+                "run": "double_piggyback_run",
+                "sneak": "double_piggyback",
+                "walk": "double_piggyback_walk"
+            },
+            "passengerAction": {
+                "double_piggyback": "double_piggybacked",
+                "double_piggyback_run": "double_piggybacked",
+                "double_piggyback_walk": "double_piggybacked"
+            },
+            "ctrl": false,
+            "view": false
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0.2,
+                "x": 0
+            },
+            "out": {
+                "y": 0,
+                "z": 0,
+                "x": 0.5
+            },
+            "rideAction": {
+                "idle": "double_circle"
+            },
+            "passengerAction": {
+                "double_circle": "double_circled"
+            },
+            "ctrl": false,
+            "view": false
         }
     ],
     "interactionUI": {
@@ -370,6 +417,15 @@
                     "width": 60,
                     "height": 60
                 }
+            },
+            {
+                "text": "",
+                "image": "plugin/myplugin/image/buy_coin.png",
+                "event": "INTERACTION_PIGGYBACK",
+				"imageSize": {
+                    "width": 60,
+                    "height": 60
+                }
             }
         ]
     },
@@ -456,6 +512,15 @@
                 "text": "",
                 "image": "plugin/myplugin/image/burger.png",
                 "event": "INTERACTION_COAX",
+				"imageSize": {
+                    "width": 60,
+                    "height": 60
+                }
+            },
+            {
+                "text": "",
+                "image": "plugin/myplugin/image/buy_cube.png",
+                "event": "INTERACTION_CIRCLE",
 				"imageSize": {
                     "width": 60,
                     "height": 60
