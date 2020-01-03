@@ -3968,7 +3968,7 @@ TAKEOFF_EQUIP_CAR
                 ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", time = 40)
             }
         }
-
+        ClearRide(entity = $createdCarOfCarName)
         KillEntity(entity = $createdCarOfCarName)
         DictionaryRemove(dict = $obj1.createdCars, key = $carName)
     }
