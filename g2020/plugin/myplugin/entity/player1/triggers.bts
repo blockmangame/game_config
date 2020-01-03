@@ -3908,7 +3908,7 @@ EQUIP_CAR {
     $newPos = ComputeV3(op = "add", p1= $pos, p2 = {x = 0, y = 2, z = 0})
     $car = CreateNpc(cfgName = $carName, pos = $newPos, map = GetEntityMap(entity = $obj1), owner = $obj1)
 
-    RideOn(ctrl = true, entity = $obj1, target = $car)
+    RideOn(entity = $obj1, target = $car)
 
     DictionarySet(dict = $obj1.createdCars, key = $carName, value = $car)
 }
@@ -3938,6 +3938,7 @@ TAKEOFF_EQUIP_CAR
 
         KillEntity(entity = $createdCarOfCarName)
         DictionaryRemove(dict = $obj1.createdCars, key = $carName)
+        CallTrigger(event = "DEBARK", object = $obj1)
     }
 }
 
