@@ -3888,7 +3888,7 @@ SHOW_SHOP_TITLE {
 
 EQUIP_CAR {
     $mapName = GetEntityName(entity = GetEntityMap(entity = $obj1))
-    If($mapName ~= "map001")
+    If($mapName ~= "map001" && $mapName ~= "map002")
     {
         Return()
     }
