@@ -312,6 +312,7 @@ ENTITY_LEAVE{
     ---------------------------------------玩家退出，删除掉暂存在数据库“dressArchive”字段中的bm装扮信息
     CallTrigger(object = $obj1, event = "REMOVE_BM_DRESS")
     CallTrigger(object = $obj1, event = "CHECK_LEAVE_PARTY")
+    ReleaseManor(player = $obj1)
 }
 UPDATE_FURNITURE_STATUS{
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
@@ -2130,6 +2131,30 @@ INTERACTION_RAISE_HEIGHT
     Else
     {
         ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
+    }
+}
+
+INTERACTION_COAX
+{   --摸头杀；大人向小孩发起
+    If($obj2.role == @adult && $obj1.role == @child)
+    {
+        CallTrigger(obj1 = $obj2, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_coax")
+    }
+    Else
+    {
+        ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
+    }
+}
+
+INTERACTION_PIGGYBACK
+{   --背；小孩向大人发起
+    If($obj2.role == @child && $obj1.role == @adult)
+    {
+        CallTrigger(obj1 = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_piggyback")
+    }
+    Else
+    {
+        ShowDialogTip(tipType = 2, entity = $obj2, p1 = "action_role_not_matching_child")
     }
 }
 
@@ -4299,6 +4324,7 @@ ENTER_MAP
         }
 
         WorksWallsOperation(player = $obj1, isOpen = true)
+        CallTrigger(player = $obj1, event = "SYNC_CUR_WALL_WORKS")
     }
 
     CallTrigger(object = $obj1, event = "DEMOUNT_BABY_TROLLEY")
@@ -4538,11 +4564,14 @@ CHECK_CLOSE_PARTY {
 REENTER_GAME(debug = true){
     ReenterGame(player = $obj1)
 }
-LEAVE_PARTY_SUCCESS {
+LEAVE_PARTY_SUCCESS(debug = true){
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
     $obj1.inPartyOwnerId = 0
     If($obj1.needAskShowPartyList){
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
+    }
+    ElseIf($obj1.dontReenterGame){
+        $obj1.dontReenterGame = false
     }
     Else{
         ReenterGame(player = $obj1)
@@ -4586,6 +4615,7 @@ CREATE_PARTY_SUCCESS {
 }
 JOIN_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = $targetUserId
+    $obj1.needCheckResetGameResult = true
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
 }
@@ -4638,6 +4668,12 @@ PARTY_BE_LIKED{
     }
     DictionarySet(dict = $curHousedict, key = "likeNum", value = $likeNum)
     ArraySet(array = $houseVars, index = $curHouseIndex, value = DictionaryToTable(dict = $curHousedict))
+}
+RESET_GAME_FAILED(debug = true){
+    If($resultCode ~= 1 and $obj1.needCheckResetGameResult){
+        $obj1.dontReenterGame = true
+        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+    }
 }
 --↑↑↑↑↑↑ party
 

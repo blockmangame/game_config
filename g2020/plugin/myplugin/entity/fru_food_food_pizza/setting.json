@@ -17,7 +17,7 @@
     },
     "actorName": "g2020_food.actor",
     "base": "fur_base",
-    "disableShadow": false,
+    "disableShadow": true,
     "sellPrice": 3,
     "sellItem": "myplugin/food_food_pizza",
     "interaction": {
@@ -32,7 +32,7 @@
         "cfgKey": "interactionUI",
         "aroundBtns": [
             {
-                "text": "payme!",
+                "text": "food_buy.text",
                 "image": "plugin/myplugin/image/hand_click.png",
                 "checkCanHide": {
                     "funcName": "checkOwnerInSameTeam"
@@ -44,7 +44,7 @@
                 }
             },
             {
-                "text": "free!",
+                "text": "food_buy.text2",
                 "image": "plugin/myplugin/image/hand_click.png",
                 "checkCanShow": {
                     "funcName": "checkOwnerInSameTeam"

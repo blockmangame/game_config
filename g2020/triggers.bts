@@ -340,14 +340,33 @@ FUNC_STATE_ADD_INTERACTLIST --params: entities
 
 WORKS_WALL_TIMER_START
 {
-    --StartTimer(rep = true, time = 100, event = "WORKS_WALL_UPDATE_NEW_WORKS")
-    --StartTimer(rep = true, time = 100, event = "WORKS_WALL_UPDATE_EXCELLENT_WORKS")
     $worksWallConfig = GetWorldVar(key = "worksWalls")
     Foreach(array = $worksWallConfig, key = "data")
     {
         $dict = NewDictionary($data)
         $name = DictionaryGet(dict = $dict, key = "name")
         StartTimer(rep = true, time = 100, event = "WORKS_WALL_UPDATE", wallName = $name)
+    }
+}
+
+SYNC_CUR_WALL_WORKS
+{
+    If(@worksWallIndex ~= nil and @worksWalls ~= nil)
+    {
+        $dictValue = NewDictionary(@worksWallIndex)
+        ForeachDictionary(dict = $dictValue, keyName = "wallName", valueName = "wallIndex")
+        {
+           $dictWall = NewDictionary(@worksWalls)
+           $worksList = DictionaryGet(dict = $dictWall, key = $wallName)
+           If($worksList)
+           {
+               $works = ArrayGet(array = $worksList, index = $wallIndex)
+               If($works)
+               {
+                   UpdateUIData(player = $player, ui = $wallName, data = $works)
+               }
+           }
+        }
     }
 }
 
@@ -462,6 +481,8 @@ LOAD_NEW_WORKS_RESPONSE {
     $info = {}
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
+
+    Test("========================================LOAD_NEW_WORKS_RESPONSE", $response)
     If($code == 1)
     {
         $info = DictionaryGet(dict = $dictValue, key = "data")
@@ -479,13 +500,16 @@ LOAD_NEW_WORKS_RESPONSE {
 FUNC_LOAD_EXCELLENT_WORKS {--获取优秀作品
     $count = 180
     $praiseNum = 100
-    GetExcellentWorks(count = $count, limit = -1, event = "FUNC_LOAD_EXCELLENT_RESPONSE" )
+    GetExcellentWorks(count = $count, limit = 0, event = "FUNC_LOAD_EXCELLENT_RESPONSE" )
 }
 
 FUNC_LOAD_EXCELLENT_RESPONSE {
     $info = {}
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
+
+    Test("========================================FUNC_LOAD_EXCELLENT_RESPONSE", $response)
+
     If($code == 1)
     {
         $info = DictionaryGet(dict = $dictValue, key = "data")
@@ -509,6 +533,7 @@ FUNC_LOAD_WORKS_WALL_TOP_RESPONSE {
     $info = {}
     $dictValue = NewDictionary($response)
     $code = DictionaryGet(dict = $dictValue, key = "code")
+    Test("========================================FUNC_LOAD_WORKS_WALL_TOP_RESPONSE", $response)
     If($code == 1)
     {
         $info = DictionaryGet(dict = $dictValue, key = "data")
