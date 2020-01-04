@@ -18,6 +18,36 @@
             }
         ]
     },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        },
+        "centerBtns": [
+            {
+                "text": "$100",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": "EVENT_BROADCAST_PARTY_INVITE",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                }
+            }
+        ]
+    },
+    "interaction": {
+        "radius": 4,
+        "offset": {
+            "x": 0,
+            "y": 2,
+            "z": 2
+        }
+    },
     "actorName": "g2020_fru_chairs4.actor",
     "base": "fur_base",
     "disableShadow": true

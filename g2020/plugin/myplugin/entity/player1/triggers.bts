@@ -3818,7 +3818,7 @@ SURE_FURNITURE_BUY {
 }
 --特权购买成功
 ENTITY_BUY_APPSTOP {
-    $dict = NewDictionary($shop)
+    $dict = NewDictionary(Copy(value = $shop))
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
     $index = ArrayFind(array = $obj1.privilege, value = $itemName)
@@ -4662,11 +4662,6 @@ JOIN_PARTY_SUCCESS {
         ArrayAppend(array = $userIds, value = $targetUserId)
         SetObjectVar(obj = $obj1, key = "joinUserPartyData", value = DictionaryToTable(dict = $joinUserPartyDataDict))
     }
-}
-UPDATE_PARTY_SETTING_INFO{
-    $curHouseCfg = $obj1.curHouseCfg
-    $partyBroadcastCost = GetEntityCfg(fullName = $curHouseCfg, key = "partyBroadcastCost")
-    $partyBroadcastCoinId = GetEntityCfg(fullName = $curHouseCfg, key = "partyBroadcastCoinId")
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg

@@ -1,14 +1,18 @@
 {
     "canClick": true,
-    "carMove": true,
+    "carMove": false,
     "carConfig": [],
     "collision": true,
+    "bodyTurnMin": 361,
+    "bodyTurnMax": 361,
+    "moveSpeed": 0.5,
+    "canJump": true,
     "ridePos": [
         {
             "yaw": 0,
             "pos": {
                 "y": -0.1,
-                "z": -0.64,
+                "z": -0.7,
                 "x": 0.6
             },
             "out": {
@@ -20,25 +24,27 @@
             "view": true,
             "passengerAction": {
                 "base": "riding"
-            }
-        },
+            },
+            "attachPoint": "ride"
+        }
+    ],
+    "attachPoints": [
         {
-            "yaw": 0,
-            "pos": {
-                "y": -0.2,
-                "z": -0.64,
-                "x": -0.6
+            "name": "ride",
+            "bone": "Bip001_Spine1",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
             },
-            "out": {
-                "y": 2,
-                "z": 0,
-                "x": 0.5
+            "position": {
+                "x": -0.03,
+                "y": 0.55,
+                "z": 0.45
             },
-            "ctrl": false,
-            "view": false,
-            "passengerAction": {
-                "base": "riding"
-            }
+            "scale": 0.5,
+            "propagateScaling": true,
+            "matchActorOrientation": true
         }
     ],
     "boundingVolume": {
@@ -47,9 +53,9 @@
             {
                 "type": "VerticalBox",
                 "params": [
-                    3,
-                    1.2,
-                    5
+                    1.6,
+                    1.5,
+                    3.6
                 ]
             }
         ]
@@ -76,6 +82,10 @@
             }
         ]
     },
+    "actorName": "g2020_car_horse_01.actor",
+    "hidePlayer": false,
+    "base": "car_base",
+    "autoRotateColliderBox ": true,
     "interaction": {
         "radius": 7,
         "offset": {
@@ -83,8 +93,5 @@
             "y": -1,
             "z": 2
         }
-    },
-    "actorName": "g2020_car01.actor",
-    "base": "car_base",
-    "autoRotateColliderBox ": true
+    }
 }

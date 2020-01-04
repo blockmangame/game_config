@@ -4,7 +4,6 @@
 		"y": 19,
 		"z": 371
 	},
-	"indentRy": 180,
 	"circleNum": 40,
 	"maxCount": 15,
 	"punishmentTime": 30,
@@ -22,20 +21,12 @@
 			"times": "loop",
 			"reward": "myplugin/work_reward",
 			"succeedMsg": "你来看",
-			"failedMsg": "结束了",
-			"npcMap": "map001",
-			"npcPos": {
-				"x": 257,
-				"y": 19.1,
-				"z": 371
-			},
-			"npcRy": 270,
 			"weight": 50,
 			"targets": [
 				{
 					"type": "SubmitForm",
 					"name": "main_task01_targets",
-					"cfgName": "myplugin/xiaohong"
+					"cfgName": "myplugin/npc02"
 				}
 			]
 		},
@@ -44,20 +35,26 @@
 			"times": "loop",
 			"reward": "myplugin/work_reward",
 			"succeedMsg": "你来看",
-			"failedMsg": "结束了",
-			"npcMap": "map001",
-			"npcPos": {
-				"x": 225,
-				"y": 21.1,
-				"z": 319
-			},
-			"npcRy": 270,
 			"weight": 50,
 			"targets": [
 				{
 					"type": "SubmitForm",
 					"name": "main_task01_targets",
-					"cfgName": "myplugin/xiaohong"
+					"cfgName": "myplugin/npc03"
+				}
+			]
+		},
+		{
+			"key": "key_3",
+			"times": "loop",
+			"reward": "myplugin/work_reward",
+			"succeedMsg": "你来看",
+			"weight": 50,
+			"targets": [
+				{
+					"type": "SubmitForm",
+					"name": "main_task01_targets",
+					"cfgName": "myplugin/npc04"
 				}
 			]
 		}
