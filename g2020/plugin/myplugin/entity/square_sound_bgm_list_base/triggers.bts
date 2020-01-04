@@ -1,0 +1,19 @@
+ENTITY_ENTER
+{
+    CallTrigger(object = $obj1, event = "PLAY_BGM", bgmIndex = 1)
+}
+
+PLAY_BGM{
+    $squareBgmList = GetConfigVar(obj = $obj1, key = "squareBgmList")
+    If(not $bgmIndex or $bgmIndex > ArraySize(array = $squareBgmList)){
+        $bgmIndex = 1
+    }
+    $bgmTime = ArrayGet(array = ArrayGet(array = $squareBgmList, index = $bgmIndex), index = 1)
+    $bgmBuff = ArrayGet(array = ArrayGet(array = $squareBgmList, index = $bgmIndex), index = 2)
+    AddEntityBuff(entity = $obj1, cfg = $bgmBuff, buffTime = $bgmTime)
+    StartTimer(time = $bgmTime, object = $obj1, obj1 = $obj1, bgmIndex = $bgmIndex + 1, event = "PLAY_BGM")
+}
+
+OPEN_BGM_LIST{
+    ShowTip(entity = $obj2, tipType = 2, textKey = "square_bgm_sound_cant_inter")
+}
