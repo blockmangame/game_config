@@ -1710,12 +1710,7 @@ FUNC_STATE_RELEASE_SUSPEND --params: state
 FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey, rewardType
 {
     AddCurrency(coinName = $rewardType or "green_currency", entity = $obj1, count = $rewardSum)
-    
-    ShowRewardRollTip(
-        entity = $obj1,
-        image = "set:jail_break.json image:jail_break_currency",
-        text = Concat(p1 = "+", p2 = $rewardSum),
-    )
+    ShowRewardItemEffect(type = "Coin", count = $rewardSum, fullName = "green_currency", player = $obj1)
 
     ShowTip(
         entity = $obj1,
@@ -3705,7 +3700,7 @@ FINISH_AWARD(){ --完成打工的奖励
     }
     If($money){
         AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
-        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
+        ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
     }
     $taskItem = SearchBagItem(entity = $obj1, key = "newTaskitem", val = true)
     If($taskItem){
@@ -3808,7 +3803,7 @@ SURE_FURNITURE_BUY {
                If(IsPlayer(entity = $owner)){
                     ShowTip(textKey = "gui_buys_your_stuff",textP1 = $name, textP2 = $itemName, tipType = 1, entity = $owner, keepTime = 20)
                     AddCurrency(entity = $owner, coinName = $coinName, count = $price)
-                    ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $price), entity = $owner)
+                    ShowRewardItemEffect(type = "Coin", count = $price, fullName = "green_currency", player = $owner)
                }
             }Else{
                ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
@@ -4209,7 +4204,7 @@ CASH_BOX_BUTTON_SURE
         }
 
         AddCurrency(entity = $owner, coinName = "green_currency", count = $money)
-        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $owner)
+        ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $owner)
         ShowTip(entity = $owner, tipType = 2, textKey = "gui_cashbox_get_money", textP1 = GetEntityName(entity = $obj1), textP2 = $money, time = 40)
     }
 }
