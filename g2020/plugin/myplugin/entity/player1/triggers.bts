@@ -195,6 +195,15 @@ ENTITY_ENTER
         CallTrigger(event = "FUNC_LOAD_NEW_WORKS")
         CallTrigger(event = "FUNC_LOAD_EXCELLENT_WORKS")
     }
+    $curTime = GetTime()
+    $curData = Concat(p1 = GetYear(time = $curTime),p2 = GetMonth(time = $curTime),p3 = GetDayOfMonth(time = $curTime))
+    $joinUserPartyDataDict = NewDictionary(GetObjectVar(obj = $obj1, key = "joinUserPartyData"))
+    If(DictionaryGet(dict = $joinUserPartyDataDict, key = "data") ~= $curData){
+        SetObjectVar(obj = $obj1, key = "joinUserPartyData", value = {
+            data = $curData,
+            userIds = {}
+        })
+    }
 }
 
 OPEN_DANCE
@@ -4632,12 +4641,32 @@ CREATE_PARTY_SUCCESS {
     $obj1.inPartyId = $partyId
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.create.success", time =  100)
     ReenterGame(player = $obj1)
+
+    $house = GetObjectVar(obj = $obj1, key = "house")
+    $house.createPartyBuff = AddEntityBuff(entity = $house, cfg = GetConfigVar(obj = $house, key = "houseCreatePartyBuff"))
 }
 JOIN_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = $targetUserId
     $obj1.needCheckResetGameResult = true
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
+    $joinUserPartyDataDict = NewDictionary(GetObjectVar(obj = $obj1, key = "joinUserPartyData"))
+    $userIds = DictionaryGet(dict = $joinUserPartyDataDict, key = "userIds")
+    $hadJoin = false
+    Foreach(array = $userIds, key = "userId"){
+        If($targetUserId == $userId){
+            $hadJoin = true
+            Break()
+        }
+    }
+    If(not $hadJoin){
+        $partyOwner = getPlayerByUserId(userId = $targetUserId)
+        AddCurrency(entity = $partyOwner, coinName = "green_currency", count = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
+        ShowTip(entity = $partyOwner, tipType = 2, textKey = "other.player.join.cur.player.party", 
+            time = 20, textP1 = GetEntityName(entity = $obj1), textP2 = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
+        ArrayAppend(array = $userIds, value = $targetUserId)
+        SetObjectVar(obj = $obj1, key = "joinUserPartyData", value = DictionaryToTable(dict = $joinUserPartyDataDict))
+    }
 }
 UPDATE_PARTY_SETTING_INFO{
     $curHouseCfg = $obj1.curHouseCfg
@@ -4671,6 +4700,11 @@ CLOSE_PARTY_SUCCESS {
         ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
         $player.inPartyOwnerId = 0
         ReenterGame(player = $player)
+    }
+
+    $house = GetObjectVar(obj = $obj1, key = "house")
+    If($house.createPartyBuff){
+        RemoveEntityBuff(entity = $house, buff = $house.createPartyBuff)
     }
 }
 PARTY_BE_LIKED{
