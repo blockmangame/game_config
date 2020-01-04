@@ -1259,8 +1259,18 @@ ADD_MONEY
         $count = $arraySize
     }
     $rewardArray = ArrayGet(array = @CDReward, index = $count)
-    $cdTime = ArrayGet(array = $rewardArray, index = 1)
-    $money = ArrayGet(array = $rewardArray, index = 2)
+
+    If(not $rewardArray)
+    {
+        Return()
+    }
+
+    $rewardArray = NewDictionary($rewardArray)
+    $cdTime = DictionaryGet(dict = $rewardArray, key = "cdTime")
+    $money = DictionaryGet(dict = $rewardArray, key = "money")
+
+    $cdTime = ToInteger($cdTime)
+    $money = ToInteger($money)
 
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/vip_privilege"))
     {
