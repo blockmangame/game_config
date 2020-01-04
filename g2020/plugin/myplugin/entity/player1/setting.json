@@ -321,6 +321,16 @@
                     "funcName": "checkInSameTeam"
                 },
                 "event": "INTERACTION_JOIN_FAMILY"
+            },
+            {
+                "text": "interact_trolley",
+                "image": "plugin/myplugin/image/trolley.png",
+                "event": "INTERACTION_BABY_TROLLEY",
+                "checkCanShow": {
+                    "funcName": "checkProp",
+                    "p1": "onTrolley",
+                    "p2": 1
+                }
             }
         ]
     },
@@ -478,15 +488,6 @@
                 "text": "",
                 "image": "plugin/myplugin/image/raiseheight.png",
                 "event": "INTERACTION_RAISE_HEIGHT",
-				"imageSize": {
-                    "width": 96,
-                    "height": 96
-                }
-            },
-            {
-                "text": "",
-                "image": "plugin/myplugin/image/trolley.png",
-                "event": "INTERACTION_BABY_TROLLEY",
 				"imageSize": {
                     "width": 96,
                     "height": 96
