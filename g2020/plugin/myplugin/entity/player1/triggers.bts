@@ -287,7 +287,9 @@ CREATE_HOUSE_OUTSIDE{
     -- Test("$housePosOffset--------------",$region,GetRegionCenter(region = $region),$housePosOffset,$yaw,V3RotationYaw(vector = $housePosOffset, yaw = $yaw),
     --     ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)))
     $house = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
-    $pos = ComputeV3(p1 = V3ToBlockPos(v3 = GetRegionCenter(region = $region)), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw))
+    $regionCenter = GetRegionCenter(region = $region)
+    $pos = {x = GetPosX(pos = $regionCenter), y = GetPosY(pos = GetRegionMin(region = $region)), z = GetPosZ(pos = $regionCenter)}
+    $pos = ComputeV3(p1 = V3ToBlockPos(v3 = $pos), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw))
     $pos = ComputeV3(p1 = $pos, op = "add", p2 = Table(x = 0.5,y = 0,z = 0.5))
     SetEntityPosition(entity = $house, pos = $pos, map = GetEntityMap(entity = $house))
     SetEntityYaw(entity = $house, rotationYaw = $yaw)
@@ -2666,7 +2668,8 @@ SET_DRESS_ARCHIVE
             custom_scarf = GetSkin(entity = $obj1, skinName = "custom_scarf"),
             custom_wing = GetSkin(entity = $obj1, skinName = "custom_wing"),
             custom_hat = GetSkin(entity = $obj1, skinName = "custom_hat"),
-            custom_tail = GetSkin(entity = $obj1, skinName = "custom_tail")
+            custom_tail = GetSkin(entity = $obj1, skinName = "custom_tail"),
+            custom_crown = GetSkin(entity = $obj1, skinName = "custom_crown")
         }
     }
 
@@ -2752,7 +2755,8 @@ ADD_DRESS_ARCHIVE
                 custom_scarf = GetSkin(entity = $obj1, skinName = "custom_scarf"),
                 custom_wing = GetSkin(entity = $obj1, skinName = "custom_wing"),
                 custom_hat = GetSkin(entity = $obj1, skinName = "custom_hat"),
-                custom_tail = GetSkin(entity = $obj1, skinName = "custom_tail")
+                custom_tail = GetSkin(entity = $obj1, skinName = "custom_tail"),
+                custom_crown = GetSkin(entity = $obj1, skinName = "custom_crown")
             }
         }
 
@@ -2882,7 +2886,8 @@ SAVE_PLAYER_DRESS
         custom_scarf = GetSkin(entity = $obj1, skinName = "custom_scarf"),
         custom_wing = GetSkin(entity = $obj1, skinName = "custom_wing"),
         custom_hat = GetSkin(entity = $obj1, skinName = "custom_hat"),
-        custom_tail = GetSkin(entity = $obj1, skinName = "custom_tail")
+        custom_tail = GetSkin(entity = $obj1, skinName = "custom_tail"),
+        custom_crown = GetSkin(entity = $obj1, skinName = "custom_crown")
     }
 }
 
