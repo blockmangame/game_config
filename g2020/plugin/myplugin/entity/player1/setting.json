@@ -6,8 +6,11 @@
     "maxHouseVarsSize": 8,
     "bodyTurnMin": 361,
     "bodyTurnMax": 361,
+	"canTurnHead": false,
+    "joinPartyGiveMoney": 200,
     "saveVars": {
-        "houseVars": []
+        "houseVars": [],
+        "joinUserPartyData": {"data": "", "userIds" : []}
     },
     "ridePos": [
         {
@@ -319,6 +322,16 @@
                     "funcName": "checkInSameTeam"
                 },
                 "event": "INTERACTION_JOIN_FAMILY"
+            },
+            {
+                "text": "interact_trolley",
+                "image": "plugin/myplugin/image/trolley.png",
+                "event": "INTERACTION_BABY_TROLLEY",
+                "checkCanShow": {
+                    "funcName": "checkProp",
+                    "p1": "onTrolley",
+                    "p2": 1
+                }
             }
         ]
     },
@@ -347,8 +360,8 @@
                 "image": "plugin/myplugin/image/back.png",
                 "event": "INTERACTION_BACK",
                 "imageSize": {
-                    "width": 60,
-                    "height": 60
+                    "width": 96,
+                    "height": 96
                 }
             },
             {
@@ -356,8 +369,8 @@
                 "image": "plugin/myplugin/image/clap.png",
                 "event": "INTERACTION_CLAP",
 				"imageSize": {
-                    "width": 60,
-                    "height": 60
+                    "width": 96,
+                    "height": 96
                 }
             },
             {
@@ -365,45 +378,44 @@
                 "image": "plugin/myplugin/image/hug.png",
                 "event": "INTERACTION_HUG",
 				"imageSize": {
-                    "width": 60,
-                    "height": 60
+                    "width": 96,
+                    "height": 96
                 }
             },
             {
                 "text": "",
-                "image": "set:party_interaction_ui.json image:interaction_act",
-                "event": "INTERACTION_HAND_IN_HAND"
+                "image": "plugin/myplugin/image/handinhand.png",
+                "event": "INTERACTION_HAND_IN_HAND",
+				"imageSize": {
+                    "width": 96,
+                    "height": 96
+                }
             },
             {
                 "text": "",
-                "image": "set:party_interaction_ui.json image:interaction_join_family",
-                "event": "INTERACTION_FOLLOW"
+                "image": "plugin/myplugin/image/follow.png",
+                "event": "INTERACTION_FOLLOW",
+				"imageSize": {
+                    "width": 96,
+                    "height": 96
+                }
             },
             {
                 "text": "",
                 "image": "plugin/myplugin/image/rideon.png",
                 "event": "INTERACTION_RIDE",
 				"imageSize": {
-                    "width": 60,
-                    "height": 60
+                    "width": 96,
+                    "height": 96
                 }
             },
             {
                 "text": "",
-                "image": "plugin/myplugin/image/trolley.png",
-                "event": "INTERACTION_BABY_TROLLEY",
-				"imageSize": {
-                    "width": 60,
-                    "height": 60
-                }
-            },
-            {
-                "text": "",
-                "image": "plugin/myplugin/image/buy_coin.png",
+                "image": "plugin/myplugin/image/piggyback.png",
                 "event": "INTERACTION_PIGGYBACK",
 				"imageSize": {
-                    "width": 60,
-                    "height": 60
+                    "width": 96,
+                    "height": 96
                 }
             }
         ]
@@ -433,8 +445,8 @@
                 "image": "plugin/myplugin/image/back.png",
                 "event": "INTERACTION_BACK",
                 "imageSize": {
-                    "width": 60,
-                    "height": 60
+                    "width": 96,
+                    "height": 96
                 }
             },
             {
@@ -442,8 +454,8 @@
                 "image": "plugin/myplugin/image/hug.png",
                 "event": "INTERACTION_HUG",
 				"imageSize": {
-                    "width": 60,
-                    "height": 60
+                    "width": 96,
+                    "height": 96
                 }
             },
             {
@@ -451,22 +463,26 @@
                 "image": "plugin/myplugin/image/handshake.png",
                 "event": "INTERACTION_HANDSHAKE",
 				"imageSize": {
-                    "width": 60,
-                    "height": 60
+                    "width": 96,
+                    "height": 96
                 }
             },
             {
                 "text": "",
-                "image": "set:party_interaction_ui.json image:interaction_act",
-                "event": "INTERACTION_FOLLOW"
+                "image": "plugin/myplugin/image/follow.png",
+                "event": "INTERACTION_FOLLOW",
+				"imageSize": {
+                    "width": 96,
+                    "height": 96
+                }
             },
             {
                 "text": "",
                 "image": "plugin/myplugin/image/pikeup.png",
                 "event": "INTERACTION_PICK",
 				"imageSize": {
-                    "width": 60,
-                    "height": 60
+                    "width": 96,
+                    "height": 96
                 }
             },
             {
@@ -474,26 +490,17 @@
                 "image": "plugin/myplugin/image/raiseheight.png",
                 "event": "INTERACTION_RAISE_HEIGHT",
 				"imageSize": {
-                    "width": 60,
-                    "height": 60
+                    "width": 96,
+                    "height": 96
                 }
             },
             {
                 "text": "",
-                "image": "plugin/myplugin/image/trolley.png",
-                "event": "INTERACTION_BABY_TROLLEY",
-				"imageSize": {
-                    "width": 60,
-                    "height": 60
-                }
-            },
-            {
-                "text": "",
-                "image": "plugin/myplugin/image/burger.png",
+                "image": "plugin/myplugin/image/coax.png",
                 "event": "INTERACTION_COAX",
 				"imageSize": {
-                    "width": 60,
-                    "height": 60
+                    "width": 96,
+                    "height": 96
                 }
             }
         ]

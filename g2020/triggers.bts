@@ -1,13 +1,11 @@
 GAME_INIT 
 {
     @BGMConfigs = ReadGameCsv(path = "bgm.csv")
+    @CDReward = ReadGameCsv(path = "cd_reward.csv")
     @Generate_State_List = ["hunger", "thirsty", "dirty", "fatigue", "ill", "region"]
     @skillPath = "myplugin/skill_state_"
     CallTrigger(event = "FUNC_STATE_STARTTIMER")
     @mathHuge = 10000000
-
-    
-	CreateNpc(cfgName = "myplugin/fishItem", pos = {x = 92, y = 19, z = 195} ,name = "买鱼")
 
     @DECORATION_STORE = ReadGameCsv(path = "decoration_store.csv")
 
@@ -34,6 +32,7 @@ GAME_INIT
 }
 
 INIT_WORK_TASK_DATA(){    --打工配置表的读取
+    $mapcfgarray = GetMapConfig(name = "map001", key = "entity")
     @worlkMoeny = NewDictionary({}) --奖励表
     @failedMsg = NewDictionary({})  --对话表
     @taskMap = NewDictionary({}) --
@@ -53,22 +52,26 @@ INIT_WORK_TASK_DATA(){    --打工配置表的读取
         $msg = DictionaryGet(dict = $taskDict, key = "succeedMsg")
         $pos = DictionaryGet(dict = $taskDict, key = "npcPos")
         DictionarySet(dict = $value,  key = "taskKey" , value = DictionaryGet(dict = $taskDict, key = "fullName"))
-        DictionarySet(dict = $value,  key = "pos" , value = $pos)
         DictionarySet(dict = $value,  key = "npcName" , value = $npcName)
-        DictionarySet(dict = $value,  key = "npcMap" , value = DictionaryGet(dict = $taskDict, key = "npcMap"))
+        DictionarySet(dict = $value,  key = "npcMap" , value = "map001")
         DictionarySet(dict = $value,  key = "failedMsg" , value = DictionaryGet(dict = $taskDict, key = "failedMsg"))
         DictionarySet(dict = $value,  key = "succeedMsg" , value = $msg)
         $weight =  DictionaryGet(dict = $taskDict, key = "weight")
         DictionarySet(dict = $value,  key = "weight" , value = $weight)
         ArrayAppend(array = @TASK_WEIGHT, value = $weight)
-        ArrayAppend(array = @TASK_TABLE, value = $value)
         DictionarySet(dict = @failedMsg, key = $npcName, value = $msg)
-        --
-        $npcRy = DictionaryGet(dict = $taskDict, key = "npcRy")
-        $nickName = DictionaryGet(dict = $targets, key = "name")
-        $NPC = CreateNpc(cfgName = $npcName, pos = Copy(value = $pos), name = $nickName, ry = $npcRy)
-        $taskKey = DictionaryGet( dict = $taskDict, key = "key")
-        $NPC.taskKey = Concat(p1 = "myplugin/work/", p2 = $taskKey)
+       
+        Foreach(array = $mapcfgarray, key = "mapcfg"){
+            $mapdict = NewDictionary($mapcfg)
+            $mapNpcName = DictionaryGet(dict = $mapdict, key = "cfg")
+            $mapNpcPos = DictionaryGet(dict = $mapdict, key = "pos")
+            If($mapNpcName == $npcName){
+                $copyPos = Copy(value = $mapNpcPos)
+                DictionarySet(dict = $value,  key = "pos" , value = $copyPos)
+            }
+        }
+
+        ArrayAppend(array = @TASK_TABLE, value = $value)
     }
     ForLoop(from=1, to = @CircleNum, key = "index"){
         $redict = GetConfigValue(type = "reward", fullName = "myplugin/task_money", key = $index)
@@ -78,23 +81,6 @@ INIT_WORK_TASK_DATA(){    --打工配置表的读取
         $mdict = NewDictionary($redict)
         DictionarySet(dict = @worlkMoeny, key = DictionaryGet(dict = $mdict, key = "index"), value = $mdict)
     }
-    $indentRy = GetConfigValue(type = "task", fullName = "myplugin/work", key = "indentRy")
-
-
-    --涂鸦墙文字初始化
-    $U3Dcfg = GetWorldVar(key = "sceneUI")
-    Foreach(array = $U3Dcfg, key = "ucfg")
-    {
-        $dict = NewDictionary($ucfg)
-        $index = DictionaryGet(dict = $dict, key = "index")
-        @graffitiWallText = NewDictionary()
-        DictionarySet(dict = @graffitiWallText, key = $index, value = "")
-    }
-    
-    CallTrigger(event = "FUNC_NAVIGATION_GET_MAPS_ALL_PATH")
-
-    CreateNpc(cfgName = "myplugin/npc_indent_model", pos = Copy(value = @INDENT_POS)  ,name = "shoManager", ry = $indentRy)
-
 }
 
 FUNC_STATE_STARTTIMER
@@ -169,24 +155,40 @@ FUNC_BROADCAST_STATE
 
 SHOW_SELECT_ROLE
 {
-    $contents = [
+    $options = [
         {
-            normalImage = "set:select_role.json image:child",
-            pushedImage = "set:select_role.json image:child",
+            image = "set:select_role.json image:child",
+            pushImage = "set:select_role.json image:child",
             event = "CHANGE_PLAYER_SCALE_CHILD",
-            text = "ui_pick_child"
+            detail = "ui_pick_child"
         },
         {
-            normalImage = "set:select_role.json image:adult",
-            pushedImage = "set:select_role.json image:adult",
+            image = "set:select_role.json image:adult",
+            pushImage = "set:select_role.json image:adult",
             event = "CHANGE_PLAYER_SCALE_ADULT",
-            text = "ui_pick_adult"
+            detail = "ui_pick_adult"
         }
     ]
-    
-    $fullName = "myplugin/selectRoleView"
 
-    ShowCardOptionsView(entity = $obj1, contents = $contents, fullName = $fullName, type = 2)
+    $bgImage = {
+        name = "set:select_role.json image:background", 
+        stretchType = "NineGrid", 
+        stretchOffset = "227 227 150 80"
+    }
+
+    ShowCardOptionsView(
+        entity = $obj1,
+        title = "ui_title_select_role",
+        titleArea = [[0,0],[0,10],[0,400],[0,50]],
+        options = $options,
+        showMask = true,
+        itemSpace = 50,
+        itemSize = [180, 260],
+        pageSize = 2,
+        contentArea = [[0, 0], [0, 0], [0, 774], [0, 375]],
+        itemImageSize = [150, 150],
+        bgImage = $bgImage
+    )
 }
 
 CHANGE_PLAYER_SCALE_ADULT

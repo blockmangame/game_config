@@ -1,8 +1,6 @@
 {
     "actorName": "boy.actor",
     "coinName": "green_currency",
-    "partyBroadcastCoinId":3,
-    "partyBroadcastCost":100,
     "partyMaxPlayerNumber": 20,
     "reachGoodPartyPlayerNumber": 1,
     "goodPartyPlayerNumberLowerRate": 1,
@@ -16,6 +14,7 @@
     "canClick": true,
     "collision": true,
     "houseCreateBuff": "myplugin/house_create_effect_buff",
+    "houseCreatePartyBuff": "myplugin/house_create_effect_buff",
     "housePosOffset": {
         "x": 0,
         "y": 0,
@@ -45,7 +44,7 @@
     "houseDefaultName": "house_default_name_nothing",
     "houseDefaultFurniture": [],
     "houseDefaultInsideMapColorTb": [],
-    "insideMap": "map001",
+    "insideMap": "map002",
     "autoRotateColliderBox": true,
     "rotateNearBoxAngle": true,
     "base": "house_base"

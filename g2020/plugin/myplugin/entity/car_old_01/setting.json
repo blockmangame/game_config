@@ -22,7 +22,7 @@
                 "base": "riding"
             }
         },
-		{
+        {
             "yaw": 0,
             "pos": {
                 "y": -0.4,
@@ -40,7 +40,7 @@
                 "base": "riding"
             }
         },
-		{
+        {
             "yaw": 0,
             "pos": {
                 "y": -0.4,
@@ -58,7 +58,7 @@
                 "base": "riding"
             }
         },
-		{
+        {
             "yaw": 0,
             "pos": {
                 "y": -0.4,
@@ -81,7 +81,7 @@
         "type": "Composite",
         "params": [
             {
-                "type": "Box",
+                "type": "VerticalBox",
                 "params": [
                     3,
                     1.2,
@@ -90,7 +90,6 @@
             }
         ]
     },
-    
     "interactionUI": {
         "cfgKey": "interactionUI",
         "followParams": {
@@ -122,5 +121,7 @@
         }
     },
     "actorName": "g2020_oldcar01.actor",
-    "base": "car_base"
+    "base": "car_base",
+    "hidePlayer": false,
+    "autoRotateColliderBox ": true
 }

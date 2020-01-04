@@ -81,7 +81,7 @@
         "type": "Composite",
         "params": [
             {
-                "type": "Box",
+                "type": "VerticalBox",
                 "params": [
                     2.6,
                     1.8,
@@ -90,7 +90,6 @@
             }
         ]
     },
-     
     "interactionUI": {
         "cfgKey": "interactionUI",
         "followParams": {
@@ -122,5 +121,7 @@
         }
     },
     "actorName": "g2020_car04.actor",
-    "base": "car_base"
+    "base": "car_base",
+    "hidePlayer": true,
+    "autoRotateColliderBox ": true
 }

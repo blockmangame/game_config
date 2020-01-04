@@ -1,0 +1,54 @@
+{
+    "canClick": true,
+    "actorName": "g2020_car_horse_01.actor",
+    "coinId": 0,
+    "sellPrice": 999,
+    "sellItem": "myplugin/car_item_horse_01",
+    "collision": true,
+    "name": "",
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "VerticalBox",
+                "params": [
+                    2.6,
+                    2,
+                    4.2
+                ]
+            }
+        ]
+    },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        },
+        "centerBtns": [
+            {
+                "text": "car_horse_01.buy",
+                "widgetFileName": "widget_button",
+                "image": "plugin/myplugin/image/buy_cube.png",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "event": "BUY_SHOP"
+            }
+        ]
+    },
+    "interaction": {
+        "radius": 7,
+        "offset": {
+            "x": 0,
+            "y": -1,
+            "z": 2
+        }
+    },
+    "base": "fishItem"
+}

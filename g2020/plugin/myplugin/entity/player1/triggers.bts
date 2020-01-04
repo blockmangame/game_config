@@ -195,6 +195,15 @@ ENTITY_ENTER
         CallTrigger(event = "FUNC_LOAD_NEW_WORKS")
         CallTrigger(event = "FUNC_LOAD_EXCELLENT_WORKS")
     }
+    $curTime = GetTime()
+    $curData = Concat(p1 = GetYear(time = $curTime),p2 = GetMonth(time = $curTime),p3 = GetDayOfMonth(time = $curTime))
+    $joinUserPartyDataDict = NewDictionary(GetObjectVar(obj = $obj1, key = "joinUserPartyData"))
+    If(DictionaryGet(dict = $joinUserPartyDataDict, key = "data") ~= $curData){
+        SetObjectVar(obj = $obj1, key = "joinUserPartyData", value = {
+            data = $curData,
+            userIds = {}
+        })
+    }
 }
 
 OPEN_DANCE
@@ -278,7 +287,9 @@ CREATE_HOUSE_OUTSIDE{
     -- Test("$housePosOffset--------------",$region,GetRegionCenter(region = $region),$housePosOffset,$yaw,V3RotationYaw(vector = $housePosOffset, yaw = $yaw),
     --     ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)))
     $house = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
-    $pos = ComputeV3(p1 = V3ToBlockPos(v3 = GetRegionCenter(region = $region)), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw))
+    $regionCenter = GetRegionCenter(region = $region)
+    $pos = {x = GetPosX(pos = $regionCenter), y = GetPosY(pos = GetRegionMin(region = $region)), z = GetPosZ(pos = $regionCenter)}
+    $pos = ComputeV3(p1 = V3ToBlockPos(v3 = $pos), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw))
     $pos = ComputeV3(p1 = $pos, op = "add", p2 = Table(x = 0.5,y = 0,z = 0.5))
     SetEntityPosition(entity = $house, pos = $pos, map = GetEntityMap(entity = $house))
     SetEntityYaw(entity = $house, rotationYaw = $yaw)
@@ -1259,8 +1270,18 @@ ADD_MONEY
         $count = $arraySize
     }
     $rewardArray = ArrayGet(array = @CDReward, index = $count)
-    $cdTime = ArrayGet(array = $rewardArray, index = 1)
-    $money = ArrayGet(array = $rewardArray, index = 2)
+
+    If(not $rewardArray)
+    {
+        Return()
+    }
+
+    $rewardArray = NewDictionary($rewardArray)
+    $cdTime = DictionaryGet(dict = $rewardArray, key = "cdTime")
+    $money = DictionaryGet(dict = $rewardArray, key = "money")
+
+    $cdTime = ToInteger($cdTime)
+    $money = ToInteger($money)
 
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/vip_privilege"))
     {
@@ -1691,12 +1712,7 @@ FUNC_STATE_RELEASE_SUSPEND --params: state
 FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey, rewardType
 {
     AddCurrency(coinName = $rewardType or "green_currency", entity = $obj1, count = $rewardSum)
-    
-    ShowRewardRollTip(
-        entity = $obj1,
-        image = "set:jail_break.json image:jail_break_currency",
-        text = Concat(p1 = "+", p2 = $rewardSum),
-    )
+    ShowRewardItemEffect(type = "Coin", count = $rewardSum, fullName = "green_currency", player = $obj1)
 
     ShowTip(
         entity = $obj1,
@@ -3689,7 +3705,7 @@ FINISH_AWARD(){ --完成打工的奖励
     }
     If($money){
         AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
-        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $obj1)
+        ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
     }
     $taskItem = SearchBagItem(entity = $obj1, key = "newTaskitem", val = true)
     If($taskItem){
@@ -3792,7 +3808,7 @@ SURE_FURNITURE_BUY {
                If(IsPlayer(entity = $owner)){
                     ShowTip(textKey = "gui_buys_your_stuff",textP1 = $name, textP2 = $itemName, tipType = 1, entity = $owner, keepTime = 20)
                     AddCurrency(entity = $owner, coinName = $coinName, count = $price)
-                    ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $price), entity = $owner)
+                    ShowRewardItemEffect(type = "Coin", count = $price, fullName = "green_currency", player = $owner)
                }
             }Else{
                ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
@@ -3807,7 +3823,7 @@ SURE_FURNITURE_BUY {
 }
 --特权购买成功
 ENTITY_BUY_APPSTOP {
-    $dict = NewDictionary($shop)
+    $dict = NewDictionary(Copy(value = $shop))
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
     $index = ArrayFind(array = $obj1.privilege, value = $itemName)
@@ -4193,7 +4209,7 @@ CASH_BOX_BUTTON_SURE
         }
 
         AddCurrency(entity = $owner, coinName = "green_currency", count = $money)
-        ShowRewardRollTip(image = "set:jail_break.json image:jail_break_currency", text = Concat(p1 = "+", p2 = $money), entity = $owner)
+        ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $owner)
         ShowTip(entity = $owner, tipType = 2, textKey = "gui_cashbox_get_money", textP1 = GetEntityName(entity = $obj1), textP2 = $money, time = 40)
     }
 }
@@ -4625,17 +4641,32 @@ CREATE_PARTY_SUCCESS {
     $obj1.inPartyId = $partyId
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.create.success", time =  100)
     ReenterGame(player = $obj1)
+
+    $house = GetObjectVar(obj = $obj1, key = "house")
+    $house.createPartyBuff = AddEntityBuff(entity = $house, cfg = GetConfigVar(obj = $house, key = "houseCreatePartyBuff"))
 }
 JOIN_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = $targetUserId
     $obj1.needCheckResetGameResult = true
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
-}
-UPDATE_PARTY_SETTING_INFO{
-    $curHouseCfg = $obj1.curHouseCfg
-    $partyBroadcastCost = GetEntityCfg(fullName = $curHouseCfg, key = "partyBroadcastCost")
-    $partyBroadcastCoinId = GetEntityCfg(fullName = $curHouseCfg, key = "partyBroadcastCoinId")
+    $joinUserPartyDataDict = NewDictionary(GetObjectVar(obj = $obj1, key = "joinUserPartyData"))
+    $userIds = DictionaryGet(dict = $joinUserPartyDataDict, key = "userIds")
+    $hadJoin = false
+    Foreach(array = $userIds, key = "userId"){
+        If($targetUserId == $userId){
+            $hadJoin = true
+            Break()
+        }
+    }
+    If(not $hadJoin){
+        $partyOwner = getPlayerByUserId(userId = $targetUserId)
+        AddCurrency(entity = $partyOwner, coinName = "green_currency", count = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
+        ShowTip(entity = $partyOwner, tipType = 2, textKey = "other.player.join.cur.player.party", 
+            time = 20, textP1 = GetEntityName(entity = $obj1), textP2 = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
+        ArrayAppend(array = $userIds, value = $targetUserId)
+        SetObjectVar(obj = $obj1, key = "joinUserPartyData", value = DictionaryToTable(dict = $joinUserPartyDataDict))
+    }
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
@@ -4664,6 +4695,11 @@ CLOSE_PARTY_SUCCESS {
         ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
         $player.inPartyOwnerId = 0
         ReenterGame(player = $player)
+    }
+
+    $house = GetObjectVar(obj = $obj1, key = "house")
+    If($house.createPartyBuff){
+        RemoveEntityBuff(entity = $house, buff = $house.createPartyBuff)
     }
 }
 PARTY_BE_LIKED{
