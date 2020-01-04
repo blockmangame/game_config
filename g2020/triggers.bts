@@ -1,6 +1,7 @@
 GAME_INIT 
 {
     @BGMConfigs = ReadGameCsv(path = "bgm.csv")
+    @CDReward = ReadGameCsv(path = "cd_reward.csv")
     @Generate_State_List = ["hunger", "thirsty", "dirty", "fatigue", "ill", "region"]
     @skillPath = "myplugin/skill_state_"
     CallTrigger(event = "FUNC_STATE_STARTTIMER")
@@ -169,24 +170,40 @@ FUNC_BROADCAST_STATE
 
 SHOW_SELECT_ROLE
 {
-    $contents = [
+    $options = [
         {
-            normalImage = "set:select_role.json image:child",
-            pushedImage = "set:select_role.json image:child",
+            image = "set:select_role.json image:child",
+            pushImage = "set:select_role.json image:child",
             event = "CHANGE_PLAYER_SCALE_CHILD",
-            text = "ui_pick_child"
+            detail = "ui_pick_child"
         },
         {
-            normalImage = "set:select_role.json image:adult",
-            pushedImage = "set:select_role.json image:adult",
+            image = "set:select_role.json image:adult",
+            pushImage = "set:select_role.json image:adult",
             event = "CHANGE_PLAYER_SCALE_ADULT",
-            text = "ui_pick_adult"
+            detail = "ui_pick_adult"
         }
     ]
-    
-    $fullName = "myplugin/selectRoleView"
 
-    ShowCardOptionsView(entity = $obj1, contents = $contents, fullName = $fullName, type = 2)
+    $bgImage = {
+        name = "set:select_role.json image:background", 
+        stretchType = "NineGrid", 
+        stretchOffset = "227 227 150 80"
+    }
+
+    ShowCardOptionsView(
+        entity = $obj1,
+        title = "ui_title_select_role",
+        titleArea = [[0,0],[0,10],[0,400],[0,50]],
+        options = $options,
+        showMask = true,
+        itemSpace = 50,
+        itemSize = [180, 260],
+        pageSize = 2,
+        contentArea = [[0, 0], [0, 0], [0, 774], [0, 375]],
+        itemImageSize = [150, 150],
+        bgImage = $bgImage
+    )
 }
 
 CHANGE_PLAYER_SCALE_ADULT
