@@ -17,8 +17,7 @@ TAKEOFF_EQUIPMEN {
     $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
     If($typeIndex == 3)
     {
-        $carName = GetConfigVar(obj = $item, key = "carName")
-        CallTrigger(event = "TAKEOFF_EQUIP_CAR", obj1 = $obj1, carName = $carName)
+        CallTrigger(event = "TAKEOFF_EQUIP_CAR", obj1 = $obj1)
     }
     ElseIf($typeIndex == 1)
     {
@@ -3956,35 +3955,9 @@ EQUIP_CAR {
         ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", time = 40)
         Return()
     }
-    If(not $obj1.createdCars)
+    If($obj1.createdCar)
     {
-        $obj1.createdCars = NewDictionary()
-    }
-
-    $createdCarOfCarName = DictionaryGet(dict = $obj1.createdCars, key = $carName)
-    $ownerInCar = false
-
-    If($createdCarOfCarName)
-    {
-        $passengers = GetPassengers(entity = $createdCarOfCarName)
-        Foreach(array = $passengers, key = "passenger")
-        {
-            If($passenger ~= GetObjectID(object = $obj1))
-            {
-                ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", time = 40)
-            }
-            Else
-            {
-                $ownerInCar = true
-            }
-        }
-
-        KillEntity(entity = $createdCarOfCarName)
-        DictionaryRemove(dict = $obj1.createdCars, key = $carName)
-        If($ownerInCar)
-        {
-            Return()
-        }
+        CallTrigger(object = $obj1, event = "TAKEOFF_EQUIP_CAR")
     }
 
     $pos = GetEntityPosition(entity = $obj1)
@@ -3993,7 +3966,7 @@ EQUIP_CAR {
 
     RideOn(entity = $obj1, target = $car)
 
-    DictionarySet(dict = $obj1.createdCars, key = $carName, value = $car)
+    SetObjectVar(obj = $obj1, key = "createdCar", value = $car)
 }
 
 DEBARK {
@@ -4002,26 +3975,23 @@ DEBARK {
 
 TAKEOFF_EQUIP_CAR
 {
-    If(not $obj1.createdCars)
+    If(not $obj1.createdCar)
     {
         Return()
     }
 
-    $createdCarOfCarName = DictionaryGet(dict = $obj1.createdCars, key = $carName)
-    If($createdCarOfCarName)
+    $car = $obj1.createdCar
+    $passengers = GetPassengers(entity = $obj1.createdCar)
+    Foreach(array = $passengers, key = "passenger")
     {
-        $passengers = GetPassengers(entity = $createdCarOfCarName)
-        Foreach(array = $passengers, key = "passenger")
+        If($passenger ~= GetObjectID(object = $obj1))
         {
-            If($passenger ~= GetObjectID(object = $obj1))
-            {
-                ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", time = 40)
-            }
+            ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", time = 40)
         }
-        ClearRide(entity = $createdCarOfCarName)
-        KillEntity(entity = $createdCarOfCarName)
-        DictionaryRemove(dict = $obj1.createdCars, key = $carName)
     }
+    ClearRide(entity = $obj1.createdCar)
+    KillEntity(entity = $obj1.createdCar)
+    $obj1.createdCar = nil
 }
 
 EQUIP_ITEM_IMMEDIATELY --params: item
