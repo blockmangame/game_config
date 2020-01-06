@@ -1,0 +1,33 @@
+ENTITY_ENTER(debug = true)
+{
+    $curBoundingBox = GetEntityBoundingBox(entity = $obj1)
+    $regionArea = Table(
+        min = ArrayGet(array = $curBoundingBox, index = 2),
+        max = ArrayGet(array = $curBoundingBox, index = 3)
+    )
+    
+    $region = AddRegion(
+        map = GetEntityMap(entity = $obj1),
+        key = GetConfigVar(obj = $obj1, key = "regionKey"),
+        regionCfg = GetConfigVar(obj = $obj1, key = "regionCfg"),
+        region = $regionArea,
+        obj1 = $obj1
+    )
+    SetRegionOwner(region = $region, owner = $obj1)
+}
+
+OPEN_THE_DOOR{
+    If(not IsPlayer(entity = $player)){
+        Return()
+    }
+    
+    PlayAction(entity = $obj1, target = $player, actionName = "openDoor", actionTime = -1)
+}
+
+CLOSE_THE_DOOR{
+    If(not IsPlayer(entity = $player)){
+        Return()
+    }
+    
+    PlayAction(entity = $obj1, target = $player, actionName = "closeDoor", actionTime = -1)
+}
