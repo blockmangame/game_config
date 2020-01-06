@@ -13,6 +13,20 @@
             "npc": "myplugin/npc24"
         }
     ],
+	"boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    0.3,
+                    1.2,
+                    0.4
+                ]
+            }
+        ]
+    },
+	
     "optionNpc": "myplugin/npc24",
     "optionList": []
 }
