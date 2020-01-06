@@ -20,11 +20,24 @@
         "followParams": {
             "followScenePos": false,
             "offset": {
-                "x": 0,
-                "y": 1,
+                "x": 0.1,
+                "y": 0.7,
                 "z": 0
             }
         }
+    },
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    0.7,
+                    1.8,
+                    0.5
+                ]
+            }
+        ]
     },
     "interaction": {
         "radius": 7,
