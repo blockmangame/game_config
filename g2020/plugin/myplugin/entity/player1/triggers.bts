@@ -2957,23 +2957,43 @@ SHOW_OPERATE_DRESS_STORE_ITEM
     $coinId = DictionaryGet(dict = $itemDic, key = "coinId")
     $price = DictionaryGet(dict = $itemDic, key = "price")
 
-    If (not $coinId or not $price)
+    If(not $coinId or not $price)
     {
         Return()
     }
 
-    $btnInfo = {
-        leftCoinId = nil,
-        leftContent = "ui_cancel",
-        rightCoinId = $coinId,
-        rightContent = $price
+    $coinName = "green_currency"
+    If($coinId == 0)
+    {
+        $coinName = "gDiamonds"
     }
-    $context = {
-        storeId = $storeId,
-        itemIndex = $itemIndex,
-        targetIndex = $targetIndex
+
+    If(CheckBalance(entity = $obj1, coinName = $coinName, price = $price))
+    {
+        $btnInfo = {
+            leftCoinId = nil,
+            leftContent = "ui_cancel",
+            rightCoinId = $coinId,
+            rightContent = $price
+        }
+        $context = {
+            storeId = $storeId,
+            itemIndex = $itemIndex,
+            targetIndex = $targetIndex
+        }
+        ShowDialogTip(entity = $obj1,tipType = 5, event = "DRESS_STORE_ITEM_BUY", p1 = "ui_tip", p2 = "ui_sure_to_pay", p3 = $btnInfo, context = $context)
     }
-    ShowDialogTip(entity = $obj1,tipType = 5, event = "DRESS_STORE_ITEM_BUY", p1 = "ui_tip", p2 = "ui_sure_to_pay", p3 = $btnInfo, context = $context)
+    Else
+    {
+        If($coinId == 0)
+        {
+            ShowRecharge(player = $obj1)
+        }
+        Else
+        {
+            OperationWindows(player = $obj1, isOpen = true, win = "goldShop")
+        }
+    }
 }
 
 DRESS_STORE_ITEM_BUY
