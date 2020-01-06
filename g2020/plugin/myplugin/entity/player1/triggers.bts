@@ -666,6 +666,8 @@ SELL_HOUSE_SURE{
     }
 
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
+    $mail = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "mail")
+    StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, mail = $mail, event = "UPDATE_HOUSE_TAB")
 }
 
 BUY_STORE{
