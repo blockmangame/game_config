@@ -808,6 +808,11 @@ SHOW_TITLE_BAR{
 }
 
 EDIT_HOUSE{
+    $obj1Map = GetEntityMap(entity = $obj1)
+    $obj1MapOwner = GetMapVar(map = $obj1Map, key = "owner")
+    If(not $obj1MapOwner or ($obj1MapOwner ~= GetObjectVar(obj = $obj1, key = "house"))){
+        Return()--in outside
+    }
     If(not $obj1.hadCloseActorStore){
         ShowGenericActorShowStore(entity = $obj1, closeWin =true)
     }
