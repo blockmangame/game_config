@@ -1,7 +1,21 @@
 {
     "canClick": true,
     "carMove": true,
-    "carConfig": [],
+    "carConfig": {
+        "traction": 8000,
+        "reverseTraction": 2000,
+        "brakingForce": 10000,
+        "mass": 1000,
+        "coefAirDrag": 3,
+        "coefRollingFriction": 0.03,
+        "minTurningRadius": 7,
+        "maxCentripetalForce": 15000,
+        "corneringStiffness": 0.05,
+        "maxCoefLateralFriction": 100,
+        "coefRestitution": 0.3,
+        "minBounceSpeed": 5,
+        "cameraDistance": 7
+    },
     "collision": true,
     "ridePos": [
         {
@@ -86,5 +100,5 @@
     },
     "actorName": "g2020_car01.actor",
     "base": "car_base",
-    "autoRotateColliderBox ": true
+    "autoRotateColliderBox": null
 }
