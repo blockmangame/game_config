@@ -629,21 +629,26 @@ SELL_HOUSE_SURE{
         ShowTip(entity = $obj1, tipType = 1, textKey = "ui_house_sell_cant_sell")
         Return()
     }
+    $isSellEquipHouse = false
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
         $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
         If(DictionaryGet(dict = $dict, key = "houseId") == $houseKey){
+            If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+                $isSellEquipHouse = true
+            }
             $curSelectDict = $dict
             ArrayRemove(array = $houseVars, index = $index)
             Break()
         }
     }
-    $newHouseVar = ArrayGet(array = $houseVars, index = 1)
-    $newHouseDict = NewDictionary($newHouseVar)
-    DictionarySet(dict = $newHouseDict, key = "isCurEquip", value = "enable")
-    ArraySet(array = $houseVars, index = 1, value = DictionaryToTable(dict = $newHouseDict))
-    CallTrigger(object = $obj1, event = "CHANGE_HOUSE", 
-            newHouse = DictionaryGet(dict = $newHouseDict, key = "houseCfg"), houseColor = DictionaryGet(dict = $newHouseDict, key = "houseSelectColor"))
-
+    If($isSellEquipHouse){
+        $newHouseVar = ArrayGet(array = $houseVars, index = 1)
+        $newHouseDict = NewDictionary($newHouseVar)
+        DictionarySet(dict = $newHouseDict, key = "isCurEquip", value = "enable")
+        ArraySet(array = $houseVars, index = 1, value = DictionaryToTable(dict = $newHouseDict))
+        CallTrigger(object = $obj1, event = "CHANGE_HOUSE", 
+                newHouse = DictionaryGet(dict = $newHouseDict, key = "houseCfg"), houseColor = DictionaryGet(dict = $newHouseDict, key = "houseSelectColor"))
+    }
     -- 出售成功，给玩家钱
     $sellHouseCfg = DictionaryGet(dict = $curSelectDict, key = "houseCfg")
     AddCurrency(entity = $obj1, coinName = "green_currency", 
