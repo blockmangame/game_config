@@ -45,13 +45,18 @@ ENTITY_TOUCH_ALL
                 )
             }
 
-            If( 1 == ToInteger($index))
+            $index = ToInteger($index)
+            If(GetPropVar(entity = $passage, key = "onTrolley") == 1)
             {
-                RideOn(entity = $passage, target = $car, ctrl = true)
+                RideOn(entity = $passage, target = $car, ctrl = true, targetIndex = $passage.role == @adult and 2 or 1)
+            }
+            ElseIf($index == 1)
+            {
+                RideOn(entity = $passage, target = $car, ctrl = true, targetIndex = $index)
             }
             Else
             {
-                RideOn(entity = $passage, target = $car)
+                RideOn(entity = $passage, target = $car,targetIndex = $index)
             }
         }
         
