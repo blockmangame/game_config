@@ -127,12 +127,9 @@ CREATE_OWNER_HOUSE{
     If($obj1.curHouseCfg){
         $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
     }
-
-    SetEntityPosition(entity = $obj1, map = "map001", pos = { x = 195.0, y = 16.0, z = 101.0 })
-
-    --SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
-    --   pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-    --CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+    SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
+      pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
+    CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
 }
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 
