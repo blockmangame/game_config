@@ -3019,7 +3019,7 @@ DRESS_STORE_ITEM_BUY
 
 SHOW_SAVE_WORKS_TIP -- 作品保存提示框
 {
-    $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+    $price = GetGlobalVar(key = "publishWorksPrice" )
     $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = nil, rightContent = "works_save" }
     $context = { url = $url, isEdit = $isEdit, worksId = $worksId}
     ShowDialogTip(entity = $obj1, tipType = 5, event = "SAVE_WORKS_TIP_CLICK_EVENT", p1 = "ui_tip", p2= "publish_works_tip", p3 = $btnInfo, context = $context)
@@ -3034,7 +3034,7 @@ SAVE_WORKS_TIP_CLICK_EVENT
     $isPublish = false
     If($button == "left")
     {
-        $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+        $price = GetGlobalVar(key = "publishWorksPrice" )
         If(CheckBalance(entity = $obj1, coinName = "green_currency", price = $price))
         {
             $isPublish = true
@@ -3069,7 +3069,7 @@ CHECK_WORKS_ARCHIVE_RESPONSE
 
     If($code == 1)
     {
-        $freeCount = GetConfigVar(obj = $obj1, key = "freeWorksArchive" )
+        $freeCount = GetGlobalVar(key = "freeWorksArchive" )
         $count = DictionaryGet(dict = $dictValue, key = "data")
         If($count < $freeCount)
         {
@@ -3095,7 +3095,7 @@ CHECK_WORKS_ARCHIVE_RESPONSE
 
 SHOW_BYU_WORKS_ARCHIVE_UI
 {
-    $price = GetConfigVar(obj = $obj1, key = "worksArchivePrice" )
+    $price = GetGlobalVar(key = "worksArchivePrice" )
     $btnInfo = { leftCoinId = 0, leftContent = $price, rightCoinId = nil, rightContent = "works_save_coverage_new" }
     $context = { url = $url, isPublish = $isPublish }
     ShowDialogTip(entity = $obj1, tipType = 5, event = "BUY_WORKS_ARCHIVE", p1 = "publish_works_buy_archive_title", p2= "publish_works_buy_archive", p3 = $btnInfo, context = $context)
@@ -3110,7 +3110,7 @@ BUY_WORKS_ARCHIVE
 
     If($button == "left")
     {
-        $price = GetConfigVar(obj = $obj1, key = "worksArchivePrice" )
+        $price = GetGlobalVar(key = "worksArchivePrice" )
         If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
         {
             ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_buy_archive_not_enough_money", time = 20)
@@ -3176,7 +3176,7 @@ UPDATE_WORKS_RESPONSE
      {
         If($isPublish)
         {
-            $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+            $price = GetGlobalVar(key = "publishWorksPrice" )
             PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
             If($isEdit)
             {
@@ -3231,7 +3231,7 @@ CREATE_WORKS_RESPONSE
     {
         If($isPublish)
         {
-            $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+            $price = GetGlobalVar(key = "publishWorksPrice" )
             PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
             ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
             UpdateUIData(player =$obj1, ui = "works_person", data = true)
@@ -3258,8 +3258,8 @@ CREATE_WORKS_RESPONSE
 
 SHOW_PUBLISH_WORKS_UI
 {
-    $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
-    $cubePrice = GetConfigVar(obj = $obj1, key = "publishWorksCubePrice" )
+    $price = GetGlobalVar(key = "publishWorksPrice" )
+    $cubePrice = GetGlobalVar(key = "publishWorksCubePrice" )
     $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = 0, rightContent = $cubePrice }
     $context = { worksId = $worksId, isEdit = false }
     ShowDialogTip(entity = $obj1, tipType = 5, event = "PUBLISH_WORKS", p1 = "ui_tip", p2= "publish_works_tip", p3 = $btnInfo, context = $context)
@@ -3269,7 +3269,7 @@ PUBLISH_WORKS
 {
     If($button == "left")
     {
-        $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+        $price = GetGlobalVar(key = "publishWorksPrice" )
         If(not CheckBalance(entity = $obj1, coinName = "green_currency", price = $price))
         {
             ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_not_enough_money", time = 20)
@@ -3280,7 +3280,7 @@ PUBLISH_WORKS
 
     If($button == "right")
     {
-        $price = GetConfigVar(obj = $obj1, key = "publishWorksCubePrice")
+        $price = GetGlobalVar(key = "publishWorksCubePrice")
         If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
         {
             ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_not_enough_money", time = 20)
@@ -3296,7 +3296,7 @@ PUBLISH_WORKS_RESPONSE
     $code = DictionaryGet(dict = $dictValue, key = "code")
     If($code == 1)
     {
-        $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
+        $price = GetGlobalVar(key = "publishWorksPrice" )
         PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
         ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
         UpdateUIData(player =$obj1, ui = "works_person", data = true)
