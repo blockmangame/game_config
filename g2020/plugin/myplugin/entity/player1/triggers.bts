@@ -136,6 +136,7 @@ CREATE_OWNER_HOUSE{
 ENTITY_ENTER
 {
     --CallTrigger(event = "CHECK_SHOW_SVIP_UI", object = $obj1)
+    AddEntityBuff(entity = $obj1, cfg = "myplugin/click_action")
     CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
     CallTrigger(event = "CHECK_IN_PARTY", object = $obj1)
     UpdateUIData(player = $obj1, ui = "circleProgress", data = {})
