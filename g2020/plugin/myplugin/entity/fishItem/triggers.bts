@@ -1,8 +1,8 @@
 BUY_SHOP(){
    $price = GetConfigVar(obj = $obj1, key = "sellPrice")
-   $itemName = GetConfigVar(obj = $obj1, key = "itemName")
+   $itemCfgName = GetConfigVar(obj = $obj1, key = "sellItem")
    $coinId = GetConfigVar(obj = $obj1, key = "coinId")
-   $Name = GetItemCfg(fullName = $sellItem, key = "name")
+   $Name = GetItemCfg(fullName = $itemCfgName, key = "itemname")
    $obj2.buySessionSS = ($obj2.buySessionSS or 0 ) + 1
    If(not $price or $price == 0){ --不要钱不弹窗直接购买
       CallTrigger(event = "SURE_BUY", object = $obj2,  objID = GetObjectID(object = $obj1), checkId = $obj2.buySessionSS)
@@ -15,7 +15,7 @@ BUY_SHOP(){
       }
       
       $content = {
-         msg = "gui_you_want_to_buy_this",
+         msg = "gui_sure_buy_this",
          args = [$Name]
       }
       $Context = {
