@@ -52,4 +52,5 @@ ENTITY_TOUCH_ALL
     }
 
     CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj2, gpsDict = GetObjectVar(obj = $obj2, key = "gpsDict"))
+    CallTrigger(object = $obj2, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
 }

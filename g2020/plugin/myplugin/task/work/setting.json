@@ -1,8 +1,8 @@
 {
 	"indentPos": {
-		"x": 267,
-		"y": 19,
-		"z": 371
+		"x": 203,
+		"y": 15,
+		"z": 239
 	},
 	"circleNum": 40,
 	"maxCount": 15,
@@ -24,7 +24,8 @@
 			"weight": 50,
 			"targets": [
 				{
-					"type": "SubmitForm",
+					"type": "Interaction",
+					"targetBuff": "myplugin/task_npc_buff",
 					"name": "main_task01_targets",
 					"cfgName": "myplugin/npc02"
 				}
@@ -38,7 +39,8 @@
 			"weight": 50,
 			"targets": [
 				{
-					"type": "SubmitForm",
+					"targetBuff": "myplugin/task_npc_buff",
+					"type": "Interaction",
 					"name": "main_task01_targets",
 					"cfgName": "myplugin/npc03"
 				}
@@ -52,7 +54,8 @@
 			"weight": 50,
 			"targets": [
 				{
-					"type": "SubmitForm",
+					"targetBuff": "myplugin/task_npc_buff",
+					"type": "Interaction",
 					"name": "main_task01_targets",
 					"cfgName": "myplugin/npc04"
 				}

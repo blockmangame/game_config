@@ -7,6 +7,7 @@
     "bodyTurnMin": 361,
     "bodyTurnMax": 361,
 	"canTurnHead": false,
+	"hideDeep": 0.1,
     "joinPartyGiveMoney": 200,
     "saveVars": {
         "houseVars": [],
@@ -854,6 +855,18 @@
             "type": 25,
             "cap": 100,
             "maxCap": 100
+        }
+    ],
+	"attachPoints": [
+        {
+            "name": "sitPoint",
+            "bone": "b_pelvis",
+            "position": {"x": 0, "y": 0, "z": 0},
+            "rotation": {"x": 0, "y": 180, "z": 90},
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
         }
     ]
 }
