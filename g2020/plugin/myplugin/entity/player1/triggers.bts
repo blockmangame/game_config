@@ -3038,7 +3038,6 @@ SAVE_WORKS_TIP_CLICK_EVENT
         }
         Else
         {
-            --ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_not_enough_money", time = 20)
             ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
             Return()
         }
@@ -3082,12 +3081,10 @@ CHECK_WORKS_ARCHIVE_RESPONSE
     {
         If($isPublish)
         {
-            --ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
             ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         }
         Else
         {
-            --ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_failure", time = 20)
             ShowDialogTip(entity = $obj1, p2 = "works_save_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         }
     }
@@ -3113,7 +3110,6 @@ BUY_WORKS_ARCHIVE
         $price = GetWorldVar(key = "worksArchivePrice")
         If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
         {
-            --ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_buy_archive_not_enough_money", time = 20)
             ShowDialogTip(entity = $obj1, p2 = "publish_works_buy_archive_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
             Return()
         }
@@ -3139,7 +3135,6 @@ BUY_WORKS_ARCHIVE_RESPONSE
     }
     Else
     {
-        --ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_buy_archive_failure", time = 20)
         ShowDialogTip(entity = $obj1, p2 = "publish_works_buy_archive_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
@@ -3160,7 +3155,6 @@ GET_NEW_UN_PUBLISH_RESPONSE
      }
      Else
      {
-        --ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_failure", time = 20)
         ShowDialogTip(entity = $obj1, p2 = "works_save_coverage_new_works_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
      }
 }
@@ -3210,12 +3204,10 @@ UPDATE_WORKS_RESPONSE
      {
         If($isEdit)
         {
-            --ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_edit_new_works_failure", time = 20)
             ShowDialogTip(entity = $obj1, p2 = "works_save_edit_new_works_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         }
         Else
         {
-            --ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_failure", time = 20)
             ShowDialogTip(entity = $obj1, p2 = "works_save_coverage_new_works_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         }
      }
@@ -3252,12 +3244,10 @@ CREATE_WORKS_RESPONSE
     {
         If($isPublish)
         {
-            --ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
             ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         }
         Else
         {
-            --ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_failure", time = 20)
             ShowDialogTip(entity = $obj1, p2 = "works_save_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         }
     }
@@ -3279,7 +3269,6 @@ PUBLISH_WORKS
         $price = GetWorldVar(key = "publishWorksPrice")
         If(not CheckBalance(entity = $obj1, coinName = "green_currency", price = $price))
         {
-            --ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_not_enough_money", time = 20)
             ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
             Return()
         }
@@ -3291,7 +3280,6 @@ PUBLISH_WORKS
         $price = GetWorldVar(key = "publishWorksCubePrice")
         If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
         {
-            --ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_not_enough_money", time = 20)
             ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
             Return()
         }
@@ -3307,14 +3295,12 @@ PUBLISH_WORKS_RESPONSE
     {
         $price = GetWorldVar(key = "publishWorksPrice")
         PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
-        --ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
         ShowDialogTip(entity = $obj1, p2 = "publish_works_succeed", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         UpdateUIData(player =$obj1, ui = "works_person", data = true)
         CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId)
     }
     Else
     {
-        --ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
         ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
@@ -3332,7 +3318,6 @@ PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE
     }
     Else
     {
-        --ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
         ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
@@ -3348,7 +3333,6 @@ PUBLISH_WORKS_BY_CUBE_RESPONSE
     }
     Else
     {
-        --ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_failure", time = 20)
         ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
