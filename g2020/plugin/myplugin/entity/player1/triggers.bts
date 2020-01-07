@@ -4570,6 +4570,7 @@ CHECK_LEAVE_PARTY {
         Return()
     }
     If($obj1.inSelfParty == 0){
+        $obj1.dontAskShowPartyList = true
         LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
         $obj1.inPartyOwnerId = 0
     }
@@ -4578,7 +4579,7 @@ ASK_LEAVE_PARTY{
     If($result == false) {
         Return()
     }
-    $obj1.needAskShowPartyList = true
+    --need ask show party list
     LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
 }
 ASK_SHOW_PARTY_LIST {
@@ -4600,7 +4601,8 @@ LEAVE_PARTY_SUCCESS(debug = true){
         ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
     }
     $obj1.inPartyOwnerId = 0
-    If($obj1.needAskShowPartyList){
+    --cases need ask: from door/ from the client exit button
+    If(not $obj1.dontAskShowPartyList){
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
     }
     ElseIf($obj1.dontReenterGame){
@@ -4617,6 +4619,7 @@ CHECK_IN_PARTY(debug = false){
         $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
         If(not $partyOwner){
             ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.no.owner", time =  20)
+            $obj1.dontAskShowPartyList = true
             LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
             $obj1.inPartyOwnerId = 0--just in case
             ReenterGame(player = $obj1)
@@ -4638,6 +4641,7 @@ INTERACTION_BANISH(debug = false){
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.be.banished", time =  20)
     $owner = GetPlayerByUserId(userId = $obj1.inPartyOwnerId)
     $obj1.excludedPartyId = $owner.inPartyId
+    $obj1.dontAskShowPartyList = true
     LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
 }
 CREATE_PARTY_SUCCESS {
@@ -4725,6 +4729,7 @@ PARTY_BE_LIKED{
 RESET_GAME_FAILED(debug = true){
     If($resultCode ~= 1 and $obj1.needCheckResetGameResult){
         $obj1.dontReenterGame = true
+        $obj1.dontAskShowPartyList = true
         LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
     }
 }
