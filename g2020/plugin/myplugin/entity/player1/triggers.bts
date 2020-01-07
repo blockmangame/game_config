@@ -3966,7 +3966,8 @@ EQUIP_CAR {
 
     $pos = GetEntityPosition(entity = $obj1)
     $newPos = ComputeV3(op = "add", p1= $pos, p2 = {x = 0, y = 2, z = 0})
-    $car = CreateNpc(cfgName = $carName, pos = $newPos, map = GetEntityMap(entity = $obj1), owner = $obj1)
+    $yaw = GetEntityYaw(entity = $obj1)
+    $car = CreateNpc(cfgName = $carName, pos = $newPos, map = GetEntityMap(entity = $obj1), owner = $obj1, ry = $yaw)
 
     RideOn(entity = $obj1, target = $car)
 
