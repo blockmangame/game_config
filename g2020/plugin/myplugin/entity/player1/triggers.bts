@@ -4337,7 +4337,10 @@ ENTER_MAP
     If(not $obj1MapOwner or ($obj1MapOwner ~= GetObjectVar(obj = $obj1, key = "house"))){
         ShowTitleBarPage(entity = $obj1, closeWin = true)
     }
+    If(not $obj1.useTrolley)
+    {
     CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+    }
     CallTrigger(object = $obj1, event = "PICK_HAND_ITEM", obj1 = $obj1)
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
@@ -4905,5 +4908,47 @@ GET_SVIP_REWARD()
         $money = GetWorldVar(key = "svipMoney")
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
         ShowToolBarButton(name = "svip", show = false, player = $obj1)
+    }
+}
+
+FUNC_TRANSMIT_CARRIER --carrier, toMap, toPos, toRy, useEnterMap
+{   
+    If($carrier)
+    {
+        $passengers = GetPassengers(entity = $carrier)
+        $passengersDic = NewDictionary($passengers)
+
+        If($obj1.onCar and $toMap ~= "map001" and $toMap ~= "map002")
+        {
+            $obj1.transmitCancel = true
+            Return()
+        }
+
+        $obj1.transmitCancel = nil
+        If($useEnterMap)
+        {
+            EnterMap(entity = $carrier, map = $toMap, pos = $toPos, ry = $toRy or 0)
+        }
+        Else
+        {
+            SetEntityPosition(entity = $carrier, map = $toMap, ry = $toRy or 0, pos = $toPos)
+        }
+
+        ForeachDictionary(dict = $passengersDic, keyName = "index", valueName = "objID")
+        {
+            $passage = GetObject(objID = $objID)
+            If(IsPlayer($passage))
+            {
+                If($useEnterMap)
+                {
+                    EnterMap(entity = $passage, map = $toMap, pos = $toPos, ry = $toRy or 0)
+                }
+                Else
+                {
+                    SetEntityPosition(entity = $passage, map = $toMap, ry = $toRy or 0, pos = $toPos)
+                }
+            }
+            RideOn(entity = $passage, target = $carrier, targetIndex = ToInteger($index))
+        }
     }
 }

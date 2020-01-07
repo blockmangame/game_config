@@ -8,18 +8,34 @@ REGION_ENTER {
         Return()
     }
     ------------------------------------------ 传送进内部房子
-    If(1 == GetPropVar(entity = $obj1, key = "onTrolley") || $obj1.onCar)
-    {
-        Return()
-    }
-
     $map = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "houseInsideMap")
     $yaw = 0
     If($obj1.curHouseCfg){
         $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
     }
-    SetEntityPosition(map = $map, entity = $obj1, ry = $yaw,
-        pos = ComputeV3(p1 = GetMapInitPos(map = $map) or GetEntityPosition(entity = $obj1), p2 = Table(x = 0, y = 0.5, z = 0), op = "add"))
+    $pos = ComputeV3(
+        p1 = GetMapInitPos(map = $map) or GetEntityPosition(entity = $obj1),
+        p2 = Table(x = 0, y = 0.5, z = 0), op = "add"
+    )
+    $carrier = GetRideOn(entity = $obj1)
+    If($carrier)
+    {
+        CallTrigger(
+            event = "FUNC_TRANSMIT_CARRIER",
+            object = $obj1, toPos = $pos, toRy = $yaw, carrier = $carrier,
+            toMap = $map
+        )
+        If($obj1.transmitCancel)
+        {
+            Return()
+        }
+    }
+    Else
+    {
+        SetEntityPosition(
+            map = $map, entity = $obj1, ry = $yaw, pos = $pos
+        )
+    }
     If(GetObjectID(object = $ownerPlayer) == GetObjectID(object = $obj1)){
         CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
         CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = false)

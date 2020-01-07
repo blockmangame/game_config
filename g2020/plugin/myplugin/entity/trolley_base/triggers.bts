@@ -1,0 +1,10 @@
+ENTITY_RIDE_ON
+{
+    $obj2.useTrolley = true
+}
+
+ENTITY_RIDE_OFF
+{
+    $obj2.useTrolley = false
+    CallTrigger(event = "DEMOUNT_BABY_TROLLEY", object = $obj2)
+}
