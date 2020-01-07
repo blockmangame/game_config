@@ -3528,7 +3528,23 @@ GET_TASK_GPS  --得到打工的GPS位置
             $obj1.gpsPos = GetEntityPosition(entity = $door)
         }
     }Else{
-        $obj1.gpsPos = $obj1.taskPos or  @INDENT_POS
+        $mapName = GetEntityMapName(entity = $obj1)
+        If($mapName ~= "map001"){
+            $mapEntry = NewDictionary(GetMapConfig(name = $mapName, key = "mapEntry"))
+            $cfg = DictionaryGet(dict = $mapEntry, key = "map001")
+            $cfgName = ArrayGet(array = $cfg, index = 1)
+            $mapEntity = GetMapConfig(name = $mapName, key = "entity")
+            Foreach(array = $mapEntity, key = "entityDict"){
+                $dict = NewDictionary($entityDict)
+                $name = DictionaryGet(dict = $dict, key = "cfg")
+                If($name == $cfgName){
+                    $okPos = DictionaryGet(dict = $dict, key = "pos")
+                }
+            }
+            $obj1.gpsPos = $okPos or @INDENT_POS
+        }Else{
+            $obj1.gpsPos = $obj1.taskPos or  @INDENT_POS
+        }
     }
 }
 TASK_NPC_ADD_BUFF  --给任务npc还动作加buff, 订单NPC加buff动作
@@ -3702,7 +3718,7 @@ SUBMIT_ORDER(){ --对话提交
     }
     $obj2 = GetObject(objID = $obj1.taskobjID)
     $obj1.nowSubmitTask = false
-    AddTarget(entity = $obj1, target = $obj2, type = "SubmitForm")
+    AddTarget(entity = $obj1, target = $obj2, type = "Interaction")
     DoFinishTask(player = $obj1, name = $obj1.taskKey)
     $obj1.taskobjID = nil
 }
@@ -3758,10 +3774,13 @@ FINISH_AWARD(){ --完成打工的奖励
 }
 --场景商店的牌子
 SHOW_SHOP_TITLE(){
-    $data1 = GetWorldVar(key = "titilePos1")
-    $data2 = GetWorldVar(key = "titilePos2")
-    Show3DUI(player = $obj1, show = $show, data = $data1)
-    Show3DUI(player = $obj1, show = $show, data = $data2)
+    $mapName = GetEntityMapName(entity = $obj1)
+    $cfg = GetWorldVar(key = "ShopTitle")
+    $Dict = NewDictionary($cfg or {})
+    $array = DictionaryGet(dict = $Dict, key = $mapName)
+    Foreach(array = $array or {}, key = "data"){
+        Show3DUI(player = $obj1, show = $show, data = $data)
+    }
 }
 --公共区域购买，场景商店的购买逻辑
 SURE_BUY {
@@ -3933,20 +3952,6 @@ ENTITY_BUY_RESULT()
         }
     }
 }
---场景商店门面
-SHOW_SHOP_TITLE {
-    Return()
-    If($obj1.showShopTitleTimer){
-        StopTimer(timer = $obj1.showShopTitleTimer)
-    }
-    If(GetEntityMapName(entity = $obj1) == "map001" ){
-        $data1 = GetWorldVar(key = "titilePos1")
-        $data2 = GetWorldVar(key = "titilePos2")
-        Show3DUI(player = $obj1, show = true, data = $data1)
-        Show3DUI(player = $obj1, show = true, data = $data2)
-    }
-}
-
 EQUIP_CAR {
     $mapName = GetEntityName(entity = GetEntityMap(entity = $obj1))
     If($mapName ~= "map001" && $mapName ~= "map002")
@@ -4326,6 +4331,7 @@ ENTER_EQUIPMEN {
 
 ENTER_MAP
 {
+    CallTrigger(event = "SHOW_SHOP_TITLE", object = $obj1, show = true)
     $obj1Map = GetEntityMap(entity = $obj1)
     $obj1MapOwner = GetMapVar(map = $obj1Map, key = "owner")
     If(not $obj1MapOwner or ($obj1MapOwner ~= GetObjectVar(obj = $obj1, key = "house"))){
@@ -4335,11 +4341,9 @@ ENTER_MAP
     CallTrigger(object = $obj1, event = "PICK_HAND_ITEM", obj1 = $obj1)
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
-        CallTrigger(event = "SHOW_SHOP_TITLE", object = $obj1, show = true)
         $U3Dcfg = GetWorldVar(key = "sceneUI")      -- u3d ui
         Foreach(array = $U3Dcfg, key = "ucfg")
         {
-
             $dict = NewDictionary($ucfg)
             $index = DictionaryGet(dict = $dict, key = "index")
 
@@ -4363,12 +4367,11 @@ ENTER_MAP
 
 LEAVE_MAP
 {
+    CallTrigger(event = "SHOW_SHOP_TITLE", object = $obj1, show = false)
     CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
-        CallTrigger(event = "SHOW_SHOP_TITLE", object = $obj1, show = false)
         $U3Dcfg = GetWorldVar(key = "sceneUI")      -- u3d ui
-
         Foreach(array = $U3Dcfg, key = "ucfg")
         {
             Show3DUI(player = $obj1, show = false, data = $ucfg)
