@@ -60,6 +60,9 @@ ENTITY_CLICK{
     If(not $editBuff){
         Return()
     }
+    If(not GetObjectVar(obj = $obj1, key = "house") or GetObjectVar(obj = $obj1, key = "house") ~= GetObjectVar(obj = $obj2, key = "house")){
+        Return()
+    }
     $lastInteractionUiObjId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")
     If($lastInteractionUiObjId){
         UpdateEntityEditContainer(player = $obj2, entityId = $lastInteractionUiObjId, show = false)

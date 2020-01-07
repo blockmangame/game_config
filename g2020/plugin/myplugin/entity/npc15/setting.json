@@ -13,6 +13,41 @@
             "npc": "myplugin/npc15"
         }
     ],
+	"boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    0.3,
+                    1.2,
+                    0.4
+                ]
+            }
+        ]
+    },
+	"interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": "SHOW_CONVERSATION_UI",
+				"imageSize": {
+                    "width": "60",
+                    "height": "60"
+                }
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0.1,
+                "y": 0.4,
+                "z": 0
+            }
+        }
+    },
     "optionNpc": "myplugin/npc15",
     "optionList": []
 }

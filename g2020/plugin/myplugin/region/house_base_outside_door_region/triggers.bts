@@ -8,6 +8,11 @@ REGION_ENTER {
         Return()
     }
     ------------------------------------------ 传送进内部房子
+    If(1 == GetPropVar(entity = $obj1, key = "onTrolley") || $obj1.onCar)
+    {
+        Return()
+    }
+
     $map = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "houseInsideMap")
     $yaw = 0
     If($obj1.curHouseCfg){

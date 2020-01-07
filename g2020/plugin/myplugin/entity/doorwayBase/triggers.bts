@@ -1,11 +1,55 @@
 ENTITY_TOUCH_ALL
 {
+
+    $car = GetRideOn(entity = $obj2)
+
+    If($car)
+    {
+        $passengers = GetPassengers(entity = $car)
+        $passengersDic = NewDictionary($passengers)
+
+        $map = GetConfigVar(obj = $obj1, key = "toMap")
+        If($map ~= "map001" and $map ~= "map002")
+        {
+            Return()
+        }
+    }
+
     EnterMap(
         entity = $obj2,
         map = GetConfigVar(obj = $obj1, key = "toMap"),
         pos = GetConfigVar(obj = $obj1, key = "toPos"),
         ry = GetConfigVar(obj = $obj1, key = "toRy")
     )
+    
+    If($car)
+    {
+        EnterMap(
+            entity = $car,
+            map = GetConfigVar(obj = $obj1, key = "toMap"),
+            pos = GetConfigVar(obj = $obj1, key = "toPos"),
+            ry = GetConfigVar(obj = $obj1, key = "toRy")
+        )
+        
+        ForeachDictionary(dict = $passengersDic, keyName = "index", valueName = "objID")
+        {
+
+            $passage = GetObject(objID = $objID)
+            If($passage and $passage ~= $obj2)
+            {
+                EnterMap(
+                    entity = $passage,
+                    map = GetConfigVar(obj = $obj1, key = "toMap"),
+                    pos = GetConfigVar(obj = $obj1, key = "toPos"),
+                    ry = GetConfigVar(obj = $obj1, key = "toRy")
+                )
+            }
+
+            $index = ToInteger($index)
+            RideOn(entity = $passage, target = $car, targetIndex = $index)
+        }
+        
+    }
 
     CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj2, gpsDict = GetObjectVar(obj = $obj2, key = "gpsDict"))
 }

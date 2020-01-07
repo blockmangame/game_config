@@ -1,0 +1,15 @@
+REGION_ENTER {
+    $building = GetRegionOwner(region = $region)
+    If(not $building){
+        Return()
+    }
+    CallTrigger(object = $building, event = "OPEN_THE_DOOR", player = $obj1)
+}
+
+REGION_LEAVE {
+    $building = GetRegionOwner(region = $region)
+    If(not $building){
+        Return()
+    }
+    CallTrigger(object = $building, event = "CLOSE_THE_DOOR", player = $obj1)
+}
