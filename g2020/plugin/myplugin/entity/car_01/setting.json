@@ -22,7 +22,7 @@
             "yaw": 0,
             "pos": {
                 "y": -0.1,
-                "z": -0.64,
+                "z": 10,
                 "x": 0.6
             },
             "out": {
@@ -34,7 +34,8 @@
             "view": true,
             "passengerAction": {
                 "base": "riding"
-            }
+            },
+            "attachPoint": "ride1"
         },
         {
             "yaw": 0,
@@ -52,7 +53,44 @@
             "view": false,
             "passengerAction": {
                 "base": "riding"
-            }
+            },
+            "attachPoint": "ride2"
+        }
+    ],
+    "attachPoints": [
+        {
+            "name": "ride1",
+            "bone": "s_car_01",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": 0.5,
+            "propagateScaling": true,
+            "matchActorOrientation": true
+        },
+        {
+            "name": "ride2",
+            "bone": "s_car_01_1",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": 0.5,
+            "propagateScaling": true,
+            "matchActorOrientation": true
         }
     ],
     "boundingVolume": {
@@ -100,5 +138,5 @@
     },
     "actorName": "g2020_car01.actor",
     "base": "car_base",
-    "autoRotateColliderBox": null
+    "autoRotateColliderBox": true
 }
