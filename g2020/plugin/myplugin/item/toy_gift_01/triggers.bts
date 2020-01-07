@@ -15,20 +15,23 @@ USE_ITEM(debug = false) --随机抽奖，抽奖道具使用后随机获得奖品
     Foreach(array = $rewardArray or {}, key = "rewardA"){
         $dict = NewDictionary($rewardA)
         $name = DictionaryGet(dict = $dict, key = "name")
-        $once = DictionaryGet(dict = $dict, key = "weight")
+        $once = DictionaryGet(dict = $dict, key = "once")
         $find = ArrayFind(array = $obj1.randomOnce, value = $name)
-        If( not ($once == true and $find)){
+        If( not ($once == true and $find) or not $once){
             ArrayAppend(array = $reardList, value = $rewardA)
             $weight = DictionaryGet(dict = $dict, key = "weight")
             $count = $count + $weight
         }
     }
-    $sum = Random(min = 1, max = $count)
+    $randX = Random()
+    $sum = $count * $randX
+    $onlyOnce = false
     Foreach(array = $reardList, key = "item"){
         $rewardDict = NewDictionary($item)
         $weight = DictionaryGet(dict = $rewardDict, key = "weight")
         $sum = $sum - $weight
         If($sum <= 0){
+            $onlyOnce = DictionaryGet(dict = $rewardDict, key = "once")
             $addItem =  DictionaryGet(dict = $rewardDict, key = "name")
             Break()
         }
@@ -37,5 +40,7 @@ USE_ITEM(debug = false) --随机抽奖，抽奖道具使用后随机获得奖品
     {
         AddItem(entity = $obj1, cfg = $addItem, count = 1)
     }
-    -- TO DO 如果是不可重复的， 把item记到obj.vars里面
+    If($onlyOnce){-- 如果是不可重复的， 把item记到obj.vars里面
+        ArrayAppend(array = $obj1.randomOnce, value = $addItem)
+    }
 }
