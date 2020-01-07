@@ -468,8 +468,8 @@ WORKS_WALL_UPDATE
 }
 
 FUNC_LOAD_NEW_WORKS { --获取最新作品
-    $currentCount = GetGlobalVar(key = "curServerWorksCount")
-    $othersCount = GetGlobalVar(key = "otherServerWorksCount")
+    $currentCount = GetWorldVar(key = "curServerWorksCount")
+    $othersCount = GetWorldVar(key = "otherServerWorksCount")
     $userIds = {}
     Foreach(array = GetAllPlayers(), key = "player")
     {
@@ -499,8 +499,8 @@ LOAD_NEW_WORKS_RESPONSE {
 }
 
 FUNC_LOAD_EXCELLENT_WORKS {--获取优秀作品
-    $count = GetGlobalVar(key = "excellentWorksCount")
-    $praiseNum = GetGlobalVar(key = "excellentWorksPraiseNum" )
+    $count = GetWorldVar(key = "excellentWorksCount")
+    $praiseNum = GetWorldVar(key = "excellentWorksPraiseNum")
     GetExcellentWorks(count = $count, limit = 0, event = "FUNC_LOAD_EXCELLENT_RESPONSE" )
 }
 
@@ -524,7 +524,7 @@ FUNC_LOAD_EXCELLENT_RESPONSE {
 
 
 FUNC_LOAD_WORKS_WALL_TOP {--获取上周前10名
-    $count = GetGlobalVar(key = "weekTopWorksCount")
+    $count = GetWorldVar(key = "weekTopWorksCount")
     GetTopWorks(count = $count, event = "FUNC_LOAD_WORKS_WALL_TOP_RESPONSE" )
 }
 
