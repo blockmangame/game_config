@@ -127,9 +127,12 @@ CREATE_OWNER_HOUSE{
     If($obj1.curHouseCfg){
         $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
     }
-    SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
-       pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-    CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+
+    SetEntityPosition(entity = $obj1, map = "map001", pos = { x = 195.0, y = 16.0, z = 101.0 })
+
+    --SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
+    --   pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
+    --CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
 }
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 
@@ -3014,7 +3017,7 @@ DRESS_STORE_ITEM_BUY
     }
 }
 
-SHOW_SAVE_WORKS_TIP
+SHOW_SAVE_WORKS_TIP -- 作品保存提示框
 {
     $price = GetConfigVar(obj = $obj1, key = "publishWorksPrice" )
     $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = nil, rightContent = "works_save" }
@@ -3043,18 +3046,18 @@ SAVE_WORKS_TIP_CLICK_EVENT
         }
     }
 
-    If($isEdit && $worksId ~= nil)
+    If($isEdit && $worksId ~= nil) -- 编辑模式
     {
         CallTrigger(event = "UPDATE_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish, worksId = $worksId, isEdit = $isEdit)
     }
-    Else
+    Else -- 创建模式
     {
         CallTrigger(event = "CHECK_WORKS_ARCHIVE", obj1 = $obj1, url = $url, isPublish = $isPublish)
     }
 }
 
 
-CHECK_WORKS_ARCHIVE
+CHECK_WORKS_ARCHIVE -- 检查作品存档数据
 {
     GetWorksCount(player = $obj1, event = "CHECK_WORKS_ARCHIVE_RESPONSE", url = $url, isPublish = $isPublish)
 }
@@ -3139,7 +3142,7 @@ BUY_WORKS_ARCHIVE_RESPONSE
     }
 }
 
-GET_NEW_UN_PUBLISH_WORKS
+GET_NEW_UN_PUBLISH_WORKS --获取没有发布的作品
 {
     GetNewUnPublishWorks(event = "GET_NEW_UN_PUBLISH_RESPONSE", player = $obj1, url = $url, isPublish = $isPublish)
 }
@@ -3183,8 +3186,6 @@ UPDATE_WORKS_RESPONSE
             {
                 ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_and_publish_new_works_succeed", time = 20)
             }
-
-            UpdateUIData(player =$obj1, ui = "works_person", data = true)
             CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId)
         }
         Else
@@ -3199,6 +3200,7 @@ UPDATE_WORKS_RESPONSE
             }
         }
 
+        UpdateUIData(player =$obj1, ui = "works_person", data = true)
         OperationWindows(player = $obj1, isOpen = false, win = "palette")
      }
      Else
