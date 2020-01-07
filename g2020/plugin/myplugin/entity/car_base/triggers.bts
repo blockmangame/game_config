@@ -30,6 +30,7 @@ RIDE_ON
 
 ENTITY_RIDE_ON
 {
+    $obj2.onCar = true
     $hidePlayer = GetConfigVar(obj = $obj1, key = "hidePlayer")
     If($hidePlayer)
     {
@@ -39,6 +40,7 @@ ENTITY_RIDE_ON
 
 ENTITY_RIDE_OFF
 {
+    $obj2.onCar = false
     If($obj2.driveHideBuff)
     {
         RemoveEntityBuff(entity = $obj2, buff = $obj2.driveHideBuff)

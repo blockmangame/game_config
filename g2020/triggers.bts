@@ -468,8 +468,8 @@ WORKS_WALL_UPDATE
 }
 
 FUNC_LOAD_NEW_WORKS { --获取最新作品
-    $currentCount = 20
-    $othersCount = 20
+    $currentCount = GetWorldVar(key = "curServerWorksCount")
+    $othersCount = GetWorldVar(key = "otherServerWorksCount")
     $userIds = {}
     Foreach(array = GetAllPlayers(), key = "player")
     {
@@ -499,8 +499,8 @@ LOAD_NEW_WORKS_RESPONSE {
 }
 
 FUNC_LOAD_EXCELLENT_WORKS {--获取优秀作品
-    $count = 180
-    $praiseNum = 100
+    $count = GetWorldVar(key = "excellentWorksCount")
+    $praiseNum = GetWorldVar(key = "excellentWorksPraiseNum")
     GetExcellentWorks(count = $count, limit = 0, event = "FUNC_LOAD_EXCELLENT_RESPONSE" )
 }
 
@@ -524,7 +524,7 @@ FUNC_LOAD_EXCELLENT_RESPONSE {
 
 
 FUNC_LOAD_WORKS_WALL_TOP {--获取上周前10名
-    $count = 10
+    $count = GetWorldVar(key = "weekTopWorksCount")
     GetTopWorks(count = $count, event = "FUNC_LOAD_WORKS_WALL_TOP_RESPONSE" )
 }
 
@@ -546,21 +546,26 @@ FUNC_LOAD_WORKS_WALL_TOP_RESPONSE {
 }
 
 
+RECHECK_INTERACTION_UI(){
+    If(not $player or not $target) {Return()}
+    RecheckObjectInteractionUI(player = $player, target = $target)
+}
+
 ENTITY_RIDE_OFF {
     If(not IsPlayer(entity = $obj2)){ Return() }
-    RecheckObjectInteractionUI(player = $obj2, target = $obj1)
+    StartTimer(rep = false, player = $obj2, target = $obj1, time = 1, event = "RECHECK_INTERACTION_UI")
     CallTrigger(object = $obj2, event = "FUNC_STATE_RIDEON", ride = $obj1, isCancel = true)
 
     If(not IsPlayer(entity = $obj1)){ Return() }
-    RecheckObjectInteractionUI(player = $obj1, target = $obj2)
+    StartTimer(rep = false, player = $obj1, target = $obj2, time = 1, event = "RECHECK_INTERACTION_UI")
 }
 ENTITY_RIDE_ON {
     If(not IsPlayer(entity = $obj2)){ Return() }
-    UpdateObjectInteractionUI(player = $obj2, target = $obj1, show = false)
+    StartTimer(rep = false, player = $obj2, target = $obj1, time = 1, event = "RECHECK_INTERACTION_UI")
     CallTrigger(object = $obj2, event = "FUNC_STATE_RIDEON", ride = $obj1)
 
     If(not IsPlayer(entity = $obj1)){ Return() }
-    UpdateObjectInteractionUI(player = $obj1, target = $obj2, show = false)
+    StartTimer(rep = false, player = $obj1, target = $obj2, time = 1, event = "RECHECK_INTERACTION_UI")
     CallTrigger(event = "FUNC_STATE_ADD_INTERACTLIST", entities = [$obj1, $obj2])
 }
 REMOVE_ILL_BUFF
