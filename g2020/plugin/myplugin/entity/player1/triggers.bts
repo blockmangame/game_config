@@ -1606,12 +1606,13 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     $rewardType = GetSkillVar(fullName = $skill, key = "rewardType")
     
     $teamId = GetEntityTeam(entity = $obj1)
+    $rewardMap = GetEntityMap(entity = $obj1)
     $rewardSum = 0
     $textKey = ""
     Foreach(array = $interactList or [], key = "objID")
     {
         $entity = GetObject(objID = $objID)
-        If(not IsPlayer(entity = $entity))
+        If(not $entity || not IsPlayer(entity = $entity) || GetEntityMap(entity = $entity) ~= $rewardMap)
         {
             Continue()
         }
