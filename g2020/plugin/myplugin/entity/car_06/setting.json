@@ -20,7 +20,27 @@
             "view": true,
             "passengerAction": {
                 "base": "g2020_barrow"
-            }
+            },
+            "attachPoint": "ride"
+        }
+    ],
+	"attachPoints": [
+        {
+            "name": "ride",
+            "bone": "s_guadian04",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": 0.5,
+            "propagateScaling": true,
+            "matchActorOrientation": true
         }
     ],
     "boundingVolume": {

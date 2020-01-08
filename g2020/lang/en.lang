@@ -60,7 +60,7 @@ state_btntext=start GPS
 state_subtitle=progress:
 you_came=Hi, there
 openning_gps=Starting GPS
-unable_to_navigate=Cannot navigate to {}
+unable_to_navigate=Cannot navigate to {.}
 state_out_of_time=Status time out
 reward_takeCare=Taking care benefits
 reward_family=Family taking care benefits
@@ -73,17 +73,17 @@ ui_family_create=create a family
 ui_family_album=family album
 ui_family_quit=leave family
 ui_family_full_member=The family is full
-ui_family_request={} sent you a family request
+ui_family_request={.} sent you a family request
 ui_family_reject=Your family request is rejected
 ui_family_offline=player offline
 ui_family_join_in=You joined a family
-ui_family_ask_for_family={}, I want to be your family
-gui_you_want_to_buy_this=Are you sure to buy {}?
-gui_buys_your_stuff={} bought your {}
+ui_family_ask_for_family={.}, I want to be your family
+gui_you_want_to_buy_this=Are you sure to buy {.}?
+gui_buys_your_stuff={.} bought your {.}
 interact_feed=feed
-thank_sb_food=Thanks to {}'s {}
-infect_sb=You got ill by {}
-state_get=You got {}
+thank_sb_food=Thanks to {.}'s {.}
+infect_sb=You got ill by {.}
+state_get=You got {.}
 
 language_end:family_status
 
@@ -423,12 +423,12 @@ language_end:house
 
 language_start:item
 
-item.money_01.name=50 Gold coins
-item.money_02.name=100 Gold coins
-item.money_03.name=400 Gold coins
-item.money_04.name=1000 Gold coins
-item.money_05.name=5000 Gold coins
-item.money_06.name=10000 Gold coins
+item.money_01.name=50 Coins
+item.money_02.name=100 Coins
+item.money_03.name=400 Coins
+item.money_04.name=1000 Coins
+item.money_05.name=5000 Coins
+item.money_06.name=10000 Coins
 item.vip_01.name=VIP
 item.vip_02.name=Dance Pack
 item.vip_03.name=Action Pack
@@ -486,6 +486,7 @@ car_old_01.name=Police car
 car_old_02.name=Car
 car_old_03.name=Sports car
 car_old_04.name=Jeep
+car_horse_01.name=White horse
 car_01.buy=buy Supercar(4000)
 car_02.buy=buy Magnetic levitation car(999)
 car_03.buy=buy Bumper car(299)
@@ -503,6 +504,7 @@ car_old_01.buy=buy Police car(499)
 car_old_02.buy=buy Car(2000)
 car_old_03.buy=buy Sports car(3000)
 car_old_04.buy=buy Jeep(1500)
+car_horse_01.buy=buy White horse(999)
 gift_01.name=Small gift
 gift_02.name=Middle gift
 gift_03.name=Big gift
@@ -560,6 +562,26 @@ create_car_in_the_air=Unable to ride in the air
 condition_with_equip_other_car=Only the owner and his family can drive this car
 trolley_already_remove=The trolley has been taken back
 trolley_pls_equip=Please equip a trolley first
+sign_in_items_11=100 coins
+sign_in_items_12=150 coins
+sign_in_items_13=200 coins
+sign_in_items_14=250 coins
+sign_in_items_15=300 coins
+sign_in_items_16=350 coins
+sign_in_items_17=500 coins
+sign_in_items_21=20 coins
+sign_in_items_22=30 coins
+sign_in_items_23=50 coins
+sign_in_items_24=70 coins
+sign_in_items_25=100 coins
+sign_in_items_26=130 coins
+sign_in_items_27=200 coins
+g2020-baby-bed=Baby trolley
+g2020-food=Food
+g2020-car=Vehicle
+g2020-toy=Toy
+g2020-task-item=Task
+g2020-bag=Bag
 
 language_end:item
 
@@ -743,5 +765,8 @@ palette_help_title=Help
 palette_help_msg=1. Two-finger swipe the screen to drag the canvas\\n2. Long-press swipe to quickly fill \\n3. Tap the blank space to collapse the palette
 gui.have_money_tip=Remaining coins
 close_gps=close GPS
+other.player.join.cur.player.party={.}joined the party, you have received {.} coins
+bgm_sound_just_owner_can_use=You cannot use other player's sound
+square_bgm_sound_cant_inter=You can only use sound in your own house
 
 language_end:system
