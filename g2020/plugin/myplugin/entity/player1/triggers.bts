@@ -4340,10 +4340,7 @@ ENTER_MAP
     If(not $obj1MapOwner or ($obj1MapOwner ~= GetObjectVar(obj = $obj1, key = "house"))){
         ShowTitleBarPage(entity = $obj1, closeWin = true)
     }
-    If(not $obj1.useTrolley)
-    {
     CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
-    }
     CallTrigger(object = $obj1, event = "PICK_HAND_ITEM", obj1 = $obj1)
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
