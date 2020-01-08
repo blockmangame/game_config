@@ -809,7 +809,7 @@ SHOW_TITLE_BAR{
     }
     $obj1.hadCloseActorStore = false
     ShowTitleBarPage(entity = $obj1, infoTb = {})
-    StartTimer(object =$obj1, obj1 =$obj1, infoTb = $infoTb, time = 1, event = "UPDATE_TITLE_SHOW_BAR")
+    StartTimer(object =$obj1, obj1 =$obj1, infoTb = $infoTb, time = 3, event = "UPDATE_TITLE_SHOW_BAR")
 }
 
 EDIT_HOUSE{
@@ -842,14 +842,66 @@ UPDATE_TITLE_SHOW_BAR{
     ShowTitleBarPage(entity = $obj1, infoTb = $infoTb, updateWin = true)
 }
 
+LOCK_HOUSE_CONTENT{
+    SetObjectVar(obj = $house, key = "isLock", value = $isLock)
+    If($textKey){
+        ShowTip(entity = $obj1, tipType = 2,textKey = $textKey, time = 40)
+    }
+    CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
+}
+
 HOUSE_LOCK{
     $house = GetObjectVar(obj = $obj1, key = "house")
+    $insideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     $isLock = GetObjectVar(obj = $house, key = "isLock")
-    SetObjectVar(obj = $house, key = "isLock", value = not $isLock) -- 给房门上锁
-    ShowTip(entity = $obj1, tipType = 2,textKey = "house_lock", time = 40)
-    If($isLock){ -- 上锁状态则重置为未上锁状态
-        ShowTip(entity = $obj1, tipType = 2,textKey = "house_unlock", time = 40)
-        CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
+    If(not $isLock){ -- wanna to lock
+        $notCurHouseFamilyPlayer = {}
+        $allPlayerInThisHouse = GetMapPlayer(map = $insideMap)
+        Foreach(array = $allPlayerInThisHouse, key = "player"){
+            Test(ToString($player), GetEntityTeam(entity = $player))
+            If(GetObjectID(object = $obj1) ~= GetObjectID(object = $player) and 
+                (0 == GetEntityTeam(entity = $player) or GetEntityTeam(entity = $player) ~= GetEntityTeam(entity = $obj1))){
+                ArrayAppend(array = $notCurHouseFamilyPlayer, value = $player)
+            }
+        }
+        If(ArraySize(array = $notCurHouseFamilyPlayer) > 0){
+            $btnInfo = {
+                leftCoinId = nil,
+                leftContent = "ui_cancel",
+                rightCoinId = nil,
+                rightContent = "ui_sure"
+            }
+            $content = {
+                msg = "ui_tip_sure_lock_house_and_kick_some_one"
+            }
+            ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_LOCK_HOUSE_AND_KICK_OTHERS", 
+                p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
+        }Else{
+            StartTimer(object =$obj1, obj1 =$obj1, house = $house, isLock = true, textKey = "house_lock", time = 2, event = "LOCK_HOUSE_CONTENT")
+        }
+    }Else{ -- 上锁状态则重置为未上锁状态
+        StartTimer(object =$obj1, obj1 =$obj1, house = $house, isLock = false, textKey = "house_unlock", time = 2, event = "LOCK_HOUSE_CONTENT")
+    }
+}
+
+SURE_LOCK_HOUSE_AND_KICK_OTHERS{
+    $house = GetObjectVar(obj = $obj1, key = "house")
+    If($button == "right"){
+        $insideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+        $notCurHouseFamilyPlayer = {}
+        $allPlayerInThisHouse = GetMapPlayer(map = $insideMap)
+        Foreach(array = $allPlayerInThisHouse, key = "player"){
+            If(GetObjectID(object = $obj1) ~= GetObjectID(object = $player) and 
+                (0 == GetEntityTeam(entity = $player) or GetEntityTeam(entity = $player) ~= GetEntityTeam(entity = $obj1))){
+                CastSkill(skill = "/click", from = $player, packet = {targetID = GetObjectID(object = GetObjectVar(obj = $house, key = "insideDoor"))})
+                ShowTip(entity = $player, tipType = 2,textKey = "house_owner_lock_house_and_kick_you", time = 40)
+            }
+        } 
+        StartTimer(object =$obj1, obj1 =$obj1, house = $house, isLock = true, textKey = "house_lock", time = 2, event = "LOCK_HOUSE_CONTENT")
+    }ElseIf($button == "left"){
+        StartTimer(object =$obj1, obj1 =$obj1, house = $house, isLock = true, textKey = "house_lock", time = 2, event = "LOCK_HOUSE_CONTENT")
+    }Else{
+        StartTimer(object =$obj1, obj1 =$obj1, house = $house, isLock = false, time = 2, event = "LOCK_HOUSE_CONTENT")
     }
 }
 
