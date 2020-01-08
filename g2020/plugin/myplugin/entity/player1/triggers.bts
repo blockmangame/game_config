@@ -938,7 +938,7 @@ UPDATE_STORE_LIST{
                 ArrayAppend(array = $listInfoTb, value = {
                     text = DictionaryGet(dict = $decorationDic, key = "buyMoney") or GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
                     image = DictionaryGet(dict = $decorationDic, key = "image") or GetEntityCfg(fullName = $fullName, key = "image") or "",
-                    actorScale = DictionaryGet(dict = $decorationDic, key = "showActorScale") or GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
+                    actorScale = DictionaryGet(dict = $decorationDic, key = "showActorScale") or GetEntityCfg(fullName = $fullName, key = "showActorScale") or 0,
                     coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, 
                         index = (DictionaryGet(dict = $decorationDic, key = "coinId") or GetEntityCfg(fullName = $fullName, key = "coinId") or 3) + 1) 
                         or "set:jail_break.json image:jail_break_currency",
