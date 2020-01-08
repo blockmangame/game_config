@@ -21,8 +21,8 @@
         {
             "yaw": 0,
             "pos": {
-                "y": -0.1,
-                "z": -0.2,
+                "y": 0,
+                "z": 0,
                 "x": 0
             },
             "out": {
@@ -34,25 +34,27 @@
             "view": true,
             "passengerAction": {
                 "base": "riding"
-            }
-        },
+            },
+            "attachPoint": "ride1"
+        }
+    ],
+	"attachPoints": [
         {
-            "yaw": 0,
-            "pos": {
-                "y": -0.1,
-                "z": -0.5,
-                "x": 0
+            "name": "ride1",
+            "bone": "s_car_05",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
             },
-            "out": {
-                "y": 2,
-                "z": 0,
-                "x": 0.5
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
             },
-            "ctrl": false,
-            "view": false,
-            "passengerAction": {
-                "base": "riding"
-            }
+            "scale": 0.5,
+            "propagateScaling": true,
+            "matchActorOrientation": true
         }
     ],
     "boundingVolume": {

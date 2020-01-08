@@ -60,7 +60,7 @@ state_btntext=打开GPS
 state_subtitle=进度: 
 you_came=你来了
 openning_gps=正在开启导航
-unable_to_navigate=无法导航至{}
+unable_to_navigate=无法导航至{.}
 state_out_of_time=状态已超时
 reward_takeCare=照顾收益
 reward_family=家庭+照顾收益
@@ -73,22 +73,20 @@ ui_family_create=创建家庭
 ui_family_album=家庭相册
 ui_family_quit=退出家庭
 ui_family_full_member=家庭满员了
-ui_family_request={}想和你组成家庭
+ui_family_request={.}想和你组成家庭
 ui_family_reject=你的家庭邀请被拒绝了
 ui_family_offline=对方已下线
 ui_family_join_in=你加入了家庭
-ui_family_ask_for_family={},我想和你组成家庭
-gui_you_want_to_buy_this=以{}的价格购买{}？
-gui_sure_buy_this=确认购买:{.}?
-gui_buys_your_stuff={}购买了你的{}。
+ui_family_ask_for_family={.},我想和你组成家庭
+gui_you_want_to_buy_this=以{.}的价格购买{.}？
+gui_buys_your_stuff={.}购买了你的{.}。
 interact_feed=投喂
-thank_sb_food=谢谢{}的食物:{}
-infect_sb=你被{}传染了疾病!
-state_get=你得到了状态{}
+thank_sb_food=谢谢{.}的食物:{.}
+infect_sb=你被{.}传染了疾病!
+state_get=你得到了状态{.}
 
 language_end:family_status
-bgm_sound_just_owner_can_use=音响只能交互自己的
-square_bgm_sound_cant_inter=广场舞专用音响，禁止个人切歌
+
 language_start:furniture
 
 fru.fru_chairs_body_1.desc=无
@@ -488,6 +486,7 @@ car_old_01.name=警车
 car_old_02.name=轿车
 car_old_03.name=跑车
 car_old_04.name=吉普车
+car_horse_01.name=白马
 car_01.buy=购买超级跑车(4000)
 car_02.buy=购买磁悬浮汽车(999)
 car_03.buy=购买碰碰车(299)
@@ -505,6 +504,7 @@ car_old_01.buy=购买警车(499)
 car_old_02.buy=购买轿车(2000)
 car_old_03.buy=购买跑车(3000)
 car_old_04.buy=购买吉普车(1500)
+car_horse_01.buy=购买白马(999)
 gift_01.name=小礼物
 gift_02.name=中礼物
 gift_03.name=大礼物
@@ -562,6 +562,26 @@ create_car_in_the_air=在空中无法骑乘
 condition_with_equip_other_car=只有车主和他的家人才能驾驶这辆车
 trolley_already_remove=手推车已被收回
 trolley_pls_equip=请先装备手推车
+sign_in_items_11=100金币
+sign_in_items_12=150金币
+sign_in_items_13=200金币
+sign_in_items_14=250金币
+sign_in_items_15=300金币
+sign_in_items_16=350金币
+sign_in_items_17=500金币
+sign_in_items_21=20金币
+sign_in_items_22=30金币
+sign_in_items_23=50金币
+sign_in_items_24=70金币
+sign_in_items_25=100金币
+sign_in_items_26=130金币
+sign_in_items_27=200金币
+g2020-baby-bed=婴儿推车
+g2020-food=食物
+g2020-car=车
+g2020-toy=玩具
+g2020-task-item=任务
+g2020-bag=背包
 
 language_end:item
 
@@ -747,10 +767,9 @@ ui_family_album_full=家庭相册已满，是否前去删除？
 palette_help_title=帮助
 palette_help_msg=1.双指滑动屏幕可以拖动画布\\n2.长按滑动可以进行快速填充\\n3.点击空白处可以收起调色板
 gui.have_money_tip=剩余游戏币
-game_shop_ack_of_money=游戏币不足
 close_gps=关闭GPS
-palette_exit_msg=退出后是否保存画板的内容？
-
 other.player.join.cur.player.party={.}加入了派对，获得{.}金币收入
+bgm_sound_just_owner_can_use=无法使用其他玩家的音响
+square_bgm_sound_cant_inter=你只能使用自己家里的音响
 
 language_end:system
