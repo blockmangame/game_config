@@ -1,5 +1,6 @@
 {
     "useNewQuadConfig": true,
+    "disableDrawSelectionBox": true,
     "defaultAvatar": "set:party_common_1.json image:default_head_icon.png",
     "broadcastPartyInviteItemIndex":14,
     "partyTipTime":100,
@@ -23,6 +24,7 @@
     "reportTime": 60,
     "maxPlayers": 30,
     "minPlayers": 1,
+    "disableBreakBlockProgress": true,
     "initPos": {
         "x": 1651,
         "y": 18,
@@ -301,7 +303,8 @@
         "tyOffset": 100,
         "mxOffset": -50,
         "myOffset": 0,
-        "midJackSize": 60
+        "midJackSize": 60,
+        "hideBJack": true
     },
     "jumpIcon": "plugin/myplugin/image/jump.png",
     "jumpProgressIcon": "plugin/myplugin/image/jump.png",
@@ -459,6 +462,7 @@
     "sceneUI": [
         {
             "index": 1,
+            "key": "1",
             "name": "graffitiWall",
             "width": 19,
             "height": 10,
@@ -536,7 +540,7 @@
             }
         }
     ],
-    "showColseGpsBtn": true,
+    "showCloseGpsBtn": true,
     "customProp": {
         "onTrolley": 0,
         "lightState": "off",

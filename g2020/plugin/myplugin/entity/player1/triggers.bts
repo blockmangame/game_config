@@ -136,6 +136,7 @@ CREATE_OWNER_HOUSE{
 ENTITY_ENTER
 {
     --CallTrigger(event = "CHECK_SHOW_SVIP_UI", object = $obj1)
+    AddEntityBuff(entity = $obj1, cfg = "myplugin/click_action")
     CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
     CallTrigger(event = "CHECK_IN_PARTY", object = $obj1)
     UpdateUIData(player = $obj1, ui = "circleProgress", data = {})
@@ -937,7 +938,7 @@ UPDATE_STORE_LIST{
                 ArrayAppend(array = $listInfoTb, value = {
                     text = DictionaryGet(dict = $decorationDic, key = "buyMoney") or GetEntityCfg(fullName = $fullName, key = "buyMoney") or "",
                     image = DictionaryGet(dict = $decorationDic, key = "image") or GetEntityCfg(fullName = $fullName, key = "image") or "",
-                    actorScale = DictionaryGet(dict = $decorationDic, key = "showActorScale") or GetEntityCfg(fullName = $fullName, key = "showActorScale") or 1,
+                    actorScale = DictionaryGet(dict = $decorationDic, key = "showActorScale") or GetEntityCfg(fullName = $fullName, key = "showActorScale") or 0,
                     coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, 
                         index = (DictionaryGet(dict = $decorationDic, key = "coinId") or GetEntityCfg(fullName = $fullName, key = "coinId") or 3) + 1) 
                         or "set:jail_break.json image:jail_break_currency",
@@ -1083,6 +1084,7 @@ BUY_HOUSE_REGION_COLOR{
     -- 如果换了墙纸或者地板，原有的不保留，当你没买     如果你原来买了A墙纸，你又换成了B，那么你要再花一遍钱去把A换回来
     $curInsideRegion = GetObjectVar(obj = $obj1, key = "curInsideRegion")
     If(not $curInsideRegion){
+        ShowTip(entity = $obj1, tipType = 2, textKey = "buy_house_region_color_had_not_inside_region", time = 40)
         Return()
     }
 
@@ -4285,6 +4287,7 @@ EDIT_BUTTON_SURE
                 DictionarySet(dict = @graffitiWallText, key = $w_index, value = $name)
 
                 $data = {
+                    key = DictionaryGet(dict = $dict, key = "key"),
                     name = DictionaryGet(dict = $dict, key = "name"),
                     width = DictionaryGet(dict = $dict, key = "width"),
                     height = DictionaryGet(dict = $dict, key = "height"),
@@ -4351,6 +4354,7 @@ ENTER_MAP
             $index = DictionaryGet(dict = $dict, key = "index")
 
              $data = {
+                key = DictionaryGet(dict = $dict, key = "key"),
                 name = DictionaryGet(dict = $dict, key = "name"),
                 width = DictionaryGet(dict = $dict, key = "width"),
                 height = DictionaryGet(dict = $dict, key = "height"),
