@@ -21,8 +21,8 @@
         {
             "yaw": 0,
             "pos": {
-                "y": 0.23,
-                "z": -0.1,
+                "y": 0,
+                "z": 0,
                 "x": 0
             },
             "out": {
@@ -33,26 +33,28 @@
             "ctrl": true,
             "view": true,
             "passengerAction": {
-                "base": "riding"
-            }
-        },
+                "base": "g2020_cycle"
+            },
+            "attachPoint": "ride"
+        }
+    ],
+	"attachPoints": [
         {
-            "yaw": 0,
-            "pos": {
-                "y": 0.23,
-                "z": -0.5,
-                "x": 0
+            "name": "ride",
+            "bone": "s_gaudian01",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
             },
-            "out": {
-                "y": 2,
-                "z": 0,
-                "x": 0.5
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
             },
-            "ctrl": false,
-            "view": false,
-            "passengerAction": {
-                "base": "riding"
-            }
+            "scale": 0.5,
+            "propagateScaling": true,
+            "matchActorOrientation": true
         }
     ],
     "boundingVolume": {
