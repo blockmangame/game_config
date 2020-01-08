@@ -3092,7 +3092,7 @@ CHECK_WORKS_ARCHIVE_RESPONSE
     }
 }
 
-SHOW_BYU_WORKS_ARCHIVE_UI
+SHOW_BYU_WORKS_ARCHIVE_UI--购买存档
 {
     $price = GetWorldVar(key = "worksArchivePrice")
     $btnInfo = { leftCoinId = 0, leftContent = $price, rightCoinId = nil, rightContent = "works_save_coverage_new" }
@@ -3332,6 +3332,7 @@ PUBLISH_WORKS_BY_CUBE_RESPONSE
     {
         ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
         CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId)
+        UpdateUIData(player = $obj1, ui = "works_person", data = true)
     }
     Else
     {
