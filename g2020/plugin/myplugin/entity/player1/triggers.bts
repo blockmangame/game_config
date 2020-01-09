@@ -325,8 +325,8 @@ ENTITY_LEAVE{
     CallTrigger(object = $obj1, event = "SAVE_PLAYER_DRESS")
     ---------------------------------------玩家退出，删除掉暂存在数据库“dressArchive”字段中的bm装扮信息
     CallTrigger(object = $obj1, event = "REMOVE_BM_DRESS")
-    CallTrigger(object = $obj1, event = "CHECK_LEAVE_PARTY")
     ReleaseManor(player = $obj1)
+    CallTrigger(object = $obj1, event = "CHECK_LEAVE_PARTY")
 }
 UPDATE_FURNITURE_STATUS{
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
@@ -4625,9 +4625,10 @@ BUY_CREATE_PARTY_PRIVILEGE_RESULT {
         TryCreateParty(player = $obj1)
     }
 }
-CHECK_LEAVE_PARTY {
+CHECK_LEAVE_PARTY(debug = false){
     If($obj1.inSelfParty == 1){
         CloseParty(player = $obj1)
+        CallTrigger(obj1 = $obj1, event = "CLOSE_PARTY_SUCCESS")
         Return()
     }
     If($obj1.inSelfParty == 0){
@@ -4654,10 +4655,10 @@ CHECK_CLOSE_PARTY {
     If($result == false) {Return()}
     CloseParty(player = $obj1)
 }
-REENTER_GAME(debug = true){
+REENTER_GAME(debug = false){
     ReenterGame(player = $obj1)
 }
-LEAVE_PARTY_SUCCESS(debug = true){
+LEAVE_PARTY_SUCCESS(debug = false){
     If($obj1.excludedPartyId == "0"){
         ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
     }
@@ -4755,11 +4756,11 @@ UPDATE_CREATE_PARTY_VIEW_INFO {
     $reachPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "reachGoodPartyPlayerNumber")
     $lowerRate = GetEntityCfg(fullName = $curHouseCfg, key = "goodPartyPlayerNumberLowerRate")
 }
-CLOSE_PARTY_SUCCESS {
+CLOSE_PARTY_SUCCESS(debug = false){
     --get all player, send tip, resetgame
     $name = GetEntityName(entity = $obj1)
     $obj1.inPartyId = "0"
-    $players = NewDictionary(GetAllPlayers())
+    $players = NewDictionary(GetAllPlayers())--if from "ENTITY_LEAVE", then the player not in this list
     ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
         ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
         $player.inPartyOwnerId = 0
