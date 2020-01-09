@@ -2,8 +2,8 @@
     "useNewQuadConfig": true,
     "disableDrawSelectionBox": true,
     "defaultAvatar": "set:party_common_1.json image:default_head_icon.png",
-    "broadcastPartyInviteItemIndex":14,
-    "partyTipTime":100,
+    "broadcastPartyInviteItemIndex": 14,
+    "partyTipTime": 100,
     "canJoinMidway": true,
     "hidehandItemName": true,
     "playerCfg": "myplugin/player1",
@@ -35,7 +35,9 @@
         "2": {
             "map": "map001",
             "pos": {
-                "x": 340.946136, "y": 19.010000, "z":455.173248
+                "x": 340.946136,
+                "y": 19.010000,
+                "z": 455.173248
             }
         }
     },
@@ -49,61 +51,61 @@
         "isShowFood": false,
         "isShowExp": false
     },
-	"uiExtension": {
-		"hideBtnIcon": "set:btn_extension.json image:hide",
-		"openBtnIcon": "set:btn_extension.json image:open",
-		"btnList": [
-			{
-				"name": "photo",
-				"showName": false,
-				"iconPath": "set:btn_extension.json image:photo",
+    "uiExtension": {
+        "hideBtnIcon": "set:btn_extension.json image:hide",
+        "openBtnIcon": "set:btn_extension.json image:open",
+        "btnList": [
+            {
+                "name": "photo",
+                "showName": false,
+                "iconPath": "set:btn_extension.json image:photo",
                 "event": "EVENT_SHOW_FAMILY_ALBUM",
                 "callbackType": 2,
                 "callbackEvent": "START_CAMERA_MODE",
                 "hideLayout": true
-			},
-			{
-				"name": "family",
-				"showName": false,
-				"iconPath": "set:btn_extension.json image:family",
+            },
+            {
+                "name": "family",
+                "showName": false,
+                "iconPath": "set:btn_extension.json image:family",
                 "event": "EVENT_SHOW_FAMILY",
                 "callbackType": 2,
                 "callbackEvent": "SHOW_TEAM_UI"
-			},
-			{
-				"name": "dress",
-				"showName": false,
-				"iconPath": "set:btn_extension.json image:dress",
+            },
+            {
+                "name": "dress",
+                "showName": false,
+                "iconPath": "set:btn_extension.json image:dress",
                 "event": "EVENT_OPEN_DRESS_ARCHIVE",
                 "callbackType": 3,
                 "callbackEvent": "EVENT_OPEN_DRESS_ARCHIVE"
-			},
-			{
-				"name": "order",
-				"showName": false,
-				"iconPath": "set:btn_extension.json image:order",
+            },
+            {
+                "name": "order",
+                "showName": false,
+                "iconPath": "set:btn_extension.json image:order",
                 "event": "EVENT_SHOW_WORK_DETAILS",
                 "callbackType": 3,
                 "callbackEvent": "EVENT_SHOW_WORK_DETAILS"
-			},
-			{
-				"name": "g_cube_store",
-				"showName": false,
-				"iconPath": "set:btn_extension.json image:g_cube_store",
+            },
+            {
+                "name": "g_cube_store",
+                "showName": false,
+                "iconPath": "set:btn_extension.json image:g_cube_store",
                 "event": "EVENT_SHOW_PRI_SHOP",
                 "callbackType": 3,
                 "callbackEvent": "EVENT_SHOW_PRI_SHOP"
-			},
-			{
-				"name": "party",
-				"showName": false,
-				"iconPath": "set:btn_extension.json image:party",
+            },
+            {
+                "name": "party",
+                "showName": false,
+                "iconPath": "set:btn_extension.json image:party",
                 "event": "EVENT_SHOW_PARTY",
                 "callbackType": 3,
                 "callbackEvent": "EVENT_SHOW_PARTY_LIST"
-			}
-		]
-	},
+            }
+        ]
+    },
     "vars": {
         "global": [
             {
@@ -311,7 +313,7 @@
     "jumpProgressIcon": "plugin/myplugin/image/jump.png",
     "jumpProgressIconIncrementSize": 0,
     "danceStoreId": 2,
-	"familyAlbumNum": 10,
+    "familyAlbumNum": 10,
     "dressArchiveNum": 10,
     "dressStoreIds": [
         3,
@@ -331,7 +333,7 @@
     "partyGoldShops": [
         2
     ],
-    "ShopTitle":{
+    "ShopTitle": {
         "map002": [
             {
                 "name": "shopSignV",
@@ -343,12 +345,12 @@
                     "x": 0,
                     "y": 270,
                     "z": 0
-                  },
-                  "position": {
+                },
+                "position": {
                     "x": 280,
                     "y": 19,
                     "z": 212
-                  }
+                }
             },
             {
                 "name": "shopSignV",
@@ -360,12 +362,12 @@
                     "x": 0,
                     "y": 270,
                     "z": 0
-                  },
-                  "position": {
+                },
+                "position": {
                     "x": 285,
                     "y": 19,
                     "z": 215
-                  }
+                }
             },
             {
                 "name": "shopSignH",
@@ -377,12 +379,12 @@
                     "x": 0,
                     "y": 270,
                     "z": 0
-                  },
-                  "position": {
+                },
+                "position": {
                     "x": 277,
                     "y": 16,
                     "z": 216
-                  }
+                }
             },
             {
                 "name": "shopSignH",
@@ -394,14 +396,14 @@
                     "x": 0,
                     "y": 270,
                     "z": 0
-                  },
-                  "position": {
+                },
+                "position": {
                     "x": 282,
                     "y": 16,
                     "z": 220
-                  }
+                }
             }
-        ] 
+        ]
     },
     "sceneUI": [
         {
@@ -424,63 +426,63 @@
     ],
     "worksWalls": [
         {
-            "name": "newWorksWall",
-            "width": 6,
-            "height": 5,
-            "rotate": {
-                "x": 0,
-                "y": 180,
-                "z": 0
-            },
-            "position": {
-                "x": 190,
-                "y": 19.1,
-                "z": 95.5
-            }
-        },
-        {
-            "name": "excellentWorksWall",
-            "width": 6,
-            "height": 5,
-            "rotate": {
-                "x": 0,
-                "y": 180,
-                "z": 0
-            },
-            "position": {
-                "x": 208,
-                "y": 19.1,
-                "z": 95.5
-            }
-        },
-        {
             "name": "topWorksWall",
-            "width": 6,
-            "height": 5,
-            "rotate": {
-                "x": 0,
-                "y": 135,
-                "z": 0
-            },
-            "position": {
-                "x": 225,
-                "y": 19.1,
-                "z": 101
-            }
-        },
-        {
-            "name": "curServerPublishWorks",
-            "width": 6,
-            "height": 5,
+            "width": 8.4,
+            "height": 7,
             "rotate": {
                 "x": 0,
                 "y": -135,
                 "z": 0
             },
             "position": {
-                "x": 174,
-                "y": 19.1,
-                "z": 101
+                "x": 173.2,
+                "y": 18.83,
+                "z": 101.2
+            }
+        },
+        {
+            "name": "newWorksWall",
+            "width": 8.4,
+            "height": 7,
+            "rotate": {
+                "x": 0,
+                "y": 180,
+                "z": 0
+            },
+            "position": {
+                "x": 188,
+                "y": 18.83,
+                "z": 96.7
+            }
+        },
+        {
+            "name": "excellentWorksWall",
+            "width": 8.4,
+            "height": 7,
+            "rotate": {
+                "x": 0,
+                "y": 180,
+                "z": 0
+            },
+            "position": {
+                "x": 211.5,
+                "y": 18.83,
+                "z": 96.7
+            }
+        },
+        {
+            "name": "curServerPublishWorks",
+            "width": 8.4,
+            "height": 7,
+            "rotate": {
+                "x": 0,
+                "y": 135,
+                "z": 0
+            },
+            "position": {
+                "x": 226.3,
+                "y": 18.83,
+                "z": 101.7
             }
         }
     ],
@@ -496,7 +498,9 @@
             {
                 "name": "friend",
                 "clientEvent": "EVENT_SHOW_FRIEND",
-                "clientEventArgs": [ true ],
+                "clientEventArgs": [
+                    true
+                ],
                 "redPointEvent": "EVENT_SHOW_RED_POINT",
                 "normalImage": "set:toorbar_botton.json image:friend",
                 "pushedImage": "set:toorbar_botton.json image:friend"
@@ -504,7 +508,9 @@
             {
                 "name": "signIn",
                 "clientEvent": "EVENT_SHOW_NEW_SIGIN_IN",
-                "clientEventArgs": [ true ],
+                "clientEventArgs": [
+                    true
+                ],
                 "defaultHide": true,
                 "normalImage": "set:toorbar_botton.json image:check_in",
                 "pushedImage": "set:toorbar_botton.json image:check_in"
@@ -522,10 +528,10 @@
     "worksArchivePrice": 100,
     "publishWorksPrice": 360,
     "publishWorksCubePrice": 360,
-    "excellentWorksCount" : 50,
-    "excellentWorksPraiseNum" : 0,
-    "weekTopWorksCount" : 10,
-    "curServerWorksCount" : 20,
-    "otherServerWorksCount" : 40,
+    "excellentWorksCount": 50,
+    "excellentWorksPraiseNum": 0,
+    "weekTopWorksCount": 10,
+    "curServerWorksCount": 20,
+    "otherServerWorksCount": 40,
     "worksWallUpdateTime": 600
 }
