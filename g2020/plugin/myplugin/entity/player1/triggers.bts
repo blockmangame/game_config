@@ -4730,7 +4730,7 @@ JOIN_PARTY_SUCCESS {
         }
     }
     If(not $hadJoin){
-        $partyOwner = getPlayerByUserId(userId = $targetUserId)
+        $partyOwner = GetPlayerByUserId(userId = $targetUserId)
         AddCurrency(entity = $partyOwner, coinName = "green_currency", count = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
         ShowTip(entity = $partyOwner, tipType = 2, textKey = "other.player.join.cur.player.party", 
             time = 20, textP1 = GetEntityName(entity = $obj1), textP2 = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
@@ -4760,6 +4760,7 @@ CLOSE_PARTY_SUCCESS(debug = false){
     --get all player, send tip, resetgame
     $name = GetEntityName(entity = $obj1)
     $obj1.inPartyId = "0"
+    $obj1.inPartyOwnerId = 0
     $players = NewDictionary(GetAllPlayers())--if from "ENTITY_LEAVE", then the player not in this list
     ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
         ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
