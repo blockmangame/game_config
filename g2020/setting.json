@@ -5,6 +5,7 @@
     "broadcastPartyInviteItemIndex":14,
     "partyTipTime":100,
     "canJoinMidway": true,
+    "hidehandItemName": true,
     "playerCfg": "myplugin/player1",
     "defaultMap": "map002",
     "needSave": true,
@@ -330,134 +331,77 @@
     "partyGoldShops": [
         2
     ],
-    "ShopSignVertical": [
-        {
-            "name": "10%",
-            "backColor": [
-                0,
-                0,
-                255,
-                255
-            ]
-        },
-        {
-            "name": "10%",
-            "backColor": [
-                0,
-                255,
-                0,
-                255
-            ]
-        },
-        {
-            "name": "10%",
-            "backColor": [
-                255,
-                0,
-                0,
-                255
-            ]
-        },
-        {
-            "name": "10%",
-            "backColor": [
-                0,
-                0,
-                0,
-                255
-            ]
-        },
-        {
-            "name": "10%",
-            "backColor": [
-                128,
-                0,
-                255,
-                255
-            ]
-        }
-    ],
-    "ShopSignHorizontal": [
-        {
-            "img": "set:party_pg_shop_img.json image:gold1.png",
-            "name": "10%",
-            "backColor": [
-                128,
-                0,
-                255,
-                255
-            ]
-        },
-        {
-            "img": "set:party_pg_shop_img.json image:gold1.png",
-            "name": "10%",
-            "backColor": [
-                0,
-                255,
-                0,
-                255
-            ]
-        },
-        {
-            "img": "set:party_pg_shop_img.json image:gold1.png",
-            "name": "10%",
-            "backColor": [
-                255,
-                0,
-                0,
-                255
-            ]
-        },
-        {
-            "img": "set:party_pg_shop_img.json image:gold1.png",
-            "name": "10%",
-            "backColor": [
-                0,
-                0,
-                0,
-                255
-            ]
-        },
-        {
-            "img": "set:party_pg_shop_img.json image:gold1.png",
-            "name": "10%",
-            "backColor": [
-                128,
-                0,
-                255,
-                255
-            ]
-        }
-    ],
-    "titilePos2": {
-        "name": "shopSignV",
-        "width": 4,
-        "height": 3,
-        "rotate": {
-            "x": 0,
-            "y": 270,
-            "z": 0
-          },
-          "position": {
-            "x": 92,
-            "y": 19,
-            "z": 195
-          }
-    },
-    "titilePos1": {
-        "name": "shopSignH",
-        "width": 4,
-        "height": 2,
-        "rotate": {
-            "x": 0,
-            "y": 270,
-            "z": 0
-          },
-          "position": {
-            "x": 89,
-            "y": 19,
-            "z": 200
-          }
+    "ShopTitle":{
+        "map002": [
+            {
+                "name": "shopSignV",
+                "key": "title1",
+                "args": "myplugin/shopSignV01",
+                "width": 4,
+                "height": 6,
+                "rotate": {
+                    "x": 0,
+                    "y": 270,
+                    "z": 0
+                  },
+                  "position": {
+                    "x": 280,
+                    "y": 19,
+                    "z": 212
+                  }
+            },
+            {
+                "name": "shopSignV",
+                "key": "title4",
+                "args": "myplugin/shopSignV01",
+                "width": 4,
+                "height": 6,
+                "rotate": {
+                    "x": 0,
+                    "y": 270,
+                    "z": 0
+                  },
+                  "position": {
+                    "x": 285,
+                    "y": 19,
+                    "z": 215
+                  }
+            },
+            {
+                "name": "shopSignH",
+                "key": "title2",
+                "args": "myplugin/shopSignH01",
+                "width": 8,
+                "height": 2,
+                "rotate": {
+                    "x": 0,
+                    "y": 270,
+                    "z": 0
+                  },
+                  "position": {
+                    "x": 277,
+                    "y": 16,
+                    "z": 216
+                  }
+            },
+            {
+                "name": "shopSignH",
+                "key": "title3",
+                "args": "myplugin/shopSignH02",
+                "width": 5,
+                "height": 2,
+                "rotate": {
+                    "x": 0,
+                    "y": 270,
+                    "z": 0
+                  },
+                  "position": {
+                    "x": 282,
+                    "y": 16,
+                    "z": 220
+                  }
+            }
+        ] 
     },
     "sceneUI": [
         {
@@ -540,6 +484,7 @@
             }
         }
     ],
+    "svipMoney": 10,
     "showCloseGpsBtn": true,
     "customProp": {
         "onTrolley": 0,
