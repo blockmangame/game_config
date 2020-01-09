@@ -7,6 +7,7 @@
     "bodyTurnMax": 361,
     "moveSpeed": 0.8,
     "canJump": true,
+	"name": "",
     "ridePos": [
         {
             "yaw": 0,
@@ -25,12 +26,31 @@
             "passengerAction": {
                 "base": "riding"
             },
-            "attachPoint": "ride"
+            "attachPoint": "ride1"
+        },
+		{
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 2,
+                "z": 0,
+                "x": 0.5
+            },
+            "ctrl": false,
+            "view": true,
+            "passengerAction": {
+                "base": "riding"
+            },
+            "attachPoint": "ride2"
         }
     ],
     "attachPoints": [
         {
-            "name": "ride",
+            "name": "ride1",
             "bone": "s_maguadian",
             "rotation": {
                 "x": 0,
@@ -38,7 +58,24 @@
                 "z": 90
             },
             "position": {
+                "x": 0.1,
+                "y": 0,
+                "z": 0
+            },
+            "scale": 0.5,
+            "propagateScaling": true,
+            "matchActorOrientation": true
+        },
+		{
+            "name": "ride2",
+            "bone": "s_maguadian",
+            "rotation": {
                 "x": 0,
+                "y": 90,
+                "z": 90
+            },
+            "position": {
+                "x": -0.35,
                 "y": 0,
                 "z": 0
             },
@@ -67,12 +104,12 @@
             "offset": {
                 "x": 0,
                 "y": 1,
-                "z": 0
+                "z": 0.4
             }
         },
         "centerBtns": [
             {
-                "text": "item_testlang",
+                "text": "interation_ride",
                 "image": "plugin/myplugin/image/hand_click.png",
                 "event": "RIDE_ON",
                 "imageSize": {
