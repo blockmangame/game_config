@@ -5,11 +5,14 @@
     "price": 100,
     "name": "",
     "itemcost": 50,
-    "canUse": false,
+    "canUse": true,
     "needSave": false,
+    "dont_consume": true,
     "itemname": "music_02.name",
-    "handBuff": "myplugin/toy_music_buff",
+    "handBuff": "myplugin/toy_music_02_buff",
     "icon": "g2020_music_02.png",
-    "mesh": "g2020_music_02.mesh",
-    "name": ""
+    "randomBuff": [
+        "myplugin/random_music_buff_01",
+        "myplugin/random_music_buff_02"
+    ]
 }
