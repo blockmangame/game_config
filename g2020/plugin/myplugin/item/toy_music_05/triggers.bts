@@ -1,0 +1,18 @@
+USE_ITEM
+{
+    If($obj1.musicBuff ~= nil)
+    {
+        RemoveEntityBuff(entity = $obj1, buff = $obj1.musicBuff)
+    }
+
+    $randomBuff = GetItemCfg(fullName = $itemName, key = "randomBuff")
+    $arraySize = ArraySize(array = $randomBuff)
+    If($arraySize<= 0)
+    {
+        Return()
+    }
+
+    $index = Random(min = 1, max = $arraySize)
+    $buffName = ArrayGet(index = $index, array = $randomBuff)
+    $obj1.musicBuff = AddEntityBuff(entity = $obj1, cfg = $buffName)
+}
