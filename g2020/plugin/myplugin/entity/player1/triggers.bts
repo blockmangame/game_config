@@ -4713,6 +4713,7 @@ LEAVE_PARTY_SUCCESS(debug = true){
         ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
     }
     $obj1.inPartyOwnerId = 0
+    $obj1.inSelfParty = nil--can join other party
     --cases need ask: from door/ from the client exit button
     If(not $obj1.dontAskShowPartyList){
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "ASK_SHOW_PARTY_LIST", tipType = 2)
