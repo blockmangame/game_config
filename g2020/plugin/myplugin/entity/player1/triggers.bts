@@ -4141,12 +4141,18 @@ DEMOUNT_BABY_TROLLEY
 CHANGE_BABY_TROLLEY_SCALE
 {
     $trolley = $obj1.createdTrolley
-    If($trolley)
+    $useTrolley = $obj1.useTrolley
+    If($trolley && $trolley.role && $trolley.role == $obj1.role)
     {
-        If($trolley.role && $trolley.role == $obj1.role)
-        {
-            Return()
-        }
+        Return()
+    }
+    ElseIf($useTrolley && $obj1.role == @adult) --乘客变成大人，应该让其下手推车
+    {
+        ClearRide(entity = $obj1)
+        Return()
+    }
+    ElseIf($trolley)
+    {
         ClearRide(entity = $trolley)
         If($trolley.scaleBuff)
         {
