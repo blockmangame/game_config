@@ -4549,19 +4549,56 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     ShowInviteTip(entity = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, titleText = $likeNum, content = $content, fullName = $fullName, showTime = $showTime)
 }
 PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
+    $partyDict = NewDictionary($obj1.partyInfo)
+    $partyId = DictionaryGet(dict = $partyDict, key = "partyId")
+    TryJoinParty(player = $obj1, targetUserId = $targetUserId, partyId = $partyId)
+}
+    CrossServerVisitPlayerByUserId(targetUserId = $obj1.targetUserId, player = $obj1)
+}
     $targetUserId = $targetUserId or $obj1.visitTargetUserId
+    $obj1.targetUserId = $targetUserId
     $contentDict = NewDictionary($content)
     $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
     If($partyInfo){--can be set by PLAYER_BE_INVITE_OTHER_SERVER
         $obj1.partyInfo = $partyInfo
     }
-    If($obj1.partyInfo){
+    If($obj1.partyInfo){--target is in party
         $partyDict = NewDictionary($obj1.partyInfo)
-        $partyId = DictionaryGet(dict = $partyDict, key = "partyId")
-        TryJoinParty(player = $obj1, targetUserId = $targetUserId, partyId = $partyId)
+        If($obj1.inSelfParty){--me in party
+            $obj1.needReenterGameWhenJoinPartyFailed = true
+            If($obj1.inSelfParty == 1){--my party
+                $obj1.dontReenterGameWhenCloseParty = true
+                $obj1.closePartyEvent = "JOIN_OTHERS_PARTY"
+                CloseParty(player = $obj1)
+            }
+            If($obj1.inSelfParty == 0){--not my party
+                $obj1.dontAskShowPartyList = true
+                $obj1.dontReenterGame = true
+                $obj1.leavePartyEvent = "JOIN_OTHERS_PARTY"
+                LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+            }
+        }
+        Else{--me not in party
+            CallTrigger(object = $obj1, event = "JOIN_OTHERS_PARTY")
+        }
     }
-    Else{
-        CrossServerVisitPlayerByUserId(targetUserId = $targetUserId, player = $obj1)
+    Else{--target not in party
+        If($obj1.inSelfParty){--me in party
+            If($obj1.inSelfParty == 1){--my party
+                $obj1.dontReenterGameWhenCloseParty = true
+                $obj1.closePartyEvent = "CROSS_SERVER_VISIT"
+                CloseParty(player = $obj1)
+            }
+            If($obj1.inSelfParty == 0){--not my party
+                $obj1.dontAskShowPartyList = true
+                $obj1.dontReenterGame = true
+                $obj1.leavePartyEvent = "CROSS_SERVER_VISIT"
+                LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+            }
+        }
+        Else{--me not in party
+            CallTrigger(object = $obj1, event = "CROSS_SERVER_VISIT")
+        }
     }
 }
 PLAYER_ON_VISIT {--same server
@@ -4672,6 +4709,9 @@ LEAVE_PARTY_SUCCESS(debug = false){
     }
     ElseIf($obj1.dontReenterGame){
         $obj1.dontReenterGame = false
+        If($obj1.leavePartyEvent){
+            CallTrigger(object = $obj1, event = $obj1.leavePartyEvent)
+        }
     }
     Else{
         ReenterGame(player = $obj1)
@@ -4719,27 +4759,15 @@ CREATE_PARTY_SUCCESS {
     $house.createPartyBuff = AddEntityBuff(entity = $house, cfg = GetConfigVar(obj = $house, key = "houseCreatePartyBuff"))
 }
 JOIN_PARTY_SUCCESS {
+    If($obj1.needReenterGameWhenJoinPartyFailed){
+        $obj1.needReenterGameWhenJoinPartyFailed = nil
+        ReenterGame(player = $obj1)
+    }
+}
     $obj1.inPartyOwnerId = $targetUserId
     $obj1.needCheckResetGameResult = true
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
-    $joinUserPartyDataDict = NewDictionary(GetObjectVar(obj = $obj1, key = "joinUserPartyData"))
-    $userIds = DictionaryGet(dict = $joinUserPartyDataDict, key = "userIds")
-    $hadJoin = false
-    Foreach(array = $userIds, key = "userId"){
-        If($targetUserId == $userId){
-            $hadJoin = true
-            Break()
-        }
-    }
-    If(not $hadJoin){
-        $partyOwner = GetPlayerByUserId(userId = $targetUserId)
-        AddCurrency(entity = $partyOwner, coinName = "green_currency", count = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
-        ShowTip(entity = $partyOwner, tipType = 2, textKey = "other.player.join.cur.player.party", 
-            time = 20, textP1 = GetEntityName(entity = $obj1), textP2 = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
-        ArrayAppend(array = $userIds, value = $targetUserId)
-        SetObjectVar(obj = $obj1, key = "joinUserPartyData", value = DictionaryToTable(dict = $joinUserPartyDataDict))
-    }
     --todo: move
     -- $joinUserPartyDataDict = NewDictionary(GetObjectVar(obj = $obj1, key = "joinUserPartyData"))
     -- $userIds = DictionaryGet(dict = $joinUserPartyDataDict, key = "userIds")
@@ -4784,11 +4812,14 @@ CLOSE_PARTY_SUCCESS(debug = false){
     $obj1.inPartyOwnerId = 0
     $players = NewDictionary(GetAllPlayers())--if from "ENTITY_LEAVE", then the player not in this list
     ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
+        If($player.dontReenterGameWhenCloseParty){Continue()}
         ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
         $player.inPartyOwnerId = 0
         ReenterGame(player = $player)
     }
-
+    If($obj1.closePartyEvent){
+        CallTrigger(object = $obj1, event = $obj1.closePartyEvent)
+    }
     $house = GetObjectVar(obj = $obj1, key = "house")
     If($house.createPartyBuff){
         RemoveEntityBuff(entity = $house, buff = $house.createPartyBuff)
