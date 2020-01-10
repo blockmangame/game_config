@@ -2999,6 +2999,12 @@ SHOW_CHANGE_NAME_INPUT_DIALOG
 
 CHANGE_PLAYER_NAME
 {
+    If(IsContainSensitiveWord(msg = $name))
+    {
+        ShowTip(entity = $obj1, tipType = 2, textKey = "gui_sensitive_word", time = 40)
+        Return()
+    }
+
     SetEntityName(entity = $obj1, name = $name)
     $obj1.nickName = $name
     UpdateUIData(player = $obj1, ui = "win_dressArchivePlayerName", data = $name)
