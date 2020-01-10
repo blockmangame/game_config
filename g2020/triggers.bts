@@ -209,6 +209,11 @@ CHANGE_PLAYER_SCALE_ADULT
         $obj1.boundingBuff = nil
     }
 
+    If($obj1.interactionBuff ~= nil && $obj1.role ~= @adult)
+    {
+        CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
+    }
+
     $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_adult")
     $obj1.boundingBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/bounding_adult")
     $obj1.role = @adult
@@ -236,6 +241,11 @@ CHANGE_PLAYER_SCALE_CHILD
     {
          RemoveEntityBuff(entity = $obj1, buff = $obj1.boundingBuff)
          $obj1.boundingBuff = nil
+    }
+
+    If($obj1.interactionBuff ~= nil && $obj1.role ~= @child)
+    {
+        CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     }
 
     $obj1.scaleBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/scale_child")
