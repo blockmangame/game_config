@@ -4421,6 +4421,7 @@ ENTER_MAP
         CallTrigger(player = $obj1, event = "SYNC_CUR_WALL_WORKS")
     }
     CallTrigger( object = $obj1, event = "FUNC_STATE_RELEASE", state = $map.cfg.releaseState)
+    CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj1, gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict"))
 }
 
 LEAVE_MAP
