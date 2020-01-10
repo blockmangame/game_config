@@ -4548,13 +4548,15 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $fullName = "myplugin/partyInviteView"
     ShowInviteTip(entity = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, titleText = $likeNum, content = $content, fullName = $fullName, showTime = $showTime)
 }
-PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
+JOIN_OTHERS_PARTY(debug = true){
     $partyDict = NewDictionary($obj1.partyInfo)
     $partyId = DictionaryGet(dict = $partyDict, key = "partyId")
     TryJoinParty(player = $obj1, targetUserId = $targetUserId, partyId = $partyId)
 }
+CROSS_SERVER_VISIT(debug = true){
     CrossServerVisitPlayerByUserId(targetUserId = $obj1.targetUserId, player = $obj1)
 }
+PLAYER_ON_VISIT_OTHER_SERVER(debug = true){
     $targetUserId = $targetUserId or $obj1.visitTargetUserId
     $obj1.targetUserId = $targetUserId
     $contentDict = NewDictionary($content)
@@ -4698,7 +4700,7 @@ CHECK_CLOSE_PARTY {
 REENTER_GAME(debug = false){
     ReenterGame(player = $obj1)
 }
-LEAVE_PARTY_SUCCESS(debug = false){
+LEAVE_PARTY_SUCCESS(debug = true){
     If($obj1.excludedPartyId == "0"){
         ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
     }
@@ -4758,12 +4760,13 @@ CREATE_PARTY_SUCCESS {
     $house = GetObjectVar(obj = $obj1, key = "house")
     $house.createPartyBuff = AddEntityBuff(entity = $house, cfg = GetConfigVar(obj = $house, key = "houseCreatePartyBuff"))
 }
-JOIN_PARTY_SUCCESS {
+JOIN_PARTY_FAILED(debug = true){
     If($obj1.needReenterGameWhenJoinPartyFailed){
         $obj1.needReenterGameWhenJoinPartyFailed = nil
         ReenterGame(player = $obj1)
     }
 }
+JOIN_PARTY_SUCCESS(debug = true){
     $obj1.inPartyOwnerId = $targetUserId
     $obj1.needCheckResetGameResult = true
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
@@ -4805,8 +4808,7 @@ UPDATE_CREATE_PARTY_VIEW_INFO {
     $reachPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "reachGoodPartyPlayerNumber")
     $lowerRate = GetEntityCfg(fullName = $curHouseCfg, key = "goodPartyPlayerNumberLowerRate")
 }
-CLOSE_PARTY_SUCCESS(debug = false){
-    --get all player, send tip, resetgame
+CLOSE_PARTY_SUCCESS(debug = true){
     $name = GetEntityName(entity = $obj1)
     $obj1.inPartyId = "0"
     $obj1.inPartyOwnerId = 0
