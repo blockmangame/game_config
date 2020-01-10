@@ -316,6 +316,7 @@ REMOVE_HOUSE_OUTSIDE{
 ENTITY_LEAVE{ 
 
     CallTrigger(object = $obj1, event = "TAKEOFF_EQUIP_CAR")
+    CallTrigger(object = $obj1, event = "DEMOUNT_BABY_TROLLEY")
 
     ------------------------------------------ 玩家退出，清掉房子 邮箱 门，重置区域owner为nil
     CallTrigger(object = $obj1, event = "REMOVE_HOUSE_OUTSIDE")
