@@ -4142,16 +4142,7 @@ CHANGE_BABY_TROLLEY_SCALE
 {
     $trolley = $obj1.createdTrolley
     $useTrolley = $obj1.useTrolley
-    If($trolley && $trolley.role && $trolley.role == $obj1.role)
-    {
-        Return()
-    }
-    ElseIf($useTrolley && $obj1.role == @adult) --乘客变成大人，应该让其下手推车
-    {
-        ClearRide(entity = $obj1)
-        Return()
-    }
-    ElseIf($trolley)
+    If($trolley && (not $trolley.role || ($trolley.role && $trolley.role ~= $obj1.role)))
     {
         ClearRide(entity = $trolley)
         If($trolley.scaleBuff)
@@ -4164,6 +4155,10 @@ CHANGE_BABY_TROLLEY_SCALE
         ))
         SetObjectVar(obj = $obj1.createdTrolley, key = "role", value = $obj1.role)
         RideOn(entity = $obj1, ctrl = true, target = $obj1.createdTrolley, targetIndex = $obj1.role == @adult and 2 or 1) --推车人
+    }
+    ElseIf(not $trolley && $useTrolley && $obj1.role == @adult) --乘客变成大人，应该让其下手推车
+    {
+        ClearRide(entity = $obj1)
     }
 }
 
