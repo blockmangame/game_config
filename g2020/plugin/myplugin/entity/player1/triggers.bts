@@ -4557,7 +4557,7 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
 JOIN_OTHERS_PARTY(debug = true){
     $partyDict = NewDictionary($obj1.partyInfo)
     $partyId = DictionaryGet(dict = $partyDict, key = "partyId")
-    TryJoinParty(player = $obj1, targetUserId = $targetUserId, partyId = $partyId)
+    TryJoinParty(player = $obj1, targetUserId = $obj1.targetUserId, partyId = $partyId)
 }
 CROSS_SERVER_VISIT(debug = true){
     CrossServerVisitPlayerByUserId(targetUserId = $obj1.targetUserId, player = $obj1)
@@ -4818,11 +4818,13 @@ CLOSE_PARTY_SUCCESS(debug = true){
     $name = GetEntityName(entity = $obj1)
     $obj1.inPartyId = "0"
     $obj1.inPartyOwnerId = 0
+    $obj1.inSelfParty = nil
     $players = NewDictionary(GetAllPlayers())--if from "ENTITY_LEAVE", then the player not in this list
     ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
         If($player.dontReenterGameWhenCloseParty){Continue()}
         ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
         $player.inPartyOwnerId = 0
+        $player.inSelfParty = nil
         ReenterGame(player = $player)
     }
     If($obj1.closePartyEvent){
