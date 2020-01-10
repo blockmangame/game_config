@@ -4675,13 +4675,13 @@ BUY_CREATE_PARTY_PRIVILEGE_RESULT {
         TryCreateParty(player = $obj1)
     }
 }
-CHECK_LEAVE_PARTY(debug = false){
-    If($obj1.inSelfParty == 1){
+CHECK_LEAVE_PARTY(debug = true){
+    If($obj1.inSelfParty == 1){--in my party
         CloseParty(player = $obj1)
         CallTrigger(obj1 = $obj1, event = "CLOSE_PARTY_SUCCESS")
         Return()
     }
-    If($obj1.inSelfParty == 0){
+    If($obj1.inSelfParty == 0){--not in my party
         $obj1.dontAskShowPartyList = true
         LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
         $obj1.inPartyOwnerId = 0
