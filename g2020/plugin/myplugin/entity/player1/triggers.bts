@@ -304,6 +304,9 @@ CREATE_HOUSE_OUTSIDE{
 
     SetObjectVar(obj = $obj1, key = "house", value = $house)
     SetObjectVar(obj = $house, key = "region", value = $region)
+
+    ---脚本action
+    ShowHomeGuide(entity = $house, player = $obj1)
 }
 
 REMOVE_HOUSE_OUTSIDE{
@@ -3598,13 +3601,20 @@ GET_TASK_GPS  --得到打工的GPS位置
         If($mapName ~= "map001"){
             $mapEntry = NewDictionary(GetMapConfig(name = $mapName, key = "mapEntry"))
             $cfg = DictionaryGet(dict = $mapEntry, key = "map001")
-            $cfgName = ArrayGet(array = $cfg, index = 1)
             $mapEntity = GetMapConfig(name = $mapName, key = "entity")
-            Foreach(array = $mapEntity, key = "entityDict"){
-                $dict = NewDictionary($entityDict)
-                $name = DictionaryGet(dict = $dict, key = "cfg")
-                If($name == $cfgName){
-                    $okPos = DictionaryGet(dict = $dict, key = "pos")
+            $minDis = GetPosDistance()
+            Foreach(array = $cfg, key = "cfgName"){
+                Foreach(array = $mapEntity, key = "entityDict"){
+                    $dict = NewDictionary($entityDict)
+                    $name = DictionaryGet(dict = $dict, key = "cfg")
+                    If($name == $cfgName){
+                        $newPos = DictionaryGet(dict = $dict, key = "pos")
+                        $dis = GetPosDistance(pos1 = $okPos, pos2 = $newPos)
+                        If(not $okPos || $dis < $minDis){
+                            $okPos = $newPos
+                            $minDis = $dis
+                        }
+                    }
                 }
             }
             $obj1.gpsPos = $okPos or @INDENT_POS
@@ -5019,10 +5029,12 @@ PLAYER_CLEAR_RIDE
 
 CHECK_SHOW_SVIP_UI()
 {
+    $show = false
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
     {
-        ShowToolBarButton(name = "svip", show = true, player = $obj1)
+        $show = true
     }
+    ShowToolBarButton(name = "svip", show = $show, player = $obj1)
 }
 GET_SVIP_REWARD()
 {
