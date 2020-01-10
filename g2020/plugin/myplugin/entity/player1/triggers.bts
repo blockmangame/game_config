@@ -4740,6 +4740,24 @@ JOIN_PARTY_SUCCESS {
         ArrayAppend(array = $userIds, value = $targetUserId)
         SetObjectVar(obj = $obj1, key = "joinUserPartyData", value = DictionaryToTable(dict = $joinUserPartyDataDict))
     }
+    --todo: move
+    -- $joinUserPartyDataDict = NewDictionary(GetObjectVar(obj = $obj1, key = "joinUserPartyData"))
+    -- $userIds = DictionaryGet(dict = $joinUserPartyDataDict, key = "userIds")
+    -- $hadJoin = false
+    -- Foreach(array = $userIds, key = "userId"){
+    --     If($targetUserId == $userId){
+    --         $hadJoin = true
+    --         Break()
+    --     }
+    -- }
+    -- If(not $hadJoin){
+    --     $partyOwner = GetPlayerByUserId(userId = $targetUserId)
+    --     AddCurrency(entity = $partyOwner, coinName = "green_currency", count = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
+    --     ShowTip(entity = $partyOwner, tipType = 2, textKey = "other.player.join.cur.player.party", 
+    --         time = 20, textP1 = GetEntityName(entity = $obj1), textP2 = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
+    --     ArrayAppend(array = $userIds, value = $targetUserId)
+    --     SetObjectVar(obj = $obj1, key = "joinUserPartyData", value = DictionaryToTable(dict = $joinUserPartyDataDict))
+    -- }
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
