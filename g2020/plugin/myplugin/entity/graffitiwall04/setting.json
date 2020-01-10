@@ -1,6 +1,7 @@
 {
     "canClick": false,
     "collision": true,
+    "autoRotateColliderBox": true,
     "skin": {
         "body": "4"
     },
@@ -8,11 +9,19 @@
         "type": "Composite",
         "params": [
             {
-                "type": "Box",
+                "type": "VerticalBox",
                 "params": [
-                    0.7,
-                    1,
+                    8.5,
+                    7.45,
                     0.7
+                ]
+            },
+            {
+                "type": "VerticalBox",
+                "params": [
+                    9.6,
+                    0.35,
+                    1.7
                 ]
             }
         ]
