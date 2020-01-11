@@ -5,8 +5,8 @@
 		"z": 239
 	},
 	"circleNum": 40,
-	"maxCount": 15,
-	"punishmentTime": 30,
+	"maxCount": 2,
+	"punishmentTime": 60,
 	"msgNotTask": "gui_not_task_msg",
 	"msgDoingTask": "gui_doing_task_msg",
 	"msgPunishTask": "gui_punish_task_msg",
@@ -268,51 +268,6 @@
 					"targetBuff": "myplugin/task_npc_buff",
 					"name": "main_task01_targets",
 					"cfgName": "myplugin/npc30"
-				}
-			]
-		},
-		{
-			"key": "key_18",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc31"
-				}
-			]
-		},
-		{
-			"key": "key_19",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc32"
-				}
-			]
-		},
-		{
-			"key": "key_20",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc44"
 				}
 			]
 		}
