@@ -1,7 +1,8 @@
 local setting = require "common.setting"
 local handles = Player.PackageHandlers
 
+local GuideHome = require "script_client.guideHome"
+
 function handles:ShowHomeGuide(packet)
-    
-	Lib.emitEvent(Event.EVENT_SHOW_HOME_GUIDE, packet)
+	GuideHome.showHomeUI(packet.pos)
 end
