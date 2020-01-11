@@ -53,5 +53,5 @@ Lib.subscribeEvent(Event.EVENT_SHOW_HOME_GUIDE, function(packet)
     ui._root:AddChildWindow(container)
     local pos = packet.pos or { x = 0, y = 0, z = 0}
     pos.y = pos.y + 1
-    rangeShowUIOnVPos(pos, container, cfg.minDis or 0, cfg.maxDis or 1000)
+    rangeShowUIOnVPos(pos, container, cfg.minDis, cfg.maxDis)
 end)
