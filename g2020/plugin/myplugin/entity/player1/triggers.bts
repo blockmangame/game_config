@@ -4673,12 +4673,12 @@ TRY_JOIN_PARTY(debug = false){
     }
 }
 TRY_CREATE_PARTY {
-    If(ArrayFind(array = $obj1.privilege, value = "myplugin/create_party_privilege")){
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/vip_privilege")){
         $canCreate = true
     }Else{
         $canCreate = false
         $tip = "gui.party.buy.privilege"
-        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 13, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
+        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 1, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
     }
 }
 BUY_CREATE_PARTY_PRIVILEGE_RESULT {
