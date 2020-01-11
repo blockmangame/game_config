@@ -5040,7 +5040,7 @@ GET_SVIP_REWARD()
 {
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
     {
-        $money = GetWorldVar(key = "svipMoney")
+        $money = GetConfigValue(type = "reward", fullName = "myplugin/privilege", key = "privilege") 
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
         ShowToolBarButton(name = "svip", show = false, player = $obj1)
     }
