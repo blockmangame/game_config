@@ -2,20 +2,24 @@ local setting = require "common.setting"
 
 local GuideHome = {}
 
+local mapDoor = {}
+local mapDoorTimer = {}
+local homeDoor = nil
 local lastShowTimer = nil
-local container = nil
-local cfg = setting:fetch("customizable_ui", "myplugin/homeView") or {}
+local uicfg = setting:fetch("customizable_ui", "myplugin/homeView") or {}
+uicfg = uicfg["settingCfg"]
 
-if not container then
-  local item = UIMgr:new_widget("button", "widget_button")
-  item:invoke("imageSize",cfg.imageSize)
-  item:invoke("enable", false)
-  item:invoke("text", cfg.text or "")
-  item:invoke("image", cfg.image)
-  container = GUIWindowManager.instance:LoadWindowFromJSON("InteractionLayout.json")
-  container:AddChildWindow(item)
-  local ui = UI:getWnd("interactionContainer")
-  ui._root:AddChildWindow(container)
+local function getItem(cfg)
+	local item = UIMgr:new_widget("button", "widget_button")
+	item:invoke("imageSize",cfg.imageSize)
+	item:invoke("enable", false)
+	item:invoke("text", cfg.text or "")
+	item:invoke("image", cfg.image)
+	local container = GUIWindowManager.instance:LoadWindowFromJSON("InteractionLayout.json")
+	container:AddChildWindow(item)
+	local ui = UI:getWnd("interactionContainer")
+	ui._root:AddChildWindow(container)
+	return container
 end
 
 local function rangeShowUIOnVPos(pos, ui, minDis, maxDis)
@@ -61,6 +65,24 @@ local function rangeShowUIOnVPos(pos, ui, minDis, maxDis)
     end
 end
 
+--mapdoor
+do
+	for name, cfg in pairs(uicfg) do
+		if name == "home" or mapDoor[name] then
+			goto continue
+		end
+		local ui = getItem(cfg)
+		mapDoor[name] = ui
+		mapDoorTimer[name] = rangeShowUIOnVPos(cfg.pos, ui, cfg.minDis, cfg.maxDis)
+		:: continue :: 
+	end
+end
+
+--homedoor
+if not homeDoor then
+	homeDoor = getItem(uicfg["home"])
+end
+
 function GuideHome.showHomeUI(pos)
 	if lastShowTimer then
 		lastShowTimer()
@@ -68,7 +90,8 @@ function GuideHome.showHomeUI(pos)
 	end
 	pos = pos or { x = 0, y = 0, z = 0}
 	pos.y = pos.y + 1
-  lastShowTimer = rangeShowUIOnVPos(pos, container, cfg.minDis, cfg.maxDis)
+	local cfg = uicfg["home"]
+	lastShowTimer = rangeShowUIOnVPos(pos, homeDoor, cfg.minDis, cfg.maxDis)
 end
 
 return GuideHome
