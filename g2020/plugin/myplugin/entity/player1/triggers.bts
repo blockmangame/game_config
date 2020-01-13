@@ -745,22 +745,42 @@ GIVE_STORE{
 UPDATE_PLAYER_3DUI_ENTITY{
     $typeOf3DUI = GetConfigVar(obj = $npc, key = "typeOf3DUI")
     If($typeOf3DUI){ -- 购买/出售/生成 3dui 家具
-        If(not GetObjectVar(obj = $obj1, key = "entityOf3DUI")){
+        If(not GetObjectVar(obj = $obj1, key = "entityOf3DUI"))
+        {
             SetObjectVar(obj = $obj1, key = "entityOf3DUI", value = {})
         }
+        
         $entityOf3DUIDict = NewDictionary(GetObjectVar(obj = $obj1, key = "entityOf3DUI"))
         $typeTable = DictionaryGet(dict = $entityOf3DUIDict, key = $typeOf3DUI) or {}
-        If($add){
-            ArrayAppend(array = $typeTable, value = GetObjectID(obj = $npc))
-        }ElseIf($remove){
+        If($add)
+        {
+            ArrayAppend(array = $typeTable, value = GetObjectID(object = $npc))
+        }
+        ElseIf($remove)
+        {
             ForLoop(from = 1, to = ArraySize(array = $typeTable), key = "index"){
-                If(ArrayGet(array = $typeTable, index = $index) == GetObjectID(obj = $npc)){
+                If(ArrayGet(array = $typeTable, index = $index) == GetObjectID(object = $npc)){
                     ArrayRemove(array = $typeTable, index = $index)
+                
+                    $players = GetMapPlayer(map = $map)
+                    Foreach(array = $players, key = "player")
+                    {
+                        $data = {
+                            key = ToString(GetObjectID(object = $npc)),
+                            name = "graffitiWall",
+                        }
+                        ShowEntity3DUI(player = $player, show = false, data = $data)
+                    }
                 }
             }
         }
         DictionarySet(dict = $entityOf3DUIDict, key = $typeOf3DUI, value = $typeTable)
         SetObjectVar(obj = $obj1, key = "entityOf3DUI", value = DictionaryToTable(dict = $entityOf3DUIDict))
+
+        If($add)
+        {
+            CallTrigger(event = "UPDATE_PLAYER_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
+        }
     }
 }
 
@@ -4472,6 +4492,8 @@ ENTER_MAP
     }
     CallTrigger( object = $obj1, event = "FUNC_STATE_RELEASE", state = $map.cfg.releaseState)
     CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj1, gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict"))
+    CallTrigger(event = "ENTER_HOUSE_MAP", object = $obj1)
+    CallTrigger(event = "UPDATE_PLAYER_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
 }
 
 LEAVE_MAP
@@ -4489,7 +4511,68 @@ LEAVE_MAP
         WorksWallsOperation(player = $obj1, isOpen = false)
     }
     CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $map.cfg.releaseState)
+    CallTrigger(event = "UPDATE_PLAYER_NUMBER_BOARD_ENTITY", object = $obj1, show = false)
 }
+
+UPDATE_PLAYER_NUMBER_BOARD_ENTITY
+{
+    $map = GetEntityMap(entity = $obj1)
+    $house = GetMapVar(map = $map, key = "owner")
+    If(not $house)
+    {
+        Return()
+    }
+
+    $owner = $house.owner
+    If(not $owner)
+    {
+        Return()
+    }
+
+    $entityOf3DUI = $owner.entityOf3DUI
+    $entityOf3DUIDict = NewDictionary($entityOf3DUI)
+    $showNumEntitys = DictionaryGet(dict = $entityOf3DUIDict, key = "showPlayerNum") or {}
+    Foreach(array = $showNumEntitys, key = "objID")
+    {
+        $players = GetMapPlayer(map = $map)
+        $playerCount = ArraySize(array = $players)
+        If($show == false)
+        {
+            $playerCount = $playerCount - 1
+        }
+
+        $data = {
+            key = ToString($objID),
+            name = "graffitiWall",
+            width = 3,
+            height = 1,
+            position = {
+                x = 0,
+                y = 2,
+                z = -0.1,
+            },
+
+            rotate = {
+                x = 0,
+                y = 0,
+                z = 0,
+            },
+
+            objID = $objID,
+            args = $playerCount
+        }
+        ShowEntity3DUI(player = $obj1, show = $show, data = $data)
+
+        Foreach(array = $players, key = "player")
+        {
+            If($player ~= $obj1)
+            {
+                ShowEntity3DUI(player = $player, show = true, data = $data)
+            }
+        }
+    }
+}
+
 --↓↓↓↓↓↓ party
 CHECK_LEAVE_PARTY_FROM_DOOR {
     If($obj1.inSelfParty == 1){
