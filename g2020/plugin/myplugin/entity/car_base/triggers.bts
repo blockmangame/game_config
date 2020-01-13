@@ -30,6 +30,10 @@ RIDE_ON
 
 ENTITY_RIDE_ON
 {
+    If($obj2.createdTrolley)
+    {
+        CallTrigger(event = "DEMOUNT_BABY_TROLLEY", object = $obj2)
+    }
     $obj2.onCar = true
     $hidePlayer = GetConfigVar(obj = $obj1, key = "hidePlayer")
     If($hidePlayer)

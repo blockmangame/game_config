@@ -3003,34 +3003,62 @@ SAVE_PLAYER_DRESS
 
 SHOW_CHANGE_NAME_INPUT_DIALOG
 {
+    $showType = 0
+    $buttons = {}
+    $freeChangeNameTimes = GetWorldVar(key = "freeChangeNameTimes")
+    If($obj1.changeNameTimes < $freeChangeNameTimes)
+    {
+        $buttons = [
+            {
+                event = "cancel",
+                normalImage = "set:tip_dialog.json image:btn_big_blue",
+                pushedImage = "set:tip_dialog.json image:btn_big_blue",
+                name = "ui_cancel"
+            },
+            {
+                event = "CHANGE_PLAYER_NAME",
+                normalImage = "set:tip_dialog.json image:btn_big_green",
+                pushedImage = "set:tip_dialog.json image:btn_big_green",
+                name = "ui_sure"
+            }
+        ]
+    }
+    Else
+    {
+        $buttons = [
+            {
+                event = "cancel",
+                normalImage = "set:tip_dialog.json image:btn_big_blue",
+                pushedImage = "set:tip_dialog.json image:btn_big_blue",
+                coinId = nil,
+                content = "ui_cancel"
+            },
+            {
+                event = "CHANGE_PLAYER_NAME",
+                normalImage = "set:tip_dialog.json image:btn_big_green",
+                pushedImage = "set:tip_dialog.json image:btn_big_green",
+                coinId = GetWorldVar(key = "changeNameCoinId"),
+                content = GetWorldVar(key = "changeNamePrice")
+            }
+        ]
+        $showType = 1
+    }
+
     $title = {
         name = "ui_dress_change_name"
     }
 
     $inputTitle = {
-        name = "ui_dress_input_name"
+        name = $inputTitleName or "ui_dress_input_name",
+        color = $inputTitleColor
     }
-
-    $buttons = [
-        {
-            event = "cancel",
-            normalImage = "set:tip_dialog.json image:btn_big_blue",
-            pushedImage = "set:tip_dialog.json image:btn_big_blue",
-            name = "ui_cancel"
-        },
-        {
-            event = "CHANGE_PLAYER_NAME",
-            normalImage = "set:tip_dialog.json image:btn_big_green",
-            pushedImage = "set:tip_dialog.json image:btn_big_green",
-            name = "ui_sure"
-        }
-    ]
 
     $contents = {
         title = $title,
         inputTitle = $inputTitle,
         buttons = $buttons,
-        text = $obj1.nickName
+        text = $name or $obj1.nickName,
+        showType = $showType
     }
 
     ShowInputDialog(entity = $obj1, contents = $contents)
@@ -3040,13 +3068,70 @@ CHANGE_PLAYER_NAME
 {
     If(IsContainSensitiveWord(msg = $name))
     {
-        ShowTip(entity = $obj1, tipType = 2, textKey = "gui_sensitive_word", time = 40)
+        CallTrigger(event = "SHOW_CHANGE_NAME_INPUT_DIALOG", obj1 = $obj1, name = $name, inputTitleName = "ui_lang_have_banned_words", inputTitleColor = [255, 0, 0])
         Return()
     }
 
+    If($name == $obj1.nickName)
+    {
+        CallTrigger(event = "SHOW_CHANGE_NAME_INPUT_DIALOG", obj1 = $obj1, inputTitleName = "ui_lang_with_the_same_name", inputTitleColor = [255, 0, 0])
+        Return()
+    }
+
+    $freeChangeNameTimes = GetWorldVar(key = "freeChangeNameTimes")
+    If($obj1.changeNameTimes >= $freeChangeNameTimes)
+    {
+        $coinName = "green_currency"
+        $coinId = GetWorldVar(key = "changeNameCoinId") or 3
+        $price = GetWorldVar(key = "changeNamePrice")
+        If($coinId == 0)
+        {
+            $coinName = "gDiamonds"
+        }
+
+        If(CheckBalance(entity = $obj1, coinName = $coinName, price = $price))
+        {
+            If(3 ~= $coinId)
+            {
+                BuyGoods(player = $obj1, uniqueId = 20202001,  coinId = $coinId, price = $price, name = $name, event = "BUY_CHANGE_PLAYER_NAME" )
+                Return()
+            }
+            If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $price))
+            {
+                Return()
+            }
+        }
+        Else
+        {
+            If($coinId == 0)
+            {
+                ShowRecharge(player = $obj1)
+            }
+            Else
+            {
+                OperationWindows(player = $obj1, isOpen = true, win = "goldShop")
+            }
+            Return()
+        }
+    }
     SetEntityName(entity = $obj1, name = $name)
     $obj1.nickName = $name
+    $obj1.changeNameTimes = $obj1.changeNameTimes + 1
     UpdateUIData(player = $obj1, ui = "win_dressArchivePlayerName", data = $name)
+}
+
+BUY_CHANGE_PLAYER_NAME
+{
+    If($isSucceed)
+    {
+        $dictValue = NewDictionary($response)
+        $name = DictionaryGet(dict = $dictValue, key = "name")
+        $obj1 = DictionaryGet(dict = $dictValue, key = "player")
+        SetEntityName(entity = $obj1, name = $name)
+        $obj1.nickName = $name
+        $obj1.changeNameTimes = $obj1.changeNameTimes + 1
+        UpdateUIData(player = $obj1, ui = "win_dressArchivePlayerName", data = $name)
+    }
 }
 
 SHOW_OPERATE_DRESS_STORE_ITEM
@@ -4852,6 +4937,7 @@ CHECK_IN_PARTY(debug = false){
             ReenterGame(player = $obj1)
             Return()
         }
+        --in party now!
         UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
         UpdateExtensionBtn(entity = $obj1, btnList = [{name = "party"}])
         If($userId == $inPartyOwnerId){
@@ -4860,6 +4946,7 @@ CHECK_IN_PARTY(debug = false){
         }
         Else{
             $obj1.inSelfParty = 0
+            CallTrigger(object = $obj1, event = "JOIN_PARTY_GIVE_OWNER_MONEY", targetUserId = $inPartyOwnerId)
             CallTrigger(fromInParty = true, target = $partyOwner, event = "PLAYER_ON_VISIT", object = $obj1)
         }
     }
@@ -4880,6 +4967,25 @@ CREATE_PARTY_SUCCESS {
     $house = GetObjectVar(obj = $obj1, key = "house")
     $house.createPartyBuff = AddEntityBuff(entity = $house, cfg = GetConfigVar(obj = $house, key = "houseCreatePartyBuff"))
 }
+JOIN_PARTY_GIVE_OWNER_MONEY(debug = false){
+    $joinUserPartyDataDict = NewDictionary($obj1.joinUserPartyData)
+    $userIds = DictionaryGet(dict = $joinUserPartyDataDict, key = "userIds")
+    $hadJoin = false
+    Foreach(array = $userIds, key = "userId"){
+        If($targetUserId == $userId){
+            $hadJoin = true
+            Break()
+        }
+    }
+    If(not $hadJoin){
+        $partyOwner = GetPlayerByUserId(userId = $targetUserId)
+        $giveCount = GetConfigVar(obj = $obj1, key = "joinPartyGiveMoney")
+        AddCurrency(entity = $partyOwner, coinName = "green_currency", count = $giveCount)
+        ShowTip(entity = $partyOwner, tipType = 2, textKey = "other.player.join.cur.player.party", textP1 = GetEntityName(entity = $obj1), textP2 = $giveCount)
+        ArrayAppend(array = $userIds, value = $targetUserId)
+        $obj1.joinUserPartyData = DictionaryToTable(dict = $joinUserPartyDataDict)
+    }
+}
 JOIN_PARTY_FAILED(debug = true){
     If($obj1.needReenterGameWhenJoinPartyFailed){
         $obj1.needReenterGameWhenJoinPartyFailed = nil
@@ -4891,24 +4997,6 @@ JOIN_PARTY_SUCCESS(debug = true){
     $obj1.needCheckResetGameResult = true
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
-    --todo: move
-    -- $joinUserPartyDataDict = NewDictionary(GetObjectVar(obj = $obj1, key = "joinUserPartyData"))
-    -- $userIds = DictionaryGet(dict = $joinUserPartyDataDict, key = "userIds")
-    -- $hadJoin = false
-    -- Foreach(array = $userIds, key = "userId"){
-    --     If($targetUserId == $userId){
-    --         $hadJoin = true
-    --         Break()
-    --     }
-    -- }
-    -- If(not $hadJoin){
-    --     $partyOwner = GetPlayerByUserId(userId = $targetUserId)
-    --     AddCurrency(entity = $partyOwner, coinName = "green_currency", count = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
-    --     ShowTip(entity = $partyOwner, tipType = 2, textKey = "other.player.join.cur.player.party", 
-    --         time = 20, textP1 = GetEntityName(entity = $obj1), textP2 = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
-    --     ArrayAppend(array = $userIds, value = $targetUserId)
-    --     SetObjectVar(obj = $obj1, key = "joinUserPartyData", value = DictionaryToTable(dict = $joinUserPartyDataDict))
-    -- }
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
