@@ -3565,14 +3565,17 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
     If($obj1.taskKey){
         $imgcount = $imgcount - 1
     }
-    If($imgcount >=0 and $imgcount <=10){
+    If($imgcount >=0 and $imgcount <10){
         $btnImg = "set:indentImg.json image:btn1.png"
-    }ElseIf($imgcount >10 &&  $imgcount <=20){
+    }ElseIf($imgcount >=10 &&  $imgcount <20){
         $btnImg = "set:indentImg.json image:BtnGreen.png"
-    }ElseIf($imgcount >20 && $imgcount <= 30){
+    }ElseIf($imgcount >=20 && $imgcount <30){
         $btnImg = "set:indentImg.json image:btnBule.png"
-    }ElseIf($imgcount >30){
+    }ElseIf($imgcount >=30){
         $btnImg = "set:indentImg.json image:BtnRed.png"
+    }
+    If($obj1.worktaskCount == @CircleNum or $imgcount == 0){
+        $resetImg = true
     }
     $taskData = Table(
         Progress =  $rate,
@@ -3580,7 +3583,8 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
         gpsPos = $obj1.gpsPos,
         isTasking = $isTasking,
         animation = $animation,
-        btnImg = $btnImg
+        btnImg = $btnImg,
+        resetImg = $resetImg
     )
     If($obj1.taskShowGps){
        SetGuidePostion(entity = $obj1, pos = $obj1.gpsPos)
