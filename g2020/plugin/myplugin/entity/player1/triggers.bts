@@ -3060,8 +3060,7 @@ CHANGE_PLAYER_NAME
 {
     If(IsContainSensitiveWord(msg = $name))
     {
-        $contentText = FilterWord(msg = $name)
-        CallTrigger(event = "SHOW_CHANGE_NAME_INPUT_DIALOG", obj1 = $obj1, name = $contentText, inputTitleName = "ui_lang_have_banned_words", inputTitleColor = [255, 0, 0])
+        CallTrigger(event = "SHOW_CHANGE_NAME_INPUT_DIALOG", obj1 = $obj1, name = $name, inputTitleName = "ui_lang_have_banned_words", inputTitleColor = [255, 0, 0])
         Return()
     }
 
