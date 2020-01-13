@@ -4867,6 +4867,7 @@ CHECK_IN_PARTY(debug = false){
             ReenterGame(player = $obj1)
             Return()
         }
+        --in party now!
         UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
         UpdateExtensionBtn(entity = $obj1, btnList = [{name = "party"}])
         If($userId == $inPartyOwnerId){
@@ -4875,6 +4876,7 @@ CHECK_IN_PARTY(debug = false){
         }
         Else{
             $obj1.inSelfParty = 0
+            CallTrigger(object = $obj1, event = "JOIN_PARTY_GIVE_OWNER_MONEY", targetUserId = $inPartyOwnerId)
             CallTrigger(fromInParty = true, target = $partyOwner, event = "PLAYER_ON_VISIT", object = $obj1)
         }
     }
@@ -4895,6 +4897,25 @@ CREATE_PARTY_SUCCESS {
     $house = GetObjectVar(obj = $obj1, key = "house")
     $house.createPartyBuff = AddEntityBuff(entity = $house, cfg = GetConfigVar(obj = $house, key = "houseCreatePartyBuff"))
 }
+JOIN_PARTY_GIVE_OWNER_MONEY(debug = false){
+    $joinUserPartyDataDict = NewDictionary($obj1.joinUserPartyData)
+    $userIds = DictionaryGet(dict = $joinUserPartyDataDict, key = "userIds")
+    $hadJoin = false
+    Foreach(array = $userIds, key = "userId"){
+        If($targetUserId == $userId){
+            $hadJoin = true
+            Break()
+        }
+    }
+    If(not $hadJoin){
+        $partyOwner = GetPlayerByUserId(userId = $targetUserId)
+        $giveCount = GetConfigVar(obj = $obj1, key = "joinPartyGiveMoney")
+        AddCurrency(entity = $partyOwner, coinName = "green_currency", count = $giveCount)
+        ShowTip(entity = $partyOwner, tipType = 2, textKey = "other.player.join.cur.player.party", textP1 = GetEntityName(entity = $obj1), textP2 = $giveCount)
+        ArrayAppend(array = $userIds, value = $targetUserId)
+        $obj1.joinUserPartyData = DictionaryToTable(dict = $joinUserPartyDataDict)
+    }
+}
 JOIN_PARTY_FAILED(debug = true){
     If($obj1.needReenterGameWhenJoinPartyFailed){
         $obj1.needReenterGameWhenJoinPartyFailed = nil
@@ -4906,24 +4927,6 @@ JOIN_PARTY_SUCCESS(debug = true){
     $obj1.needCheckResetGameResult = true
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
-    --todo: move
-    -- $joinUserPartyDataDict = NewDictionary(GetObjectVar(obj = $obj1, key = "joinUserPartyData"))
-    -- $userIds = DictionaryGet(dict = $joinUserPartyDataDict, key = "userIds")
-    -- $hadJoin = false
-    -- Foreach(array = $userIds, key = "userId"){
-    --     If($targetUserId == $userId){
-    --         $hadJoin = true
-    --         Break()
-    --     }
-    -- }
-    -- If(not $hadJoin){
-    --     $partyOwner = GetPlayerByUserId(userId = $targetUserId)
-    --     AddCurrency(entity = $partyOwner, coinName = "green_currency", count = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
-    --     ShowTip(entity = $partyOwner, tipType = 2, textKey = "other.player.join.cur.player.party", 
-    --         time = 20, textP1 = GetEntityName(entity = $obj1), textP2 = GetEntityCfg(fullName = $obj1, key = "joinPartyGiveMoney"))
-    --     ArrayAppend(array = $userIds, value = $targetUserId)
-    --     SetObjectVar(obj = $obj1, key = "joinUserPartyData", value = DictionaryToTable(dict = $joinUserPartyDataDict))
-    -- }
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
     $curHouseCfg = $obj1.curHouseCfg
