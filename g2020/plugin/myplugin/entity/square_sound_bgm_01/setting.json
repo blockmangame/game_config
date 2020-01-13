@@ -1,0 +1,105 @@
+{
+	"base": "square_sound_bgm_list_base",
+    "skin": {
+        "body": "2022"
+    },
+    "squareBgmList": [
+		[
+			617,
+			"myplugin/bgm_buff_01"
+		],
+		[
+			844,
+			"myplugin/bgm_buff_02"
+		],
+		[
+			1165,
+			"myplugin/bgm_buff_03"
+		],
+		[
+			1200,
+			"myplugin/bgm_buff_04"
+		],
+		[
+			1682,
+			"myplugin/bgm_buff_05"
+		],
+		[
+			1087,
+			"myplugin/bgm_buff_06"
+		],
+		[
+			1144,
+			"myplugin/bgm_buff_07"
+		],
+		[
+			1191,
+			"myplugin/bgm_buff_08"
+		],
+		[
+			1547,
+			"myplugin/bgm_buff_09"
+		],
+		[
+			1650,
+			"myplugin/bgm_buff_10"
+		],
+		[
+			1728,
+			"myplugin/bgm_buff_11"
+		],
+		[
+			1766,
+			"myplugin/bgm_buff_12"
+		],
+		[
+			1767,
+			"myplugin/bgm_buff_13"
+		],
+		[
+			1836,
+			"myplugin/bgm_buff_14"
+		]
+	],
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    0.7,
+                    1,
+                    0.7
+                ]
+            }
+        ]
+    },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "interact_sound",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "event": "OPEN_BGM_LIST"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        }
+    },
+    "interaction": {
+        "radius": 7,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "name": "",
+    "actorName": "g2020_fru_chairs.actor"
+}
