@@ -53,6 +53,7 @@ EXECUTION_EDIT_ACTION{
 
 STOP_EDIT_ENTITY{
     CallTrigger(object = $obj1, event = "REMOVE_EDIT_BUFF")
+    SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
 }
 
 ENTITY_CLICK{
@@ -64,10 +65,12 @@ ENTITY_CLICK{
         Return()
     }
     $lastInteractionUiObjId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")
-    If($lastInteractionUiObjId){
-        UpdateEntityEditContainer(player = $obj2, entityId = $lastInteractionUiObjId, show = false)
+    If($lastInteractionUiObjId ~= GetObjectID(object = $obj1)){
+        If($lastInteractionUiObjId){
+            UpdateEntityEditContainer(player = $obj2, entityId = $lastInteractionUiObjId, show = false)
+        }
+        StartTimer(rep = false, object =$obj1, obj1 =$obj1, obj2 = $obj2, time = 1, event = "SHOW_EDIT_UI")
     }
-    StartTimer(rep = false, object =$obj1, obj1 =$obj1, obj2 = $obj2, time = 1, event = "SHOW_EDIT_UI")
 }   
 
 SHOW_EDIT_UI{
@@ -125,6 +128,7 @@ DEC_INTERACTION_SALE{
     UpdateEntityEditContainer(player = $owner, entityId = GetObjectID(object = $obj1), show = false)
     SetObjectVar(obj = $owner, key = "lastInteractionUiObjId", value = nil)
 
+    CallTrigger(object = $owner, obj1 = $owner, npc = $obj1, remove = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
     KillEntity(entity = $obj1)
 }
 
