@@ -7,16 +7,16 @@
     "lockRotateBodyRoll": 0,
     "rotateNearBoxAngle": true,
     "posSyncDelay": 1,
-    "stopChangeYaw":1,
+    "stopChangeYaw": 1,
     "disableShadow": true,
     "image": "",
     "buyMoney": 0,
     "sellMoney": 0,
     "sellByDiscountMoney": 0,
     "hpBarColor": 0,
-    "collision": false,
+    "collision": true,
     "name": "",
-    "pushable": true,
+    "/pushable": true,
     "coinId": 3,
     "showActorScale": 0,
     "canClick": true,
@@ -43,7 +43,6 @@
             "attachPoint": "attachPoints_3sit1",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sit1"
             }
@@ -64,7 +63,6 @@
             "attachPoint": "attachPoints_3sit2",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sit1"
             }
@@ -85,7 +83,6 @@
             "attachPoint": "attachPoints_3sit3",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sit1"
             }
@@ -106,7 +103,6 @@
             "attachPoint": "attachPoints_1sit",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sit1"
             }
@@ -127,7 +123,6 @@
             "attachPoint": "attachPoints_2sit1",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sit1"
             }
@@ -148,7 +143,6 @@
             "attachPoint": "attachPoints_2sit2",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sit1"
             }
@@ -170,7 +164,7 @@
             "ctrl": false,
             "view": false,
             "rideAction": {
-                "idle" : "run"
+                "idle": "run"
             },
             "passengerAction": {
                 "base": "qiuqian"
@@ -193,7 +187,7 @@
             "ctrl": false,
             "view": false,
             "rideAction": {
-                "idle" : "run"
+                "idle": "run"
             },
             "passengerAction": {
                 "base": "sit3"
@@ -216,12 +210,13 @@
             "ctrl": false,
             "view": false,
             "rideAction": {
-                "idle" : "run"
+                "idle": "run"
             },
             "passengerAction": {
                 "base": "sit3"
             }
-        },{
+        },
+        {
             "/yaw": "3人1号坐2_index10",
             "yaw": 0,
             "pos": {
@@ -237,7 +232,6 @@
             "attachPoint": "attachPoints_3sit1",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sit2"
             }
@@ -258,7 +252,6 @@
             "attachPoint": "attachPoints_3sit2",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sit2"
             }
@@ -279,7 +272,6 @@
             "attachPoint": "attachPoints_3sit3",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sit2"
             }
@@ -300,7 +292,6 @@
             "attachPoint": "attachPoints_1sit",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sit2"
             }
@@ -314,14 +305,13 @@
                 "x": 0
             },
             "out": {
-                "y":0.2,
+                "y": 0.2,
                 "z": 0,
                 "x": 0
             },
             "attachPoint": "attachPoints_2sit1",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sit2"
             }
@@ -342,7 +332,6 @@
             "attachPoint": "attachPoints_2sit2",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sit2"
             }
@@ -360,12 +349,111 @@
                 "z": 0,
                 "x": 0
             },
-            "/attachPoint": "attachPoints_1sit",
+            "/attachPoint": "attachPoints_1sleep",
             "ctrl": false,
             "view": false,
-            
             "passengerAction": {
                 "base": "sleep1"
+            }
+        },
+        {
+            "/yaw": "chairs7crib3_index17",
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0.2,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "attachPoints_chairs7",
+            "ctrl": false,
+            "view": false,
+            "passengerAction": {
+                "base": "sit2"
+            }
+        },
+        {
+            "/yaw": "chairs6大浴缸1_index18",
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0.2,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "attachPoints_chairs6_1",
+            "ctrl": false,
+            "view": false,
+            "passengerAction": {
+                "base": "sit2"
+            }
+        },
+        {
+            "/yaw": "chairs6大浴缸2_index19",
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0.2,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "attachPoints_chairs6_2",
+            "ctrl": false,
+            "view": false,
+            "passengerAction": {
+                "base": "sit2"
+            }
+        },
+        {
+            "/yaw": "chairs6大浴缸3_index20",
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0.2,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "attachPoints_chairs6_3",
+            "ctrl": false,
+            "view": false,
+            "passengerAction": {
+                "base": "sit2"
+            }
+        },
+        {
+            "/yaw": "chairs6大浴缸4_index21",
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0.2,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "attachPoints_chairs6_4",
+            "ctrl": false,
+            "view": false,
+            "passengerAction": {
+                "base": "sit2"
             }
         }
     ],
@@ -423,11 +511,28 @@
             "propagateScaling": false,
             "alignWorldYAxis": false,
             "matchActorOrientation": false
-        }
-        ,
+        },
         {
             "name": "attachPoints_1sit",
             "bone": "s_chair",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_1sleep",
+            "bone": "s_sleep",
             "position": {
                 "y": 0,
                 "z": 0,
@@ -532,6 +637,168 @@
             "propagateScaling": false,
             "alignWorldYAxis": false,
             "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_chairs7",
+            "bone": "s_guadian_14",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_chairs6_1",
+            "bone": "s_guadian_01",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_chairs6_2",
+            "bone": "s_guadian_02",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_chairs6_3",
+            "bone": "s_guadian_03",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_chairs6_4",
+            "bone": "s_guadian_04",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_chairs6_1b",
+            "bone": "s_guadian_01_b",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_chairs6_2b",
+            "bone": "s_guadian_02_b",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_chairs6_3b",
+            "bone": "s_guadian_03_b",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_chairs6_4b",
+            "bone": "s_guadian_04_b",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
         }
     ],
     "editBuff": "myplugin/dec_edit_buff",
@@ -600,16 +867,15 @@
                 "params": {}
             }
         ],
-        "events":{
+        "events": {
             "startEdit": "START_EDIT_ENTITY",
             "stopEdit": "STOP_EDIT_ENTITY",
-            "beginMove":"DEC_INTERACTION_MOVE_TOUCH_BEGIN",
-            "endMove":"DEC_INTERACTION_MOVE_TOUCH_END",
-            "sale":"DEC_INTERACTION_SALE",
-            "leftRotation":"DEC_INTERACTION_LEFT_ROTATION",
-            "rightRotation":"DEC_INTERACTION_RIGHT_ROTATION",
-            "exit":"DEC_INTERACTION_EXIT_EDIT"
+            "beginMove": "DEC_INTERACTION_MOVE_TOUCH_BEGIN",
+            "endMove": "DEC_INTERACTION_MOVE_TOUCH_END",
+            "sale": "DEC_INTERACTION_SALE",
+            "leftRotation": "DEC_INTERACTION_LEFT_ROTATION",
+            "rightRotation": "DEC_INTERACTION_RIGHT_ROTATION",
+            "exit": "DEC_INTERACTION_EXIT_EDIT"
         }
     }
-    
 }
