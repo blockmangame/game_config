@@ -3,71 +3,9 @@
     "canClick": true,
     "canMove": true,
     "collision": true,
-    "trolleyAdult": "myplugin/item_adult_scale",
-    "trolleyChild": "myplugin/item_child_scale",
     "attachBuff": "myplugin/trolley_buff",
 	"bodyTurnMax": 361,
-	"bodyTurnMin": 361,
-    "ridePos": [
-        {
-            "yaw": 0,
-            "pos": {
-                "x": 0,
-                "y": 0,
-                "z": -1
-            },
-            "out": {
-                "x": 0.5,
-                "y": 2,
-                "z": 0
-            },
-            "ctrl": true,
-            "view": true,
-            "passengerAction" :{
-                "base": "double_babytrolley_idle",
-                "walk" : "double_babytrolley_walk",
-                "run" : "double_babytrolley_run",
-                "idle": "double_babytrolley_idle"
-            }
-        },
-        {
-            "yaw": 0,
-            "pos": {
-                "x": 0,
-                "y": 0,
-                "z": -1.6
-            },
-            "out": {
-                "x": 0.5,
-                "y": 2,
-                "z": 0
-            },
-            "ctrl": true,
-            "view": true,
-            "passengerAction" :{
-                "base": "double_babytrolley_idle",
-                "walk" : "double_babytrolley_walk",
-                "run" : "double_babytrolley_run",
-                "idle": "double_babytrolley_idle"
-            }
-        },
-        {
-            "yaw": 0,
-            "pos": {
-                "y": -0.1,
-                "z": -0.7,
-                "x": 0.6
-            },
-            "out": {
-                "y": 2,
-                "z": 0,
-                "x": 0.5
-            },
-            "ctrl": false,
-            "view": false,
-            "passengerAction": {
-                "base": "riding"
-            }
-        }
-    ]
+    "bodyTurnMin": 361,
+    "rotateCheckCollide": true,
+    "autoRotateColliderBox": true
 }

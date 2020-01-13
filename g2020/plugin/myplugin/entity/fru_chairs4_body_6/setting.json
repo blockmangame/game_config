@@ -18,19 +18,21 @@
             }
         ]
     },
+    "actorName": "g2020_fru_chairs4.actor",
+    "base": "fur_base",
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
     "interactionUI": {
         "cfgKey": "interactionUI",
-        "followParams": {
-            "followScenePos": false,
-            "offset": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            }
-        },
         "centerBtns": [
             {
-                "text": "$100",
+                "text": "Radio.text",
                 "image": "plugin/myplugin/image/hand_click.png",
                 "event": "EVENT_BROADCAST_PARTY_INVITE",
                 "imageSize": {
@@ -38,17 +40,14 @@
                     "height": "60"
                 }
             }
-        ]
-    },
-    "interaction": {
-        "radius": 4,
-        "offset": {
-            "x": 0,
-            "y": 2,
-            "z": 2
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
         }
-    },
-    "actorName": "g2020_fru_chairs4.actor",
-    "base": "fur_base",
-    "disableShadow": true
+    }
 }

@@ -2,5 +2,73 @@
     "base": "trolley_base",
     "canClick": true,
     "actorName": "g2020_trolley_06.actor",
-    "disableShadow": true
+    "disableShadow": true,
+    "trolleyAdult": "myplugin/trolley_06_adult_scale",
+    "trolleyChild": "myplugin/trolley_06_child_scale",
+
+    "ridePos": [
+        {
+            "小孩推车": "",
+            "yaw": 0,
+            "pos": {
+                "x": 0,
+                "y": 0,
+                "z": 0.05
+            },
+            "out": {
+                "x": 0.5,
+                "y": 2,
+                "z": 0
+            },
+            "ctrl": true,
+            "view": true,
+            "passengerAction" :{
+                "base": "double_babytrolley_idle",
+                "walk" : "double_babytrolley_walk",
+                "run" : "double_babytrolley_run",
+                "idle": "double_babytrolley_idle"
+            }
+        },
+        {
+            "大人推车":"",
+            "yaw": 0,
+            "pos": {
+                "x": 0,
+                "y": 0,
+                "z": 0.03
+            },
+            "out": {
+                "x": 0.5,
+                "y": 2,
+                "z": 0
+            },
+            "ctrl": true,
+            "view": true,
+            "passengerAction" :{
+                "base": "double_babytrolley_idle",
+                "walk" : "double_babytrolley_walk",
+                "run" : "double_babytrolley_run",
+                "idle": "double_babytrolley_idle"
+            }
+        },
+        {
+            "小孩乘车":"",
+            "yaw": 0,
+            "pos": {
+                "y": -0.1,
+                "z": -0.7,
+                "x": 0.6
+            },
+            "out": {
+                "y": 2,
+                "z": 0,
+                "x": 0.5
+            },
+            "ctrl": false,
+            "view": false,
+            "passengerAction": {
+                "base": "riding"
+            }
+        }
+    ]
 }

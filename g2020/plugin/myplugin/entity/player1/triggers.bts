@@ -304,6 +304,9 @@ CREATE_HOUSE_OUTSIDE{
 
     SetObjectVar(obj = $obj1, key = "house", value = $house)
     SetObjectVar(obj = $house, key = "region", value = $region)
+
+    ---脚本action
+    ShowHomeGuide(entity = $house, player = $obj1)
 }
 
 REMOVE_HOUSE_OUTSIDE{
@@ -735,7 +738,30 @@ GIVE_STORE{
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
 
+    CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
     -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
+}
+
+UPDATE_PLAYER_3DUI_ENTITY{
+    $typeOf3DUI = GetConfigVar(obj = $npc, key = "typeOf3DUI")
+    If($typeOf3DUI){ -- 购买/出售/生成 3dui 家具
+        If(not GetObjectVar(obj = $obj1, key = "entityOf3DUI")){
+            SetObjectVar(obj = $obj1, key = "entityOf3DUI", value = {})
+        }
+        $entityOf3DUIDict = NewDictionary(GetObjectVar(obj = $obj1, key = "entityOf3DUI"))
+        $typeTable = DictionaryGet(dict = $entityOf3DUIDict, key = $typeOf3DUI) or {}
+        If($add){
+            ArrayAppend(array = $typeTable, value = GetObjectID(obj = $npc))
+        }ElseIf($remove){
+            ForLoop(from = 1, to = ArraySize(array = $typeTable), key = "index"){
+                If(ArrayGet(array = $typeTable, index = $index) == GetObjectID(obj = $npc)){
+                    ArrayRemove(array = $typeTable, index = $index)
+                }
+            }
+        }
+        DictionarySet(dict = $entityOf3DUIDict, key = $typeOf3DUI, value = $typeTable)
+        SetObjectVar(obj = $obj1, key = "entityOf3DUI", value = DictionaryToTable(dict = $entityOf3DUIDict))
+    }
 }
 
 CLICK_BUY_STORE{
@@ -773,6 +799,8 @@ SAVE_FURNITURE{
                 }
                 DictionarySet(dict = $fDict, key = "saveSkinList", value = $saveSkinList)
             }
+            -- 如果是黑板类型的，则保存黑板相关数据
+            DictionarySet(dict = $fDict, key = "blackboardStr", value = GetObjectVar(obj = $npc, key = "blackboardStr"))
         }
         ArraySet(array = $furnitures, index = $fIndex, value = DictionaryToTable(dict = $fDict))
     }
@@ -3648,14 +3676,17 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
     If($obj1.taskKey){
         $imgcount = $imgcount - 1
     }
-    If($imgcount >=0 and $imgcount <=10){
+    If($imgcount >=0 and $imgcount <10){
         $btnImg = "set:indentImg.json image:btn1.png"
-    }ElseIf($imgcount >10 &&  $imgcount <=20){
+    }ElseIf($imgcount >=10 &&  $imgcount <20){
         $btnImg = "set:indentImg.json image:BtnGreen.png"
-    }ElseIf($imgcount >20 && $imgcount <= 30){
+    }ElseIf($imgcount >=20 && $imgcount <30){
         $btnImg = "set:indentImg.json image:btnBule.png"
-    }ElseIf($imgcount >30){
+    }ElseIf($imgcount >=30){
         $btnImg = "set:indentImg.json image:BtnRed.png"
+    }
+    If($obj1.worktaskCount == @CircleNum or $imgcount == 0){
+        $resetImg = true
     }
     $taskData = Table(
         Progress =  $rate,
@@ -3663,7 +3694,8 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
         gpsPos = $obj1.gpsPos,
         isTasking = $isTasking,
         animation = $animation,
-        btnImg = $btnImg
+        btnImg = $btnImg,
+        resetImg = $resetImg
     )
     If($obj1.taskShowGps){
        SetGuidePostion(entity = $obj1, pos = $obj1.gpsPos)
@@ -3684,13 +3716,20 @@ GET_TASK_GPS  --得到打工的GPS位置
         If($mapName ~= "map001"){
             $mapEntry = NewDictionary(GetMapConfig(name = $mapName, key = "mapEntry"))
             $cfg = DictionaryGet(dict = $mapEntry, key = "map001")
-            $cfgName = ArrayGet(array = $cfg, index = 1)
             $mapEntity = GetMapConfig(name = $mapName, key = "entity")
-            Foreach(array = $mapEntity, key = "entityDict"){
-                $dict = NewDictionary($entityDict)
-                $name = DictionaryGet(dict = $dict, key = "cfg")
-                If($name == $cfgName){
-                    $okPos = DictionaryGet(dict = $dict, key = "pos")
+            $minDis = GetPosDistance()
+            Foreach(array = $cfg, key = "cfgName"){
+                Foreach(array = $mapEntity, key = "entityDict"){
+                    $dict = NewDictionary($entityDict)
+                    $name = DictionaryGet(dict = $dict, key = "cfg")
+                    If($name == $cfgName){
+                        $newPos = DictionaryGet(dict = $dict, key = "pos")
+                        $dis = GetPosDistance(pos1 = $okPos, pos2 = $newPos)
+                        If(not $okPos || $dis < $minDis){
+                            $okPos = $newPos
+                            $minDis = $dis
+                        }
+                    }
                 }
             }
             $obj1.gpsPos = $okPos or @INDENT_POS
@@ -4749,12 +4788,12 @@ TRY_JOIN_PARTY(debug = false){
     }
 }
 TRY_CREATE_PARTY {
-    If(ArrayFind(array = $obj1.privilege, value = "myplugin/create_party_privilege")){
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/vip_privilege")){
         $canCreate = true
     }Else{
         $canCreate = false
         $tip = "gui.party.buy.privilege"
-        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 13, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
+        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 1, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
     }
 }
 BUY_CREATE_PARTY_PRIVILEGE_RESULT {
@@ -5105,16 +5144,18 @@ PLAYER_CLEAR_RIDE
 
 CHECK_SHOW_SVIP_UI()
 {
+    $show = false
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
     {
-        ShowToolBarButton(name = "svip", show = true, player = $obj1)
+        $show = true
     }
+    ShowToolBarButton(name = "svip", show = $show, player = $obj1)
 }
 GET_SVIP_REWARD()
 {
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
     {
-        $money = GetWorldVar(key = "svipMoney")
+        $money = GetConfigValue(type = "reward", fullName = "myplugin/privilege", key = "privilege") 
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
         ShowToolBarButton(name = "svip", show = false, player = $obj1)
     }
