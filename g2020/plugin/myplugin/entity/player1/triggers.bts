@@ -180,18 +180,6 @@ ENTITY_ENTER
 
         LoadPlayerAppDress(player = $obj1, event = "HTTP_PURCHASED_DRESS_CALL_BACK")
 
-        -- test data
-        --SetSkin(entity = $obj1, skinName = "custom_wing", skinValue = 25)
-        --SetSkin(entity = $obj1, skinName = "custom_scarf", skinValue = 3)
-        --SetSkin(entity = $obj1, skinName = "clothes_tops", skinValue = 20)
-        --SetSkin(entity = $obj1, skinName = "custom_shoes", skinValue = 40)
-        --SetSkin(entity = $obj1, skinName = "clothes_pants", skinValue = 35)
-        --SetSkin(entity = $obj1, skinName = "custom_hair", skinValue = 5)
-        --SetSkin(entity = $obj1, skinName = "custom_face", skinValue = 5)
-        --SetSkin(entity = $obj1, skinName = "custom_glasses", skinValue = 3)
-        --SetSkin(entity = $obj1, skinName = "custom_hat", skinValue = 5)
-        --SetSkin(entity = $obj1, skinName = "custom_tail", skinValue = 5)
-
         CallTrigger(event = "FUNC_LOAD_NEW_WORKS")
         CallTrigger(event = "FUNC_LOAD_EXCELLENT_WORKS")
     }
