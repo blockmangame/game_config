@@ -14,6 +14,13 @@
                 ]
             }
         ]
+    },"interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
     },
     "sellPrice": [
         4500,
@@ -25,20 +32,25 @@
     ],
     "interactionUI": {
         "cfgKey": "interactionUI",
-        "aroundParams": {
-            "startAngle": 0,
-            "endAngle": 90,
-            "radius": 100
-        },
         "centerBtns": [
             {
                 "text": "cook.guide",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "nextCfgKey": "interaction_choices"
+                "nextCfgKey": "interaction_choices",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "widgetFileName": "widget_button"
             }
         ],
         "followParams": {
-            "followScenePos": false
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
         }
     },
     "interaction_choices": {

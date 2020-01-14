@@ -1,6 +1,6 @@
 {
     "skin": {
-        "body": "2"
+        "body": "1"
     },
     "boundingVolume": {
         "type": "Composite",
@@ -51,7 +51,109 @@
             }
         ]
     },
-    "actorName": "g2020_fru_chairs4.actor",
+    "actorName": "g2020_fru_chairs6.actor",
     "base": "fur_base",
-    "releaseState": "dirty"
+    "releaseState": "dirty",
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "interactionUI": [
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "chairs6_bathtub1.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs6_bathtub1",
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "chairs6_bathtub2.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs6_bathtub2",
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "chairs6_bathtub3.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs6_bathtub3",
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "chairs6_bathtub4.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs6_bathtub4",
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ]
 }
