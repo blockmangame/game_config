@@ -754,8 +754,7 @@ UPDATE_PLAYER_3DUI_ENTITY{
                     Foreach(array = $players, key = "player")
                     {
                         $data = {
-                            key = ToString(GetObjectID(object = $npc)),
-                            name = "graffitiWall",
+                            key = ToString(GetObjectID(object = $npc))
                         }
                         ShowEntity3DUI(player = $player, show = false, data = $data)
                     }
@@ -4593,7 +4592,7 @@ UPDATE_PLAYER_NUMBER_BOARD_ENTITY
 
     $entityOf3DUI = $owner.entityOf3DUI
     $entityOf3DUIDict = NewDictionary($entityOf3DUI)
-    $showNumEntitys = DictionaryGet(dict = $entityOf3DUIDict, key = "showPlayerNum") or {}
+    $showNumEntitys = DictionaryGet(dict = $entityOf3DUIDict, key = "numberBoard") or {}
     Foreach(array = $showNumEntitys, key = "objID")
     {
         $players = GetMapPlayer(map = $map)

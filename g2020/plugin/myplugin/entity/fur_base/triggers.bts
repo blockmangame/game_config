@@ -133,6 +133,10 @@ DEC_INTERACTION_SALE{
     SetObjectVar(obj = $owner, key = "lastInteractionUiObjId", value = nil)
 
     CallTrigger(object = $owner, obj1 = $owner, npc = $obj1, remove = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
+    StartTimer(object =$obj1, obj1 =$obj1, time = 2, event = "KILL_SELF")
+}
+
+KILL_SELF{
     KillEntity(entity = $obj1)
 }
 
