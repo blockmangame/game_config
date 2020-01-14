@@ -3058,7 +3058,8 @@ SHOW_CHANGE_NAME_INPUT_DIALOG
         inputTitle = $inputTitle,
         buttons = $buttons,
         text = $name or $obj1.nickName,
-        showType = $showType
+        showType = $showType,
+        isHintMaxTextLength = true
     }
 
     ShowInputDialog(entity = $obj1, contents = $contents)
