@@ -3765,27 +3765,6 @@ TASK_NPC_ADD_BUFF  --给任务npc还动作加buff, 订单NPC加buff动作
     }
     --订单NPC
     $checkMax = @workmaxCount <= ($obj1.maxtaskCount or 0)
-    $action = "idle"
-    If(not $obj1.taskKey &&  not $checkMax && not $obj1.punishmentCD)--未接单
-    {
-        $buff = GetConfigValue(type = "task", fullName = "myplugin/work", key = "buffNotTask")
-    }ElseIf($obj1.taskKey)--接单后
-    { 
-        $buff = GetConfigValue(type = "task", fullName = "myplugin/work", key = "buffDoingTask")
-    }ElseIf($obj1.punishmentCD)--放弃惩罚中
-    {
-        $buff = GetConfigValue(type = "task", fullName = "myplugin/work", key = "buffPunishTask")
-    }ElseIf($checkMax) -- 上限后
-    {
-        $buff = GetConfigValue(type = "task", fullName = "myplugin/work", key = "buffMoreMaxTask")
-    }
-    If($buff and @INDENT_MODEL and $buff ~= $obj1.lastTaskBuff){
-        If($obj1.lastTaskBuff){
-            --UnMarkEntityForPlayer(player = $obj1, entity = @INDENT_MODEL, buffName = $obj1.lastTaskBuff)
-        }
-        --MarkEntityForPlayer(player = $obj1, entity = @INDENT_MODEL, buffName = $buff)
-        $obj1.lastTaskBuff = $buff
-    }
     --订单NPC新的计算buff方法：
     If(not $obj1.taskKey &&  not $checkMax && not $obj1.punishmentCD && $obj1.lastTaskStatus ~= 1)--未接单
     {   
@@ -3875,6 +3854,15 @@ MAC_TASK_COUNT_RESET(){--第二天，刷新最大累计
     }
 }
 INIT_WORK_TASK(){ --初始打工
+    $taskKey = [
+        "myplugin/orderNpc/key_4",
+        "myplugin/orderNpc/key_3",
+        "myplugin/orderNpc/key_2",
+        "myplugin/orderNpc/key_1",
+    ]
+    Foreach(array = $taskKey, key = "nameKey"){
+        CancelTask(player = $obj1, name = $nameKey)
+    }
     $today = GetYearDayStr(time = GetTime())
     $dayEnd = GetDayEndTime(time = GetTime()) - GetTime()
     StartTimer(event = "MAC_TASK_COUNT_RESET", object = $obj1, rep = false, time = $dayEnd * 20)
