@@ -2450,7 +2450,7 @@ REQUEST_JOIN_FAMILY
             }
 
             SetEntityTeam(entity = $obj1, teamId = $targetFamilyID)
-            CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $targetFamilyID)
+            CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $targetFamilyID, object = $obj1)
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", time = 40)
             $obj1.requestFamilyPlayer = nil
         }
@@ -2461,7 +2461,7 @@ REQUEST_JOIN_FAMILY
             @familyIndex = @familyIndex + 1
             SetEntityTeam(entity = $targetPlayer, teamId = $teamId)
             SetEntityTeam(entity = $obj1, teamId = $teamId)
-            CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId)
+            CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId, object = $obj1)
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", time = 40)
             $obj1.requestFamilyPlayer = nil
         }
