@@ -64,6 +64,9 @@ ENTITY_CLICK{
     If(not GetObjectVar(obj = $obj1, key = "house") or GetObjectVar(obj = $obj1, key = "house") ~= GetObjectVar(obj = $obj2, key = "house")){
         Return()
     }
+    If($obj1.isSale){
+        Return()
+    }
     $lastInteractionUiObjId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")
     If($lastInteractionUiObjId ~= GetObjectID(object = $obj1)){
         If($lastInteractionUiObjId){
@@ -97,6 +100,7 @@ DEC_INTERACTION_MOVE_TOUCH_END{
 }
 
 DEC_INTERACTION_SALE{
+    $obj1.isSale = true
     $owner = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "owner")
     $houseVars = GetObjectVar(obj = $owner, key = "houseVars")
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
@@ -187,6 +191,9 @@ ADD_EDIT_BUFF{
 }
 
 REMOVE_EDIT_BUFF{
+    If(not IsValidObject(object = $obj1)){
+        Return()
+    }
     $decEditBuff = GetConfigVar(obj = $obj1, key = "editBuff")
     If(not $decEditBuff){
         Return()
