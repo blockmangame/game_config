@@ -113,7 +113,7 @@
             "pos": {
                 "y": 0,
                 "z": 0,
-                "x": 0
+                "x": 0.5
             },
             "out": {
                 "y": 0.2,
@@ -133,7 +133,7 @@
             "pos": {
                 "y": 0,
                 "z": 0,
-                "x": 0
+                "x": -0.5
             },
             "out": {
                 "y": 0.2,
@@ -373,7 +373,7 @@
             "ctrl": false,
             "view": false,
             "passengerAction": {
-                "base": "sit2"
+                "base": "sleep1"
             }
         },
         {
@@ -450,6 +450,26 @@
                 "x": 0
             },
             "attachPoint": "attachPoints_chairs6_4",
+            "ctrl": false,
+            "view": false,
+            "passengerAction": {
+                "base": "sit2"
+            }
+        },
+        {
+            "/yaw": "chairs5浴缸_index22",
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0.2,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "attachPoints_chairs5",
             "ctrl": false,
             "view": false,
             "passengerAction": {
@@ -785,6 +805,42 @@
         {
             "name": "attachPoints_chairs6_4b",
             "bone": "s_guadian_04_b",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_chairs5",
+            "bone": "s_guadian_01",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "attachPoints_chairs5b",
+            "bone": "s_guadian_01_b",
             "position": {
                 "y": 0,
                 "z": 0,

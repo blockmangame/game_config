@@ -327,6 +327,10 @@ ENTITY_chairs6_bathtub3 {
 ENTITY_chairs6_bathtub4 {
 	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 21)
 }
+ENTITY_chairs5_bathtub {
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 22)
+}
+
 --上面是编辑，下面是购买逻辑
 
 COOK_SHOW_CHOICES {
