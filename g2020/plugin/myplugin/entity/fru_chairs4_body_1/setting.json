@@ -51,7 +51,37 @@
             }
         ]
     },
-    "actorName": "g2020_fru_chairs4.actor",
+    "actorName": "g2020_fru_chairs5.actor",
     "base": "fur_base",
-    "releaseState": "dirty"
+    "releaseState": "dirty",
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "chairs5_bathtub.text",
+                "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                "event": "ENTITY_chairs5_bathtub",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                }
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+            }
+        }
+    }
 }

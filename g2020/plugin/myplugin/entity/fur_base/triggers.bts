@@ -54,6 +54,7 @@ EXECUTION_EDIT_ACTION{
 STOP_EDIT_ENTITY{
     CallTrigger(object = $obj1, event = "REMOVE_EDIT_BUFF")
     SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
+    CallTrigger(object = $obj2, event = "EDIT_HOUSE")
 }
 
 ENTITY_CLICK{
@@ -129,10 +130,15 @@ DEC_INTERACTION_SALE{
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
 
+    Test("GetObjectID(object = $obj1)", GetObjectID(object = $obj1))
     UpdateEntityEditContainer(player = $owner, entityId = GetObjectID(object = $obj1), show = false)
     SetObjectVar(obj = $owner, key = "lastInteractionUiObjId", value = nil)
 
     CallTrigger(object = $owner, obj1 = $owner, npc = $obj1, remove = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
+    StartTimer(object =$obj1, obj1 =$obj1, time = 2, event = "KILL_SELF")
+}
+
+KILL_SELF{
     KillEntity(entity = $obj1)
 }
 
@@ -176,7 +182,6 @@ ROTATION_BODY_YAW{
 
 DEC_INTERACTION_EXIT_EDIT{
     -- UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = false)
-    CallTrigger(object = $obj2, event = "EDIT_HOUSE")
 }
 
 ADD_EDIT_BUFF{
@@ -322,6 +327,10 @@ ENTITY_chairs6_bathtub3 {
 ENTITY_chairs6_bathtub4 {
 	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 21)
 }
+ENTITY_chairs5_bathtub {
+	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 22)
+}
+
 --上面是编辑，下面是购买逻辑
 
 COOK_SHOW_CHOICES {
