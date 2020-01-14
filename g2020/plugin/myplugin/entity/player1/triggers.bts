@@ -4614,23 +4614,35 @@ UPDATE_PLAYER_NUMBER_BOARD_ENTITY
             $playerCount = $playerCount - 1
         }
 
+        $width = 0
+        $height = 0
+        $position = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $rotate = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $npc = GetObject(objID = $objID)
+        If($npc)
+        {
+            $position = GetConfigVar(obj = $npc, key = "position") or $position
+            $width = GetConfigVar(obj = $npc, key = "width") or $width
+            $height = GetConfigVar(obj = $npc, key = "height") or $height
+        }
+
         $data = {
             key = ToString($objID),
             name = "graffitiWall",
-            width = 3,
-            height = 1,
-            position = {
-                x = 0,
-                y = 2,
-                z = -0.1,
-            },
-
-            rotate = {
-                x = 0,
-                y = 0,
-                z = 0,
-            },
-
+            width = $width,
+            height = $height,
+            position = $position,
+            rotate = $rotate,
             objID = $objID,
             args = $playerCount
         }
