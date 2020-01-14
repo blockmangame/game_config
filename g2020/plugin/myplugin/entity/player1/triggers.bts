@@ -4616,6 +4616,9 @@ UPDATE_PLAYER_NUMBER_BOARD_ENTITY
 
         $width = 0
         $height = 0
+        $title = ""
+        $textColor = [255, 255, 255]
+        $titleColor = [255, 255, 255]
         $position = {
             x = 0,
             y = 0,
@@ -4634,17 +4637,25 @@ UPDATE_PLAYER_NUMBER_BOARD_ENTITY
             $position = GetConfigVar(obj = $npc, key = "position") or $position
             $width = GetConfigVar(obj = $npc, key = "width") or $width
             $height = GetConfigVar(obj = $npc, key = "height") or $height
+            $textColor = GetConfigVar(obj = $npc, key = "textColor") or $textColor
+            $title = GetConfigVar(obj = $npc, key = "title") or $title
+            $titleColor = GetConfigVar(obj = $npc, key = "titleColor") or $titleColor
         }
 
         $data = {
             key = ToString($objID),
-            name = "graffitiWall",
+            name = "numberBoard",
             width = $width,
             height = $height,
             position = $position,
             rotate = $rotate,
             objID = $objID,
-            args = $playerCount
+            args = {
+                text = $playerCount,
+                textColor = $textColor,
+                title = $title,
+                titleColor = $titleColor,
+            }
         }
         ShowEntity3DUI(player = $obj1, show = $show, data = $data)
 
