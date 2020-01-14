@@ -54,6 +54,7 @@ EXECUTION_EDIT_ACTION{
 STOP_EDIT_ENTITY{
     CallTrigger(object = $obj1, event = "REMOVE_EDIT_BUFF")
     SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
+    CallTrigger(object = $obj2, event = "EDIT_HOUSE")
 }
 
 ENTITY_CLICK{
@@ -129,6 +130,7 @@ DEC_INTERACTION_SALE{
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
 
+    Test("GetObjectID(object = $obj1)", GetObjectID(object = $obj1))
     UpdateEntityEditContainer(player = $owner, entityId = GetObjectID(object = $obj1), show = false)
     SetObjectVar(obj = $owner, key = "lastInteractionUiObjId", value = nil)
 
@@ -180,7 +182,6 @@ ROTATION_BODY_YAW{
 
 DEC_INTERACTION_EXIT_EDIT{
     -- UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = false)
-    CallTrigger(object = $obj2, event = "EDIT_HOUSE")
 }
 
 ADD_EDIT_BUFF{
