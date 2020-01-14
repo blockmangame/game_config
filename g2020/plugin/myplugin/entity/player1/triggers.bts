@@ -754,8 +754,7 @@ UPDATE_PLAYER_3DUI_ENTITY{
                     Foreach(array = $players, key = "player")
                     {
                         $data = {
-                            key = ToString(GetObjectID(object = $npc)),
-                            name = "graffitiWall",
+                            key = ToString(GetObjectID(object = $npc))
                         }
                         ShowEntity3DUI(player = $player, show = false, data = $data)
                     }
