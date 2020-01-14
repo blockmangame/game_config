@@ -129,7 +129,6 @@ DEC_INTERACTION_SALE{
     SetObjectVar(obj = $owner, key = "lastInteractionUiObjId", value = nil)
 
     CallTrigger(object = $owner, obj1 = $owner, npc = $obj1, remove = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
-    CallTrigger(object = $obj2, event = "EDIT_HOUSE")
     KillEntity(entity = $obj1)
 }
 
