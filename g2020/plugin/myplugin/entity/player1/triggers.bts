@@ -4883,15 +4883,15 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $fullName = "myplugin/partyInviteView"
     ShowInviteTip(entity = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, titleText = $likeNum, content = $content, fullName = $fullName, showTime = $showTime)
 }
-JOIN_OTHERS_PARTY(debug = true){
+JOIN_OTHERS_PARTY(debug = false){
     $partyDict = NewDictionary($obj1.partyInfo)
     $partyId = DictionaryGet(dict = $partyDict, key = "partyId")
     TryJoinParty(player = $obj1, targetUserId = $obj1.targetUserId, partyId = $partyId)
 }
-CROSS_SERVER_VISIT(debug = true){
+CROSS_SERVER_VISIT(debug = false){
     CrossServerVisitPlayerByUserId(targetUserId = $obj1.targetUserId, player = $obj1)
 }
-PLAYER_ON_VISIT_OTHER_SERVER(debug = true){
+PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
     $targetUserId = $targetUserId or $obj1.visitTargetUserId
     $obj1.targetUserId = $targetUserId
     $contentDict = NewDictionary($content)
@@ -5002,7 +5002,7 @@ BUY_CREATE_PARTY_PRIVILEGE_RESULT {
         TryCreateParty(player = $obj1)
     }
 }
-CHECK_LEAVE_PARTY(debug = true){
+CHECK_LEAVE_PARTY(debug = false){
     If($obj1.inSelfParty == 1){--in my party
         CloseParty(player = $obj1)
         CallTrigger(obj1 = $obj1, event = "CLOSE_PARTY_SUCCESS")
@@ -5035,7 +5035,7 @@ CHECK_CLOSE_PARTY {
 REENTER_GAME(debug = false){
     ReenterGame(player = $obj1)
 }
-LEAVE_PARTY_SUCCESS(debug = true){
+LEAVE_PARTY_SUCCESS(debug = false){
     If($obj1.excludedPartyId == "0"){
         ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
     }
@@ -5123,7 +5123,7 @@ JOIN_PARTY_FAILED(debug = true){
         ReenterGame(player = $obj1)
     }
 }
-JOIN_PARTY_SUCCESS(debug = true){
+JOIN_PARTY_SUCCESS(debug = false){
     $obj1.inPartyOwnerId = $targetUserId
     $obj1.needCheckResetGameResult = true
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
@@ -5147,7 +5147,7 @@ UPDATE_CREATE_PARTY_VIEW_INFO {
     $reachPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "reachGoodPartyPlayerNumber")
     $lowerRate = GetEntityCfg(fullName = $curHouseCfg, key = "goodPartyPlayerNumberLowerRate")
 }
-CLOSE_PARTY_SUCCESS(debug = true){
+CLOSE_PARTY_SUCCESS(debug = false){
     $name = GetEntityName(entity = $obj1)
     $obj1.inPartyId = "0"
     $obj1.inPartyOwnerId = 0
