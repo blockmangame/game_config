@@ -5021,6 +5021,7 @@ CHECK_IN_PARTY(debug = false){
         --in party now!
         UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
         UpdateExtensionBtn(entity = $obj1, btnList = [{name = "party"}])
+        CallTrigger(object = $obj1, event = "OPEN_DANCE")
         If($userId == $inPartyOwnerId){
             $obj1.inSelfParty = 1
             BroadcastPartyInvite(player = $obj1)
