@@ -4469,6 +4469,7 @@ ENTER_MAP
     CallTrigger(event = "ENTER_HOUSE_MAP", object = $obj1)
     CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
     CallTrigger(event = "UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = true)
+    CallTrigger(event = "UPDATE_PUBLIC_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = true)
 }
 
 LEAVE_MAP
@@ -4482,6 +4483,7 @@ LEAVE_MAP
     CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $map.cfg.releaseState)
     CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = false)
     CallTrigger(event = "UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = false)
+    CallTrigger(event = "UPDATE_PUBLIC_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = false)
 }
 
 UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY
@@ -4676,7 +4678,50 @@ UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY
 
 UPDATE_PUBLIC_ALL_BLACK_BOARD_ENTITY
 {
+    $map = GetEntityMap(entity = $obj1)
+    $entityWith3dUI = GetMapVar(map = $map, key = "entityWith3dUI")
+    If(not $entityWith3dUI)
+    {
+        Return()
+    }
 
+    ForeachDictionary(dict = $entityWith3dUI, keyName = "objID", valueName = "npc")
+    {
+        $width = 0
+        $height = 0
+        $text = ""
+        $position = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $rotate = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $position = GetConfigVar(obj = $npc, key = "position") or $position
+        $width = GetConfigVar(obj = $npc, key = "width") or $width
+        $height = GetConfigVar(obj = $npc, key = "height") or $height
+        $text = $npc.blackboardStr or $text
+
+        $data = {
+            key = ToString($objID),
+            name = "blackBoard",
+            width = $width,
+            height = $height,
+            position = $position,
+            rotate = $rotate,
+            objID = $objID,
+            args = {
+                text = $text
+            }
+        }
+
+        ShowEntity3DUI(player = $obj1, show = $show, data = $data)
+    }
 }
 
 --↓↓↓↓↓↓ party
