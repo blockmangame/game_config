@@ -16,5 +16,36 @@
         ]
     },
     "actorName": "g2020_fru_chairs4.actor",
-    "base": "fur_base"
+    "base": "fur_base",
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "isBgmSpeakers": true,
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "bgm.text",
+                "image": "plugin/myplugin/image/fru_intUI/hand_click.png",
+                "event": "OPEN_BGM_LIST",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                }
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+            }
+        }
+    }
 }
