@@ -16,5 +16,43 @@
         ]
     },
     "actorName": "g2020_fru_blackboard.actor",
-    "base": "fur_base"
+    "base": "fur_base",
+    "typeOf3DUI": "blackBoard",
+    "position": {
+        "x": 0,
+        "y": 1.5,
+        "z": -0.06
+    },
+    "height": 3.6,
+    "width": 6,
+    "textLength": 215,
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "checkCanShow": {
+                    "funcName": "checkOwnership"
+                },
+                "event": "SHOW_EDIT_BLACKBOARD_INPUT_DIALOG"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        }
+    },
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    }
 }

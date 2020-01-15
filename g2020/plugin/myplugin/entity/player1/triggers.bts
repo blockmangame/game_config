@@ -766,7 +766,15 @@ UPDATE_PLAYER_3DUI_ENTITY{
 
         If($add)
         {
-            CallTrigger(event = "UPDATE_PLAYER_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
+            CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
+            If($updateAll)
+            {
+                CallTrigger(event = "UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = true)
+            }
+            Else
+            {
+                CallTrigger(event = "UPDATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY", object = $obj1, npc = $npc)
+            } 
         }
     }
 }
@@ -3694,8 +3702,9 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
     }ElseIf($imgcount >=30){
         $btnImg = "set:indentImg.json image:BtnRed.png"
     }
-    If($obj1.worktaskCount == @CircleNum or $imgcount == 0){
+    If($obj1.worktaskCount == @CircleNum or $imgcount == 0 or $obj1.isinintTask){
         $resetImg = true
+        $obj1.isinintTask = nil
     }
     $taskData = Table(
         Progress =  $rate,
@@ -3880,6 +3889,7 @@ INIT_WORK_TASK(){ --初始打工
         $obj1.failedMsg = DictionaryGet(dict = $taskDict, key = "failedMsg")
     }
     StartTimer(rep = false, time = 20, object = $obj1, event = "TASK_UPDATE_DATA")
+    $obj1.isinintTask = true
 }
 DO_SUBMIT_ORDER(){ --对话
     $obj1.nowSubmitTask = true
@@ -4414,86 +4424,6 @@ CASH_BOX_BUTTON_SURE
     }
 }
 
-SHOW_EDIT_INPUT_DIALOG
-{
-     $title = {
-        name = "ui_edit_title_name"
-    }
-
-    $inputTitle = {
-        name = "ui_edit_input_name"
-    }
-
-    $buttons = [
-        {
-            event = "cancel",
-            normalImage = "set:tip_dialog.json image:btn_big_blue",
-            pushedImage = "set:tip_dialog.json image:btn_big_blue",
-            name = "ui_cancel"
-        },
-        {
-            event = "EDIT_BUTTON_SURE",
-            normalImage = "set:tip_dialog.json image:btn_big_green",
-            pushedImage = "set:tip_dialog.json image:btn_big_green",
-            name = "ui_sure"
-        }
-    ]
-
-    $options = {
-        index = $index
-    }
-
-    $contents = {
-        title = $title,
-        inputTitle = $inputTitle,
-        buttons = $buttons,
-        text = $name,
-        textLength = 100,
-    }
-
-    ShowInputDialog(entity = $obj1, contents = $contents, options = $options)
-}
-
-EDIT_BUTTON_SURE
-{
-    $name = FilterWord(msg = $name)
-    If(not $name)
-    {
-        Return()
-    }
-
-    If($index ~= 0)
-    {
-        $U3Dcfg = GetWorldVar(key = "sceneUI")
-        Foreach(array = $U3Dcfg, key = "ucfg")
-        {
-            $dict = NewDictionary($ucfg)
-            $w_index = DictionaryGet(dict = $dict, key = "index")
-            If($index == $w_index)
-            {
-                DictionarySet(dict = @graffitiWallText, key = $w_index, value = $name)
-
-                $data = {
-                    key = DictionaryGet(dict = $dict, key = "key"),
-                    name = DictionaryGet(dict = $dict, key = "name"),
-                    width = DictionaryGet(dict = $dict, key = "width"),
-                    height = DictionaryGet(dict = $dict, key = "height"),
-                    rotate = DictionaryGet(dict = $dict, key = "rotate"),
-                    position = DictionaryGet(dict = $dict, key = "position"),
-                    args = $name,
-                }
-
-                $map = GetEntityMap(entity = $obj1)
-                $players = GetMapPlayer(map = $map)
-                Foreach(array = $players, key = "player")
-                {
-                    Show3DUI(player = $player, show = true, data = $data)
-                }
-            }
-        }
-    }
-}
-
 PICK_HAND_ITEM {
     $canHandMap = GetConfigVar(obj = GetEntityHandItem(entity = $obj1), key = "canHandMap")
     $playerCurMap = GetEntityMapName(entity = $obj1)
@@ -4531,32 +4461,14 @@ ENTER_MAP
     CallTrigger(object = $obj1, event = "PICK_HAND_ITEM", obj1 = $obj1)
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
-        $U3Dcfg = GetWorldVar(key = "sceneUI")      -- u3d ui
-        Foreach(array = $U3Dcfg, key = "ucfg")
-        {
-            $dict = NewDictionary($ucfg)
-            $index = DictionaryGet(dict = $dict, key = "index")
-
-             $data = {
-                key = DictionaryGet(dict = $dict, key = "key"),
-                name = DictionaryGet(dict = $dict, key = "name"),
-                width = DictionaryGet(dict = $dict, key = "width"),
-                height = DictionaryGet(dict = $dict, key = "height"),
-                rotate = DictionaryGet(dict = $dict, key = "rotate"),
-                position = DictionaryGet(dict = $dict, key = "position"),
-                args = DictionaryGet(dict = @graffitiWallText, key = $index),
-            }
-
-            Show3DUI(player = $obj1, show = true, data = $data)
-        }
-
         WorksWallsOperation(player = $obj1, isOpen = true)
         CallTrigger(player = $obj1, event = "SYNC_CUR_WALL_WORKS")
     }
     CallTrigger( object = $obj1, event = "FUNC_STATE_RELEASE", state = $map.cfg.releaseState)
     CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj1, gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict"))
     CallTrigger(event = "ENTER_HOUSE_MAP", object = $obj1)
-    CallTrigger(event = "UPDATE_PLAYER_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
+    CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
+    CallTrigger(event = "UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = true)
 }
 
 LEAVE_MAP
@@ -4565,19 +4477,14 @@ LEAVE_MAP
     CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
-        $U3Dcfg = GetWorldVar(key = "sceneUI")      -- u3d ui
-        Foreach(array = $U3Dcfg, key = "ucfg")
-        {
-            Show3DUI(player = $obj1, show = false, data = $ucfg)
-        }
-
         WorksWallsOperation(player = $obj1, isOpen = false)
     }
     CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $map.cfg.releaseState)
-    CallTrigger(event = "UPDATE_PLAYER_NUMBER_BOARD_ENTITY", object = $obj1, show = false)
+    CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = false)
+    CallTrigger(event = "UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = false)
 }
 
-UPDATE_PLAYER_NUMBER_BOARD_ENTITY
+UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY
 {
     $map = GetEntityMap(entity = $obj1)
     $house = GetMapVar(map = $map, key = "owner")
@@ -4656,6 +4563,114 @@ UPDATE_PLAYER_NUMBER_BOARD_ENTITY
                 ShowEntity3DUI(player = $player, show = true, data = $data)
             }
         }
+    }
+}
+
+UPDATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY
+{
+    $width = 0
+    $height = 0
+    $text = ""
+    $position = {
+        x = 0,
+        y = 0,
+        z = 0,
+    }
+
+    $rotate = {
+        x = 0,
+        y = 0,
+        z = 0,
+    }
+
+    $objID = 0
+    If($npc)
+    {
+        $position = GetConfigVar(obj = $npc, key = "position") or $position
+        $width = GetConfigVar(obj = $npc, key = "width") or $width
+        $height = GetConfigVar(obj = $npc, key = "height") or $height
+        $text = $npc.blackboardStr or $text
+        $objID = GetObjectID(object = $npc)
+    }
+    
+    $data = {
+        key = ToString($objID),
+        name = "blackBoard",
+        width = $width,
+        height = $height,
+        position = $position,
+        rotate = $rotate,
+        objID = $objID,
+        args = {
+            text = $text
+        }
+    }
+
+    $players = GetMapPlayer(map = $map)
+    Foreach(array = $players, key = "player")
+    {
+        ShowEntity3DUI(player = $player, show = true, data = $data)
+    }
+}
+
+UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY
+{
+    $map = GetEntityMap(entity = $obj1)
+    $house = GetMapVar(map = $map, key = "owner")
+    If(not $house)
+    {
+        Return()
+    }
+
+    $owner = $house.owner
+    If(not $owner)
+    {
+        Return()
+    }
+
+    $entityOf3DUI = $owner.entityOf3DUI
+    $entityOf3DUIDict = NewDictionary($entityOf3DUI)
+    $blackBoardEntitys = DictionaryGet(dict = $entityOf3DUIDict, key = "blackBoard") or {}
+    Foreach(array = $blackBoardEntitys, key = "objID")
+    {
+        $width = 0
+        $height = 0
+        $text = ""
+        $position = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $rotate = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $npc = GetObject(objID = $objID)
+        If($npc)
+        {
+            $position = GetConfigVar(obj = $npc, key = "position") or $position
+            $width = GetConfigVar(obj = $npc, key = "width") or $width
+            $height = GetConfigVar(obj = $npc, key = "height") or $height
+            $text = $npc.blackboardStr or $text
+        }
+
+        $data = {
+            key = ToString($objID),
+            name = "blackBoard",
+            width = $width,
+            height = $height,
+            position = $position,
+            rotate = $rotate,
+            objID = $objID,
+            args = {
+                text = $text
+            }
+        }
+
+        ShowEntity3DUI(player = $obj1, show = $show, data = $data)
     }
 }
 
@@ -4765,15 +4780,15 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $fullName = "myplugin/partyInviteView"
     ShowInviteTip(entity = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, titleText = $likeNum, content = $content, fullName = $fullName, showTime = $showTime)
 }
-JOIN_OTHERS_PARTY(debug = true){
+JOIN_OTHERS_PARTY(debug = false){
     $partyDict = NewDictionary($obj1.partyInfo)
     $partyId = DictionaryGet(dict = $partyDict, key = "partyId")
     TryJoinParty(player = $obj1, targetUserId = $obj1.targetUserId, partyId = $partyId)
 }
-CROSS_SERVER_VISIT(debug = true){
+CROSS_SERVER_VISIT(debug = false){
     CrossServerVisitPlayerByUserId(targetUserId = $obj1.targetUserId, player = $obj1)
 }
-PLAYER_ON_VISIT_OTHER_SERVER(debug = true){
+PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
     $targetUserId = $targetUserId or $obj1.visitTargetUserId
     $obj1.targetUserId = $targetUserId
     $contentDict = NewDictionary($content)
@@ -4819,6 +4834,8 @@ PLAYER_ON_VISIT_OTHER_SERVER(debug = true){
             CallTrigger(object = $obj1, event = "CROSS_SERVER_VISIT")
         }
     }
+    -- CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+    StartTimer(time = 1, object = $obj1, obj1 = $obj1, event = "SHOW_TITLE_BAR")
 }
 PLAYER_ON_VISIT {--same server
     If(not $target){
@@ -4837,6 +4854,7 @@ PLAYER_ON_VISIT {--same server
         $obj1.teleMap = nil
         $obj1.telePos = nil
     }
+    StartTimer(time = 1, object = $obj1, obj1 = $obj1, event = "SHOW_TITLE_BAR")
 }
 GET_VISIT_TELE_POS {
     $house = $obj1.house
@@ -4884,7 +4902,7 @@ BUY_CREATE_PARTY_PRIVILEGE_RESULT {
         TryCreateParty(player = $obj1)
     }
 }
-CHECK_LEAVE_PARTY(debug = true){
+CHECK_LEAVE_PARTY(debug = false){
     If($obj1.inSelfParty == 1){--in my party
         CloseParty(player = $obj1)
         CallTrigger(obj1 = $obj1, event = "CLOSE_PARTY_SUCCESS")
@@ -4917,7 +4935,7 @@ CHECK_CLOSE_PARTY {
 REENTER_GAME(debug = false){
     ReenterGame(player = $obj1)
 }
-LEAVE_PARTY_SUCCESS(debug = true){
+LEAVE_PARTY_SUCCESS(debug = false){
     If($obj1.excludedPartyId == "0"){
         ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
     }
@@ -5005,7 +5023,7 @@ JOIN_PARTY_FAILED(debug = true){
         ReenterGame(player = $obj1)
     }
 }
-JOIN_PARTY_SUCCESS(debug = true){
+JOIN_PARTY_SUCCESS(debug = false){
     $obj1.inPartyOwnerId = $targetUserId
     $obj1.needCheckResetGameResult = true
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
@@ -5029,7 +5047,7 @@ UPDATE_CREATE_PARTY_VIEW_INFO {
     $reachPlayerNum = GetEntityCfg(fullName = $curHouseCfg, key = "reachGoodPartyPlayerNumber")
     $lowerRate = GetEntityCfg(fullName = $curHouseCfg, key = "goodPartyPlayerNumberLowerRate")
 }
-CLOSE_PARTY_SUCCESS(debug = true){
+CLOSE_PARTY_SUCCESS(debug = false){
     $name = GetEntityName(entity = $obj1)
     $obj1.inPartyId = "0"
     $obj1.inPartyOwnerId = 0
@@ -5293,4 +5311,25 @@ NEXT_GUIDE_STEP
 {
     $obj1.curStep = $obj1.curStep + 1
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.curStep))
+}
+
+EDIT_BLACKBOARD_BUTTON_SURE
+{
+    $npc = GetObject(objID = $objID)
+    If(not $npc)
+    {
+        Return()
+    }
+
+    $textLength = GetConfigVar(obj = $npc, key = "textLength") or 50
+    
+    $name = FilterWord(msg = $name, len = $textLength)
+    If(not $name)
+    {
+        Return()
+    }
+
+    $npc.blackboardStr = $name
+
+    CallTrigger(event = "UPDATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY", object = $obj1, npc = $npc)
 }
