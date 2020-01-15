@@ -48,7 +48,7 @@ EXECUTION_EDIT_ACTION{
     }ElseIf($action == "rightRotation"){
         $event = "DEC_INTERACTION_RIGHT_ROTATION"
     }
-    CallTrigger(object = $obj1, event = $event, objID = GetObjectID(object = $obj1), params = $params)
+    CallTrigger(object = $obj1, event = $event, objID = GetObjectID(object = $obj1), obj2 = $obj2, params = $params)
 }
 
 STOP_EDIT_ENTITY{
@@ -88,6 +88,7 @@ DEC_INTERACTION_MOVE_TOUCH_BEGIN{
         actionName = "jump",
         actionTime = -1
     )
+    $obj2.isMoveDec = true
 }
 
 DEC_INTERACTION_MOVE_TOUCH_END{
@@ -98,6 +99,7 @@ DEC_INTERACTION_MOVE_TOUCH_END{
     SetEntityRoll(entity = $obj1, rotationRoll = DictionaryGet(dict = $dict, key = "entityRoll") or GetEntityPosition(entity = $obj1))
     $obj1.lastSideNormal = DictionaryGet(dict = $dict, key = "lastSideNormal") or Table(x = 0,y = 0,z = 0)
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, time = 2, yaw = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), event = "ROTATION_BODY_YAW")
+    $obj2.isMoveDec = nil
 }
 
 DEC_INTERACTION_SALE{
@@ -512,6 +514,12 @@ OPEN_BGM_LIST{
 ----------黑板
 SHOW_EDIT_BLACKBOARD_INPUT_DIALOG
 {
+    $house = $obj1.house
+    $owner = $house.owner
+    If(GetObjectID(object = $owner) ~= GetObjectID(object = $obj2)){
+        Return()
+    }
+
     $objID = GetObjectID(object = $obj1)
     $title = {
         name = "ui_edit_title_name"

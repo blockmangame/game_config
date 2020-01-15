@@ -1,6 +1,8 @@
 {
+    "disableShadow": true,
+    "name": "",
     "skin": {
-        "body": "2"
+        "body": "3"
     },
     "boundingVolume": {
         "type": "Composite",
@@ -16,26 +18,21 @@
         ]
     },
     "actorName": "g2020_fru_blackboard.actor",
-    "base": "fur_base",
-    "typeOf3DUI": "blackBoard",
     "position": {
         "x": 0,
-        "y": 1.2,
+        "y": 1.5,
         "z": -0.06
     },
-    "height": 2.8,
-    "width": 3.3,
-    "textLength": 52,
+    "height": 3.6,
+    "width": 6,
+    "textLength": 215,
     "interactionUI": {
         "cfgKey": "interactionUI",
         "centerBtns": [
             {
                 "text": "",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "checkCanShow": {
-                    "funcName": "checkOwnership"
-                },
-                "event": "SHOW_EDIT_BLACKBOARD_INPUT_DIALOG"
+                "event": "SHOW_PUBLIC_BLACK_BOARD_EDIT_UI"
             }
         ],
         "followParams": {
