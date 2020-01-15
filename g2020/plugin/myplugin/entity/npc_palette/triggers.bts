@@ -1,4 +1,11 @@
 TUYA_HUABAN()
 {
     OperationWindows(player = $obj2, isOpen = true, win = "palette")
+    If(not $obj2.openedPalette)
+    {
+        $obj2.openedPalette = true
+        $obj2.curStep = 2
+        SetGuideStep(player = $obj2, step = Concat(p1 = "step", p2 = $obj2.curStep))
+        UpdateUIData(player = $obj2, ui = "win_palette", data = Table(func = "enlargeDrawingBoard"))
+    }
 }
