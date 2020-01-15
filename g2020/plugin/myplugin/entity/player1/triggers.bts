@@ -5150,10 +5150,10 @@ START_PLAY_BGM  {
     }
     $cfg = NewDictionary($cfg)
     If(DictionaryGet(dict = $cfg, key = "needPrivilege") == "TRUE"
-        and not ArrayFind(array = $obj1.privilege, value = "music_privilege"))
+        and not ArrayFind(array = $obj1.privilege, value = "myplugin/music_privilege"))
     {
         -- 没有特权，调用弹窗购买
-        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 3)
+        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 4)
         Return()
     }
     If($obj1.house ~= GetEntityMap(entity = $obj1).owner) {
