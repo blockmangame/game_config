@@ -17,6 +17,14 @@
     },
     "actorName": "g2020_fru_blackboard.actor",
     "base": "fur_base",
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
     "typeOf3DUI": "blackBoard",
     "position": {
         "x": 0,
@@ -24,18 +32,23 @@
         "z": -0.06
     },
     "height": 2.8,
-    "width": 3.3,
     "textLength": 52,
+    "title": "number_board_title",
+    "width": 3.3,
     "interactionUI": {
         "cfgKey": "interactionUI",
         "centerBtns": [
             {
-                "text": "",
-                "image": "plugin/myplugin/image/hand_click.png",
+                "text": "blackboard.text",
+                "image": "plugin/myplugin/image/fru_intUI/hand_click.png",
                 "checkCanShow": {
                     "funcName": "checkOwnership"
                 },
-                "event": "SHOW_EDIT_BLACKBOARD_INPUT_DIALOG"
+                "event": "SHOW_EDIT_BLACKBOARD_INPUT_DIALOG",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                }
             }
         ],
         "followParams": {
@@ -45,14 +58,6 @@
                 "y": 1,
                 "z": 0
             }
-        }
-    },
-    "interaction": {
-        "radius": 5,
-        "offset": {
-            "x": 0,
-            "y": 0,
-            "z": 0
         }
     }
 }
