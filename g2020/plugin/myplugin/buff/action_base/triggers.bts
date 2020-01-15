@@ -4,4 +4,5 @@ ENTITY_BUFF_REMOVE {
     }
     $entity.interactionObjId = nil
     $entity.interactionBuff = nil
+    PlayAction(entity = $entity, actionName = "idle",  actionTime = 0, player = $entity)
 }
