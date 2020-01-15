@@ -830,3 +830,64 @@ FUNC_NAVIGATION_GET_DOORWAY_LIST --params: mapS(玩家当前所在地图名), ma
         }
     }
 }
+
+SHOW_PUBLIC_BLACK_BOARD_EDIT_UI
+{
+    $objID = GetObjectID(object = $obj1)
+    $title = {
+        name = "ui_edit_title_name"
+    }
+
+    $inputTitle = {
+        name = "ui_edit_input_name"
+    }
+
+    $buttons = [
+        {
+            event = "cancel",
+            normalImage = "set:tip_dialog.json image:btn_big_blue",
+            pushedImage = "set:tip_dialog.json image:btn_big_blue",
+            name = "ui_cancel"
+        },
+        {
+            event = "EDIT_PUBLIC_BLACKBOARD_BUTTON_SURE",
+            normalImage = "set:tip_dialog.json image:btn_big_green",
+            pushedImage = "set:tip_dialog.json image:btn_big_green",
+            name = "ui_sure"
+        }
+    ]
+
+    $options = {
+        objID = $objID
+    }
+
+    $text = $obj1.blackBoardStr or ""
+    $textLength = GetConfigVar(obj = $obj1, key = "textLength") or 50
+ 
+    $contents = {
+        title = $title,
+        inputTitle = $inputTitle,
+        buttons = $buttons,
+        text = $text,
+        textLength = $textLength,
+    }
+
+    ShowInputDialog(entity = $obj2, contents = $contents, options = $options)
+}
+
+EDIT_PUBLIC_BLACKBOARD_BUTTON_SURE
+{
+    $npc = GetObject(objID = $objID)
+
+    $textLength = GetConfigVar(obj = $npc, key = "textLength") or 50
+    
+    $name = FilterWord(msg = $name, len = $textLength)
+    If(not $name)
+    {
+        Return()
+    }
+
+    $npc.blackboardStr = $name
+
+    CallTrigger(event = "UPDATE_SINGLE_BLACK_BOARD_ENTITY", object = $obj1, npc = $npc)
+}

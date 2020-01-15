@@ -773,7 +773,7 @@ UPDATE_PLAYER_3DUI_ENTITY{
             }
             Else
             {
-                CallTrigger(event = "UPDATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY", object = $obj1, npc = $npc)
+                CallTrigger(event = "UPDATE_SINGLE_BLACK_BOARD_ENTITY", object = $obj1, npc = $npc)
             } 
         }
     }
@@ -4566,7 +4566,7 @@ UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY
     }
 }
 
-UPDATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY
+UPDATE_SINGLE_BLACK_BOARD_ENTITY
 {
     $width = 0
     $height = 0
@@ -4672,6 +4672,11 @@ UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY
 
         ShowEntity3DUI(player = $obj1, show = $show, data = $data)
     }
+}
+
+UPDATE_PUBLIC_ALL_BLACK_BOARD_ENTITY
+{
+
 }
 
 --↓↓↓↓↓↓ party
@@ -5331,5 +5336,5 @@ EDIT_BLACKBOARD_BUTTON_SURE
 
     $npc.blackboardStr = $name
 
-    CallTrigger(event = "UPDATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY", object = $obj1, npc = $npc)
+    CallTrigger(event = "UPDATE_SINGLE_BLACK_BOARD_ENTITY", object = $obj1, npc = $npc)
 }
