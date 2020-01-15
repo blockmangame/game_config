@@ -1,0 +1,13 @@
+ENTITY_ENTER
+{
+    $map = GetEntityMap(entity = $obj1)
+    If(not GetMapVar(map = $map, key = "entityWith3dUI"))
+    {
+        SetMapVar(map = $map, key = "entityWith3dUI", value = NewDictionary())
+    }
+   
+    $entityWith3dUI = GetMapVar(map = $map, key = "entityWith3dUI")
+    $objID = GetObjectID(object = $obj1)
+    DictionarySet(dict = $entityWith3dUI, key = $objID, value = $obj1)
+    SetMapVar(map = $map, key = "entityWith3dUI", value = $entityWith3dUI)
+}
