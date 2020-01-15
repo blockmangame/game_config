@@ -512,6 +512,12 @@ OPEN_BGM_LIST{
 ----------黑板
 SHOW_EDIT_BLACKBOARD_INPUT_DIALOG
 {
+    $house = $obj1.house
+    $owner = $house.owner
+    If(GetObjectID(object = $owner) ~= GetObjectID(object = $obj2)){
+        Return()
+    }
+
     $objID = GetObjectID(object = $obj1)
     $title = {
         name = "ui_edit_title_name"
