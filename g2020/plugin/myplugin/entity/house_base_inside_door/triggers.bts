@@ -27,7 +27,7 @@ INTER_WITH_DOOR{
         CallTrigger(object = $obj2, event = "CHECK_LEAVE_PARTY_FROM_DOOR")
         Return()
     }
-    If(not IsPlayer(entity = $obj2)) {
+    If(not IsPlayer(entity = $obj2) or $obj2.isMoveDec) {
         Return()
     }
 
