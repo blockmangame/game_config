@@ -5288,3 +5288,9 @@ FUNC_TRANSMIT_CARRIER --carrier, toMap, toPos, toRy, useEnterMap
         }
     }
 }
+
+NEXT_GUIDE_STEP
+{
+    $obj1.curStep = $obj1.curStep + 1
+    SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.curStep))
+}
