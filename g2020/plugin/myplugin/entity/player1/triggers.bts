@@ -766,7 +766,15 @@ UPDATE_PLAYER_3DUI_ENTITY{
 
         If($add)
         {
-            CallTrigger(event = "UPDATE_PLAYER_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
+            CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
+            If($updateAll)
+            {
+                CallTrigger(event = "UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = true)
+            }
+            Else
+            {
+                CallTrigger(event = "UPDATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY", object = $obj1, npc = $npc)
+            } 
         }
     }
 }
@@ -4416,7 +4424,7 @@ CASH_BOX_BUTTON_SURE
 
 SHOW_EDIT_INPUT_DIALOG
 {
-     $title = {
+    $title = {
         name = "ui_edit_title_name"
     }
 
@@ -4556,7 +4564,8 @@ ENTER_MAP
     CallTrigger( object = $obj1, event = "FUNC_STATE_RELEASE", state = $map.cfg.releaseState)
     CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj1, gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict"))
     CallTrigger(event = "ENTER_HOUSE_MAP", object = $obj1)
-    CallTrigger(event = "UPDATE_PLAYER_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
+    CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
+    CallTrigger(event = "UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = true)
 }
 
 LEAVE_MAP
@@ -4574,10 +4583,11 @@ LEAVE_MAP
         WorksWallsOperation(player = $obj1, isOpen = false)
     }
     CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $map.cfg.releaseState)
-    CallTrigger(event = "UPDATE_PLAYER_NUMBER_BOARD_ENTITY", object = $obj1, show = false)
+    CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = false)
+    CallTrigger(event = "UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = false)
 }
 
-UPDATE_PLAYER_NUMBER_BOARD_ENTITY
+UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY
 {
     $map = GetEntityMap(entity = $obj1)
     $house = GetMapVar(map = $map, key = "owner")
@@ -4656,6 +4666,114 @@ UPDATE_PLAYER_NUMBER_BOARD_ENTITY
                 ShowEntity3DUI(player = $player, show = true, data = $data)
             }
         }
+    }
+}
+
+UPDATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY
+{
+    $width = 0
+    $height = 0
+    $text = ""
+    $position = {
+        x = 0,
+        y = 0,
+        z = 0,
+    }
+
+    $rotate = {
+        x = 0,
+        y = 0,
+        z = 0,
+    }
+
+    $objID = 0
+    If($npc)
+    {
+        $position = GetConfigVar(obj = $npc, key = "position") or $position
+        $width = GetConfigVar(obj = $npc, key = "width") or $width
+        $height = GetConfigVar(obj = $npc, key = "height") or $height
+        $text = $npc.blackboardStr or $text
+        $objID = GetObjectID(object = $npc)
+    }
+    
+    $data = {
+        key = ToString($objID),
+        name = "blackBoard",
+        width = $width,
+        height = $height,
+        position = $position,
+        rotate = $rotate,
+        objID = $objID,
+        args = {
+            text = $text
+        }
+    }
+
+    $players = GetMapPlayer(map = $map)
+    Foreach(array = $players, key = "player")
+    {
+        ShowEntity3DUI(player = $player, show = true, data = $data)
+    }
+}
+
+UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY
+{
+    $map = GetEntityMap(entity = $obj1)
+    $house = GetMapVar(map = $map, key = "owner")
+    If(not $house)
+    {
+        Return()
+    }
+
+    $owner = $house.owner
+    If(not $owner)
+    {
+        Return()
+    }
+
+    $entityOf3DUI = $owner.entityOf3DUI
+    $entityOf3DUIDict = NewDictionary($entityOf3DUI)
+    $blackBoardEntitys = DictionaryGet(dict = $entityOf3DUIDict, key = "blackBoard") or {}
+    Foreach(array = $blackBoardEntitys, key = "objID")
+    {
+        $width = 0
+        $height = 0
+        $text = ""
+        $position = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $rotate = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $npc = GetObject(objID = $objID)
+        If($npc)
+        {
+            $position = GetConfigVar(obj = $npc, key = "position") or $position
+            $width = GetConfigVar(obj = $npc, key = "width") or $width
+            $height = GetConfigVar(obj = $npc, key = "height") or $height
+            $text = $npc.blackboardStr or $text
+        }
+
+        $data = {
+            key = ToString($objID),
+            name = "blackBoard",
+            width = $width,
+            height = $height,
+            position = $position,
+            rotate = $rotate,
+            objID = $objID,
+            args = {
+                text = $text
+            }
+        }
+
+        ShowEntity3DUI(player = $obj1, show = $show, data = $data)
     }
 }
 
@@ -5287,4 +5405,25 @@ FUNC_TRANSMIT_CARRIER --carrier, toMap, toPos, toRy, useEnterMap
             RideOn(entity = $passage, target = $carrier, targetIndex = ToInteger($index))
         }
     }
+}
+
+EDIT_BLACKBOARD_BUTTON_SURE
+{
+    $npc = GetObject(objID = $objID)
+    If(not $npc)
+    {
+        Return()
+    }
+
+    $textLength = GetConfigVar(obj = $npc, key = "textLength") or 50
+    
+    $name = FilterWord(msg = $name, len = $textLength)
+    If(not $name)
+    {
+        Return()
+    }
+
+    $npc.blackboardStr = $name
+
+    CallTrigger(event = "UPDATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY", object = $obj1, npc = $npc)
 }

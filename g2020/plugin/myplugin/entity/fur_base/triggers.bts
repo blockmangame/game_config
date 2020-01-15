@@ -508,3 +508,47 @@ OPEN_BGM_LIST{
         ShowTip(entity = $obj2, tipType = 2, textKey = "bgm_sound_just_owner_can_use")
     }
 }
+
+----------黑板
+SHOW_EDIT_BLACKBOARD_INPUT_DIALOG
+{
+    $objID = GetObjectID(object = $obj1)
+    $title = {
+        name = "ui_edit_title_name"
+    }
+
+    $inputTitle = {
+        name = "ui_edit_input_name"
+    }
+
+    $buttons = [
+        {
+            event = "cancel",
+            normalImage = "set:tip_dialog.json image:btn_big_blue",
+            pushedImage = "set:tip_dialog.json image:btn_big_blue",
+            name = "ui_cancel"
+        },
+        {
+            event = "EDIT_BLACKBOARD_BUTTON_SURE",
+            normalImage = "set:tip_dialog.json image:btn_big_green",
+            pushedImage = "set:tip_dialog.json image:btn_big_green",
+            name = "ui_sure"
+        }
+    ]
+
+    $options = {
+        objID = $objID
+    }
+
+    $textLength = GetConfigVar(obj = $obj1, key = "textLength") or 50
+
+    $contents = {
+        title = $title,
+        inputTitle = $inputTitle,
+        buttons = $buttons,
+        text = $obj1.blackboardStr,
+        textLength = $textLength,
+    }
+
+    ShowInputDialog(entity = $obj2, contents = $contents, options = $options)
+}
