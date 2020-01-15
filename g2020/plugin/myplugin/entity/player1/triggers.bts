@@ -3702,8 +3702,9 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
     }ElseIf($imgcount >=30){
         $btnImg = "set:indentImg.json image:BtnRed.png"
     }
-    If($obj1.worktaskCount == @CircleNum or $imgcount == 0){
+    If($obj1.worktaskCount == @CircleNum or $imgcount == 0 or $obj1.isinintTask){
         $resetImg = true
+        $obj1.isinintTask = nil
     }
     $taskData = Table(
         Progress =  $rate,
@@ -3888,6 +3889,7 @@ INIT_WORK_TASK(){ --初始打工
         $obj1.failedMsg = DictionaryGet(dict = $taskDict, key = "failedMsg")
     }
     StartTimer(rep = false, time = 20, object = $obj1, event = "TASK_UPDATE_DATA")
+    $obj1.isinintTask = true
 }
 DO_SUBMIT_ORDER(){ --对话
     $obj1.nowSubmitTask = true
