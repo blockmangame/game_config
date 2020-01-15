@@ -4937,6 +4937,8 @@ PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
             CallTrigger(object = $obj1, event = "CROSS_SERVER_VISIT")
         }
     }
+    -- CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+    StartTimer(time = 1, object = $obj1, obj1 = $obj1, event = "SHOW_TITLE_BAR")
 }
 PLAYER_ON_VISIT {--same server
     If(not $target){
@@ -4955,6 +4957,7 @@ PLAYER_ON_VISIT {--same server
         $obj1.teleMap = nil
         $obj1.telePos = nil
     }
+    StartTimer(time = 1, object = $obj1, obj1 = $obj1, event = "SHOW_TITLE_BAR")
 }
 GET_VISIT_TELE_POS {
     $house = $obj1.house
