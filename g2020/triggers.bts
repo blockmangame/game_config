@@ -861,7 +861,7 @@ SHOW_PUBLIC_BLACK_BOARD_EDIT_UI
         objID = $objID
     }
 
-    $text = $obj1.blackBoardStr or ""
+    $text = $obj1.blackboardStr or ""
     $textLength = GetConfigVar(obj = $obj1, key = "textLength") or 50
  
     $contents = {
