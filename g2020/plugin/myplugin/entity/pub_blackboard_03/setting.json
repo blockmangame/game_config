@@ -24,5 +24,34 @@
     },
     "height": 3.6,
     "width": 6,
-    "textLength": 215
+    "textLength": 215,
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "",
+                "image": "plugin/myplugin/image/hand_click.png",
+                "checkCanShow":{
+                    "funcName":"checkOwnership"
+                },
+                "event": "SHOW_PUBLIC_BLACK_BOARD_EDIT_UI"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        }
+    },
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    }
 }
