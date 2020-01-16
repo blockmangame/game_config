@@ -1,17 +1,17 @@
 {
-    "type":"Base",
+    "type": "Base",
     "base": "skill_state_base",
-    "icon":"set:state_detail.json image:ill",
-   
-
+    "icon": "set:state_detail.json image:ill",
     "state": "ill",
     "generateType": "A",
-    "generateTime":[6, 16, 26, 36, 46, 56],
+    "generateTime": [
+        10,
+        30,
+        50
+    ],
     "autoVanishT": 300,
-    
     "affectDis": 5,
     "affectTimeSpanSec": 5,
-
     "hadReward": true,
     "rewardSelf": 8,
     "rewardOther": 12,
@@ -19,7 +19,6 @@
     "rewardDis": 5,
     "rewardCount": 3,
     "rewardType": "green_currency",
-
     "effect": "myplugin/buff_state_ill_effect",
     "duration": 20,
     "tipContents": {

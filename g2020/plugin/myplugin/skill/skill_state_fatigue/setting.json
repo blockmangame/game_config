@@ -1,22 +1,22 @@
 {
     "type": "base",
     "base": "skill_state_base",
-    "icon":"set:state_detail.json image:fatigue",
-  
-    
+    "icon": "set:state_detail.json image:fatigue",
     "state": "fatigue",
     "generateType": "A",
     "hadReward": true,
-
-    "generateTime":[4, 14, 24, 34, 44, 54],
-    "rewardSelf": 20000,
-    "rewardOther": 1000,
-    "rewardFamily": 1000,
+    "generateTime": [
+        6,
+        21,
+        36,
+        51
+    ],
+    "rewardSelf": 6,
+    "rewardOther": 9,
+    "rewardFamily": 12,
     "rewardDis": 5,
-    "duration": 30,
+    "duration": 20,
     "rewardCount": 3,
-
-    
     "tipContents": {
         "text": {
             "textKey": "state_fatigue_contents",

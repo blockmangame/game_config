@@ -2,25 +2,37 @@
     "type": "base",
     "base": "skill_state_base",
     "pos": "top",
-    
-   
     "generateType": "B",
     "hadReward": true,
-
-    "generateTime":[5,15,25,35,45,55],
+    "generateTime": [
+        0.2,
+        6,
+        12,
+        18,
+        24,
+        30,
+        36,
+        42,
+        48,
+        54
+    ],
     "subdivided": [
         "dances",
         "camp",
         "playground",
         "pool",
         "school",
-        "playground"
+        "dances",
+        "camp",
+        "playground",
+        "pool",
+        "school"
     ],
     "rewardSelf": 8,
     "rewardOther": 12,
     "rewardFamily": 16,
     "rewardDis": 5,
-    "duration": 20,
+    "duration": 60,
     "rewardCount": 3,
     "rewardType": "green_currency"
 }
