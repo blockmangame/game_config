@@ -48,24 +48,16 @@ INTER_WITH_DOOR{
         op = "add"
     )
 
-    $carrier = GetRideOn(entity = $obj2)
-    If($carrier)
+    CallTrigger(
+        event = "FUNC_TRANSMIT_CARRIER",
+        object = $obj2, toPos = $pos, toRy = $ry,
+        toMap = $map
+    )
+    If($obj2.transmitCancel)
     {
-        CallTrigger(
-            event = "FUNC_TRANSMIT_CARRIER",
-            object = $obj2, toPos = $pos, toRy = $ry, carrier = $carrier,
-            toMap = $map
-        )
-        If($obj2.transmitCancel)
-        {
-            Return()
-        }
+        Return()
     }
-    Else
-    {
-        SetEntityPosition(entity = $obj2, map = $map, ry = $ry, pos = $pos)
-        StartTimer(time = 1, object = $obj1, obj2 = $obj2, ry = $ry, event = "CHANGE_ENTITY_FACE")
-    }
+    StartTimer(time = 1, object = $obj1, obj2 = $obj2, ry = $ry, event = "CHANGE_ENTITY_FACE")
 
     If(GetObjectID(object = GetObjectVar(obj = $obj2, key = "house")) == GetObjectID(object = GetObjectVar(obj = $obj1, key = "house"))){
         CallTrigger(object = $obj2, event = "SAVE_FURNITURE")
