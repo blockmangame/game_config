@@ -64,6 +64,7 @@ INTER_WITH_DOOR{
     Else
     {
         SetEntityPosition(entity = $obj2, map = $map, ry = $ry, pos = $pos)
+        StartTimer(time = 1, object = $obj1, obj2 = $obj2, ry = $ry, event = "CHANGE_ENTITY_FACE")
     }
 
     If(GetObjectID(object = GetObjectVar(obj = $obj2, key = "house")) == GetObjectID(object = GetObjectVar(obj = $obj1, key = "house"))){
@@ -79,6 +80,10 @@ INTER_WITH_DOOR{
         CallTrigger(object = $obj2, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = true)
     }
     CallTrigger(object = $obj2, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
+}
+
+CHANGE_ENTITY_FACE{
+    SetBodyYaw(entity = $obj2, yaw = $ry)
 }
 
 ENTITY_DIE{
