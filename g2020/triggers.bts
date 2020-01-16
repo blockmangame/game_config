@@ -183,7 +183,7 @@ SHOW_SELECT_ROLE
 
 CHANGE_PLAYER_SCALE_ADULT
 {
-    If(not $obj1.checkSignIn){
+    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn){
         CheckSignInShow(player = $obj1)
         $obj1.checkSignIn = true
     }
@@ -217,7 +217,7 @@ CHANGE_PLAYER_SCALE_ADULT
 
 CHANGE_PLAYER_SCALE_CHILD
 {
-    If(not $obj1.checkSignIn){
+    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn){
         CheckSignInShow(player = $obj1)
         $obj1.checkSignIn = true
     }
