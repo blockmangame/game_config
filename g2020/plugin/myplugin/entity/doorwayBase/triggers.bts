@@ -4,26 +4,16 @@ ENTITY_TOUCH_ALL
     $toPos = GetConfigVar(obj = $obj1, key = "toPos")
     $toRy = GetConfigVar(obj = $obj1, key = "toRy")
 
-    $carrier = GetRideOn(entity = $obj2)
-    If($carrier)
+    CallTrigger(
+        event = "FUNC_TRANSMIT_CARRIER",
+        object = $obj2,
+        toMap = $toMap,
+        toPos = $toPos,
+        toRy = $toRy,
+    )
+    If($obj2.transmitCancel)
     {
-        CallTrigger(
-            event = "FUNC_TRANSMIT_CARRIER",
-            object = $obj2,
-            toMap = $toMap,
-            toPos = $toPos,
-            toRy = $toRy,
-            carrier = $carrier,
-            useEnterMap = true
-        )
-        If($obj2.transmitCancel)
-        {
-            Return()
-        }
-    }
-    Else
-    {
-        EnterMap(entity = $obj2, map = $toMap, pos = $toPos, ry = $toRy)
+        Return()
     }
 
     CallTrigger(object = $obj2, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
