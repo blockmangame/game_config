@@ -1,6 +1,7 @@
 {
     "canClick": true,
     "carMove": true,
+    "stepHeight": 1.1,
     "carConfig": {
         "traction": 12000,
         "reverseTraction": 3000,
@@ -21,27 +22,28 @@
         {
             "yaw": 0,
             "pos": {
-                "y": -0.1,
-                "z": -0.7,
-                "x": 0.6
+                "y": 0,
+                "z": 0,
+                "x": 0
             },
             "out": {
-                "y": 2,
+                "y": 0,
                 "z": 0,
-                "x": 0.5
+                "x": 0
             },
             "ctrl": true,
             "view": true,
             "passengerAction": {
                 "base": "riding"
-            }
+            },
+            "attachPoint": "ride1"
         },
         {
             "yaw": 0,
             "pos": {
-                "y": -0.1,
-                "z": -0.7,
-                "x": 0.6
+                "y": 0,
+                "z": 0,
+                "x": 0
             },
             "out": {
                 "y": 2,
@@ -52,43 +54,44 @@
             "view": false,
             "passengerAction": {
                 "base": "riding"
-            }
+            },
+            "attachPoint": "ride2"
+        }
+    ],
+    "attachPoints": [
+        {
+            "name": "ride1",
+            "bone": "s_guadian012",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": 0.5,
+            "propagateScaling": true,
+            "matchActorOrientation": true
         },
         {
-            "yaw": 0,
-            "pos": {
-                "y": -0.1,
-                "z": -0.7,
-                "x": 0.6
+            "name": "ride2",
+            "bone": "s_guadian013",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
             },
-            "out": {
-                "y": 2,
-                "z": 0,
-                "x": 0.5
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
             },
-            "ctrl": false,
-            "view": false,
-            "passengerAction": {
-                "base": "riding"
-            }
-        },
-        {
-            "yaw": 0,
-            "pos": {
-                "y": -0.1,
-                "z": -0.7,
-                "x": 0.6
-            },
-            "out": {
-                "y": 2,
-                "z": 0,
-                "x": 0.5
-            },
-            "ctrl": false,
-            "view": false,
-            "passengerAction": {
-                "base": "riding"
-            }
+            "scale": 0.5,
+            "propagateScaling": true,
+            "matchActorOrientation": true
         }
     ],
     "boundingVolume": {
@@ -127,7 +130,7 @@
         },
         "centerBtns": [
             {
-                "text": "item_testlang",
+                "text": "interaction_drive",
                 "image": "plugin/myplugin/image/hand_click.png",
                 "event": "RIDE_ON",
                 "imageSize": {
