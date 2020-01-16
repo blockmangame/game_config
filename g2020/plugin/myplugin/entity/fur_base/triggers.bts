@@ -54,7 +54,11 @@ EXECUTION_EDIT_ACTION{
 STOP_EDIT_ENTITY{
     CallTrigger(object = $obj1, event = "REMOVE_EDIT_BUFF")
     SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
-    CallTrigger(object = $obj2, event = "EDIT_HOUSE")
+    If(not GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/can_edit_house_buff")) -- 编辑房子的cd
+    {
+        CallTrigger(object = $obj2, event = "EDIT_HOUSE")
+        AddEntityBuff(entity = $obj2, cfg = "myplugin/can_edit_house_buff", buffTime = 5)
+    }
 }
 
 ENTITY_CLICK{
