@@ -1,38 +1,37 @@
 {
-		"climbSpeed":0.05,
-		"maxSpeed":0.05,
-		"blockObjectOnCollision":false,
-		"breakTime":20,
-		"collisionBoxes":{
-			
-		},
-		"lightOpacity":0,
-		"isOpaqueFullCube":false,
-		"quads":[
-			{
-				"pos":[
-					{
-						"x":0,
-						"z":0.9,
-						"y":1
-					},
-					{
-						"x":0,
-						"z":0.9,
-						"y":0
-					},
-					{
-						"x":1,
-						"z":0.9,
-						"y":0
-					},
-					{
-						"x":1,
-						"z":0.9,
-						"y":1
-					}
-				],
-				"texture":"ladder.png"
-			}
-		]
-	}
+    "collisionBoxes": [],
+    "lightOpacity": 0,
+    "maxSpeed": 0.05,
+    "breakTime": 20,
+    "renderPass": null,
+    "blockObjectOnCollision": false,
+    "quads": [
+        {
+            "texture": "ladder.png",
+            "pos": [
+                {
+                    "z": 0.99,
+                    "y": 1,
+                    "x": 1
+                },
+                {
+                    "z": 0.99,
+                    "y": 0,
+                    "x": 1
+                },
+                {
+                    "z": 0.99,
+                    "y": 0,
+                    "x": 0
+                },
+                {
+                    "z": 0.99,
+                    "y": 1,
+                    "x": 0
+                }
+            ]
+        }
+    ],
+    "climbSpeed": 0.05,
+    "isOpaqueFullCube": false
+}
