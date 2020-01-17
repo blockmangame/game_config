@@ -19,6 +19,7 @@ GAME_INIT
     CallTrigger(event = "INIT_WORK_TASK_DATA")
     CallTrigger(event = "FUNC_NAVIGATION_GET_MAPS_ALL_PATH")
     CallTrigger(event = "FUNC_LOAD_WORKS_WALL_TOP")
+    @Map001 = GetStaticMap(name = "map001", create = true)--load map001
 }
 
 INIT_WORK_TASK_DATA(){    --打工配置表的读取

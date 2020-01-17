@@ -106,15 +106,36 @@ CREATE_OWNER_HOUSE{
         }
     }
     $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
+    ------------------------------------------ 有租地特权把房子移到public区域
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/home_privilege")){
+        $regions = GetAllRegion(map = @Map001)
+        Foreach(array = $regions or {}, key = "publicRegion"){
+            If(not GetRegionOwner(region = $publicRegion) and GetRegionConfig(region = $publicRegion, key = "isHouseRegion")){
+                CallTrigger(
+                    object = $obj1, 
+                    event = "CREATE_HOUSE_OUTSIDE",
+                    region = $publicRegion, 
+                    houseCfg = DictionaryGet(dict = $dict, key = "houseCfg"),
+                    houseColor = DictionaryGet(dict = $dict, key = "houseSelectColor"),
+                    houseMap = @Map001,
+                    housePos = GetRegionCenter(region = $publicRegion)
+                )
+                $isCreate = true
+                Break()
+            }
+        }
+    }
     ------------------------------------------ 获得当前地图上的空出的区域，创建房子 * 
     -- 区域 <region------owner(需要使用GetRegionOwner)> 房子 <house-------owner> 玩家，可通过区域获取区域上的房子，通过房子获得所属玩家。 反向同理
-    $regions = GetAllRegion(map = GetEntityMap(entity = $obj1))
-    Foreach(array = $regions, key = "region"){
-        If(not GetRegionOwner(region = $region) and GetRegionConfig(region = $region, key = "isHouseRegion")){
-            CallTrigger(object = $obj1, event = "CREATE_HOUSE_OUTSIDE", region = $region, 
-                houseCfg = DictionaryGet(dict = $dict, key = "houseCfg"),
-                houseColor = DictionaryGet(dict = $dict, key = "houseSelectColor"))
-            Break()
+    If(not $isCreate){
+        $regions = GetAllRegion(map = GetEntityMap(entity = $obj1))
+        Foreach(array = $regions, key = "region"){
+            If(not GetRegionOwner(region = $region) and GetRegionConfig(region = $region, key = "isHouseRegion")){
+                CallTrigger(object = $obj1, event = "CREATE_HOUSE_OUTSIDE", region = $region, 
+                    houseCfg = DictionaryGet(dict = $dict, key = "houseCfg"),
+                    houseColor = DictionaryGet(dict = $dict, key = "houseSelectColor"))
+                Break()
+            }
         }
     }
     ------------------------------------------ 玩家进入游戏就进入自己房间
@@ -123,6 +144,59 @@ CREATE_OWNER_HOUSE{
         KickOutPlayer(entity = $obj1) -- 踢出服务器多分配的玩家
     }
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+    $yaw = 0
+    If($obj1.curHouseCfg){
+        $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
+    }
+    SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
+	  pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
+    CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+}
+
+MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建房子
+    If(not ArrayFind(array = $obj1.privilege, value = "myplugin/home_privilege")){
+        Return()
+    }
+    $curMapName = GetEntityMapName(entity = $obj1)
+    $holdPos = true
+    ForLoop(from = 1, to = 15, key = "index"){
+        $tmp = Concat(p1 = "house", p2 = $index, p3 = "_map")
+        If($tmp == $curMapName){
+            $holdPos = false
+        }
+    }
+    $curSelectHouse = {}
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    $dict = {}
+    Foreach(array = $houseVars, key = "house"){
+        $dict = NewDictionary($house)
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            Break()
+        }
+    }
+    $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
+    $regions = GetAllRegion(map = @Map001)
+    Foreach(array = $regions or {}, key = "publicRegion"){
+        If(not GetRegionOwner(region = $publicRegion) and GetRegionConfig(region = $publicRegion, key = "isHouseRegion")){
+            $house = GetObjectVar(obj = $obj1, key = "house")
+            KillEntity(entity = $house)
+            CallTrigger(
+                object = $obj1, 
+                event = "CREATE_HOUSE_OUTSIDE",
+                region = $publicRegion, 
+                houseCfg = DictionaryGet(dict = $dict, key = "houseCfg"),
+                houseColor = DictionaryGet(dict = $dict, key = "houseSelectColor"),
+                houseMap = @Map001,
+                housePos = GetRegionCenter(region = $publicRegion)
+            )
+            Break()
+        }
+    }
+    If($holdPos){ --If player in home then move home to public with playerr Else player dont move 
+        Return()
+    }
+    $newHouse = GetObjectVar(obj = $obj1, key = "house")
+    $houseInsideMap = GetObjectVar(obj = $newHouse, key = "houseInsideMap")
     $yaw = 0
     If($obj1.curHouseCfg){
         $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
@@ -274,7 +348,9 @@ CREATE_HOUSE_OUTSIDE{
     $housePosOffset = GetEntityCfg(fullName = $houseCfg, key = "housePosOffset") or {x = 0, y = 0, z = 0}
     -- Test("$housePosOffset--------------",$region,GetRegionCenter(region = $region),$housePosOffset,$yaw,V3RotationYaw(vector = $housePosOffset, yaw = $yaw),
     --     ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)))
-    $house = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = $houseCfg)
+    $houseMap = $houseMap or GetEntityMap(entity = $obj1)
+    $housePos = $housePos or GetEntityPosition(entity = $obj1)
+    $house = CreateNpc(map = $houseMap, cfgName = $houseCfg, pos = $housePos)
     $regionCenter = GetRegionCenter(region = $region)
     $pos = {x = GetPosX(pos = $regionCenter), y = GetPosY(pos = GetRegionMin(region = $region)), z = GetPosZ(pos = $regionCenter)}
     $pos = ComputeV3(p1 = V3ToBlockPos(v3 = $pos), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw))
@@ -3814,9 +3890,6 @@ TASK_NPC_ADD_BUFF  --给任务npc还动作加buff, 订单NPC加buff动作
         $obj1.lastOrderTask = $npctaskKey
     }
 }
-T_BUFF(){
-    MarkEntityForPlayer(player = $obj1, entity = @TNPC, buffName = "myplugin/task_npc_buff", buffTime = 1200)
-}
 TASK_UPDATE_DATA(){ --更新打工数据
     CallTrigger(event = "TASK_NPC_ADD_BUFF", object = $obj1) --给对应npc加buff或者换动作
 	CallTrigger(event = "GET_TASK_GPS", object = $obj1) --得到GPS位置
@@ -4087,6 +4160,9 @@ ENTITY_BUY_APPSTOP {
         CallTrigger(obj1 = $obj1, event = "BUY_PRIVILEGE_SUCCEED", shopIndex = $itemIndex, privilegeName = $itemName)
         If($itemName == "myplugin/svip_privilege"){
             ShowToolBarButton(name = "svip", show = true, player = $obj1)
+        }
+        If($itemName == "myplugin/home_privilege"){ --购买租地特权，把房子移到公共区域
+            StartTimer(time = 1,object = $obj1, event = "MOVE_HOME_FROM_PROTECT_TO_PUBLIC")
         }
     }
 }
@@ -5308,7 +5384,8 @@ GET_SVIP_REWARD()
 {
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
     {
-        $money = GetConfigValue(type = "reward", fullName = "myplugin/privilege", key = "privilege") 
+        $money = GetConfigValue(type = "reward", fullName = "myplugin/privilege", key = "svipMoney")
+        Test("----------------", $money)
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
         ShowToolBarButton(name = "svip", show = false, player = $obj1)
     }
