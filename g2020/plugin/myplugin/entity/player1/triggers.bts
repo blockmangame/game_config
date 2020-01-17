@@ -5089,12 +5089,14 @@ CHECK_IN_PARTY(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
     If($inPartyOwnerId ~= 0){
+        --todo: check real in party
         $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
         If(not $partyOwner){
             ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.no.owner", time =  20)
             $obj1.dontAskShowPartyList = true
             LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
             $obj1.inPartyOwnerId = 0--just in case
+            CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
             ReenterGame(player = $obj1)
             Return()
         }
