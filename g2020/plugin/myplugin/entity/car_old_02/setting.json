@@ -2,7 +2,7 @@
     "canClick": true,
     "carMove": true,
     "carConfig": {
-        "traction": 4000,
+        "traction": 2000,
         "reverseTraction": 1000,
         "brakingForce": 8000,
         "mass": 1000,
@@ -11,7 +11,7 @@
         "minTurningRadius": 7,
         "maxCentripetalForce": 10000,
         "corneringStiffness": 0.05,
-        "maxCoefLateralFriction": 100,
+        "maxCoefLateralFriction": 5,
         "coefRestitution": 0.2,
         "minBounceSpeed": 5,
         "cameraDistance": 7
@@ -137,5 +137,6 @@
     "actorName": "g2020_oldcar02.actor",
     "base": "car_base",
     "hidePlayer": true,
-    "autoRotateColliderBox": true
+    "autoRotateColliderBox": true,
+    "name": ""
 }

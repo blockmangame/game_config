@@ -3,14 +3,14 @@
     "carMove": true,
     "stepHeight": 1.1,
     "carConfig": {
-        "traction": 12000,
+        "traction": 3000,
         "reverseTraction": 3000,
         "brakingForce": 10000,
         "mass": 800,
         "coefAirDrag": 2,
         "coefRollingFriction": 0.01,
-        "minTurningRadius": 5,
-        "maxCentripetalForce": 30000,
+        "minTurningRadius": 7,
+        "maxCentripetalForce": 20000,
         "corneringStiffness": 0.05,
         "maxCoefLateralFriction": 10,
         "coefRestitution": 0.3,
@@ -150,5 +150,6 @@
     },
     "actorName": "g2020_car02.actor",
     "base": "car_base",
-    "autoRotateColliderBox": true
+    "autoRotateColliderBox": true,
+    "name": ""
 }
