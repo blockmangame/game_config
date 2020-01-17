@@ -5321,6 +5321,7 @@ FUNC_TRANSMIT_CARRIER --param: toMap, toPos, toRy
     {
         If((not $obj1.onCar && not $obj1.useTrolley) || ($obj1.onCar && $toMap ~= "map001" && $toMap ~= "map002"))
         {
+            ShowTip(entity = $obj1, tipType = 2, textKey = "unable_to_transmit", time = 40)
             $obj1.transmitCancel = true
             Return()
         }
