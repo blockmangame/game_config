@@ -404,7 +404,7 @@ HOUSE_TAB_EVENT{
         $listInfoTb = {}
         Foreach(array = GetConfigVar(obj = $obj1, key = "houseStore") or {}, key = "houseFullName"){
             $coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, index = (GetEntityCfg(fullName = $houseFullName, key = "coinId") or 3) + 1)
-                        or "set:jail_break.json image:jail_break_currency"
+                        or "plugin/myplugin/image/coin.png"
             ArrayAppend(array = $listInfoTb, value = {
                 image = GetEntityCfg(fullName = $houseFullName, key = "defaultColorImage") or "",
                 text = GetEntityCfg(fullName = $houseFullName, key = "houseType") or "",
@@ -1040,7 +1040,7 @@ UPDATE_STORE_LIST{
                     actorScale = DictionaryGet(dict = $decorationDic, key = "showActorScale") or GetEntityCfg(fullName = $fullName, key = "showActorScale") or 0,
                     coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, 
                         index = (DictionaryGet(dict = $decorationDic, key = "coinId") or GetEntityCfg(fullName = $fullName, key = "coinId") or 3) + 1) 
-                        or "set:jail_break.json image:jail_break_currency",
+                        or "plugin/myplugin/image/coin.png",
                     cfg = $fullName,
                     showName = DictionaryGet(dict = $decorationDic, key = "showName"),
                     showDesc = DictionaryGet(dict = $decorationDic, key = "showDesc"),
@@ -1057,7 +1057,7 @@ UPDATE_STORE_LIST{
                     image = DictionaryGet(dict = $decorationDic, key = "image") or GetBlockConfigByName(block = $fullName, key = "image") or "",
                     coinImg = ArrayGet(array = @CURRENT_ID_IMAGE, 
                         index = (DictionaryGet(dict = $decorationDic, key = "coinId") or GetBlockConfigByName(block = $fullName, key = "coinId") or 3) + 1) 
-                        or "set:jail_break.json image:jail_break_currency",
+                        or "plugin/myplugin/image/coin.png",
                     event = "BUY_HOUSE_REGION_COLOR",
                     context = {
                         colorBlock = $fullName,
