@@ -1988,6 +1988,12 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
     
     $owner = GetMapVar(map = $curMapEntity, key = "owner")
     $house = GetObjectVar(obj = $obj1, key = "house")
+
+    If($type == "selfHouse")
+    {
+        $belongMap = GetEntityName(entity = GetEntityMap(entity = $house))
+    }
+
     If($owner)
     {
         If($type == "selfHouse" && $owner == $house)
@@ -5403,12 +5409,8 @@ FUNC_TRANSMIT_CARRIER --param: toMap, toPos, toRy
             Return()
         }
         $obj1.transmitCancel = false
-        SetEntityPosition(entity = $carrier, map = $toMap, ry = $toRy or 0, pos = $toPos)
     }
-    Else
-    {
-        SetEntityPosition(entity = $obj1, map = $toMap, ry = $toRy or 0, pos = $toPos)
-    }
+    SetEntityPosition(entity = $carrier or $obj1, map = $toMap, ry = $toRy or 0, pos = $toPos)
 }
 
 NEXT_GUIDE_STEP
