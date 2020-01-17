@@ -5085,34 +5085,76 @@ LEAVE_PARTY_SUCCESS(debug = false){
         ReenterGame(player = $obj1)
     }
 }
-CHECK_IN_PARTY(debug = false){
+REALLY_AT_PARTY(debug = false){
+    --in party now!
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
-    If($inPartyOwnerId ~= 0){
-        --todo: check real in party
-        $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
-        If(not $partyOwner){
-            ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.no.owner", time =  20)
-            $obj1.dontAskShowPartyList = true
-            LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
-            $obj1.inPartyOwnerId = 0--just in case
-            CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
-            ReenterGame(player = $obj1)
-            Return()
+    $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
+    UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
+    UpdateExtensionBtn(entity = $obj1, btnList = [{name = "party"}])
+    CallTrigger(object = $obj1, event = "OPEN_DANCE")
+    If($userId == $inPartyOwnerId){
+        $obj1.inSelfParty = 1
+        BroadcastPartyInvite(player = $obj1)
+    }
+    Else{
+        $obj1.inSelfParty = 0
+        CallTrigger(object = $obj1, event = "JOIN_PARTY_GIVE_OWNER_MONEY", targetUserId = $inPartyOwnerId)
+        CallTrigger(fromInParty = true, target = $partyOwner, event = "PLAYER_ON_VISIT", object = $obj1)
+    }
+}
+RESET_NOT_IN_PARTY(debug = false){
+    $obj1.inPartyOwnerId = 0
+    CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+    $obj1.role = @adult
+    CallTrigger(event = "SHOW_SELECT_ROLE", object = $obj1)
+}
+GET_TARGET_PARTY_INFO(debug = false){
+    $myId = GetPlayerUserID(player = $obj1)
+    $partyInfoDict = NewDictionary($partyInfo)
+    $ownerId = DictionaryGet(dict = $partyInfoDict, key = "userId")
+    If(not $ownerId){--target has no party
+        CallTrigger(object = $obj1, event = "RESET_NOT_IN_PARTY")
+    }
+    ElseIf($ownerId == $myId){
+        CallTrigger(object = $obj1, event = "REALLY_AT_PARTY")
+    }
+    Else{
+        $memberUserIds = DictionaryGet(dict = $partyInfoDict, key = "memberUserIds")
+        Foreach(array = $memberUserIds, key = "userId"){
+            If($myId == $userId){
+                $isMember = true
+                Break()
+            }
         }
-        --in party now!
-        UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
-        UpdateExtensionBtn(entity = $obj1, btnList = [{name = "party"}])
-        CallTrigger(object = $obj1, event = "OPEN_DANCE")
-        If($userId == $inPartyOwnerId){
-            $obj1.inSelfParty = 1
-            BroadcastPartyInvite(player = $obj1)
+        If(not $isMember){--target has closed this party
+            CallTrigger(object = $obj1, event = "RESET_NOT_IN_PARTY")
         }
         Else{
-            $obj1.inSelfParty = 0
-            CallTrigger(object = $obj1, event = "JOIN_PARTY_GIVE_OWNER_MONEY", targetUserId = $inPartyOwnerId)
-            CallTrigger(fromInParty = true, target = $partyOwner, event = "PLAYER_ON_VISIT", object = $obj1)
+            $inPartyOwnerId = $obj1.inPartyOwnerId
+            $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
+            If($partyOwner){
+                CallTrigger(object = $obj1, event = "REALLY_AT_PARTY")
+            }
+            Else{
+                ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.return.party", event = "ASK_RETURN_PARTY_RESULT", tipType = 2)
+            }
         }
+    }
+}
+ASK_RETURN_PARTY_RESULT(debug = false){
+    If($result == false){
+        CallTrigger(object = $obj1, event = "RESET_NOT_IN_PARTY")
+        Return()
+    }
+    $obj1.resetGameToJoinParty = true
+    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
+    CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+}
+CHECK_IN_PARTY(debug = false){
+    $inPartyOwnerId = $obj1.inPartyOwnerId
+    If($inPartyOwnerId ~= 0){
+        GetPartyInfoByUserId(player = $obj1, targetUserId = $inPartyOwnerId, callback = "GET_TARGET_PARTY_INFO")
     }
 }
 INTERACTION_BANISH(debug = false){
@@ -5150,7 +5192,7 @@ JOIN_PARTY_GIVE_OWNER_MONEY(debug = false){
         $obj1.joinUserPartyData = DictionaryToTable(dict = $joinUserPartyDataDict)
     }
 }
-JOIN_PARTY_FAILED(debug = true){
+JOIN_PARTY_FAILED(debug = false){
     If($obj1.needReenterGameWhenJoinPartyFailed){
         $obj1.needReenterGameWhenJoinPartyFailed = nil
         ReenterGame(player = $obj1)
@@ -5217,7 +5259,7 @@ PARTY_BE_LIKED{
     DictionarySet(dict = $curHousedict, key = "likeNum", value = $likeNum)
     ArraySet(array = $houseVars, index = $curHouseIndex, value = DictionaryToTable(dict = $curHousedict))
 }
-RESET_GAME_FAILED(debug = true){
+RESET_GAME_FAILED(debug = false){
     If($resultCode ~= 1){
         If($obj1.resetGameToJoinParty){
             ShowTip(entity = $obj1, tipType = 2, textKey = "tip.user.join.party.failed")
