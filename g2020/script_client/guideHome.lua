@@ -6,8 +6,8 @@ local mapDoor = {}
 local mapDoorTimer = {}
 local homeDoor = nil
 local lastShowTimer = nil
-local uicfg = setting:fetch("customizable_ui", "myplugin/homeView") or {}
-uicfg = uicfg["settingCfg"]
+local pluginCfg = setting:fetch("customizable_ui", "myplugin/homeView") or {}
+local uicfg = pluginCfg["settingCfg"]
 
 local function getItem(cfg)
 	local item = UIMgr:new_widget("button", "widget_button")
@@ -15,6 +15,19 @@ local function getItem(cfg)
 	item:invoke("enable", false)
 	item:invoke("text", cfg.text or "")
 	item:invoke("image", cfg.image)
+	item:invoke("textFontSize", cfg.textFontSize or "HT16")
+	local buttonImage = item:invoke("child", "widget_button-image")
+	if buttonImage then
+		buttonImage:SetEnabled(false)
+	end
+	local button = item:invoke("root")
+	if button then
+		button:SetEnabled(false)
+	end
+	local backImage = item:invoke("child", "widget_button-background")
+	if backImage then
+		backImage:SetEnabled(false)
+	end
 	local container = GUIWindowManager.instance:LoadWindowFromJSON("InteractionLayout.json")
 	container:AddChildWindow(item)
 	local ui = UI:getWnd("interactionContainer")
