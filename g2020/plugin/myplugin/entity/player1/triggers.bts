@@ -5158,7 +5158,7 @@ JOIN_PARTY_FAILED(debug = true){
 }
 JOIN_PARTY_SUCCESS(debug = false){
     $obj1.inPartyOwnerId = $targetUserId
-    $obj1.needCheckResetGameResult = true
+    $obj1.resetGameToJoinParty = true
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
 }
@@ -5218,10 +5218,16 @@ PARTY_BE_LIKED{
     ArraySet(array = $houseVars, index = $curHouseIndex, value = DictionaryToTable(dict = $curHousedict))
 }
 RESET_GAME_FAILED(debug = true){
-    If($resultCode ~= 1 and $obj1.needCheckResetGameResult){
-        $obj1.dontReenterGame = true
-        $obj1.dontAskShowPartyList = true
-        LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+    If($resultCode ~= 1){
+        If($obj1.resetGameToJoinParty){
+            ShowTip(entity = $obj1, tipType = 2, textKey = "tip.user.join.party.failed")
+            $obj1.dontReenterGame = true
+            $obj1.dontAskShowPartyList = true
+            LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+        }
+        Else{
+            ShowTip(entity = $obj1, tipType = 2, textKey = $resultType)
+        }
     }
 }
 --↑↑↑↑↑↑ party
