@@ -1,17 +1,10 @@
 {
+    "base": "npc_ability_base",
     "actorName": "boy.actor",
-    "canClick": true,
-    "clickDistance": 5,
-    "canAttack": false,
-    "collision": true,
-    "name": "npc_dialog_1",
+    "name": "npc_change_player_name.name",
     "talkList": [
         {
-            "msg": "hello",
-            "npc": "myplugin/npc_change_player_name"
-        },
-        {
-            "msg": "hahahaha",
+            "msg": "npc_change_player_name.dialog",
             "npc": "myplugin/npc_change_player_name"
         }
     ],
@@ -26,15 +19,23 @@
         "cfgKey": "interactionUI",
         "centerBtns": [
             {
-                "text": "",
-                "image": "plugin/myplugin/image/hand_click.png",
+                "text": "npc_change_player_name.text",
+                "image": "plugin/myplugin/image/fru_intUI/hand_click.png",
                 "event": "SHOW_CONVERSATION_UI",
 				"imageSize": {
                     "width": "60",
                     "height": "60"
                 }
             }
-        ]
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+            }
+        }
     },
     "interaction": {
         "radius": 5,
