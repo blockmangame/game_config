@@ -5490,3 +5490,25 @@ EDIT_BLACKBOARD_BUTTON_SURE
 
     CallTrigger(event = "UPDATE_SINGLE_BLACK_BOARD_ENTITY", object = $obj1, npc = $npc)
 }
+
+FUNC_CHECK_SHOWN_DANCES_SKILL --param: shown
+{
+    $reg = GetRegionByName(
+        map = GetEntityMap(entity = $obj1),
+        name = "dances"
+    )
+
+    $event = "CLOSE_DANCE"
+    If($reg && $shown && IfEntityInArea(
+                    entity = $obj1,
+                    region = {
+                        min = GetRegionMin(region = $reg),
+                        max = GetRegionMax(region = $reg) + V3(1, 1, 1)
+                    }
+                )
+    )
+    {
+        $event = "OPEN_DANCE"
+    }
+    CallTrigger(object = $obj1, event = $event)
+}

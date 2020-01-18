@@ -561,6 +561,7 @@ ENTITY_RIDE_OFF {
     If(not IsPlayer(entity = $obj2)){ Return() }
     StartTimer(rep = false, player = $obj2, target = $obj1, time = 1, event = "RECHECK_INTERACTION_UI")
     CallTrigger(object = $obj2, event = "FUNC_STATE_RIDEON", ride = $obj1, isCancel = true)
+    CallTrigger(object = $obj2, event = "FUNC_CHECK_SHOWN_DANCES_SKILL", shown = true)
 
     If(not IsPlayer(entity = $obj1)){ Return() }
     StartTimer(rep = false, player = $obj1, target = $obj2, time = 1, event = "RECHECK_INTERACTION_UI")
@@ -570,7 +571,11 @@ ENTITY_RIDE_ON {
     StartTimer(rep = false, player = $obj2, target = $obj1, time = 1, event = "RECHECK_INTERACTION_UI")
     CallTrigger(object = $obj2, event = "FUNC_STATE_RIDEON", ride = $obj1)
 
-    If(not IsPlayer(entity = $obj1)){ Return() }
+    If(not IsPlayer(entity = $obj1))
+    { 
+        CallTrigger(object = $obj2, event = "FUNC_CHECK_SHOWN_DANCES_SKILL", shown = false)
+        Return() 
+    }
     StartTimer(rep = false, player = $obj1, target = $obj2, time = 1, event = "RECHECK_INTERACTION_UI")
     CallTrigger(event = "FUNC_STATE_ADD_INTERACTLIST", entities = [$obj1, $obj2])
 }

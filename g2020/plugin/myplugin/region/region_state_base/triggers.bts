@@ -1,7 +1,8 @@
 REGION_ENTER {
     If(IsPlayer(entity = $obj1))
     {
-        If($inRegionKey == "dances")
+        $ride = GetRideOn(entity = $obj1)
+        If($inRegionKey == "dances" && (not $ride || IsPlayer(entity = $ride)))
         {
             CallTrigger(object = $obj1, event = "OPEN_DANCE")
         }
