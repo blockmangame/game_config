@@ -1,3 +1,4 @@
 ENTITY_BUFF_ADD{
     ClearRide(entity = $entity)
+    StartTimer(rep = false, object = $entity, time = 2, event = "RECHECK_CLEAR_RIDE")
 }
