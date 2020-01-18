@@ -5461,6 +5461,7 @@ FUNC_TRANSMIT_CARRIER --param: toMap, toPos, toRy
         $obj1.transmitCancel = false
     }
     SetEntityPosition(entity = $carrier or $obj1, map = $toMap, ry = $toRy or 0, pos = $toPos)
+    ChangeCameraView(entity = $obj1, yaw = $toRy, pitch = 30, distance = 2, smooth = 1, offset = {x = 0, y = 0, z = 0})
 }
 
 NEXT_GUIDE_STEP
