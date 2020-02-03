@@ -28,7 +28,6 @@ REGION_ENTER {
     }
     If(GetObjectID(object = $ownerPlayer) == GetObjectID(object = $obj1)){
         -- CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
-        CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = false)
     }
     StartTimer(time = 20,object = $obj1, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
 }

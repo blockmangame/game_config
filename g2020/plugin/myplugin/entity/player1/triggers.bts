@@ -4542,6 +4542,7 @@ ENTER_EQUIPMEN {
 ENTER_MAP
 {
     CallTrigger(event = "SHOW_SHOP_TITLE", object = $obj1, show = true)
+    CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA")
     $obj1Map = GetEntityMap(entity = $obj1)
     $obj1MapOwner = GetMapVar(map = $obj1Map, key = "owner")
     If(not $obj1MapOwner or ($obj1MapOwner ~= GetObjectVar(obj = $obj1, key = "house"))){
@@ -4567,6 +4568,7 @@ ENTER_MAP
 LEAVE_MAP
 {
     CallTrigger(event = "SHOW_SHOP_TITLE", object = $obj1, show = false)
+    CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA")
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
         WorksWallsOperation(player = $obj1, isOpen = false)
