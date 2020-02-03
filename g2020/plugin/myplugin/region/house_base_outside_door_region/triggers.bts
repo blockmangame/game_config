@@ -1,33 +1,4 @@
 REGION_ENTER {
     $door = GetRegionOwner(region = $region)
-    $ownerPlayer = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "owner")
-    $isLock = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "isLock")
-    If(not IsPlayer(entity = $obj1) 
-        or ($isLock and GetObjectID(object = $ownerPlayer) ~= GetObjectID(object = $obj1))
-        or ($isLock and $ownerPlayer.teamId ~= $obj1.teamId)){
-        Return()
-    }
-    ------------------------------------------ 传送进内部房子
-    $map = GetObjectVar(obj = GetObjectVar(obj = $door, key = "house"), key = "houseInsideMap")
-    $yaw = 0
-    If($obj1.curHouseCfg){
-        $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
-    }
-    $pos = ComputeV3(
-        p1 = GetMapInitPos(map = $map) or GetEntityPosition(entity = $obj1),
-        p2 = Table(x = 0, y = 0.5, z = 0), op = "add"
-    )
-    CallTrigger(
-        event = "FUNC_TRANSMIT_CARRIER",
-        object = $obj1, toPos = $pos, toRy = $yaw,
-        toMap = $map
-    )
-    If($obj1.transmitCancel)
-    {
-        Return()
-    }
-    If(GetObjectID(object = $ownerPlayer) == GetObjectID(object = $obj1)){
-        -- CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
-    }
-    StartTimer(time = 20,object = $obj1, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
+    StartTimer(time = 2, object = $door, event = "ENTITY_ENTER_DOOR_REGION", entity = $obj1) --打工导航/不止是导航
 }
