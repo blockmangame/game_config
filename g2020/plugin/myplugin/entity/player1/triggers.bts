@@ -1632,7 +1632,7 @@ FUNC_STATE_RIDEON --params: ride[, isCancel = false]
     }
     Else
     {
-        CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $state)
+        CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $state, ride = $ride)
     }
 }
 
@@ -1898,6 +1898,11 @@ FUNC_STATE_RELEASE_SUSPEND --params: state
         {
             CallTrigger(object = $obj1, event = "FUNC_STATE_SUSPEND_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
         }   
+    }
+
+    If($ride and $ride.lastSideNormal and IsPlayer(entity = $obj1)){
+        -- $pos = ComputeV3(p1 = GetEntityPosition(entity = $ride), op = "add", p2 = $ride.lastSideNormal)
+        -- SetEntityPosition(map = GetEntityMap(entity = $obj1), entity = $obj1, pos = $pos)
     }
 }
 
@@ -4538,6 +4543,9 @@ ENTER_MAP
     $obj1MapOwner = GetMapVar(map = $obj1Map, key = "owner")
     If(not $obj1MapOwner or ($obj1MapOwner ~= GetObjectVar(obj = $obj1, key = "house"))){
         ShowTitleBarPage(entity = $obj1, closeWin = true)
+        ShowGenericActorShowStore(entity = $obj1, closeWin =true)
+    }ElseIf($obj1MapOwner or ($obj1MapOwner == GetObjectVar(obj = $obj1, key = "house"))){
+        CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
     }
     CallTrigger(object = $obj1, event = "PICK_HAND_ITEM", obj1 = $obj1)
     If(GetEntityMapName(entity = $obj1) == "map001") 

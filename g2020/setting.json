@@ -510,8 +510,16 @@
         "hideDeep": 0.75
     },
     "toolBarSetting": {
-        "svip": {
-            "serverEvent": "GET_SVIP_REWARD"
+        "addBtnList": [
+            "friend",
+            "signIn",
+            "svip"
+        ],
+        "buttonCfg": {
+            "svip": {
+                "show": false,
+                "serverEvent": "GET_SVIP_REWARD"
+            }
         }
     },
     "freeWorksArchive": 3,
