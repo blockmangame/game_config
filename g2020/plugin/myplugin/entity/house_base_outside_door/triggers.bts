@@ -53,7 +53,6 @@ ENTITY_ENTER_DOOR_REGION{
     }
     If(GetObjectID(object = $ownerPlayer) == GetObjectID(object = $entity)){
         -- CallTrigger(object = $entity, event = "SHOW_TITLE_BAR")
-        CallTrigger(object = $entity, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA", up = false)
     }
     StartTimer(time = 20,object = $entity, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
 }
