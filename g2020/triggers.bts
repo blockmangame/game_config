@@ -8,6 +8,7 @@ GAME_INIT
     @mathHuge = 10000000
 
     @DECORATION_STORE = ReadGameCsv(path = "decoration_store.csv")
+    SortArrayByKey(array = @DECORATION_STORE, key = "itemsort", isToNumberKey = true)
 
     @CURRENT_ID_IMAGE = [
         "set:diamond.json image:Diamond-icon2.png",
@@ -562,6 +563,8 @@ ENTITY_RIDE_OFF {
     StartTimer(rep = false, player = $obj2, target = $obj1, time = 1, event = "RECHECK_INTERACTION_UI")
     CallTrigger(object = $obj2, event = "FUNC_STATE_RIDEON", ride = $obj1, isCancel = true)
     CallTrigger(object = $obj2, event = "FUNC_CHECK_SHOWN_DANCES_SKILL", shown = true)
+
+    StartTimer(rep = false, object = $obj2, target = $obj1, time = 1, event = "RIDEOFF_IN_DEC")
 
     If(not IsPlayer(entity = $obj1)){ Return() }
     StartTimer(rep = false, player = $obj1, target = $obj2, time = 1, event = "RECHECK_INTERACTION_UI")
