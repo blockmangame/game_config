@@ -55,3 +55,19 @@ ENTITY_RIDE_OFF
         RemoveEntityBuff(entity = $obj2, buff = $obj2.driveHideBuff)
     }
 }
+
+START_HORN{
+    $soundBuffCfg = GetConfigVar(obj = $obj1, key = "hornSoundBuff")
+    $soundBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $soundBuffCfg)
+    If(not $soundBuff){
+        AddEntityBuff(entity = $obj1, cfg = $soundBuffCfg)
+    }
+}
+
+STOP_HORN{
+    $soundBuffCfg = GetConfigVar(obj = $obj1, key = "hornSoundBuff")
+    $soundBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $soundBuffCfg)
+    If($soundBuff){
+        RemoveEntityBuff(entity = $obj1, buff = $soundBuff)
+    }
+}
