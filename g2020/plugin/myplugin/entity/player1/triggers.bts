@@ -209,7 +209,7 @@ MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建�
 
 ENTITY_ENTER
 {
-    --CallTrigger(event = "CHECK_SHOW_SVIP_UI", object = $obj1)
+    CallTrigger(event = "CHECK_SHOW_SVIP_UI", object = $obj1)
     AddEntityBuff(entity = $obj1, cfg = "myplugin/click_action")
     CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
     CallTrigger(event = "CHECK_IN_PARTY", object = $obj1)
@@ -4174,6 +4174,7 @@ ENTITY_BUY_APPSTOP {
         CallTrigger(obj1 = $obj1, event = "BUY_PRIVILEGE_SUCCEED", shopIndex = $itemIndex, privilegeName = $itemName)
         If($itemName == "myplugin/svip_privilege"){
             ShowToolBarButton(name = "svip", show = true, player = $obj1)
+            AddEntityBuff(entity = $obj1, cfg = "myplugin/svip_privilege_buff")
         }
         If($itemName == "myplugin/home_privilege"){ --购买租地特权，把房子移到公共区域
             StartTimer(time = 1,object = $obj1, event = "MOVE_HOME_FROM_PROTECT_TO_PUBLIC")
