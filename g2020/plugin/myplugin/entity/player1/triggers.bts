@@ -4987,7 +4987,7 @@ PLAYER_ON_VISIT {--same server
     If(not $target){
         $target = $obj2 or $obj1.visitTarget
     }
-    If(not $target){
+    If(not $target or $target.interactionObjId == GetObjectID(object = $obj1)){
         Return()
     }
     CallTrigger(object = $target, event = "GET_VISIT_TELE_POS", from = $obj1, fromInParty = $fromInParty)
