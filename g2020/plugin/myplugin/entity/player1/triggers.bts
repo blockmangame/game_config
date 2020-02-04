@@ -471,6 +471,7 @@ CHANGE_HOUSE{ -- 换房子/存档
     CallTrigger(object = $obj1, event = "REMOVE_HOUSE_OUTSIDE")
     ShowTip(entity = $obj1, tipType = 1, textKey = "house_change")
 
+    $obj1.entityOf3DUI = {}
     CallTrigger(object = $obj1, event = "CREATE_HOUSE_OUTSIDE", region = $region, houseCfg = $newHouse, houseColor = $houseColor)
 }
 
@@ -3326,7 +3327,9 @@ SAVE_WORKS_TIP_CLICK_EVENT
         }
         Else
         {
-            ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            --ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+
+            CallTrigger(event = "SHOW_GOTO_APP_SHOP_UI", obj1 = $obj1)
             Return()
         }
     }
@@ -3398,7 +3401,8 @@ BUY_WORKS_ARCHIVE
         $price = GetWorldVar(key = "worksArchivePrice")
         If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
         {
-            ShowDialogTip(entity = $obj1, p2 = "publish_works_buy_archive_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            --ShowDialogTip(entity = $obj1, p2 = "publish_works_buy_archive_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            CallTrigger(event = "SHOW_GOTO_RECHARGE_UI", obj1 = $obj1)
             Return()
         }
         BuyGoods(player = $obj1, uniqueId = 1000001,  coinId = 0, price = $price, url = $url, isPublish = $isPublish, event = "BUY_WORKS_ARCHIVE_RESPONSE" )
@@ -3557,7 +3561,8 @@ PUBLISH_WORKS
         $price = GetWorldVar(key = "publishWorksPrice")
         If(not CheckBalance(entity = $obj1, coinName = "green_currency", price = $price))
         {
-            ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            --ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            CallTrigger(event = "SHOW_GOTO_APP_SHOP_UI", obj1 = $obj1)
             Return()
         }
         PublishWorks(player = $obj1, id = $worksId, event = "PUBLISH_WORKS_RESPONSE")
@@ -3568,7 +3573,8 @@ PUBLISH_WORKS
         $price = GetWorldVar(key = "publishWorksCubePrice")
         If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
         {
-            ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            --ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            CallTrigger(event = "SHOW_GOTO_RECHARGE_UI", obj1 = $obj1)
             Return()
         }
         BuyGoods(player = $obj1, uniqueId = 1000002,  coinId = 0, price = $price, worksId = $worksId, event = "PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE" )
@@ -5527,4 +5533,32 @@ FUNC_CHECK_SHOWN_DANCES_SKILL --param: shown
         $event = "OPEN_DANCE"
     }
     CallTrigger(object = $obj1, event = $event)
+}
+
+SHOW_GOTO_RECHARGE_UI
+{
+    $btnInfo = { leftCoinId = nil, leftContent = "gui.text.cancel", rightCoinId = nil, rightContent = "go_to_recharge" }
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "SHOW_GOTO_RECHARGE_UI_RESULT", p1 = "composition.tip.title", p2= "pay_failure_gDiamonds_insufficient", p3 = $btnInfo)
+}
+
+SHOW_GOTO_RECHARGE_UI_RESULT
+{
+    If($button == "right")
+    {
+        ShowRecharge(player = $obj1)
+    }
+}
+
+SHOW_GOTO_APP_SHOP_UI
+{
+    $btnInfo = { leftCoinId = nil, leftContent = "gui.text.cancel", rightCoinId = nil, rightContent = "go_to_conversion" }
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "SHOW_GOTO_APP_SHOP_UI_RESULT", p1 = "composition.tip.title", p2= "pay_failure_game_money_insufficient", p3 = $btnInfo)
+}
+
+SHOW_GOTO_APP_SHOP_UI_RESULT
+{
+    If($button == "right")
+    {
+        ShowGoldShop(player = $obj1, show = true)
+    }
 }
