@@ -465,6 +465,7 @@ CHANGE_HOUSE_COLOR{ -- 换色
 }
 
 CHANGE_HOUSE{ -- 换房子/存档
+    $obj1.entityOf3DUI = {}
     $region = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "region")
     $obj1.curHouseCfg = $newHouse
     ------------------------------------------ 改变房子(actor)，直接杀掉原来的，新建新的
