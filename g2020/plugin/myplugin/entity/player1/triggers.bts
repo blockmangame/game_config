@@ -375,6 +375,8 @@ CREATE_HOUSE_OUTSIDE{
 
 REMOVE_HOUSE_OUTSIDE{
     $house = GetObjectVar(obj = $obj1, key = "house")
+    $map = GetObjectVar(obj = $house, key = "houseInsideMap")
+    SetMapVar(map = $map, key = "isRemove", value = true)
     $region = GetObjectVar(obj = $house, key = "region")
     SetRegionOwner(region = $region, owner = nil)
     KillEntity(entity = $house)

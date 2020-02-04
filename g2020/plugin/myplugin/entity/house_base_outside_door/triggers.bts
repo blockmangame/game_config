@@ -25,6 +25,10 @@ ENTITY_DIE{
 }
 
 ENTITY_ENTER_DOOR_REGION{
+    $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
+    If(not $map or GetMapVar(map = $map, key = "isRemove")){
+        Return()
+    }
     $ownerPlayer = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "owner")
     $isLock = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "isLock")
     If(not IsPlayer(entity = $entity) 
