@@ -471,6 +471,7 @@ CHANGE_HOUSE{ -- 换房子/存档
     CallTrigger(object = $obj1, event = "REMOVE_HOUSE_OUTSIDE")
     ShowTip(entity = $obj1, tipType = 1, textKey = "house_change")
 
+    $obj1.entityOf3DUI = {}
     CallTrigger(object = $obj1, event = "CREATE_HOUSE_OUTSIDE", region = $region, houseCfg = $newHouse, houseColor = $houseColor)
 }
 
