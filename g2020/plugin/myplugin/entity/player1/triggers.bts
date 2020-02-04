@@ -10,7 +10,8 @@ WEAR_EQUIPMEN {
     {
         --baby trolley
         CallTrigger(event = "EQUIP_BABY_TROLLEY", object = $obj1, cfgPath = GetConfigVar(obj = $item, key = "trolleyEntity"))
-    }
+	}
+	$obj1.equipItem = $item
 }
 
 TAKEOFF_EQUIPMEN {
@@ -4347,7 +4348,7 @@ EQUIP_CAR {
 }
 
 DEBARK {
-	Dismount(entity = $obj1)
+	EquipItem(entity = $obj1, item = $obj1.equipItem)
 }
 
 TAKEOFF_EQUIP_CAR
@@ -4387,8 +4388,8 @@ EQUIP_ITEM_IMMEDIATELY --params: item
     }
     If($typeIndex == 1)
     {
-        --baby trolley
-        CallTrigger(event = "EQUIP_BABY_TROLLEY", object = $obj1, cfgPath = GetConfigVar(obj = $item, key = "trolleyEntity"))
+		--baby trolley
+		EquipItem(entity = $obj1, item = $item)
     }
 }
 
@@ -4607,19 +4608,13 @@ PICK_HAND_ITEM {
 }
 
 ENTER_EQUIPMEN {
-    $disableHand = GetConfigVar(obj = $item, key = "disableHand")
     $canHandMap = GetConfigVar(obj = $item, key = "canHandMap")
     $playerCurMap = GetEntityMapName(entity = $obj1)
     If ($canHandMap and $playerCurMap ~= $canHandMap)
     {
         Return()
     }
-    If($disableHand)
-    {
-        CallTrigger(object = $obj1, event = "EQUIP_ITEM_IMMEDIATELY", item = $item)
-        Return()
-    }
-    SetHandItem(player = $obj1, item = $item)
+    CallTrigger(object = $obj1, event = "EQUIP_ITEM_IMMEDIATELY", item = $item)
 }
 
 ENTER_MAP
