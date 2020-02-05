@@ -12,6 +12,7 @@ WEAR_EQUIPMEN {
         CallTrigger(event = "EQUIP_BABY_TROLLEY", object = $obj1, cfgPath = GetConfigVar(obj = $item, key = "trolleyEntity"))
 	}
 	$obj1.equipItem = $item
+	SetItemVar(entity = $obj1, item = $item, key = "equipFlag", value = true)
 }
 
 TAKEOFF_EQUIPMEN {
@@ -4374,23 +4375,32 @@ TAKEOFF_EQUIP_CAR
 
 EQUIP_ITEM_IMMEDIATELY --params: item
 {
-    $immediately = $item and GetConfigVar(obj = $item, key = "equipImmediately")
-    If(not $immediately)
+	$typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
+	If($typeIndex ~= 1 )
+	{
+		$disableHand = GetConfigVar(obj = $item, key = "disableHand")
+		If($disableHand)
+		{
+			Return()
+		}
+		If(not GetItemVar(item = $item, key = "equipFlag"))
+		{
+			EquipItem(entity = $obj1, item = $item)
+		}
+		Return()
+	}
+	$immediately = $item and GetConfigVar(obj = $item, key = "equipImmediately")
+    If(not $immediately )
     {
         Return()
     }
-    $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
     $equipTakeOff = GetObjectVar(obj = $obj1, key = "equipTakeOff")
     If($equipTakeOff)
     {
         SetObjectVar(obj = $obj1, key = "equipTakeOff", value = false)
         Return()
     }
-    If($typeIndex == 1)
-    {
-		--baby trolley
-		EquipItem(entity = $obj1, item = $item)
-    }
+	EquipItem(entity = $obj1, item = $item)
 }
 
 EQUIP_BABY_TROLLEY --params: cfgPath
@@ -4603,7 +4613,8 @@ PICK_HAND_ITEM {
     $playerCurMap = GetEntityMapName(entity = $obj1)
     If ($canHandMap and $playerCurMap ~= $canHandMap)
     {
-        SetHandItem(player = $obj1)
+		-- SetHandItem(player = $obj1)
+		--这里要改
     }
 }
 
@@ -4613,7 +4624,8 @@ ENTER_EQUIPMEN {
     If ($canHandMap and $playerCurMap ~= $canHandMap)
     {
         Return()
-    }
+	}
+	--EquipItem(entity = $obj1, item = $item)
     CallTrigger(object = $obj1, event = "EQUIP_ITEM_IMMEDIATELY", item = $item)
 }
 
