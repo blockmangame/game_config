@@ -807,6 +807,7 @@ GIVE_STORE{
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
 
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
+    CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
     -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
 }
 
@@ -826,6 +827,7 @@ UPDATE_PLAYER_3DUI_ENTITY{
         }
         ElseIf($remove)
         {
+            $map = GetEntityMap(entity = $npc)
             ForLoop(from = 1, to = ArraySize(array = $typeTable), key = "index"){
                 If(ArrayGet(array = $typeTable, index = $index) == GetObjectID(object = $npc)){
                     ArrayRemove(array = $typeTable, index = $index)
@@ -843,19 +845,6 @@ UPDATE_PLAYER_3DUI_ENTITY{
         }
         DictionarySet(dict = $entityOf3DUIDict, key = $typeOf3DUI, value = $typeTable)
         SetObjectVar(obj = $obj1, key = "entityOf3DUI", value = DictionaryToTable(dict = $entityOf3DUIDict))
-
-        If($add)
-        {
-            CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
-            If($updateAll)
-            {
-                CallTrigger(event = "UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = true)
-            }
-            Else
-            {
-                CallTrigger(event = "UPDATE_SINGLE_BLACK_BOARD_ENTITY", object = $obj1, npc = $npc)
-            } 
-        }
     }
 }
 
@@ -917,6 +906,8 @@ SHOW_TITLE_BAR{
     
     $lastInteractionUiObjId = GetObjectVar(obj = $obj1, key = "lastInteractionUiObjId")
     If($lastInteractionUiObjId){
+        $dec = GetObject(objID = $lastInteractionUiObjId)
+        $dec.isNotNeedShowDec = true
         UpdateEntityEditContainer(player = $obj1, entityId = $lastInteractionUiObjId, show = false)
         SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     }
@@ -1451,7 +1442,14 @@ UPDATE_OBJ_HOUSE_INSIDE_REGION{
 RIDEOFF_IN_DEC{
     If($target and $target.lastSideNormal and IsPlayer(entity = $obj1)){
         Test($target.lastSideNormal, GetEntityPosition(entity = $target))
-        $pos = ComputeV3(p1 = GetEntityPosition(entity = $target), op = "add", p2 = $target.lastSideNormal)
+        If(GetPosY(pos = $target.lastSideNormal) == -1){
+            $addPos = {
+                x = 0,
+                y = -3,
+                z = 0
+            }
+        }
+        $pos = ComputeV3(p1 = GetEntityPosition(entity = $target), op = "add", p2 = $addPos or $target.lastSideNormal)
         SetEntityPosition(entity = $obj1, pos = $pos)
     }
 }
@@ -4664,6 +4662,69 @@ LEAVE_MAP
     CallTrigger(event = "UPDATE_PUBLIC_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = false)
 }
 
+UPDATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY
+{
+    If(not $npc)
+    {
+        Return()
+    }
+    $typeOf3DUI = GetConfigVar(obj = $npc, key = "typeOf3DUI")
+    If($typeOf3DUI and $typeOf3DUI == "numberBoard")
+    {
+        $map = GetEntityMap(entity = $npc)
+        $players = GetMapPlayer(map = $map)
+        $playerCount = ArraySize(array = $players)
+
+        $width = 0
+        $height = 0
+        $title = ""
+        $textColor = [255, 255, 255]
+        $titleColor = [255, 255, 255]
+        $position = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $rotate = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $objID = GetObjectID(object = $npc)
+        $position = GetConfigVar(obj = $npc, key = "position") or $position
+        $width = GetConfigVar(obj = $npc, key = "width") or $width
+        $height = GetConfigVar(obj = $npc, key = "height") or $height
+        $textColor = GetConfigVar(obj = $npc, key = "textColor") or $textColor
+        $title = GetConfigVar(obj = $npc, key = "title") or $title
+        $titleColor = GetConfigVar(obj = $npc, key = "titleColor") or $titleColor
+
+        $data = {
+            key = ToString($objID),
+            name = "numberBoard",
+            width = $width,
+            height = $height,
+            position = $position,
+            rotate = $rotate,
+            objID = $objID,
+            args = {
+                text = $playerCount,
+                textColor = $textColor,
+                title = $title,
+                titleColor = $titleColor,
+            }
+        }
+        
+        Foreach(array = $players, key = "player")
+        {
+            -- ShowEntity3DUI(player = $player, show = false, data = $data)
+            ShowEntity3DUI(player = $player, show = true, data = $data)
+        }
+    }
+}
+
+
 UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY
 {
     $map = GetEntityMap(entity = $obj1)
@@ -4734,12 +4795,17 @@ UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY
                 titleColor = $titleColor,
             }
         }
-        ShowEntity3DUI(player = $obj1, show = $show, data = $data)
-
+        ShowEntity3DUI(player = $obj1, show = false, data = $data)
+        If($show)
+        {
+            ShowEntity3DUI(player = $obj1, show = $show, data = $data)
+        }
+        
         Foreach(array = $players, key = "player")
         {
             If($player ~= $obj1)
             {
+                ShowEntity3DUI(player = $player, show = false, data = $data)
                 ShowEntity3DUI(player = $player, show = true, data = $data)
             }
         }
@@ -4786,9 +4852,11 @@ UPDATE_SINGLE_BLACK_BOARD_ENTITY
         }
     }
 
+    $map = GetEntityMap(entity = $obj1)
     $players = GetMapPlayer(map = $map)
     Foreach(array = $players, key = "player")
     {
+        ShowEntity3DUI(player = $player, show = false, data = $data)
         ShowEntity3DUI(player = $player, show = true, data = $data)
     }
 }
@@ -4849,8 +4917,11 @@ UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY
                 text = $text
             }
         }
-
-        ShowEntity3DUI(player = $obj1, show = $show, data = $data)
+        ShowEntity3DUI(player = $obj1, show = false, data = $data)
+        If($show)
+        {
+            ShowEntity3DUI(player = $obj1, show = true, data = $data)
+        }
     }
 }
 
@@ -4898,7 +4969,11 @@ UPDATE_PUBLIC_ALL_BLACK_BOARD_ENTITY
             }
         }
 
-        ShowEntity3DUI(player = $obj1, show = $show, data = $data)
+        ShowEntity3DUI(player = $obj1, show = false, data = $data)
+        If($show)
+        {
+            ShowEntity3DUI(player = $obj1, show = true, data = $data)
+        }
     }
 }
 
@@ -5078,6 +5153,7 @@ PLAYER_ON_VISIT {--same server
         If($isInHouse and $obj1.teleMap ~= GetEntityMap(entity = $obj1)){
             ShowTitleBarPage(entity = $obj1, closeWin = true)
         }
+        CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
         SetEntityPosition(map = $obj1.teleMap, entity = $obj1, pos = $obj1.telePos)
         $obj1.teleMap = nil
         $obj1.telePos = nil
@@ -5532,14 +5608,21 @@ CHECK_SHOW_SVIP_UI()
     {
         $show = true
     }
+    If($obj1.getSvipDay ~= "" and IsSameDay(time1 = $obj1.getSvipDay, time2 = GetTime())){
+        $show = false
+    }
     ShowToolBarButton(name = "svip", show = $show, player = $obj1)
 }
 GET_SVIP_REWARD()
 {
+    If($obj1.getSvipDay ~= "" and IsSameDay(time1 = $obj1.getSvipDay, time2 = GetTime())){
+        ShowToolBarButton(name = "svip", show = false, player = $obj1)
+        Return()
+    }
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
     {
+        $obj1.getSvipDay = GetTime()
         $money = GetConfigValue(type = "reward", fullName = "myplugin/privilege", key = "svipMoney")
-        Test("----------------", $money)
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
         ShowToolBarButton(name = "svip", show = false, player = $obj1)
     }
@@ -5551,7 +5634,11 @@ FUNC_TRANSMIT_CARRIER --param: toMap, toPos, toRy
     $carrier = GetRideOn(entity = $obj1)
     If($carrier)
     {
-        If((not $obj1.onCar && not $obj1.useTrolley) || ($obj1.onCar && $toMap ~= "map001" && $toMap ~= "map002"))
+        $conA = not IsPlayer(entity = $carrier)
+        $conB = not $obj1.onCar && not $obj1.useTrolley
+        $conC = $obj1.onCar && $toMap ~= "map001" && $toMap ~= "map002"
+        
+        If($conA && ($conB || $conC))
         {
             ShowTip(entity = $obj1, tipType = 2, textKey = "unable_to_transmit", time = 40)
             $obj1.transmitCancel = true

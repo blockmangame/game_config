@@ -56,7 +56,10 @@ STOP_EDIT_ENTITY{
     SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     If(not GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/can_edit_house_buff")) -- 编辑房子的cd
     {
-        CallTrigger(object = $obj2, event = "EDIT_HOUSE")
+        If(not $obj1.isNotNeedShowDec){
+            CallTrigger(object = $obj2, event = "EDIT_HOUSE")
+        }
+        $obj1.isNotNeedShowDec = nil
         AddEntityBuff(entity = $obj2, cfg = "myplugin/can_edit_house_buff", buffTime = 5)
     }
 }
@@ -251,6 +254,13 @@ FUR_ENTITY_RIDE_ON
     CallTrigger(obj1 = $me, event = "ENTITY_REMOVE_INTERACTION")
     ClearRide(entity = $me)
     RideOn(ctrl = $ctrl, entity = $me, target = $obj1, targetIndex = $index)
+    $decEditBuff = GetConfigVar(obj = $obj1, key = "editBuff")
+    If($decEditBuff){
+        $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $decEditBuff) -- 不在编辑状态下玩家不能编辑房子的家具
+        If($buff){
+            UpdateEntityEditContainer(player = $me, entityId = GetObjectID(object = $obj1), show = false)
+        }
+    }
 }
 --上面是编辑，这里是ride
 

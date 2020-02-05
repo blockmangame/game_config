@@ -56,9 +56,9 @@
             "小孩乘车":"",
             "yaw": 0,
             "pos": {
-                "y": -0.1,
-                "z": -0.7,
-                "x": 0.6
+                "y": 0,
+                "z": 0,
+                "x": 0
             },
             "out": {
                 "y": 2,
@@ -68,8 +68,28 @@
             "ctrl": false,
             "view": false,
             "passengerAction": {
-                "base": "riding"
-            }
+                "base": "g2020_trolley_baby"
+            },
+            "attachPoint": "ride1"
+        }
+    ],
+    "attachPoints": [
+        {
+            "name": "ride1",
+            "bone": "s_gaudiansb",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
+            },
+            "position": {
+                "x": 0,
+                "y": 0.45,
+                "z": 1.3
+            },
+            "scale": 0.5,
+            "propagateScaling": true,
+            "matchActorOrientation": true
         }
     ]
 }
