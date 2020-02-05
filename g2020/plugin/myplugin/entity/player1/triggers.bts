@@ -5600,14 +5600,21 @@ CHECK_SHOW_SVIP_UI()
     {
         $show = true
     }
+    If($obj1.getSvipDay ~= "" and IsSameDay(time1 = $obj1.getSvipDay, time2 = GetTime())){
+        $show = false
+    }
     ShowToolBarButton(name = "svip", show = $show, player = $obj1)
 }
 GET_SVIP_REWARD()
 {
+    If($obj1.getSvipDay ~= "" and IsSameDay(time1 = $obj1.getSvipDay, time2 = GetTime())){
+        ShowToolBarButton(name = "svip", show = false, player = $obj1)
+        Return()
+    }
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
     {
+        $obj1.getSvipDay = GetTime()
         $money = GetConfigValue(type = "reward", fullName = "myplugin/privilege", key = "svipMoney")
-        Test("----------------", $money)
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
         ShowToolBarButton(name = "svip", show = false, player = $obj1)
     }
