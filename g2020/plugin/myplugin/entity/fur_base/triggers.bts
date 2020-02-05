@@ -253,88 +253,135 @@ FUR_ENTITY_RIDE_ON
     RideOn(ctrl = $ctrl, entity = $me, target = $obj1, targetIndex = $index)
 }
 --上面是编辑，这里是ride
-ENTITY_sit1_3_1 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 1)
-}
 
-ENTITY_sit1_3_2 {
-    CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 2)
+ENTITY_sit1_1_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 1)
 }
-
-ENTITY_sit1_3_3 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 3)
+ENTITY_sit1_2_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 2)
 }
-
-ENTITY_sit1_1_1 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 4)
+ENTITY_sit1_2_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 3)
 }
-
-ENTITY_sit1_2_1 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 5)
+ENTITY_sit1_3_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 4)
 }
-
-ENTITY_sit1_2_2 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 6)
+ENTITY_sit1_3_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 5)
 }
-
-ENTITY_qiuqian {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 7)
+ENTITY_sit1_3_3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 6)
 }
-
-ENTITY_qiaoqiaoban_l {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 8)
+ENTITY_sit1_bar_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 7)
 }
-
-ENTITY_qiaoqiaoban_r {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 9)
+ENTITY_sit1_corner_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 8)
 }
-ENTITY_sit2_3_1 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 10)
+ENTITY_sit1_corner_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 9)
 }
-
-ENTITY_sit2_3_2 {
-    CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 11)
+ENTITY_sit1_corner_3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 10)
 }
-
-ENTITY_sit2_3_3 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 12)
+ENTITY_sit1_low_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 11)
 }
-
-ENTITY_sit2_1_1 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 13)
+ENTITY_sit1_low_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 12)
 }
-
-ENTITY_sit2_2_1 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 14)
+ENTITY_sit2_1_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 13)
 }
-
-ENTITY_sit2_2_2 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 15)
+ENTITY_sit2_2_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 14)
 }
-ENTITY_sleep1 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 16)
+ENTITY_sit2_2_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 15)
 }
-
-ENTITY_chairs7 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 17)
+ENTITY_sit2_3_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 16)
 }
-
-ENTITY_chairs6_bathtub1 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 18)
+ENTITY_sit2_3_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 17)
 }
-
-ENTITY_chairs6_bathtub2 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 19)
+ENTITY_sit2_3_3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 18)
 }
-
-ENTITY_chairs6_bathtub3 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 20)
+ENTITY_sit2_bar_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 19)
 }
-ENTITY_chairs6_bathtub4 {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 21)
+ENTITY_sit2_corner_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 20)
 }
-ENTITY_chairs5_bathtub {
-	CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 22)
+ENTITY_sit2_corner_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 21)
+}
+ENTITY_sit2_corner_3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 22)
+}
+ENTITY_sit2_low_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 23)
+}
+ENTITY_sit2_low_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 24)
+}
+ENTITY_chairs6_bathtub1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 25)
+}
+ENTITY_chairs6_bathtub2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 26)
+}
+ENTITY_chairs6_bathtub3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 27)
+}
+ENTITY_chairs6_bathtub4{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 28)
+}
+ENTITY_chairs5_bathtub{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 29)
+}
+ENTITY_chairs6_bathtub1_small{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 30)
+}
+ENTITY_chairs6_bathtub2_small{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 31)
+}
+ENTITY_chairs6_bathtub3_small{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 32)
+}
+ENTITY_chairs6_bathtub4_small{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 33)
+}
+ENTITY_chairs5_bathtub_small{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 34)
+}
+ENTITY_sleep1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 35)
+}
+ENTITY_chairs7{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 36)
+}
+ENTITY_camp_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 37)
+}
+ENTITY_camp_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 38)
+}
+ENTITY_camp_3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 39)
+}
+ENTITY_qiuqian{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 40)
+}
+ENTITY_qiaoqiaoban_l{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 41)
+}
+ENTITY_qiaoqiaoban_r{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 42)
+}
+ENTITY_sit2_low1_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 43)
 }
 
 --上面是编辑，下面是购买逻辑
