@@ -1442,7 +1442,14 @@ UPDATE_OBJ_HOUSE_INSIDE_REGION{
 RIDEOFF_IN_DEC{
     If($target and $target.lastSideNormal and IsPlayer(entity = $obj1)){
         Test($target.lastSideNormal, GetEntityPosition(entity = $target))
-        $pos = ComputeV3(p1 = GetEntityPosition(entity = $target), op = "add", p2 = $target.lastSideNormal)
+        If(GetPosY(pos = $target.lastSideNormal) == -1){
+            $addPos = {
+                x = 0,
+                y = -3,
+                z = 0
+            }
+        }
+        $pos = ComputeV3(p1 = GetEntityPosition(entity = $target), op = "add", p2 = $addPos or $target.lastSideNormal)
         SetEntityPosition(entity = $obj1, pos = $pos)
     }
 }
