@@ -123,6 +123,9 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
             SetObjectVar(obj = $npc, key = "blackboardStr", value = DictionaryGet(dict = $fDict, key = "blackboardStr"))
             CallTrigger(object = GetObjectVar(obj = $obj1, key = "owner"), obj1 = GetObjectVar(obj = $obj1, key = "owner"), 
                 npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
+
+            CallTrigger(object = GetObjectVar(obj = $obj1, key = "owner"), obj1 = GetObjectVar(obj = $obj1, key = "owner"), 
+                npc = $npc, add = true, event = "UPDATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
         }
     }
     ------------------------------------------ 内部门
