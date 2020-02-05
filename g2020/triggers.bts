@@ -32,7 +32,7 @@ INIT_WORK_TASK_DATA(){    --打工配置表的读取
     @TASK_WEIGHT = NewArray() --打工随机比重表
     @INDENT_POS = GetConfigValue(type = "task", fullName = "myplugin/work", key = "indentPos")--订单领取位置
     @CircleNum = GetConfigValue(type = "task", fullName = "myplugin/work", key = "circleNum")
-    @workmaxCount = GetConfigValue(type = "task", fullName = "myplugin/work", key = "maxCount") --最大限度
+    @workmaxCount = GetConfigValue(type = "task", fullName = "myplugin/work", key = "maxCount") or 60--最大限度
     @punishmentTime = GetConfigValue(type = "task", fullName = "myplugin/work", key = "punishmentTime") --惩罚时间
     $taskData = GetConfigValue(type = "task", fullName = "myplugin/work", key = "tasks")
     Foreach(array = $taskData, key = "Dict"){
