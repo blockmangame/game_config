@@ -906,6 +906,8 @@ SHOW_TITLE_BAR{
     
     $lastInteractionUiObjId = GetObjectVar(obj = $obj1, key = "lastInteractionUiObjId")
     If($lastInteractionUiObjId){
+        $dec = GetObject(objID = $lastInteractionUiObjId)
+        $dec.isNotNeedShowDec = true
         UpdateEntityEditContainer(player = $obj1, entityId = $lastInteractionUiObjId, show = false)
         SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     }

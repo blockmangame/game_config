@@ -56,7 +56,10 @@ STOP_EDIT_ENTITY{
     SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     If(not GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/can_edit_house_buff")) -- 编辑房子的cd
     {
-        CallTrigger(object = $obj2, event = "EDIT_HOUSE")
+        If(not $obj1.isNotNeedShowDec){
+            CallTrigger(object = $obj2, event = "EDIT_HOUSE")
+        }
+        $obj1.isNotNeedShowDec = nil
         AddEntityBuff(entity = $obj2, cfg = "myplugin/can_edit_house_buff", buffTime = 5)
     }
 }
