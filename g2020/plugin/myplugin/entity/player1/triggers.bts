@@ -216,6 +216,7 @@ ENTITY_ENTER
     UpdateUIData(player = $obj1, ui = "circleProgress", data = {})
     OperationWindows(win = "workTask", isOpen = true, player = $obj1)
     CallTrigger(event = "INIT_WORK_TASK", object = $obj1) --初始化打工任务
+    SetWorksArchiveNum(player = $obj1, num = $obj1.worksArchiveNum)
     If(IsPlayer(entity = $obj1))
     {
         $playerName = GetEntityName(entity = $obj1)
@@ -3357,9 +3358,17 @@ CHECK_WORKS_ARCHIVE_RESPONSE
 
     If($code == 1)
     {
-        $freeCount = GetWorldVar(key = "freeWorksArchive")
+        $unlockNum = $obj1.worksArchiveNum
+        $maxArchiveNum = GetWorldVar(key = "maxWorksArchiveNum")
         $count = DictionaryGet(dict = $dictValue, key = "data")
-        If($count < $freeCount)
+
+        If($count >= $maxArchiveNum)
+        {
+            ShowDialogTip(entity = $obj1, p2 = "works_save_failure_archive_full", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            Return()
+        }
+
+        If($count < $unlockNum)
         {
             CallTrigger(event = "CREATE_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish)
         }
@@ -3380,6 +3389,45 @@ CHECK_WORKS_ARCHIVE_RESPONSE
         }
     }
 }
+
+SHOW_BYU_WORKS_ARCHIVE_UI_2--购买存档
+{
+    $price = GetWorldVar(key = "worksArchivePrice")
+    $btnInfo = { leftCoinId = nil, leftContent = "gui.text.cancel", rightCoinId = 0, rightContent = $price }
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "BUY_WORKS_ARCHIVE_2", p1 = "composition.tip.title", p2= "buy_works_archive", p3 = $btnInfo)
+}
+
+BUY_WORKS_ARCHIVE_2
+{
+    If($button == "right")
+    {
+        $price = GetWorldVar(key = "worksArchivePrice")
+        If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
+        {
+            CallTrigger(event = "SHOW_GOTO_RECHARGE_UI", obj1 = $obj1)
+            Return()
+        }
+        BuyGoods(player = $obj1, uniqueId = 1000003,  coinId = 0, price = $price, event = "BUY_WORKS_ARCHIVE_RESPONSE_2" )
+    }
+}
+
+BUY_WORKS_ARCHIVE_RESPONSE_2
+{
+    $dictValue = NewDictionary($response)
+    $obj1 = DictionaryGet(dict = $dictValue, key = "player")
+    If($isSucceed)
+    {
+        $obj1.worksArchiveNum = $obj1.worksArchiveNum + 1
+        SetWorksArchiveNum(player = $obj1, num = $obj1.worksArchiveNum)
+        UpdateUIData(player =$obj1, ui = "works_person", data = true)
+        ShowDialogTip(entity = $obj1, p2 = "buy_works_archive_succeed", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+    }
+    Else
+    {
+        ShowDialogTip(entity = $obj1, p2 = "buy_works_archive_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+    }
+}
+
 
 SHOW_BYU_WORKS_ARCHIVE_UI--购买存档
 {
@@ -3423,6 +3471,7 @@ BUY_WORKS_ARCHIVE_RESPONSE
     $isPublish = DictionaryGet(dict = $dictValue, key = "isPublish")
     If($isSucceed)
     {
+        $obj1.worksArchiveNum = $obj1.worksArchiveNum + 1
         CallTrigger(event = "CREATE_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish)
     }
     Else
@@ -3444,6 +3493,10 @@ GET_NEW_UN_PUBLISH_RESPONSE
      {
         $worksId = DictionaryGet(dict = $dictValue, key = "data")
         CallTrigger(event = "UPDATE_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish, worksId = $worksId)
+     }
+     ElseIf($code == 2047)
+     {
+        ShowDialogTip(entity = $obj1, p2 = "works_save_coverage_new_works_failure_not_un_publish", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
      }
      Else
      {
@@ -3488,7 +3541,7 @@ UPDATE_WORKS_RESPONSE
                 ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_succeed", time = 20)
             }
         }
-
+        SetWorksArchiveNum(player = $obj1, num = $obj1.worksArchiveNum)
         UpdateUIData(player =$obj1, ui = "works_person", data = true)
         OperationWindows(player = $obj1, isOpen = false, win = "palette")
      }
@@ -3529,6 +3582,7 @@ CREATE_WORKS_RESPONSE
         {
             ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_succeed", time = 20)
         }
+        SetWorksArchiveNum(player = $obj1, num = $obj1.worksArchiveNum)
         UpdateUIData(player =$obj1, ui = "works_person", data = true)
         OperationWindows(player = $obj1, isOpen = false, win = "palette")
     }
@@ -3590,6 +3644,7 @@ PUBLISH_WORKS_RESPONSE
         $price = GetWorldVar(key = "publishWorksPrice")
         PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
         ShowDialogTip(entity = $obj1, p2 = "publish_works_succeed", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        SetWorksArchiveNum(player = $obj1, num = $obj1.worksArchiveNum)
         UpdateUIData(player =$obj1, ui = "works_person", data = true)
         CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId)
     }
