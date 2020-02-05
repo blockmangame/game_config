@@ -555,7 +555,7 @@ FUNC_LOAD_WORKS_WALL_TOP_RESPONSE {
 
 RECHECK_INTERACTION_UI(){
     If(not IsValidObject(object = $player) or not IsValidObject(object = $target)) {Return()}
-    RecheckObjectInteractionUI(player = $player, target = $target)
+    RecheckObjectInteractionUI(player = $player, target = $target, show = true)
 }
 
 ENTITY_RIDE_OFF {
