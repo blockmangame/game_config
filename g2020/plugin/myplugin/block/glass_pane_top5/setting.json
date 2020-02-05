@@ -2,166 +2,121 @@
     "collisionBoxes": [
         {
             "max": {
-                "z": 0.55,
-                "x": 0.55,
+                "z": 0.6,
+                "x": 1,
                 "y": 1
             },
             "min": {
-                "z": 0.45,
-                "x": 0.45,
+                "z": 0.6,
+                "x": 0,
                 "y": 0
             }
         }
     ],
     "breakTime": 20,
-    "lightOpacity": 0,
+    "lightOpacity": 15,
 	"blockObjectOnCollision": false,
 	"isOpaqueFullCube": false,
+    "defaultTexture": "/block/glass_pane_top/glass_pane_top.png",
 	"quads":
 	[
-        {
-            "texture": "glass_pane_top.png",
+		{
+            "texture": "/block/glass_pane_top/glass.png",
             "vertices": [
                 {
                     "position": {
-						"z": 0.45,
+						"x": 1,
 						"y": 1,
-						"x": 0.55
+						"z": 0.6
                     },
                     "textureCoord": {
-                        "x": 0.45, "y": 0
+                        "x": 0, "y": 0
                     }
                 },
                 {
                     "position": {
-						"z": 0.45,
+						"x": 0,
 						"y": 1,
-						"x": 0.45
+						"z": 0.6
                     },
                     "textureCoord": {
-                        "x": 0.45, "y": 0.1
+                        "x": 0, "y": 1
                     }
                 },
                 {
                     "position": {
-						"z": 0.55,
-						"y": 1,
-						"x": 0.45
-                    },
-                    "textureCoord": {
-                        "x": 0.55, "y": 0.1
-                    }
-                },
-                {
-                    "position": {
-						"z": 0.55,
-						"y": 1,
-						"x": 0.55
-                    },
-                    "textureCoord": {
-                        "x": 0.55, "y": 0
-                    }
-                }
-            ]
-        },
-        {
-            "texture": "glass_pane_top.png",
-            "vertices": [
-                {
-                    "position": {
-						"z": 0.45,
+						"x": 0,
 						"y": 0,
-						"x": 0.55
+						"z": 0.6
                     },
                     "textureCoord": {
-                        "x": 0.45, "y": 0
+                        "x": 0.25, "y": 1
                     }
                 },
                 {
                     "position": {
-						"z": 0.45,
-						"y": 1,
-						"x": 0.55
-                    },
-                    "textureCoord": {
-                        "x": 0.45, "y": 1
-                    }
-                },
-                {
-                    "position": {
-						"z": 0.55,
-						"y": 1,
-						"x": 0.55
-                    },
-                    "textureCoord": {
-                        "x": 0.55, "y": 1
-                    }
-                },
-                {
-                    "position": {
-						"z": 0.55,
+						"x": 1,
 						"y": 0,
-						"x": 0.55
+						"z": 0.6
                     },
                     "textureCoord": {
-                        "x": 0.55, "y": 0
+                        "x": 0.25, "y": 0
                     }
                 }
             ]
         },
 		{
-            "texture": "glass_pane_top.png",
+            "texture": "/block/glass_pane_top/glass.png",
             "vertices": [
                 {
                     "position": {
-						"z": 0.45,
+						"x": 1,
 						"y": 1,
-						"x": 0.45
+						"z": 0.4
                     },
                     "textureCoord": {
-                        "x": 0.45, "y": 0
+                        "x": 0, "y": 0
                     }
                 },
                 {
                     "position": {
-						"z": 0.45,
+						"x": 1,
 						"y": 0,
-						"x": 0.45
+						"z": 0.4
                     },
                     "textureCoord": {
-                        "x": 0.45, "y": 1
+                        "x": 0, "y": 0.25
                     }
                 },
                 {
                     "position": {
-						"z": 0.55,
+						"x": 0,
 						"y": 0,
-						"x": 0.45
+						"z": 0.4
                     },
                     "textureCoord": {
-                        "x": 0.55, "y": 1
+                        "x": 1, "y": 0.25
                     }
                 },
                 {
                     "position": {
-						"z": 0.55,
+						"x": 0,
 						"y": 1,
-						"x": 0.45
+						"z": 0.4
                     },
                     "textureCoord": {
-                        "x": 0.55, "y": 0
+                        "x": 1, "y": 0
                     }
                 }
             ]
         },
 		{
-            "texture": "glass_pane_top.png",
             "vertices": [
                 {
                     "position": {
-						"x": 0.55,
-						"y": 0,
-						"z": 0.55
+						"x": 1,
+						"y": 1,
+						"z": 0.6
                     },
                     "textureCoord": {
                         "x": 0.45, "y": 0
@@ -169,19 +124,19 @@
                 },
                 {
                     "position": {
-						"x": 0.55,
+						"x": 1,
 						"y": 1,
-						"z": 0.55
+						"z": 0.4
                     },
                     "textureCoord": {
-                        "x": 0.45, "y": 1
+                        "x": 0.55, "y": 0
                     }
                 },
                 {
                     "position": {
-						"x": 0.45,
+						"x": 0,
 						"y": 1,
-						"z": 0.55
+						"z": 0.4
                     },
                     "textureCoord": {
                         "x": 0.55, "y": 1
@@ -189,24 +144,23 @@
                 },
                 {
                     "position": {
-						"x": 0.45,
-						"y": 0,
-						"z": 0.55
+						"x": 0,
+						"y": 1,
+						"z": 0.6
                     },
                     "textureCoord": {
-                        "x": 0.55, "y": 0
+                        "x": 0.45, "y": 1
                     }
                 }
             ]
         },
 		{
-            "texture": "glass_pane_top.png",
             "vertices": [
                 {
                     "position": {
-						"x": 0.45,
-						"y": 0,
-						"z": 0.45
+						"x": 1,
+						"y": 0.87,
+						"z": 0.6
                     },
                     "textureCoord": {
                         "x": 0.45, "y": 0
@@ -214,9 +168,9 @@
                 },
                 {
                     "position": {
-						"x": 0.45,
-						"y": 1,
-						"z": 0.45
+						"x": 0,
+						"y": 0.87,
+						"z": 0.6
                     },
                     "textureCoord": {
                         "x": 0.45, "y": 1
@@ -224,9 +178,9 @@
                 },
                 {
                     "position": {
-						"x": 0.55,
-						"y": 1,
-						"z": 0.45
+						"x": 0,
+						"y": 0.87,
+						"z": 0.4
                     },
                     "textureCoord": {
                         "x": 0.55, "y": 1
@@ -234,9 +188,9 @@
                 },
                 {
                     "position": {
-						"x": 0.55,
-						"y": 0,
-						"z": 0.45
+						"x": 1,
+						"y": 0.87,
+						"z": 0.4
                     },
                     "textureCoord": {
                         "x": 0.55, "y": 0
