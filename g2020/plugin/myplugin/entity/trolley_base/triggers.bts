@@ -6,4 +6,5 @@ ENTITY_RIDE_ON
 ENTITY_RIDE_OFF
 {
     $obj2.useTrolley = false
+    CallTrigger(object = $obj2, event = "DEMOUNT_BABY_TROLLEY")
 }

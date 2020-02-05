@@ -2259,7 +2259,7 @@ INTERACTION_CLAP
 
     If($obj2.role == @child && $obj1.role == @child)
     {
-        CallTrigger(obj1 = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_clap")
+        CallTrigger(obj1 = $obj1, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_clap")
     }
     Else
     {
@@ -2272,11 +2272,11 @@ INTERACTION_HUG
 
     If($obj2.role == @child && $obj1.role == @child)
     {
-        CallTrigger(obj1 = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_hug")
+        CallTrigger(obj1 = $obj1, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_hug")
     }
     ElseIf($obj2.role == @adult && $obj1.role == @adult)
     {
-        CallTrigger(obj1 = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_hug")
+        CallTrigger(obj1 = $obj1, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_hug")
     }
     Else
     {
@@ -2288,7 +2288,7 @@ INTERACTION_HANDSHAKE
 { --握手 大人和大人
     If($obj2.role == @adult && $obj1.role == @adult)
     {
-        CallTrigger(obj1 = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_handshake")
+        CallTrigger(obj1 = $obj1, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_handshake")
     }
     Else
     {
@@ -2300,7 +2300,7 @@ INTERACTION_RIDE
 { --骑乘 小孩和大人
     If($obj2.role == @child && $obj1.role == @adult)
     {
-        CallTrigger(obj1 = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_ride")
+        CallTrigger(obj1 = $obj1, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_ride")
     }
     Else
     {
@@ -2312,7 +2312,7 @@ INTERACTION_HAND_IN_HAND
 { --手拉手 小孩和小孩
     If($obj2.role == @child && $obj1.role == @child)
     {
-        CallTrigger(obj1 = $obj2, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_handinhand")
+        CallTrigger(obj1 = $obj1, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_handinhand")
     }
     Else
     {
@@ -2322,14 +2322,14 @@ INTERACTION_HAND_IN_HAND
 
 INTERACTION_FOLLOW
 { --跟随
-    CallTrigger(obj1 = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_follow")
+    CallTrigger(obj1 = $obj1, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_follow")
 }
 
 INTERACTION_PICK
 { --大人向小孩发起
     If($obj2.role == @adult && $obj1.role == @child)
     {
-        CallTrigger(obj1 = $obj2, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_pickup")
+        CallTrigger(obj1 = $obj1, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_pickup")
     }
     Else
     {
@@ -2359,9 +2359,10 @@ INTERACTION_BABY_TROLLEY {
 
 INTERACTION_RAISE_HEIGHT
 {
+    --举高高：大人向小孩发起
     If($obj2.role == @adult && $obj1.role == @child)
     {
-        CallTrigger(obj1 = $obj2, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_raise_height")
+        CallTrigger(obj1 = $obj1, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_raise_height")
     }
     Else
     {
@@ -2373,7 +2374,7 @@ INTERACTION_COAX
 {   --摸头杀；大人向小孩发起
     If($obj2.role == @adult && $obj1.role == @child)
     {
-        CallTrigger(obj1 = $obj2, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_coax")
+        CallTrigger(obj1 = $obj1, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_coax")
     }
     Else
     {
@@ -2385,7 +2386,7 @@ INTERACTION_PIGGYBACK
 {   --背；小孩向大人发起
     If($obj2.role == @child && $obj1.role == @adult)
     {
-        CallTrigger(obj1 = $obj2, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_piggyback")
+        CallTrigger(obj1 = $obj1, to = $obj1, from = $obj2, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_piggyback")
     }
     Else
     {
@@ -2410,6 +2411,22 @@ USER_INTERACTION_ACTION
                 Return()
             }
         }
+    }
+
+    $receiver = $obj1   --接收方。被发起人
+    $promoter = $obj1 == $from and $to or $from --发起方
+
+    If($receiver.interactionObjId || GetRideOn(entity = $receiver))
+    {
+        ShowTip(entity = $promoter, tipType = 2, textKey = "target_is_intercting", time = 40)
+        Return()
+    }
+
+    If($promoter.interactionObjId)
+    {
+        CallTrigger(obj1 = $promoter, event = "ENTITY_REMOVE_INTERACTION")
+    } Else {
+        Dismount(entity = $promoter)
     }
 
     CastSkill(skill = $skillName, from = $from, packet = {targetID = GetObjectID(object = $to)})
@@ -4414,8 +4431,9 @@ EQUIP_BABY_TROLLEY --params: cfgPath
 
 DEMOUNT_BABY_TROLLEY
 {
-    If($obj1.createdTrolley)
+    If($obj1.createdTrolley && not $obj1.demounttingTrolley && not $obj1.keepCreatedTrolley)
     {
+        $obj1.demounttingTrolley = true
         $passengers = GetPassengers(entity = $obj1.createdTrolley)
         Foreach(array = $passengers, key = "passenger")
         {
@@ -4431,6 +4449,7 @@ DEMOUNT_BABY_TROLLEY
         KillEntity(entity = $obj1.createdTrolley)
         $obj1.trolleyBuff = nil
         $obj1.createdTrolley = nil
+        $obj1.demounttingTrolley = nil
     }
 }
 
@@ -4440,6 +4459,7 @@ CHANGE_BABY_TROLLEY_SCALE
     $useTrolley = $obj1.useTrolley
     If($trolley && (not $trolley.role || ($trolley.role && $trolley.role ~= $obj1.role)))
     {
+        $obj1.keepCreatedTrolley = true
         ClearRide(entity = $trolley)
         If($trolley.scaleBuff)
         {
@@ -4451,6 +4471,7 @@ CHANGE_BABY_TROLLEY_SCALE
         ))
         SetObjectVar(obj = $obj1.createdTrolley, key = "role", value = $obj1.role)
         RideOn(entity = $obj1, ctrl = true, target = $obj1.createdTrolley, targetIndex = $obj1.role == @adult and 2 or 1) --推车人
+        $obj1.keepCreatedTrolley = nil
     }
     ElseIf(not $trolley && $useTrolley && $obj1.role == @adult) --乘客变成大人，应该让其下手推车
     {
@@ -5048,7 +5069,7 @@ PLAYER_ON_VISIT {--same server
     If(not $target){
         $target = $obj2 or $obj1.visitTarget
     }
-    If(not $target){
+    If(not $target or $target.interactionObjId == GetObjectID(object = $obj1)){
         Return()
     }
     CallTrigger(object = $target, event = "GET_VISIT_TELE_POS", from = $obj1, fromInParty = $fromInParty)
