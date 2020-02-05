@@ -122,7 +122,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
             ArraySet(array = $furnitures, index = $findex, value = DictionaryToTable(dict = $fDict))
             SetObjectVar(obj = $npc, key = "blackboardStr", value = DictionaryGet(dict = $fDict, key = "blackboardStr"))
             CallTrigger(object = GetObjectVar(obj = $obj1, key = "owner"), obj1 = GetObjectVar(obj = $obj1, key = "owner"), 
-                npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY", updateAll = true)
+                npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
         }
     }
     ------------------------------------------ 内部门
