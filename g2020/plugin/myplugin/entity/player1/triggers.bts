@@ -5078,6 +5078,7 @@ PLAYER_ON_VISIT {--same server
         If($isInHouse and $obj1.teleMap ~= GetEntityMap(entity = $obj1)){
             ShowTitleBarPage(entity = $obj1, closeWin = true)
         }
+        CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
         SetEntityPosition(map = $obj1.teleMap, entity = $obj1, pos = $obj1.telePos)
         $obj1.teleMap = nil
         $obj1.telePos = nil
@@ -5551,7 +5552,11 @@ FUNC_TRANSMIT_CARRIER --param: toMap, toPos, toRy
     $carrier = GetRideOn(entity = $obj1)
     If($carrier)
     {
-        If((not $obj1.onCar && not $obj1.useTrolley) || ($obj1.onCar && $toMap ~= "map001" && $toMap ~= "map002"))
+        $conA = not IsPlayer(entity = $carrier)
+        $conB = not $obj1.onCar && not $obj1.useTrolley
+        $conC = $obj1.onCar && $toMap ~= "map001" && $toMap ~= "map002"
+        
+        If($conA && ($conB || $conC))
         {
             ShowTip(entity = $obj1, tipType = 2, textKey = "unable_to_transmit", time = 40)
             $obj1.transmitCancel = true
