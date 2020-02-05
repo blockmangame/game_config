@@ -4376,8 +4376,9 @@ EQUIP_BABY_TROLLEY --params: cfgPath
 
 DEMOUNT_BABY_TROLLEY
 {
-    If($obj1.createdTrolley)
+    If($obj1.createdTrolley && not $obj1.demounttingTrolley && not $obj1.keepCreatedTrolley)
     {
+        $obj1.demounttingTrolley = true
         $passengers = GetPassengers(entity = $obj1.createdTrolley)
         Foreach(array = $passengers, key = "passenger")
         {
@@ -4393,6 +4394,7 @@ DEMOUNT_BABY_TROLLEY
         KillEntity(entity = $obj1.createdTrolley)
         $obj1.trolleyBuff = nil
         $obj1.createdTrolley = nil
+        $obj1.demounttingTrolley = nil
     }
 }
 
@@ -4402,6 +4404,7 @@ CHANGE_BABY_TROLLEY_SCALE
     $useTrolley = $obj1.useTrolley
     If($trolley && (not $trolley.role || ($trolley.role && $trolley.role ~= $obj1.role)))
     {
+        $obj1.keepCreatedTrolley = true
         ClearRide(entity = $trolley)
         If($trolley.scaleBuff)
         {
@@ -4413,6 +4416,7 @@ CHANGE_BABY_TROLLEY_SCALE
         ))
         SetObjectVar(obj = $obj1.createdTrolley, key = "role", value = $obj1.role)
         RideOn(entity = $obj1, ctrl = true, target = $obj1.createdTrolley, targetIndex = $obj1.role == @adult and 2 or 1) --推车人
+        $obj1.keepCreatedTrolley = nil
     }
     ElseIf(not $trolley && $useTrolley && $obj1.role == @adult) --乘客变成大人，应该让其下手推车
     {
