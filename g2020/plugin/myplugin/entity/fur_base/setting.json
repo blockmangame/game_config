@@ -1006,7 +1006,7 @@
                 "z": 0,
                 "x": 0
             },
-            "attachPoint": "s_chair",
+            "attachPoint": "s_chair_fb1",
             "ctrl": false,
             "view": false,
             "rideAction": {
@@ -1029,7 +1029,7 @@
                 "z": 0,
                 "x": 0
             },
-            "attachPoint": "s_chair",
+            "attachPoint": "s_chair_fb2",
             "ctrl": false,
             "view": false,
             "rideAction": {
@@ -1037,6 +1037,75 @@
             },
             "passengerAction": {
                 "base": "sit1"
+            }
+        },
+        {
+            "/yaw": "index_45_cirb1",
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0.2,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "s_sleep_fb1",
+            "ctrl": false,
+            "view": false,
+            "rideAction": {
+                "idle": "idle"
+            },
+            "passengerAction": {
+                "base": "sleep1"
+            }
+        },
+        {
+            "/yaw": "index_46_cirb2",
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0.2,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "s_sleep_fb2",
+            "ctrl": false,
+            "view": false,
+            "rideAction": {
+                "idle": "idle"
+            },
+            "passengerAction": {
+                "base": "sleep1"
+            }
+        },
+        {
+            "/yaw": "index_47_cirb3",
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0.2,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "s_sleep_fb3",
+            "ctrl": false,
+            "view": false,
+            "rideAction": {
+                "idle": "idle"
+            },
+            "passengerAction": {
+                "base": "sleep1"
             }
         }
     ],
@@ -1066,6 +1135,24 @@
                 "y": 0,
                 "z": 0,
                 "x": 0
+            },
+            "rotation": {
+                "y": 270,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "s_chair_fb2",
+            "bone": "s_chair",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": -0.2
             },
             "rotation": {
                 "y": 270,
@@ -1177,6 +1264,60 @@
             },
             "rotation": {
                 "y": 0,
+                "z": 0,
+                "x": 270
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "s_sleep_fb1",
+            "bone": "s_sleep",
+            "position": {
+                "y": -0.3,
+                "z": -0.45,
+                "x": 0.3
+            },
+            "rotation": {
+                "y": 90,
+                "z": 0,
+                "x": 270
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "s_sleep_fb2",
+            "bone": "s_sleep",
+            "position": {
+                "y": -0.2,
+                "z": -0.45,
+                "x": 0.4
+            },
+            "rotation": {
+                "y": 90,
+                "z": 0,
+                "x": 270
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "s_sleep_fb3",
+            "bone": "s_sleep",
+            "position": {
+                "y": 0,
+                "z": -0.45,
+                "x": 0.3
+            },
+            "rotation": {
+                "y": 90,
                 "z": 0,
                 "x": 270
             },
@@ -1335,12 +1476,12 @@
             "position": {
                 "y": 0,
                 "z": 0,
-                "x": 0
+                "x": 0.5
             },
             "rotation": {
-                "y": 90,
+                "y": 270,
                 "z": 90,
-                "x": 180
+                "x": 0
             },
             "scale": 1,
             "propagateScaling": false,
