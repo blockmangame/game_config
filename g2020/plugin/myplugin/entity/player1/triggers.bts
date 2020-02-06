@@ -601,6 +601,7 @@ SURE_BUY_HOUSE{
         Return()
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
+        ShowGoldShop(player = $obj1, show = true)    
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_not_enough_money", time = 40)
         Return()
     }
@@ -612,6 +613,7 @@ BUY_HOUSE_BY_APP{
     $houseCfg = DictionaryGet(dict = $dictValue, key = "houseCfg")
     $obj1 = DictionaryGet(dict = $dictValue, key = "player")
     If(not $isSucceed){
+        ShowRecharge(player = $obj1)
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_not_enough_money", time = 40)
         Return()
     }
@@ -767,6 +769,9 @@ BUY_STORE{
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
+        -- $obj1.hadCloseActorStore = true
+        -- ShowGenericActorShowStore(entity = $obj1, closeWin =true)
+        ShowGoldShop(player = $obj1, show = true)
         Return()
     }
     CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg)
@@ -777,6 +782,7 @@ BUY_STORE_BY_APP{
     $cfg = DictionaryGet(dict = $dictValue, key = "cfg")
     $obj1 = DictionaryGet(dict = $dictValue, key = "player")
     If(not $isSucceed){
+        ShowRecharge(player = $obj1)
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
         Return()
     }
@@ -1217,6 +1223,7 @@ BUY_INSIDE_DOOR{
         Return()
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
+        ShowGoldShop(player = $obj1, show = true)
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
         Return()
     }
@@ -1228,6 +1235,7 @@ BUY_DOOR_BY_APP{
     $cfg = DictionaryGet(dict = $dictValue, key = "cfg")
     $obj1 = DictionaryGet(dict = $dictValue, key = "player")
     If(not $isSucceed){
+        ShowRecharge(player = $obj1)
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
         Return()
     }
@@ -1353,6 +1361,7 @@ SURE_BUY_SET_REGION_COLOR
         }
 
         If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
+            ShowGoldShop(player = $obj1, show = true)
             ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", time = 40)
             Return()
         }
@@ -1367,6 +1376,7 @@ BUY_REGION_COLOR_BY_APP{
     $colorBlock = DictionaryGet(dict = $dictValue, key = "colorBlock")
     $obj1 = DictionaryGet(dict = $dictValue, key = "player")
     If(not $isSucceed){
+        ShowRecharge(player = $obj1)
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", time = 40)
         Return()
     }
@@ -3219,6 +3229,7 @@ CHANGE_PLAYER_NAME
             }
             If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $price))
             {
+                ShowGoldShop(player = $obj1, show = true)
                 Return()
             }
         }
@@ -3252,6 +3263,8 @@ BUY_CHANGE_PLAYER_NAME
         $obj1.nickName = $name
         $obj1.changeNameTimes = $obj1.changeNameTimes + 1
         UpdateUIData(player = $obj1, ui = "win_dressArchivePlayerName", data = $name)
+    }Else{
+        ShowRecharge(player = $obj1)
     }
 }
 
@@ -3441,6 +3454,7 @@ BUY_WORKS_ARCHIVE_RESPONSE_2
     }
     Else
     {
+        ShowRecharge(player = $obj1)
         ShowDialogTip(entity = $obj1, p2 = "buy_works_archive_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
@@ -3493,6 +3507,7 @@ BUY_WORKS_ARCHIVE_RESPONSE
     }
     Else
     {
+        ShowRecharge(player = $obj1)
         ShowDialogTip(entity = $obj1, p2 = "publish_works_buy_archive_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
@@ -3684,6 +3699,7 @@ PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE
     }
     Else
     {
+        ShowRecharge(player = $obj1)
         ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
@@ -4198,6 +4214,7 @@ SHOP_BUY_COIN {
         ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
         --ShowTip(textKey = "ui_buy_success", tipType = 2, entity = $obj1, keepTime = 20)
     }ElseIf($obj1){
+        ShowRecharge(player = $obj1)
         ShowTip(textKey = "app_shop_lack_of_money", tipType = 1, entity = $obj1, keepTime = 20)
     }
 }
