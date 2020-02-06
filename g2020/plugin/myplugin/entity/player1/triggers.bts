@@ -5749,3 +5749,7 @@ SHOW_GOTO_APP_SHOP_UI_RESULT
         ShowGoldShop(player = $obj1, show = true)
     }
 }
+
+ADD_TOY_GIFT(){
+    AddItem(entity = $obj1, cfg = $addItem, count = 1)
+}
