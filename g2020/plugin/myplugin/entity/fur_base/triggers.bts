@@ -62,6 +62,7 @@ STOP_EDIT_ENTITY{
         $obj1.isNotNeedShowDec = nil
         AddEntityBuff(entity = $obj2, cfg = "myplugin/can_edit_house_buff", buffTime = 5)
     }
+    ReviveEntity(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1))
 }
 
 ENTITY_CLICK{
