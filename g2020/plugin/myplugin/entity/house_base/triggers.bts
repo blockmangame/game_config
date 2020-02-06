@@ -450,7 +450,7 @@ ENTITY_CLICK{
         Return()
     }
     If(GetObjectVar(obj = $obj1, key = "isLock")){
-        ShowTip(entity = $obj2, tipType = 1, textKey = "house_lock")
+        ShowTip(entity = $obj2, tipType = 2, textKey = "house_lock")
         Return()
     }
 }
