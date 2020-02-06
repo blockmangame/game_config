@@ -596,7 +596,7 @@
             "ctrl": false,
             "view": false,
             "rideAction": {
-                "idle": "idle"
+                "idle": "run2"
             },
             "passengerAction": {
                 "base": "sit1"
@@ -619,7 +619,7 @@
             "ctrl": false,
             "view": false,
             "rideAction": {
-                "idle": "idle"
+                "idle": "run2"
             },
             "passengerAction": {
                 "base": "sit1"
@@ -642,7 +642,7 @@
             "ctrl": false,
             "view": false,
             "rideAction": {
-                "idle": "idle"
+                "idle": "run2"
             },
             "passengerAction": {
                 "base": "sit1"
@@ -665,7 +665,7 @@
             "ctrl": false,
             "view": false,
             "rideAction": {
-                "idle": "idle"
+                "idle": "run2"
             },
             "passengerAction": {
                 "base": "sit1"
@@ -688,7 +688,7 @@
             "ctrl": false,
             "view": false,
             "rideAction": {
-                "idle": "idle"
+                "idle": "run1"
             },
             "passengerAction": {
                 "base": "sit1"
@@ -994,7 +994,7 @@
             }
         },
         {
-            "/yaw": "index_43_sit2_low1_1",
+            "/yaw": "index_43_sit2_low1fb",
             "yaw": 0,
             "pos": {
                 "y": 0,
@@ -1006,7 +1006,7 @@
                 "z": 0,
                 "x": 0
             },
-            "attachPoint": "s_chair_fb1",
+            "attachPoint": "s_chair",
             "ctrl": false,
             "view": false,
             "rideAction": {
@@ -1014,6 +1014,29 @@
             },
             "passengerAction": {
                 "base": "sit2"
+            }
+        },
+        {
+            "/yaw": "index_44_sit1_1_1fb",
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0.2,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "s_chair",
+            "ctrl": false,
+            "view": false,
+            "rideAction": {
+                "idle": "idle"
+            },
+            "passengerAction": {
+                "base": "sit1"
             }
         }
     ],
@@ -1149,7 +1172,7 @@
             "bone": "s_sleep",
             "position": {
                 "y": 0,
-                "z": 0.2,
+                "z": -0.2,
                 "x": 0
             },
             "rotation": {
@@ -1164,14 +1187,14 @@
         },
         {
             "name": "s_bathtub_01_01",
-            "bone": "s_bathtub_01_01",
+            "bone": "s_bathtub_01_03",
             "position": {
                 "y": 0,
                 "z": 0,
                 "x": 0
             },
             "rotation": {
-                "y": 0,
+                "y": 180,
                 "z": 0,
                 "x": 0
             },
@@ -1182,6 +1205,24 @@
         },
         {
             "name": "s_bathtub_01_02",
+            "bone": "s_bathtub_01_04",
+            "position": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 270,
+                "z": 0,
+                "x": 0
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        },
+        {
+            "name": "s_bathtub_01_03",
             "bone": "s_bathtub_01_02",
             "position": {
                 "y": 0,
@@ -1199,33 +1240,15 @@
             "matchActorOrientation": false
         },
         {
-            "name": "s_bathtub_01_03",
-            "bone": "s_bathtub_01_03",
-            "position": {
-                "y": 0,
-                "z": 0,
-                "x": 0
-            },
-            "rotation": {
-                "y": 0,
-                "z": 0,
-                "x": 0
-            },
-            "scale": 1,
-            "propagateScaling": false,
-            "alignWorldYAxis": false,
-            "matchActorOrientation": false
-        },
-        {
             "name": "s_bathtub_01_04",
-            "bone": "s_bathtub_01_04",
+            "bone": "s_bathtub_01_01",
             "position": {
                 "y": 0,
                 "z": 0,
                 "x": 0
             },
             "rotation": {
-                "y": 0,
+                "y": 90,
                 "z": 0,
                 "x": 0
             },
@@ -1315,9 +1338,9 @@
                 "x": 0
             },
             "rotation": {
-                "y": 0,
-                "z": 0,
-                "x": 0
+                "y": 90,
+                "z": 90,
+                "x": 180
             },
             "scale": 1,
             "propagateScaling": false,

@@ -263,7 +263,6 @@ FUR_ENTITY_RIDE_ON
     }
 }
 --上面是编辑，这里是ride
-
 ENTITY_sit1_1_1{
 CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 1)
 }
@@ -390,9 +389,13 @@ CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1
 ENTITY_qiaoqiaoban_r{
 CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 42)
 }
-ENTITY_sit2_low1_1{
+ENTITY_sit2_low1fb{
 CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 43)
 }
+ENTITY_sit1_1_1fb{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 44)
+}
+
 
 --上面是编辑，下面是购买逻辑
 
