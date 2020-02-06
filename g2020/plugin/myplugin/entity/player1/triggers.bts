@@ -472,7 +472,7 @@ CHANGE_HOUSE{ -- 换房子/存档
     $obj1.curHouseCfg = $newHouse
     ------------------------------------------ 改变房子(actor)，直接杀掉原来的，新建新的
     CallTrigger(object = $obj1, event = "REMOVE_HOUSE_OUTSIDE")
-    ShowTip(entity = $obj1, tipType = 1, textKey = "house_change")
+    ShowTip(entity = $obj1, tipType = 2, textKey = "house_change")
 
     $obj1.entityOf3DUI = {}
     CallTrigger(object = $obj1, event = "CREATE_HOUSE_OUTSIDE", region = $region, houseCfg = $newHouse, houseColor = $houseColor)
@@ -590,7 +590,7 @@ SURE_BUY_HOUSE{
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
     If(not $houseCfg or ArraySize(array = $houseVars) >= (GetConfigVar(obj = $obj1, key = "maxHouseVarsSize") or 8)){
         -- 买房子 成功则关闭界面，失败则不关闭 -- 达到房子上限也不给买
-        ShowTip(entity = $obj1, tipType = 1, textKey = "ui_buy_failure")
+        ShowTip(entity = $obj1, tipType = 2, textKey = "ui_buy_failure")
         Return()
     }
     ------------- 花钱买房 -- 此处判断是否购买失败，失败直接返回
@@ -601,7 +601,8 @@ SURE_BUY_HOUSE{
         Return()
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
-        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_not_enough_money", time = 40)
+        ShowGoldShop(player = $obj1, show = true)    
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_not_enough_money", keepTime = 40)
         Return()
     }
     CallTrigger(object = $obj1, event = "GIVE_HOUSE", houseCfg = $houseCfg)
@@ -612,7 +613,8 @@ BUY_HOUSE_BY_APP{
     $houseCfg = DictionaryGet(dict = $dictValue, key = "houseCfg")
     $obj1 = DictionaryGet(dict = $dictValue, key = "player")
     If(not $isSucceed){
-        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_not_enough_money", time = 40)
+        ShowRecharge(player = $obj1)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_not_enough_money", keepTime = 40)
         Return()
     }
     CallTrigger(object = $obj1, event = "GIVE_HOUSE", houseCfg = $houseCfg)
@@ -635,7 +637,7 @@ GIVE_HOUSE{
             houseInsideDoor = GetEntityCfg(fullName = $houseCfg, key = "insideDoor") or "myplugin/house_base_inside_door"
         }
     )
-    ShowTip(entity = $obj1, tipType = 1, textKey = "ui_buy_success")
+    ShowTip(entity = $obj1, tipType = 2, textKey = "ui_buy_success")
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
     CallTrigger(object = $obj1, event = "UPDATE_HOUSE", houseKey = $houseId, curSelectKey = $curSelect)
 }
@@ -704,7 +706,7 @@ SELL_HOUSE{
 SELL_HOUSE_SURE{
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     If(ArraySize(array = $houseVars) <= 1){ -- 最后一套房不能出售
-        ShowTip(entity = $obj1, tipType = 1, textKey = "ui_house_sell_cant_sell")
+        ShowTip(entity = $obj1, tipType = 2, textKey = "ui_house_sell_cant_sell")
         Return()
     }
     $isSellEquipHouse = false
@@ -766,7 +768,10 @@ BUY_STORE{
         Return()
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
-        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", keepTime = 40)
+        -- $obj1.hadCloseActorStore = true
+        -- ShowGenericActorShowStore(entity = $obj1, closeWin =true)
+        ShowGoldShop(player = $obj1, show = true)
         Return()
     }
     CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg)
@@ -777,7 +782,8 @@ BUY_STORE_BY_APP{
     $cfg = DictionaryGet(dict = $dictValue, key = "cfg")
     $obj1 = DictionaryGet(dict = $dictValue, key = "player")
     If(not $isSucceed){
-        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
+        ShowRecharge(player = $obj1)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", keepTime = 40)
         Return()
     }
     CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg)
@@ -963,7 +969,7 @@ UPDATE_TITLE_SHOW_BAR{
 LOCK_HOUSE_CONTENT{
     SetObjectVar(obj = $house, key = "isLock", value = $isLock)
     If($textKey){
-        ShowTip(entity = $obj1, tipType = 2,textKey = $textKey, time = 40)
+        ShowTip(entity = $obj1, tipType = 2,textKey = $textKey, keepTime = 40)
     }
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR") 
 }
@@ -1014,7 +1020,7 @@ SURE_LOCK_HOUSE_AND_KICK_OTHERS{
                 -- CastSkill(skill = "/click", from = $player, packet = {targetID = GetObjectID(object = GetObjectVar(obj = $house, key = "insideDoor"))})
                 $insideDoor = GetObjectVar(obj = $house, key = "insideDoor")
                 CallTrigger(object = $insideDoor, obj1 = $insideDoor, obj2 = $player, event = "INTER_WITH_DOOR")
-                ShowTip(entity = $player, tipType = 2,textKey = "house_owner_lock_house_and_kick_you", time = 40)
+                ShowTip(entity = $player, tipType = 2,textKey = "house_owner_lock_house_and_kick_you", keepTime = 40)
             }
         } 
         StartTimer(object =$obj1, obj1 =$obj1, house = $house, isLock = true, textKey = "house_lock", time = 2, event = "LOCK_HOUSE_CONTENT")
@@ -1217,7 +1223,8 @@ BUY_INSIDE_DOOR{
         Return()
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
-        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
+        ShowGoldShop(player = $obj1, show = true)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", keepTime = 40)
         Return()
     }
     CallTrigger(object = $obj1, event = "GIVE_DOOR", cfg = $cfg)
@@ -1228,7 +1235,8 @@ BUY_DOOR_BY_APP{
     $cfg = DictionaryGet(dict = $dictValue, key = "cfg")
     $obj1 = DictionaryGet(dict = $dictValue, key = "player")
     If(not $isSucceed){
-        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", time = 40)
+        ShowRecharge(player = $obj1)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", keepTime = 40)
         Return()
     }
     CallTrigger(object = $obj1, event = "GIVE_DOOR", cfg = $cfg)
@@ -1256,7 +1264,7 @@ BUY_HOUSE_REGION_COLOR{
     -- 如果换了墙纸或者地板，原有的不保留，当你没买     如果你原来买了A墙纸，你又换成了B，那么你要再花一遍钱去把A换回来
     $curInsideRegion = GetObjectVar(obj = $obj1, key = "curInsideRegion")
     If(not $curInsideRegion){
-        ShowTip(entity = $obj1, tipType = 2, textKey = "buy_house_region_color_had_not_inside_region", time = 40)
+        ShowTip(entity = $obj1, tipType = 2, textKey = "buy_house_region_color_had_not_inside_region", keepTime = 40)
         Return()
     }
 
@@ -1353,7 +1361,8 @@ SURE_BUY_SET_REGION_COLOR
         }
 
         If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
-            ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", time = 40)
+            ShowGoldShop(player = $obj1, show = true)
+            ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", keepTime = 40)
             Return()
         }
 
@@ -1367,7 +1376,8 @@ BUY_REGION_COLOR_BY_APP{
     $colorBlock = DictionaryGet(dict = $dictValue, key = "colorBlock")
     $obj1 = DictionaryGet(dict = $dictValue, key = "player")
     If(not $isSucceed){
-        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", time = 40)
+        ShowRecharge(player = $obj1)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", keepTime = 40)
         Return()
     }
     CallTrigger(object = $obj1, event = "SET_REGION_COLOR", childRegionKey = $childRegionKey, colorBlock = $colorBlock)
@@ -2418,7 +2428,7 @@ USER_INTERACTION_ACTION
 
     If($receiver.interactionObjId || GetRideOn(entity = $receiver))
     {
-        ShowTip(entity = $promoter, tipType = 2, textKey = "target_is_intercting", time = 40)
+        ShowTip(entity = $promoter, tipType = 2, textKey = "target_is_intercting", keepTime = 40)
         Return()
     }
 
@@ -2472,7 +2482,7 @@ CREATE_FAMILY
         }
         SetEntityTeam(entity = $obj1, teamId = @familyIndex)
         @familyIndex = @familyIndex + 1
-        ShowTip(entity = $obj1, tipType = 2,textKey = "gui_create_family_success", time = 40)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "gui_create_family_success", keepTime = 40)
     }
 }
 
@@ -2483,7 +2493,7 @@ QUIT_FAMILY
         $teamId = GetEntityTeam(entity = $obj1)
         SetEntityTeam(entity = $obj1, teamId = 0)
         RecheckAllInteractionUIs(player = $obj1)
-        ShowTip(entity = $obj1, tipType = 2,textKey = "gui_quit_family_success", time = 40)
+        ShowTip(entity = $obj1, tipType = 2,textKey = "gui_quit_family_success", keepTime = 40)
         CallTrigger(event = "INIT_TEAM_UI", obj1 = $obj1, show = false)
         CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId, object = $obj1)
     }
@@ -2514,7 +2524,7 @@ INTERACTION_JOIN_FAMILY
         $playerCount = GetTeamInfo(teamId = $selfFamilyID, key = "playerCount")
         If($playerCount >= 4)
         {
-            ShowTip(entity = $obj2, tipType = 2,textKey = "ui_family_full_member", time = 40)
+            ShowTip(entity = $obj2, tipType = 2,textKey = "ui_family_full_member", keepTime = 40)
             Return()
         }
     }
@@ -2544,7 +2554,7 @@ REQUEST_JOIN_FAMILY
     {
         If(IsPlayer(entity = $targetPlayer))
         {
-            ShowTip(entity = $targetPlayer, tipType = 2,textKey = "ui_family_reject", time = 40)
+            ShowTip(entity = $targetPlayer, tipType = 2,textKey = "ui_family_reject", keepTime = 40)
         }
         Return()
     }
@@ -2552,7 +2562,7 @@ REQUEST_JOIN_FAMILY
     {
         If(not IsPlayer(entity = $targetPlayer))
         {
-            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_offline", time = 40)
+            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_offline", keepTime = 40)
             Return()
         }
 
@@ -2565,13 +2575,13 @@ REQUEST_JOIN_FAMILY
             $playerCount = GetTeamInfo(teamId = $targetFamilyID, key = "playerCount")
             If(not $playerCount or $playerCount >= 4)
             {
-                ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_full_member", time = 40)
+                ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_full_member", keepTime = 40)
                 Return()
             }
 
             SetEntityTeam(entity = $obj1, teamId = $targetFamilyID)
             CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $targetFamilyID, object = $obj1)
-            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", time = 40)
+            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", keepTime = 40)
             $obj1.requestFamilyPlayer = nil
         }
         Else
@@ -2582,7 +2592,7 @@ REQUEST_JOIN_FAMILY
             SetEntityTeam(entity = $targetPlayer, teamId = $teamId)
             SetEntityTeam(entity = $obj1, teamId = $teamId)
             CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId, object = $obj1)
-            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", time = 40)
+            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", keepTime = 40)
             $obj1.requestFamilyPlayer = nil
         }
     }
@@ -3219,6 +3229,7 @@ CHANGE_PLAYER_NAME
             }
             If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $price))
             {
+                ShowGoldShop(player = $obj1, show = true)
                 Return()
             }
         }
@@ -3252,6 +3263,8 @@ BUY_CHANGE_PLAYER_NAME
         $obj1.nickName = $name
         $obj1.changeNameTimes = $obj1.changeNameTimes + 1
         UpdateUIData(player = $obj1, ui = "win_dressArchivePlayerName", data = $name)
+    }Else{
+        ShowRecharge(player = $obj1)
     }
 }
 
@@ -3441,6 +3454,7 @@ BUY_WORKS_ARCHIVE_RESPONSE_2
     }
     Else
     {
+        ShowRecharge(player = $obj1)
         ShowDialogTip(entity = $obj1, p2 = "buy_works_archive_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
@@ -3493,6 +3507,7 @@ BUY_WORKS_ARCHIVE_RESPONSE
     }
     Else
     {
+        ShowRecharge(player = $obj1)
         ShowDialogTip(entity = $obj1, p2 = "publish_works_buy_archive_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
@@ -3539,11 +3554,11 @@ UPDATE_WORKS_RESPONSE
             PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
             If($isEdit)
             {
-                ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_edit_and_publish_new_works_succeed", time = 20)
+                ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_edit_and_publish_new_works_succeed", keepTime = 20)
             }
             Else
             {
-                ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_and_publish_new_works_succeed", time = 20)
+                ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_and_publish_new_works_succeed", keepTime = 20)
             }
             CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId)
         }
@@ -3551,11 +3566,11 @@ UPDATE_WORKS_RESPONSE
         {
             If($isEdit)
             {
-                ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_edit_new_works_succeed", time = 20)
+                ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_edit_new_works_succeed", keepTime = 20)
             }
             Else
             {
-                ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_succeed", time = 20)
+                ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_new_works_succeed", keepTime = 20)
             }
         }
         SetWorksArchiveNum(player = $obj1, num = $obj1.worksArchiveNum)
@@ -3592,12 +3607,12 @@ CREATE_WORKS_RESPONSE
         {
             $price = GetWorldVar(key = "publishWorksPrice")
             PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
-            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
+            ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", keepTime = 20)
             CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $data)
         }
         Else
         {
-            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_succeed", time = 20)
+            ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_succeed", keepTime = 20)
         }
         SetWorksArchiveNum(player = $obj1, num = $obj1.worksArchiveNum)
         UpdateUIData(player =$obj1, ui = "works_person", data = true)
@@ -3684,6 +3699,7 @@ PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE
     }
     Else
     {
+        ShowRecharge(player = $obj1)
         ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
@@ -3694,7 +3710,7 @@ PUBLISH_WORKS_BY_CUBE_RESPONSE
     $code = DictionaryGet(dict = $dictValue, key = "code")
     If($code == 1)
     {
-        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", time = 20)
+        ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", keepTime = 20)
         CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId)
         UpdateUIData(player = $obj1, ui = "works_person", data = true)
     }
@@ -4178,7 +4194,7 @@ SURE_BUY {
             If($coinId == 0){
                 BuyGoods(player = $obj1, uniqueId = 20201999,  coinId = $coinId, price = $price, event = "SHOP_BUY_COIN", objID = GetObjectID(object = $obj1), sellItem = $sellItem)
             }Else{
-                --ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
+                --ShowTip(textKey = "ui_buy_success", tipType = 2, entity = $obj1, keepTime = 20)
                 ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
                 PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
             }
@@ -4198,7 +4214,8 @@ SHOP_BUY_COIN {
         ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
         --ShowTip(textKey = "ui_buy_success", tipType = 2, entity = $obj1, keepTime = 20)
     }ElseIf($obj1){
-        ShowTip(textKey = "app_shop_lack_of_money", tipType = 1, entity = $obj1, keepTime = 20)
+        ShowRecharge(player = $obj1)
+        ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
     }
 }
 --区域购买逻辑： 领主家里买厨具，食物，
@@ -4220,17 +4237,17 @@ SURE_FURNITURE_BUY {
          If($checkBag ~= false){
             PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
             If(not $isTeam and $owner){ --不是一个家庭给领主加钱
-               --ShowTip(textKey = "ui_buy_success", tipType = 1, entity = $obj1, keepTime = 20)
+               --ShowTip(textKey = "ui_buy_success", tipType = 2, entity = $obj1, keepTime = 20)
                 ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
                $name = GetEntityName(entity = $obj1)
                If(IsPlayer(entity = $owner)){
-                    ShowTip(textKey = "gui_buys_your_stuff",textP1 = $name, textP2 = $itemName, tipType = 1, entity = $owner, keepTime = 20)
+                    ShowTip(textKey = "gui_buys_your_stuff",textP1 = $name, textP2 = $itemName, tipType = 2, entity = $owner, keepTime = 20)
                     AddCurrency(entity = $owner, coinName = $coinName, count = $price)
                     ShowRewardItemEffect(type = "Coin", count = $price, fullName = "green_currency", player = $owner)
                }
             }Else{
                ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
-               --ShowTip(textKey = "gui_gain_item_success",textP1 = $itemName, tipType = 1, entity = $obj1, keepTime = 20)
+               --ShowTip(textKey = "gui_gain_item_success",textP1 = $itemName, tipType = 2, entity = $obj1, keepTime = 20)
             }
          }Else{ --背包满了
             ShowTip(textKey = "gui_str_app_shop_inventory_is_full", tipType = 2, entity = $obj1, keepTime = 20)
@@ -4330,7 +4347,7 @@ EQUIP_CAR {
 
     If(not GetEntityOnGround(entity = $obj1))
     {
-        ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", time = 40)
+        ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", keepTime = 40)
         Return()
     }
     If($obj1.createdCar)
@@ -4365,7 +4382,7 @@ TAKEOFF_EQUIP_CAR
     {
         If($passenger ~= GetObjectID(object = $obj1))
         {
-            ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", time = 40)
+            ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", keepTime = 40)
         }
     }
     ClearRide(entity = $obj1.createdCar)
@@ -4411,7 +4428,7 @@ EQUIP_BABY_TROLLEY --params: cfgPath
     }
     If(not GetEntityOnGround(entity = $obj1))
     {
-        ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", time = 40)
+        ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", keepTime = 40)
         Return()
     }
     
@@ -4448,7 +4465,7 @@ DEMOUNT_BABY_TROLLEY
         {
             If($passenger ~= GetObjectID(object = $obj1))
             {
-                ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", time = 40)
+                ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", keepTime = 40)
             }
         }
         ClearRide(entity = $obj1.createdTrolley)
@@ -4572,13 +4589,13 @@ CASH_BOX_BUTTON_SURE
     $money = ToNumber($name)
     If(not IsNumber($money))
     {
-        ShowTip(entity = $obj1, tipType = 2, textKey = "gui_cashbox_only_number", time = 40)
+        ShowTip(entity = $obj1, tipType = 2, textKey = "gui_cashbox_only_number", keepTime = 40)
         Return()
     }
 
     If($money // 1 ~= $money)
     {
-        ShowTip(entity = $obj1, tipType = 2, textKey = "gui_cashbox_only_number", time = 40)
+        ShowTip(entity = $obj1, tipType = 2, textKey = "gui_cashbox_only_number", keepTime = 40)
         Return()
     }
     Else
@@ -4586,7 +4603,7 @@ CASH_BOX_BUTTON_SURE
 
         If($money <= 0 or $money > 100)
         {
-            ShowTip(entity = $obj1, tipType = 2, textKey = "gui_cashbox_only_number", time = 40)
+            ShowTip(entity = $obj1, tipType = 2, textKey = "gui_cashbox_only_number", keepTime = 40)
             Return()
         }
 
@@ -4598,13 +4615,13 @@ CASH_BOX_BUTTON_SURE
 
         If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $money))
         {
-            ShowTip(entity = $obj1, tipType = 2, textKey = "gui_cashbox_not_enough_number", time = 40)
+            ShowTip(entity = $obj1, tipType = 2, textKey = "gui_cashbox_not_enough_number", keepTime = 40)
             Return()
         }
 
         AddCurrency(entity = $owner, coinName = "green_currency", count = $money)
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $owner)
-        ShowTip(entity = $owner, tipType = 2, textKey = "gui_cashbox_get_money", textP1 = GetEntityName(entity = $obj1), textP2 = $money, time = 40)
+        ShowTip(entity = $owner, tipType = 2, textKey = "gui_cashbox_get_money", textP1 = GetEntityName(entity = $obj1), textP2 = $money, keepTime = 40)
     }
 }
 
@@ -5187,7 +5204,7 @@ GET_VISIT_TELE_POS {
         $from.teleMap = GetEntityMap(entity = $obj1)
     }
     Else{
-        ShowTip(entity = $from, tipType = 1, textKey = "house_lock")
+        ShowTip(entity = $from, tipType = 2, textKey = "house_lock")
         $door = $house.door
         $from.telePos = ComputeV3(p1 = GetEntityPosition(entity = $door), p2 = V3RotationYaw(vector = Table(x = 0, y = 0.5, z = 3), yaw = GetEntityYaw(entity = $door)), op = "add")
         $from.teleMap = GetEntityMap(entity = $door)
@@ -5248,7 +5265,7 @@ REENTER_GAME(debug = false){
 }
 LEAVE_PARTY_SUCCESS(debug = false){
     If($obj1.excludedPartyId == "0"){
-        ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", time =  100)
+        ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", keepTime =  100)
     }
     $obj1.inPartyOwnerId = 0
     $obj1.inSelfParty = nil--can join other party
@@ -5329,7 +5346,7 @@ ASK_RETURN_PARTY_RESULT(debug = false){
         Return()
     }
     $obj1.resetGameToJoinParty = true
-    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
+    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", keepTime =  100)
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
 }
 CHECK_IN_PARTY(debug = false){
@@ -5339,7 +5356,7 @@ CHECK_IN_PARTY(debug = false){
     }
 }
 INTERACTION_BANISH(debug = false){
-    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.be.banished", time =  20)
+    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.be.banished", keepTime =  20)
     $owner = GetPlayerByUserId(userId = $obj1.inPartyOwnerId)
     $obj1.excludedPartyId = $owner.inPartyId
     $obj1.dontAskShowPartyList = true
@@ -5348,7 +5365,7 @@ INTERACTION_BANISH(debug = false){
 CREATE_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = GetPlayerUserID(player = $obj1)
     $obj1.inPartyId = $partyId
-    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.create.success", time =  100)
+    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.create.success", keepTime =  100)
     ReenterGame(player = $obj1)
 
     $house = GetObjectVar(obj = $obj1, key = "house")
@@ -5382,7 +5399,7 @@ JOIN_PARTY_FAILED(debug = false){
 JOIN_PARTY_SUCCESS(debug = false){
     $obj1.inPartyOwnerId = $targetUserId
     $obj1.resetGameToJoinParty = true
-    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", time =  100)
+    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", keepTime =  100)
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
@@ -5411,7 +5428,7 @@ CLOSE_PARTY_SUCCESS(debug = false){
     $players = NewDictionary(GetAllPlayers())--if from "ENTITY_LEAVE", then the player not in this list
     ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
         If($player.dontReenterGameWhenCloseParty){Continue()}
-        ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", time =  20, textP1 = $name)
+        ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", keepTime =  20, textP1 = $name)
         $player.inPartyOwnerId = 0
         $player.inSelfParty = nil
         ReenterGame(player = $player)
@@ -5647,7 +5664,7 @@ FUNC_TRANSMIT_CARRIER --param: toMap, toPos, toRy
         
         If($conA && ($conB || $conC))
         {
-            ShowTip(entity = $obj1, tipType = 2, textKey = "unable_to_transmit", time = 40)
+            ShowTip(entity = $obj1, tipType = 2, textKey = "unable_to_transmit", keepTime = 40)
             $obj1.transmitCancel = true
             Return()
         }
@@ -5731,4 +5748,8 @@ SHOW_GOTO_APP_SHOP_UI_RESULT
     {
         ShowGoldShop(player = $obj1, show = true)
     }
+}
+
+ADD_TOY_GIFT(){
+    AddItem(entity = $obj1, cfg = $addItem, count = 1)
 }
