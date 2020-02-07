@@ -5228,7 +5228,7 @@ TRY_CREATE_PARTY {
         $canCreate = true
     }Else{
         $canCreate = false
-        $tip = "gui.party.buy.privilege"
+        $tip = ""
         CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 1, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
     }
 }
