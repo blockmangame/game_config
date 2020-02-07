@@ -5724,6 +5724,7 @@ FUNC_CHECK_SHOWN_DANCES_SKILL --param: shown
 
 SHOW_GOTO_RECHARGE_UI
 {
+    $def = false
     $btnInfo = { leftCoinId = nil, leftContent = "gui.text.cancel", rightCoinId = nil, rightContent = "go_to_recharge" }
     ShowDialogTip(entity = $obj1, tipType = 5, event = "SHOW_GOTO_RECHARGE_UI_RESULT", p1 = "composition.tip.title", p2= "pay_failure_gDiamonds_insufficient", p3 = $btnInfo)
 }
@@ -5738,6 +5739,7 @@ SHOW_GOTO_RECHARGE_UI_RESULT
 
 SHOW_GOTO_APP_SHOP_UI
 {
+    $def = false
     $btnInfo = { leftCoinId = nil, leftContent = "gui.text.cancel", rightCoinId = nil, rightContent = "go_to_conversion" }
     ShowDialogTip(entity = $obj1, tipType = 5, event = "SHOW_GOTO_APP_SHOP_UI_RESULT", p1 = "composition.tip.title", p2= "pay_failure_game_money_insufficient", p3 = $btnInfo)
 }
