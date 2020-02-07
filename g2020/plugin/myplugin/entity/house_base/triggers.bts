@@ -126,6 +126,9 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
 
             CallTrigger(object = GetObjectVar(obj = $obj1, key = "owner"), obj1 = GetObjectVar(obj = $obj1, key = "owner"), 
                 npc = $npc, add = true, event = "UPDATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
+
+            CallTrigger(object = GetObjectVar(obj = $obj1, key = "owner"), obj1 = GetObjectVar(obj = $obj1, key = "owner"), 
+                npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")     
         }
     }
     ------------------------------------------ 内部门

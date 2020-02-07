@@ -816,6 +816,7 @@ GIVE_STORE{
 
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
+    CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")
     -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
 }
 
@@ -846,7 +847,7 @@ UPDATE_PLAYER_3DUI_ENTITY{
                         $data = {
                             key = ToString(GetObjectID(object = $npc))
                         }
-                        ShowEntity3DUI(player = $player, show = false, data = $data)
+                        CloseSceneEntityUI(player = $player, data = $data)
                     }
                 }
             }
@@ -4749,8 +4750,7 @@ UPDATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY
         
         Foreach(array = $players, key = "player")
         {
-            -- ShowEntity3DUI(player = $player, show = false, data = $data)
-            ShowEntity3DUI(player = $player, show = true, data = $data)
+            OpenSceneEntityUI(player = $player, data = $data)
         }
     }
 }
@@ -4826,19 +4826,79 @@ UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY
                 titleColor = $titleColor,
             }
         }
-        ShowEntity3DUI(player = $obj1, show = false, data = $data)
+
         If($show)
         {
-            ShowEntity3DUI(player = $obj1, show = $show, data = $data)
+            OpenSceneEntityUI(player = $obj1, data = $data)
+        }
+        Else
+        {
+            CloseSceneEntityUI(player = $obj1, data = $data)
         }
         
         Foreach(array = $players, key = "player")
         {
             If($player ~= $obj1)
             {
-                ShowEntity3DUI(player = $player, show = false, data = $data)
-                ShowEntity3DUI(player = $player, show = true, data = $data)
+                RefreshNumberBoardText(player = $player, wndKey = ToString($objID), text = $playerCount)
             }
+        }
+    }
+}
+
+CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY
+{
+    If(not $npc)
+    {
+        Return()
+    }
+
+    $typeOf3DUI = GetConfigVar(obj = $npc, key = "typeOf3DUI")
+    If($typeOf3DUI and $typeOf3DUI == "blackBoard")
+    {
+        $width = 0
+        $height = 0
+        $text = ""
+        $position = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $rotate = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $objID = 0
+        If($npc)
+        {
+            $position = GetConfigVar(obj = $npc, key = "position") or $position
+            $width = GetConfigVar(obj = $npc, key = "width") or $width
+            $height = GetConfigVar(obj = $npc, key = "height") or $height
+            $text = $npc.blackboardStr or $text
+            $objID = GetObjectID(object = $npc)
+        }
+        
+        $data = {
+            key = ToString($objID),
+            name = "blackBoard",
+            width = $width,
+            height = $height,
+            position = $position,
+            rotate = $rotate,
+            objID = $objID,
+            args = {
+                text = $text
+            }
+        }
+
+        $map = GetEntityMap(entity = $obj1)
+        $players = GetMapPlayer(map = $map)
+        Foreach(array = $players, key = "player")
+        {
+            OpenSceneEntityUI(player = $player, data = $data)
         }
     }
 }
@@ -4887,8 +4947,7 @@ UPDATE_SINGLE_BLACK_BOARD_ENTITY
     $players = GetMapPlayer(map = $map)
     Foreach(array = $players, key = "player")
     {
-        ShowEntity3DUI(player = $player, show = false, data = $data)
-        ShowEntity3DUI(player = $player, show = true, data = $data)
+        RefreshBlackBoardText(player = $player, wndKey = ToString($objID), text = $text)
     }
 }
 
@@ -4948,10 +5007,14 @@ UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY
                 text = $text
             }
         }
-        ShowEntity3DUI(player = $obj1, show = false, data = $data)
+
         If($show)
         {
-            ShowEntity3DUI(player = $obj1, show = true, data = $data)
+            OpenSceneEntityUI(player = $obj1, data = $data)
+        }
+        Else
+        {
+            CloseSceneEntityUI(player = $obj1, data = $data)
         }
     }
 }
@@ -5000,10 +5063,13 @@ UPDATE_PUBLIC_ALL_BLACK_BOARD_ENTITY
             }
         }
 
-        ShowEntity3DUI(player = $obj1, show = false, data = $data)
         If($show)
         {
-            ShowEntity3DUI(player = $obj1, show = true, data = $data)
+            OpenSceneEntityUI(player = $obj1, data = $data)
+        }
+        Else
+        {
+            CloseSceneEntityUI(player = $obj1, data = $data)
         }
     }
 }
