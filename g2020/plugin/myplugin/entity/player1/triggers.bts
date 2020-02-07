@@ -1462,9 +1462,14 @@ RIDEOFF_IN_DEC{
             }
         }
         $pos = ComputeV3(p1 = GetEntityPosition(entity = $target), op = "add", p2 = $addPos or $target.lastSideNormal)
-        SetEntityPosition(entity = $obj1, pos = $pos)
+        $ride = GetRideOn(entity = $obj1)
+        If(not $ride)
+        {
+            SetEntityPosition(entity = $obj1, pos = $pos)
+        }
     }
 }
+
 
 ADD_MONEY
 {  
