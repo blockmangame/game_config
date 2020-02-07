@@ -4159,8 +4159,15 @@ SHOW_SHOP_TITLE(){
     $cfg = GetWorldVar(key = "ShopTitle")
     $Dict = NewDictionary($cfg or {})
     $array = DictionaryGet(dict = $Dict, key = $mapName)
-    Foreach(array = $array or {}, key = "data"){
-        Show3DUI(player = $obj1, show = $show, data = $data)
+    If($show){
+        Foreach(array = $array or {}, key = "data"){
+            OpenSceneUI(player = $obj1, data = $data)
+        }
+    }
+    Else{
+        Foreach(array = $array or {}, key = "data"){
+            CloseSceneUI(player = $obj1, data = $data)
+        }
     }
 }
 --公共区域购买，场景商店的购买逻辑
@@ -5724,6 +5731,7 @@ FUNC_CHECK_SHOWN_DANCES_SKILL --param: shown
 
 SHOW_GOTO_RECHARGE_UI
 {
+    $def = false
     $btnInfo = { leftCoinId = nil, leftContent = "gui.text.cancel", rightCoinId = nil, rightContent = "go_to_recharge" }
     ShowDialogTip(entity = $obj1, tipType = 5, event = "SHOW_GOTO_RECHARGE_UI_RESULT", p1 = "composition.tip.title", p2= "pay_failure_gDiamonds_insufficient", p3 = $btnInfo)
 }
@@ -5738,6 +5746,7 @@ SHOW_GOTO_RECHARGE_UI_RESULT
 
 SHOW_GOTO_APP_SHOP_UI
 {
+    $def = false
     $btnInfo = { leftCoinId = nil, leftContent = "gui.text.cancel", rightCoinId = nil, rightContent = "go_to_conversion" }
     ShowDialogTip(entity = $obj1, tipType = 5, event = "SHOW_GOTO_APP_SHOP_UI_RESULT", p1 = "composition.tip.title", p2= "pay_failure_game_money_insufficient", p3 = $btnInfo)
 }

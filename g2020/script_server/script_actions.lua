@@ -1,6 +1,14 @@
 local BehaviorTree = require("common.behaviortree")
 local Actions = BehaviorTree.Actions
 
+function Actions.RefreshNumberBoardText(data, params, context)
+	params.player:sendPacket({
+		pid = "RefreshNumberBoardText",
+		wndKey = params.wndKey,
+		text = params.text,
+	})
+end
+
 function Actions.ShowHomeGuide(data, params, context)
 	local entity = params.entity
 	local pos = entity:getPosition()
