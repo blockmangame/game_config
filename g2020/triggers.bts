@@ -909,6 +909,10 @@ SHOW_PUBLIC_BLACK_BOARD_EDIT_UI
 EDIT_PUBLIC_BLACKBOARD_BUTTON_SURE
 {
     $npc = GetObject(objID = $objID)
+    If(not $npc)
+    {
+        Return()
+    }
 
     $textLength = GetConfigVar(obj = $npc, key = "textLength") or 50
     
