@@ -369,11 +369,13 @@ WORKS_WALL_TIMER_START
         Return()
     }
     $worksWallUpdateTime = GetWorldVar(key = "worksWallUpdateTime")
+    $time = $worksWallUpdateTime
     Foreach(array = $worksWallConfig, key = "data")
     {
         $dict = NewDictionary($data)
         $name = DictionaryGet(dict = $dict, key = "name")
-        StartTimer(rep = true, time = $worksWallUpdateTime, event = "WORKS_WALL_UPDATE", wallName = $name)
+        StartTimer(rep = true, time = $time, event = "WORKS_WALL_UPDATE", wallName = $name)
+        $time = 40 + $time
     }
 }
 
