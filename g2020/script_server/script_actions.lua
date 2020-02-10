@@ -9,6 +9,14 @@ function Actions.RefreshNumberBoardText(data, params, context)
 	})
 end
 
+function Actions.RefreshBlackBoardText(data, params, context)
+	params.player:sendPacket({
+		pid = "RefreshBlackBoardText",
+		wndKey = params.wndKey,
+		text = params.text,
+	})
+end
+
 function Actions.ShowHomeGuide(data, params, context)
 	local entity = params.entity
 	local pos = entity:getPosition()

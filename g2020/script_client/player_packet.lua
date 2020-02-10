@@ -11,6 +11,14 @@ function handles:RefreshNumberBoardText(packet)
 	wnd:updateText(packet.text)
 end
 
+function handles:RefreshBlackBoardText(packet)
+	local wnd = UI._windows[packet.wndKey]
+	if not wnd then
+		return
+	end
+	wnd:updateText(packet.text)
+end
+
 function handles:ShowHomeGuide(packet)
 	GuideHome.showHomeUI(packet.pos)
 end

@@ -90,12 +90,41 @@ SHOW_EDIT_UI{
 }
 
 DEC_INTERACTION_MOVE_TOUCH_BEGIN{
+    -- PlayAction(
+    --     entity = $obj1,
+    --     includeSelf = true,
+    --     actionName = "jump",
+    --     actionTime = -1
+    -- )
     PlayAction(
         entity = $obj1,
         includeSelf = true,
-        actionName = "jump",
+        actionName = "shake",
         actionTime = -1
     )
+    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff")
+    If($buff)
+    {
+        RemoveEntityBuff(entity = $obj1, buff = $buff)
+    }
+    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_shake_buff")
+    If(not $buff) -- 被编辑的entity播放动作摇晃 buff
+    {
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_shake_buff")
+    }
+    -- 移动家具特效buff
+    $decBeginMovementEffectBuff = GetConfigVar(obj = $obj1, key = "decBeginMovementEffectBuff")
+    If($decBeginMovementEffectBuff){
+        $decBeginMovementEffectBuffMap = NewDictionary($decBeginMovementEffectBuff or {})
+        $cfg = DictionaryGet(dict = $decBeginMovementEffectBuffMap, key = "buff")
+        If($cfg){
+            $time = DictionaryGet(dict = $decBeginMovementEffectBuffMap, key = "time")
+            $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
+            If(not $buff){
+                AddEntityBuff(entity = $obj1, cfg = $cfg, buffTime = $soundBuffTime)
+            }
+        }
+    }
     $obj2.isMoveDec = true
 }
 
@@ -107,6 +136,36 @@ DEC_INTERACTION_MOVE_TOUCH_END{
     SetEntityRoll(entity = $obj1, rotationRoll = DictionaryGet(dict = $dict, key = "entityRoll") or GetEntityPosition(entity = $obj1))
     $obj1.lastSideNormal = DictionaryGet(dict = $dict, key = "lastSideNormal") or Table(x = 0,y = 0,z = 0)
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, time = 2, yaw = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), event = "ROTATION_BODY_YAW")
+    
+    PlayAction(
+        entity = $obj1,
+        includeSelf = true,
+        actionName = "idle",
+        actionTime = -1
+    )
+    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_shake_buff")
+    If($buff)
+    {
+        RemoveEntityBuff(entity = $obj1, buff = $buff)
+    }
+    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff")
+    If(not $buff) -- 被编辑的entity播放动作摇晃 buff
+    {
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_idle_buff")
+    }
+    -- 移动家具特效buff2
+    $decEndMovementEffectBuff = GetConfigVar(obj = $obj1, key = "decEndMovementEffectBuff")
+    If($decEndMovementEffectBuff){
+        $decEndMovementEffectBuffMap = NewDictionary($decEndMovementEffectBuff or {})
+        $cfg = DictionaryGet(dict = $decEndMovementEffectBuffMap, key = "buff")
+        If($cfg){
+            $time = DictionaryGet(dict = $decEndMovementEffectBuffMap, key = "time")
+            $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
+            If(not $buff){
+                AddEntityBuff(entity = $obj1, cfg = $cfg, buffTime = $soundBuffTime)
+            }
+        }
+    }
     $obj2.isMoveDec = nil
 }
 
@@ -127,11 +186,24 @@ DEC_INTERACTION_SALE{
         $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $index))
         If(DictionaryGet(dict = $fDict, key = "furnishingId") == GetObjectID(object = $obj1)){
             $cfg = DictionaryGet(dict = $fDict, key = "cfg")
-            $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
+            $sellMoney = DictionaryGet(dict = $fDict, key = "sellMoney")
             If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
-                $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
+                $sellMoney = DictionaryGet(dict = $fDict, key = "sellByDiscountMoney")
             }
-            AddCurrency(entity = $owner, coinName = "green_currency", count = $sellMoney)
+            If(not $sellMoney){
+                Foreach(array = @DECORATION_STORE, key = "decorationTb"){
+                    $decorationDic = NewDictionary($decorationTb)
+                    If(DictionaryGet(dict = $decorationDic, key = "fullName") == $cfg){
+                        $sellMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellMoney") or 0)
+                        Test("$sellMoney", $sellMoney)
+                        If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
+                            $sellMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellByDiscountMoney") or 0)
+                            Test("$sellByDiscountMoney", $sellMoney)
+                        }                    
+                    }
+                }
+            }
+            AddCurrency(entity = $owner, coinName = "green_currency", count = $sellMoney or 0)
             ArrayRemove(array = $furnitures, index = $index)
             Break()
         }

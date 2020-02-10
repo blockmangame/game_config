@@ -325,7 +325,8 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
                     -- pos是相对坐标，每个map都有一个initPos，坐标都是这个initPos+pos
                     -- 绝对坐标也行
                     {pos = {x = "xx", y = "xx", z = "xx"},yaw = 0,cfg = "myplugin/xxx...",
-                        furnishingId = "id",isOldFurnishing = "true/false", saveSkinList = [{skinName = "xxx", skin = "xxx"}]}
+                        furnishingId = "id",isOldFurnishing = "true/false", saveSkinList = [{skinName = "xxx", skin = "xxx"}],
+                        sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney}
                     -- {pos,yaw,cfg,全局唯一id:furnishingId（当前obj的id）,
                     -- isOldFurnishing 是否是旧家具，下线后则会将当前玩家全部房子的全部家具设置成true，即是旧家具
                     -- saveSkinList 特殊家具需要保存皮肤列表（需要在该家具中配一个saveSkinList 要保存的皮肤列表）}
@@ -761,10 +762,12 @@ BUY_STORE{
         If(DictionaryGet(dict = $decorationDic, key = "fullName") == $cfg){
             $buyMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "buyMoney") or 0)
             $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
+            $sellMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellMoney") or 0)
+            $sellByDiscountMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellByDiscountMoney") or 0)
         }
     }
     If(3 ~= $coinId){
-        BuyGoods(player = $obj1, uniqueId = 20201002,  coinId = $coinId, price = $buyMoney, cfg = $cfg, event = "BUY_STORE_BY_APP" )
+        BuyGoods(player = $obj1, uniqueId = 20201002,  coinId = $coinId, price = $buyMoney, cfg = $cfg, sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney, event = "BUY_STORE_BY_APP" )
         Return()
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
@@ -774,7 +777,7 @@ BUY_STORE{
         ShowGoldShop(player = $obj1, show = true)
         Return()
     }
-    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg)
+    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg, sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney)
 }
 
 BUY_STORE_BY_APP{
@@ -786,7 +789,7 @@ BUY_STORE_BY_APP{
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", keepTime = 40)
         Return()
     }
-    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg)
+    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg, sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney)
 }
 
 GIVE_STORE{
@@ -808,7 +811,8 @@ GIVE_STORE{
     }
     ArrayAppend(array = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing"), value = {
         pos = GetEntityPosition(entity = $npc), yaw = GetEntityYaw(entity = $npc),cfg = $cfg,
-        furnishingId = GetObjectID(object = $npc),isOldFurnishing = false
+        furnishingId = GetObjectID(object = $npc),isOldFurnishing = false,
+        sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney
     })
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
@@ -816,6 +820,7 @@ GIVE_STORE{
 
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
+    CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")
     -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
 }
 
@@ -846,7 +851,7 @@ UPDATE_PLAYER_3DUI_ENTITY{
                         $data = {
                             key = ToString(GetObjectID(object = $npc))
                         }
-                        ShowEntity3DUI(player = $player, show = false, data = $data)
+                        CloseSceneEntityUI(player = $player, data = $data)
                     }
                 }
             }
@@ -1462,8 +1467,26 @@ RIDEOFF_IN_DEC{
             }
         }
         $pos = ComputeV3(p1 = GetEntityPosition(entity = $target), op = "add", p2 = $addPos or $target.lastSideNormal)
-        SetEntityPosition(entity = $obj1, pos = $pos)
+        $ride = GetRideOn(entity = $obj1)
+        If(not $ride)
+        {
+            SetEntityPosition(entity = $obj1, pos = $pos)
+        }
     }
+}
+
+INTERACTION_WITH_MOVEMENT_EVENT{
+    $dict = NewDictionary(@interactionWithMovementEventMap)
+    $eventDict = NewDictionary(DictionaryGet(dict = $dict, key = $interactionType) or {})
+    $event = DictionaryGet(dict = $eventDict, key = $interactionName)
+    Test($interactionType, $interactionName, $event)
+    If(not $event){
+        Return()
+    }
+    If($targetObjId){
+        $target = GetObject(objID = $targetObjId)
+    }
+    CallTrigger(object = $target or $obj1, event = $event)
 }
 
 ADD_MONEY
@@ -4138,7 +4161,7 @@ FINISH_AWARD(){ --完成打工的奖励
         AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
     }
-    $taskItem = SearchBagItem(entity = $obj1, key = "newTaskitem", val = true)
+    $taskItem = searchEquipItem(entity = $obj1, key = "newTaskitem", val = true)
     If($taskItem){
         ConsumeItem(item = $taskItem, num = 1)
     }
@@ -4749,8 +4772,7 @@ UPDATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY
         
         Foreach(array = $players, key = "player")
         {
-            -- ShowEntity3DUI(player = $player, show = false, data = $data)
-            ShowEntity3DUI(player = $player, show = true, data = $data)
+            OpenSceneEntityUI(player = $player, data = $data)
         }
     }
 }
@@ -4826,19 +4848,79 @@ UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY
                 titleColor = $titleColor,
             }
         }
-        ShowEntity3DUI(player = $obj1, show = false, data = $data)
+
         If($show)
         {
-            ShowEntity3DUI(player = $obj1, show = $show, data = $data)
+            OpenSceneEntityUI(player = $obj1, data = $data)
+        }
+        Else
+        {
+            CloseSceneEntityUI(player = $obj1, data = $data)
         }
         
         Foreach(array = $players, key = "player")
         {
             If($player ~= $obj1)
             {
-                ShowEntity3DUI(player = $player, show = false, data = $data)
-                ShowEntity3DUI(player = $player, show = true, data = $data)
+                RefreshNumberBoardText(player = $player, wndKey = ToString($objID), text = $playerCount)
             }
+        }
+    }
+}
+
+CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY
+{
+    If(not $npc)
+    {
+        Return()
+    }
+
+    $typeOf3DUI = GetConfigVar(obj = $npc, key = "typeOf3DUI")
+    If($typeOf3DUI and $typeOf3DUI == "blackBoard")
+    {
+        $width = 0
+        $height = 0
+        $text = ""
+        $position = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $rotate = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $objID = 0
+        If($npc)
+        {
+            $position = GetConfigVar(obj = $npc, key = "position") or $position
+            $width = GetConfigVar(obj = $npc, key = "width") or $width
+            $height = GetConfigVar(obj = $npc, key = "height") or $height
+            $text = $npc.blackboardStr or $text
+            $objID = GetObjectID(object = $npc)
+        }
+        
+        $data = {
+            key = ToString($objID),
+            name = "blackBoard",
+            width = $width,
+            height = $height,
+            position = $position,
+            rotate = $rotate,
+            objID = $objID,
+            args = {
+                text = $text
+            }
+        }
+
+        $map = GetEntityMap(entity = $obj1)
+        $players = GetMapPlayer(map = $map)
+        Foreach(array = $players, key = "player")
+        {
+            OpenSceneEntityUI(player = $player, data = $data)
         }
     }
 }
@@ -4887,8 +4969,7 @@ UPDATE_SINGLE_BLACK_BOARD_ENTITY
     $players = GetMapPlayer(map = $map)
     Foreach(array = $players, key = "player")
     {
-        ShowEntity3DUI(player = $player, show = false, data = $data)
-        ShowEntity3DUI(player = $player, show = true, data = $data)
+        RefreshBlackBoardText(player = $player, wndKey = ToString($objID), text = $text)
     }
 }
 
@@ -4948,10 +5029,14 @@ UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY
                 text = $text
             }
         }
-        ShowEntity3DUI(player = $obj1, show = false, data = $data)
+
         If($show)
         {
-            ShowEntity3DUI(player = $obj1, show = true, data = $data)
+            OpenSceneEntityUI(player = $obj1, data = $data)
+        }
+        Else
+        {
+            CloseSceneEntityUI(player = $obj1, data = $data)
         }
     }
 }
@@ -5000,10 +5085,13 @@ UPDATE_PUBLIC_ALL_BLACK_BOARD_ENTITY
             }
         }
 
-        ShowEntity3DUI(player = $obj1, show = false, data = $data)
         If($show)
         {
-            ShowEntity3DUI(player = $obj1, show = true, data = $data)
+            OpenSceneEntityUI(player = $obj1, data = $data)
+        }
+        Else
+        {
+            CloseSceneEntityUI(player = $obj1, data = $data)
         }
     }
 }
@@ -5228,7 +5316,7 @@ TRY_CREATE_PARTY {
         $canCreate = true
     }Else{
         $canCreate = false
-        $tip = "gui.party.buy.privilege"
+        $tip = ""
         CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 1, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
     }
 }
@@ -5638,6 +5726,7 @@ CHECK_SHOW_SVIP_UI()
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
     {
         $show = true
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/svip_privilege_buff")
     }
     If($obj1.getSvipDay ~= "" and IsSameDay(time1 = $obj1.getSvipDay, time2 = GetTime())){
         $show = false

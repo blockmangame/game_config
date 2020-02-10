@@ -73,3 +73,74 @@ START_HORN{
 
 STOP_HORN{
 }
+
+MOVE_BEGIN_FORWARD_BACK{
+    $forwardBuffCfg = GetConfigVar(obj = $obj1, key = "carForwardMovementBuff")
+    $backBuffCfg = GetConfigVar(obj = $obj1, key = "carBackMovementBuff")
+    $entityYaw = GetEntityYaw(entity = $obj1) % 360
+    $entityPos = GetEntityPosition(entity = $obj1)
+    If($obj1.entityLastPos and $obj1.entityLastPos ~= $entityPos){
+        $forwardBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $forwardBuffCfg)
+        $backBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $backBuffCfg)
+        $pointYaw = V3AngleXZ(vector = ComputeV3(op = "sub", p1 = $entityPos, p2 = $obj1.entityLastPos))
+        $subYaw = $pointYaw - $entityYaw
+        -- Test($entityYaw, V3AngleXZ(vector = ComputeV3(op = "sub", p1 = $entityPos, p2 = $obj1.entityLastPos)))
+        If($subYaw > 90 or $subYaw < -90){
+            --Test("444444444444444444444", $subYaw, $entityYaw, $pointYaw)
+            If(not $backBuff and $key){
+                AddEntityBuff(entity = $obj1, cfg = $backBuffCfg)
+            }
+            If($forwardBuff){
+                RemoveEntityBuff(entity = $obj1, buff = $forwardBuff)
+            }
+        }Else{
+            --Test("5555555555555555555555", $subYaw, $entityYaw, $pointYaw)
+            If(not $forwardBuff and $key){
+                AddEntityBuff(entity = $obj1, cfg = $forwardBuffCfg)
+            }
+            If($backBuff){
+                RemoveEntityBuff(entity = $obj1, buff = $backBuff)
+            }
+        }
+    }
+    $obj1.entityLastPos = $entityPos
+    $obj1.movementTimer = StartTimer(rep = false, object =$obj1, obj1 =$obj1, key = $key, time = 10, event = "MOVE_BEGIN_FORWARD_BACK")
+}
+
+MOVE_END_FORWARD_BACK{
+    $buffCfg = GetConfigVar(obj = $obj1, key = "carForwardMovementBuff")
+    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $buffCfg)
+    If($buff){
+        RemoveEntityBuff(entity = $obj1, buff = $buff)
+    }
+    $buffCfg = GetConfigVar(obj = $obj1, key = "carBackMovementBuff")
+    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $buffCfg)
+    If($buff){
+        RemoveEntityBuff(entity = $obj1, buff = $buff)
+    }
+    If($obj1.movementTimer){
+        StopTimer(timer = $obj1.movementTimer)
+        $obj1.movementTimer = nil
+    }
+    $obj1.entityLastPos = nil
+}
+
+START_FORWARD{
+    Test("START_FORWARD", GetLastPos(entity = $obj1), GetEntityYaw(entity = $obj1))
+    CallTrigger(object = $obj1, obj1 = $obj1, key = "forward", event = "MOVE_BEGIN_FORWARD_BACK")
+}
+
+STOP_FORWARD{
+    Test("STOP_FORWARD")
+    CallTrigger(object = $obj1, obj1 = $obj1, event = "MOVE_END_FORWARD_BACK")
+}
+
+START_BACK{
+    Test("START_BACK", GetLastPos(entity = $obj1), GetEntityYaw(entity = $obj1))
+    CallTrigger(object = $obj1, obj1 = $obj1, key = "back", event = "MOVE_BEGIN_FORWARD_BACK")
+}
+
+STOP_BACK{
+    Test("STOP_BACK")
+    CallTrigger(object = $obj1, obj1 = $obj1, event = "MOVE_END_FORWARD_BACK")
+}

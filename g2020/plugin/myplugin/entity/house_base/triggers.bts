@@ -126,6 +126,9 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
 
             CallTrigger(object = GetObjectVar(obj = $obj1, key = "owner"), obj1 = GetObjectVar(obj = $obj1, key = "owner"), 
                 npc = $npc, add = true, event = "UPDATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
+
+            CallTrigger(object = GetObjectVar(obj = $obj1, key = "owner"), obj1 = GetObjectVar(obj = $obj1, key = "owner"), 
+                npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")     
         }
     }
     ------------------------------------------ 内部门
@@ -488,6 +491,14 @@ ENTITY_DIE{
 
     ------------------------------------------ 销毁内部房子
     $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
-    MoveMapPlayerTo(map = $map, newmap = $outsideDoorMap, pos = ComputeV3(p1 = $outsideDoorPos, p2 = Table(x = 0, y = 0.1, z = 5), op = "add"))
+    Test(GetEntityYaw(entity = $outsideDoor))
+    $allPlayer = GetMapPlayer(map = $map)
+    Foreach(array = $allPlayer, key = "player"){
+        ShowTip(entity = $player, tipType = 2,textKey = "house_change_and_kick_you", keepTime = 40)
+    }
+    -- SetEntityPosition(entity = $door, map = GetEntityMap(entity = $obj1), 
+    --     pos = ComputeV3(p1 = GetEntityPosition(entity = $obj1), p2 = V3RotationYaw(vector = GetConfigVar(obj = $obj1, key = "doorPos") or {x = 0,y = 0, z = 0}, yaw = $yaw), op = "add"))
+    MoveMapPlayerTo(map = $map, newmap = $outsideDoorMap, pos = ComputeV3(p1 = GetEntityPosition(entity = $obj1), 
+        p2 = V3RotationYaw(vector = Table(x = 0, y = 0.1, z = 9), yaw = GetEntityYaw(entity = $outsideDoor)), op = "add"))
     CloseMap(map = $map)
 }
