@@ -4161,7 +4161,7 @@ FINISH_AWARD(){ --完成打工的奖励
         AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
     }
-    $taskItem = SearchBagItem(entity = $obj1, key = "newTaskitem", val = true)
+    $taskItem = searchEquipItem(entity = $obj1, key = "newTaskitem", val = true)
     If($taskItem){
         ConsumeItem(item = $taskItem, num = 1)
     }
@@ -5726,6 +5726,7 @@ CHECK_SHOW_SVIP_UI()
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
     {
         $show = true
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/svip_privilege_buff")
     }
     If($obj1.getSvipDay ~= "" and IsSameDay(time1 = $obj1.getSvipDay, time2 = GetTime())){
         $show = false
