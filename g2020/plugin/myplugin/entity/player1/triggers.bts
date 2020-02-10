@@ -4480,7 +4480,6 @@ EQUIP_BABY_TROLLEY --params: cfgPath
             cfg = GetConfigVar(obj = $trolley, key = "attachBuff")
         )
         SetObjectVar(obj = $obj1, key = "createdTrolley", value = $trolley)
-        AddSkill(entity = $obj1, name = "myplugin/kill_trolley")
         CallTrigger(object = $obj1, event = "CHANGE_BABY_TROLLEY_SCALE")
     }
 }
@@ -4499,7 +4498,6 @@ DEMOUNT_BABY_TROLLEY
             }
         }
         ClearRide(entity = $obj1.createdTrolley)
-        RemoveSkill(entity = $obj1, name = "myplugin/kill_trolley")
         RemoveEntityBuff(entity = $obj1.createdTrolley, buff = GetObjectVar(obj = $obj1.createdTrolley, key = "scaleBuff"))
         RemoveEntityBuff(entity = $obj1, buff = $obj1.trolleyBuff)
         KillEntity(entity = $obj1.createdTrolley)
