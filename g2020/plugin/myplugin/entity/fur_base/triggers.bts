@@ -186,11 +186,24 @@ DEC_INTERACTION_SALE{
         $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $index))
         If(DictionaryGet(dict = $fDict, key = "furnishingId") == GetObjectID(object = $obj1)){
             $cfg = DictionaryGet(dict = $fDict, key = "cfg")
-            $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
+            $sellMoney = DictionaryGet(dict = $fDict, key = "sellMoney")
             If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
-                $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
+                $sellMoney = DictionaryGet(dict = $fDict, key = "sellByDiscountMoney")
             }
-            AddCurrency(entity = $owner, coinName = "green_currency", count = $sellMoney)
+            If(not $sellMoney){
+                Foreach(array = @DECORATION_STORE, key = "decorationTb"){
+                    $decorationDic = NewDictionary($decorationTb)
+                    If(DictionaryGet(dict = $decorationDic, key = "fullName") == $cfg){
+                        $sellMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellMoney") or 0)
+                        Test("$sellMoney", $sellMoney)
+                        If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
+                            $sellMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellByDiscountMoney") or 0)
+                            Test("$sellByDiscountMoney", $sellMoney)
+                        }                    
+                    }
+                }
+            }
+            AddCurrency(entity = $owner, coinName = "green_currency", count = $sellMoney or 0)
             ArrayRemove(array = $furnitures, index = $index)
             Break()
         }

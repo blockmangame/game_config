@@ -325,7 +325,8 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
                     -- pos是相对坐标，每个map都有一个initPos，坐标都是这个initPos+pos
                     -- 绝对坐标也行
                     {pos = {x = "xx", y = "xx", z = "xx"},yaw = 0,cfg = "myplugin/xxx...",
-                        furnishingId = "id",isOldFurnishing = "true/false", saveSkinList = [{skinName = "xxx", skin = "xxx"}]}
+                        furnishingId = "id",isOldFurnishing = "true/false", saveSkinList = [{skinName = "xxx", skin = "xxx"}],
+                        sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney}
                     -- {pos,yaw,cfg,全局唯一id:furnishingId（当前obj的id）,
                     -- isOldFurnishing 是否是旧家具，下线后则会将当前玩家全部房子的全部家具设置成true，即是旧家具
                     -- saveSkinList 特殊家具需要保存皮肤列表（需要在该家具中配一个saveSkinList 要保存的皮肤列表）}
@@ -761,10 +762,12 @@ BUY_STORE{
         If(DictionaryGet(dict = $decorationDic, key = "fullName") == $cfg){
             $buyMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "buyMoney") or 0)
             $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
+            $sellMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellMoney") or 0)
+            $sellByDiscountMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellByDiscountMoney") or 0)
         }
     }
     If(3 ~= $coinId){
-        BuyGoods(player = $obj1, uniqueId = 20201002,  coinId = $coinId, price = $buyMoney, cfg = $cfg, event = "BUY_STORE_BY_APP" )
+        BuyGoods(player = $obj1, uniqueId = 20201002,  coinId = $coinId, price = $buyMoney, cfg = $cfg, sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney, event = "BUY_STORE_BY_APP" )
         Return()
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
@@ -774,7 +777,7 @@ BUY_STORE{
         ShowGoldShop(player = $obj1, show = true)
         Return()
     }
-    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg)
+    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg, sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney)
 }
 
 BUY_STORE_BY_APP{
@@ -786,7 +789,7 @@ BUY_STORE_BY_APP{
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", keepTime = 40)
         Return()
     }
-    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg)
+    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg, sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney)
 }
 
 GIVE_STORE{
@@ -808,7 +811,8 @@ GIVE_STORE{
     }
     ArrayAppend(array = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing"), value = {
         pos = GetEntityPosition(entity = $npc), yaw = GetEntityYaw(entity = $npc),cfg = $cfg,
-        furnishingId = GetObjectID(object = $npc),isOldFurnishing = false
+        furnishingId = GetObjectID(object = $npc),isOldFurnishing = false,
+        sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney
     })
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
@@ -1471,6 +1475,19 @@ RIDEOFF_IN_DEC{
     }
 }
 
+INTERACTION_WITH_MOVEMENT_EVENT{
+    $dict = NewDictionary(@interactionWithMovementEventMap)
+    $eventDict = NewDictionary(DictionaryGet(dict = $dict, key = $interactionType) or {})
+    $event = DictionaryGet(dict = $eventDict, key = $interactionName)
+    Test($interactionType, $interactionName, $event)
+    If(not $event){
+        Return()
+    }
+    If($targetObjId){
+        $target = GetObject(objID = $targetObjId)
+    }
+    CallTrigger(object = $target or $obj1, event = $event)
+}
 
 ADD_MONEY
 {  
