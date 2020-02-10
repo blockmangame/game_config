@@ -121,7 +121,7 @@ DEC_INTERACTION_MOVE_TOUCH_BEGIN{
             $time = DictionaryGet(dict = $decBeginMovementEffectBuffMap, key = "time")
             $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
             If(not $buff){
-                AddEntityBuff(entity = $obj1, cfg = $cfg, buffTime = $soundBuffTime)
+                AddEntityBuff(entity = $obj1, cfg = $cfg, buffTime = $time)
             }
         }
     }
@@ -162,7 +162,7 @@ DEC_INTERACTION_MOVE_TOUCH_END{
             $time = DictionaryGet(dict = $decEndMovementEffectBuffMap, key = "time")
             $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
             If(not $buff){
-                AddEntityBuff(entity = $obj1, cfg = $cfg, buffTime = $soundBuffTime)
+                AddEntityBuff(entity = $obj1, cfg = $cfg, buffTime = $time)
             }
         }
     }
