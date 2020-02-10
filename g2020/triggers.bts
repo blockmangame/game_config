@@ -16,6 +16,25 @@ GAME_INIT
         "set:diamond.json image:Diamond-icon2.png",
         "plugin/myplugin/image/coin.png"
     ]
+
+    @interactionWithMovementEventMap = {
+        WindowTouchDown = {
+            startHorn = "START_HORN",
+            forward = "START_FORWARD",
+            back = "START_BACK"
+        },
+        WindowTouchUp = {
+            debark = "DEBARK",
+            stopHorn = "STOP_HORN",
+            forward = "STOP_FORWARD",
+            back = "STOP_BACK"
+        },
+        MotionRelease = {
+            forward = "STOP_FORWARD",
+            back = "STOP_BACK"
+        }
+    }
+
     CallTrigger(event = "WORKS_WALL_TIMER_START")
     CallTrigger(event = "INIT_WORK_TASK_DATA")
     CallTrigger(event = "FUNC_NAVIGATION_GET_MAPS_ALL_PATH")
