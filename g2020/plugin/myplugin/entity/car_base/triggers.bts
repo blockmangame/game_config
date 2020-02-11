@@ -31,7 +31,7 @@ RIDE_ON
         }
         Else
         {
-            CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+            CallTrigger(obj1 = $obj2, event = "PLAYER_CLEAR_RIDE")
             RideOn(entity = $obj2, target = $obj1)
         }
     }
@@ -39,7 +39,7 @@ RIDE_ON
 
 RIDE_ON_CAR
 {
-    CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+    CallTrigger(obj1 = $obj2, event = "PLAYER_CLEAR_RIDE")
     RideOn(entity = $obj2, target = $obj1)
 }
 
