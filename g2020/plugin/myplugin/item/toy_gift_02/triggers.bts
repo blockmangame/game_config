@@ -1,5 +1,34 @@
 USE_ITEM(debug = false) --随机抽奖，抽奖道具使用后随机获得奖品
 {
+    $ary = [
+        [
+            21,
+            2
+        ],
+        [
+            23,
+            2
+        ],
+        [
+            24,
+            2
+        ]
+    ]
+    $msg = [
+        "baby_bag_full",
+        "car_bag_full",
+        "toy_bag_full",
+    ]
+    ForLoop(from = 1, to = 4,key = "index"){
+        $cap = GetEntityTrayAvailableCapacity(entity = $obj1, trayType = ArrayGet(array = $ary, index = $index))
+        If($index == 3){ -- 礼品盒也是玩具
+            $cap = $cap + 1
+        }
+        If($cap <=0 ){
+            ShowTip(textKey = ArrayGet(array = $msg, index = $index), tipType = 1, entity = $obj1, keepTime = 30)
+            Return()
+        }
+    }
     --TO DO 播放特效
     $rewardArray = NewArray()
     $randomPot = GetItemCfg(fullName = $itemName, key = "randomPot") 
@@ -38,6 +67,7 @@ USE_ITEM(debug = false) --随机抽奖，抽奖道具使用后随机获得奖品
     }
     If($item)
     {
+        ConsumeItem(item = $sloter, num = 1)
         ShowAnimationReward(cfgKey = "myplugin/toy_gift_02", player = $obj1, type = "Item", count = 1, fullName = $addItem)
         StartTimer(rep = false, time = 40, object = $obj1, obj1 = $obj1, addItem = $addItem, event = "ADD_TOY_GIFT")
         --ShowRewardItemEffect(type = "Item", count = 1, fullName = $addItem, player = $obj1) -- todo 改变弹窗
