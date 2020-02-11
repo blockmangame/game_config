@@ -601,6 +601,10 @@ RECHECK_INTERACTION_UI(){
 
 ENTITY_RIDE_OFF {
     If(not IsPlayer(entity = $obj2)){ Return() }
+    $buff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/attach_point_index_1_buff")
+    If($buff){
+        RemoveEntityBuff(entity = $obj2, buff = $buff)
+    }
     $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_run_buff")
     If($buff) -- 被骑乘的entity播放动作buff
     {
