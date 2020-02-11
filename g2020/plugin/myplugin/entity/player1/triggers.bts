@@ -4393,16 +4393,16 @@ EQUIP_CAR {
         ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", keepTime = 40)
         Return()
     }
+
     If($obj1.createdCar)
     {
         CallTrigger(object = $obj1, event = "TAKEOFF_EQUIP_CAR")
     }
-
+    CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
     $pos = GetEntityPosition(entity = $obj1)
     $newPos = ComputeV3(op = "add", p1= $pos, p2 = {x = 0, y = 2, z = 0})
     $yaw = GetEntityYaw(entity = $obj1)
     $car = CreateNpc(cfgName = $carName, pos = $newPos, map = GetEntityMap(entity = $obj1), owner = $obj1, ry = $yaw)
-
     RideOn(entity = $obj1, target = $car)
 
     SetObjectVar(obj = $obj1, key = "createdCar", value = $car)
@@ -4475,7 +4475,7 @@ EQUIP_BABY_TROLLEY --params: cfgPath
         ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", keepTime = 40)
         Return()
     }
-    
+
     If($obj1.createdTrolley)
     {
         CallTrigger(object = $obj1, event = "DEMOUNT_BABY_TROLLEY")
@@ -4489,6 +4489,7 @@ EQUIP_BABY_TROLLEY --params: cfgPath
     If($trolley)
     {
         $trolley.role = nil
+        CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
         $obj1.trolleyBuff = AddEntityBuff(
             entity = $obj1,
             cfg = GetConfigVar(obj = $trolley, key = "attachBuff")
