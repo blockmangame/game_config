@@ -64,17 +64,24 @@ ENTITY_RIDE_OFF
 
 START_HORN{
     $hornSoundBuff = GetConfigVar(obj = $obj1, key = "hornSoundBuff")
-    If(not $hornSoundBuff){
+    If(not $hornSoundBuff or $obj1.isCdHornSound){
         Return()
     }
     $soundBuffMap = NewDictionary(GetConfigVar(obj = $obj1, key = "hornSoundBuff") or {})
     $soundBuffCfg = DictionaryGet(dict = $soundBuffMap, key = "buff")
+    $soundBuffCd = DictionaryGet(dict = $soundBuffMap, key = "cd")
     If(not $soundBuffCfg){
         Return()
     }
     $soundBuffTime = DictionaryGet(dict = $soundBuffMap, key = "time")
     $soundBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $soundBuffCfg)
     AddEntityBuff(entity = $obj1, cfg = $soundBuffCfg, buffTime = $soundBuffTime)
+    $obj1.isCdHornSound = true
+    StartTimer(rep = false, object =$obj1, obj1 =$obj1, time = $soundBuffCd, event = "HORN_SOUND_CD_OK")
+}
+
+HORN_SOUND_CD_OK{
+    $obj1.isCdHornSound = nil
 }
 
 STOP_HORN{
