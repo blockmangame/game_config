@@ -22,3 +22,10 @@ end
 function handles:ShowHomeGuide(packet)
 	GuideHome.showHomeUI(packet.pos)
 end
+
+function handles:UpdateEntityDate(packet)
+    local obj = World.CurWorld:getObject(packet.objId)
+    if obj then
+        obj[packet.key] = packet.value
+    end
+end
