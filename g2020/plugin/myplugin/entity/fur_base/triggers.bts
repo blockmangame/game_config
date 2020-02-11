@@ -120,9 +120,7 @@ DEC_INTERACTION_MOVE_TOUCH_BEGIN{
         If($cfg){
             $time = DictionaryGet(dict = $decBeginMovementEffectBuffMap, key = "time")
             $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
-            If(not $buff){
-                AddEntityBuff(entity = $obj1, cfg = $cfg, buffTime = $time)
-            }
+            AddEntityBuff(entity = $obj1, cfg = $cfg, buffTime = $time)
         }
     }
     $obj2.isMoveDec = true
@@ -161,9 +159,7 @@ DEC_INTERACTION_MOVE_TOUCH_END{
         If($cfg){
             $time = DictionaryGet(dict = $decEndMovementEffectBuffMap, key = "time")
             $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
-            If(not $buff){
-                AddEntityBuff(entity = $obj1, cfg = $cfg, buffTime = $time)
-            }
+            AddEntityBuff(entity = $obj1, cfg = $cfg, buffTime = $time)
         }
     }
     $obj2.isMoveDec = nil
