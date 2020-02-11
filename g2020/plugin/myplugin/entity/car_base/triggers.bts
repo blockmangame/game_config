@@ -24,8 +24,9 @@ RIDE_ON
     }
     If($canDrive)
     {
-        If($obj2.createdTrolley){
-            ClearRide(entity = $obj2.createdTrolley)
+        If($obj2.otherItem){
+            --ClearRide(entity = $obj2.createdTrolley)
+			EquipItem(entity = $obj2, item = $obj2.equipItem)
             StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "RIDE_ON_CAR")
         }Else{
             RideOn(entity = $obj2, target = $obj1)
