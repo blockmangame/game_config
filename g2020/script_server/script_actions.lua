@@ -82,3 +82,17 @@ function Actions.EquipItem(data, params, content)
 	Tray:switch(tray_1, curSlot, tray_2, dstSlot) 
 	entity:syncSkillMap()
 end
+
+function Actions.UpdateEntityDateToClient(data, params, context)
+	local entity = params.entity
+    local key = params.key
+	if not entity or not key then
+		return
+    end
+    entity:sendPacket({
+        pid = "UpdateEntityDate",
+	    objId = entity.objID,
+	    key = key,
+        value = params.value
+    })
+end
