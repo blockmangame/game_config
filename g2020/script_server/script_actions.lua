@@ -35,29 +35,47 @@ function Actions.EquipItem(data, params, content)
 	if not item or not entity then
         return 
     end
-    local curTid = item:tid()
+	local tray = entity:tray()
+	local curTid = item:tid()
 	local curSlot = item:slot()
-    local types = item:tray_type()
-	local dstTid, dstSlot
-    for tid, _ in pairs(types) do
-        local ret = entity:tray():query_trays(tid)
-        for _, element in pairs(ret) do
-            local _tid, _tray = element.tid, element.tray
-            local slot = _tray:find_free()
-            if curTid ~= _tid then
-				dstTid = _tid
-				dstSlot = slot or 1
-            end
-        end
-    end
+	local function canEquipTrayTid(item, tid)
+	    if not item then
+			return 
+		end
+		local curTid = tid or item:tid()
+		local types = item:tray_type()
+		for tid, _ in pairs(types) do
+			local ret = tray:query_trays(tid)
+			for _, element in pairs(ret) do
+				local _tid, _tray = element.tid, element.tray
+				local slot = _tray:find_free()
+				if curTid ~= _tid then
+					return _tid, slot or 1
+				end
+			end
+		end
+	end
+
+	local function takeoffItem(tid, slot)
+		local sloter = tray:fetch_tray(tid):fetch_item(slot)
+		if sloter then
+			local equipTid, equipSlot = canEquipTrayTid(sloter, tid)
+			local entityTrays = entity:tray()
+			local tray_1 = entityTrays:fetch_tray(tid)
+			local tray_2 = entityTrays:fetch_tray(equipTid)
+			print(tid, slot, equipTid, equipSlot)
+			Tray:switch(tray_1, slot, tray_2, equipSlot)
+		end
+	end
+	local dstTid, dstSlot = canEquipTrayTid(item)
 	if not dstTid then
 		return
 	end
 	local entityTrays = entity:tray()
 	local tray_1 = entityTrays:fetch_tray(curTid)
 	local tray_2 = entityTrays:fetch_tray(dstTid)
-	
-	if not Tray:check_switch(tray_1, curSlot, tray_2, dstSlot) then
+	takeoffItem(dstTid, dstSlot)
+	if not Tray:check_switch(tray_1, item:slot(), tray_2, dstSlot) then
 		return
 	end
 

@@ -3,19 +3,28 @@ WEAR_EQUIPMEN {
     If($typeIndex == 3)
     {
         -- on car
+        If($obj1.equipItem)
+        {
+      		EquipItem(entity = $obj1, item = $obj1.equipItem)
+        }
         $carName = GetConfigVar(obj = $item, key = "carName")
         CallTrigger(event = "EQUIP_CAR", obj1 = $obj1, carName = $carName)
     }
     ElseIf($typeIndex == 1)
     {
         --baby trolley
+        $obj1.otherItem = true
         CallTrigger(event = "EQUIP_BABY_TROLLEY", object = $obj1, cfgPath = GetConfigVar(obj = $item, key = "trolleyEntity"))
 	}
+    Else{
+        $obj1.otherItem = true
+    }
 	$obj1.equipItem = $item
 	SetItemVar(entity = $obj1, item = $item, key = "equipFlag", value = true)
 }
 
 TAKEOFF_EQUIPMEN {
+    $obj1.equipItem = nil
     $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
     If($typeIndex == 3)
     {
@@ -26,6 +35,10 @@ TAKEOFF_EQUIPMEN {
         --baby trolley
         SetObjectVar(obj = $obj1, key = "equipTakeOff", value = true)
         CallTrigger(event = "DEMOUNT_BABY_TROLLEY", object = $obj1)
+	    $obj1.otherItem = false
+    }
+    Else{
+        $obj1.otherItem = false
     }
 }
 
@@ -4396,7 +4409,8 @@ EQUIP_CAR {
 }
 
 DEBARK {
-	EquipItem(entity = $obj1, item = $obj1.equipItem)
+	Dismount(entity = $obj1)
+	--EquipItem(entity = $obj1, item = $obj1.equipItem)
 }
 
 TAKEOFF_EQUIP_CAR
