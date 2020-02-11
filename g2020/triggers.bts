@@ -574,6 +574,10 @@ FUNC_LOAD_WORKS_WALL_TOP_RESPONSE {
 }
 
 RECHECK_JUMP2RUN_BUFF{
+    If(not IsValidObject(object = $entity))
+    {
+        Return()
+    }
     $buff = GetEntityTypeBuff(entity = $entity, key = "fullName", value = "myplugin/dec_jump2_2_run_buff")
     If(not $buff) -- 被骑乘的entity播放动作buff
     {
