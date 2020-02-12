@@ -4314,7 +4314,7 @@ ENTITY_BUY_APPSTOP {
         CallTrigger(obj1 = $obj1, event = "BUY_PRIVILEGE_SUCCEED", shopIndex = $itemIndex, privilegeName = $itemName)
         If($itemName == "myplugin/svip_privilege"){
             ShowToolBarButton(name = "svip", show = true, player = $obj1)
-            AddEntityBuff(entity = $obj1, cfg = "myplugin/svip_privilege_buff")
+            CallTrigger(obj1 = $obj1, event = "ADD_SVIP_BUFF", object = $obj1)
         }
         If($itemName == "myplugin/home_privilege"){ --购买租地特权，把房子移到公共区域
             StartTimer(time = 1,object = $obj1, event = "MOVE_HOME_FROM_PROTECT_TO_PUBLIC")
@@ -5732,14 +5732,23 @@ PLAYER_CLEAR_RIDE
     CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     ClearRide(entity = $obj1)
 }
-
+ADD_SVIP_BUFF{
+    If($obj1.lastSvipBuff){
+        RemoveEntityBuff(entity = $obj1, buff = $obj1.lastSvipBuff)
+    }
+    If($obj1.role == @child){
+        $obj1.lastSvipBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/svip_privilege_buff_2")
+    }Else{
+        $obj1.lastSvipBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/svip_privilege_buff")
+    }
+}
 CHECK_SHOW_SVIP_UI()
 {
     $show = false
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege"))
     {
         $show = true
-        AddEntityBuff(entity = $obj1, cfg = "myplugin/svip_privilege_buff")
+        CallTrigger(obj1 = $obj1, event = "ADD_SVIP_BUFF", object = $obj1)
     }
     If($obj1.getSvipDay ~= "" and IsSameDay(time1 = $obj1.getSvipDay, time2 = GetTime())){
         $show = false
