@@ -3,6 +3,10 @@ ENTITY_ENTER
 }
 
 ENTITY_RIDE_ON{
+    If(GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff"))
+    {
+        RemoveEntityBuff(entity = $obj1, buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff"))
+    }
     CallTrigger(object = $obj2, obj2 = $obj1, event = "ROTATION_WHEN_RIDE_ON")
 }
 
@@ -24,6 +28,11 @@ EDIT_OBJECT_ACTION{
 
 START_EDIT_ENTITY{
     CallTrigger(object = $obj1, event = "ADD_EDIT_BUFF")
+    If(not $obj1.firstInEdit){
+        SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1))
+        SetBodyYaw(entity = $obj1, yaw = $yaw or GetEntityYaw(entity = $obj1))
+        $obj1.firstInEdit = true
+    }
     SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = GetObjectID(object = $obj1))
 }
 
@@ -52,6 +61,7 @@ EXECUTION_EDIT_ACTION{
 }
 
 STOP_EDIT_ENTITY{
+    CallTrigger(object = $obj1, obj1 = $obj1, event = "REMOVE_END_MOVEMENT_BUFF")
     CallTrigger(object = $obj1, event = "REMOVE_EDIT_BUFF")
     SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     If(not GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/can_edit_house_buff")) -- 编辑房子的cd
@@ -89,29 +99,22 @@ SHOW_EDIT_UI{
     UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = true)
 }
 
+REMOVE_END_MOVEMENT_BUFF{
+    $decEndMovementEffectBuff = GetConfigVar(obj = $obj1, key = "decEndMovementEffectBuff")
+    If($decEndMovementEffectBuff){
+        $decEndMovementEffectBuffMap = NewDictionary($decEndMovementEffectBuff or {})
+        $cfg = DictionaryGet(dict = $decEndMovementEffectBuffMap, key = "buff")
+        If($cfg){
+            $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
+            If($buff){
+                RemoveEntityBuff(entity = $obj1, buff = $buff)
+            }
+        }
+    }
+}
+
 DEC_INTERACTION_MOVE_TOUCH_BEGIN{
-    -- PlayAction(
-    --     entity = $obj1,
-    --     includeSelf = true,
-    --     actionName = "jump",
-    --     actionTime = -1
-    -- )
-    PlayAction(
-        entity = $obj1,
-        includeSelf = true,
-        actionName = "shake",
-        actionTime = -1
-    )
-    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff")
-    If($buff)
-    {
-        RemoveEntityBuff(entity = $obj1, buff = $buff)
-    }
-    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_shake_buff")
-    If(not $buff) -- 被编辑的entity播放动作摇晃 buff
-    {
-        AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_shake_buff")
-    }
+    CallTrigger(object = $obj1, obj1 = $obj1, event = "REMOVE_END_MOVEMENT_BUFF")
     -- 移动家具特效buff
     $decBeginMovementEffectBuff = GetConfigVar(obj = $obj1, key = "decBeginMovementEffectBuff")
     If($decBeginMovementEffectBuff){
@@ -126,31 +129,57 @@ DEC_INTERACTION_MOVE_TOUCH_BEGIN{
     $obj2.isMoveDec = true
 }
 
+UPDATE_POSITION{
+    $sideNormalX = GetPosX(pos = $lastSideNormal)
+    $sideNormalY = GetPosY(pos = $lastSideNormal)
+    $sideNormalZ = GetPosZ(pos = $lastSideNormal)
+    $posX = GetPosX(pos = $pos)
+    $posY = GetPosY(pos = $pos)
+    $posZ = GetPosZ(pos = $pos)
+    If($sideNormalX~=0 and NumberFloor(p1 = $posX) ~=  NumberFloor(p1 = $posX + 0.2)){
+        $posX = NumberCeil(p1 = $posX)
+    }ElseIf($sideNormalY~=0 and NumberFloor(p1 = $posY) ~=  NumberFloor(p1 = $posY + 0.2)){
+        $posY = NumberCeil(p1 = $posY)
+    }ElseIf($sideNormalZ~=0 and NumberFloor(p1 = $posZ) ~=  NumberFloor(p1 = $posZ + 0.2)){
+        $posZ = NumberCeil(p1 = $posZ)
+    }
+    -- $posX = $sideNormalX~=0 and (NumberFloor(p1 = GetPosX(pos = $pos)) + $sideNormalX * 0.00001) or GetPosX(pos = $pos)
+    -- $posY = $sideNormalY~=0 and (NumberFloor(p1 = GetPosY(pos = $pos)) + $sideNormalY * 0.00001) or GetPosY(pos = $pos)
+    -- $posZ = $sideNormalZ~=0 and (NumberFloor(p1 = GetPosZ(pos = $pos)) + $sideNormalZ * 0.00001) or GetPosZ(pos = $pos)
+    Test(" $posX ", $posX , $posY , $posZ )
+    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = {
+        x = $posX + $sideNormalX * 0.0002,
+        y = $posY + $sideNormalY * 0.0002,
+        z = $posZ - $sideNormalZ * 0.0002,
+    }, ry = $ry, rp = $rp)
+}
+
+REMOVE_BEGIN_MOVEMENT_BUFF{
+    $decBeginMovementEffectBuff = GetConfigVar(obj = $obj1, key = "decBeginMovementEffectBuff")
+    If($decBeginMovementEffectBuff){
+        $decBeginMovementEffectBuffMap = NewDictionary($decBeginMovementEffectBuff or {})
+        $cfg = DictionaryGet(dict = $decBeginMovementEffectBuffMap, key = "buff")
+        If($cfg){
+            $time = DictionaryGet(dict = $decBeginMovementEffectBuffMap, key = "time")
+            $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
+            If($buff)
+            {
+                RemoveEntityBuff(entity = $obj1, buff = $buff)
+            }
+        }
+    }
+}
+
 DEC_INTERACTION_MOVE_TOUCH_END{
+    CallTrigger(object = $obj1, obj1 = $obj1, event = "REMOVE_BEGIN_MOVEMENT_BUFF")
     -- entityPos = $entityPos, entityYaw = $entityYaw, entityPitch = $entityPitch, entityScale = $entityScale)
     $dict = NewDictionary($params or {})
-    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = DictionaryGet(dict = $dict, key = "entityPos") or GetEntityPosition(entity = $obj1)
-        , ry = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), rp = DictionaryGet(dict = $dict, key = "entityPitch") or GetEntityPitch(entity = $obj1))
-    SetEntityRoll(entity = $obj1, rotationRoll = DictionaryGet(dict = $dict, key = "entityRoll") or GetEntityPosition(entity = $obj1))
-    $obj1.lastSideNormal = DictionaryGet(dict = $dict, key = "lastSideNormal") or Table(x = 0,y = 0,z = 0)
+    $obj1.lastSideNormal = DictionaryGet(dict = $dict, key = "lastSideNormal") or Table(x = 0,y = 0,z = 0)    
+    SetEntityRoll(entity = $obj1, rotationRoll = DictionaryGet(dict = $dict, key = "entityRoll") or GetEntityRoll(entity = $obj1))
+    CallTrigger(object = $obj1, obj1 = $obj1, lastSideNormal = $obj1.lastSideNormal, pos = DictionaryGet(dict = $dict, key = "entityPos") or GetEntityPosition(entity = $obj1), 
+        ry = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), 
+        rp = DictionaryGet(dict = $dict, key = "entityPitch") or GetEntityPitch(entity = $obj1), event = "UPDATE_POSITION")
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, time = 2, yaw = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), event = "ROTATION_BODY_YAW")
-    
-    PlayAction(
-        entity = $obj1,
-        includeSelf = true,
-        actionName = "idle",
-        actionTime = -1
-    )
-    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_shake_buff")
-    If($buff)
-    {
-        RemoveEntityBuff(entity = $obj1, buff = $buff)
-    }
-    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff")
-    If(not $buff) -- 被编辑的entity播放动作摇晃 buff
-    {
-        AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_idle_buff")
-    }
     -- 移动家具特效buff2
     $decEndMovementEffectBuff = GetConfigVar(obj = $obj1, key = "decEndMovementEffectBuff")
     If($decEndMovementEffectBuff){
@@ -252,10 +281,16 @@ POS_AROUND{
         $imcPitch = $sideNormalZ == 1 and -$scale or $scale
         SetEntityPitch(entity = $obj1, rotationPitch = $pitch + $imcPitch)
     }
+    StartTimer(object =$obj1, obj1 =$obj1, time = 3, event = "UPDATE_POS")
+}
+
+UPDATE_POS{
+    CallTrigger(object = $obj1, obj1 = $obj1, lastSideNormal = $obj1.lastSideNormal or Table(x = 0,y = 1,z = 0), 
+        pos = GetEntityPosition(entity = $obj1), event = "UPDATE_POSITION")
 }
 
 ROTATION_BODY_YAW{
-    SetBodyYaw(entity = $obj1, yaw = $yaw)
+    SetBodyYaw(entity = $obj1, yaw = $yaw or GetEntityYaw(entity = $obj1))
 }
 
 DEC_INTERACTION_EXIT_EDIT{
@@ -332,18 +367,6 @@ FUR_ENTITY_RIDE_ON
         If($buff){
             UpdateEntityEditContainer(player = $me, entityId = GetObjectID(object = $obj1), show = false)
         }
-    }
-    PlayAction(
-        entity = $obj1,
-        includeSelf = true,
-        actionName = "run",
-        actionTime = -1
-    )
-    AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_run_buff")
-    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff")
-    If($buff) -- 被骑乘的entity播放动作buff
-    {
-        RemoveEntityBuff(entity = $obj1, buff = $buff)
     }
 }
 --上面是编辑，这里是ride

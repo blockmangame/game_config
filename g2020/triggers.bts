@@ -575,27 +575,6 @@ FUNC_LOAD_WORKS_WALL_TOP_RESPONSE {
     CallTrigger(event = "UPDATE_WORKS_WALL_DATA", wallName = "topWorksWall", works = $info)
 }
 
-RECHECK_JUMP2RUN_BUFF{
-    If(not IsValidObject(object = $entity))
-    {
-        Return()
-    }
-    $buff = GetEntityTypeBuff(entity = $entity, key = "fullName", value = "myplugin/dec_jump2_2_run_buff")
-    If(not $buff) -- 被骑乘的entity播放动作buff
-    {
-        If(not GetEntityTypeBuff(entity = $entity, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff"))
-        {
-            PlayAction(
-                entity = $entity,
-                includeSelf = true,
-                actionName = "idle",
-                actionTime = -1
-            )
-            AddEntityBuff(entity = $entity, cfg = "myplugin/dec_jump2_2_idle_buff")
-        }
-    }
-}
-
 RECHECK_INTERACTION_UI(){
     If(not IsValidObject(object = $player) or not IsValidObject(object = $target)) {Return()}
     RecheckObjectInteractionUI(player = $player, target = $target, show = true)
@@ -603,16 +582,20 @@ RECHECK_INTERACTION_UI(){
 
 ENTITY_RIDE_OFF {
     If(not IsPlayer(entity = $obj2)){ Return() }
+    PlayAction(
+        entity = $obj1,
+        includeSelf = true,
+        actionName = "jump",
+        actionTime = -1
+    )
+    If(not GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff"))
+    {
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_idle_buff")
+    }
     $buff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/attach_point_index_1_buff")
     If($buff){
         RemoveEntityBuff(entity = $obj2, buff = $buff)
     }
-    $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_run_buff")
-    If($buff) -- 被骑乘的entity播放动作buff
-    {
-        RemoveEntityBuff(entity = $obj1, buff = $buff)
-    }
-    StartTimer(rep = false, entity = $obj1, time = 1, event = "RECHECK_JUMP2RUN_BUFF")
     StartTimer(rep = false, player = $obj2, target = $obj1, time = 1, event = "RECHECK_INTERACTION_UI")
     CallTrigger(object = $obj2, event = "FUNC_STATE_RIDEON", ride = $obj1, isCancel = true)
     CallTrigger(object = $obj2, event = "FUNC_CHECK_SHOWN_DANCES_SKILL", shown = true)
