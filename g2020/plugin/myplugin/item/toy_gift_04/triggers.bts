@@ -18,9 +18,6 @@ USE_ITEM(debug = false) --随机抽奖，抽奖道具使用后随机获得奖品
     ]
     ForLoop(from = 1, to = 4,key = "index"){
         $cap = GetEntityTrayAvailableCapacity(entity = $obj1, trayType = ArrayGet(array = $ary, index = $index))
-        If($index == 3){ -- 礼品盒也是玩具
-            $cap = $cap + 1
-        }
         If($cap <=0 ){
             ShowTip(textKey = ArrayGet(array = $msg, index = $index), tipType = 1, entity = $obj1, keepTime = 30)
             Return()
