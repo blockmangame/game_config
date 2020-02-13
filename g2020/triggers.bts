@@ -588,7 +588,8 @@ ENTITY_RIDE_OFF {
         actionName = "jump",
         actionTime = -1
     )
-    If(not GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff"))
+    If(not GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff")
+        and GetRideOn(entity = $obj1))
     {
         AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_idle_buff")
     }
