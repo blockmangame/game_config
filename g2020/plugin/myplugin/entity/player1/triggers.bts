@@ -4175,6 +4175,9 @@ FINISH_AWARD(){ --完成打工的奖励
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
     }
     $taskItem = searchEquipItem(entity = $obj1, key = "newTaskitem", val = true)
+    If(not $taskItem){
+        $taskItem = SearchBagItem(entity = $obj1, key = "newTaskitem", val = true)
+    }
     If($taskItem){
         ConsumeItem(item = $taskItem, num = 1)
     }
