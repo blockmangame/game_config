@@ -22,11 +22,16 @@ RIDE_ON
             }
         }
     }
+
     If($canDrive)
     {
+        Test($obj2.otherItem)
+        Test($obj1.otherItem)
+
         If($obj2.otherItem){
             --ClearRide(entity = $obj2.createdTrolley)
-			EquipItem(entity = $obj2, item = $obj2.equipItem)
+			--EquipItem(entity = $obj2, item = $obj2.equipItem)
+            ClearItemUseByKey(entity = $obj2, key = "typeIndex", valueArray = NewArray(1, 2, 4, 5))
             StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "RIDE_ON_CAR")
         }
         Else

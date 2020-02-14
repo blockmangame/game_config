@@ -29,58 +29,9 @@ function Actions.ShowHomeGuide(data, params, context)
 	})
 end
 
-function Actions.EquipItem(data, params, content)
-	local item = params.item
+function Actions.CheckUseItemClear(data, params, context)
 	local entity = params.entity
-	if not item or not entity then
-        return 
-    end
-	local tray = entity:tray()
-	local curTid = item:tid()
-	local curSlot = item:slot()
-	local function canEquipTrayTid(item, tid)
-	    if not item then
-			return 
-		end
-		local curTid = tid or item:tid()
-		local types = item:tray_type()
-		for tid, _ in pairs(types) do
-			local ret = tray:query_trays(tid)
-			for _, element in pairs(ret) do
-				local _tid, _tray = element.tid, element.tray
-				local slot = _tray:find_free()
-				if curTid ~= _tid then
-					return _tid, slot or 1
-				end
-			end
-		end
-	end
-
-	local function takeoffItem(tid, slot)
-		local sloter = tray:fetch_tray(tid):fetch_item(slot)
-		if sloter then
-			local equipTid, equipSlot = canEquipTrayTid(sloter, tid)
-			local entityTrays = entity:tray()
-			local tray_1 = entityTrays:fetch_tray(tid)
-			local tray_2 = entityTrays:fetch_tray(equipTid)
-			print(tid, slot, equipTid, equipSlot)
-			Tray:switch(tray_1, slot, tray_2, equipSlot)
-		end
-	end
-	local dstTid, dstSlot = canEquipTrayTid(item)
-	if not dstTid then
-		return
-	end
-	local entityTrays = entity:tray()
-	local tray_1 = entityTrays:fetch_tray(curTid)
-	local tray_2 = entityTrays:fetch_tray(dstTid)
-	takeoffItem(dstTid, dstSlot)
-	if not Tray:check_switch(tray_1, item:slot(), tray_2, dstSlot) then
-		return
-	end
-
-	Tray:switch(tray_1, curSlot, tray_2, dstSlot) 
-	entity:syncSkillMap()
+	entity:checkUseItemClear()
 end
 
 function Actions.UpdateEntityDateToClient(data, params, context)
@@ -95,4 +46,29 @@ function Actions.UpdateEntityDateToClient(data, params, context)
 	    key = key,
         value = params.value
     })
+end
+
+function Actions.IsDrive(data, params, context)
+	local entity = params.entity
+	if entity and entity.rideOnId then
+		local old = entity.world:getEntity(entity.rideOnId)
+		if old and old:cfg().carMove then
+			return true
+		end
+	end
+	return false
+end
+
+function Actions.SetItemUse(data, params, context)
+	local entity = params.entity
+	local item = params.item
+	if not item then
+		return
+	end 
+	entity:setItemUse(item:tid(), item:slot(), params.isUse)
+end
+
+function Actions.ClearItemUseByKey(data, params, context)
+	local entity = params.entity
+	entity:clearItemUseByKey(params.key, params.valueArray)
 end

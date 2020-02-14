@@ -1,11 +1,37 @@
-WEAR_EQUIPMEN {
+SET_ITEM_USE {
+    If($isUse)
+    {
+
+        CallTrigger(event = "WEAR_ITEM", obj1 = $obj1, item = $item)
+    }
+    Else
+    {
+        CallTrigger(event = "TAKEOFF_ITEM", obj1 = $obj1, item = $item)
+    }
+}
+
+CHECK_CAN_USE_ITEM {
+    If(IsDrive(entity = $obj1))
+    {
+        --正在开车不能装备任何东西
+        $result = false
+    }
+}
+
+CHECK_CLEAR_HAND_ITEM{
+    CheckUseItemClear(entity = $obj1)
+}
+
+WEAR_ITEM {
+    ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 4, 5))
     $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
     If($typeIndex == 3)
     {
         -- on car
         If($obj1.equipItem)
         {
-      		EquipItem(entity = $obj1, item = $obj1.equipItem)
+            --SetItemUse(entity = $obj1, item = $obj1.equipItem, isUse = false)
+      		--EquipItem(entity = $obj1, item = $obj1.equipItem)
         }
         $carName = GetConfigVar(obj = $item, key = "carName")
         CallTrigger(event = "EQUIP_CAR", obj1 = $obj1, carName = $carName)
@@ -13,18 +39,18 @@ WEAR_EQUIPMEN {
     ElseIf($typeIndex == 1)
     {
         --baby trolley
+    	$obj1.equipItem = $item
         $obj1.otherItem = true
         CallTrigger(event = "EQUIP_BABY_TROLLEY", object = $obj1, cfgPath = GetConfigVar(obj = $item, key = "trolleyEntity"))
 	}
     Else{
+    	$obj1.equipItem = $item
         $obj1.otherItem = true
     }
-	$obj1.equipItem = $item
 	SetItemVar(entity = $obj1, item = $item, key = "equipFlag", value = true)
 }
 
-TAKEOFF_EQUIPMEN {
-    $obj1.equipItem = nil
+TAKEOFF_ITEM {
     $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
     If($typeIndex == 3)
     {
@@ -36,9 +62,11 @@ TAKEOFF_EQUIPMEN {
         SetObjectVar(obj = $obj1, key = "equipTakeOff", value = true)
         CallTrigger(event = "DEMOUNT_BABY_TROLLEY", object = $obj1)
 	    $obj1.otherItem = false
+        $obj1.equipItem = nil
     }
     Else{
         $obj1.otherItem = false
+        $obj1.equipItem = nil
     }
 }
 
@@ -4413,7 +4441,6 @@ EQUIP_CAR {
 
 DEBARK {
 	Dismount(entity = $obj1)
-	--EquipItem(entity = $obj1, item = $obj1.equipItem)
 }
 
 TAKEOFF_EQUIP_CAR
@@ -4449,7 +4476,8 @@ EQUIP_ITEM_IMMEDIATELY --params: item
 		}
 		If(not GetItemVar(item = $item, key = "equipFlag"))
 		{
-			EquipItem(entity = $obj1, item = $item)
+            SetItemUse(entity = $obj1, item = $item, isUse = true)
+			--EquipItem(entity = $obj1, item = $item)
 		}
 		Return()
 	}
@@ -4464,7 +4492,8 @@ EQUIP_ITEM_IMMEDIATELY --params: item
         SetObjectVar(obj = $obj1, key = "equipTakeOff", value = false)
         Return()
     }
-	EquipItem(entity = $obj1, item = $item)
+    SetItemUse(entity = $obj1, item =$item, isUse = true)
+	--EquipItem(entity = $obj1, item = $item)
 }
 
 EQUIP_BABY_TROLLEY --params: cfgPath
@@ -4688,6 +4717,10 @@ ENTER_EQUIPMEN {
     {
         Return()
 	}
+    If(IsDrive(entity = $obj1))
+    {
+        Return()
+    }
 	--EquipItem(entity = $obj1, item = $item)
     CallTrigger(object = $obj1, event = "EQUIP_ITEM_IMMEDIATELY", item = $item)
 }

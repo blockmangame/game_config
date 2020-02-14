@@ -29,3 +29,8 @@ function handles:UpdateEntityDate(packet)
         obj[packet.key] = packet.value
     end
 end
+
+function handles:SyncItemUse(packet)
+	self:setItemUse(packet.tid, packet.slot, packet.isUse, true)
+
+end

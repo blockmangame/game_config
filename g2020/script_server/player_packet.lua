@@ -5,3 +5,10 @@ function handles:UseItemEquipSkill(packet)
 	local item = Item.CreateSlotItem(self, packet.tid, packet.slot)
 	Trigger.CheckTriggers(item:cfg(), "USE_ITEM", {obj1 = self, itemName = item:cfg().fullName, sloter = item})
 end
+
+function handles:SetItemUse(packet)
+    local tid = packet.tid
+	local slot = packet.slot
+	local isUse = packet.isUse
+	self:setItemUse(tid, slot, isUse)
+end
