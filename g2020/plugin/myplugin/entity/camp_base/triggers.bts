@@ -3,6 +3,10 @@ ENTITY_ENTER
 }
 
 ENTITY_RIDE_ON{
+    If(GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff"))
+    {
+        RemoveEntityBuff(entity = $obj1, buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff"))
+    }
     CallTrigger(object = $obj2, obj2 = $obj1, event = "ROTATION_WHEN_RIDE_ON")
 }
 
@@ -24,6 +28,11 @@ EDIT_OBJECT_ACTION{
 
 START_EDIT_ENTITY{
     CallTrigger(object = $obj1, event = "ADD_EDIT_BUFF")
+    If(not $obj1.firstInEdit){
+        SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1))
+        SetBodyYaw(entity = $obj1, yaw = $yaw or GetEntityYaw(entity = $obj1))
+        $obj1.firstInEdit = true
+    }
     SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = GetObjectID(object = $obj1))
 }
 
@@ -52,6 +61,7 @@ EXECUTION_EDIT_ACTION{
 }
 
 STOP_EDIT_ENTITY{
+    CallTrigger(object = $obj1, obj1 = $obj1, event = "REMOVE_END_MOVEMENT_BUFF")
     CallTrigger(object = $obj1, event = "REMOVE_EDIT_BUFF")
     SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     If(not GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/can_edit_house_buff")) -- 编辑房子的cd
@@ -89,18 +99,98 @@ SHOW_EDIT_UI{
     UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = true)
 }
 
+REMOVE_END_MOVEMENT_BUFF{
+    $decEndMovementEffectBuff = GetConfigVar(obj = $obj1, key = "decEndMovementEffectBuff")
+    If($decEndMovementEffectBuff){
+        $decEndMovementEffectBuffMap = NewDictionary($decEndMovementEffectBuff or {})
+        $cfg = DictionaryGet(dict = $decEndMovementEffectBuffMap, key = "buff")
+        If($cfg){
+            $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
+            If($buff){
+                RemoveEntityBuff(entity = $obj1, buff = $buff)
+            }
+        }
+    }
+}
+
 DEC_INTERACTION_MOVE_TOUCH_BEGIN{
+    CallTrigger(object = $obj1, obj1 = $obj1, event = "REMOVE_END_MOVEMENT_BUFF")
+    -- 移动家具特效buff
+    $decBeginMovementEffectBuff = GetConfigVar(obj = $obj1, key = "decBeginMovementEffectBuff")
+    If($decBeginMovementEffectBuff){
+        $decBeginMovementEffectBuffMap = NewDictionary($decBeginMovementEffectBuff or {})
+        $cfg = DictionaryGet(dict = $decBeginMovementEffectBuffMap, key = "buff")
+        If($cfg){
+            $time = DictionaryGet(dict = $decBeginMovementEffectBuffMap, key = "time")
+            $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
+            AddEntityBuff(entity = $obj1, cfg = $cfg, buffTime = $time)
+        }
+    }
     $obj2.isMoveDec = true
 }
 
+UPDATE_POSITION{
+    $sideNormalX = GetPosX(pos = $lastSideNormal)
+    $sideNormalY = GetPosY(pos = $lastSideNormal)
+    $sideNormalZ = GetPosZ(pos = $lastSideNormal)
+    $posX = GetPosX(pos = $pos)
+    $posY = GetPosY(pos = $pos)
+    $posZ = GetPosZ(pos = $pos)
+    If($sideNormalX~=0 and NumberFloor(p1 = $posX) ~=  NumberFloor(p1 = $posX + 0.2)){
+        $posX = NumberCeil(p1 = $posX)
+    }ElseIf($sideNormalY~=0 and NumberFloor(p1 = $posY) ~=  NumberFloor(p1 = $posY + 0.2)){
+        $posY = NumberCeil(p1 = $posY)
+    }ElseIf($sideNormalZ~=0 and NumberFloor(p1 = $posZ) ~=  NumberFloor(p1 = $posZ + 0.2)){
+        $posZ = NumberCeil(p1 = $posZ)
+    }
+    -- $posX = $sideNormalX~=0 and (NumberFloor(p1 = GetPosX(pos = $pos)) + $sideNormalX * 0.00001) or GetPosX(pos = $pos)
+    -- $posY = $sideNormalY~=0 and (NumberFloor(p1 = GetPosY(pos = $pos)) + $sideNormalY * 0.00001) or GetPosY(pos = $pos)
+    -- $posZ = $sideNormalZ~=0 and (NumberFloor(p1 = GetPosZ(pos = $pos)) + $sideNormalZ * 0.00001) or GetPosZ(pos = $pos)
+    Test(" $posX ", $posX , $posY , $posZ )
+    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = {
+        x = $posX + $sideNormalX * 0.0002,
+        y = $posY + $sideNormalY * 0.0002,
+        z = $posZ - $sideNormalZ * 0.0002,
+    }, ry = $ry, rp = $rp)
+}
+
+REMOVE_BEGIN_MOVEMENT_BUFF{
+    $decBeginMovementEffectBuff = GetConfigVar(obj = $obj1, key = "decBeginMovementEffectBuff")
+    If($decBeginMovementEffectBuff){
+        $decBeginMovementEffectBuffMap = NewDictionary($decBeginMovementEffectBuff or {})
+        $cfg = DictionaryGet(dict = $decBeginMovementEffectBuffMap, key = "buff")
+        If($cfg){
+            $time = DictionaryGet(dict = $decBeginMovementEffectBuffMap, key = "time")
+            $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
+            If($buff)
+            {
+                RemoveEntityBuff(entity = $obj1, buff = $buff)
+            }
+        }
+    }
+}
+
 DEC_INTERACTION_MOVE_TOUCH_END{
+    CallTrigger(object = $obj1, obj1 = $obj1, event = "REMOVE_BEGIN_MOVEMENT_BUFF")
     -- entityPos = $entityPos, entityYaw = $entityYaw, entityPitch = $entityPitch, entityScale = $entityScale)
     $dict = NewDictionary($params or {})
-    SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = DictionaryGet(dict = $dict, key = "entityPos") or GetEntityPosition(entity = $obj1)
-        , ry = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), rp = DictionaryGet(dict = $dict, key = "entityPitch") or GetEntityPitch(entity = $obj1))
-    SetEntityRoll(entity = $obj1, rotationRoll = DictionaryGet(dict = $dict, key = "entityRoll") or GetEntityPosition(entity = $obj1))
-    $obj1.lastSideNormal = DictionaryGet(dict = $dict, key = "lastSideNormal") or Table(x = 0,y = 0,z = 0)
+    $obj1.lastSideNormal = DictionaryGet(dict = $dict, key = "lastSideNormal") or Table(x = 0,y = 0,z = 0)    
+    SetEntityRoll(entity = $obj1, rotationRoll = DictionaryGet(dict = $dict, key = "entityRoll") or GetEntityRoll(entity = $obj1))
+    CallTrigger(object = $obj1, obj1 = $obj1, lastSideNormal = $obj1.lastSideNormal, pos = DictionaryGet(dict = $dict, key = "entityPos") or GetEntityPosition(entity = $obj1), 
+        ry = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), 
+        rp = DictionaryGet(dict = $dict, key = "entityPitch") or GetEntityPitch(entity = $obj1), event = "UPDATE_POSITION")
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, time = 2, yaw = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), event = "ROTATION_BODY_YAW")
+    -- 移动家具特效buff2
+    $decEndMovementEffectBuff = GetConfigVar(obj = $obj1, key = "decEndMovementEffectBuff")
+    If($decEndMovementEffectBuff){
+        $decEndMovementEffectBuffMap = NewDictionary($decEndMovementEffectBuff or {})
+        $cfg = DictionaryGet(dict = $decEndMovementEffectBuffMap, key = "buff")
+        If($cfg){
+            $time = DictionaryGet(dict = $decEndMovementEffectBuffMap, key = "time")
+            $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
+            AddEntityBuff(entity = $obj1, cfg = $cfg, buffTime = $time)
+        }
+    }
     $obj2.isMoveDec = nil
 }
 
@@ -121,11 +211,24 @@ DEC_INTERACTION_SALE{
         $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $index))
         If(DictionaryGet(dict = $fDict, key = "furnishingId") == GetObjectID(object = $obj1)){
             $cfg = DictionaryGet(dict = $fDict, key = "cfg")
-            $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellMoney")
+            $sellMoney = DictionaryGet(dict = $fDict, key = "sellMoney")
             If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
-                $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
+                $sellMoney = DictionaryGet(dict = $fDict, key = "sellByDiscountMoney")
             }
-            AddCurrency(entity = $owner, coinName = "green_currency", count = $sellMoney)
+            If(not $sellMoney){
+                Foreach(array = @DECORATION_STORE, key = "decorationTb"){
+                    $decorationDic = NewDictionary($decorationTb)
+                    If(DictionaryGet(dict = $decorationDic, key = "fullName") == $cfg){
+                        $sellMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellMoney") or 0)
+                        Test("$sellMoney", $sellMoney)
+                        If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
+                            $sellMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellByDiscountMoney") or 0)
+                            Test("$sellByDiscountMoney", $sellMoney)
+                        }                    
+                    }
+                }
+            }
+            AddCurrency(entity = $owner, coinName = "green_currency", count = $sellMoney or 0)
             ArrayRemove(array = $furnitures, index = $index)
             Break()
         }
@@ -178,10 +281,16 @@ POS_AROUND{
         $imcPitch = $sideNormalZ == 1 and -$scale or $scale
         SetEntityPitch(entity = $obj1, rotationPitch = $pitch + $imcPitch)
     }
+    StartTimer(object =$obj1, obj1 =$obj1, time = 3, event = "UPDATE_POS")
+}
+
+UPDATE_POS{
+    CallTrigger(object = $obj1, obj1 = $obj1, lastSideNormal = $obj1.lastSideNormal or Table(x = 0,y = 1,z = 0), 
+        pos = GetEntityPosition(entity = $obj1), event = "UPDATE_POSITION")
 }
 
 ROTATION_BODY_YAW{
-    SetBodyYaw(entity = $obj1, yaw = $yaw)
+    SetBodyYaw(entity = $obj1, yaw = $yaw or GetEntityYaw(entity = $obj1))
 }
 
 DEC_INTERACTION_EXIT_EDIT{
@@ -248,6 +357,9 @@ FUR_ENTITY_RIDE_ON
 {
     CallTrigger(obj1 = $me, event = "ENTITY_REMOVE_INTERACTION")
     ClearRide(entity = $me)
+    If(not GetEntityTypeBuff(entity = $me, key = "fullName", value = "myplugin/attach_point_index_1_buff")){
+        AddEntityBuff(entity = $me, cfg = "myplugin/attach_point_index_1_buff") -- 通过buff换skin
+    }
     RideOn(ctrl = $ctrl, entity = $me, target = $obj1, targetIndex = $index)
     $decEditBuff = GetConfigVar(obj = $obj1, key = "editBuff")
     If($decEditBuff){
@@ -258,19 +370,147 @@ FUR_ENTITY_RIDE_ON
     }
 }
 --上面是编辑，这里是ride
-ENTITY_camp1{
+ENTITY_sit1_1_1{
 CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 1)
 }
-ENTITY_camp2_1{
+ENTITY_sit1_2_1{
 CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 2)
 }
-ENTITY_camp2_2{
+ENTITY_sit1_2_2{
 CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 3)
 }
 ENTITY_sit1_3_1{
 CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 4)
 }
-
+ENTITY_sit1_3_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 5)
+}
+ENTITY_sit1_3_3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 6)
+}
+ENTITY_sit1_bar_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 7)
+}
+ENTITY_sit1_corner_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 8)
+}
+ENTITY_sit1_corner_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 9)
+}
+ENTITY_sit1_corner_3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 10)
+}
+ENTITY_sit1_low_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 11)
+}
+ENTITY_sit1_low_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 12)
+}
+ENTITY_sit2_1_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 13)
+}
+ENTITY_sit2_2_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 14)
+}
+ENTITY_sit2_2_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 15)
+}
+ENTITY_sit2_3_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 16)
+}
+ENTITY_sit2_3_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 17)
+}
+ENTITY_sit2_3_3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 18)
+}
+ENTITY_sit2_bar_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 19)
+}
+ENTITY_sit2_corner_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 20)
+}
+ENTITY_sit2_corner_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 21)
+}
+ENTITY_sit2_corner_3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 22)
+}
+ENTITY_sit2_low_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 23)
+}
+ENTITY_sit2_low_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 24)
+}
+ENTITY_chairs6_bathtub1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 25)
+}
+ENTITY_chairs6_bathtub2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 26)
+}
+ENTITY_chairs6_bathtub3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 27)
+}
+ENTITY_chairs6_bathtub4{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 28)
+}
+ENTITY_chairs5_bathtub{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 29)
+}
+ENTITY_chairs6_bathtub1_small{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 30)
+}
+ENTITY_chairs6_bathtub2_small{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 31)
+}
+ENTITY_chairs6_bathtub3_small{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 32)
+}
+ENTITY_chairs6_bathtub4_small{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 33)
+}
+ENTITY_chairs5_bathtub_small{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 34)
+}
+ENTITY_sleep1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 35)
+}
+ENTITY_chairs7{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 36)
+}
+ENTITY_camp_1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 37)
+}
+ENTITY_camp_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 38)
+}
+ENTITY_camp_3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 39)
+}
+ENTITY_qiuqian{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 40)
+}
+ENTITY_qiaoqiaoban_l{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 41)
+}
+ENTITY_qiaoqiaoban_r{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 42)
+}
+ENTITY_sit2_low1fb{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 43)
+}
+ENTITY_sit1_1_1fb{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 44)
+}
+ENTITY_cirb1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 45)
+}
+ENTITY_cirb2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 46)
+}
+ENTITY_cirb3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 47)
+}
 
 
 --上面是编辑，下面是购买逻辑
