@@ -15,6 +15,7 @@ ENTITY_ENTER
         z = 0,
     }
 
+    $objID = GetObjectID(object = $obj1)
     $position = GetConfigVar(obj = $obj1, key = "position") or $position
     $width = GetConfigVar(obj = $obj1, key = "width") or $width
     $height = GetConfigVar(obj = $obj1, key = "height") or $height
