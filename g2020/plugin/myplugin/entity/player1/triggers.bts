@@ -885,15 +885,6 @@ UPDATE_PLAYER_3DUI_ENTITY{
             ForLoop(from = 1, to = ArraySize(array = $typeTable), key = "index"){
                 If(ArrayGet(array = $typeTable, index = $index) == GetObjectID(object = $npc)){
                     ArrayRemove(array = $typeTable, index = $index)
-                
-                    -- $players = GetMapPlayer(map = $map)
-                    -- Foreach(array = $players, key = "player")
-                    -- {
-                    --     $data = {
-                    --         key = ToString(GetObjectID(object = $npc))
-                    --     }
-                    --     CloseSceneEntityUI(player = $player, data = $data)
-                    -- }
                 }
             }
         }
@@ -4747,8 +4738,6 @@ ENTER_MAP
     CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj1, gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict"))
     CallTrigger(event = "ENTER_HOUSE_MAP", object = $obj1)
     CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
-    -- CallTrigger(event = "UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = true)
-    -- CallTrigger(event = "UPDATE_PUBLIC_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = true)
 }
 
 LEAVE_MAP
@@ -4761,11 +4750,8 @@ LEAVE_MAP
     }
     CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $map.cfg.releaseState)
     CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = false)
-    -- CallTrigger(event = "UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = false)
-    -- CallTrigger(event = "UPDATE_PUBLIC_ALL_BLACK_BOARD_ENTITY", object = $obj1, show = false)
 }
 
---done
 CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY
 {
     If(not $npc)
@@ -4823,7 +4809,6 @@ CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY
     }
 }
 
--- done
 UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY
 {
     $map = GetEntityMap(entity = $obj1)
@@ -4886,7 +4871,6 @@ UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY
             height = $height,
             position = $position,
             rotate = $rotate,
-            objID = $objID,
             args = {
                 text = $playerCount,
                 textColor = $textColor,
@@ -4895,15 +4879,10 @@ UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY
             }
         }
 
-        Foreach(array = $players, key = "player")
-        {
-            -- todo:
-            RefreshNumberBoardText(player = $player, wndKey = ToString($objID), text = $playerCount)
-        }
+        RefreshEntitySceneUI(entity = $npc, data = $data)
     }
 }
 
---done
 CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY
 {
     If(not $npc)
@@ -4989,143 +4968,13 @@ UPDATE_SINGLE_BLACK_BOARD_ENTITY
         height = $height,
         position = $position,
         rotate = $rotate,
-        objID = $objID,
         args = {
             text = $text
         }
     }
 
-    $map = GetEntityMap(entity = $obj1)
-    $players = GetMapPlayer(map = $map)
-    Foreach(array = $players, key = "player")
-    {
-        -- todo
-        RefreshBlackBoardText(player = $player, wndKey = ToString($objID), text = $text)
-    }
+    RefreshEntitySceneUI(entity = $npc, data = $data)
 }
-
--- UPDATE_PLAYER_ALL_BLACK_BOARD_ENTITY
--- {
---     $map = GetEntityMap(entity = $obj1)
---     $house = GetMapVar(map = $map, key = "owner")
---     If(not $house)
---     {
---         Return()
---     }
-
---     $owner = $house.owner
---     If(not $owner)
---     {
---         Return()
---     }
-
---     $entityOf3DUI = $owner.entityOf3DUI
---     $entityOf3DUIDict = NewDictionary($entityOf3DUI)
---     $blackBoardEntitys = DictionaryGet(dict = $entityOf3DUIDict, key = "blackBoard") or {}
---     Foreach(array = $blackBoardEntitys, key = "objID")
---     {
---         $width = 0
---         $height = 0
---         $text = ""
---         $position = {
---             x = 0,
---             y = 0,
---             z = 0,
---         }
-
---         $rotate = {
---             x = 0,
---             y = 0,
---             z = 0,
---         }
-
---         $npc = GetObject(objID = $objID)
---         If($npc)
---         {
---             $position = GetConfigVar(obj = $npc, key = "position") or $position
---             $width = GetConfigVar(obj = $npc, key = "width") or $width
---             $height = GetConfigVar(obj = $npc, key = "height") or $height
---             $text = $npc.blackboardStr or $text
---         }
-
---         $data = {
---             key = ToString($objID),
---             name = "blackBoard",
---             width = $width,
---             height = $height,
---             position = $position,
---             rotate = $rotate,
---             objID = $objID,
---             args = {
---                 text = $text
---             }
---         }
-
---         If($show)
---         {
---             OpenSceneEntityUI(player = $obj1, data = $data)
---         }
---         Else
---         {
---             CloseSceneEntityUI(player = $obj1, data = $data)
---         }
---     }
--- }
-
--- UPDATE_PUBLIC_ALL_BLACK_BOARD_ENTITY
--- {
---     $map = GetEntityMap(entity = $obj1)
---     $entityWith3dUI = GetMapVar(map = $map, key = "entityWith3dUI")
---     If(not $entityWith3dUI)
---     {
---         Return()
---     }
-
---     ForeachDictionary(dict = $entityWith3dUI, keyName = "objID", valueName = "npc")
---     {
---         $width = 0
---         $height = 0
---         $text = ""
---         $position = {
---             x = 0,
---             y = 0,
---             z = 0,
---         }
-
---         $rotate = {
---             x = 0,
---             y = 0,
---             z = 0,
---         }
-
---         $position = GetConfigVar(obj = $npc, key = "position") or $position
---         $width = GetConfigVar(obj = $npc, key = "width") or $width
---         $height = GetConfigVar(obj = $npc, key = "height") or $height
---         $text = $npc.blackboardStr or $text
-
---         $data = {
---             key = ToString($objID),
---             name = "blackBoard",
---             width = $width,
---             height = $height,
---             position = $position,
---             rotate = $rotate,
---             objID = $objID,
---             args = {
---                 text = $text
---             }
---         }
-
---         If($show)
---         {
---             OpenSceneEntityUI(player = $obj1, data = $data)
---         }
---         Else
---         {
---             CloseSceneEntityUI(player = $obj1, data = $data)
---         }
---     }
--- }
 
 --↓↓↓↓↓↓ party
 CHECK_LEAVE_PARTY_FROM_DOOR {
