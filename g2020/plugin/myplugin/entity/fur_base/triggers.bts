@@ -150,7 +150,7 @@ UPDATE_POSITION{
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = {
         x = $posX + $sideNormalX * 0.0002,
         y = $posY + $sideNormalY * 0.0002,
-        z = $posZ - $sideNormalZ * 0.0002,
+        z = $posZ + $sideNormalZ * 0.0002,
     }, ry = $ry, rp = $rp)
 }
 
@@ -281,7 +281,7 @@ POS_AROUND{
         $imcPitch = $sideNormalZ == 1 and -$scale or $scale
         SetEntityPitch(entity = $obj1, rotationPitch = $pitch + $imcPitch)
     }
-    StartTimer(object =$obj1, obj1 =$obj1, time = 3, event = "UPDATE_POS")
+    StartTimer(object =$obj1, obj1 =$obj1, time = 1, event = "UPDATE_POS")
 }
 
 UPDATE_POS{
@@ -667,6 +667,10 @@ BUY_SHOP(){
 
 LIGHT_ON
 {
+    If(GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff"))
+    {
+        RemoveEntityBuff(entity = $obj1, buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff"))
+    }
     $cfg = Concat(p1 = "myplugin/", p2 = $obj1.cfg.buffName)
     AddEntityBuff(entity = $obj1, cfg = $cfg)
 }
@@ -675,6 +679,10 @@ LIGHT_OFF
 {
     $cfg = Concat(p1 = "myplugin/", p2 = $obj1.cfg.buffName)
     RemoveEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
+    If(not GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff"))
+    {
+        AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_idle_buff")
+    }
 }
 ----上面是编辑，下面是选择体型
 SHOW_SELECT_ROLE_UI 
