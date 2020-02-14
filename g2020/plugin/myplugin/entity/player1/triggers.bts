@@ -252,6 +252,7 @@ MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建�
 
 ENTITY_ENTER
 {
+    $obj1.outOfCameraModeState = {}
     CallTrigger(event = "CHECK_SHOW_SVIP_UI", object = $obj1)
     AddEntityBuff(entity = $obj1, cfg = "myplugin/click_action")
     CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
@@ -1595,8 +1596,10 @@ FUNC_STATE_ADD --params: state
     $stateBase = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "stateBase") or $state
     SetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase), value = true)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
-
-    AddSkill(entity = $obj1, name = Concat(p1 = @skillPath, p2 = $state))
+    If(not IsCameraMode(player = $obj1)){
+        AddSkill(entity = $obj1, name = Concat(p1 = @skillPath, p2 = $state))
+    }
+    ArrayAppend(array = $obj1.outOfCameraModeState, value = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA")
     CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state)
@@ -1908,6 +1911,11 @@ FUNC_STATESKILL_REMOVE --params: state, skill
     }
 
     RemoveSkill(entity = $obj1, name = $skill)
+    $index = ArratFind(array = $obj1.outOfCameraModeState, value = $state)
+    If($index){
+        ArrayRemove(array = $obj1.outOfCameraModeState, index = $index)
+    }
+
     SetObjectVar(obj = $obj1, key = $hadState, value = false)
     CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
     CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
@@ -4575,6 +4583,16 @@ START_CAMERA_MODE
 {
     If(not IsCameraMode(player = $obj1))
     {
+        -- actionControl -> jump and move, skills -> just skill
+        $obj1.showFuncId = HideOpenedWnd(entity = $obj1, excluded = {a = "actionControl",b = "skills"})
+        Test("$obj1.outOfCameraModeState", $obj1.outOfCameraModeState)
+        ForLoop(from = 1, to = ArraySize(array = $obj1.outOfCameraModeState), key = "idx")
+        {
+            $stateBase = ArrayGet(array = $obj1.outOfCameraModeState, index = $idx)
+            $keyStr = Concat(p1 = "myplugin/skill_state_", p2 = $stateBase)
+            RemoveSkill(entity = $obj1, name = $keyStr)
+        }
+        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
         SetCameraMode(player = $obj1, isOpen = true)
         HideInteractionWindow(player = $obj1)
         $obj1.cameraModeCloseBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/camera_mode_close")

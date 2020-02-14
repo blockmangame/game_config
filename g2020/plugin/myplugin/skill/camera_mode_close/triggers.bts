@@ -2,6 +2,13 @@ SKILL_CAST
 {
     If(IsCameraMode(player = $obj1))
     {
+        ShowOpenedWnd(entity = $obj1, showFuncId = $obj1.showFuncId)
+        ForLoop(from = 1, to = ArraySize(array = $obj1.outOfCameraModeState), key = "idx")
+        {
+            $stateBase = ArrayGet(array = $obj1.outOfCameraModeState, index = $idx)
+            $keyStr = Concat(p1 = "myplugin/skill_state_", p2 = $stateBase)
+            AddSkill(entity = $obj1, name = $keyStr)
+        }
         ShowInteractionWindow(player = $obj1)
         SetCameraMode(player = $obj1, isOpen = false)
         RemoveEntityBuff(entity = $obj1, buff = $obj1.cameraModeCloseBuff)
