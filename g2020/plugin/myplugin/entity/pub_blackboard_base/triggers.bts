@@ -19,6 +19,7 @@ ENTITY_ENTER
     $position = GetConfigVar(obj = $obj1, key = "position") or $position
     $width = GetConfigVar(obj = $obj1, key = "width") or $width
     $height = GetConfigVar(obj = $obj1, key = "height") or $height
+    $rotate = GetConfigVar(obj = $obj1, key = "rotate") or $rotate
     $text = $obj1.blackboardStr or $text
 
     $data = {

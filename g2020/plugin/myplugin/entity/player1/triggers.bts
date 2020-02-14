@@ -4789,6 +4789,7 @@ CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY
         $textColor = GetConfigVar(obj = $npc, key = "textColor") or $textColor
         $title = GetConfigVar(obj = $npc, key = "title") or $title
         $titleColor = GetConfigVar(obj = $npc, key = "titleColor") or $titleColor
+        $rotate = GetConfigVar(obj = $npc, key = "rotate") or $rotate
 
         $data = {
             key = ToString($objID),
@@ -4914,6 +4915,7 @@ CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY
             $position = GetConfigVar(obj = $npc, key = "position") or $position
             $width = GetConfigVar(obj = $npc, key = "width") or $width
             $height = GetConfigVar(obj = $npc, key = "height") or $height
+            $rotate = GetConfigVar(obj = $npc, key = "rotate") or $rotate
             $text = $npc.blackboardStr or $text
             $objID = GetObjectID(object = $npc)
         }
