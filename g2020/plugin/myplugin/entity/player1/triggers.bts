@@ -4584,7 +4584,7 @@ START_CAMERA_MODE
     If(not IsCameraMode(player = $obj1))
     {
         -- actionControl -> jump and move, skills -> just skill
-        $obj1.showFuncId = HideOpenedWnd(entity = $obj1, excluded = {a = "actionControl",b = "skills"})
+        $obj1.showFuncId = HideOpenedWnd(player = $obj1, excluded = {a = "actionControl",b = "skills"})
         Test("$obj1.outOfCameraModeState", $obj1.outOfCameraModeState)
         ForLoop(from = 1, to = ArraySize(array = $obj1.outOfCameraModeState), key = "idx")
         {

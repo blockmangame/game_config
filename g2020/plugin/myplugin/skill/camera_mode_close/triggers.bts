@@ -2,7 +2,7 @@ SKILL_CAST
 {
     If(IsCameraMode(player = $obj1))
     {
-        ShowOpenedWnd(entity = $obj1, showFuncId = $obj1.showFuncId)
+        ShowOpenedWnd(player = $obj1, showFuncId = $obj1.showFuncId)
         ForLoop(from = 1, to = ArraySize(array = $obj1.outOfCameraModeState), key = "idx")
         {
             $stateBase = ArrayGet(array = $obj1.outOfCameraModeState, index = $idx)
