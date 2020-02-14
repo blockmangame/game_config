@@ -1,13 +1,36 @@
 ENTITY_ENTER
 {
-    $map = GetEntityMap(entity = $obj1)
-    If(not GetMapVar(map = $map, key = "entityWith3dUI"))
-    {
-        SetMapVar(map = $map, key = "entityWith3dUI", value = NewDictionary())
+    $width = 0
+    $height = 0
+    $text = ""
+    $position = {
+        x = 0,
+        y = 0,
+        z = 0,
     }
-   
-    $entityWith3dUI = GetMapVar(map = $map, key = "entityWith3dUI")
-    $objID = GetObjectID(object = $obj1)
-    DictionarySet(dict = $entityWith3dUI, key = $objID, value = $obj1)
-    SetMapVar(map = $map, key = "entityWith3dUI", value = $entityWith3dUI)
+
+    $rotate = {
+        x = 0,
+        y = 0,
+        z = 0,
+    }
+
+    $position = GetConfigVar(obj = $obj1, key = "position") or $position
+    $width = GetConfigVar(obj = $obj1, key = "width") or $width
+    $height = GetConfigVar(obj = $obj1, key = "height") or $height
+    $text = $obj1.blackboardStr or $text
+
+    $data = {
+        key = ToString($objID),
+        name = "blackBoard",
+        width = $width,
+        height = $height,
+        position = $position,
+        rotate = $rotate,
+        args = {
+            text = $text
+        }
+    }
+
+    AddEntitySceneUI(entity = $obj1, data = $data)
 }
