@@ -1,8 +1,57 @@
 {
     "canClick": false,
-    "collision": false,
+    "collision": true,
     "skin": {
         "body": "1"
+    },
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    7.6,
+                    2.65,
+                    3.9,
+                    -7.6,
+                    2.2,
+                    3.7
+                ]
+            },
+            {
+                "type": "Box",
+                "params": [
+                    7.6,
+                    2.65,
+                    -3.9,
+                    -7.6,
+                    2.2,
+                    -3.7
+                ]
+            },
+            {
+                "type": "Box",
+                "params": [
+                    7.7,
+                    2.65,
+                    3.9,
+                    7.55,
+                    2.2,
+                    -3.9
+                ]
+            },
+            {
+                "type": "Box",
+                "params": [
+                    -7.7,
+                    2.65,
+                    3.9,
+                    -7.55,
+                    2.2,
+                    -3.9
+                ]
+            }
+        ]
     },
     "disableShadow": true,
     "name": "",
