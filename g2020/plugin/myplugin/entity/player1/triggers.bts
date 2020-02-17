@@ -1911,7 +1911,7 @@ FUNC_STATESKILL_REMOVE --params: state, skill
     }
 
     RemoveSkill(entity = $obj1, name = $skill)
-    $index = ArratFind(array = $obj1.outOfCameraModeState, value = $state)
+    $index = ArrayFind(array = $obj1.outOfCameraModeState, value = $state)
     If($index){
         ArrayRemove(array = $obj1.outOfCameraModeState, index = $index)
     }
