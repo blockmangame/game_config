@@ -5,8 +5,8 @@ SKILL_CAST
         ShowOpenedWnd(player = $obj1, showFuncId = $obj1.showFuncId)
         ForLoop(from = 1, to = ArraySize(array = $obj1.outOfCameraModeState), key = "idx")
         {
-            $stateBase = ArrayGet(array = $obj1.outOfCameraModeState, index = $idx)
-            $keyStr = Concat(p1 = "myplugin/skill_state_", p2 = $stateBase)
+            $state = ArrayGet(array = $obj1.outOfCameraModeState, index = $idx)
+            $keyStr = Concat(p1 = "myplugin/skill_state_", p2 = $state)
             AddSkill(entity = $obj1, name = $keyStr)
         }
         ShowInteractionWindow(player = $obj1)
