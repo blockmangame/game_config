@@ -16,5 +16,10 @@ SKILL_CAST
         OperationWindows(player = $obj1, isOpen = true, win = "main_tray_g2020")
         $obj1.cameraModeCloseBuff = nil
         $obj1.cameraModeTakePhotosBuff = nil
+        If($obj1.role == @child){
+            $obj1.boundingBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/bounding_child")
+        }ElseIf($obj1.role == @adult){
+            $obj1.boundingBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/bounding_adult")
+        }
     }
 }
