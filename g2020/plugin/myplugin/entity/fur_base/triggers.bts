@@ -561,6 +561,9 @@ COOK_BUY {
    $myTeamId = GetEntityTeam(entity = $obj2)
    $coinId = GetConfigVar(obj = $obj1, key = "coinId")
    $Name = GetItemCfg(fullName = $sellItem, key = "name")
+   If(not $Name){
+       $Name = GetItemCfg(fullName = $sellItem, key = "itemname")
+   }
    $ownerName = "nil"
    $isTeam = false
    If($owner){
@@ -571,7 +574,7 @@ COOK_BUY {
        $isTeam = true
    }
    If($isTeam or not $price or $price ==0){ --不要钱不弹窗直接购买
-      CallTrigger(event = "SURE_FURNITURE_BUY", obj2 = $obj1,object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam, owner = $owner)
+      CallTrigger(event = "SURE_FURNITURE_BUY", obj2 = $obj1,object = $obj2, sellItem = $sellItem, isTeam = $isTeam, owner = $owner)
    }Else{
       $btnInfo = {
         leftCoinId = nil,
@@ -600,6 +603,9 @@ FOOD_BUY {
    $sellItem = GetConfigVar(obj = $obj1, key = "sellItem")
    $coinId = GetConfigVar(obj = $obj1, key = "coinId")
    $Name = GetItemCfg(fullName = $sellItem, key = "name")
+   If(not $Name){
+        $Name = GetItemCfg(fullName = $sellItem, key = "itemname")
+    }
    $owner = GetOwner(entity = $obj1)
    $myTeamId = GetEntityTeam(entity = $obj2)
    $ownerName = "nil"
@@ -612,7 +618,7 @@ FOOD_BUY {
        $isTeam = true
    }
    If($isTeam or not $price or $price ==0 ){ --不要钱不弹窗直接购买
-      CallTrigger(event = "SURE_FURNITURE_BUY", obj2 = $obj1, object = $obj2, price = $price, sellItem = $sellItem, isTeam = $isTeam, owner = $owner)
+      CallTrigger(event = "SURE_FURNITURE_BUY", obj2 = $obj1, object = $obj2, sellItem = $sellItem, isTeam = $isTeam, owner = $owner)
    }Else{
       $btnInfo = {
         leftCoinId = nil,

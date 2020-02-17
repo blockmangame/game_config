@@ -40,8 +40,18 @@ GAME_INIT
     CallTrigger(event = "FUNC_NAVIGATION_GET_MAPS_ALL_PATH")
     CallTrigger(event = "FUNC_LOAD_WORKS_WALL_TOP")
     @Map001 = GetStaticMap(name = "map001", create = true)--load map001
+    CallTrigger(event = "SHOW_SHOP_TITLE")
 }
-
+--场景商店的牌子
+SHOW_SHOP_TITLE(){
+    $mapName = "map001"
+    $cfg = GetWorldVar(key = "ShopTitle")
+    $Dict = NewDictionary($cfg or {})
+    $array = DictionaryGet(dict = $Dict, key = $mapName)
+    Foreach(array = $array or {}, key = "data"){
+        AddSceneUI(map = @Map001, data = $data)
+    }
+}
 INIT_WORK_TASK_DATA(){    --打工配置表的读取
     $mapcfgarray = GetMapConfig(name = "map001", key = "entity")
     @worlkMoeny = NewDictionary({}) --奖励表
