@@ -4583,6 +4583,9 @@ START_CAMERA_MODE
 {
     If(not IsCameraMode(player = $obj1))
     {
+        If($obj1.boundingBuff){
+            RemoveEntityBuff(entity = $obj1, buff = $obj1.boundingBuff)
+        }
         -- actionControl -> jump and move, skills -> just skill
         $obj1.showFuncId = HideOpenedWnd(player = $obj1, excluded = {a = "actionControl",b = "skills"})
         Test("$obj1.outOfCameraModeState", $obj1.outOfCameraModeState)
