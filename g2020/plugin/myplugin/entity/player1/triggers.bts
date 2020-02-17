@@ -4258,7 +4258,7 @@ SURE_BUY {
             ShowTip(textKey = "gui_str_app_shop_inventory_is_full", tipType = 2, entity = $obj1, keepTime = 20)
          }
    }Else{ --不够钱
-      ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
+        CallTrigger(object = $obj1, event = "CHOICE_OPEN_BUY", coinName = $coinName)
    }
 }
 SHOP_BUY_COIN {
@@ -4309,8 +4309,23 @@ SURE_FURNITURE_BUY {
             ShowTip(textKey = "gui_str_app_shop_inventory_is_full", tipType = 2, entity = $obj1, keepTime = 20)
          }
    }Else{ --不够钱
-      ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
+      CallTrigger(object = $obj1, event = "CHOICE_OPEN_BUY", coinName = $coinName)
    }
+}
+CHOICE_OPEN_BUY(){
+    $msg = $coinName == "gDiamonds" and "pay_failure_gDiamonds_insufficient" or "pay_failure_game_money_insufficient"
+    ShowDialogTip(entity = $obj1, tipType = 2, event = "OPEN_BUY_COIN",p1 = $msg, context = {coinName = $coinName})
+}
+OPEN_BUY_COIN()
+{
+    If($result == false){
+        Return()
+    }
+    If($coinName == "gDiamonds"){
+        ShowRecharge(player = $obj1)
+    }Else{
+        ShowGoldShop(player = $obj1, show = true)
+    }
 }
 --特权购买成功
 ENTITY_BUY_APPSTOP {
