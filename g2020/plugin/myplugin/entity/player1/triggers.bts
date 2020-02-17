@@ -5605,6 +5605,9 @@ PLAYER_CLEAR_RIDE
     ClearRide(entity = $obj1)
 }
 ADD_SVIP_BUFF{
+    If(not ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege")){
+        Return()
+    }
     If($obj1.lastSvipBuff){
         RemoveEntityBuff(entity = $obj1, buff = $obj1.lastSvipBuff)
     }
