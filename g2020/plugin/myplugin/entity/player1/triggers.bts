@@ -4588,8 +4588,8 @@ START_CAMERA_MODE
         Test("$obj1.outOfCameraModeState", $obj1.outOfCameraModeState)
         ForLoop(from = 1, to = ArraySize(array = $obj1.outOfCameraModeState), key = "idx")
         {
-            $stateBase = ArrayGet(array = $obj1.outOfCameraModeState, index = $idx)
-            $keyStr = Concat(p1 = "myplugin/skill_state_", p2 = $stateBase)
+            $state = ArrayGet(array = $obj1.outOfCameraModeState, index = $idx)
+            $keyStr = Concat(p1 = "myplugin/skill_state_", p2 = $state)
             RemoveSkill(entity = $obj1, name = $keyStr)
         }
         CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
