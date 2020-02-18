@@ -5763,3 +5763,26 @@ SHOW_GOTO_APP_SHOP_UI_RESULT
 ADD_TOY_GIFT(){
     AddItem(entity = $obj1, cfg = $addItem, count = 1)
 }
+
+SET_TIMES_BOUNDARY
+{
+    $index = 1
+    $size = ArraySize(array = $array or {})
+    Foreach(array = $array or {}, key = "value")
+    {
+
+        If($index == $size)
+        {
+            @rangeBoundary =  Concat(p1 = ToString($value), p2 = "+")
+            Return()
+        }
+
+        If($times <= $value)
+        {
+            @rangeBoundary = ToString($value)
+            Return()
+        }
+
+        $index = $index + 1
+    }
+}
