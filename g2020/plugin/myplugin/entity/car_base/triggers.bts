@@ -1,5 +1,6 @@
 RIDE_ON
 {
+    Test("5aaaaaaaaaaaaaaaaaaaaaaa ")
     $owner = GetOwner(entity = $obj1)
     $canDrive = false
     If($owner)
@@ -27,7 +28,9 @@ RIDE_ON
     {
         Test($obj2.otherItem)
         Test($obj1.otherItem)
-
+        If(not GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/attach_point_index_1_buff")){
+            AddEntityBuff(entity = $obj2, cfg = "myplugin/attach_point_index_1_buff") -- 通过buff换skin
+        }
         If($obj2.otherItem){
             --ClearRide(entity = $obj2.createdTrolley)
 			--EquipItem(entity = $obj2, item = $obj2.equipItem)
@@ -44,12 +47,20 @@ RIDE_ON
 
 RIDE_ON_CAR
 {
+    Test("5bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb ")
+    If(not GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/attach_point_index_1_buff")){
+        AddEntityBuff(entity = $obj2, cfg = "myplugin/attach_point_index_1_buff") -- 通过buff换skin
+    }
     CallTrigger(obj1 = $obj2, event = "PLAYER_CLEAR_RIDE")
     RideOn(entity = $obj2, target = $obj1)
 }
 
 ENTITY_RIDE_ON
 {
+    Test("5cccccccccccccccccccccccccccccc ")
+    If(not GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/attach_point_index_1_buff")){
+        AddEntityBuff(entity = $obj2, cfg = "myplugin/attach_point_index_1_buff") -- 通过buff换skin
+    }
     $obj2.onCar = true
     $hidePlayer = GetConfigVar(obj = $obj1, key = "hidePlayer")
     If($hidePlayer)
@@ -60,6 +71,10 @@ ENTITY_RIDE_ON
 
 ENTITY_RIDE_OFF
 {
+    $buff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/attach_point_index_1_buff")
+    If($buff){
+        RemoveEntityBuff(entity = $obj2, buff = $buff)
+    }
     $obj2.onCar = false
     If($obj2.driveHideBuff)
     {
