@@ -1,6 +1,6 @@
 {
     "useNewQuadConfig": true,
-    "crossServerVisitButtonImage":"set:party_common_1.json image:yellow_btn.png",
+    "crossServerVisitButtonImage": "set:party_common_1.json image:yellow_btn.png",
     "disableDrawSelectionBox": true,
     "defaultAvatar": "set:party_common_1.json image:default_head_icon.png",
     "broadcastPartyInviteItemIndex": 13,
@@ -18,7 +18,7 @@
     "isShowSvipUI": true,
     "checkSignIn": true,
     "isDragControl": true,
-    "cameraCtrBody":false,
+    "cameraCtrBody": false,
     "ShowFriendUIEvent": "EVENT_SHOW_FRIEND",
     "waitPlayerTime": 0,
     "waitStartTime": 0,
@@ -33,8 +33,7 @@
         "y": 18,
         "z": -560
     },
-    "transferData": {
-    },
+    "transferData": {},
     "hideSettingPlayerList": true,
     "mainUiList": [
         "main_tray_g2020"
@@ -236,7 +235,10 @@
             },
             {
                 "key": "joinUserPartyData",
-                "value": {"data": "", "userIds" : []},
+                "value": {
+                    "data": "",
+                    "userIds": []
+                },
                 "save": true
             },
             {
@@ -294,7 +296,25 @@
         ]
     ],
     "skillJack": {
-        "jackList": [
+        "lineSkills": [
+            {
+                "xOffset": 0,
+                "yOffset": 100,
+                "jackSize": 60,
+                "itemSpace": 30,
+                "hAlign": 1,
+                "vAlign": 0
+            },
+            {
+                "xOffset": -50,
+                "yOffset": 0,
+                "jackSize": 60,
+                "itemSpace": 30,
+                "hAlign": 2,
+                "vAlign": 1
+            }
+        ],
+        "sectorSkills": [
             {
                 "jackNum": 4,
                 "radius": 120,
@@ -321,12 +341,6 @@
                 150
             ]
         ],
-        "topJackSize": 60,
-        "txOffset": 0,
-        "tyOffset": 100,
-        "mxOffset": -50,
-        "myOffset": 0,
-        "midJackSize": 60,
         "hideBJack": true
     },
     "jumpIcon": "plugin/myplugin/image/jump.png",
@@ -389,7 +403,7 @@
                     "z": 198
                 }
             },
-			{
+            {
                 "name": "shopSignV",
                 "key": "title3",
                 "args": "myplugin/shopSignV03",
@@ -524,7 +538,7 @@
             }
         }
     },
-    "maxWorksArchiveNum" : 27,
+    "maxWorksArchiveNum": 27,
     "freeWorksArchive": 3,
     "worksArchivePrice": 100,
     "publishWorksPrice": 360,
@@ -538,7 +552,7 @@
     "freeChangeNameTimes": 0,
     "changeNamePrice": 100,
     "changeNameCoinId": 0,
-	"viewMode": 1,
+    "viewMode": 1,
     "hidePerSpec": true,
     "personalSettingUI": {
         "volume": true,
