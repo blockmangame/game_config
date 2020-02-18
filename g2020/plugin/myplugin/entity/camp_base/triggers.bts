@@ -9,8 +9,9 @@ FUR_ENTITY_RIDE_ON
 {
     CallTrigger(obj1 = $me, event = "ENTITY_REMOVE_INTERACTION")
     ClearRide(entity = $me)
-    If(not GetEntityTypeBuff(entity = $me, key = "fullName", value = "myplugin/attach_point_index_1_buff")){
-        AddEntityBuff(entity = $me, cfg = "myplugin/attach_point_index_1_buff") -- 通过buff换skin
+    $targetAttachPointIndexBuff = GetConfigVar(obj = $obj1, key = $me.role == @adult and "targetAttachPointIndexBuffByAdult" or "targetAttachPointIndexBuffByChild")
+    If($targetAttachPointIndexBuff and not GetEntityTypeBuff(entity = $me, key = "fullName", value = $targetAttachPointIndexBuff)){
+        AddEntityBuff(entity = $me, cfg = $targetAttachPointIndexBuff)
     }
     RideOn(ctrl = $ctrl, entity = $me, target = $obj1, targetIndex = $index)
     $decEditBuff = GetConfigVar(obj = $obj1, key = "editBuff")
