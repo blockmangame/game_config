@@ -3625,7 +3625,7 @@ UPDATE_WORKS_RESPONSE
             {
                 ShowTip(entity = $obj1, tipType = 6, textKey = "works_save_coverage_and_publish_new_works_succeed", keepTime = 20)
             }
-            CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId)
+            CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId, player = $obj1)
         }
         Else
         {
@@ -3673,7 +3673,7 @@ CREATE_WORKS_RESPONSE
             $price = GetWorldVar(key = "publishWorksPrice")
             PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
             ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", keepTime = 20)
-            CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $data)
+            CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $data, player = $obj1)
         }
         Else
         {
@@ -3743,7 +3743,7 @@ PUBLISH_WORKS_RESPONSE
         ShowDialogTip(entity = $obj1, p2 = "publish_works_succeed", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         SetWorksArchiveNum(player = $obj1, num = $obj1.worksArchiveNum)
         UpdateUIData(player =$obj1, ui = "works_person", data = true)
-        CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId)
+        CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId, player = $obj1)
     }
     Else
     {
@@ -3776,7 +3776,7 @@ PUBLISH_WORKS_BY_CUBE_RESPONSE
     If($code == 1)
     {
         ShowTip(entity = $obj1, tipType = 6, textKey = "publish_works_succeed", keepTime = 20)
-        CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId)
+        CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId, player = $obj1)
         UpdateUIData(player = $obj1, ui = "works_person", data = true)
     }
     Else
@@ -5768,6 +5768,25 @@ ADD_TOY_GIFT(){
 }
 
 
+DATA_REPORT_GOLD_NUM
+{
+    $num = GetCurrency(entity = $obj1, coinName = "green_currency")
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $num, array = [2999, 9999, 19999, 29999, 39999, 49999, 59999, 69999, 79999, 89999, 99999, 109999, 119999, 499999, 999999, 1000000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:gold", @rangeBoundary])
+}
+
+DATA_REPORT_CUBE_NUM
+{
+    $num = GetCurrency(entity = $obj1, coinName = "gDiamonds")
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $num, array = [0, 59, 19999, 299, 1999, 4999, 9999, 49999, 99999, 100000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:cube", @rangeBoundary])
+}
+
+DATA_REPORT_WORKS_ARCHIVE
+{
+    WorksArchiveReport(player = $obj1)
+}
+
 SEND_CHAT_MESSAGE
 {
     If(not $obj1.curChatMsgNum)
@@ -5791,34 +5810,10 @@ DATA_REPORT_CHAT_MESSAGE
         $obj1.curChatMsgNum = 0
     }
 
-    @rangeBoundary = "0"
-    CallTrigger(obj1 = $obj1, event = "SET_RANGE_BOUNDARY", times = $obj1.curChatMsgNum, array = [0, 5, 10, 20, 30, 31])
+    CallTrigger(obj1 = $obj1, event = "SET_RANGE_BOUNDARY", num = $obj1.curChatMsgNum, array = [0, 5, 10, 20, 30, 31])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:chat:single_game", @rangeBoundary])
 
-    @rangeBoundary = "0"
-    CallTrigger(obj1 = $obj1, event = "SET_RANGE_BOUNDARY" , times = $obj1.chatMsgNum, array = [0, 9, 19, 49, 99, 199, 499, 999, 1999, 4999, 9999, 10000])
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $obj1.chatMsgNum, array = [0, 9, 19, 49, 99, 199, 499, 999, 1999, 4999, 9999, 10000])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:chat:sum", @rangeBoundary])
 }
 
-SET_RANGE_BOUNDARY
-{
-    $index = 1
-    $size = ArraySize(array = $array or {})
-    Foreach(array = $array or {}, key = "value")
-    {
-
-        If($index == $size)
-        {
-            @rangeBoundary =  Concat(p1 = ToString($value), p2 = "+")
-            Return()
-        }
-
-        If($times <= $value)
-        {
-            @rangeBoundary = ToString($value)
-            Return()
-        }
-
-        $index = $index + 1
-    }
-}
