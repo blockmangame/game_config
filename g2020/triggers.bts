@@ -603,9 +603,9 @@ ENTITY_RIDE_OFF {
     {
         AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_idle_buff")
     }
-    $buff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/attach_point_index_1_buff")
-    If($buff){
-        RemoveEntityBuff(entity = $obj2, buff = $buff)
+    $targetAttachPointIndexBuff = GetConfigVar(obj = $obj1, key = $obj2.role == @adult and "targetAttachPointIndexBuffByAdult" or "targetAttachPointIndexBuffByChild")
+    If($targetAttachPointIndexBuff and GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff)){
+        RemoveEntityBuff(entity = $obj2, buff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff))
     }
     StartTimer(rep = false, player = $obj2, target = $obj1, time = 1, event = "RECHECK_INTERACTION_UI")
     CallTrigger(object = $obj2, event = "FUNC_STATE_RIDEON", ride = $obj1, isCancel = true)

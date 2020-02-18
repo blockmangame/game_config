@@ -2258,7 +2258,7 @@ FUNC_UPDATE_STATE_SKILL_JACK_AREA --params: up
     UpdateSkillJackArea(
         entity = $obj1,
         info = {
-            pos = "top",
+            pos = 1,
             yOff = $up and @skillJackUp or @skillJackDown
         }
     )
