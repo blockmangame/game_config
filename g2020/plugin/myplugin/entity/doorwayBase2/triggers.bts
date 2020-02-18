@@ -1,0 +1,20 @@
+ENTITY_TOUCH_ALL
+{
+    $toMap = GetConfigVar(obj = $obj1, key = "toMap")
+    $toPos = GetConfigVar(obj = $obj1, key = "toPos")
+    $toRy = GetConfigVar(obj = $obj1, key = "toRy")
+
+    CallTrigger(
+        event = "FUNC_TRANSMIT_CARRIER",
+        object = $obj2,
+        toMap = $toMap,
+        toPos = $toPos,
+        toRy = $toRy,
+    )
+    If($obj2.transmitCancel)
+    {
+        Return()
+    }
+
+    CallTrigger(object = $obj2, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
+}
