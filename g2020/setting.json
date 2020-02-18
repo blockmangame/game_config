@@ -135,6 +135,10 @@
                     "indoor_school",
                     "indoor_toyshop"
                 ]
+            },
+            {
+                "key" : "rangeBoundary",
+                "value" : "0"
             }
         ],
         "entity": [
@@ -190,6 +194,11 @@
             },
             {
                 "key": "worktaskCount",
+                "value": 0,
+                "save": true
+            },
+            {
+                "key": "workTaskfinish",
                 "value": 0,
                 "save": true
             },
@@ -260,6 +269,11 @@
                 "key": "worksArchiveNum",
                 "value": 3,
                 "save": true
+            },
+            {
+                "key": "chatMsgNum",
+                "value": 0,
+                "save": true
             }
         ]
     },
@@ -300,8 +314,8 @@
             {
                 "xOffset": 0,
                 "yOffset": 100,
-                "jackSize": 60,
-                "itemSpace": 30,
+                "jackSize": 80,
+                "itemSpace": 10,
                 "hAlign": 1,
                 "vAlign": 0
             },

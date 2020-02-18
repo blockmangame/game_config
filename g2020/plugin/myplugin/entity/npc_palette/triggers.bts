@@ -1,6 +1,7 @@
 TUYA_HUABAN()
 {
     OperationWindows(player = $obj2, isOpen = true, win = "palette")
+    GameAnalyticsCustomEvent(player = $obj2, parts = ["player:open:doodle_editor"], value = 0)
     If(not $obj2.openedPalette)
     {
         $obj2.openedPalette = true

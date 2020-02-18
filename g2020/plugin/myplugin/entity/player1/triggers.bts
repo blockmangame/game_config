@@ -4180,6 +4180,7 @@ FINISH_TASK(debug = false){ --完成打工的对话
 }
 FINISH_AWARD(){ --完成打工的奖励
     $obj1.maxtaskCount = ($obj1.maxtaskCount or 0 ) + 1
+    $obj1.workTaskfinish = $obj1.workTaskfinish + 1
     If($obj1.maxtaskCount >= @workmaxCount && not $obj1.maxActor and @INDENT_MODEL){ --最大累计数，改变模型
         $obj1.maxActor = true
         CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "maxCountActor", obj2 = $obj1)
@@ -5764,4 +5765,60 @@ SHOW_GOTO_APP_SHOP_UI_RESULT
 
 ADD_TOY_GIFT(){
     AddItem(entity = $obj1, cfg = $addItem, count = 1)
+}
+
+
+SEND_CHAT_MESSAGE
+{
+    If(not $obj1.curChatMsgNum)
+    {
+        $obj1.curChatMsgNum = 0
+    }
+
+    If (not $obj1.chatMsgNum)
+    {
+        $obj1.chatMsgNum = 0
+    }
+
+    $obj1.chatMsgNum = $obj1.chatMsgNum + 1
+    $obj1.curChatMsgNum = $obj1.curChatMsgNum + 1
+}
+
+DATA_REPORT_CHAT_MESSAGE
+{
+    If(not $obj1.curChatMsgNum)
+    {
+        $obj1.curChatMsgNum = 0
+    }
+
+    @rangeBoundary = "0"
+    CallTrigger(obj1 = $obj1, event = "SET_RANGE_BOUNDARY", times = $obj1.curChatMsgNum, array = [0, 5, 10, 20, 30, 31])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:chat:single_game", @rangeBoundary])
+
+    @rangeBoundary = "0"
+    CallTrigger(obj1 = $obj1, event = "SET_RANGE_BOUNDARY" , times = $obj1.chatMsgNum, array = [0, 9, 19, 49, 99, 199, 499, 999, 1999, 4999, 9999, 10000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:chat:sum", @rangeBoundary])
+}
+
+SET_RANGE_BOUNDARY
+{
+    $index = 1
+    $size = ArraySize(array = $array or {})
+    Foreach(array = $array or {}, key = "value")
+    {
+
+        If($index == $size)
+        {
+            @rangeBoundary =  Concat(p1 = ToString($value), p2 = "+")
+            Return()
+        }
+
+        If($times <= $value)
+        {
+            @rangeBoundary = ToString($value)
+            Return()
+        }
+
+        $index = $index + 1
+    }
 }
