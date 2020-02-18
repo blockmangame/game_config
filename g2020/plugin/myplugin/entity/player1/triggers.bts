@@ -5764,6 +5764,39 @@ ADD_TOY_GIFT(){
     AddItem(entity = $obj1, cfg = $addItem, count = 1)
 }
 
+
+SEND_CHAT_MESSAGE
+{
+    If(not $obj1.curChatMsgNum)
+    {
+        $obj1.curChatMsgNum = 0
+    }
+
+    If (not $obj1.chatMsgNum)
+    {
+        $obj1.chatMsgNum = 0
+    }
+
+    $obj1.chatMsgNum = $obj1.chatMsgNum + 1
+    $obj1.curChatMsgNum = $obj1.curChatMsgNum + 1
+}
+
+DATA_REPORT_CHAT_MESSAGE
+{
+    If(not $obj1.curChatMsgNum)
+    {
+        $obj1.curChatMsgNum = 0
+    }
+
+    @rangeBoundary = "0"
+    CallTrigger(obj1 = $obj1, event = "SET_TIMES_BOUNDARY", times = $obj1.curChatMsgNum, array = [0, 5, 10, 20, 30, 31])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:chat:single_game", @rangeBoundary])
+
+    @rangeBoundary = "0"
+    CallTrigger(obj1 = $obj1, event = "SET_TIMES_BOUNDARY" , times = $obj1.chatMsgNum, array = [0, 9, 19, 49, 99, 199, 499, 999, 1999, 4999, 9999, 10000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:chat:sum", @rangeBoundary])
+}
+
 SET_TIMES_BOUNDARY
 {
     $index = 1
