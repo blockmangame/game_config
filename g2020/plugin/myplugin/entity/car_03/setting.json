@@ -34,9 +34,29 @@
             "view": true,
             "passengerAction": {
                 "base": "riding"
-            }
+            },
+			"attachPoint": "ride1"
         }
     ],
+	"attachPoints": [
+        {
+            "name": "ride1",
+            "bone": "s_guadian011",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": 1,
+            "propagateScaling": true,
+            "matchActorOrientation": true
+        }
+	],
     "boundingVolume": {
         "type": "Composite",
         "params": [
