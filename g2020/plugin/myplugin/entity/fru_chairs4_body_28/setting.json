@@ -8,26 +8,81 @@
             {
                 "type": "Box",
                 "params": [
-                    0.93,
-                    0.23,
-                    0.32,
-                    -0.93,
+                    1.4,
+                    0.3,
+                    0.4,
+                    -1.4,
                     0,
-                    -0.32
+                    -0.44
                 ]
             },
             {
                 "type": "Box",
                 "params": [
-                    0.93,
-                    0.63,
+                    1.4,
+                    1.2,
                     -0.04,
-                    -0.93,
+                    -1.4,
                     0,
-                    -0.32
+                    -0.44
                 ]
             }
         ]
+    }, "interactionUI": [
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit2_low_1.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_low_1",
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.5,
+                    "y": 0.5,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit2_low_2.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_low_2",
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.5,
+                    "y": 0.5,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
     },
     "actorName": "g2020_fru_chairs4.actor",
     "base": "fur_base",
