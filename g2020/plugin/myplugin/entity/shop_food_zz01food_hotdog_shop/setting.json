@@ -1,0 +1,59 @@
+{
+    "canClick": true,
+    "actorName": "g2020_food.actor",
+    "skin": {
+        "body": "22"
+    },
+    "coinId": 3,
+    "sellPrice": 5,
+    "sellItem": "myplugin/food_zz01food_hotdog",
+    "collision": true,
+    "name": "",
+    "pushable": null,
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "VerticalBox",
+                "params": [
+                    1,
+                    1,
+                    1
+                ]
+            }
+        ]
+    },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": -0.1,
+                "y": 0.2,
+                "z": -0.1
+            }
+        },
+        "centerBtns": [
+            {
+                "text": "zz01food_hotdog_shop.buy",
+                "widgetFileName": "widget_button",
+                "image": "plugin/myplugin/image/buy_coin.png",
+                "imageSize": {
+                    "width": "50",
+                    "height": "50"
+                },
+                "event": "BUY_SHOP"
+            }
+        ]
+    },
+    "interaction": {
+        "radius": 7,
+        "offset": {
+            "x": 0.2,
+            "y": -1,
+            "z": 2
+        }
+    },
+    "base": "fishItem",
+    "disableShadow": true
+}
