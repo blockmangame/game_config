@@ -5792,15 +5792,15 @@ DATA_REPORT_CHAT_MESSAGE
     }
 
     @rangeBoundary = "0"
-    CallTrigger(obj1 = $obj1, event = "SET_TIMES_BOUNDARY", times = $obj1.curChatMsgNum, array = [0, 5, 10, 20, 30, 31])
+    CallTrigger(obj1 = $obj1, event = "SET_RANGE_BOUNDARY", times = $obj1.curChatMsgNum, array = [0, 5, 10, 20, 30, 31])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:chat:single_game", @rangeBoundary])
 
     @rangeBoundary = "0"
-    CallTrigger(obj1 = $obj1, event = "SET_TIMES_BOUNDARY" , times = $obj1.chatMsgNum, array = [0, 9, 19, 49, 99, 199, 499, 999, 1999, 4999, 9999, 10000])
+    CallTrigger(obj1 = $obj1, event = "SET_RANGE_BOUNDARY" , times = $obj1.chatMsgNum, array = [0, 9, 19, 49, 99, 199, 499, 999, 1999, 4999, 9999, 10000])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:chat:sum", @rangeBoundary])
 }
 
-SET_TIMES_BOUNDARY
+SET_RANGE_BOUNDARY
 {
     $index = 1
     $size = ArraySize(array = $array or {})
