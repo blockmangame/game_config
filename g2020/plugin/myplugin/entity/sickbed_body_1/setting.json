@@ -1,0 +1,61 @@
+{
+    "skin": {
+        "body": "1"
+    },
+    "actorName": "g2020_sickbed.actor",
+    "base": "sickbed_base",
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    1.1,
+                    0.9,
+                    2
+                ]
+            }, {
+                "type": "Box",
+                "params": [
+                    -0.8,
+                    2,
+                    -0.5,
+                    -0.3,
+                    0,
+                    -0.4
+                ]
+            }
+        ]
+    },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "sickbed.text",
+                "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                "event": "ENTITY_sickbed",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "widgetFileName": "widget_button"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+            }
+        }
+    }
+}
