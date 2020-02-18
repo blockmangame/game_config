@@ -60,9 +60,18 @@ EXECUTION_EDIT_ACTION{
     CallTrigger(object = $obj1, event = $event, objID = GetObjectID(object = $obj1), obj2 = $obj2, params = $params)
 }
 
+LIGHT_ON_OFF_RESET{
+    If($obj1.lightOnBuff){
+        RemoveEntityBuff(entity = $obj1, buff = $obj1.lightOnBuff)
+        $cfg = Concat(p1 = "myplugin/", p2 = $obj1.cfg.buffName)
+        $obj1.lightOnBuff = AddEntityBuff(entity = $obj1, cfg = $cfg)
+    }
+}
+
 STOP_EDIT_ENTITY{
     CallTrigger(object = $obj1, obj1 = $obj1, event = "REMOVE_END_MOVEMENT_BUFF")
     CallTrigger(object = $obj1, event = "REMOVE_EDIT_BUFF")
+    CallTrigger(object = $obj1, event = "LIGHT_ON_OFF_RESET")
     SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
     If(not GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/can_edit_house_buff")) -- 编辑房子的cd
     {
@@ -357,8 +366,9 @@ FUR_ENTITY_RIDE_ON
 {
     CallTrigger(obj1 = $me, event = "ENTITY_REMOVE_INTERACTION")
     ClearRide(entity = $me)
-    If(not GetEntityTypeBuff(entity = $me, key = "fullName", value = "myplugin/attach_point_index_1_buff")){
-        AddEntityBuff(entity = $me, cfg = "myplugin/attach_point_index_1_buff") -- 通过buff换skin
+    $targetAttachPointIndexBuff = GetConfigVar(obj = $obj1, key = $me.role == @adult and "targetAttachPointIndexBuffByAdult" or "targetAttachPointIndexBuffByChild")
+    If($targetAttachPointIndexBuff and not GetEntityTypeBuff(entity = $me, key = "fullName", value = $targetAttachPointIndexBuff)){
+        AddEntityBuff(entity = $me, cfg = $targetAttachPointIndexBuff)
     }
     RideOn(ctrl = $ctrl, entity = $me, target = $obj1, targetIndex = $index)
     $decEditBuff = GetConfigVar(obj = $obj1, key = "editBuff")
@@ -511,6 +521,34 @@ CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1
 ENTITY_cirb3{
 CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 47)
 }
+ENTITY_qiaoqiaoban_l2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 48)
+}
+ENTITY_qiaoqiaoban_r2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 49)
+}
+ENTITY_sit1_bar_2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 50)
+}
+ENTITY_qiaoqiaoban_l3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 51)
+}
+ENTITY_qiaoqiaoban_r3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 52)
+}
+ENTITY_chairs4_zhoudeng1{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 53)
+}
+ENTITY_chairs4_zhoudeng2{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 54)
+}
+ENTITY_chairs4_zhoudeng3{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 55)
+}
+ENTITY_chairs4_zhoudeng4{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 56)
+}
+
 
 
 --上面是编辑，下面是购买逻辑
@@ -678,13 +716,14 @@ LIGHT_ON
         RemoveEntityBuff(entity = $obj1, buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff"))
     }
     $cfg = Concat(p1 = "myplugin/", p2 = $obj1.cfg.buffName)
-    AddEntityBuff(entity = $obj1, cfg = $cfg)
+    $obj1.lightOnBuff = AddEntityBuff(entity = $obj1, cfg = $cfg)
 }
 
 LIGHT_OFF
 {
     $cfg = Concat(p1 = "myplugin/", p2 = $obj1.cfg.buffName)
     RemoveEntityTypeBuff(entity = $obj1, key = "fullName", value = $cfg)
+    $obj1.lightOnBuff = nil
     If(not GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff"))
     {
         AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_idle_buff")

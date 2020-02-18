@@ -3,16 +3,16 @@
     "carMove": true,
     "stepHeight": 1.1,
     "carConfig": {
-        "traction": 3000,
-        "reverseTraction": 3000,
-        "brakingForce": 10000,
+        "traction": 15000,
+        "reverseTraction": 10000,
+        "brakingForce": 20000,
         "mass": 800,
-        "coefAirDrag": 2,
-        "coefRollingFriction": 0.01,
-        "minTurningRadius": 7,
-        "maxCentripetalForce": 20000,
+        "coefAirDrag": 3,
+        "coefRollingFriction": 0.6,
+        "minTurningRadius": 2,
+        "maxCentripetalForce": 7000,
         "corneringStiffness": 0.05,
-        "maxCoefLateralFriction": 10,
+        "maxCoefLateralFriction": 25,
         "coefRestitution": 0.3,
         "minBounceSpeed": 5,
         "cameraDistance": 7
@@ -100,7 +100,7 @@
             {
                 "type": "VerticalBox",
                 "params": [
-                    2.6,
+                    2.4,
                     1.65,
                     4.9
                 ]
@@ -161,5 +161,7 @@
         "cd": 20
     },
     "carForwardMovementBuff": "myplugin/car_run_mag_buff",
-    "carBackMovementBuff": "myplugin/car_run_mag_buff_1"
+    "carBackMovementBuff": "myplugin/car_run_mag_buff_1",
+    "targetAttachPointIndexBuffByChild": "myplugin/attach_point_index_1_buff",
+    "targetAttachPointIndexBuffByAdult": "myplugin/attach_point_index_2_buff"
 }

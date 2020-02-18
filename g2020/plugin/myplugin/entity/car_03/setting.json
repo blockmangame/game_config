@@ -2,19 +2,19 @@
     "canClick": true,
     "carMove": true,
     "carConfig": {
-        "traction": 800,
-        "reverseTraction": 300,
+        "traction": 3000,
+        "reverseTraction": 2000,
         "brakingForce": 5000,
         "mass": 200,
         "coefAirDrag": 8,
-        "coefRollingFriction": 0.07,
-        "minTurningRadius": 4,
-        "maxCentripetalForce": 10000,
+        "coefRollingFriction": 0.7,
+        "minTurningRadius": 1,
+        "maxCentripetalForce": 800,
         "corneringStiffness": 0.05,
         "maxCoefLateralFriction": 100,
-        "coefRestitution": 0.9,
+        "coefRestitution": 2,
         "minBounceSpeed": 0.1,
-        "cameraDistance": 7
+        "cameraDistance": 6
     },
     "collision": true,
     "ridePos": [
@@ -34,7 +34,27 @@
             "view": true,
             "passengerAction": {
                 "base": "riding"
-            }
+            },
+            "attachPoint": "ride1"
+        }
+    ],
+    "attachPoints": [
+        {
+            "name": "ride1",
+            "bone": "s_guadian011",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": 1,
+            "propagateScaling": true,
+            "matchActorOrientation": true
         }
     ],
     "boundingVolume": {

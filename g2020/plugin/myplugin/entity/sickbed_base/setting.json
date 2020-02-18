@@ -1,0 +1,79 @@
+{
+    "actorName": "",
+  
+
+    "rotateNearBoxAngle": true,
+    "posSyncDelay": 1,
+    "stopChangeYaw": 1,
+    "disableShadow": true,
+ 
+  
+
+    "hpBarColor": 0,
+    "collision": true,
+    "name": "",
+
+    "canClick": true,
+    "releaseState": "ill",
+    
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    0,
+                    0,
+                    0
+                ]
+            }
+        ]
+    },
+    "ridePos": [
+        {
+            "/yaw": "index_1",
+            "yaw": 0,
+            "pos": {
+                "y": 0,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 0.2,
+                "z": 0,
+                "x": 0
+            },
+            "attachPoint": "s_bingchuang_big",
+            "ctrl": false,
+            "view": false,
+            "rideAction": {
+                "idle": "idle"
+            },
+            "passengerAction": {
+                "base": "sleep1"
+            }
+        }
+    ],
+    "attachPoints": [
+      
+        {
+            "name": "s_bingchuang_big",
+            "bone": "s_bingchuang_big",
+            "position": {
+                "y": -0.1,
+                "z": 0,
+                "x": 0
+            },
+            "rotation": {
+                "y": 0,
+                "z": 0,
+                "x": 270
+            },
+            "scale": 1,
+            "propagateScaling": false,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
+        }
+       
+    ]
+}

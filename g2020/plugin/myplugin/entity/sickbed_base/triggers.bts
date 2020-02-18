@@ -1,0 +1,28 @@
+
+
+--上面是编辑，这里是ride
+TEST_SHOW_NEW_UI {
+    UpdateObjectInteractionUI(cfgKey = "interactionUI_1", player = $obj2, target = $obj1, show = true)
+}
+
+FUR_ENTITY_RIDE_ON
+{
+    CallTrigger(obj1 = $me, event = "ENTITY_REMOVE_INTERACTION")
+    ClearRide(entity = $me)
+    If(not GetEntityTypeBuff(entity = $me, key = "fullName", value = "myplugin/attach_point_index_1_buff")){
+        AddEntityBuff(entity = $me, cfg = "myplugin/attach_point_index_1_buff") -- 通过buff换skin
+    }
+    RideOn(ctrl = $ctrl, entity = $me, target = $obj1, targetIndex = $index)
+    $decEditBuff = GetConfigVar(obj = $obj1, key = "editBuff")
+    If($decEditBuff){
+        $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $decEditBuff) -- 不在编辑状态下玩家不能编辑房子的家具
+        If($buff){
+            UpdateEntityEditContainer(player = $me, entityId = GetObjectID(object = $obj1), show = false)
+        }
+    }
+}
+
+--上面是编辑，这里是ride
+ENTITY_sickbed{
+CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = 1)
+}

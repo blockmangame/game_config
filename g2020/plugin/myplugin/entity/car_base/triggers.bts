@@ -1,5 +1,6 @@
 RIDE_ON
 {
+    Test("5aaaaaaaaaaaaaaaaaaaaaaa ")
     $owner = GetOwner(entity = $obj1)
     $canDrive = false
     If($owner)
@@ -27,7 +28,7 @@ RIDE_ON
     {
         Test($obj2.otherItem)
         Test($obj1.otherItem)
-
+        CallTrigger(object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "ADD_TARGET_ATTACH_POINT_INDEX_BUFF")
         If($obj2.otherItem){
             --ClearRide(entity = $obj2.createdTrolley)
 			--EquipItem(entity = $obj2, item = $obj2.equipItem)
@@ -42,14 +43,24 @@ RIDE_ON
     }
 }
 
+ADD_TARGET_ATTACH_POINT_INDEX_BUFF{
+    $targetAttachPointIndexBuff = GetConfigVar(obj = $obj1, key = $obj2.role == @adult and "targetAttachPointIndexBuffByAdult" or "targetAttachPointIndexBuffByChild")
+    Test("$targetAttachPointIndexBuff", $targetAttachPointIndexBuff)
+    If($targetAttachPointIndexBuff and not GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff)){
+        AddEntityBuff(entity = $obj2, cfg = $targetAttachPointIndexBuff)
+    }
+}
+
 RIDE_ON_CAR
 {
+    CallTrigger(object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "ADD_TARGET_ATTACH_POINT_INDEX_BUFF")
     CallTrigger(obj1 = $obj2, event = "PLAYER_CLEAR_RIDE")
     RideOn(entity = $obj2, target = $obj1)
 }
 
 ENTITY_RIDE_ON
 {
+    CallTrigger(object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "ADD_TARGET_ATTACH_POINT_INDEX_BUFF")
     $obj2.onCar = true
     $hidePlayer = GetConfigVar(obj = $obj1, key = "hidePlayer")
     If($hidePlayer)
@@ -58,8 +69,16 @@ ENTITY_RIDE_ON
     }
 }
 
+REMOVE_TARGET_ATTACH_POINT_INDEX_BUFF{
+    $targetAttachPointIndexBuff = GetConfigVar(obj = $obj1, key = $obj2.role == @adult and "targetAttachPointIndexBuffByAdult" or "targetAttachPointIndexBuffByChild")
+    If($targetAttachPointIndexBuff and GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff)){
+        RemoveEntityBuff(entity = $obj2, buff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff))
+    }
+}
+
 ENTITY_RIDE_OFF
 {
+    CallTrigger(object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "REMOVE_TARGET_ATTACH_POINT_INDEX_BUFF")
     $obj2.onCar = false
     If($obj2.driveHideBuff)
     {

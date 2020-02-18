@@ -1,0 +1,53 @@
+{
+    "skin": {
+        "body": "42"
+    },
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    0.7,
+                    1,
+                    0.7
+                ]
+            }
+        ]
+    },
+    "actorName": "g2020_fru_chairs4.actor",
+    "base": "fur_base",
+    "sellMoney": 50,
+    "sellByDiscountMoney": 25,
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "text": "barsit2.text",
+                "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                "event": "ENTITY_sit1_bar_2",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "widgetFileName": "widget_button"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+            }
+        }
+    }
+}

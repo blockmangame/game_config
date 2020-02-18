@@ -1,0 +1,82 @@
+{
+    "skin": {
+        "body": "1"
+    },
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    -1.4,
+                    0.6,
+                    -0.2,
+                    1.4,
+                    0,
+                    0.3
+                ]
+            }
+        ]
+    },
+    "actorName": "g2020_fru_chairs5.actor",
+    "base": "fur_base",
+    "sellMoney": 500,
+    "sellByDiscountMoney": 250,
+    "buffName": "light_on_buff",
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "aroundParams": {
+            "startAngle": 0,
+            "endAngle": 90,
+            "radius": 0
+        },
+        "aroundBtns": [
+            {
+                "text": "light_on.text",
+                "image": "plugin/myplugin/image/fru_intUI/open.png",
+                "checkCanHide": {
+                    "funcName": "checkTargetProp",
+                    "key": "lightState",
+                    "value": "on"
+                },
+                "event": "LIGHT_ON",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "widgetFileName": "widget_button"
+            },
+            {
+                "text": "light_off.text",
+                "image": "plugin/myplugin/image/fru_intUI/close.png",
+                "checkCanHide": {
+                    "funcName": "checkTargetProp",
+                    "key": "lightState",
+                    "value": "off"
+                },
+                "event": "LIGHT_OFF",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "widgetFileName": "widget_button"
+            }
+        ],
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+            }
+        }
+    }
+}

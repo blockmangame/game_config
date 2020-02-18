@@ -13,8 +13,12 @@ SET_ITEM_USE {
 CHECK_CAN_USE_ITEM {
     If(IsDrive(entity = $obj1))
     {
-        --正在开车不能装备任何东西
-        $result = false
+		--正在开车不能装备任何东西
+		$typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
+		If($typeIndex ~= 3)
+		{
+			$result = false
+		}
     }
 }
 
@@ -27,12 +31,10 @@ WEAR_ITEM {
     $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
     If($typeIndex == 3)
     {
-        -- on car
-        If($obj1.equipItem)
-        {
-            --SetItemUse(entity = $obj1, item = $obj1.equipItem, isUse = false)
-      		--EquipItem(entity = $obj1, item = $obj1.equipItem)
-        }
+		-- on car
+		
+		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 3, 4, 5))
+
         $carName = GetConfigVar(obj = $item, key = "carName")
         CallTrigger(event = "EQUIP_CAR", obj1 = $obj1, carName = $carName)
     }
@@ -2256,7 +2258,7 @@ FUNC_UPDATE_STATE_SKILL_JACK_AREA --params: up
     UpdateSkillJackArea(
         entity = $obj1,
         info = {
-            pos = "top",
+            pos = 1,
             yOff = $up and @skillJackUp or @skillJackDown
         }
     )
@@ -4178,6 +4180,7 @@ FINISH_TASK(debug = false){ --完成打工的对话
 }
 FINISH_AWARD(){ --完成打工的奖励
     $obj1.maxtaskCount = ($obj1.maxtaskCount or 0 ) + 1
+    $obj1.workTaskfinish = $obj1.workTaskfinish + 1
     If($obj1.maxtaskCount >= @workmaxCount && not $obj1.maxActor and @INDENT_MODEL){ --最大累计数，改变模型
         $obj1.maxActor = true
         CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "maxCountActor", obj2 = $obj1)
