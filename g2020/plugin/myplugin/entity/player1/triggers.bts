@@ -456,6 +456,7 @@ ENTITY_LEAVE_DATA_REPORT{
     CallTrigger(object = $obj1, event = "DATA_REPORT_GOLD_NUM")
     CallTrigger(object = $obj1, event = "DATA_REPORT_CHAT_MESSAGE")
     CallTrigger(object = $obj1, event = "DATA_REPORT_WORKS_ARCHIVE")
+    CallTrigger(object = $obj1, event = "DATA_REPORT_DRESS_NUM")
 }
 
 DATA_REPORT_BAG{
@@ -5834,5 +5835,27 @@ DATA_REPORT_CHAT_MESSAGE
 
     CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $obj1.chatMsgNum, array = [0, 9, 19, 49, 99, 199, 499, 999, 1999, 4999, 9999, 10000])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:chat:sum", @rangeBoundary])
+}
+
+DATA_REPORT_DRESS_NUM
+{
+    $num = 0
+    $dressStoreIds = GetWorldVar(key = "dressStoreIds")
+    Foreach(array = $dressStoreIds, key = "storeId")
+    {
+        $storeItems = GetStoreById(storeId = $storeId)
+        Foreach(array = $storeItems, key = "item")
+        {
+            $itemDict = NewDictionary($item)
+            $index = DictionaryGet(dict = $itemDict, key = "index")
+            $status = GetStoreItemStatus(player = $obj1, storeId = $storeId, index = $index)
+            If ($status >= 1)
+            {
+                $num = $num + 1
+            }
+        }
+    }
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $num, array = [0, 2, 5, 10, 20, 30, 50, 51])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:dress", @rangeBoundary])
 }
 
