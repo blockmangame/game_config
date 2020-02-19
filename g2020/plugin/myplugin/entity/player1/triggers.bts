@@ -453,6 +453,9 @@ ENTITY_LEAVE{
 
 ENTITY_LEAVE_DATA_REPORT{
     CallTrigger(object = $obj1, event = "DATA_REPORT_BAG")
+    CallTrigger(object = $obj1, event = "DATA_REPORT_GOLD_NUM")
+    CallTrigger(object = $obj1, event = "DATA_REPORT_CHAT_MESSAGE")
+    CallTrigger(object = $obj1, event = "DATA_REPORT_WORKS_ARCHIVE")
 }
 
 DATA_REPORT_BAG{
@@ -5778,18 +5781,6 @@ SHOW_GOTO_APP_SHOP_UI_RESULT
 
 ADD_TOY_GIFT(){
     AddItem(entity = $obj1, cfg = $addItem, count = 1)
-}
-
-LOGIN_REPORT_DATA
-{
-
-}
-
-LOGOUT_REPORT_DATA
-{
-    CallTrigger(obj1 = $obj1, event = "DATA_REPORT_GOLD_NUM")
-    CallTrigger(obj1 = $obj1, event = "DATA_REPORT_CHAT_MESSAGE")
-    CallTrigger(obj1 = $obj1, event = "DATA_REPORT_WORKS_ARCHIVE")
 }
 
 DATA_REPORT_GOLD_NUM
