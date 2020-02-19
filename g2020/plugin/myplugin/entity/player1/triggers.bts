@@ -466,6 +466,8 @@ ENTITY_LEAVE_DATA_REPORT{
 	CallTrigger(object = $obj1, event = "DATA_REPORT_HOUSE_SIZE")
 	-- 统计玩家下线时消耗的货币总量
 	CallTrigger(object = $obj1, event = "DATA_REPORT_CONSUME_GOLD_NUM")
+    -- 统计玩家下线时消除的状态总数
+    CallTrigger(object = $obj1, event = "DATA_REPORT_RELEASE_STATE_SUM")
 }
 
 DATA_REPORT_HOUSE_SIZE{
@@ -1865,6 +1867,7 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     )
     
     CallTrigger(object = $obj1, event = "FUNC_STATESKILL_REMOVE", state = $state, skill = $skill)
+    CallTrigger(object = $obj1, event = "USER_RELEASE_STATE_SUM")
 
     If(not GetSkillVar(fullName = $skill, key = "hadReward"))
     {
@@ -5882,3 +5885,13 @@ USER_CONSUME_MONEY
     }
 }
 
+DATA_REPORT_RELEASE_STATE_SUM
+{
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $obj1.releaseStateNum, array = [0, 9, 19, 49, 99, 199, 499, 999, 1999, 2999, 3999, 4999, 5999, 6999, 7999, 8999, 9999, 10000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:remove:status", @rangeBoundary])
+}
+
+USER_RELEASE_STATE_SUM
+{
+    $obj1.releaseStateNum = $obj1.releaseStateNum + 1
+}
