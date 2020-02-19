@@ -4519,12 +4519,12 @@ EQUIP_CAR {
     {
         Return()
     }
-
-    If(not GetEntityOnGround(entity = $obj1))
-    {
-        ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", keepTime = 40)
-        Return()
-    }
+	-- 栋哥哥说去掉，怕以后加回去就先注释了
+    -- If(not GetEntityOnGround(entity = $obj1))
+    -- {
+    --     ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", keepTime = 40)
+    --     Return()
+    -- }
 
     If($obj1.createdCar)
     {
@@ -5782,7 +5782,7 @@ FUNC_TRANSMIT_CARRIER --param: toMap, toPos, toRy
         }
     }
     SetEntityPosition(entity = $carrier or $obj1, map = $toMap, ry = $toRy or 0, pos = $toPos)
-    ChangeCameraView(entity = $obj1, yaw = $toRy, pitch = 30, distance = 2, smooth = 1, offset = {x = 0, y = 0, z = 0})
+    ChangeCameraView(entity = $obj1, yaw = $toRy, pitch = 30, distance = 5, smooth = 1, offset = {x = 0, y = 0, z = 0})
 }
 
 NEXT_GUIDE_STEP
