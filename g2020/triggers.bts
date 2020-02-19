@@ -308,18 +308,6 @@ FUNC_OPEN_GPS --params: gpsDict
     ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
 }
 
-FUNC_CLOSE_PROGRESS_FOLLOW_OBJ --params: pgName
-{
-    If(not $pgName || $pgName == GetObjectVar(obj = $obj1, key = "progress"))
-    {
-        ShowProgressFollowObj(
-            entity = $obj1,
-            isOpen = false
-        )
-        SetObjectVar(obj = $obj1, key = "progress", value = nil)
-    }
-}
-
 FUNC_CLOSE_DETAILS_UI --params: uiName
 {
     If(not $uiName || $uiName == GetObjectVar(obj = $obj1, key = "detailsUI"))
