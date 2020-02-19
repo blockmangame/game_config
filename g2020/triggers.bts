@@ -964,7 +964,7 @@ SET_RANGE_BOUNDARY
 
         If($index == $size)
         {
-            @rangeBoundary =  Concat(p1 = ToString($value), p2 = "+")
+            @rangeBoundary =  ToString($value)
             Return()
         }
 
