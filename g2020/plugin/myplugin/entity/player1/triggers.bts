@@ -1836,6 +1836,7 @@ FUNC_STATE_START_PROGRESS --params: state, stateBase, duration
         entity = $obj1,
         totalTime = $duration * 20,
         usedTime = $usedTime * 20,
+        pgText = Concat(p1 = "state_", p2 = $state, p3 = "_title"),
     )
 
     SetObjectVar(
