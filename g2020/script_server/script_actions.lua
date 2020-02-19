@@ -56,9 +56,3 @@ function Actions.ClearItemUseByKey(data, params, context)
 	local entity = params.entity
 	entity:clearItemUseByKey(params.key, params.valueArray)
 end
-
-function Actions.UploadPrivilege(data, params, context)
-	if params.player then
-		AsyncProcess.UploadPrivilege(params.player.platformUserId)
-	end
-end 
