@@ -890,7 +890,7 @@ GIVE_STORE{
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["store:buy",$cfg])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["decoration:store:buy",$cfg])
     -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
 }
 
@@ -945,7 +945,7 @@ SAVE_FURNITURE{
             DictionarySet(dict = $fDict, key = "yaw", value = GetEntityYaw(entity = $npc))
             DictionarySet(dict = $fDict, key = "pitch", value = GetEntityPitch(entity = $npc))
             DictionarySet(dict = $fDict, key = "roll", value = GetEntityRoll(entity = $npc))
-            DictionarySet(dict = $fDict, key = "lastSideNormal", value = $npc.lastSideNormal or Table(x = 0,y = 0,z = 0))
+            DictionarySet(dict = $fDict, key = "lastSideNormal", value = $npc.lastSideNormal or Table(x = 0,y = 1,z = 0))
             -- 如果是衣架，有saveSkinList，则需要保存当前衣架的皮肤
             If(GetConfigVar(obj = $npc, key = "saveSkinList")){
                 $saveSkinList = {}
@@ -1503,7 +1503,7 @@ SET_REGION_COLOR{
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["store:buy",$colorBlock])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["decoration:store:buy",$colorBlock])
 }
 
 ROTATION_WHEN_RIDE_ON{
