@@ -453,6 +453,7 @@ ENTITY_LEAVE{
 }
 
 ENTITY_LEAVE_DATA_REPORT{
+	-- 统计玩家下线时背包道具情况
     CallTrigger(object = $obj1, event = "DATA_REPORT_BAG")
 	-- 统计玩家下线时当次聊天发言的数量
     CallTrigger(object = $obj1, event = "DATA_REPORT_GOLD_NUM")
@@ -475,13 +476,6 @@ ENTITY_LEAVE_DATA_REPORT{
 DATA_REPORT_HOUSE_SIZE{
     CallTrigger(event = "SET_RANGE_BOUNDARY" , num = ArraySize(array = GetObjectVar(obj = $obj1, key = "houseVars") or {}), array = [1, 2 ,3 ,4 ,5 ,6, 7, 8])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:house:num", @rangeBoundary])
-}
-
-ENTITY_ONTICK{
-	If ($playTime % 5 == 0)
-	{
-		CallTrigger(object = $obj1, event = "DATA_REPORT_BAG")
-	}
 }
 
 DATA_REPORT_BAG{
