@@ -2629,8 +2629,18 @@ ADD_JOIN_FAMILY_REPORT_NUM
     $objID = GetObjectID(object = $obj1)
 }
 
+SHOW_QUIT_FAMILY_UI
+{
+    ShowDialogTip(entity = $obj1, tipType = 2, event = "QUIT_FAMILY",p1 = "gui_want_to_quit_family")
+}
+
 QUIT_FAMILY
 {
+    If(not $result)
+    {
+        Return()
+    }
+    
     If(IsPlayer(entity = $obj1))
     {
         $teamId = GetEntityTeam(entity = $obj1)
@@ -2822,7 +2832,7 @@ INIT_TEAM_UI
              name = "ui_family_album"
         },
         {
-            event = "QUIT_FAMILY",
+            event = "SHOW_QUIT_FAMILY_UI",
             normalImage = "set:team.json image:green_btn",
             pushedImage = "set:team.json image:green_btn",
             name = "ui_family_quit"
