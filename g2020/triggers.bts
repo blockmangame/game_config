@@ -437,6 +437,8 @@ PLAYER_PUBLISH_WORKS
     {
         UpdateUIData(player =$player, ui = $wallName, data = {graffitiId = $worksId})
     }
+
+    GameAnalyticsCustomEvent(player = $player, parts = ["player:works:publish"])
 }
 
 SET_WORKS_WALL_INDEX
@@ -950,4 +952,28 @@ EDIT_PUBLIC_BLACKBOARD_BUTTON_SURE
     $npc.blackboardStr = $name
 
     CallTrigger(event = "UPDATE_SINGLE_BLACK_BOARD_ENTITY", object = $obj1, npc = $npc)
+}
+
+SET_RANGE_BOUNDARY
+{
+    $index = 1
+    @rangeBoundary = "0"
+    $size = ArraySize(array = $array or {})
+    Foreach(array = $array or {}, key = "value")
+    {
+
+        If($index == $size)
+        {
+            @rangeBoundary =  Concat(p1 = ToString($value), p2 = "+")
+            Return()
+        }
+
+        If($num <= $value)
+        {
+            @rangeBoundary = ToString($value)
+            Return()
+        }
+
+        $index = $index + 1
+    }
 }
