@@ -41,6 +41,8 @@ GAME_INIT
     CallTrigger(event = "FUNC_LOAD_WORKS_WALL_TOP")
     @Map001 = GetStaticMap(name = "map001", create = true)--load map001
     CallTrigger(event = "SHOW_SHOP_TITLE")
+
+    @FamilyCreateDuration = NewDictionary({})   -- 保存家庭创建的时间，用来数据统计
 }
 --场景商店的牌子
 SHOW_SHOP_TITLE(){

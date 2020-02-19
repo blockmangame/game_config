@@ -468,6 +468,8 @@ ENTITY_LEAVE_DATA_REPORT{
 	CallTrigger(object = $obj1, event = "DATA_REPORT_CONSUME_GOLD_NUM")
     -- 统计玩家下线时消除的状态总数
     CallTrigger(object = $obj1, event = "DATA_REPORT_RELEASE_STATE_SUM")
+    -- 统计玩家下线时家庭数量
+    CallTrigger(object = $obj1, event = "DATA_REPORT_FAMILY_NUM")
 }
 
 DATA_REPORT_HOUSE_SIZE{
@@ -2573,10 +2575,39 @@ CREATE_FAMILY
         {
             Return()
         }
-        SetEntityTeam(entity = $obj1, teamId = @familyIndex)
+        $teamId = @familyIndex
+        SetEntityTeam(entity = $obj1, teamId = $teamId)
         @familyIndex = @familyIndex + 1
         ShowTip(entity = $obj1, tipType = 2,textKey = "gui_create_family_success", keepTime = 40)
+
+        CallTrigger(event = "ADD_CREATE_FAMILY_REPORT_NUM", object = $obj1)
+        DictionarySet(dict = @FamilyCreateDuration, key = $teamId, value = GetGameTime())    --记录家庭生成时间
     }
+}
+
+ADD_CREATE_FAMILY_REPORT_NUM
+{
+    If(not $obj1.singleGameCreateFamilyNum)
+    {
+        $obj1.singleGameCreateFamilyNum = 0
+    }
+
+    $obj1.singleGameCreateFamilyNum = $obj1.singleGameCreateFamilyNum + 1
+    $obj1.createFamilyNum = $obj1.createFamilyNum + 1
+
+    $objID = GetObjectID(object = $obj1)
+}
+
+ADD_JOIN_FAMILY_REPORT_NUM
+{
+    If(not $obj1.singleGameJoinFamilyNum)
+    {
+        $obj1.singleGameJoinFamilyNum = 0
+    }
+    $obj1.singleGameJoinFamilyNum = $obj1.singleGameJoinFamilyNum + 1
+    $obj1.joinFamilyNum = $obj1.joinFamilyNum + 1
+
+    $objID = GetObjectID(object = $obj1)
 }
 
 QUIT_FAMILY
@@ -2589,6 +2620,23 @@ QUIT_FAMILY
         ShowTip(entity = $obj1, tipType = 2,textKey = "gui_quit_family_success", keepTime = 40)
         CallTrigger(event = "INIT_TEAM_UI", obj1 = $obj1, show = false)
         CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId, object = $obj1)
+    }
+}
+
+LEAVE_TEAM
+{
+    If(IsPlayer(entity = $obj1))
+    {
+        If($teamId and $teamId ~= 0)
+        {
+            $teamEntityList = GetTeamEntityList(teamId = $teamId)
+            $dict = NewDictionary($teamEntityList)
+            $size = DictionarySize(dict = $dict)
+            If($size <= 0)
+            {
+                CallTrigger(event = "DATA_REPORT_FAMILY_DURACTION", object = $obj1, teamId = $teamId)
+            }
+        }
     }
 }
 
@@ -2641,7 +2689,6 @@ INTERACTION_JOIN_FAMILY
 
 REQUEST_JOIN_FAMILY
 {
-    $selfFamilyID = GetEntityTeam(entity = $obj1)
     $targetPlayer = $obj1.requestFamilyPlayer
     If($button == "left")
     {
@@ -2676,17 +2723,25 @@ REQUEST_JOIN_FAMILY
             CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $targetFamilyID, object = $obj1)
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", keepTime = 40)
             $obj1.requestFamilyPlayer = nil
+
+            CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $obj1)
         }
         Else
         {
             -- 如果 target 没有家庭
             $teamId = @familyIndex
             @familyIndex = @familyIndex + 1
+
             SetEntityTeam(entity = $targetPlayer, teamId = $teamId)
             SetEntityTeam(entity = $obj1, teamId = $teamId)
+           
             CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId, object = $obj1)
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", keepTime = 40)
             $obj1.requestFamilyPlayer = nil
+
+            DictionarySet(dict = @FamilyCreateDuration, key = $teamId, value = GetGameTime())    --记录家庭生成时间
+            CallTrigger(event = "ADD_CREATE_FAMILY_REPORT_NUM", object = $targetPlayer)
+            CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $obj1)
         }
     }
 }
@@ -5894,4 +5949,55 @@ DATA_REPORT_RELEASE_STATE_SUM
 USER_RELEASE_STATE_SUM
 {
     $obj1.releaseStateNum = $obj1.releaseStateNum + 1
+}
+
+DATA_REPORT_FAMILY_NUM
+{
+    If(not $obj1.singleGameCreateFamilyNum)
+    {
+       $obj1.singleGameCreateFamilyNum = 0
+    }
+
+    -- 统计单次游戏创建家庭的数量
+    $num = $obj1.singleGameCreateFamilyNum
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $num, array = [0, 2, 3])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["family:create:single_game", @rangeBoundary])
+
+    -- 统计玩家创建家庭的总数
+    $num = $obj1.singleGameCreateFamilyNum + $obj1.createFamilyNum
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $num, array = [0, 9, 19, 49, 99, 199, 499, 999, 1999, 4999, 9999, 10000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["family:create:sum", @rangeBoundary])
+
+
+    If(not $obj1.singleGameJoinFamilyNum)
+    {
+        $obj1.singleGameJoinFamilyNum = 0
+    }
+
+    -- 统计单次游戏加入家庭的数量
+    $num = $obj1.singleGameJoinFamilyNum
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $num, array = [0, 2, 3])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["family:join:single_game", @rangeBoundary])
+
+    -- 统计玩家加入家庭的总数
+    $num = $obj1.singleGameJoinFamilyNum + $obj1.joinFamilyNum
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $num, array = [0, 9, 19, 49, 99, 199, 499, 999, 1999, 4999, 9999, 10000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["family:join:sum", @rangeBoundary])
+}
+
+DATA_REPORT_FAMILY_DURACTION
+{
+    -- 统计家庭存活时间
+    $startTime = DictionaryGet(dict = @FamilyCreateDuration, key = $teamId)
+
+    If(not $startTime)
+    {
+        Return()
+    }
+    
+    $duration = (GetGameTime() - $startTime) / 20 / 60
+
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $duration, array = [5, 10, 20, 30, 60, 120, 180, 181])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["family:keep:time", @rangeBoundary])
+    DictionaryRemove(dict = @FamilyCreateDuration, key = $teamId)
 }
