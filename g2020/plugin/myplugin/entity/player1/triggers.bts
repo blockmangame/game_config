@@ -11,14 +11,17 @@ SET_ITEM_USE {
 }
 
 CHECK_CAN_USE_ITEM {
+    $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
     If(IsDrive(entity = $obj1))
     {
 		--正在开车不能装备任何东西
-		$typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
 		If($typeIndex ~= 3)
 		{
 			$result = false
 		}
+    }
+    If($typeIndex == 3 and $obj1.equipCarCd){
+        $result = false
     }
 }
 
@@ -29,7 +32,7 @@ CHECK_CLEAR_HAND_ITEM{
 WEAR_ITEM {
     ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 4, 5))
     $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
-    If($typeIndex == 3)
+    If($typeIndex == 3 and not $obj1.equipCarCd)
     {
 		-- on car
 		
@@ -4513,7 +4516,14 @@ ENTITY_BUY_RESULT()
         }
     }
 }
+
+CLEAR_EQUIP_CAR_CD{
+    $obj1.equipCarCd = nil
+}
+
 EQUIP_CAR {
+    $obj1.equipCarCd = true
+    StartTimer(time = 20,object = $obj1, event = "CLEAR_EQUIP_CAR_CD")
     $mapName = GetEntityName(entity = GetEntityMap(entity = $obj1))
     If($mapName ~= "map001" && $mapName ~= "map002")
     {
