@@ -10,6 +10,12 @@
     "canJump": true,
     "name": "",
     "driverJumpShiled": true,
+	"jumpSpeed": 0.8,
+	"actionMap": {
+        "jump1": "jump",
+        "jump2": "jump",
+        "jump3": "jump"
+    },
     "ridePos": [
         {
             "yaw": 0,
@@ -25,6 +31,9 @@
             },
             "ctrl": true,
             "view": true,
+			"rideAction": {
+                "jump2": "jump"
+            },
             "passengerAction": {
                 "base": "riding"
             },
