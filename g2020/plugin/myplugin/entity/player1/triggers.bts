@@ -445,6 +445,8 @@ ENTITY_LEAVE{
     CallTrigger(object = $obj1, event = "REMOVE_BM_DRESS")
     ReleaseManor(player = $obj1)
     CallTrigger(object = $obj1, event = "CHECK_LEAVE_PARTY")
+    --清除手持道具
+    ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 3, 4, 5))
 }
 UPDATE_FURNITURE_STATUS{
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
