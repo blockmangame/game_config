@@ -254,6 +254,7 @@ MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建�
 
 ENTITY_ENTER
 {
+    ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 3, 4, 5))
     $obj1.outOfCameraModeState = {}
     CallTrigger(event = "CHECK_SHOW_SVIP_UI", object = $obj1)
     AddEntityBuff(entity = $obj1, cfg = "myplugin/click_action")
@@ -4381,7 +4382,7 @@ ENTITY_BUY_APPSTOP {
             CallTrigger(obj1 = $obj1, event = "ADD_SVIP_BUFF", object = $obj1)
         }
         If($itemName == "myplugin/home_privilege"){ --购买租地特权，把房子移到公共区域
-            --UploadPrivilege(player = $obj1) --上报租地特权
+            UploadPrivilege(player = $obj1) --上报租地特权
             StartTimer(time = 1,object = $obj1, event = "MOVE_HOME_FROM_PROTECT_TO_PUBLIC")
         }
     }
@@ -4500,6 +4501,7 @@ TAKEOFF_EQUIP_CAR
 
 EQUIP_ITEM_IMMEDIATELY --params: item
 {
+    Test("bts.EQuiP,setItem")
 	$typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
 	If($typeIndex ~= 1 )
 	{
