@@ -49,21 +49,12 @@
         "openBtnIcon": "set:btn_extension.json image:open",
         "btnList": [
             {
-                "name": "photo",
+                "name": "g_cube_store",
                 "showName": false,
-                "iconPath": "set:btn_extension.json image:photo",
-                "event": "EVENT_SHOW_FAMILY_ALBUM",
-                "callbackType": 2,
-                "callbackEvent": "START_CAMERA_MODE",
-                "hideLayout": true
-            },
-            {
-                "name": "family",
-                "showName": false,
-                "iconPath": "set:btn_extension.json image:family",
-                "event": "EVENT_SHOW_FAMILY",
-                "callbackType": 2,
-                "callbackEvent": "SHOW_TEAM_UI"
+                "iconPath": "set:btn_extension.json image:g_cube_store",
+                "event": "EVENT_SHOW_PRI_SHOP",
+                "callbackType": 3,
+                "callbackEvent": "EVENT_SHOW_PRI_SHOP"
             },
             {
                 "name": "dress",
@@ -74,20 +65,21 @@
                 "callbackEvent": "EVENT_OPEN_DRESS_ARCHIVE"
             },
             {
-                "name": "order",
+                "name": "family",
                 "showName": false,
-                "iconPath": "set:btn_extension.json image:order",
-                "event": "EVENT_SHOW_WORK_DETAILS",
-                "callbackType": 3,
-                "callbackEvent": "EVENT_SHOW_WORK_DETAILS"
+                "iconPath": "set:btn_extension.json image:family",
+                "event": "EVENT_SHOW_FAMILY",
+                "callbackType": 2,
+                "callbackEvent": "SHOW_TEAM_UI"
             },
             {
-                "name": "g_cube_store",
+                "name": "photo",
                 "showName": false,
-                "iconPath": "set:btn_extension.json image:g_cube_store",
-                "event": "EVENT_SHOW_PRI_SHOP",
-                "callbackType": 3,
-                "callbackEvent": "EVENT_SHOW_PRI_SHOP"
+                "iconPath": "set:btn_extension.json image:photo",
+                "event": "EVENT_SHOW_FAMILY_ALBUM",
+                "callbackType": 2,
+                "callbackEvent": "START_CAMERA_MODE",
+                "hideLayout": true
             },
             {
                 "name": "party",
@@ -96,6 +88,14 @@
                 "event": "EVENT_SHOW_PARTY",
                 "callbackType": 3,
                 "callbackEvent": "EVENT_SHOW_PARTY_LIST"
+            },
+            {
+                "name": "order",
+                "showName": false,
+                "iconPath": "set:btn_extension.json image:order",
+                "event": "EVENT_SHOW_WORK_DETAILS",
+                "callbackType": 3,
+                "callbackEvent": "EVENT_SHOW_WORK_DETAILS"
             }
         ]
     },
@@ -282,6 +282,16 @@
             },
             {
                 "key": "releaseStateNum",
+                "value": 0,
+                "save": true
+            },
+            {
+                "key": "createFamilyNum",
+                "value": 0,
+                "save": true
+            },
+            {
+                "key": "joinFamilyNum",
                 "value": 0,
                 "save": true
             }
@@ -548,7 +558,10 @@
         "onTrolley": 0,
         "lightState": "off",
         "hideDeep": 0.75
-    },
+	},
+	"cameraSetting": {
+		"cameraDistance": 5
+	},
     "toolBarSetting": {
         "addBtnList": [
             "friend",
@@ -576,7 +589,7 @@
     "freeChangeNameTimes": 0,
     "changeNamePrice": 100,
     "changeNameCoinId": 0,
-    "viewMode": 1,
+	"viewMode": 1,
     "hidePerSpec": true,
     "personalSettingUI": {
         "volume": true,
