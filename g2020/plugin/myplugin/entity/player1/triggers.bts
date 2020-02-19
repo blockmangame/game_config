@@ -464,6 +464,8 @@ ENTITY_LEAVE_DATA_REPORT{
     CallTrigger(object = $obj1, event = "DATA_REPORT_DRESS_NUM")
 	-- 统计玩家下线时房子数量
 	CallTrigger(object = $obj1, event = "DATA_REPORT_HOUSE_SIZE")
+	-- 统计玩家下线时消耗的货币总量
+	CallTrigger(object = $obj1, event = "DATA_REPORT_CONSUME_GOLD_NUM")
 }
 
 DATA_REPORT_HOUSE_SIZE{
@@ -5879,5 +5881,19 @@ DATA_REPORT_DRESS_NUM
     }
     CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $num, array = [0, 2, 5, 10, 20, 30, 50, 51])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:dress", @rangeBoundary])
+}
+
+DATA_REPORT_CONSUME_GOLD_NUM
+{
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $obj1.consumeGoldNum, array = [99, 399, 999, 2999, 9999, 19999, 29999, 39999, 49999, 59999, 69999, 79999, 89999, 99999, 109999, 119999, 499999, 999999, 1000000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:consume:gold", @rangeBoundary])
+}
+
+USER_CONSUME_MONEY
+{
+    If ($coinName == "green_currency" and $count > 0)
+    {
+        $obj1.consumeGoldNum = $obj1.consumeGoldNum + $count
+    }
 }
 

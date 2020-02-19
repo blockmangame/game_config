@@ -965,7 +965,6 @@ SET_RANGE_BOUNDARY
     $size = ArraySize(array = $array or {})
     Foreach(array = $array or {}, key = "value")
     {
-
         If($index == $size)
         {
             @rangeBoundary =  ToString($value)
