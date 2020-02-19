@@ -447,7 +447,18 @@ ENTITY_LEAVE{
     CallTrigger(object = $obj1, event = "CHECK_LEAVE_PARTY")
     --清除手持道具
     ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 3, 4, 5))
+	
+    CallTrigger(object = $obj1, event = "ENTITY_LEAVE_DATA_REPORT")
 }
+
+ENTITY_LEAVE_DATA_REPORT{
+    CallTrigger(object = $obj1, event = "DATA_REPORT_BAG")
+}
+
+DATA_REPORT_BAG{
+	-- todo
+}
+
 UPDATE_FURNITURE_STATUS{
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
