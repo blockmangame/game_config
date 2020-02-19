@@ -5767,6 +5767,17 @@ ADD_TOY_GIFT(){
     AddItem(entity = $obj1, cfg = $addItem, count = 1)
 }
 
+LOGIN_REPORT_DATA
+{
+
+}
+
+LOGOUT_REPORT_DATA
+{
+    CallTrigger(obj1 = $obj1, event = "DATA_REPORT_GOLD_NUM")
+    CallTrigger(obj1 = $obj1, event = "DATA_REPORT_CHAT_MESSAGE")
+    CallTrigger(obj1 = $obj1, event = "DATA_REPORT_WORKS_ARCHIVE")
+}
 
 DATA_REPORT_GOLD_NUM
 {
@@ -5775,11 +5786,15 @@ DATA_REPORT_GOLD_NUM
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:gold", @rangeBoundary])
 }
 
-DATA_REPORT_CUBE_NUM
+LOAD_USER_MONEY
 {
-    $num = GetCurrency(entity = $obj1, coinName = "gDiamonds")
-    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $num, array = [0, 59, 19999, 299, 1999, 4999, 9999, 49999, 99999, 100000])
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:cube", @rangeBoundary])
+    If(not $obj1.cubeReport)
+    {
+        $obj1.cubeReport = true
+        $num = GetCurrency(entity = $obj1, coinName = "gDiamonds")
+        CallTrigger(event = "SET_RANGE_BOUNDARY", num = $num, array = [0, 59, 19999, 299, 1999, 4999, 9999, 49999, 99999, 100000])
+        GameAnalyticsCustomEvent(player = $obj1, parts = ["player:cube", @rangeBoundary])
+    }
 }
 
 DATA_REPORT_WORKS_ARCHIVE
