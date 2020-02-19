@@ -7,7 +7,7 @@
     "lockRotateBodyPitch": 0,
     "lockRotateBodyRoll": 0,
     "rotateNearBoxAngle": true,
-    "stopChangeYaw":1,
+    "stopChangeYaw": 1,
     "posSyncDelay": 1,
     "image": "",
     "buyMoney": 0,
@@ -42,7 +42,7 @@
                 "x": 150,
                 "y": 0
             },
-            "params": {}
+            "params": []
         },
         "aroundWidget": [
             {
@@ -62,7 +62,7 @@
                     "x": -100,
                     "y": 0
                 },
-                "params": {}
+                "params": []
             },
             {
                 "text": "LEFT_ROTATION",
@@ -73,7 +73,7 @@
                     "x": -100,
                     "y": 150
                 },
-                "params": {}
+                "params": []
             },
             {
                 "text": "RIGHT_ROTATION",
@@ -84,18 +84,18 @@
                     "x": 0,
                     "y": 150
                 },
-                "params": {}
+                "params": []
             }
         ],
-        "events":{
+        "events": {
             "startEdit": "START_EDIT_ENTITY",
             "stopEdit": "STOP_EDIT_ENTITY",
-            "beginMove":"DEC_INTERACTION_MOVE_TOUCH_BEGIN",
-            "endMove":"DEC_INTERACTION_MOVE_TOUCH_END",
-            "sale":"DEC_INTERACTION_SALE",
-            "leftRotation":"DEC_INTERACTION_LEFT_ROTATION",
-            "rightRotation":"DEC_INTERACTION_RIGHT_ROTATION",
-            "exit":"DEC_INTERACTION_EXIT_EDIT"
+            "beginMove": "DEC_INTERACTION_MOVE_TOUCH_BEGIN",
+            "endMove": "DEC_INTERACTION_MOVE_TOUCH_END",
+            "sale": "DEC_INTERACTION_SALE",
+            "leftRotation": "DEC_INTERACTION_LEFT_ROTATION",
+            "rightRotation": "DEC_INTERACTION_RIGHT_ROTATION",
+            "exit": "DEC_INTERACTION_EXIT_EDIT"
         }
     },
     "interaction": {

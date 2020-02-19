@@ -2,16 +2,16 @@
     "canClick": true,
     "actorName": "boy.actor",
     "canMove": true,
-    "waterline":0.8,
-    "canBoat":true,
+    "waterline": 0.8,
+    "canBoat": true,
     "disableShadow": true,
     "hideSelfName": true,
     "climbType": 1,
     "maxHouseVarsSize": 8,
     "bodyTurnMin": 361,
     "bodyTurnMax": 361,
-	"canTurnHead": false,
-	"hideDeep": 0,
+    "canTurnHead": false,
+    "hideDeep": 0,
     "joinPartyGiveMoney": 200,
     "saveVars": {
         "houseVars": []
@@ -253,7 +253,7 @@
                 "showName": true,
                 "image": "plugin/myplugin/image/hand_click.png",
                 "nextCfgKey": "interaction_choices",
-				"imageSize": {
+                "imageSize": {
                     "width": "60",
                     "height": "60"
                 }
@@ -285,7 +285,7 @@
         "aroundBtns": [
             {
                 "text": "interact_add_friend",
-                "checkCanHide":{
+                "checkCanHide": {
                     "funcName": "checkIsFriend"
                 },
                 "event": "EVENT_FRIEND_OPERACTION_ADD_FRIEND",
@@ -294,7 +294,7 @@
             {
                 "text": "interact_feed",
                 "image": "set:party_interaction_ui.json image:interaction_feed",
-                "checkCanShow":{
+                "checkCanShow": {
                     "funcName": "checkTypeHandItem",
                     "key": "base",
                     "value": "food_base"
@@ -304,7 +304,7 @@
             {
                 "text": "interact_banish",
                 "image": "set:party_interaction_ui.json image:interaction_banish",
-                "checkCanShow":{
+                "checkCanShow": {
                     "funcName": "checkInSelfParty"
                 },
                 "event": "INTERACTION_BANISH"
@@ -317,7 +317,7 @@
             {
                 "text": "interact_join_family",
                 "image": "set:party_interaction_ui.json image:interaction_join_family",
-                "checkCanHide":{
+                "checkCanHide": {
                     "funcName": "checkInSameTeam"
                 },
                 "event": "INTERACTION_JOIN_FAMILY"
@@ -367,7 +367,7 @@
                 "text": "",
                 "image": "plugin/myplugin/image/clap.png",
                 "event": "INTERACTION_CLAP",
-				"imageSize": {
+                "imageSize": {
                     "width": 96,
                     "height": 96
                 }
@@ -376,7 +376,7 @@
                 "text": "",
                 "image": "plugin/myplugin/image/hug.png",
                 "event": "INTERACTION_HUG",
-				"imageSize": {
+                "imageSize": {
                     "width": 96,
                     "height": 96
                 }
@@ -385,7 +385,7 @@
                 "text": "",
                 "image": "plugin/myplugin/image/handinhand.png",
                 "event": "INTERACTION_HAND_IN_HAND",
-				"imageSize": {
+                "imageSize": {
                     "width": 96,
                     "height": 96
                 }
@@ -394,7 +394,7 @@
                 "text": "",
                 "image": "plugin/myplugin/image/follow.png",
                 "event": "INTERACTION_FOLLOW",
-				"imageSize": {
+                "imageSize": {
                     "width": 96,
                     "height": 96
                 }
@@ -403,7 +403,7 @@
                 "text": "",
                 "image": "plugin/myplugin/image/rideon.png",
                 "event": "INTERACTION_RIDE",
-				"imageSize": {
+                "imageSize": {
                     "width": 96,
                     "height": 96
                 }
@@ -412,7 +412,7 @@
                 "text": "",
                 "image": "plugin/myplugin/image/piggyback.png",
                 "event": "INTERACTION_PIGGYBACK",
-				"imageSize": {
+                "imageSize": {
                     "width": 96,
                     "height": 96
                 }
@@ -452,7 +452,7 @@
                 "text": "",
                 "image": "plugin/myplugin/image/hug.png",
                 "event": "INTERACTION_HUG",
-				"imageSize": {
+                "imageSize": {
                     "width": 96,
                     "height": 96
                 }
@@ -461,7 +461,7 @@
                 "text": "",
                 "image": "plugin/myplugin/image/handshake.png",
                 "event": "INTERACTION_HANDSHAKE",
-				"imageSize": {
+                "imageSize": {
                     "width": 96,
                     "height": 96
                 }
@@ -470,7 +470,7 @@
                 "text": "",
                 "image": "plugin/myplugin/image/follow.png",
                 "event": "INTERACTION_FOLLOW",
-				"imageSize": {
+                "imageSize": {
                     "width": 96,
                     "height": 96
                 }
@@ -479,7 +479,7 @@
                 "text": "",
                 "image": "plugin/myplugin/image/pickup.png",
                 "event": "INTERACTION_PICK",
-				"imageSize": {
+                "imageSize": {
                     "width": 96,
                     "height": 96
                 }
@@ -488,7 +488,7 @@
                 "text": "",
                 "image": "plugin/myplugin/image/raiseheight.png",
                 "event": "INTERACTION_RAISE_HEIGHT",
-				"imageSize": {
+                "imageSize": {
                     "width": 96,
                     "height": 96
                 }
@@ -497,7 +497,7 @@
                 "text": "",
                 "image": "plugin/myplugin/image/coax.png",
                 "event": "INTERACTION_COAX",
-				"imageSize": {
+                "imageSize": {
                     "width": 96,
                     "height": 96
                 }
@@ -515,7 +515,6 @@
         "REQUEST_JOIN_FAMILY",
         "INVITE_JOIN_FAMILY"
     ],
-    
     "interaction": {
         "radius": 7,
         "offset": {
@@ -823,49 +822,57 @@
             }
         }
     },
-  "trays": [
-    {
-      "type": 2,
-      "cap": 1,
-      "maxCap": 1
-    },
-    {
-      "type": 1,
-      "cap": 1,
-      "maxCap": 1
-    },
-    {
-      "type": 21,
-      "cap": 100,
-      "maxCap": 100
-    },
-    {
-      "type": 22,
-      "cap": 100,
-      "maxCap": 100
-    },
-    {
-      "type": 23,
-      "cap": 100,
-      "maxCap": 100
-    },
-    {
-      "type": 24,
-      "cap": 100,
-      "maxCap": 100
-    },
-    {
-      "type": 25,
-      "cap": 100,
-      "maxCap": 100
-    }
-  ],
-	"attachPoints": [
+    "trays": [
+        {
+            "type": 2,
+            "cap": 1,
+            "maxCap": 1
+        },
+        {
+            "type": 1,
+            "cap": 1,
+            "maxCap": 1
+        },
+        {
+            "type": 21,
+            "cap": 100,
+            "maxCap": 100
+        },
+        {
+            "type": 22,
+            "cap": 100,
+            "maxCap": 100
+        },
+        {
+            "type": 23,
+            "cap": 100,
+            "maxCap": 100
+        },
+        {
+            "type": 24,
+            "cap": 100,
+            "maxCap": 100
+        },
+        {
+            "type": 25,
+            "cap": 100,
+            "maxCap": 100
+        }
+    ],
+    "attachPoints": [
         {
             "name": "sitPoint",
             "bone": "b_pelvis",
-            "position": {"x": 0, "y": 0, "z": 0},
-            "rotation": {"x": 0, "y": 180, "z": 90},
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "rotation": {
+                "x": 0,
+                "y": 180,
+                "z": 90
+            },
             "scale": 1,
             "propagateScaling": true,
             "alignWorldYAxis": false,
@@ -874,8 +881,16 @@
         {
             "name": "sitPoint_1",
             "bone": "b_pelvis",
-            "position": {"x": 0, "y": 0, "z": 0},
-            "rotation": {"x": 0, "y": 180, "z": 90},
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "rotation": {
+                "x": 0,
+                "y": 180,
+                "z": 90
+            },
             "scale": 1,
             "propagateScaling": false,
             "alignWorldYAxis": false,
@@ -884,8 +899,16 @@
         {
             "name": "sitPoint_2",
             "bone": "b_pelvis",
-            "position": {"x":0, "y":0, "z":0},
-            "rotation": {"x":0, "y":180, "z":90},
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "rotation": {
+                "x": 0,
+                "y": 180,
+                "z": 90
+            },
             "scale": 1.1,
             "propagateScaling": true,
             "alignWorldYAxis": false,
@@ -893,19 +916,30 @@
         }
     ],
     "cameraCtrBody": true,
-    "moveStateSwithSkillCfgs":[
-        {"oldState":"ALL", "newState":"AERIAL", "cfgKey":"aerialLandingSkill"},
-        {"oldState":"EMPTY", "newState":"IDLE", "cfgKey":"resetMoveStatus"}
+    "moveStateSwithSkillCfgs": [
+        {
+            "oldState": "ALL",
+            "newState": "AERIAL",
+            "cfgKey": "aerialLandingSkill"
+        },
+        {
+            "oldState": "EMPTY",
+            "newState": "IDLE",
+            "cfgKey": "resetMoveStatus"
+        }
     ],
-    "aerialLandingSkill": ["myplugin/reset_move_status"],
-    "resetMoveStatus": ["myplugin/reset_move_status"],
-    "clickWinDanceSounderSound":{
+    "aerialLandingSkill": [
+        "myplugin/reset_move_status"
+    ],
+    "resetMoveStatus": [
+        "myplugin/reset_move_status"
+    ],
+    "clickWinDanceSounderSound": {
         "volume": 10,
         "loop": false,
         "selfOnly": true,
         "sound": "sound_drum.mp3",
         "path": "plugin/myplugin/sound/sound_drum.mp3"
     },
-    "runBuff": [
-    ]
+    "runBuff": []
 }

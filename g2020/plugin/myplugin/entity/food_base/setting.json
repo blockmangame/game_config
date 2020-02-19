@@ -7,7 +7,6 @@
             1
         ]
     },
-    
     "deadInRed": false,
     "destroyTime": 40,
     "interactionUI": {
@@ -21,7 +20,7 @@
             {
                 "text": "pay me!",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "checkCanHide":{
+                "checkCanHide": {
                     "funcName": "checkOwnerInSameTeam"
                 },
                 "event": "FOOD_BUY"
@@ -29,7 +28,7 @@
             {
                 "text": "free!",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "checkCanShow":{
+                "checkCanShow": {
                     "funcName": "checkOwnerInSameTeam"
                 },
                 "event": "FOOD_BUY"
