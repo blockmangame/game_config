@@ -1503,6 +1503,7 @@ SET_REGION_COLOR{
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["store:buy",$colorBlock])
 }
 
 ROTATION_WHEN_RIDE_ON{
