@@ -110,7 +110,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
         If($npc){
             SetEntityRoll(entity = $npc, rotationRoll = DictionaryGet(dict = $fDict, key = "roll") or 0)
             -- Test("DictionaryGet(dict = $fDict, key = roll) ", DictionaryGet(dict = $fDict, key = "roll"), DictionaryGet(dict = $fDict, key = "pitch"),DictionaryGet(dict = $fDict, key = "yaw") )
-            $npc.lastSideNormal = DictionaryGet(dict = $fDict, key = "lastSideNormal") or Table(x = 0,y = 0,z = 0)
+            $npc.lastSideNormal = DictionaryGet(dict = $fDict, key = "lastSideNormal") or Table(x = 0,y = 1,z = 0)
             -- UpdateEntityDateToClient(entity = $npc, key = "lastSideNormal", value = $npc.lastSideNormal)
             Foreach(array = DictionaryGet(dict = $fDict, key = "saveSkinList") or {}, key = "skinTb"){
                 $skinDict = NewDictionary($skinTb)

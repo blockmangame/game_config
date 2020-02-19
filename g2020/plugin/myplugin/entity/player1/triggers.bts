@@ -453,10 +453,21 @@ ENTITY_LEAVE{
 
 ENTITY_LEAVE_DATA_REPORT{
     CallTrigger(object = $obj1, event = "DATA_REPORT_BAG")
+	-- 统计玩家下线时当次聊天发言的数量
     CallTrigger(object = $obj1, event = "DATA_REPORT_GOLD_NUM")
+	-- 统计玩家下线时历史聊天发言的数量
     CallTrigger(object = $obj1, event = "DATA_REPORT_CHAT_MESSAGE")
+	-- 统计玩家下线时作品的数量
     CallTrigger(object = $obj1, event = "DATA_REPORT_WORKS_ARCHIVE")
+	-- 统计玩家下线时装饰的数量
     CallTrigger(object = $obj1, event = "DATA_REPORT_DRESS_NUM")
+	-- 统计玩家下线时房子数量
+	CallTrigger(object = $obj1, event = "DATA_REPORT_HOUSE_SIZE")
+}
+
+DATA_REPORT_HOUSE_SIZE{
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = ArraySize(array = GetObjectVar(obj = $obj1, key = "houseVars") or {}), array = [1, 2 ,3 ,4 ,5 ,6, 7, 8])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:house:num", @rangeBoundary])
 }
 
 DATA_REPORT_BAG{
@@ -702,6 +713,7 @@ GIVE_HOUSE{
     ShowTip(entity = $obj1, tipType = 2, textKey = "ui_buy_success")
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
     CallTrigger(object = $obj1, event = "UPDATE_HOUSE", houseKey = $houseId, curSelectKey = $curSelect)
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["store:buy",$houseCfg ,GetEntityCfg(fullName = $houseCfg, key = "houseType") or nil])
 }
 
 SELL_HOUSE{
@@ -882,6 +894,7 @@ GIVE_STORE{
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["decoration:store:buy",$cfg])
     -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
 }
 
@@ -936,7 +949,7 @@ SAVE_FURNITURE{
             DictionarySet(dict = $fDict, key = "yaw", value = GetEntityYaw(entity = $npc))
             DictionarySet(dict = $fDict, key = "pitch", value = GetEntityPitch(entity = $npc))
             DictionarySet(dict = $fDict, key = "roll", value = GetEntityRoll(entity = $npc))
-            DictionarySet(dict = $fDict, key = "lastSideNormal", value = $npc.lastSideNormal or Table(x = 0,y = 0,z = 0))
+            DictionarySet(dict = $fDict, key = "lastSideNormal", value = $npc.lastSideNormal or Table(x = 0,y = 1,z = 0))
             -- 如果是衣架，有saveSkinList，则需要保存当前衣架的皮肤
             If(GetConfigVar(obj = $npc, key = "saveSkinList")){
                 $saveSkinList = {}
@@ -1494,6 +1507,7 @@ SET_REGION_COLOR{
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["decoration:store:buy",$colorBlock])
 }
 
 ROTATION_WHEN_RIDE_ON{
@@ -1518,7 +1532,13 @@ RIDEOFF_IN_DEC{
                 z = 0
             }
         }
-        $pos = ComputeV3(p1 = GetEntityPosition(entity = $target), op = "add", p2 = $addPos or $target.lastSideNormal)
+        $addPos = $addPos or $target.lastSideNormal
+        $pos = ComputeV3(p1 = GetEntityPosition(entity = $target), op = "add", p2 = {
+            x = GetPosX(pos = $addPos) * 1.1,
+            y = GetPosY(pos = $addPos) * 1.1,
+            z = GetPosZ(pos = $addPos) * 1.1,
+        })
+        Test("$addPos", $addPos, "$pos", $pos, "GetEntityPosition(entity = $target)", GetEntityPosition(entity = $target))
         $ride = GetRideOn(entity = $obj1)
         If(not $ride)
         {
