@@ -285,12 +285,16 @@ CHANGE_PLAYER_SCALE_CHILD
 FUNC_CLOSE_GPS --params: destination
 {
     $gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict")
-    If($gpsDict)
+    If($destination and $gpsDict)
     {
         $dictDestination = DictionaryGet(dict = $gpsDict, key = "destination")
     }
     If(not $destination || $destination == $dictDestination)
     {
+        If($destination)
+        {
+            ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
+        }
         SetGuidePostion(entity = $obj1)
         SetObjectVar(obj = $obj1, key = "gpsDict", value = nil)
     }

@@ -445,7 +445,20 @@ ENTITY_LEAVE{
     CallTrigger(object = $obj1, event = "REMOVE_BM_DRESS")
     ReleaseManor(player = $obj1)
     CallTrigger(object = $obj1, event = "CHECK_LEAVE_PARTY")
+    --清除手持道具
+    ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 3, 4, 5))
+	
+    CallTrigger(object = $obj1, event = "ENTITY_LEAVE_DATA_REPORT")
 }
+
+ENTITY_LEAVE_DATA_REPORT{
+    CallTrigger(object = $obj1, event = "DATA_REPORT_BAG")
+}
+
+DATA_REPORT_BAG{
+	-- todo
+}
+
 UPDATE_FURNITURE_STATUS{
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars") or {}
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
@@ -1710,6 +1723,7 @@ FUNC_STATE_RIDEON --params: ride[, isCancel = false]
     }
     If(not $isCancel)
     {
+        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state)
         CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = $state)
     }
     Else
@@ -1755,17 +1769,7 @@ FUNC_STATE_CHECK_REGION --params: state
 
 FUNC_REGION_STATE_OPERATION --parmas: opt, state
 {
-    $gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict")
-    If($gpsDict)
-    {
-        $dictDestination = DictionaryGet(dict = $gpsDict, key = "destination")
-        If($state == $dictDestination)
-        {
-            ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
-            CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
-        }
-    }
-
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state)
     CallTrigger(
         object = $obj1,
         state = $state,
@@ -2031,10 +2035,7 @@ FUNC_STATE_OPEN_GPS --params: rtVal
         Return()
     }
 
-    CallTrigger(
-        object = $obj1,
-        event = "FUNC_CLOSE_GPS"
-    )
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
 
     $reg = Concat(p1 = "myplugin/region_state_", p2 = $rtVal)
     $gpsDict = NewDictionary(GetConfigValue(type = "region", fullName = $reg, key = "gpsDict")) 
@@ -2123,6 +2124,18 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
         }
         ElseIf($type == "entity")
         {
+            $destination = DictionaryGet(dict = $gpsDict, key = "destination")
+            $ride = GetRideOn(entity = $obj1)
+            If($ride and $destination)
+            {
+                $dist = GetConfigVar(obj = $ride, key = "releaseState")
+                If($dist == $destination)
+                {
+                    ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
+                    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+                    Return()
+                }
+            }
             $gps = DictionaryGet(dict = $gpsDict, key = "pos")
         }
         ElseIf($type == "selfHouse")
