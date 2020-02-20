@@ -398,8 +398,6 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
 CREATE_HOUSE_OUTSIDE{
     $yaw = GetRegionConfig(region = $region, key = "regionHouseYaw")
     $housePosOffset = GetEntityCfg(fullName = $houseCfg, key = "housePosOffset") or {x = 0, y = 0, z = 0}
-    -- Test("$housePosOffset--------------",$region,GetRegionCenter(region = $region),$housePosOffset,$yaw,V3RotationYaw(vector = $housePosOffset, yaw = $yaw),
-    --     ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)))
     $houseMap = $houseMap or GetEntityMap(entity = $obj1)
     $housePos = $housePos or GetEntityPosition(entity = $obj1)
     $house = CreateNpc(map = $houseMap, cfgName = $houseCfg, pos = $housePos)
@@ -494,7 +492,7 @@ DATA_REPORT_BAG{
 	
 	@count = CountTrayItemNum(entity = $obj1, trayType = 22) --food
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = @count, array = [0, 2, 5, 10, 20, 30, 50])
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:bag::food", @rangeBoundary])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:bag:food", @rangeBoundary])
 	
 	@count = CountTrayItemNum(entity = $obj1, trayType = 23) --car
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = @count, array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 30, 50, 70])
@@ -744,7 +742,7 @@ GIVE_HOUSE{
     ShowTip(entity = $obj1, tipType = 2, textKey = "ui_buy_success")
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
     CallTrigger(object = $obj1, event = "UPDATE_HOUSE", houseKey = $houseId, curSelectKey = $curSelect)
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["store:buy",
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:house",
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $houseCfg)),
         GetEntityCfg(fullName = $houseCfg, key = "houseType") or "other"])
 }
@@ -927,7 +925,7 @@ GIVE_STORE{
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["decoration:store:buy",
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:decoration",
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $cfg))])
     -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
 }
@@ -1086,7 +1084,6 @@ HOUSE_LOCK{
         $notCurHouseFamilyPlayer = {}
         $allPlayerInThisHouse = GetMapPlayer(map = $insideMap)
         Foreach(array = $allPlayerInThisHouse, key = "player"){
-            Test(ToString($player), GetEntityTeam(entity = $player))
             If(GetObjectID(object = $obj1) ~= GetObjectID(object = $player) and 
                 (0 == GetEntityTeam(entity = $player) or GetEntityTeam(entity = $player) ~= GetEntityTeam(entity = $obj1))){
                 ArrayAppend(array = $notCurHouseFamilyPlayer, value = $player)
@@ -1541,7 +1538,7 @@ SET_REGION_COLOR{
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["decoration:store:buy",
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:decoration",
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $colorBlock))])
 }
 
@@ -1559,7 +1556,6 @@ UPDATE_OBJ_HOUSE_INSIDE_REGION{
 
 RIDEOFF_IN_DEC{
     If($target and $target.lastSideNormal and IsPlayer(entity = $obj1)){
-        Test($target.lastSideNormal, GetEntityPosition(entity = $target))
         If(GetPosY(pos = $target.lastSideNormal) == -1){
             $addPos = {
                 x = 0,
@@ -1569,11 +1565,10 @@ RIDEOFF_IN_DEC{
         }
         $addPos = $addPos or $target.lastSideNormal
         $pos = ComputeV3(p1 = GetEntityPosition(entity = $target), op = "add", p2 = {
-            x = GetPosX(pos = $addPos) * 1.1,
-            y = GetPosY(pos = $addPos) * 1.1,
-            z = GetPosZ(pos = $addPos) * 1.1,
+            x = GetPosX(pos = $addPos) * 1.1 + 0.1,
+            y = GetPosY(pos = $addPos) * 1.1 + 0.1,
+            z = GetPosZ(pos = $addPos) * 1.1 + 0.1,
         })
-        Test("$addPos", $addPos, "$pos", $pos, "GetEntityPosition(entity = $target)", GetEntityPosition(entity = $target))
         $ride = GetRideOn(entity = $obj1)
         If(not $ride)
         {
@@ -1586,7 +1581,6 @@ INTERACTION_WITH_MOVEMENT_EVENT{
     $dict = NewDictionary(@interactionWithMovementEventMap)
     $eventDict = NewDictionary(DictionaryGet(dict = $dict, key = $interactionType) or {})
     $event = DictionaryGet(dict = $eventDict, key = $interactionName)
-    Test($interactionType, $interactionName, $event)
     If(not $event){
         Return()
     }
@@ -4473,6 +4467,7 @@ ENTITY_BUY_APPSTOP {
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
     $index = ArrayFind(array = $obj1.privilege, value = $itemName)
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["shop:buy:", $shopType, $itemIndex])
     If($shopType == "1" && not $index){
         $addItem = false
         $goodsDict = NewDictionary($obj1.goodsInfo)
@@ -4547,8 +4542,6 @@ ENTITY_BUY_RESULT()
             $obj1.checkbuyData = nil
             CallTrigger(object = $obj1, event = $event, succeed = $succeed, shopIndex = $itemIndex)
             ShowTip(textKey = $msg, tipType = 2, entity = $obj1, keepTime = 20)
-			
-			GameAnalyticsCustomEvent(player = $obj1, parts = ["shop:buy:shopIndex", $itemIndex])
         }
     }
 }
@@ -4613,7 +4606,6 @@ TAKEOFF_EQUIP_CAR
 
 EQUIP_ITEM_IMMEDIATELY --params: item
 {
-    Test("bts.EQuiP,setItem")
 	$typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
 	If($typeIndex ~= 1 )
 	{
@@ -4737,7 +4729,6 @@ START_CAMERA_MODE
         }
         -- actionControl -> jump and move, skills -> just skill
         $obj1.showFuncId = HideOpenedWnd(player = $obj1, excluded = {a = "actionControl",b = "skills"})
-        Test("$obj1.outOfCameraModeState", $obj1.outOfCameraModeState)
         ForLoop(from = 1, to = ArraySize(array = $obj1.outOfCameraModeState), key = "idx")
         {
             $state = ArrayGet(array = $obj1.outOfCameraModeState, index = $idx)
@@ -5428,6 +5419,28 @@ LEAVE_PARTY_SUCCESS(debug = false){
         ReenterGame(player = $obj1)
     }
 }
+REPORT_CREATE_PARTY{
+    $num = $obj1.createPartyCount + 1
+    $obj1.createPartyCount = $num
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $num, array = [0, 9, 19, 49, 99, 199,  499, 999, 1999, 4999, 9999, 10000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:create:sum", @rangeBoundary])
+
+    $num = $obj1.createPartyCountPerGame + 1
+    $obj1.createPartyCountPerGame = $num
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $num, array = [0, 9, 19, 49, 99, 100])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:create:single_game", @rangeBoundary])
+}
+REPORT_JOIN_PARTY{
+    $num = $obj1.joinPartyCount + 1
+    $obj1.joinPartyCount = $num
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $num, array = [0, 9, 19, 49, 99, 199,  499, 999, 1999, 4999, 9999, 10000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:join:sum", @rangeBoundary])
+
+    $num = $obj1.joinPartyCountPerGame + 1
+    $obj1.joinPartyCountPerGame = $num
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $num, array = [0, 9, 19, 49, 99, 100])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:join:single_game", @rangeBoundary])
+}
 REALLY_AT_PARTY(debug = false){
     --in party now!
     $userId = GetPlayerUserID(player = $obj1)
@@ -5437,16 +5450,20 @@ REALLY_AT_PARTY(debug = false){
     UpdateExtensionBtn(entity = $obj1, btnList = [{name = "party"}])
     CallTrigger(object = $obj1, event = "OPEN_DANCE")
     If($userId == $inPartyOwnerId){
+        CallTrigger(object = $obj1, event = "REPORT_CREATE_PARTY")
         $obj1.inSelfParty = 1
         BroadcastPartyInvite(player = $obj1)
     }
     Else{
+        CallTrigger(object = $obj1, event = "REPORT_JOIN_PARTY")
         $obj1.inSelfParty = 0
         CallTrigger(object = $obj1, event = "JOIN_PARTY_GIVE_OWNER_MONEY", targetUserId = $inPartyOwnerId)
         CallTrigger(fromInParty = true, target = $partyOwner, event = "PLAYER_ON_VISIT", object = $obj1)
     }
 }
 RESET_NOT_IN_PARTY(debug = false){
+    $obj1.createPartyCountPerGame = 0
+    $obj1.joinPartyCountPerGame = 0
     $obj1.inPartyOwnerId = 0
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
     $obj1.role = @adult
@@ -5498,6 +5515,10 @@ CHECK_IN_PARTY(debug = false){
     $inPartyOwnerId = $obj1.inPartyOwnerId
     If($inPartyOwnerId ~= 0){
         GetPartyInfoByUserId(player = $obj1, targetUserId = $inPartyOwnerId, callback = "GET_TARGET_PARTY_INFO")
+    }
+    Else{
+        $obj1.createPartyCountPerGame = 0
+        $obj1.joinPartyCountPerGame = 0
     }
 }
 INTERACTION_BANISH(debug = false){
@@ -5579,6 +5600,11 @@ CLOSE_PARTY_SUCCESS(debug = false){
         $obj1.openPartyFailed = nil
         Return()
     }
+
+    $duration = GetGameTime() / 20 / 60
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $duration, array = [10, 20, 30, 31])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:keep:time", @rangeBoundary])
+
     $players = NewDictionary(GetAllPlayers())--if from "ENTITY_LEAVE", then the player not in this list
     ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
         If($player.dontReenterGameWhenCloseParty){Continue()}
@@ -6080,4 +6106,9 @@ DATA_REPORT_FAMILY_DURACTION
 DATA_REPORT_PALETTE_GUIDE_STEP --params: step
 {
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:guide", $step])
+}
+
+STORE_BUY_GOODS_SUCCESSFUL
+{
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:store", ToString($storeId), ToString($index)])
 }
