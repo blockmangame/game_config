@@ -5812,6 +5812,7 @@ FUNC_TRANSMIT_CARRIER --param: toMap, toPos, toRy
 
 NEXT_GUIDE_STEP
 {
+    CallTrigger(object = $obj1, step = $obj1.curStep, event = "DATA_REPORT_PALETTE_GUIDE_STEP")
     $obj1.curStep = $obj1.curStep + 1
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.curStep))
 }
@@ -6042,4 +6043,9 @@ DATA_REPORT_FAMILY_DURACTION
     CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $duration, array = [5, 10, 20, 30, 60, 120, 180, 181])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["family:keep:time", @rangeBoundary])
     DictionaryRemove(dict = @FamilyCreateDuration, key = $teamId)
+}
+
+DATA_REPORT_PALETTE_GUIDE_STEP --params: step
+{
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:guide", $step])
 }
