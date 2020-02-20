@@ -742,7 +742,7 @@ GIVE_HOUSE{
     ShowTip(entity = $obj1, tipType = 2, textKey = "ui_buy_success")
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
     CallTrigger(object = $obj1, event = "UPDATE_HOUSE", houseKey = $houseId, curSelectKey = $curSelect)
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["store:buy",
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:house",
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $houseCfg)),
         GetEntityCfg(fullName = $houseCfg, key = "houseType") or "other"])
 }
@@ -925,7 +925,7 @@ GIVE_STORE{
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["decoration:store:buy",
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:decoration",
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $cfg))])
     -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
 }
@@ -1538,7 +1538,7 @@ SET_REGION_COLOR{
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["decoration:store:buy",
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:decoration",
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $colorBlock))])
 }
 
