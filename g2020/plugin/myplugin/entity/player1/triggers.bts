@@ -2483,6 +2483,7 @@ USER_INTERACTION_ACTION
             If(not ArrayFind(array = $obj1.privilege, value = $privilegeName))
             {
                 $shopIndex = GetSkillVar(fullName = $skillName, key = "shopIndex")
+                $index = GetShopItemIndex(itemName = "myplugin/action_privilege") or $shopIndex
                 CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $shopIndex)
                 Return()
             }
@@ -4401,7 +4402,7 @@ ENTITY_BUY_APPSTOP {
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
     $index = ArrayFind(array = $obj1.privilege, value = $itemName)
     GameAnalyticsCustomEvent(player = $obj1, parts = ["shop:buy:", $shopType, $itemIndex])
-    If($shopType == "1" && not $index){
+    If($shopType == "1" && not $index and $limit ~= -1){
         $addItem = false
         $goodsDict = NewDictionary($obj1.goodsInfo)
         $limit = $limit - DictionaryGet(dict = $goodsDict, key = $itemIndex)
@@ -4679,7 +4680,8 @@ START_CAMERA_MODE
 
 STORE_ITEM_OPERATION_PRIVILEGE
 {
-    CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $shopIndex)
+    $index = GetShopItemIndex(itemName = "myplugin/dance_privilege") or 4 or $shopIndex
+    CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $index)
 }
 
 BUY_PRIVILEGE_SUCCEED
@@ -5300,7 +5302,8 @@ TRY_CREATE_PARTY {
     }Else{
         $canCreate = false
         $tip = ""
-        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 1, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
+        $shopIndex = GetShopItemIndex(itemName = "myplugin/vip_privilege") or 1
+        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $shopIndex, buyResultEvent = "BUY_CREATE_PARTY_PRIVILEGE_RESULT")
     }
 }
 BUY_CREATE_PARTY_PRIVILEGE_RESULT {
@@ -5599,7 +5602,8 @@ START_PLAY_BGM  {
         and not ArrayFind(array = $obj1.privilege, value = "myplugin/music_privilege"))
     {
         -- 没有特权，调用弹窗购买
-        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = 4)
+        $shopIndex = GetShopItemIndex(itemName = "myplugin/music_privilege") or 7
+        CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $shopIndex)
         Return()
     }
     If($obj1.house ~= GetEntityMap(entity = $obj1).owner) {

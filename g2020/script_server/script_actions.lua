@@ -56,3 +56,11 @@ function Actions.ClearItemUseByKey(data, params, context)
 	local entity = params.entity
 	entity:clearItemUseByKey(params.key, params.valueArray)
 end
+
+function Actions.GetShopItemIndex(data, params, context)
+	for _, item in pairs(Shop.shops) do
+		if item.itemName == params.itemName then
+			return item.index
+		end
+	end
+end
