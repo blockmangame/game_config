@@ -86,6 +86,36 @@ infect_sb=You got ill by {}
 state_get=You got {}
 ui_delete=Delete
 ui_check=View
+state_hunger_reward_self_tip=You are full(+{} coins)
+state_hunger_reward_family_tip=Your family {} is full(+{} coins)
+state_hunger_reward_other_tip=Your friend {} is full(+{} coins)
+state_thirsty_reward_self_tip=You are not thirsty any more(+{} coins)
+state_thirsty_reward_family_tip=Your family {} is not thirsty any more(+{} coins)
+state_thirsty_reward_other_tip=Your friend {} is not thirsty any more(+{} coins)
+state_dirty_reward_self_tip=You are clean(+{} coins)
+state_dirty_reward_family_tip=Your family {} is clean(+{} coins)
+state_dirty_reward_other_tip=Your friend {} is clean(+{} coins)
+state_fatigue_reward_self_tip=You are not tired any more(+{} coins)
+state_fatigue_reward_family_tip=Your family {} is not tired any more(+{} coins)
+state_fatigue_reward_other_tip=Your friend {} is not tired any more(+{} coins)
+state_ill_reward_self_tip=You are not sick any more(+{} coins)
+state_ill_reward_family_tip=Your family {} is not sick any more(+{} coins)
+state_ill_reward_other_tip=Your friend {} is not sick any more(+{} coins)
+state_school_reward_self_tip=You finished school(+{} coins)
+state_school_reward_family_tip=Your family {} finished school(+{} coins)
+state_school_reward_other_tip=Your friend {} finished school(+{} coins)
+state_dances_reward_self_tip=You finished dancing(+{} coins)
+state_dances_reward_family_tip=Your family {} finished dancing(+{} coins)
+state_dances_reward_other_tip=Your friend {} finished dancing(+{} coins)
+state_playground_reward_self_tip=You are not bored anymore(+{} coins)
+state_playground_reward_family_tip=Your family {} is not bored anymore(+{} coins)
+state_playground_reward_other_tip=Your friend {} is not bored anymore(+{} coins)
+state_pool_reward_self_tip=You are cool now(+{} coins)
+state_pool_reward_family_tip=Your family {} is cool now(+{} coins)
+state_pool_reward_other_tip=Your friend {} is cool now(+{} coins)
+state_camp_reward_self_tip=You finished camping(+{} coins)
+state_camp_reward_family_tip=Your family {} finished camping(+{} coins)
+state_camp_reward_other_tip=Your friend {} finished camping(+{} coins)
 
 language_end:family_status
 
@@ -727,6 +757,9 @@ zz01food_hotdog=hotdog
 zz01food_hotdog_shop=hotdog shop
 myplugin/food_zz01food_hotdog=buy hotdog\n($3)
 myplugin/food_zz01food_hotdog_shop=buy hotdog\n($3)
+car_02.describe=
+car_03.describe=
+car_04.describe=
 
 language_end:item
 
@@ -985,7 +1018,7 @@ action_role_not_matching_child_or_adult=Unable to do the interaction with player
 pizza_dialog=Thans for your pizza. Here is your reward.
 unable_to_transmit=▢FFFFA048cannot enter now▢FFFFFFFF
 works_save_coverage_new_works_failure_not_publish=Overwrite failed, there are no unpublished works, please delete or unlock the works archive and try again
-tip.party.broadcast.invite.need.money=Are you sure to spend (.) coins to invite other players to the party?
+tip.party.broadcast.invite.need.money=Are you sure to spend {.} coins to invite other players to the party?
 tip.party.broadcast.invite.pay.money.success=Invitation broadcast has been sent
 tip.operate.frequently=Operation too frequent
 tip.invite.need.in.party=You can only send broadcast in a party
@@ -1017,5 +1050,9 @@ create=Create
 btn.friend=Friend
 btn.nearby.player=Neighborhood
 btn.friend.request=New friend
+buy_house_region_color_had_not_inside_reigion=You cannot change wallpaper or floor in this region
+gui.cantUseTip.babycar=When you are adult, you can put a child in the trolley
+gui.cantUseTip.car= 
+gui.cantUseTip= 
 
 language_end:system
