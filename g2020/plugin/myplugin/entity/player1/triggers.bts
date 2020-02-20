@@ -474,6 +474,8 @@ ENTITY_LEAVE_DATA_REPORT{
     CallTrigger(object = $obj1, event = "DATA_REPORT_FAMILY_NUM")
     -- 统计玩家下线时打工次数的总数
     CallTrigger(object = $obj1, event = "DATA_REPORT_FINISH_WORK_SUM")
+    -- 统计玩家下线时添加好友数量
+    CallTrigger(object = $obj1, event = "DATA_REPORT_ADD_FRIEND")
 }
 DATA_REPORT_FINISH_WORK_SUM{
     --打工完成数量埋点
@@ -5136,7 +5138,16 @@ UPDATE_SINGLE_BLACK_BOARD_ENTITY
 
     RefreshEntitySceneUI(entity = $npc, data = $data)
 }
-
+DATA_REPORT_ADD_FRIEND{
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.addFriendCount, array = [0, 9, 19, 49, 99, 199,  499, 999, 1999, 4999, 9999, 10000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:friend:request:sum", @rangeBoundary])
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.addFriendCountPerGame, array = [0, 2, 5, 10, 11])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:friend:request:single_game", @rangeBoundary])
+}
+ON_ADD_FRIEND{
+    $obj1.addFriendCount = $obj1.addFriendCount + 1
+    $obj1.addFriendCountPerGame = $obj1.addFriendCountPerGame + 1
+}
 --↓↓↓↓↓↓ party
 CHECK_LEAVE_PARTY_FROM_DOOR {
     If($obj1.inSelfParty == 1){
