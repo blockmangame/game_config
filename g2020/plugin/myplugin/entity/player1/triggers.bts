@@ -6060,3 +6060,8 @@ DATA_REPORT_PALETTE_GUIDE_STEP --params: step
 {
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:guide", $step])
 }
+
+STORE_BUY_GOODS_SUCCESSFUL
+{
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:store", ToString($storeId), ToString($index)])
+}
