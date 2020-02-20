@@ -730,7 +730,7 @@ GIVE_HOUSE{
             houseInsideRegionColors = Copy(value = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or {}),
             isCurEquip = "disable",
             houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
-            houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
+            houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "other",
             houseId = $houseId,
             houseInsideDoor = GetEntityCfg(fullName = $houseCfg, key = "insideDoor") or "myplugin/house_base_inside_door"
         }
@@ -740,7 +740,7 @@ GIVE_HOUSE{
     CallTrigger(object = $obj1, event = "UPDATE_HOUSE", houseKey = $houseId, curSelectKey = $curSelect)
     GameAnalyticsCustomEvent(player = $obj1, parts = ["store:buy",
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $houseCfg)),
-        GetEntityCfg(fullName = $houseCfg, key = "houseType") or nil])
+        GetEntityCfg(fullName = $houseCfg, key = "houseType") or "other"])
 }
 
 SELL_HOUSE{
