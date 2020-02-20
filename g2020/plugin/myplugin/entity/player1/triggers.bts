@@ -117,11 +117,7 @@ INTERACTION_FEED {
         textP1 = GetEntityName(entity = $obj2),
         textP2 = $itemname
     )
-    CallTrigger(
-        object = $obj1,
-        event = "FUNC_STATE_RELEASE",
-        state = $state
-    )
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = $state)
 }
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
 CREATE_OWNER_HOUSE{
@@ -1743,10 +1739,7 @@ FUNC_STATE_AFFECT_OTHER --params: state
 
     $entities = GetNearbyEntities(
         entity = $obj1,
-        distance = GetSkillVar(
-            fullName = $skill,
-            key = "affectDis"
-        )
+        distance = GetSkillVar(fullName = $skill, key = "affectDis")
     )
     $name = GetEntityName(entity = $obj1)
     Foreach(array = $entities or [], key = "entity")
@@ -1756,15 +1749,11 @@ FUNC_STATE_AFFECT_OTHER --params: state
             Continue()
         }
         ShowBubbleMsg(entity = $entity, textKey = "infect_sb", textP1 = $name)
-        CallTrigger(
-            object = $entity,
-            event = "FUNC_STATE_ADD",
-            state = $state
-        )
+        CallTrigger(object = $entity, event = "FUNC_STATE_ADD", state = $state)
     }
 }
 
-FUNC_STATE_RIDEON --params: ride[, isCancel = false]
+FUNC_STATE_CHECK_RIDEON --params: ride[, isCancel = false]
 {
     If(not $ride)
     {
@@ -1790,20 +1779,13 @@ FUNC_STATE_RIDEON --params: ride[, isCancel = false]
 FUNC_STATE_CHECK_MAP --params: state
 {
     $map = GetEntityMap(entity = $obj1)
-    CallTrigger(
-        object = $obj1,
-        event = "FUNC_STATE_RELEASE",
-        state = $map.cfg.releaseState
-    )
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = $map.cfg.releaseState)
 }
 
 FUNC_STATE_CHECK_REGION --params: state
 {   
     -- 判断状态生成时是否就已经在区域里面了
-    $reg = GetRegionByName(
-        map = GetEntityMap(entity = $obj1),
-        name = $state 
-    )
+    $reg = GetRegionByName(map = GetEntityMap(entity = $obj1), name = $state)
 
     If($reg && IfEntityInArea(
                     entity = $obj1,
@@ -1814,11 +1796,7 @@ FUNC_STATE_CHECK_REGION --params: state
                 )
     )
     {
-        CallTrigger(
-            object = $obj1,
-            state = $state,
-            event = "FUNC_REGION_STATE_OPERATION",
-        )
+        CallTrigger(object = $obj1, state = $state, event = "FUNC_REGION_STATE_OPERATION")
     }
 }
 
@@ -1906,46 +1884,49 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     $rewardSelfTip = GetSkillVar(fullName = $skill, key = "rewardSelfTip")
     $rewardEffect = GetSkillVar(fullName = $skill, key = "rewardEffect")
 
-    $rewardOther = GetSkillVar(fullName = $skill, key = "rewardOther")
-    $rewardFamily = GetSkillVar(fullName = $skill, key = "rewardFamily")
-    $rewardDis = GetSkillVar(fullName = $skill, key = "rewardDis")
-    $rewardCount = GetSkillVar(fullName = $skill, key = "rewardCount")
-    $rewardFamilyTip = GetSkillVar(fullName = $skill, key = "rewardFamilyTip")
-    $rewardOtherTip = GetSkillVar(fullName = $skill, key = "rewardOtherTip")
-
-    $teamId = GetEntityTeam(entity = $obj1)
-    $rewardMap = GetEntityMap(entity = $obj1)
-    $rewardSum = 0
-    $textKey = ""
-    $promoterName = GetEntityName(entity = $obj1)
-    Foreach(array = $interactList or [], key = "objID")
+    If(ArraySize(array = $interactList or []) > 0)
     {
-        $entity = GetObject(objID = $objID)
-        If(not $entity || not IsPlayer(entity = $entity) || GetEntityMap(entity = $entity) ~= $rewardMap)
-        {
-            Continue()
-        }
+        $rewardOther = GetSkillVar(fullName = $skill, key = "rewardOther")
+        $rewardFamily = GetSkillVar(fullName = $skill, key = "rewardFamily")
+        $rewardDis = GetSkillVar(fullName = $skill, key = "rewardDis")
+        $rewardCount = GetSkillVar(fullName = $skill, key = "rewardCount")
+        $rewardFamilyTip = GetSkillVar(fullName = $skill, key = "rewardFamilyTip")
+        $rewardOtherTip = GetSkillVar(fullName = $skill, key = "rewardOtherTip")
 
-        $countKey = Concat(p1 = $stateBase, p2 = "RewardCount")
-        $count = GetObjectVar(obj = $entity, key = $countKey) or 0
-        $dis = GetObjectDistance(obj1 = $obj1, obj2 = $entity)
-        $myTeamId =  GetEntityTeam(entity = $entity)
-
-        If($count < $rewardCount && $dis < $rewardDis)
+        $teamId = GetEntityTeam(entity = $obj1)
+        $rewardMap = GetEntityMap(entity = $obj1)
+        $rewardSum = 0
+        $textKey = ""
+        $promoterName = GetEntityName(entity = $obj1)
+        Foreach(array = $interactList or [], key = "objID")
         {
-            SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
-            $isSameFamily = $teamId ~= 0 && $teamId == $myTeamId
-            $rewardSum = $isSameFamily and $rewardFamily or $rewardOther
-            $textKey = $isSameFamily and $rewardFamilyTip or $rewardOtherTip
-            CallTrigger(
-                object = $entity,
-                event = "FUNC_STATE_REWARD_AND_TIP",
-                rewardSum = $rewardSum,
-                textKey = $textKey,
-                rewardType = $rewardType,
-                textP1 = $promoterName,
-                textP2 = $rewardSum
-            )
+            $entity = GetObject(objID = $objID)
+            If(not $entity || not IsPlayer(entity = $entity) || GetEntityMap(entity = $entity) ~= $rewardMap)
+            {
+                Continue()
+            }
+
+            $countKey = Concat(p1 = $stateBase, p2 = "RewardCount")
+            $count = GetObjectVar(obj = $entity, key = $countKey) or 0
+            $dis = GetObjectDistance(obj1 = $obj1, obj2 = $entity)
+            $myTeamId =  GetEntityTeam(entity = $entity)
+
+            If($count < $rewardCount && $dis < $rewardDis)
+            {
+                SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
+                $isSameFamily = $teamId ~= 0 && $teamId == $myTeamId
+                $rewardSum = $isSameFamily and $rewardFamily or $rewardOther
+                $textKey = $isSameFamily and $rewardFamilyTip or $rewardOtherTip
+                CallTrigger(
+                    object = $entity,
+                    event = "FUNC_STATE_REWARD_AND_TIP",
+                    rewardSum = $rewardSum,
+                    textKey = $textKey,
+                    rewardType = $rewardType,
+                    textP1 = $promoterName,
+                    textP2 = $rewardSum
+                )
+            }
         }
     }
 
@@ -2097,11 +2078,7 @@ FUNC_STATE_OPEN_GPS --params: rtVal
     $reg = Concat(p1 = "myplugin/region_state_", p2 = $rtVal)
     $gpsDict = NewDictionary(GetConfigValue(type = "region", fullName = $reg, key = "gpsDict")) 
 
-    CallTrigger(
-        object = $obj1,
-        gpsDict = $gpsDict,
-        event = "FUNC_GPS_SET_OR_SYNC"
-    )
+    CallTrigger(object = $obj1, gpsDict = $gpsDict, event = "FUNC_GPS_SET_OR_SYNC")
 }
 
 FUNC_GPS_SET_OR_SYNC --params: gpsDict
@@ -2209,13 +2186,7 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
         $ngt = DictionaryGet(dict = $gpsDict, key = "navigateDict")
         If(not $ngt)
         {
-            CallTrigger(
-                object = $obj1,
-                event = "FUNC_GPS_RECALCULATE",
-                mapStart = $curMap,
-                mapEnd = $belongMap,
-                gpsDict = $gpsDict,
-            )
+            CallTrigger(object = $obj1, event = "FUNC_GPS_RECALCULATE", mapStart = $curMap, mapEnd = $belongMap, gpsDict = $gpsDict)
             Return()
         }
         Else
@@ -2224,51 +2195,22 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
             $maps = DictionaryGet(dict = $ngt, key = "maps")
             $road = DictionaryGet(dict = $ngt, key = "road")
         
-            $correctMap = ArrayGet(
-                array = @allMaps,
-                index = ArrayGet(
-                    array = $maps,
-                    index = $roadIdx
-                )
-            )
+            $correctMap = ArrayGet(array = @allMaps, index = ArrayGet(array = $maps, index = $roadIdx))
             If($correctMap ~= $mapName)
             {
-                CallTrigger(
-                    object = $obj1,
-                    event = "FUNC_GPS_RECALCULATE",
-                    mapStart = $curMap,
-                    mapEnd = $belongMap,
-                    gpsDict = $gpsDict,
-                )
+                CallTrigger(object = $obj1, event = "FUNC_GPS_RECALCULATE", mapStart = $curMap, mapEnd = $belongMap, gpsDict = $gpsDict)
                 Return()
             }
         
-            $gps = GetConfigValue(
-                type = "entity",
-                key = "pos",
-                fullName = ArrayGet(array = $road, index = $roadIdx)
-            )
+            $gps = GetConfigValue(type = "entity", key = "pos", fullName = ArrayGet(array = $road, index = $roadIdx))
             
-            $navigateDict = NewDictionary({
-                road = $road,
-                roadIdx = $roadIdx,
-                maps = $maps
-            })
+            $navigateDict = NewDictionary({road = $road, roadIdx = $roadIdx, maps = $maps})
 
-            DictionarySet(
-                dict = $gpsDict,
-                key = "navigateDict",
-                value = $navigateDict
-            )
+            DictionarySet(dict = $gpsDict, key = "navigateDict", value = $navigateDict)
         }
     }
 
-    CallTrigger(
-        object = $obj1,
-        event = "FUNC_OPEN_GPS",
-        gps = $gps,
-        gpsDict = $gpsDict
-    )
+    CallTrigger(object = $obj1, event = "FUNC_OPEN_GPS", gps = $gps, gpsDict = $gpsDict)
 }
 
 FUNC_GPS_RECALCULATE --params: mapStart, mapEnd, gpsDict
@@ -2287,17 +2229,9 @@ FUNC_GPS_RECALCULATE --params: mapStart, mapEnd, gpsDict
         Return()
     }
 
-    $navigateDict = NewDictionary({
-        road = $road,
-        roadIdx = $roadIdx,
-        maps = $maps
-    })
+    $navigateDict = NewDictionary({road = $road, roadIdx = $roadIdx, maps = $maps})
 
-    DictionarySet(
-        dict = $gpsDict,
-        key = "navigateDict",
-        value = $navigateDict
-    )
+    DictionarySet(dict = $gpsDict, key = "navigateDict", value = $navigateDict)
 
     CallTrigger(
         object = $obj1,
@@ -2317,10 +2251,7 @@ FUNC_UPDATE_STATE_SKILL_JACK_AREA --params: up
     {
         $map = GetEntityMap(entity = $obj1)
         $houseInsideMap = GetObjectVar(
-            obj = GetObjectVar(
-                obj = $obj1,
-                key = "house"
-            ),
+            obj = GetObjectVar(obj = $obj1, key = "house"),
             key = "houseInsideMap"
         )
         $up = $map ~= $houseInsideMap and true or false
@@ -2359,7 +2290,7 @@ FUNC_STATE_ACTION --params: state
     CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_REGION", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_MAP", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_START_AUTO_VANISH_TIME", state = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_RIDEON", ride = GetRideOn(entity = $obj1)) --检查是否已经在骑乘并且该骑乘是否会触发解除状态
+    CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_RIDEON", ride = GetRideOn(entity = $obj1)) --检查是否已经在骑乘并且该骑乘是否会触发解除状态
 }
 
 SHOW_BUY_PRIVILEGE_TIP
