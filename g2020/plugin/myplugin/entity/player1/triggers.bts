@@ -4452,6 +4452,7 @@ ENTITY_BUY_APPSTOP {
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
     $index = ArrayFind(array = $obj1.privilege, value = $itemName)
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["shop:buy:", $shopType, $itemIndex])
     If($shopType == "1" && not $index){
         $addItem = false
         $goodsDict = NewDictionary($obj1.goodsInfo)
@@ -4526,8 +4527,6 @@ ENTITY_BUY_RESULT()
             $obj1.checkbuyData = nil
             CallTrigger(object = $obj1, event = $event, succeed = $succeed, shopIndex = $itemIndex)
             ShowTip(textKey = $msg, tipType = 2, entity = $obj1, keepTime = 20)
-			
-			GameAnalyticsCustomEvent(player = $obj1, parts = ["shop:buy:shopIndex", $itemIndex])
         }
     }
 }
