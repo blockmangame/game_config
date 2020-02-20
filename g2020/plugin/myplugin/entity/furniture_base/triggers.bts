@@ -6,7 +6,6 @@ ENTITY_TOUCH_ALL{
 }
 
 EDIT_OBJECT_ACTION{
-    Test($params, $action, "EDIT_OBJECT_ACTION")
     If($action == "startEdit"){
         CallTrigger(object = $obj1, event = "START_EDIT_ENTITY", obj2 = $obj2, params = $params)
     }ElseIf($action == "stopEdit"){

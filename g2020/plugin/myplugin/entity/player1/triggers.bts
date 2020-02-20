@@ -398,8 +398,6 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
 CREATE_HOUSE_OUTSIDE{
     $yaw = GetRegionConfig(region = $region, key = "regionHouseYaw")
     $housePosOffset = GetEntityCfg(fullName = $houseCfg, key = "housePosOffset") or {x = 0, y = 0, z = 0}
-    -- Test("$housePosOffset--------------",$region,GetRegionCenter(region = $region),$housePosOffset,$yaw,V3RotationYaw(vector = $housePosOffset, yaw = $yaw),
-    --     ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)))
     $houseMap = $houseMap or GetEntityMap(entity = $obj1)
     $housePos = $housePos or GetEntityPosition(entity = $obj1)
     $house = CreateNpc(map = $houseMap, cfgName = $houseCfg, pos = $housePos)
@@ -1086,7 +1084,6 @@ HOUSE_LOCK{
         $notCurHouseFamilyPlayer = {}
         $allPlayerInThisHouse = GetMapPlayer(map = $insideMap)
         Foreach(array = $allPlayerInThisHouse, key = "player"){
-            Test(ToString($player), GetEntityTeam(entity = $player))
             If(GetObjectID(object = $obj1) ~= GetObjectID(object = $player) and 
                 (0 == GetEntityTeam(entity = $player) or GetEntityTeam(entity = $player) ~= GetEntityTeam(entity = $obj1))){
                 ArrayAppend(array = $notCurHouseFamilyPlayer, value = $player)
@@ -1559,7 +1556,6 @@ UPDATE_OBJ_HOUSE_INSIDE_REGION{
 
 RIDEOFF_IN_DEC{
     If($target and $target.lastSideNormal and IsPlayer(entity = $obj1)){
-        Test($target.lastSideNormal, GetEntityPosition(entity = $target))
         If(GetPosY(pos = $target.lastSideNormal) == -1){
             $addPos = {
                 x = 0,
@@ -1573,7 +1569,6 @@ RIDEOFF_IN_DEC{
             y = GetPosY(pos = $addPos) * 1.1,
             z = GetPosZ(pos = $addPos) * 1.1,
         })
-        Test("$addPos", $addPos, "$pos", $pos, "GetEntityPosition(entity = $target)", GetEntityPosition(entity = $target))
         $ride = GetRideOn(entity = $obj1)
         If(not $ride)
         {
@@ -1586,7 +1581,6 @@ INTERACTION_WITH_MOVEMENT_EVENT{
     $dict = NewDictionary(@interactionWithMovementEventMap)
     $eventDict = NewDictionary(DictionaryGet(dict = $dict, key = $interactionType) or {})
     $event = DictionaryGet(dict = $eventDict, key = $interactionName)
-    Test($interactionType, $interactionName, $event)
     If(not $event){
         Return()
     }
@@ -4598,7 +4592,6 @@ TAKEOFF_EQUIP_CAR
 
 EQUIP_ITEM_IMMEDIATELY --params: item
 {
-    Test("bts.EQuiP,setItem")
 	$typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
 	If($typeIndex ~= 1 )
 	{
@@ -4722,7 +4715,6 @@ START_CAMERA_MODE
         }
         -- actionControl -> jump and move, skills -> just skill
         $obj1.showFuncId = HideOpenedWnd(player = $obj1, excluded = {a = "actionControl",b = "skills"})
-        Test("$obj1.outOfCameraModeState", $obj1.outOfCameraModeState)
         ForLoop(from = 1, to = ArraySize(array = $obj1.outOfCameraModeState), key = "idx")
         {
             $state = ArrayGet(array = $obj1.outOfCameraModeState, index = $idx)
