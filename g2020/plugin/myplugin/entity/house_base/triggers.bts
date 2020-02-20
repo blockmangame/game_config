@@ -3,14 +3,18 @@ ENTITY_ENTER
     CallTrigger(object = $obj1, event = "CREATR_SUBSIDIARY")
 }
 
-CREATR_SUBSIDIARY{
-    ------------------------------------------ 创建邮箱
-    ------------------------------------------ 房子 <house-------mail> 邮箱
-    $mail = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "mail"))
+CREATR_HOUSE_OUTSIDE_MAIL{
+    $mail = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "mail"), owner = GetObjectVar(obj = $obj1, key = "owner"))
     SetObjectVar(obj = $mail, key = "house", value = $obj1)
     SetObjectVar(obj = $obj1, key = "mail", value = $mail)
 
     StartTimer(rep = false, time = 1, object = $obj1, mail = $mail, event = "CHANGE_MAIL_YAW")
+}
+
+CREATR_SUBSIDIARY{
+    ------------------------------------------ 创建邮箱
+    ------------------------------------------ 房子 <house-------mail> 邮箱
+    StartTimer(time = 1, object = $obj1, event = "CREATR_HOUSE_OUTSIDE_MAIL") -- 延迟一帧是因为需要用到上一帧创建完才设置的owner
     ------------------------------------------ 创建房门，房门播放开门的
     ------------------------------------------ 房子 <house-------door> 房门
     $door = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "door"))
