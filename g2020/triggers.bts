@@ -284,7 +284,7 @@ CHANGE_PLAYER_SCALE_CHILD
     CallTrigger(obj1 = $obj1, event = "ADD_SVIP_BUFF", object = $obj1)
 }
 
-FUNC_CLOSE_GPS --params: destination
+FUNC_CLOSE_GPS --params: destination[, hideTip]
 {
     $gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict")
     If($destination and $gpsDict)
@@ -293,7 +293,7 @@ FUNC_CLOSE_GPS --params: destination
     }
     If(not $destination || $destination == $dictDestination)
     {
-        If($destination)
+        If(not $hideTip and $destination)
         {
             ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
         }
