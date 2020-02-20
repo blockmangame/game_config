@@ -1906,16 +1906,22 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     }
 
     $rewardSelf = GetSkillVar(fullName = $skill, key = "rewardSelf")
+    $rewardType = GetSkillVar(fullName = $skill, key = "rewardType")
+    $rewardSelfTip = GetSkillVar(fullName = $skill, key = "rewardSelfTip")
+    $rewardEffect = GetSkillVar(fullName = $skill, key = "rewardEffect")
+
     $rewardOther = GetSkillVar(fullName = $skill, key = "rewardOther")
     $rewardFamily = GetSkillVar(fullName = $skill, key = "rewardFamily")
     $rewardDis = GetSkillVar(fullName = $skill, key = "rewardDis")
     $rewardCount = GetSkillVar(fullName = $skill, key = "rewardCount")
-    $rewardType = GetSkillVar(fullName = $skill, key = "rewardType")
-    
+    $rewardFamilyTip = GetSkillVar(fullName = $skill, key = "rewardFamilyTip")
+    $rewardOtherTip = GetSkillVar(fullName = $skill, key = "rewardOtherTip")
+
     $teamId = GetEntityTeam(entity = $obj1)
     $rewardMap = GetEntityMap(entity = $obj1)
     $rewardSum = 0
     $textKey = ""
+    $promoterName = GetEntityName(entity = $obj1)
     Foreach(array = $interactList or [], key = "objID")
     {
         $entity = GetObject(objID = $objID)
@@ -1923,7 +1929,7 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         {
             Continue()
         }
-        
+
         $countKey = Concat(p1 = $stateBase, p2 = "RewardCount")
         $count = GetObjectVar(obj = $entity, key = $countKey) or 0
         $dis = GetObjectDistance(obj1 = $obj1, obj2 = $entity)
@@ -1934,22 +1940,27 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
             SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
             $isSameFamily = $teamId ~= 0 && $teamId == $myTeamId
             $rewardSum = $isSameFamily and $rewardFamily or $rewardOther
-            $textKey = $isSameFamily and "reward_family" or "reward_takeCare"
+            $textKey = $isSameFamily and $rewardFamilyTip or $rewardOtherTip
             CallTrigger(
                 object = $entity,
                 event = "FUNC_STATE_REWARD_AND_TIP",
                 rewardSum = $rewardSum,
                 textKey = $textKey,
-                rewardType = $rewardType
+                rewardType = $rewardType,
+                textP1 = $promoterName,
+                textP2 = $rewardSum
             )
         }
     }
+
     CallTrigger(
         object = $obj1,
         event = "FUNC_STATE_REWARD_AND_TIP",
+        showMoneyEffect = $rewardEffect,
         rewardSum = $rewardSelf,
-        textKey = "reward_takeCare",
-        rewardType = $rewardType
+        textKey = $rewardSelfTip,
+        rewardType = $rewardType,
+        textP1 = $rewardSelf
     )
 }
 
@@ -2038,16 +2049,20 @@ FUNC_STATE_RELEASE_SUSPEND --params: state
     }
 }
 
-FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey, rewardType
+FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey, rewardType [, textP1, textP2, textP3, showMoneyEffect]
 {
     AddCurrency(coinName = $rewardType or "green_currency", entity = $obj1, count = $rewardSum)
-    ShowRewardItemEffect(type = "Coin", count = $rewardSum, fullName = "green_currency", player = $obj1)
-
-    ShowTip(
-        entity = $obj1,
-        tipType = 3,
-        textKey = $textKey
-    )
+    ShowRewardItemEffect(type = "Coin", count = $rewardSum, fullName = $rewardType or "green_currency", player = $obj1)
+    ShowTip(entity = $obj1, tipType = 3, textKey = $textKey, textP1 = $textP1, textP2 = $textP2, textP3 = $textP3)
+    If($showMoneyEffect)
+    {
+        If($obj1.stateRewardEffect)
+        {
+            RemoveEntityBuff(entity = $obj1, buff = $obj1.stateRewardEffect)
+            $obj1.stateRewardEffect = nil
+        }
+        $obj1.stateRewardEffect = AddEntityBuff(entity = $obj1, cfg = $showMoneyEffect)
+    }
 }
 
 FUNC_STATE_SHOW_DETAILS_UI -- params: skill(fullName)
