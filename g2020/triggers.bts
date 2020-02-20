@@ -604,7 +604,7 @@ ENTITY_RIDE_OFF {
         RemoveEntityBuff(entity = $obj2, buff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff))
     }
     StartTimer(rep = false, player = $obj2, target = $obj1, time = 1, event = "RECHECK_INTERACTION_UI")
-    CallTrigger(object = $obj2, event = "FUNC_STATE_RIDEON", ride = $obj1, isCancel = true)
+    CallTrigger(object = $obj2, event = "FUNC_STATE_CHECK_RIDEON", ride = $obj1, isCancel = true)
     CallTrigger(object = $obj2, event = "FUNC_CHECK_SHOWN_DANCES_SKILL", shown = true)
 
     StartTimer(rep = false, object = $obj2, target = $obj1, time = 1, event = "RIDEOFF_IN_DEC")
@@ -615,7 +615,7 @@ ENTITY_RIDE_OFF {
 ENTITY_RIDE_ON {
     If(not IsPlayer(entity = $obj2)){ Return() }
     StartTimer(rep = false, player = $obj2, target = $obj1, time = 1, event = "RECHECK_INTERACTION_UI")
-    CallTrigger(object = $obj2, event = "FUNC_STATE_RIDEON", ride = $obj1)
+    CallTrigger(object = $obj2, event = "FUNC_STATE_CHECK_RIDEON", ride = $obj1)
 
     If(not IsPlayer(entity = $obj1))
     { 
