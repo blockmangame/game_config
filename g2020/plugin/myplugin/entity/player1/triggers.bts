@@ -1565,9 +1565,9 @@ RIDEOFF_IN_DEC{
         }
         $addPos = $addPos or $target.lastSideNormal
         $pos = ComputeV3(p1 = GetEntityPosition(entity = $target), op = "add", p2 = {
-            x = GetPosX(pos = $addPos) * 1.1,
-            y = GetPosY(pos = $addPos) * 1.1,
-            z = GetPosZ(pos = $addPos) * 1.1,
+            x = GetPosX(pos = $addPos) * 1.1 + 0.1,
+            y = GetPosY(pos = $addPos) * 1.1 + 0.1,
+            z = GetPosZ(pos = $addPos) * 1.1 + 0.1,
         })
         $ride = GetRideOn(entity = $obj1)
         If(not $ride)
