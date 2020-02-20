@@ -474,8 +474,14 @@ ENTITY_LEAVE_DATA_REPORT{
     CallTrigger(object = $obj1, event = "DATA_REPORT_RELEASE_STATE_SUM")
     -- 统计玩家下线时家庭数量
     CallTrigger(object = $obj1, event = "DATA_REPORT_FAMILY_NUM")
+    -- 统计玩家下线时打工次数的总数
+    CallTrigger(object = $obj1, event = "DATA_REPORT_FINISH_WORK_SUM")
 }
-
+DATA_REPORT_FINISH_WORK_SUM{
+    --打工完成数量埋点
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $obj1.workTaskfinish, array = [0,10,20,30,40,80,120,400,800,1200,1600,2000,2400,2800,3200,3201])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:task:finish:", @rangeBoundary])
+}
 DATA_REPORT_HOUSE_SIZE{
     CallTrigger(event = "SET_RANGE_BOUNDARY" , num = ArraySize(array = GetObjectVar(obj = $obj1, key = "houseVars") or {}), array = [1, 2 ,3 ,4 ,5 ,6, 7, 8])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:house:num", @rangeBoundary])
