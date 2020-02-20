@@ -5490,10 +5490,11 @@ CREATE_PARTY_SUCCESS {
     $obj1.inPartyOwnerId = GetPlayerUserID(player = $obj1)
     $obj1.inPartyId = $partyId
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.create.success", keepTime =  100)
+    $obj1.resetGameToOpenParty = true
+    $house = $obj1.house
+    $house.createPartyBuff = AddEntityBuff(entity = $house, cfg = GetConfigVar(obj = $house, key = "houseCreatePartyBuff"))
     ReenterGame(player = $obj1)
 
-    $house = GetObjectVar(obj = $obj1, key = "house")
-    $house.createPartyBuff = AddEntityBuff(entity = $house, cfg = GetConfigVar(obj = $house, key = "houseCreatePartyBuff"))
 }
 JOIN_PARTY_GIVE_OWNER_MONEY(debug = false){
     $joinUserPartyDataDict = NewDictionary($obj1.joinUserPartyData)
@@ -5549,6 +5550,14 @@ CLOSE_PARTY_SUCCESS(debug = false){
     $obj1.inPartyId = "0"
     $obj1.inPartyOwnerId = 0
     $obj1.inSelfParty = nil
+    $house = $obj1.house
+    If($house.createPartyBuff){
+        RemoveEntityBuff(entity = $house, buff = $house.createPartyBuff)
+    }
+    If($obj1.openPartyFailed){
+        $obj1.openPartyFailed = nil
+        Return()
+    }
     $players = NewDictionary(GetAllPlayers())--if from "ENTITY_LEAVE", then the player not in this list
     ForeachDictionary(keyName = "_", valueName = "player", dict = $players){
         If($player.dontReenterGameWhenCloseParty){Continue()}
@@ -5559,10 +5568,6 @@ CLOSE_PARTY_SUCCESS(debug = false){
     }
     If($obj1.closePartyEvent){
         CallTrigger(object = $obj1, event = $obj1.closePartyEvent)
-    }
-    $house = GetObjectVar(obj = $obj1, key = "house")
-    If($house.createPartyBuff){
-        RemoveEntityBuff(entity = $house, buff = $house.createPartyBuff)
     }
 }
 PARTY_BE_LIKED{
@@ -5581,13 +5586,19 @@ PARTY_BE_LIKED{
     DictionarySet(dict = $curHousedict, key = "likeNum", value = $likeNum)
     ArraySet(array = $houseVars, index = $curHouseIndex, value = DictionaryToTable(dict = $curHousedict))
 }
-RESET_GAME_FAILED(debug = false){
+RESET_GAME_FAILED(debug = true){
     If($resultCode ~= 1){
         If($obj1.resetGameToJoinParty){
             ShowTip(entity = $obj1, tipType = 2, textKey = "tip.user.join.party.failed")
             $obj1.dontReenterGame = true
             $obj1.dontAskShowPartyList = true
             LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
+        }
+        ElseIf($obj1.resetGameToOpenParty){
+            $obj1.resetGameToOpenParty = nil
+            $obj1.openPartyFailed = true
+            ShowTip(entity = $obj1, tipType = 2, textKey = "tip.user.create.party.failed")
+            CloseParty(player = $obj1)
         }
         Else{
             ShowTip(entity = $obj1, tipType = 2, textKey = $resultType)
