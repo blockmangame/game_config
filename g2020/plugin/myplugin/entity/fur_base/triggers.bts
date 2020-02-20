@@ -14,7 +14,6 @@ ENTITY_TOUCH_ALL{
 }
 
 EDIT_OBJECT_ACTION{
-    Test($params, $action, "EDIT_OBJECT_ACTION")
     If($action == "startEdit"){
         CallTrigger(object = $obj1, event = "START_EDIT_ENTITY", obj2 = $obj2, params = $params)
     }ElseIf($action == "stopEdit"){
@@ -155,7 +154,6 @@ UPDATE_POSITION{
     -- $posX = $sideNormalX~=0 and (NumberFloor(p1 = GetPosX(pos = $pos)) + $sideNormalX * 0.00001) or GetPosX(pos = $pos)
     -- $posY = $sideNormalY~=0 and (NumberFloor(p1 = GetPosY(pos = $pos)) + $sideNormalY * 0.00001) or GetPosY(pos = $pos)
     -- $posZ = $sideNormalZ~=0 and (NumberFloor(p1 = GetPosZ(pos = $pos)) + $sideNormalZ * 0.00001) or GetPosZ(pos = $pos)
-    Test(" $posX ", $posX , $posY , $posZ )
     SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = {
         x = $posX + $sideNormalX * 0.0002,
         y = $posY + $sideNormalY * 0.0002,
@@ -229,10 +227,8 @@ DEC_INTERACTION_SALE{
                     $decorationDic = NewDictionary($decorationTb)
                     If(DictionaryGet(dict = $decorationDic, key = "fullName") == $cfg){
                         $sellMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellMoney") or 0)
-                        Test("$sellMoney", $sellMoney)
                         If(DictionaryGet(dict = $fDict, key = "isOldFurnishing")){
                             $sellMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellByDiscountMoney") or 0)
-                            Test("$sellByDiscountMoney", $sellMoney)
                         }                    
                     }
                 }
@@ -246,7 +242,6 @@ DEC_INTERACTION_SALE{
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
 
-    Test("GetObjectID(object = $obj1)", GetObjectID(object = $obj1))
     UpdateEntityEditContainer(player = $owner, entityId = GetObjectID(object = $obj1), show = false)
     SetObjectVar(obj = $owner, key = "lastInteractionUiObjId", value = nil)
 

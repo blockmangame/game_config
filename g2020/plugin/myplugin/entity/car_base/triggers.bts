@@ -1,6 +1,5 @@
 RIDE_ON
 {
-    Test("5aaaaaaaaaaaaaaaaaaaaaaa ")
     $owner = GetOwner(entity = $obj1)
     $canDrive = false
     If($owner)
@@ -26,8 +25,6 @@ RIDE_ON
 
     If($canDrive)
     {
-        Test($obj2.otherItem)
-        Test($obj1.otherItem)
         CallTrigger(object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "ADD_TARGET_ATTACH_POINT_INDEX_BUFF")
         If($obj2.otherItem){
             --ClearRide(entity = $obj2.createdTrolley)
@@ -45,7 +42,6 @@ RIDE_ON
 
 ADD_TARGET_ATTACH_POINT_INDEX_BUFF{
     $targetAttachPointIndexBuff = GetConfigVar(obj = $obj1, key = $obj2.role == @adult and "targetAttachPointIndexBuffByAdult" or "targetAttachPointIndexBuffByChild")
-    Test("$targetAttachPointIndexBuff", $targetAttachPointIndexBuff)
     If($targetAttachPointIndexBuff and not GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff)){
         AddEntityBuff(entity = $obj2, cfg = $targetAttachPointIndexBuff)
     }
@@ -114,9 +110,7 @@ MOVE_BEGIN_FORWARD_BACK{
         $backBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $backBuffCfg)
         $pointYaw = V3AngleXZ(vector = ComputeV3(op = "sub", p1 = $entityPos, p2 = $obj1.entityLastPos))
         $subYaw = $pointYaw - $entityYaw
-        -- Test($entityYaw, V3AngleXZ(vector = ComputeV3(op = "sub", p1 = $entityPos, p2 = $obj1.entityLastPos)))
         If($subYaw > 90 or $subYaw < -90){
-            --Test("444444444444444444444", $subYaw, $entityYaw, $pointYaw)
             If(not $backBuff and $key){
                 AddEntityBuff(entity = $obj1, cfg = $backBuffCfg)
             }
@@ -124,7 +118,6 @@ MOVE_BEGIN_FORWARD_BACK{
                 RemoveEntityBuff(entity = $obj1, buff = $forwardBuff)
             }
         }Else{
-            --Test("5555555555555555555555", $subYaw, $entityYaw, $pointYaw)
             If(not $forwardBuff and $key){
                 AddEntityBuff(entity = $obj1, cfg = $forwardBuffCfg)
             }
@@ -156,21 +149,17 @@ MOVE_END_FORWARD_BACK{
 }
 
 START_FORWARD{
-    Test("START_FORWARD", GetLastPos(entity = $obj1), GetEntityYaw(entity = $obj1))
     CallTrigger(object = $obj1, obj1 = $obj1, key = "forward", event = "MOVE_BEGIN_FORWARD_BACK")
 }
 
 STOP_FORWARD{
-    Test("STOP_FORWARD")
     CallTrigger(object = $obj1, obj1 = $obj1, event = "MOVE_END_FORWARD_BACK")
 }
 
 START_BACK{
-    Test("START_BACK", GetLastPos(entity = $obj1), GetEntityYaw(entity = $obj1))
     CallTrigger(object = $obj1, obj1 = $obj1, key = "back", event = "MOVE_BEGIN_FORWARD_BACK")
 }
 
 STOP_BACK{
-    Test("STOP_BACK")
     CallTrigger(object = $obj1, obj1 = $obj1, event = "MOVE_END_FORWARD_BACK")
 }

@@ -3,14 +3,18 @@ ENTITY_ENTER
     CallTrigger(object = $obj1, event = "CREATR_SUBSIDIARY")
 }
 
-CREATR_SUBSIDIARY{
-    ------------------------------------------ 创建邮箱
-    ------------------------------------------ 房子 <house-------mail> 邮箱
-    $mail = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "mail"))
+CREATR_HOUSE_OUTSIDE_MAIL{
+    $mail = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "mail"), owner = GetObjectVar(obj = $obj1, key = "owner"))
     SetObjectVar(obj = $mail, key = "house", value = $obj1)
     SetObjectVar(obj = $obj1, key = "mail", value = $mail)
 
     StartTimer(rep = false, time = 1, object = $obj1, mail = $mail, event = "CHANGE_MAIL_YAW")
+}
+
+CREATR_SUBSIDIARY{
+    ------------------------------------------ 创建邮箱
+    ------------------------------------------ 房子 <house-------mail> 邮箱
+    StartTimer(time = 1, object = $obj1, event = "CREATR_HOUSE_OUTSIDE_MAIL") -- 延迟一帧是因为需要用到上一帧创建完才设置的owner
     ------------------------------------------ 创建房门，房门播放开门的
     ------------------------------------------ 房子 <house-------door> 房门
     $door = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = GetConfigVar(obj = $obj1, key = "door"))
@@ -20,7 +24,6 @@ CREATR_SUBSIDIARY{
     StartTimer(rep = false, time = 1, object = $obj1, door = $door, event = "CHANGE_DOOR_YAW")
     ------------------------------------------ 创建内部房子（创建动态地图）
     ------------------------------------------ 房子 <owner-------houseInsideMap> 内部房子
-    -- Test("GetConfigVar(obj = $obj1, key = nsideMap)",GetConfigVar(obj = $obj1, key = "insideMap"))
     $map = CreateMap(name = GetConfigVar(obj = $obj1, key = "insideMap"))
     SetObjectVar(obj = $obj1, key = "houseInsideMap", value = $map)
     SetMapVar(map = $map, key = "owner", value = $obj1)
@@ -109,7 +112,6 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
             pos = $pos, ry = DictionaryGet(dict = $fDict, key = "yaw") or 0, rp = DictionaryGet(dict = $fDict, key = "pitch") or 0, owner = $obj1.owner)
         If($npc){
             SetEntityRoll(entity = $npc, rotationRoll = DictionaryGet(dict = $fDict, key = "roll") or 0)
-            -- Test("DictionaryGet(dict = $fDict, key = roll) ", DictionaryGet(dict = $fDict, key = "roll"), DictionaryGet(dict = $fDict, key = "pitch"),DictionaryGet(dict = $fDict, key = "yaw") )
             $npc.lastSideNormal = DictionaryGet(dict = $fDict, key = "lastSideNormal") or Table(x = 0,y = 1,z = 0)
             -- UpdateEntityDateToClient(entity = $npc, key = "lastSideNormal", value = $npc.lastSideNormal)
             Foreach(array = DictionaryGet(dict = $fDict, key = "saveSkinList") or {}, key = "skinTb"){
@@ -341,7 +343,6 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
                     If($tempPosInRegion){
                         If(PosToV3(pos = $tempPos) ~= PosToV3(pos = $lastBlockPos)){
                             -- If(PosToV3(pos = $nextBlockPos) == PosToV3({x = 26,y = 15, z = 41})){
-                            -- Test($tempPos, $lastBlockPos, $tindex)
                             $nextBlockPos = $tempPos
                             $directionIndex = $tindex
                             Break()
@@ -492,7 +493,6 @@ ENTITY_DIE{
 
     ------------------------------------------ 销毁内部房子
     $map = GetObjectVar(obj = $obj1, key = "houseInsideMap")
-    Test(GetEntityYaw(entity = $outsideDoor))
     $allPlayer = GetMapPlayer(map = $map)
     Foreach(array = $allPlayer, key = "player"){
         ShowTip(entity = $player, tipType = 2,textKey = "house_change_and_kick_you", keepTime = 40)

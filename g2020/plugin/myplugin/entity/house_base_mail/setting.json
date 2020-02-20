@@ -23,6 +23,9 @@
                 "text": "house_base_mail.text",
                 "image": "plugin/myplugin/image/fru_intUI/hand_click.png",
                 "event": "ENTITY_house_mail",
+                "checkCanShow": {
+                    "funcName": "checkOwnership"
+                },
                 "imageSize": {
                     "width": "60",
                     "height": "60"

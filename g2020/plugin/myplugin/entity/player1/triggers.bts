@@ -398,8 +398,6 @@ TEST_DATA{ -- 保存进数据库的数据伪代码 -- 旧 11-30
 CREATE_HOUSE_OUTSIDE{
     $yaw = GetRegionConfig(region = $region, key = "regionHouseYaw")
     $housePosOffset = GetEntityCfg(fullName = $houseCfg, key = "housePosOffset") or {x = 0, y = 0, z = 0}
-    -- Test("$housePosOffset--------------",$region,GetRegionCenter(region = $region),$housePosOffset,$yaw,V3RotationYaw(vector = $housePosOffset, yaw = $yaw),
-    --     ComputeV3(p1 = GetRegionCenter(region = $region), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw)))
     $houseMap = $houseMap or GetEntityMap(entity = $obj1)
     $housePos = $housePos or GetEntityPosition(entity = $obj1)
     $house = CreateNpc(map = $houseMap, cfgName = $houseCfg, pos = $housePos)
@@ -474,8 +472,14 @@ ENTITY_LEAVE_DATA_REPORT{
     CallTrigger(object = $obj1, event = "DATA_REPORT_RELEASE_STATE_SUM")
     -- 统计玩家下线时家庭数量
     CallTrigger(object = $obj1, event = "DATA_REPORT_FAMILY_NUM")
+    -- 统计玩家下线时打工次数的总数
+    CallTrigger(object = $obj1, event = "DATA_REPORT_FINISH_WORK_SUM")
 }
-
+DATA_REPORT_FINISH_WORK_SUM{
+    --打工完成数量埋点
+    CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $obj1.workTaskfinish, array = [0,10,20,30,40,80,120,400,800,1200,1600,2000,2400,2800,3200,3201])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:task:finish:", @rangeBoundary])
+}
 DATA_REPORT_HOUSE_SIZE{
     CallTrigger(event = "SET_RANGE_BOUNDARY" , num = ArraySize(array = GetObjectVar(obj = $obj1, key = "houseVars") or {}), array = [1, 2 ,3 ,4 ,5 ,6, 7, 8])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:house:num", @rangeBoundary])
@@ -738,7 +742,7 @@ GIVE_HOUSE{
     ShowTip(entity = $obj1, tipType = 2, textKey = "ui_buy_success")
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
     CallTrigger(object = $obj1, event = "UPDATE_HOUSE", houseKey = $houseId, curSelectKey = $curSelect)
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["store:buy",
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:house",
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $houseCfg)),
         GetEntityCfg(fullName = $houseCfg, key = "houseType") or "other"])
 }
@@ -921,7 +925,7 @@ GIVE_STORE{
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["decoration:store:buy",
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:decoration",
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $cfg))])
     -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
 }
@@ -1080,7 +1084,6 @@ HOUSE_LOCK{
         $notCurHouseFamilyPlayer = {}
         $allPlayerInThisHouse = GetMapPlayer(map = $insideMap)
         Foreach(array = $allPlayerInThisHouse, key = "player"){
-            Test(ToString($player), GetEntityTeam(entity = $player))
             If(GetObjectID(object = $obj1) ~= GetObjectID(object = $player) and 
                 (0 == GetEntityTeam(entity = $player) or GetEntityTeam(entity = $player) ~= GetEntityTeam(entity = $obj1))){
                 ArrayAppend(array = $notCurHouseFamilyPlayer, value = $player)
@@ -1535,7 +1538,7 @@ SET_REGION_COLOR{
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["decoration:store:buy",
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:decoration",
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $colorBlock))])
 }
 
@@ -1553,7 +1556,6 @@ UPDATE_OBJ_HOUSE_INSIDE_REGION{
 
 RIDEOFF_IN_DEC{
     If($target and $target.lastSideNormal and IsPlayer(entity = $obj1)){
-        Test($target.lastSideNormal, GetEntityPosition(entity = $target))
         If(GetPosY(pos = $target.lastSideNormal) == -1){
             $addPos = {
                 x = 0,
@@ -1567,7 +1569,6 @@ RIDEOFF_IN_DEC{
             y = GetPosY(pos = $addPos) * 1.1,
             z = GetPosZ(pos = $addPos) * 1.1,
         })
-        Test("$addPos", $addPos, "$pos", $pos, "GetEntityPosition(entity = $target)", GetEntityPosition(entity = $target))
         $ride = GetRideOn(entity = $obj1)
         If(not $ride)
         {
@@ -1580,7 +1581,6 @@ INTERACTION_WITH_MOVEMENT_EVENT{
     $dict = NewDictionary(@interactionWithMovementEventMap)
     $eventDict = NewDictionary(DictionaryGet(dict = $dict, key = $interactionType) or {})
     $event = DictionaryGet(dict = $eventDict, key = $interactionName)
-    Test($interactionType, $interactionName, $event)
     If(not $event){
         Return()
     }
@@ -4592,7 +4592,6 @@ TAKEOFF_EQUIP_CAR
 
 EQUIP_ITEM_IMMEDIATELY --params: item
 {
-    Test("bts.EQuiP,setItem")
 	$typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
 	If($typeIndex ~= 1 )
 	{
@@ -4716,7 +4715,6 @@ START_CAMERA_MODE
         }
         -- actionControl -> jump and move, skills -> just skill
         $obj1.showFuncId = HideOpenedWnd(player = $obj1, excluded = {a = "actionControl",b = "skills"})
-        Test("$obj1.outOfCameraModeState", $obj1.outOfCameraModeState)
         ForLoop(from = 1, to = ArraySize(array = $obj1.outOfCameraModeState), key = "idx")
         {
             $state = ArrayGet(array = $obj1.outOfCameraModeState, index = $idx)
