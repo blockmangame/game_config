@@ -2035,12 +2035,7 @@ FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey, rewardType [, textP1, te
     ShowTip(entity = $obj1, tipType = 3, textKey = $textKey, textP1 = $textP1, textP2 = $textP2, textP3 = $textP3)
     If($showMoneyEffect)
     {
-        If($obj1.stateRewardEffect)
-        {
-            RemoveEntityBuff(entity = $obj1, buff = $obj1.stateRewardEffect)
-            $obj1.stateRewardEffect = nil
-        }
-        $obj1.stateRewardEffect = AddEntityBuff(entity = $obj1, cfg = $showMoneyEffect)
+        AddEntityBuff(entity = $obj1, cfg = $showMoneyEffect, buffTime = 100)
     }
 }
 
