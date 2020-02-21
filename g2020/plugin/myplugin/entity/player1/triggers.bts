@@ -4032,7 +4032,7 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
         resetImg = $resetImg
     )
     If($obj1.taskShowGps){
-       SetGuidePostion(entity = $obj1, pos = $obj1.gpsPos)
+       SetGuideTarget(entity = $obj1, pos = $obj1.gpsPos, guideSpeed = 0.05)
     }
     UpdateUIData(player = $obj1, ui = "circleProgress", data = $taskData)
 }
@@ -4160,7 +4160,7 @@ DELETE_ITEM(){--267.0,19.0,371.0
         $obj1.taskIndex = nil
         $obj1.worktaskCount = $obj1.worktaskCount - 1
         If($obj1.taskShowGps){
-            SetGuidePostion(entity = $obj1)
+            SetGuideTarget(entity = $obj1)
         }
         $obj1.taskShowGps = false
         CallTrigger(event = "GET_TASK_GPS", object = $obj1)
@@ -4238,7 +4238,7 @@ FINISH_TASK(debug = false){ --完成打工的对话
        Return()
     }
     If($obj1.taskShowGps){
-        SetGuidePostion(entity = $obj1)
+        SetGuideTarget(entity = $obj1)
     }
     $obj1.taskShowGps = false
     $obj1.finishworkTime =  StartTimer(object = $obj1, event = "FINISH_AWARD", time = 20)

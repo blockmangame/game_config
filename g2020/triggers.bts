@@ -297,7 +297,7 @@ FUNC_CLOSE_GPS --params: destination[, hideTip]
         {
             ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
         }
-        SetGuidePostion(entity = $obj1)
+        SetGuideTarget(entity = $obj1)
         SetObjectVar(obj = $obj1, key = "gpsDict", value = nil)
     }
 }
@@ -305,7 +305,7 @@ FUNC_CLOSE_GPS --params: destination[, hideTip]
 FUNC_OPEN_GPS --params: gpsDict
 {
     $obj1.taskShowGps = false
-    SetGuidePostion(pos = $gps, entity = $obj1)
+    SetGuideTarget(pos = $gps, entity = $obj1, guideSpeed = 0.05)
     SetObjectVar(obj = $obj1, key = "gpsDict", value = $gpsDict)
     ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
 }
