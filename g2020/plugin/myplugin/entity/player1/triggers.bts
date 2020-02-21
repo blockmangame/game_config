@@ -5788,6 +5788,7 @@ GET_SVIP_REWARD()
         $obj1.getSvipDay = GetTime()
         $money = GetConfigValue(type = "reward", fullName = "myplugin/privilege", key = "svipMoney")
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
+        AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
         ShowToolBarButton(name = "svip", show = false, player = $obj1)
     }
 }
