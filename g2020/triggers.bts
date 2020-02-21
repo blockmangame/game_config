@@ -43,6 +43,9 @@ GAME_INIT
     CallTrigger(event = "SHOW_SHOP_TITLE")
 
     @FamilyCreateDuration = NewDictionary({})   -- 保存家庭创建的时间，用来数据统计
+
+    --
+    @HOME_SUM = 0
 }
 --场景商店的牌子
 SHOW_SHOP_TITLE(){

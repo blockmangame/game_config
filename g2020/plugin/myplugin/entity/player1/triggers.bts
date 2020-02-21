@@ -165,6 +165,7 @@ CREATE_OWNER_HOUSE{
                     housePos = GetRegionCenter(region = $publicRegion)
                 )
                 $isCreate = true
+                @HOME_SUM = @HOME_SUM + 1
                 Break()
             }
         }
@@ -233,6 +234,7 @@ MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建�
                 houseMap = @Map001,
                 housePos = GetRegionCenter(region = $publicRegion)
             )
+            @HOME_SUM = @HOME_SUM + 1
             Break()
         }
     }
@@ -4415,11 +4417,17 @@ ENTITY_BUY_APPSTOP {
         }
         If($itemName == "myplugin/home_privilege"){ --购买租地特权，把房子移到公共区域
             UploadPrivilege(player = $obj1) --上报租地特权
-            StartTimer(time = 1,object = $obj1, event = "MOVE_HOME_FROM_PROTECT_TO_PUBLIC")
+            If(@HOME_SUM >= 2){
+                StartTimer(time = 2, object = $obj1, event = "MOVE_TO_OTHER_SERVER")
+            }Else{
+                StartTimer(time = 1,object = $obj1, event = "MOVE_HOME_FROM_PROTECT_TO_PUBLIC")
+            }
         }
     }
 }
-
+MOVE_TO_OTHER_SERVER(){-- 租地满了，移到其他地方。
+    ReenterGame(player = $obj1)
+}
 --弹窗购买特权
 POP_UP_BUY_PRIVILEGE 
 {
