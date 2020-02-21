@@ -4401,7 +4401,7 @@ ENTITY_BUY_APPSTOP {
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
     $index = ArrayFind(array = $obj1.privilege, value = $itemName)
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["shop:buy:", $shopType, $itemIndex])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["shop:buy", $shopType, $itemIndex])
     If($shopType == "1" && not $index and $limit ~= -1){
         $addItem = false
         $goodsDict = NewDictionary($obj1.goodsInfo)
