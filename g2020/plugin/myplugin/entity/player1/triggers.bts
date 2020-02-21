@@ -4475,7 +4475,13 @@ ENTITY_BUY_RESULT()
         If($nowBuyIndex == $itemIndex){
             $obj1.checkbuyData = nil
             CallTrigger(object = $obj1, event = $event, succeed = $succeed, shopIndex = $itemIndex)
-            ShowTip(textKey = $msg, tipType = 2, entity = $obj1, keepTime = 20)
+            --ShowTip(textKey = $msg, tipType = 2, entity = $obj1, keepTime = 20)
+            If(not $succeed){
+                CallTrigger(object = $obj1, event = "CHOICE_OPEN_BUY", coinName = "gDiamonds")
+            }Else{
+                $itemName = GetShopItem(shopIndex = $itemIndex, key = "itemName")
+                ShowRewardItemEffect(type = "Item", count = 1, fullName = $itemName, player = $obj1)
+            }
         }
     }
 }
