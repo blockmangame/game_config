@@ -165,6 +165,7 @@ CREATE_OWNER_HOUSE{
                     housePos = GetRegionCenter(region = $publicRegion)
                 )
                 $isCreate = true
+                @HOME_SUM = @HOME_SUM + 1
                 Break()
             }
         }
@@ -233,6 +234,7 @@ MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建�
                 houseMap = @Map001,
                 housePos = GetRegionCenter(region = $publicRegion)
             )
+            @HOME_SUM = @HOME_SUM + 1
             Break()
         }
     }
@@ -2033,12 +2035,7 @@ FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey, rewardType [, textP1, te
     ShowTip(entity = $obj1, tipType = 3, textKey = $textKey, textP1 = $textP1, textP2 = $textP2, textP3 = $textP3)
     If($showMoneyEffect)
     {
-        If($obj1.stateRewardEffect)
-        {
-            RemoveEntityBuff(entity = $obj1, buff = $obj1.stateRewardEffect)
-            $obj1.stateRewardEffect = nil
-        }
-        $obj1.stateRewardEffect = AddEntityBuff(entity = $obj1, cfg = $showMoneyEffect)
+        AddEntityBuff(entity = $obj1, cfg = $showMoneyEffect, buffTime = 100)
     }
 }
 
@@ -4401,7 +4398,7 @@ ENTITY_BUY_APPSTOP {
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
     $index = ArrayFind(array = $obj1.privilege, value = $itemName)
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["shop:buy:", $shopType, $itemIndex])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["shop:buy", $shopType, $itemIndex])
     If($shopType == "1" && not $index and $limit ~= -1){
         $addItem = false
         $goodsDict = NewDictionary($obj1.goodsInfo)
@@ -4415,11 +4412,17 @@ ENTITY_BUY_APPSTOP {
         }
         If($itemName == "myplugin/home_privilege"){ --购买租地特权，把房子移到公共区域
             UploadPrivilege(player = $obj1) --上报租地特权
-            StartTimer(time = 1,object = $obj1, event = "MOVE_HOME_FROM_PROTECT_TO_PUBLIC")
+            If(@HOME_SUM >= 2){
+                StartTimer(time = 2, object = $obj1, event = "MOVE_TO_OTHER_SERVER")
+            }Else{
+                StartTimer(time = 1,object = $obj1, event = "MOVE_HOME_FROM_PROTECT_TO_PUBLIC")
+            }
         }
     }
 }
-
+MOVE_TO_OTHER_SERVER(){-- 租地满了，移到其他地方。
+    ReenterGame(player = $obj1)
+}
 --弹窗购买特权
 POP_UP_BUY_PRIVILEGE 
 {
