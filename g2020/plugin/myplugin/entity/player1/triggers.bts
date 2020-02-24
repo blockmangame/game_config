@@ -5166,6 +5166,7 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
         If($targetPartyId == $obj1.excludedPartyId and $ownerId == $obj1.visitTargetUserId){--party owner invited me
             $obj1.excludedPartyId = "0"
         }
+        $obj1.visitTargetUserId = $ownerId
     }
 
     $buttonInfo = [
