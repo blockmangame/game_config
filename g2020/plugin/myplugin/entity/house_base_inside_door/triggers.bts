@@ -32,17 +32,20 @@ INTER_WITH_DOOR{
     }
 
     CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
-
+    $house = GetObjectVar(obj = $obj2, key = "house")
     $door = GetObjectVar(obj = GetMapVar(map = $map, key = "owner"), key = "door")
     If(not $door){
-        $door = GetObjectVar(obj = GetObjectVar(obj = $obj2, key = "house"), key = "door")
+        $door = GetObjectVar(obj = $house, key = "door")
     }
     $map = GetEntityMap(entity = $door)
     $ry = GetEntityYaw(entity = $door)
+
+    $regionCenter = GetRegionCenter(region = GetObjectVar(obj = $house, key = "region"))
+    $pos = {x = GetPosX(pos = $regionCenter), y = GetPosY(pos = GetRegionMin(region = GetObjectVar(obj = $house, key = "region"))), z = GetPosZ(pos = $regionCenter)}
     $pos = ComputeV3(
-        p1 = GetEntityPosition(entity = $door),
+        p1 = $pos,
         p2 = V3RotationYaw(
-            vector = Table(x = 0, y = 0.5, z = 3),
+            vector = GetConfigVar(obj = $house, key = "entityTeleportToOutsidePosOffset") or Table(x = 0, y = 0.5, z = 3),
             yaw = $ry
         ),
         op = "add"
