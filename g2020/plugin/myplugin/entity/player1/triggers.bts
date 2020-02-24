@@ -4323,7 +4323,7 @@ SURE_BUY {
             ShowTip(textKey = "gui_str_app_shop_inventory_is_full", tipType = 2, entity = $obj1, keepTime = 20)
          }
    }Else{ --不够钱
-        CallTrigger(object = $obj1, event = "CHOICE_OPEN_BUY", coinName = $coinName)
+        CallTrigger(object = $obj1, event = "GO_TO_BUY_UI", coinName = $coinName)
    }
 }
 SHOP_BUY_COIN {
@@ -4374,10 +4374,19 @@ SURE_FURNITURE_BUY {
             ShowTip(textKey = "gui_str_app_shop_inventory_is_full", tipType = 2, entity = $obj1, keepTime = 20)
          }
    }Else{ --不够钱
-      CallTrigger(object = $obj1, event = "CHOICE_OPEN_BUY", coinName = $coinName)
+      CallTrigger(object = $obj1, event = "GO_TO_BUY_UI", coinName = $coinName)
    }
 }
-CHOICE_OPEN_BUY(){
+--不询问,直接打开金币/魔方商店
+GO_TO_BUY_UI{
+    If($coinName == "gDiamonds"){
+        ShowRecharge(player = $obj1)
+    }Else{
+        ShowGoldShop(player = $obj1, show = true)
+    }
+}
+--询问打开购买金币/魔方商店
+CHOICE_OPEN_BUY(debug = true){
     $msg = $coinName == "gDiamonds" and "pay_failure_gDiamonds_insufficient" or "pay_failure_game_money_insufficient"
     ShowDialogTip(entity = $obj1, tipType = 2, event = "OPEN_BUY_COIN",p1 = $msg, context = {coinName = $coinName})
 }
@@ -4480,7 +4489,7 @@ ENTITY_BUY_RESULT()
             CallTrigger(object = $obj1, event = $event, succeed = $succeed, shopIndex = $itemIndex)
             --ShowTip(textKey = $msg, tipType = 2, entity = $obj1, keepTime = 20)
             If(not $succeed){
-                CallTrigger(object = $obj1, event = "CHOICE_OPEN_BUY", coinName = "gDiamonds")
+                CallTrigger(object = $obj1, event = "GO_TO_BUY_UI", coinName = "gDiamonds")
             }Else{
                 $itemName = GetShopItem(shopIndex = $itemIndex, key = "itemName")
                 ShowRewardItemEffect(type = "Item", count = 1, fullName = $itemName, player = $obj1)
