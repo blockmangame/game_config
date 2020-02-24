@@ -3018,8 +3018,7 @@ CHANGE_DANCE_SKILL
 
 SET_DRESS_ARCHIVE
 {
-    $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
-    If(not $dressArchive)
+    If(not $obj1.dressArchive)
     {
         Return()
     }
@@ -3047,9 +3046,9 @@ SET_DRESS_ARCHIVE
         }
     }
 
-    ArrayAppend(array = $dressArchive, value = $bmDressInfo)
+    ArrayAppend(array = $obj1.dressArchive, value = $bmDressInfo)
 
-    UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $dressArchive)
+    UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $obj1.dressArchive)
 
 }
 
@@ -3103,13 +3102,12 @@ SHOW_OPERATE_DRESS_ARCHIVE_INPUT_DIALOG
 
 ADD_DRESS_ARCHIVE
 {
-    $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
-    If(not $dressArchive)
+    If(not $obj1.dressArchive)
     {
         Return()
     }
 
-    If((ArraySize(array = $dressArchive) - 1) < GetWorldVar(key = "dressArchiveNum"))
+    If((ArraySize(array = $obj1.dressArchive) - 1) < GetWorldVar(key = "dressArchiveNum"))
     {
         $addDressData = {
             vars = {
@@ -3135,9 +3133,9 @@ ADD_DRESS_ARCHIVE
             }
         }
 
-        ArrayInsert(array = $dressArchive, index = 1, value = $addDressInfo)
+        ArrayInsert(array = $obj1.dressArchive, index = 1, value = $addDressInfo)
 
-        UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $dressArchive)
+        UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $obj1.dressArchive)
     }
 }
 
@@ -3158,9 +3156,8 @@ DELETE_DRESS_ARCHIVE
     }
     
     ShowInputDialog(entity = $obj1, contents = { isClose = true })
-    $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
 
-    If(not $dressArchive)
+    If(not $obj1.dressArchive)
     {
         Return()
     }
@@ -3170,18 +3167,17 @@ DELETE_DRESS_ARCHIVE
         Return()
     }
 
-    If($index <= ArraySize(array = $dressArchive) and $index > 0)
+    If($index <= ArraySize(array = $obj1.dressArchive) and $index > 0)
     {
-        ArrayRemove(array = $dressArchive, index = $index)
+        ArrayRemove(array = $obj1.dressArchive, index = $index)
     }
     
-    UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $dressArchive)
+    UpdateUIData(player = $obj1, ui = "win_dressArchive", data = $obj1.dressArchive)
 }
 
 RENAME_DRESS_ARCHIVE
 {
-    $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
-    If(not $dressArchive)
+    If(not $obj1.dressArchive)
     {
         Return()
     }
@@ -3191,9 +3187,9 @@ RENAME_DRESS_ARCHIVE
         Return()
     }
 
-    If($index <= ArraySize(array = $dressArchive) and $index > 0)
+    If($index <= ArraySize(array = $obj1.dressArchive) and $index > 0)
     {
-        $archive = ArrayGet(array = $dressArchive, index = $index)
+        $archive = ArrayGet(array = $obj1.dressArchive, index = $index)
         If($archive)
         {
             SetObjectVar(obj = $archive, key = "name", value = $name)
@@ -3208,26 +3204,24 @@ RENAME_DRESS_ARCHIVE
 
 REMOVE_BM_DRESS
 {
-    $dressArchive = GetObjectVar(obj = $obj1, key = "dressArchive")
-    If(not $dressArchive)
+    If(not $obj1.dressArchive)
     {
         Return()
     }
 
-    ArrayRemove(array = $dressArchive, index = ArraySize(array = $dressArchive))
+    ArrayRemove(array = $obj1.dressArchive, index = ArraySize(array = $obj1.dressArchive))
 }
 
 INIT_PLAYER_DRESS
 {
-    $gameDress = GetObjectVar(obj = $obj1, key = "gameDress")
-    If(not $gameDress)
+    If(not $obj1.gameDress)
     {
         Return()
     }
 
-    If($gameDress ~= "")
+    If($obj1.gameDress ~= "")
     {
-        $dressDict = NewDictionary($gameDress)
+        $dressDict = NewDictionary($obj1.gameDress)
         ForeachDictionary(dict = $dressDict, keyName = "skinName", valueName = "skinValue")
         {
             SetSkin(entity = $obj1, skinName = $skinName, skinValue = $skinValue)
@@ -3237,13 +3231,12 @@ INIT_PLAYER_DRESS
 
 SAVE_PLAYER_DRESS
 {
-    $gameDress = GetObjectVar(obj = $obj1, key = "gameDress")
-    If(not $gameDress)
+    If(not $obj1.gameDress)
     {
         Return()
     }
 
-    $gameDress = {
+    $obj1.gameDress = {
         custom_face = GetSkin(entity = $obj1, skinName = "custom_face"),
         custom_hair = GetSkin(entity = $obj1, skinName = "custom_hair"),
         clothes_tops = GetSkin(entity = $obj1, skinName = "clothes_tops"),
