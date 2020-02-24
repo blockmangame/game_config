@@ -46,17 +46,5 @@ ENTITY_ENTER_DOOR_REGION{
         p1 = GetMapInitPos(map = $map) or GetEntityPosition(entity = $entity),
         p2 = Table(x = 0, y = 0.5, z = 0), op = "add"
     )
-    CallTrigger(
-        event = "FUNC_TRANSMIT_CARRIER",
-        object = $entity, toPos = $pos, toRy = $yaw,
-        toMap = $map
-    )
-    If($entity.transmitCancel)
-    {
-        Return()
-    }
-    If(GetObjectID(object = $ownerPlayer) == GetObjectID(object = $entity)){
-        -- CallTrigger(object = $entity, event = "SHOW_TITLE_BAR")
-    }
-    StartTimer(time = 20,object = $entity, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
+    CallTrigger(event = "FUNC_TRANSMIT_CARRIER", object = $entity, toPos = $pos, toRy = $yaw, toMap = $map)
 }

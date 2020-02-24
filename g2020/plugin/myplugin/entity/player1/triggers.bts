@@ -4837,6 +4837,7 @@ ENTER_MAP
     }
     CallTrigger( object = $obj1, event = "FUNC_STATE_RELEASE", state = $map.cfg.releaseState)
     CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj1, gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict"))
+    CallTrigger(object = $obj1, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
     CallTrigger(event = "ENTER_HOUSE_MAP", object = $obj1)
     CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
 }
@@ -4850,6 +4851,18 @@ LEAVE_MAP
     }
     CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $map.cfg.releaseState)
     CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = false)
+
+    If($map.owner == $obj1.house)
+    {
+        CallTrigger(object = $obj1, event = "SAVE_FURNITURE")
+        ShowGenericActorShowStore(entity = $obj1, closeWin =true)
+
+        $lastInteractionUiObjId = GetObjectVar(obj = $obj1, key = "lastInteractionUiObjId")
+        If($lastInteractionUiObjId){
+            UpdateEntityEditContainer(player = $obj1, entityId = $lastInteractionUiObjId, show = false)
+            SetObjectVar(obj = $obj1, key = "lastInteractionUiObjId", value = nil)
+        }
+    }
 }
 
 CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY

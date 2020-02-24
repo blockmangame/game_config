@@ -51,28 +51,12 @@ INTER_WITH_DOOR{
         op = "add"
     )
 
-    CallTrigger(
-        event = "FUNC_TRANSMIT_CARRIER",
-        object = $obj2, toPos = $pos, toRy = $ry,
-        toMap = $map
-    )
+    CallTrigger(event = "FUNC_TRANSMIT_CARRIER", object = $obj2, toPos = $pos, toRy = $ry, toMap = $map)
     If($obj2.transmitCancel)
     {
         Return()
     }
     StartTimer(time = 1, object = $obj1, obj2 = $obj2, ry = $ry, event = "CHANGE_ENTITY_FACE")
-
-    If(GetObjectID(object = GetObjectVar(obj = $obj2, key = "house")) == GetObjectID(object = GetObjectVar(obj = $obj1, key = "house"))){
-        CallTrigger(object = $obj2, event = "SAVE_FURNITURE")
-        ShowGenericActorShowStore(entity = $obj2, closeWin =true)
-
-        $lastInteractionUiObjId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")
-        If($lastInteractionUiObjId){
-            UpdateEntityEditContainer(player = $obj2, entityId = $lastInteractionUiObjId, show = false)
-            SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
-        }
-    }
-    CallTrigger(object = $obj2, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
 }
 
 CHANGE_ENTITY_FACE{
