@@ -26,9 +26,8 @@ def change_encode(dirName):
                 path = os.path.join(dir, fs)
                 to_lf(path, isLF)
 
-def data_to_json(path, fileName, data):
+def data_to_json(filePath, data):
     content = json.dumps(data, indent=2)
-    filePath = os.path.join(path, fileName)
     file = open(filePath, "w")
     file.write(content)
     file.close()
@@ -47,13 +46,15 @@ def zip_dir(dirName):
             size = os.path.getsize(path)
             if size > 0 :
                 if fs.find(".bat") < 0 and fs.find(".iml") < 0 :
-                    zip.write(path, arcname)
+                    if fs.find("files.json") < 0 :
+                        zip.write(path, arcname)
                     if fs.find(".mca") < 0 and fs.find(".bts") < 0 and fs.find(".lua") < 0 :
                         fileList.append(arcname.replace("\\", "/"))
             else :
                 print("file {0}, size == 0.".format(path))
-    data_to_json(rootPath, "files.json",fileList)
-    zip.write(rootPath, "files.json")
+    filePath = os.path.join(rootPath, "files.json")
+    data_to_json(filePath, fileList)
+    zip.write(filePath, 'files.json')
     zip.close()
 
 def parse_args():
