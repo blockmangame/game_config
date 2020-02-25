@@ -1,6 +1,5 @@
 GAME_INIT 
 {
-    @idx = 0
     @BGMConfigs = ReadGameCsv(path = "bgm.csv")
     @CDReward = ReadGameCsv(path = "cd_reward.csv")
     @Generate_State_List = ["hunger", "thirsty", "dirty", "fatigue", "ill", "region"]
