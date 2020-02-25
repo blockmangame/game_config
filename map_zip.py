@@ -1,4 +1,4 @@
-import os, zipfile
+import os, zipfile, json
 import argparse
 
 # 转换文件格式和编码方式
@@ -26,11 +26,20 @@ def change_encode(dirName):
                 path = os.path.join(dir, fs)
                 to_lf(path, isLF)
 
+def data_to_json(path, fileName, data):
+    content = json.dumps(data, indent=2)
+    filePath = os.path.join(path, fileName)
+    file = open(filePath, "w")
+    file.write(content)
+    file.close()
+    to_lf(filePath, True)
+
 def zip_dir(dirName):
     rootPath = os.path.join(os.getcwd(), dirName)
     outputName = './zips/' + dirName + '.zip'
     zip = zipfile.ZipFile(outputName, 'w', zipfile.ZIP_DEFLATED)
     pre_len = len(rootPath)
+    fileList = []
     for dir, dirs, files in os.walk(rootPath):
         for fs in files:
             path = os.path.join(dir, fs)
@@ -39,8 +48,12 @@ def zip_dir(dirName):
             if size > 0 :
                 if fs.find(".bat") < 0 and fs.find(".iml") < 0 :
                     zip.write(path, arcname)
+                    if fs.find(".mca") < 0 and fs.find(".bts") < 0 and fs.find(".lua") < 0 :
+                        fileList.append(arcname.replace("\\", "/"))
             else :
                 print("file {0}, size == 0.".format(path))
+    data_to_json(rootPath, "files.json",fileList)
+    zip.write(rootPath, "files.json")
     zip.close()
 
 def parse_args():
