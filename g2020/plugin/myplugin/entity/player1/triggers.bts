@@ -1657,7 +1657,7 @@ FUNC_STATE_GENERATE --params: stateBase, col, skill
         contents = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "tipContents")
     )
     @idx = @idx + 1
-    Test("Create Bubble Msg count = ", @idx)
+    Test("Create Bubble Msg count = ", @idx) ------------------状态测试数据！！！！！！！测试在手机端是否会崩溃。
     CallTrigger(object = $obj1, event = "FUNC_STATE_ADD", state = $state)
 }
 

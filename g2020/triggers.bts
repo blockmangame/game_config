@@ -127,6 +127,7 @@ FUNC_STATE_STARTTIMER
         --     time = 20,--($cdTime * 1200) // 1,
         --     event = "FUNC_BROADCAST_STATE",
         -- )
+        ---------状态测试数据！！！！！！！测试在手机端是否会崩溃。
         CallTrigger(object = $ob1, event = "FUNC_BROADCAST_STATE", timeArr = $timeInfo, stateBase = $stateBase, column = 1)
     }
 }
@@ -176,7 +177,7 @@ FUNC_BROADCAST_STATE
         column = $column,
         timeArr = $timeArr,
         stateBase = $stateBase,
-        time = 1, --($cdTime * 1200) // 1
+        time = 1, --($cdTime * 1200) // 1 ---状态测试数据！！！！！！！测试在手机端是否会崩溃。
     )
 }
 
