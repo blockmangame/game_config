@@ -57,6 +57,10 @@ EXECUTION_EDIT_ACTION{
         $event = "DEC_INTERACTION_RIGHT_ROTATION"
     }
     CallTrigger(object = $obj1, event = $event, objID = GetObjectID(object = $obj1), obj2 = $obj2, params = $params)
+    If($obj1.saveFurnitureDelayTimer){ -- 操作保存
+        StopTimer(timer = $obj1.saveFurnitureDelayTimer)
+    }
+    $obj1.saveFurnitureDelayTimer = StartTimer(object = $obj2, obj1 = $obj2, time = 20, event = "SAVE_FURNITURE")
 }
 
 LIGHT_ON_OFF_RESET{

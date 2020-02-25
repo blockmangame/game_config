@@ -118,22 +118,23 @@ FUNC_STATE_STARTTIMER
         $timeInfo = GetSkillVar(fullName = $keyStr, key = "generateTime")
 
         $cdTime = ArrayGet(array = $timeInfo, index = 1)
-        StartTimer(
-            column = 1,
-            rep = false,
-            timeArr = $timeInfo,
-            stateBase = $stateBase,
-            time = ($cdTime * 1200) // 1,
-            event = "FUNC_BROADCAST_STATE",
-        )
+        -- StartTimer(
+        --     column = 1,
+        --     rep = false,
+        --     timeArr = $timeInfo,
+        --     stateBase = $stateBase,
+        --     time = 20,--($cdTime * 1200) // 1,
+        --     event = "FUNC_BROADCAST_STATE",
+        -- )
+        ---------状态测试数据！！！！！！！测试在手机端是否会崩溃。
+        CallTrigger(object = $ob1, event = "FUNC_BROADCAST_STATE", timeArr = $timeInfo, stateBase = $stateBase, column = 1)
     }
 }
 
 FUNC_BROADCAST_STATE
 {
     Foreach(array = GetAllPlayers(), key = "player"){
-        $inPartyOwnerId = $player.inPartyOwnerId
-        If($inPartyOwnerId ~= 0){
+        If($player.inPartyOwnerId ~= 0){
             Continue()
         }
         SetObjectVar(obj = $player, value = 0, key = Concat(p1 = $stateBase, p2 = "RewardCount"))
@@ -175,7 +176,7 @@ FUNC_BROADCAST_STATE
         column = $column,
         timeArr = $timeArr,
         stateBase = $stateBase,
-        time = ($cdTime * 1200) // 1
+        time = 1, --($cdTime * 1200) // 1 ---状态测试数据！！！！！！！测试在手机端是否会崩溃。
     )
 }
 

@@ -42,9 +42,5 @@ CHANG_ACTOR(){ --变模型
         If($actorName == "actorName"){
             $obj2.punishmentCD = false
         }
-        $changActor = GetConfigVar(obj = $obj1, key = $actorName) --changActor
-        If($changActor and $changActor ~= ""){
-            ChangeEntityActorAlone(entity = $obj1, name =  $changActor, player = $obj2)
-        }
     }
 }

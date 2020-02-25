@@ -32,44 +32,31 @@ INTER_WITH_DOOR{
     }
 
     CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
-
+    $house = GetObjectVar(obj = $obj2, key = "house")
     $door = GetObjectVar(obj = GetMapVar(map = $map, key = "owner"), key = "door")
     If(not $door){
-        $door = GetObjectVar(obj = GetObjectVar(obj = $obj2, key = "house"), key = "door")
+        $door = GetObjectVar(obj = $house, key = "door")
     }
     $map = GetEntityMap(entity = $door)
     $ry = GetEntityYaw(entity = $door)
+
+    $regionCenter = GetRegionCenter(region = GetObjectVar(obj = $house, key = "region"))
+    $pos = {x = GetPosX(pos = $regionCenter), y = GetPosY(pos = GetRegionMin(region = GetObjectVar(obj = $house, key = "region"))), z = GetPosZ(pos = $regionCenter)}
     $pos = ComputeV3(
-        p1 = GetEntityPosition(entity = $door),
+        p1 = $pos,
         p2 = V3RotationYaw(
-            vector = Table(x = 0, y = 0.5, z = 3),
+            vector = GetConfigVar(obj = $house, key = "entityTeleportToOutsidePosOffset") or Table(x = 0, y = 0.5, z = 3),
             yaw = $ry
         ),
         op = "add"
     )
 
-    CallTrigger(
-        event = "FUNC_TRANSMIT_CARRIER",
-        object = $obj2, toPos = $pos, toRy = $ry,
-        toMap = $map
-    )
+    CallTrigger(event = "FUNC_TRANSMIT_CARRIER", object = $obj2, toPos = $pos, toRy = $ry, toMap = $map)
     If($obj2.transmitCancel)
     {
         Return()
     }
     StartTimer(time = 1, object = $obj1, obj2 = $obj2, ry = $ry, event = "CHANGE_ENTITY_FACE")
-
-    If(GetObjectID(object = GetObjectVar(obj = $obj2, key = "house")) == GetObjectID(object = GetObjectVar(obj = $obj1, key = "house"))){
-        CallTrigger(object = $obj2, event = "SAVE_FURNITURE")
-        ShowGenericActorShowStore(entity = $obj2, closeWin =true)
-
-        $lastInteractionUiObjId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")
-        If($lastInteractionUiObjId){
-            UpdateEntityEditContainer(player = $obj2, entityId = $lastInteractionUiObjId, show = false)
-            SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = nil)
-        }
-    }
-    CallTrigger(object = $obj2, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
 }
 
 CHANGE_ENTITY_FACE{
