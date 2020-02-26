@@ -151,7 +151,9 @@ CREATE_OWNER_HOUSE{
     }
     $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
     ------------------------------------------ 有租地特权把房子移到public区域
-    If(ArrayFind(array = $obj1.privilege, value = "myplugin/home_privilege")){
+    $manorId = GetPlayerManorId(player = $obj1) --服务器分配的房子id, 1-2为特权
+    Test("Test Get Player ManorID::",$manorId)
+    If(ArrayFind(array = $obj1.privilege, value = "myplugin/home_privilege") and $manorId >0 and $manorId <=2){
         $regions = GetAllRegion(map = @Map001)
         Foreach(array = $regions or {}, key = "publicRegion"){
             If(not GetRegionOwner(region = $publicRegion) and GetRegionConfig(region = $publicRegion, key = "isHouseRegion")){
