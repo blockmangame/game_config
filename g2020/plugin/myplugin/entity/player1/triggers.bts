@@ -2416,6 +2416,7 @@ INTERACTION_BABY_TROLLEY {
         $trolley = $obj2.createdTrolley
         If($trolley && ArraySize(array = GetPassengers(entity = $trolley)) < 2)
         {
+            CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
             RideOn(entity = $obj1, ctrl = false, target = $obj2.createdTrolley, targetIndex = 3) --乘车人
             CallTrigger(event = "FUNC_STATE_ADD_INTERACTLIST", entities = [$obj1, $obj2])
         }
