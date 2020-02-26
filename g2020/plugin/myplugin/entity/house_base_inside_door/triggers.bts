@@ -32,9 +32,11 @@ INTER_WITH_DOOR{
     }
 
     CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
-    $house = GetObjectVar(obj = $obj2, key = "house")
-    $door = GetObjectVar(obj = GetMapVar(map = $map, key = "owner"), key = "door")
-    If(not $door){
+    $house = GetMapVar(map = $map, key = "owner")
+    If(not $house){
+        $house = GetObjectVar(obj = $obj2, key = "house")
+        $door = GetObjectVar(obj = $house, key = "door")
+    }Else{
         $door = GetObjectVar(obj = $house, key = "door")
     }
     $map = GetEntityMap(entity = $door)
