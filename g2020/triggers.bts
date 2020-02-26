@@ -596,11 +596,6 @@ ENTITY_RIDE_OFF {
         actionName = "jump",
         actionTime = -1
     )
-    If(not GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff")
-        and not GetRideOn(entity = $obj1))
-    {
-        AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_idle_buff")
-    }
     $targetAttachPointIndexBuff = GetConfigVar(obj = $obj1, key = $obj2.role == @adult and "targetAttachPointIndexBuffByAdult" or "targetAttachPointIndexBuffByChild")
     If($targetAttachPointIndexBuff and GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff)){
         RemoveEntityBuff(entity = $obj2, buff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff))
@@ -611,7 +606,13 @@ ENTITY_RIDE_OFF {
 
     StartTimer(rep = false, object = $obj2, target = $obj1, time = 1, event = "RIDEOFF_IN_DEC")
 
-    If(not IsPlayer(entity = $obj1)){ Return() }
+    If(not IsPlayer(entity = $obj1)){
+        If(not GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff") and not GetRideOn(entity = $obj1))
+        {
+            AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_idle_buff")
+        }
+        Return() 
+    }
     StartTimer(rep = false, player = $obj1, target = $obj2, time = 1, event = "RECHECK_INTERACTION_UI")
 }
 ENTITY_RIDE_ON {
