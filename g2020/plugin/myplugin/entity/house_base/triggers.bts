@@ -207,7 +207,7 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_FLOOR{
         }
         ForLoop(from = $minX, to = $maxX, key = "i"){
             ForLoop(from = $minZ, to = $maxZ, key = "j"){
-                $destBlockCfg = ArrayGet(array = ArrayGet(array = $replaceTb, index = ($j - $minZ + $heightCount) % $matrixHeight + 1), index = ($i - $minX + $widthCount) % $matrixWidth + 1)
+                $destBlockCfg = ArrayGet(array = ArrayGet(array = $replaceTb, index = $matrixHeight - ($j - $minZ + $heightCount) % $matrixHeight), index = ($i - $minX + $widthCount) % $matrixWidth + 1)
                 $pos = {x = $i, y = $minY, z = $j}
                 CallTrigger(object = $obj1, event = "CREATE_HOUSE_REGION_DEST_BLOCK", map = $map, filter = $filter, pos = $pos, 
                     sourceBlockCfg = GetBlockFullName(map = $map, pos = $pos), destBlockCfg = $destBlockCfg)
