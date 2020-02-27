@@ -2352,24 +2352,24 @@ INTERACTION_PIGGYBACK
 
 USER_INTERACTION_ACTION
 {
-    $toTeamId = GetEntityTeam(entity = $to)
-    $fromTeamId = GetEntityTeam(entity = $from)
-    --双人交互检查是不是相同家庭
-    If(not $fromTeamId || not $toTeamId || $fromTeamId ==  0 || $toTeamId == 0 || $fromTeamId ~= $toTeamId)
+    $toTeamId = GetEntityTeam(entity = $to) or 0
+    $fromTeamId = GetEntityTeam(entity = $from) or 0
+    If($toTeamId ~= $fromTeamId)
     {
-        If(GetSkillVar(fullName = $skillName, key = "needPrivilege"))
+        --双人交互仅允许双方共同家庭 或者 双方都没有家庭。
+        Return()
+    }
+    If(GetSkillVar(fullName = $skillName, key = "needPrivilege"))
+    {
+        $privilegeName = GetSkillVar(fullName = $skillName, key = "privilegeName")
+        If(not ArrayFind(array = $obj1.privilege, value = $privilegeName))
         {
-            $privilegeName = GetSkillVar(fullName = $skillName, key = "privilegeName")
-            If(not ArrayFind(array = $obj1.privilege, value = $privilegeName))
-            {
-                $shopIndex = GetSkillVar(fullName = $skillName, key = "shopIndex")
-                $index = GetShopItemIndex(itemName = "myplugin/action_privilege") or $shopIndex
-                CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $shopIndex)
-                Return()
-            }
+            $shopIndex = GetSkillVar(fullName = $skillName, key = "shopIndex")
+            $index = GetShopItemIndex(itemName = "myplugin/action_privilege") or $shopIndex
+            CallTrigger(obj1 = $obj1, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $shopIndex)
+            Return()
         }
     }
-
     $receiver = $obj1   --接收方。被发起人
     $promoter = $obj1 == $from and $to or $from --发起方
 
