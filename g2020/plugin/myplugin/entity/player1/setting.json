@@ -578,6 +578,13 @@
     ],
     "decStoreList": [
         {
+            "nextCfgKey": "partyStore",
+            "titleKey": "allDec",
+            "text": "ui_decStoreList_partyStore",
+            "image": "set:Edit_1.json image:Edit_Kitchen_Icon.png",
+            "event": "SHOW_DEC_STORE_LIST"
+        },
+        {
             "nextCfgKey": "kitchenStore",
             "titleKey": "allDec",
             "text": "ui_decStoreList_kitchenStore",
@@ -606,12 +613,45 @@
             "event": "SHOW_DEC_STORE_LIST"
         },
         {
+            "nextCfgKey": "courtyardStore",
+            "titleKey": "allDec",
+            "text": "ui_decStoreList_courtyardStore",
+            "image": "set:Edit_1.json image:Edit_Toilet_Icon.png",
+            "event": "SHOW_DEC_STORE_LIST"
+        },
+        {
             "closeEvent": "EDIT_HOUSE",
             "context": {
                 "titleKey": "allDec"
             }
         }
     ],
+    "partyStore": {
+        "storeInfo": {
+            "storeId": "partyStore",
+            "type": "entity"
+        },
+        "closeInfo": {
+            "closeEvent": "EDIT_HOUSE",
+            "context": {
+                "titleKey": "allDec"
+            }
+        },
+        "rightInfo": {
+            "rightEvent": "SHOW_DEC_STORE_LIST",
+            "context": {
+                "titleKey": "allDec",
+                "nextCfgKey": "kitchenStore"
+            }
+        },
+        "leftInfo": {
+            "leftEvent": "SHOW_DEC_STORE",
+            "context": {
+                "titleKey": "allDec",
+                "nextCfgKey": "decStoreList"
+            }
+        }
+    },
     "kitchenStore": {
         "storeInfo": {
             "storeId": "kitchenStore",
@@ -705,7 +745,33 @@
             "rightEvent": "SHOW_DEC_STORE_LIST",
             "context": {
                 "titleKey": "allDec",
-                "nextCfgKey": "kitchenStore"
+                "nextCfgKey": "courtyardStore"
+            }
+        },
+        "leftInfo": {
+            "leftEvent": "SHOW_DEC_STORE",
+            "context": {
+                "titleKey": "allDec",
+                "nextCfgKey": "decStoreList"
+            }
+        }
+    },
+    "courtyardStore": {
+        "storeInfo": {
+            "storeId": "courtyardStore",
+            "type": "entity"
+        },
+        "closeInfo": {
+            "closeEvent": "EDIT_HOUSE",
+            "context": {
+                "titleKey": "allDec"
+            }
+        },
+        "rightInfo": {
+            "rightEvent": "SHOW_DEC_STORE_LIST",
+            "context": {
+                "titleKey": "allDec",
+                "nextCfgKey": "partyStore"
             }
         },
         "leftInfo": {
