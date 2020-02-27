@@ -1,4 +1,4 @@
 REGION_ENTER {
     $door = GetRegionOwner(region = $region)
-    StartTimer(time = 2, object = $door, event = "ENTITY_ENTER_DOOR_REGION", entity = $obj1) --打工导航/不止是导航
+    StartTimer(time = 2, object = $door, event = "ENTITY_ENTER_DOOR_REGION", entity = $obj1)
 }
