@@ -4328,6 +4328,7 @@ ENTITY_BUY_APPSTOP {
     }
 }
 UPLOAD_PRIVILEGE_SUCCEED(){-- 购买租地特权成功，重新分配服务器
+    ReleaseManor(player = $obj1)
     ReenterGame(player = $obj1)
 }
 --弹窗购买特权
