@@ -4472,7 +4472,7 @@ EQUIP_BABY_TROLLEY --params: cfgPath
     {
         CallTrigger(object = $obj1, event = "DEMOUNT_BABY_TROLLEY")
     }
-    $trolley = CreateNpc(cfgName = $cfgPath, pos = $newPos, map = GetEntityMap(entity = $obj1), owner = $obj1)
+    $trolley = CreateNpc(cfgName = $cfgPath, pos = GetEntityPosition(entity = $obj1), map = GetEntityMap(entity = $obj1), owner = $obj1)
     If($trolley)
     {
         $trolley.role = nil
