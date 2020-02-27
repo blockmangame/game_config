@@ -20,6 +20,62 @@
         "cfgKey": "interactionUI",
         "centerBtns": [
             {
+                "image": "plugin/myplugin/image/fru_intUI/hand_click.png",
+                "nextCfgKey": "interaction_choices",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                },
+                "checkCanShow": {
+                    "funcName": "checkOwnership"
+                }
+            }
+        ],
+        "followParams": {
+            "followScenePos": false
+        }
+    },
+    "interaction_choices": {
+        "cfgKey": "interaction_choices",
+        "aroundParams": {
+            "startAngle": 90,
+            "endAngle": 450,
+            "widgetFileName": "widget_button_2",
+            "radius": 150,
+            "imageSize": {
+                "width": 200,
+                "height": 97
+            },
+            "imageStretchType": "NineGrid",
+            "imageStretchOffset": "100 20 0 0"
+        },
+        "followParams": {
+            "followScenePos": true,
+            "showRange": 5,
+            "resetWhenHide": true
+        },
+        "aroundBtns": [
+            {
+                "text": "show_change_house_menu",
+                "image": "set:party_interaction_ui.json image:interaction_act",
+                "event": "ENTITY_house_mail"
+            },
+            {
+                "text": "show_party_list",
+                "image": "set:party_interaction_ui.json image:interaction_act",
+                "event": "SHOW_PARTY_LIST"
+            },
+            {
+                "text": "lock_cur_house_door",
+                "image": "set:party_interaction_ui.json image:interaction_act",
+                "event": "LOCK_CUR_DOORS_HOUSE"
+            }
+        ]
+    },
+    "interactionUI_old": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
                 "text": "house_base_mail.text",
                 "image": "plugin/myplugin/image/fru_intUI/hand_click.png",
                 "event": "ENTITY_house_mail",
