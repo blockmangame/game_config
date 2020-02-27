@@ -854,7 +854,34 @@ SELL_HOUSE_SURE{
 
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
     $mail = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "mail")
-    StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, mail = $mail, event = "UPDATE_HOUSE_TAB")
+    -- If(not $isSellEquipHouse){
+    StartTimer(rep = false, time = 2, object = $obj1, obj1 = $obj1, event = "DELAY_SHOW_HOUSE_SHOP")
+    -- }
+}
+
+DELAY_SHOW_HOUSE_SHOP{
+    If(not IsPlayer(entity = $obj1)){
+        Return()
+    }
+    ------------------------------------------ 打开换色换房子操作界面/存档
+    -- infoTb是拼出来的
+    $btnList = [{text = "ui_house_get_more", btnType = 3, event = "HOUSE_TAB_EVENT", context = { key = "0" }}]
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    Foreach(array = $houseVars, key = "houseVar"){
+        $dict = NewDictionary($houseVar)
+        ArrayAppend(array = $btnList, value = {
+            text = DictionaryGet(dict = $dict, key = "houseName"), 
+            curSelect = DictionaryGet(dict = $dict, key = "isCurEquip") == "enable",
+            isEquip = DictionaryGet(dict = $dict, key = "isCurEquip") == "enable",
+            event = "HOUSE_TAB_EVENT", 
+            context = { key = DictionaryGet(dict = $dict, key = "houseId") }
+        })
+    }
+    $infoTb = {
+        titleTb = {text = "ui_house_my_home"},
+        btnInfo = {btnList = $btnList}
+    }
+    ShowGenericListDisplayBox(entity = $obj1, infoTb = $infoTb)
 }
 
 BUY_STORE{

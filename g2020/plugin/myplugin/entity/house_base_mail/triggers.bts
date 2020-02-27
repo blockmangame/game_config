@@ -14,27 +14,5 @@ LOCK_CUR_DOORS_HOUSE{
 }
 
 ENTITY_house_mail{
-    If((not IsPlayer(entity = $obj2)) or 
-        (GetObjectID(object = GetObjectVar(obj = GetObjectVar(obj = $obj2, key = "house"), key = "mail")) ~= GetObjectID(object = $obj1))){
-        Return()
-    }
-    ------------------------------------------ 打开换色换房子操作界面/存档
-    -- infoTb是拼出来的
-    $btnList = [{text = "ui_house_get_more", btnType = 3, event = "HOUSE_TAB_EVENT", context = { key = "0" }}]
-    $houseVars = GetObjectVar(obj = $obj2, key = "houseVars")
-    Foreach(array = $houseVars, key = "houseVar"){
-        $dict = NewDictionary($houseVar)
-        ArrayAppend(array = $btnList, value = {
-            text = DictionaryGet(dict = $dict, key = "houseName"), 
-            curSelect = DictionaryGet(dict = $dict, key = "isCurEquip") == "enable",
-            isEquip = DictionaryGet(dict = $dict, key = "isCurEquip") == "enable",
-            event = "HOUSE_TAB_EVENT", 
-            context = { key = DictionaryGet(dict = $dict, key = "houseId") }
-        })
-    }
-    $infoTb = {
-        titleTb = {text = "ui_house_my_home"},
-        btnInfo = {btnList = $btnList}
-    }
-    ShowGenericListDisplayBox(entity = $obj2, infoTb = $infoTb)
+    CallTrigger(object = $obj2, obj1 = $obj2, event = "DELAY_SHOW_HOUSE_SHOP") 
 }
