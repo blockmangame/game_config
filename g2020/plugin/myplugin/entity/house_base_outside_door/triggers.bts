@@ -34,7 +34,9 @@ ENTITY_ENTER_DOOR_REGION{
     If(not IsPlayer(entity = $entity) 
         or ($isLock and GetObjectID(object = $ownerPlayer) ~= GetObjectID(object = $entity))
         or ($isLock and $ownerPlayer.teamId ~= $entity.teamId)){
-        ShowTip(entity = $entity, tipType = 2, textKey = "show_house_lock_tip_when_closein_outside_door")
+        If(IsPlayer(entity = $entity)){
+            ShowTip(entity = $entity, tipType = 2, textKey = "show_house_lock_tip_when_closein_outside_door")
+        }
         Return()
     }
     ------------------------------------------ 传送进内部房子
