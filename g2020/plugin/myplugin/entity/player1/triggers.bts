@@ -1651,100 +1651,63 @@ FUNC_STATE_GENERATE --params: stateBase, col, skill
             CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $preState, hideTip = true)
         }
         $state = ArrayGet(array = $subdivided, index = $col)
+        $skill = Concat(p1 = @skillPath, p2 = $state)
         SetObjectVar(obj = $obj1, value = $state, key = Concat(p1 = "pre", p2 = $stateBase))
         SetObjectVar(obj = $obj1, value = $col, key = Concat(p1 = $stateBase, p2 = "Idx"))
     }
-    ShowBubbleMsg(
-        entity = $obj1,
-        contents = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "tipContents")
-    )
-    CallTrigger(object = $obj1, event = "FUNC_STATE_ADD", state = $state)
+    ShowBubbleMsg(entity = $obj1, contents = GetSkillVar(fullName = $skill, key = "tipContents"))
+    CallTrigger(object = $obj1, event = "FUNC_STATE_ADD", state = $state, stateBase = $stateBase, skill = $skill)
 }
 
-FUNC_STATE_ADD --params: state
+FUNC_STATE_ADD --params: state, stateBase, skill
 {
-    $stateBase = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "stateBase") or $state
     SetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase), value = true)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
     If(not IsCameraMode(player = $obj1)){
-        AddSkill(entity = $obj1, name = Concat(p1 = @skillPath, p2 = $state))
+        AddSkill(entity = $obj1, name = $skill)
     }
     ArrayAppend(array = $obj1.outOfCameraModeState, value = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA")
-    CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state, skill = $skill)
 }
 
-FUNC_STATE_START_AUTO_VANISH_TIME --parmas: state
+FUNC_STATE_START_AUTO_VANISH_TIME --parmas: state, skill
 {
-    $skill = Concat(p1 = @skillPath, p2 = $state)
     $autoVanishT = GetSkillVar(fullName = $skill, key = "autoVanishT")
     If(not $autoVanishT || $autoVanishT <= 0)
     {
         Return()
     }
-    SetObjectVar(
-        obj = $obj1,
-        key = Concat(p1 = $state, p2 = "AUTOVANISH_TIMER"),
-        value = StartTimer(
-            rep = false,
-            object = $obj1,
-            state = $state,
-            skill = $skill,
-            event = "FUNC_STATESKILL_REMOVE",
-            time = ($autoVanishT * 20) // 1
-        )
-    )
+    $value = StartTimer(rep = false, object = $obj1, state = $state, skill = $skill, event = "FUNC_STATESKILL_REMOVE", time = ($autoVanishT * 20) // 1)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "AUTOVANISH_TIMER"), value = $value)
 }
 
-FUNC_STATE_ADD_EFFECT --params: state
+FUNC_STATE_ADD_EFFECT --params: state, skill
 {
-    $effect = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "effect")
-    If(not $effect)
+    $effect = GetSkillVar(fullName = $skill, key = "effect")
+    If($effect)
     {
-        Return()
+        SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "Effect"), value = AddEntityBuff(entity = $obj1, cfg = $effect))
     }
-    SetObjectVar(
-        obj = $obj1,
-        key = Concat(p1 = $state, p2 = "Effect"),
-        value = AddEntityBuff(
-            entity = $obj1,
-            cfg = $effect
-        )
-    )
 }
 
-FUNC_STATE_START_AFFECT --params: state
+FUNC_STATE_START_AFFECT --params: state, skill
 {
-    $skill = Concat(p1 = @skillPath, p2 = $state)
     $timeSpan = GetSkillVar(fullName = $skill, key = "affectTimeSpanSec")
     If(not $timeSpan || $timeSpan <= 0)
     {
         Return()
     }
-
-    SetObjectVar(
-        obj = $obj1,
-        key = Concat(p1 = $state, p2 = "AFFECT_TIMER"),
-        value = StartTimer(
-            rep = true,
-            object = $obj1,
-            state = $state,
-            event = "FUNC_STATE_AFFECT_OTHER",
-            time = ($timeSpan * 20) // 1
-        )
-    )
+    $value = StartTimer(rep = true, object = $obj1, state = $state, skill = $skill, event = "FUNC_STATE_AFFECT_OTHER", time = ($timeSpan * 20) // 1)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "AFFECT_TIMER"), value = $value)
 }
 
-FUNC_STATE_AFFECT_OTHER --params: state
+FUNC_STATE_AFFECT_OTHER --params: state, skill
 {
-    $skill = Concat(p1 = @skillPath, p2 = $state)
+    $skill = $skill or Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
-
-    $entities = GetNearbyEntities(
-        entity = $obj1,
-        distance = GetSkillVar(fullName = $skill, key = "affectDis")
-    )
+    $entities = GetNearbyEntities(entity = $obj1, distance = GetSkillVar(fullName = $skill, key = "affectDis"))
     $name = GetEntityName(entity = $obj1)
     Foreach(array = $entities or [], key = "entity")
     {
@@ -1753,37 +1716,28 @@ FUNC_STATE_AFFECT_OTHER --params: state
             Continue()
         }
         ShowBubbleMsg(entity = $entity, textKey = "infect_sb", textP1 = $name)
-        CallTrigger(object = $entity, event = "FUNC_STATE_ADD", state = $state)
+        CallTrigger(object = $entity, event = "FUNC_STATE_ADD", state = $state, stateBase = $stateBase, skill = $skill)
     }
 }
 
-FUNC_STATE_CHECK_RIDEON --params: ride[, isCancel = false]
+FUNC_STATE_RIDE_OPERATION --params: ride, opt
 {
     If(not $ride)
     {
         Return()
     }
-
-    $state = GetConfigVar(obj = $ride, key = "releaseState")
-    If(not $state)
+    If($ride.cfg.releaseState)
     {
-        Return()
-    }
-    If(not $isCancel)
-    {
-        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state)
-        CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = $state)
-    }
-    Else
-    {
-        CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $state)
+        CallTrigger(object = $obj1, state = $ride.cfg.releaseState, event = $opt ~= "RIDE_OFF" and "FUNC_STATE_RELEASE" or "FUNC_STATE_RELEASE_SUSPEND")
     }
 }
 
-FUNC_STATE_CHECK_MAP --params: state
+FUNC_STATE_MAP_OPERATION --params: map, opt(LEAVE or ENTER)
 {
-    $map = GetEntityMap(entity = $obj1)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = $map.cfg.releaseState)
+    If($map.cfg.releaseState)
+    {
+        CallTrigger(object = $obj1, state = $map.cfg.releaseState, event = $opt ~= "LEAVE" and "FUNC_STATE_RELEASE" or "FUNC_STATE_RELEASE_SUSPEND")
+    }
 }
 
 FUNC_STATE_CHECK_REGION --params: state
@@ -1806,12 +1760,7 @@ FUNC_STATE_CHECK_REGION --params: state
 
 FUNC_REGION_STATE_OPERATION --parmas: opt, state
 {
-    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state)
-    CallTrigger(
-        object = $obj1,
-        state = $state,
-        event = $opt ~= "LEAVE" and "FUNC_STATE_RELEASE" or "FUNC_STATE_RELEASE_SUSPEND"
-    )
+    CallTrigger(object = $obj1, state = $state, event = $opt ~= "LEAVE" and "FUNC_STATE_RELEASE" or "FUNC_STATE_RELEASE_SUSPEND")
 }
 
 FUNC_STATE_SUSPEND_PROGRESS --params: state, stateBase, duration
@@ -1823,11 +1772,7 @@ FUNC_STATE_SUSPEND_PROGRESS --params: state, stateBase, duration
     $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime"))
     If($sTime && $usedTime)
     {
-        SetObjectVar(
-            obj = $obj1,
-            key = Concat(p1 = $stateBase, p2 = "UsedTime"),
-            value = GetTime() - $sTime + $usedTime
-        )
+        SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime"), value = GetTime() - $sTime + $usedTime)
     }
 }
 
@@ -1850,13 +1795,7 @@ FUNC_STATE_START_PROGRESS --params: state, stateBase, duration
     SetObjectVar(
         obj = $obj1,
         key = Concat(p1 = $stateBase, p2 = "_TIMER"),
-        value = StartTimer(
-            rep = false,
-            object =$obj1,
-            state = $state,
-            time = (($duration - $usedTime) * 20) // 1,
-            event = "FUNC_STATE_REWARD"
-        )
+        value = StartTimer(rep = false, object =$obj1, state = $state, event = "FUNC_STATE_REWARD", time = (($duration - $usedTime) * 20) // 1)
     )
 }
 
@@ -1870,79 +1809,71 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         Return()
     }
 
-    $interactList = GetObjectVar(
-        obj = $obj1,
-        key = Concat(p1 = $stateBase, p2 = "InteractList")
-    )
-    
-    CallTrigger(object = $obj1, event = "FUNC_STATESKILL_REMOVE", state = $state, skill = $skill)
-    CallTrigger(object = $obj1, event = "USER_RELEASE_STATE_SUM")
-
-    If(not GetSkillVar(fullName = $skill, key = "hadReward"))
+    $interactList = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"))
+    If(GetSkillVar(fullName = $skill, key = "hadReward"))
     {
-        Return()
-    }
+        $rewardSelf = GetSkillVar(fullName = $skill, key = "rewardSelf")
+        $rewardType = GetSkillVar(fullName = $skill, key = "rewardType")
+        $rewardSelfTip = GetSkillVar(fullName = $skill, key = "rewardSelfTip")
+        $rewardEffect = GetSkillVar(fullName = $skill, key = "rewardEffect")
 
-    $rewardSelf = GetSkillVar(fullName = $skill, key = "rewardSelf")
-    $rewardType = GetSkillVar(fullName = $skill, key = "rewardType")
-    $rewardSelfTip = GetSkillVar(fullName = $skill, key = "rewardSelfTip")
-    $rewardEffect = GetSkillVar(fullName = $skill, key = "rewardEffect")
-
-    If(ArraySize(array = $interactList or []) > 0)
-    {
-        $rewardOther = GetSkillVar(fullName = $skill, key = "rewardOther")
-        $rewardFamily = GetSkillVar(fullName = $skill, key = "rewardFamily")
-        $rewardDis = GetSkillVar(fullName = $skill, key = "rewardDis")
-        $rewardCount = GetSkillVar(fullName = $skill, key = "rewardCount")
-        $rewardFamilyTip = GetSkillVar(fullName = $skill, key = "rewardFamilyTip")
-        $rewardOtherTip = GetSkillVar(fullName = $skill, key = "rewardOtherTip")
-
-        $teamId = GetEntityTeam(entity = $obj1)
-        $rewardMap = GetEntityMap(entity = $obj1)
-        $rewardSum = 0
-        $textKey = ""
-        $promoterName = GetEntityName(entity = $obj1)
-        Foreach(array = $interactList or [], key = "objID")
+        If(ArraySize(array = $interactList or []) > 0)
         {
-            $entity = GetObject(objID = $objID)
-            If(not $entity || not IsPlayer(entity = $entity) || GetEntityMap(entity = $entity) ~= $rewardMap)
-            {
-                Continue()
-            }
+            $rewardOther = GetSkillVar(fullName = $skill, key = "rewardOther")
+            $rewardFamily = GetSkillVar(fullName = $skill, key = "rewardFamily")
+            $rewardDis = GetSkillVar(fullName = $skill, key = "rewardDis")
+            $rewardCount = GetSkillVar(fullName = $skill, key = "rewardCount")
+            $rewardFamilyTip = GetSkillVar(fullName = $skill, key = "rewardFamilyTip")
+            $rewardOtherTip = GetSkillVar(fullName = $skill, key = "rewardOtherTip")
 
-            $countKey = Concat(p1 = $stateBase, p2 = "RewardCount")
-            $count = GetObjectVar(obj = $entity, key = $countKey) or 0
-            $dis = GetObjectDistance(obj1 = $obj1, obj2 = $entity)
-            $myTeamId =  GetEntityTeam(entity = $entity)
-
-            If($count < $rewardCount && $dis < $rewardDis)
+            $teamId = GetEntityTeam(entity = $obj1)
+            $rewardMap = GetEntityMap(entity = $obj1)
+            $rewardSum = 0
+            $textKey = ""
+            $promoterName = GetEntityName(entity = $obj1)
+            Foreach(array = $interactList or [], key = "objID")
             {
-                SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
-                $isSameFamily = $teamId ~= 0 && $teamId == $myTeamId
-                $rewardSum = $isSameFamily and $rewardFamily or $rewardOther
-                $textKey = $isSameFamily and $rewardFamilyTip or $rewardOtherTip
-                CallTrigger(
-                    object = $entity,
-                    event = "FUNC_STATE_REWARD_AND_TIP",
-                    rewardSum = $rewardSum,
-                    textKey = $textKey,
-                    rewardType = $rewardType,
-                    textP1 = $promoterName,
-                    textP2 = $rewardSum
-                )
+                $entity = GetObject(objID = $objID)
+                If(not $entity || not IsPlayer(entity = $entity) || GetEntityMap(entity = $entity) ~= $rewardMap)
+                {
+                    Continue()
+                }
+
+                $countKey = Concat(p1 = $stateBase, p2 = "RewardCount")
+                $count = GetObjectVar(obj = $entity, key = $countKey) or 0
+                $dis = GetObjectDistance(obj1 = $obj1, obj2 = $entity)
+                $myTeamId =  GetEntityTeam(entity = $entity)
+
+                If($count < $rewardCount && $dis < $rewardDis)
+                {
+                    SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
+                    $isSameFamily = $teamId ~= 0 && $teamId == $myTeamId
+                    $rewardSum = $isSameFamily and $rewardFamily or $rewardOther
+                    $textKey = $isSameFamily and $rewardFamilyTip or $rewardOtherTip
+                    CallTrigger(
+                        object = $entity,
+                        event = "FUNC_STATE_REWARD_AND_TIP",
+                        rewardSum = $rewardSum,
+                        textKey = $textKey,
+                        rewardType = $rewardType,
+                        textP1 = $promoterName,
+                        textP2 = $rewardSum
+                    )
+                }
             }
         }
+        CallTrigger(
+            object = $obj1,
+            event = "FUNC_STATE_REWARD_AND_TIP",
+            showMoneyEffect = $rewardEffect,
+            rewardSum = $rewardSelf,
+            textKey = $rewardSelfTip,
+            rewardType = $rewardType,
+            textP1 = $rewardSelf
+        )
     }
-
-    CallTrigger(
-        object = $obj1,
-        event = "FUNC_STATE_REWARD_AND_TIP",
-        showMoneyEffect = $rewardEffect,
-        rewardSum = $rewardSelf,
-        textKey = $rewardSelfTip,
-        rewardType = $rewardType,
-        textP1 = $rewardSelf
-    )
+    CallTrigger(object = $obj1, event = "FUNC_STATESKILL_REMOVE", state = $state, skill = $skill, stateBase = $stateBase)
+    CallTrigger(object = $obj1, event = "USER_RELEASE_STATE_SUM")
 }
 
 FUNC_STATESKILL_REMOVE --params: state, skill
@@ -1971,29 +1902,22 @@ FUNC_STATE_RELEASE --params: state[, duration]
     {
         Return()
     }
-
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $hadState = Concat(p1 = "had", p2 = $stateBase)
     $releasingState = Concat(p1 = "releasing", p2 = $stateBase)
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state)
     If(GetObjectVar(obj = $obj1, key = $hadState) && not GetObjectVar(obj = $obj1, key = $releasingState))
     {
         $subdivided = GetSkillVar(fullName = $skill, key = "subdivided")
         If(ArraySize(array = $subdivided or []) > 0)
         {
-            $kind = ArrayGet(
-                array = $subdivided,
-                index = GetObjectVar(
-                    obj = $obj1,
-                    key = Concat(p1 = $stateBase, p2 = "Idx")
-                )
-            )
+            $kind = ArrayGet(array = $subdivided, index = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "Idx")))
             If($kind ~= $state)
             {
                 Return()
             }
         }
-
         SetObjectVar(obj = $obj1, key = $releasingState, value = true)
         CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "AUTOVANISH_TIMER"))
         $duration = $duration or GetSkillVar(fullName = $skill, key = "duration")
@@ -2071,12 +1995,9 @@ FUNC_STATE_OPEN_GPS --params: rtVal
     {
         Return()
     }
-
     CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
-
     $reg = Concat(p1 = "myplugin/region_state_", p2 = $rtVal)
     $gpsDict = NewDictionary(GetConfigValue(type = "region", fullName = $reg, key = "gpsDict")) 
-
     CallTrigger(object = $obj1, gpsDict = $gpsDict, event = "FUNC_GPS_SET_OR_SYNC")
 }
 
@@ -2086,44 +2007,34 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
     {
         Return()
     }
-    
     $type = DictionaryGet(dict = $gpsDict, key = "type")
     If(not $type)
     {
         Return()
     }
-    
     $belongMap = DictionaryGet(dict = $gpsDict, key = "belongMap")
     $pos = DictionaryGet(dict = $gpsDict, key = "pos")
-    
     $conA = (($type == "map" || $type == "selfHouse" || $type == "region") && not $belongMap)
     $conB = $type == "entity" && (not $belongMap || not $pos)
     If($conA || $conB)
     {
         Return()
     }
-    
+
     $curMapEntity = GetEntityMap(entity = $obj1)
     $curMap = GetEntityName(entity = $curMapEntity)
     $gps = { x = 0, y = 0, z = 0 }
-    
     $owner = GetMapVar(map = $curMapEntity, key = "owner")
-    $house = GetObjectVar(obj = $obj1, key = "house")
-
-    If($type == "selfHouse")
-    {
-        $belongMap = GetEntityName(entity = GetEntityMap(entity = $house))
-    }
-
+    $belongMap = $type == "selfHouse" and GetEntityName(entity = GetEntityMap(entity = $obj1.house)) or $belongMap
     If($owner)
     {
-        If($type == "selfHouse" && $owner == $house)
+        If($type == "selfHouse" && $owner == $obj1.house)
         {
             ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
             CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
             Return()
         }
-        $door = GetObjectVar(obj = $owner, key = "insideDoor")
+        $door = $owner.insideDoor
         $gps = GetEntityPosition(entity = $door)
     }
     ElseIf($curMap == $belongMap)
@@ -2136,15 +2047,12 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
         }
         ElseIf($type == "region")
         {
-            $region = GetRegionByName(map = $map, name = DictionaryGet(dict = $gpsDict, key = "regionName"))
+            $region = GetRegionByName(map = $curMapEntity, name = DictionaryGet(dict = $gpsDict, key = "regionName"))
             If($region)
             {
                 $min = GetRegionMin(region = $region)
                 $max = GetRegionMax(region = $region)
-                $tmpReg = {
-                    min = $min,
-                    max = $max + V3(1, 1, 1)
-                }
+                $tmpReg = {min = $min, max = $max + V3(1, 1, 1)}
                 If(IfEntityInArea(entity = $obj1, region = $tmpReg))
                 {
                     ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
@@ -2159,21 +2067,17 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
         {
             $destination = DictionaryGet(dict = $gpsDict, key = "destination")
             $ride = GetRideOn(entity = $obj1)
-            If($ride and $destination)
+            If($ride and $ride.cfg.releaseState == $destination)
             {
-                $dist = GetConfigVar(obj = $ride, key = "releaseState")
-                If($dist == $destination)
-                {
-                    ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
-                    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
-                    Return()
-                }
+                ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
+                CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+                Return()
             }
             $gps = DictionaryGet(dict = $gpsDict, key = "pos")
         }
         ElseIf($type == "selfHouse")
         {
-            $gps = ComputeV3(p1 = GetEntityPosition(entity = $house), p2 = V3RotationYaw(vector = GetConfigVar(obj = $house, key = "doorPos") or {x = 0,y = 0, z = 0}, yaw = GetEntityYaw(entity = $house)), op = "add")
+            $gps = ComputeV3(p1 = GetEntityPosition(entity = $obj1.house), p2 = V3RotationYaw(vector = GetConfigVar(obj = $obj1.house, key = "doorPos") or {x = 0,y = 0, z = 0}, yaw = GetEntityYaw(entity = $obj1.house)), op = "add")
         }
     }
     Else
@@ -2181,7 +2085,6 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
         $road = []
         $maps = []
         $roadIdx = 1
-
         $ngt = DictionaryGet(dict = $gpsDict, key = "navigateDict")
         If(not $ngt)
         {
@@ -2193,22 +2096,17 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
             $roadIdx = DictionaryGet(dict = $ngt, key = "roadIdx") + 1
             $maps = DictionaryGet(dict = $ngt, key = "maps")
             $road = DictionaryGet(dict = $ngt, key = "road")
-        
             $correctMap = ArrayGet(array = @allMaps, index = ArrayGet(array = $maps, index = $roadIdx))
             If($correctMap ~= $mapName)
             {
                 CallTrigger(object = $obj1, event = "FUNC_GPS_RECALCULATE", mapStart = $curMap, mapEnd = $belongMap, gpsDict = $gpsDict)
                 Return()
             }
-        
             $gps = GetConfigValue(type = "entity", key = "pos", fullName = ArrayGet(array = $road, index = $roadIdx))
-            
             $navigateDict = NewDictionary({road = $road, roadIdx = $roadIdx, maps = $maps})
-
             DictionarySet(dict = $gpsDict, key = "navigateDict", value = $navigateDict)
         }
     }
-
     CallTrigger(object = $obj1, event = "FUNC_OPEN_GPS", gps = $gps, gpsDict = $gpsDict)
 }
 
@@ -2227,21 +2125,10 @@ FUNC_GPS_RECALCULATE --params: mapStart, mapEnd, gpsDict
         ShowTip(entity = $obj1, tipType = 3, textKey = "unable_to_navigate", textP1 = $mapEnd)
         Return()
     }
-
     $navigateDict = NewDictionary({road = $road, roadIdx = $roadIdx, maps = $maps})
-
     DictionarySet(dict = $gpsDict, key = "navigateDict", value = $navigateDict)
-
-    CallTrigger(
-        object = $obj1,
-        event = "FUNC_OPEN_GPS",
-        gps = GetConfigValue(
-            type = "entity",
-            key = "pos",
-            fullName = ArrayGet(array = $road, index = $roadIdx)
-        ),
-        gpsDict = $gpsDict
-    )
+    $gps = GetConfigValue(type = "entity", key = "pos", fullName = ArrayGet(array = $road, index = $roadIdx))
+    CallTrigger(object = $obj1, event = "FUNC_OPEN_GPS", gps = $gps, gpsDict = $gpsDict)
 }
 
 FUNC_UPDATE_STATE_SKILL_JACK_AREA --params: up
@@ -2249,19 +2136,9 @@ FUNC_UPDATE_STATE_SKILL_JACK_AREA --params: up
     If($up == nil)
     {
         $map = GetEntityMap(entity = $obj1)
-        $houseInsideMap = GetObjectVar(
-            obj = GetObjectVar(obj = $obj1, key = "house"),
-            key = "houseInsideMap"
-        )
-        $up = $map ~= $houseInsideMap and true or false
+        $up = $map.owner ~= $obj1.house and true or false
     }
-    UpdateSkillJackArea(
-        entity = $obj1,
-        info = {
-            pos = 1,
-            yOff = $up and @skillJackUp or @skillJackDown
-        }
-    )
+    UpdateSkillJackArea(entity = $obj1, info = {pos = 1, yOff = $up and @skillJackUp or @skillJackDown})
 }
 
 FUNC_STATE_RESET_DATA --params: state[, hideTip]
@@ -2282,14 +2159,14 @@ FUNC_STATEBASE_RESET_DATA -- params: stateBase
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
 }
 
-FUNC_STATE_ACTION --params: state
+FUNC_STATE_ACTION --params: state, skill
 {
-    CallTrigger(object = $obj1, event = "FUNC_STATE_ADD_EFFECT", state = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_START_AFFECT", state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_ADD_EFFECT", state = $state, skill = $skill)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_START_AFFECT", state = $state, skill = $skill)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_START_AUTO_VANISH_TIME", state = $state, skill = $skill)
     CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_REGION", state = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_MAP", state = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_START_AUTO_VANISH_TIME", state = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_CHECK_RIDEON", ride = GetRideOn(entity = $obj1)) --检查是否已经在骑乘并且该骑乘是否会触发解除状态
+    CallTrigger(object = $obj1, event = "FUNC_STATE_MAP_OPERATION", map = GetEntityMap(entity = $obj1))
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RIDE_OPERATION", ride = GetRideOn(entity = $obj1))
 }
 
 SHOW_BUY_PRIVILEGE_TIP
@@ -4595,20 +4472,12 @@ EQUIP_BABY_TROLLEY --params: cfgPath
     {
         CallTrigger(object = $obj1, event = "DEMOUNT_BABY_TROLLEY")
     }
-
-    $trolley = CreateNpc(
-        cfgName = $cfgPath,
-        pos = GetEntityPosition(entity = $obj1),
-        map = GetEntityMap(entity = $obj1), owner = $obj1
-    )
+    $trolley = CreateNpc(cfgName = $cfgPath, pos = $newPos, map = GetEntityMap(entity = $obj1), owner = $obj1)
     If($trolley)
     {
         $trolley.role = nil
         CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
-        $obj1.trolleyBuff = AddEntityBuff(
-            entity = $obj1,
-            cfg = GetConfigVar(obj = $trolley, key = "attachBuff")
-        )
+        $obj1.trolleyBuff = AddEntityBuff(entity = $obj1, cfg = GetConfigVar(obj = $trolley, key = "attachBuff"))
         SetObjectVar(obj = $obj1, key = "createdTrolley", value = $trolley)
         CallTrigger(object = $obj1, event = "CHANGE_BABY_TROLLEY_SCALE")
     }
@@ -4838,7 +4707,7 @@ ENTER_MAP
         WorksWallsOperation(player = $obj1, isOpen = true)
         CallTrigger(player = $obj1, event = "SYNC_CUR_WALL_WORKS")
     }
-    CallTrigger( object = $obj1, event = "FUNC_STATE_RELEASE", state = $map.cfg.releaseState)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_MAP_OPERATION", map = $map, opt = "ENTER")
     CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj1, gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict"))
     CallTrigger(object = $obj1, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
     CallTrigger(event = "ENTER_HOUSE_MAP", object = $obj1)
@@ -4852,7 +4721,7 @@ LEAVE_MAP
     {
         WorksWallsOperation(player = $obj1, isOpen = false)
     }
-    CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE_SUSPEND", state = $map.cfg.releaseState)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_MAP_OPERATION", map = $map, opt = "LEAVE")
     CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = false)
 
     If($map.owner == $obj1.house)

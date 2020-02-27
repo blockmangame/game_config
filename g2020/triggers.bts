@@ -118,14 +118,7 @@ FUNC_STATE_STARTTIMER
         $timeInfo = GetSkillVar(fullName = $keyStr, key = "generateTime")
 
         $cdTime = ArrayGet(array = $timeInfo, index = 1)
-        StartTimer(
-            column = 1,
-            rep = false,
-            timeArr = $timeInfo,
-            stateBase = $stateBase,
-            time = ($cdTime * 1200) // 1,
-            event = "FUNC_BROADCAST_STATE",
-        )
+        StartTimer(column = 1, rep = false, timeArr = $timeInfo, stateBase = $stateBase, event = "FUNC_BROADCAST_STATE", time = ($cdTime * 1200) // 1)
     }
 }
 
@@ -138,10 +131,7 @@ FUNC_BROADCAST_STATE
         SetObjectVar(obj = $player, value = 0, key = Concat(p1 = $stateBase, p2 = "RewardCount"))
 
         $skill = Concat(p1 = @skillPath, p2 = $stateBase)
-        $generateType = GetSkillVar(
-            fullName = $skill,
-            key = "generateType"
-        )
+        $generateType = GetSkillVar(fullName = $skill, key = "generateType")
         If($generateType == "A" && GetObjectVar(obj = $player, key = Concat(p1 = "had", p2 = $stateBase)))
         {
             Continue()
@@ -168,14 +158,7 @@ FUNC_BROADCAST_STATE
         $cdTime = 60 - $curTime + $endTime
     }
 
-    StartTimer(
-        rep = false, 
-        event = $event,
-        column = $column,
-        timeArr = $timeArr,
-        stateBase = $stateBase,
-        time = ($cdTime * 1200) // 1
-    )
+    StartTimer(rep = false, event = $event, column = $column, timeArr = $timeArr, stateBase = $stateBase, time = ($cdTime * 1200) // 1)
 }
 
 SHOW_SELECT_ROLE
@@ -601,7 +584,7 @@ ENTITY_RIDE_OFF {
         RemoveEntityBuff(entity = $obj2, buff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff))
     }
     StartTimer(rep = false, player = $obj2, target = $obj1, time = 1, event = "RECHECK_INTERACTION_UI")
-    CallTrigger(object = $obj2, event = "FUNC_STATE_CHECK_RIDEON", ride = $obj1, isCancel = true)
+    CallTrigger(object = $obj2, event = "FUNC_STATE_RIDE_OPERATION", ride = $obj1, opt = "RIDE_OFF")
     CallTrigger(object = $obj2, event = "FUNC_CHECK_SHOWN_DANCES_SKILL", shown = true)
 
     StartTimer(rep = false, object = $obj2, target = $obj1, time = 1, event = "RIDEOFF_IN_DEC")
@@ -618,7 +601,7 @@ ENTITY_RIDE_OFF {
 ENTITY_RIDE_ON {
     If(not IsPlayer(entity = $obj2)){ Return() }
     StartTimer(rep = false, player = $obj2, target = $obj1, time = 1, event = "RECHECK_INTERACTION_UI")
-    CallTrigger(object = $obj2, event = "FUNC_STATE_CHECK_RIDEON", ride = $obj1)
+    CallTrigger(object = $obj2, event = "FUNC_STATE_RIDE_OPERATION", ride = $obj1, opt = "RIDE_ON")
 
     If(not IsPlayer(entity = $obj1))
     { 
@@ -630,7 +613,6 @@ ENTITY_RIDE_ON {
 }
 REMOVE_ILL_BUFF
 {
-    -- CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = "illEffect")
     CallTrigger(object = $obj1, event = "FUNC_STATE_RELEASE", state = "ill", duration = 0)
 }
 
