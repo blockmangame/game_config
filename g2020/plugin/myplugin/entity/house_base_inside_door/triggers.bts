@@ -18,6 +18,8 @@ CREATE_DOOR_REGION{
 }
 
 ENTITY_inside_door{
+    $obj2.isInnerInsideDoor = true
+    StartTimer(rep = false, object = $obj2, obj1 = $obj2, time = 3, event = "RESET_PLAYER_INNER_INSIDE_DOOR_STATUS")
     CallTrigger(object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "INTER_WITH_DOOR")
 }
 

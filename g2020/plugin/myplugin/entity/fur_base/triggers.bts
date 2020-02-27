@@ -363,6 +363,9 @@ TEST_SHOW_NEW_UI {
 
 FUR_ENTITY_RIDE_ON
 {
+    If($me.isInnerInsideDoor){
+        Return()
+    }
     CallTrigger(obj1 = $me, event = "ENTITY_REMOVE_INTERACTION")
     ClearRide(entity = $me)
     $targetAttachPointIndexBuff = GetConfigVar(obj = $obj1, key = $me.role == @adult and "targetAttachPointIndexBuffByAdult" or "targetAttachPointIndexBuffByChild")

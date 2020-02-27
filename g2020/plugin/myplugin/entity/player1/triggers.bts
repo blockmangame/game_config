@@ -1555,6 +1555,9 @@ UPDATE_OBJ_HOUSE_INSIDE_REGION{
     SetObjectVar(obj = $obj1, key = "curInsideRegion", value = $region)
 }
 ------------------------------------------------------------------------------------------------------------------------------ 分割线
+RESET_PLAYER_INNER_INSIDE_DOOR_STATUS{
+    $obj1.isInnerInsideDoor = nil
+}
 
 RIDEOFF_IN_DEC{
     If($target and $target.lastSideNormal and IsPlayer(entity = $obj1)){
