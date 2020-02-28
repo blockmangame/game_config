@@ -4728,6 +4728,16 @@ PICK_HAND_ITEM {
     }
 }
 
+LEAVE_EQUIPMEN {
+	CallTrigger(event = "TAKEOFF_ITEM", obj1 = $obj1, item = $item)
+    $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
+	If($typeIndex ~= 3)
+	{
+		--SetHandItem(player = $obj1)
+		RemoveEntityTypeBuff(entity = $obj1, key = "type", value = "HandBuff")
+	}
+}
+
 ENTER_EQUIPMEN {
     $canHandMap = GetConfigVar(obj = $item, key = "canHandMap")
     $playerCurMap = GetEntityMapName(entity = $obj1)
