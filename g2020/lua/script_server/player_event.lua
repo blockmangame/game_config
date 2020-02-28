@@ -10,11 +10,9 @@ local events = {}
 function player_event(player, event, ...)
     playerEventEngineHandler(player, event, ...)
     local func = events[event]
-    if not func then
-        print("script_server no event!", event)
-        return
+    if func then
+        func(player, ...)
     end
-    func(player, ...)
 end
 
 function events:sendSpawn(id)
