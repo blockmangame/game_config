@@ -140,6 +140,12 @@ CREATE_OWNER_HOUSE{
                 }
             ]
         SetObjectVar(obj = $obj1, key = "houseVars", value = $houseVars)
+
+        -- 玩家第一次游戏时，给他一点钱
+        $money = @firstTimeLoginMoney
+        AddCurrency(count = $money, coinName = "green_currency", entity = $obj1)
+        ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
+
     }
 
     $dict = {}
