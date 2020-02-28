@@ -5332,10 +5332,10 @@ DATA_REPORT_PARTY{
     GameAnalyticsCustomEvent(player = $obj1, parts = ["party:create:single_game", @rangeBoundary])
 
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.joinPartyCount, array = [0, 9, 19, 49, 99, 199,  499, 999, 1999, 4999, 9999, 10000])
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:create:sum", @rangeBoundary])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:join:sum", @rangeBoundary])
 
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.joinPartyCountPerGame, array = [0, 9, 19, 49, 99, 100])
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:create:single_game", @rangeBoundary])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:join:single_game", @rangeBoundary])
 }
 REALLY_AT_PARTY(debug = false){
     --in party now!
