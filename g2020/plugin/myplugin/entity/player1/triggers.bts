@@ -892,7 +892,7 @@ DELAY_SHOW_HOUSE_SHOP{
 }
 
 BUY_STORE{
-    If(not $cfg){
+    If(not $cfg or $obj1.isInnerInsideDoor){
         Return()
     }
     $buyMoney = GetEntityCfg(fullName = $cfg, key = "buyMoney")
@@ -1041,6 +1041,9 @@ SAVE_FURNITURE{
 }
 
 SHOW_TITLE_BAR{
+    If($obj1.isInnerInsideDoor){
+        Return()
+    }
     $obj1Map = GetEntityMap(entity = $obj1)
     $obj1MapOwner = GetMapVar(map = $obj1Map, key = "owner")
     If($obj1.inPartyOwnerId ~= 0 or not $obj1MapOwner or ($obj1MapOwner ~= GetObjectVar(obj = $obj1, key = "house"))){
@@ -1185,6 +1188,9 @@ UPDATE_EDIT_STORE_SELL_TAB{
 }
 
 SHOW_DEC_STORE{
+    If($obj1.isInnerInsideDoor){
+        Return()
+    }
     $obj1.hadCloseActorStore = false
     ShowGenericActorShowStore(entity = $obj1, infoTb = {})
     ShowTitleBarPage(entity = $obj1, closeWin = true)
