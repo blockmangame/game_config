@@ -1,5 +1,6 @@
 ENTITY_ENTER
 {
+    AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_swimming_idle_2_idel_buff")
 }
 
 ENTITY_RIDE_ON{
@@ -791,6 +792,7 @@ SHOW_EDIT_BLACKBOARD_INPUT_DIALOG
         buttons = $buttons,
         text = $obj1.blackboardStr,
         textLength = $textLength,
+        isHintRemainingText = true,
     }
 
     ShowInputDialog(entity = $obj2, contents = $contents, options = $options)

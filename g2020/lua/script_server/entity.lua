@@ -59,7 +59,7 @@ function EntityServer:setItemUse(tid, slot, isUse)
     local tidUseItemList = useItemList[tid]
     local useFlag = tidUseItemList and tidUseItemList[slot] and true or false
     isUse = isUse and true or false
-    if useFlag == isUse then
+	if useFlag == isUse then
         return 
 	end
 	
@@ -74,19 +74,21 @@ function EntityServer:setItemUse(tid, slot, isUse)
     if isUse then
         Trigger.CheckTriggers(self:cfg(), "CHECK_CAN_USE_ITEM", checkContext)
         if not checkContext.result then
-            return
+			return
         end
     end
-    if lastItem and not lastItem:null() then
-    	Trigger.CheckTriggers(self:cfg(), "SET_ITEM_USE", {obj1 = self,isUse = isUse , item = lastItem})
+	if lastItem and not lastItem:null() then
+		Trigger.CheckTriggers(self:cfg(), "SET_ITEM_USE", {obj1 = self,isUse = isUse , item = lastItem})
     end
 	useItemList[tid][slot] = isUse and item or nil
-	self:removeTypeBuff("type", "HandBuff")
-	if isUse and item and not item:null() then
+	if item and not item:null() then
 		local buffName = item:cfg().equip_buff
 		if buffName then
+			self:removeTypeBuff("type", "HandBuff")
+		end
+		if isUse and buffName then
+			self:data("main").handItem = item
             self:addBuff(buffName)
-            
 		end
     end
     self:syncItemUse(tid, slot, isUse)
