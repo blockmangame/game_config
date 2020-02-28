@@ -792,6 +792,7 @@ SHOW_EDIT_BLACKBOARD_INPUT_DIALOG
         buttons = $buttons,
         text = $obj1.blackboardStr,
         textLength = $textLength,
+        isHintRemainingText = true,
     }
 
     ShowInputDialog(entity = $obj2, contents = $contents, options = $options)
