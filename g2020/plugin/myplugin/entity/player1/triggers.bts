@@ -904,10 +904,11 @@ BUY_STORE{
             $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
             $sellMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellMoney") or 0)
             $sellByDiscountMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellByDiscountMoney") or 0)
+            $storeId = DictionaryGet(dict = $decorationDic, key = "storeId") or "other"
         }
     }
     If(3 ~= $coinId){
-        BuyGoods(player = $obj1, uniqueId = 20201002,  coinId = $coinId, price = $buyMoney, cfg = $cfg, sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney, event = "BUY_STORE_BY_APP" )
+        BuyGoods(player = $obj1, uniqueId = 20201002,  coinId = $coinId, price = $buyMoney, cfg = $cfg, storeId = $storeId, sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney, event = "BUY_STORE_BY_APP" )
         Return()
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
@@ -917,7 +918,7 @@ BUY_STORE{
         ShowGoldShop(player = $obj1, show = true)
         Return()
     }
-    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg, sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney)
+    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg, storeId = $storeId, sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney)
 }
 
 BUY_STORE_BY_APP{
@@ -929,7 +930,7 @@ BUY_STORE_BY_APP{
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", keepTime = 40)
         Return()
     }
-    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg, sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney)
+    CallTrigger(object = $obj1, event = "GIVE_STORE", cfg = $cfg, storeId = $storeId, sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney)
 }
 
 GIVE_STORE{
@@ -961,7 +962,7 @@ GIVE_STORE{
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:decoration",
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:decoration",$storeId,
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $cfg))])
     -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
 }
@@ -1450,6 +1451,7 @@ BUY_HOUSE_REGION_COLOR{
             If(DictionaryGet(dict = $decorationDic, key = "fullName") == $colorBlock){
                 $buyMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "buyMoney") or 0)
                 $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
+                $storeId = DictionaryGet(dict = $decorationDic, key = "storeId") or "other"
                 Break()
             }
         }
@@ -1466,7 +1468,8 @@ BUY_HOUSE_REGION_COLOR{
 
     $context = {
         colorBlock = $colorBlock,
-        childRegionKey = $childRegionKey
+        childRegionKey = $childRegionKey,
+        storeId = $storeId
     }
 
     ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_BUY_SET_REGION_COLOR", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $context)
@@ -1488,11 +1491,12 @@ SURE_BUY_SET_REGION_COLOR
             If(DictionaryGet(dict = $decorationDic, key = "fullName") == $colorBlock){
                 $buyMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "buyMoney") or 0)
                 $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
+                $storeId = DictionaryGet(dict = $decorationDic, key = "storeId") or "other"
                 Break()
             }
         }
         If(3 ~= $coinId){
-            BuyGoods(player = $obj1, uniqueId = 20201004, coinId = $coinId, price = $buyMoney, 
+            BuyGoods(player = $obj1, uniqueId = 20201004, coinId = $coinId, price = $buyMoney, storeId = $storeId,
                 childRegionKey = $childRegionKey, colorBlock = $colorBlock, event = "BUY_REGION_COLOR_BY_APP" )
             Return()
         }
@@ -1503,7 +1507,7 @@ SURE_BUY_SET_REGION_COLOR
             Return()
         }
 
-        CallTrigger(object = $obj1, event = "SET_REGION_COLOR", childRegionKey = $childRegionKey, colorBlock = $colorBlock)    
+        CallTrigger(object = $obj1, event = "SET_REGION_COLOR", childRegionKey = $childRegionKey, storeId = $storeId, colorBlock = $colorBlock)    
     }
 }
 
@@ -1517,7 +1521,7 @@ BUY_REGION_COLOR_BY_APP{
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", keepTime = 40)
         Return()
     }
-    CallTrigger(object = $obj1, event = "SET_REGION_COLOR", childRegionKey = $childRegionKey, colorBlock = $colorBlock)
+    CallTrigger(object = $obj1, event = "SET_REGION_COLOR", childRegionKey = $childRegionKey, storeId = $storeId, colorBlock = $colorBlock)
 }
 
 SET_REGION_COLOR{
@@ -1574,7 +1578,7 @@ SET_REGION_COLOR{
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:decoration",
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:decoration",$storeId,
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $colorBlock))])
 }
 
