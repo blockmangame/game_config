@@ -158,7 +158,7 @@ CREATE_OWNER_HOUSE{
     $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
     ------------------------------------------ 有租地特权把房子移到public区域
     $manorId = GetPlayerManorId(player = $obj1) --服务器分配的房子id, 1-2为特权
-    Test("Test Get Player ManorID::",$manorId)
+    Test("Test Get Player ManorID::",GetPlayerUserID(player = $obj1), $manorId)
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/home_privilege") and $manorId >0 and $manorId <=2){
         $regions = GetAllRegion(map = @Map001)
         Foreach(array = $regions or {}, key = "publicRegion"){
@@ -452,7 +452,10 @@ ENTITY_LEAVE{
     CallTrigger(object = $obj1, event = "SAVE_PLAYER_DRESS")
     ---------------------------------------玩家退出，删除掉暂存在数据库“dressArchive”字段中的bm装扮信息
     CallTrigger(object = $obj1, event = "REMOVE_BM_DRESS")
-    ReleaseManor(player = $obj1)
+    If( not $obj1.hasRelease){
+        Test("ENTITY_LEVAE:RELESEMANOR :", GetPlayerUserID(player = $obj1))
+        ReleaseManor(player = $obj1)
+    }
     CallTrigger(object = $obj1, event = "CHECK_LEAVE_PARTY")
     --清除手持道具
     ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 3, 4, 5))
@@ -4345,6 +4348,8 @@ ENTITY_BUY_APPSTOP {
     }
 }
 UPLOAD_PRIVILEGE_SUCCEED(){-- 购买租地特权成功，重新分配服务器
+    $obj1.hasRelease = true
+    Test("BUY_SUCCEED :", GetPlayerUserID(player = $obj1))
     ReleaseManor(player = $obj1)
     ReenterGame(player = $obj1)
 }
