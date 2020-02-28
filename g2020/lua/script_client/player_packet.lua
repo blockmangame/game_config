@@ -16,5 +16,8 @@ end
 
 function handles:SyncItemUse(packet)
 	self:setItemUse(packet.tid, packet.slot, packet.isUse, true)
+end
 
+function handles:ShowSingleFamilyUI(packet)
+    Lib.emitEvent(Event.EVENT_SHOW_SINGLE_FAMILY, packet.show, packet.info)
 end

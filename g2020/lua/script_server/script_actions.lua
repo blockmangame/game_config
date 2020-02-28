@@ -64,3 +64,17 @@ function Actions.GetShopItemIndex(data, params, context)
 		end
 	end
 end
+
+function Actions.ShowSingleFamilyUI(data, params, context)
+    local entity = params.entity
+    if not entity then
+        return
+    end
+
+    entity:sendPacket({
+        pid = "ShowSingleFamilyUI",
+        info = params.info,
+        show = params.show
+    })
+
+end
