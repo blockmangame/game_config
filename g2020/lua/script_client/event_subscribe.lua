@@ -10,3 +10,12 @@ Lib.subscribeEvent(Event.EVENT_SHOW_GOLD_SHOP, function(show)
 		Me:uiBehaviorLog("goldShop", string.format("%s open goldShop", Me.name), "")
 	end
 end)
+
+Lib.subscribeEvent(Event.EVENT_SHOW_SINGLE_FAMILY, function(show, ...)
+    local window = UI:getWnd("singleFamily", true)
+    if show then
+        UI:openWnd("singleFamily", ...)
+    else
+        UI:closeWnd("singleFamily")
+    end
+end)
