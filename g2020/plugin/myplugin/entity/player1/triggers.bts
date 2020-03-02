@@ -5066,13 +5066,11 @@ PLAYER_BE_INVITE {
         {
             normalImage = "set:invite_tip.json image:green_btn",
             pushedImage = "set:invite_tip.json image:green_btn",
-            event = "PLAYER_ON_VISIT",
             text = "ui_sure"
         },
         {
             normalImage = "set:invite_tip.json image:blue_btn",
             pushedImage = "set:invite_tip.json image:blue_btn",
-            event = "PLAYER_BE_INVITE_REFUSE",
             text = "ui_cancel"
         }
     ]
@@ -5085,16 +5083,47 @@ PLAYER_BE_INVITE {
     }
 
     $fullName = "myplugin/friendInviteView"
-
-    ShowInviteTip(entity = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, content = $content, fullName = $fullName, showTime = $showTime)
+    $eventMap = {
+        button1 = "PLAYER_ON_VISIT",
+        button2 = "PLAYER_BE_INVITE_REFUSE",
+        autoClose = "FRIEND_INVITE_AUTO_CLOSE",
+        beReplced = "FRIEND_INVITE_BE_REPLCED",
+    }
+    ShowInviteTip(player = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, content = $content, fullName = $fullName, showTime = $showTime, eventMap = $eventMap)
 
 }
-PLAYER_BE_INVITE_REFUSE(){
 
+---party invite ↓↓
+PARTY_INVITE_AUTO_CLOSE(debug1 = true){
+    --GA
 }
-PLAYER_BE_INVITE_OTHER_SERVER_REFUSE(){
+
+PARTY_INVITE_BE_REPLCED(debug1 = true){
+    --GA
+}
+
+JOIN_PARTY_REFUSE(debug1 = true){
+    --GA
     $obj1.partyInfo = nil
 }
+
+JOIN_PARTY_ARGEE(debug1 = true){
+    --GA
+    CallTrigger(event = "PLAYER_ON_VISIT_OTHER_SERVER", object = $obj1)
+}
+---party invite ↑↑
+
+------cross server invite ↓↓
+-- PLAYER_BE_INVITE_OTHER_SERVER_REFUSE
+-- FRIEND_INVITE_OTHER_SERVER_AUTO_CLOSE
+-- FRIEND_INVITE_OTHER_SERVER_BE_REPLCED
+------cross server invite ↑↑
+----- same server invite ↓↓
+-- PLAYER_BE_INVITE_REFUSE(debug = true){}
+-- FRIEND_INVITE_AUTO_CLOSE(debug = true){}
+-- FRIEND_INVITE_BE_REPLCED(debug = true){}
+----- same server invite ↑↑
+    
 PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
@@ -5107,9 +5136,8 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $picUrl = DictionaryGet(dict = $contentDict, key = "picUrl")
     $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
     $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
-    $likeNum = 0
 
-    If($partyInfo){
+    If($partyInfo){--[party] friend invite
         $obj1.partyInfo = $partyInfo
         $partyInfoDict = NewDictionary($partyInfo)
         $targetPartyId = DictionaryGet(dict = $partyInfoDict, key = "partyId")
@@ -5119,32 +5147,72 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
             $obj1.excludedPartyId = "0"
         }
         $obj1.visitTargetUserId = $ownerId
-    }
 
-    $buttonInfo = [
-        {
-            normalImage = "set:invite_tip.json image:green_btn",
-            pushedImage = "set:invite_tip.json image:green_btn",
-            event = "PLAYER_ON_VISIT_OTHER_SERVER",
-            text = "ui_sure"
-        },
-        {
-            normalImage = "set:invite_tip.json image:blue_btn",
-            pushedImage = "set:invite_tip.json image:blue_btn",
-            event = "PLAYER_BE_INVITE_OTHER_SERVER_REFUSE",
-            text = "ui_cancel"
+        -- party invite ui style
+        $content = {
+            msg = "gui_party_invite_notice",
+            args = [
+                $nickName
+            ]
         }
-    ]
 
-    $content = {
-        msg = "gui_party_invite_notice",
-        args = [
-            $nickName
+        $fullName = "myplugin/partyInviteView"
+        $buttonInfo = [
+            {
+                normalImage = "set:invite_tip.json image:green_btn",
+                pushedImage = "set:invite_tip.json image:green_btn",
+                text = "ui_sure"
+            },
+            {
+                normalImage = "set:invite_tip.json image:blue_btn",
+                pushedImage = "set:invite_tip.json image:blue_btn",
+                text = "ui_cancel"
+            }
         ]
+        $content = {
+            msg = "gui_friend_invite_notice",
+            args = [
+                $nickName
+            ]
+        }
+        $eventMap = {
+            button1 = "JOIN_PARTY_ARGEE",
+            button2 = "JOIN_PARTY_REFUSE",
+            autoClose = "PARTY_INVITE_AUTO_CLOSE",
+            beReplced = "PARTY_INVITE_BE_REPLCED",
+        }
+
+        $fullName = "myplugin/friendInviteView"
+    }
+    Else{--[common] friend invite
+        $buttonInfo = [
+            {
+                normalImage = "set:invite_tip.json image:green_btn",
+                pushedImage = "set:invite_tip.json image:green_btn",
+                text = "ui_sure"
+            },  
+            {
+                normalImage = "set:invite_tip.json image:blue_btn",
+                pushedImage = "set:invite_tip.json image:blue_btn",
+                text = "ui_cancel"
+            }
+        ]
+        $content = {
+            msg = "gui_friend_invite_notice",
+            args = [
+                $nickName
+            ]
+        }
+        $eventMap = {
+            button1 = "PLAYER_ON_VISIT_OTHER_SERVER",
+            button2 = "PLAYER_BE_INVITE_OTHER_SERVER_REFUSE",
+            autoClose = "FRIEND_INVITE_OTHER_SERVER_AUTO_CLOSE",
+            beReplced = "FRIEND_INVITE_OTHER_SERVER_BE_REPLCED",
+        }
+        $fullName = "myplugin/friendInviteView"
     }
 
-    $fullName = "myplugin/partyInviteView"
-    ShowInviteTip(entity = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, titleText = $likeNum, content = $content, fullName = $fullName, showTime = $showTime)
+    ShowInviteTip(player = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, titleText = $likeNum, content = $content, fullName = $fullName, showTime = $showTime, eventMap = $eventMap)
 }
 JOIN_OTHERS_PARTY(debug = false){
     $partyDict = NewDictionary($obj1.partyInfo)
@@ -5200,7 +5268,6 @@ PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
             CallTrigger(object = $obj1, event = "CROSS_SERVER_VISIT")
         }
     }
-    -- CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
     StartTimer(time = 1, object = $obj1, obj1 = $obj1, event = "SHOW_TITLE_BAR")
 }
 PLAYER_ON_VISIT {--same server
