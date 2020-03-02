@@ -2545,6 +2545,8 @@ LEAVE_TEAM
             If($size <= 0)
             {
                 CallTrigger(event = "DATA_REPORT_FAMILY_DURACTION", object = $obj1, teamId = $teamId)
+                DictionaryRemove(dict = @FamilyCreateDuration, key = $teamId)   -- 移除队伍的存活时间
+                DictionaryRemove(dict = @FamilyName, key = $teamId)             -- 移除队伍的名字
             }
         }
     }
@@ -2662,7 +2664,8 @@ SHOW_TEAM_UI
     $teamId = GetEntityTeam(entity = $obj1)
     If($teamId and $teamId ~= 0)
     {
-        CallTrigger(event = "INIT_TEAM_UI", object = $obj1) 
+        $teamName = DictionaryGet(dict = @FamilyName, key = $teamId) or nil
+        CallTrigger(event = "INIT_TEAM_UI", object = $obj1, teamName = $teamName) 
     }
     Else
     {
@@ -2702,7 +2705,7 @@ TEAM_CREATE_RESULT
 INIT_TEAM_UI
 {
     $title = {
-        name = "gui_my_family"
+        name = $teamName or "gui_my_family"
     }
     
     $buttons = [
@@ -6000,7 +6003,6 @@ DATA_REPORT_FAMILY_DURACTION
 
     CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $duration, array = [5, 10, 20, 30, 60, 120, 180, 181])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["family:keep:time", @rangeBoundary])
-    DictionaryRemove(dict = @FamilyCreateDuration, key = $teamId)
 }
 
 DATA_REPORT_PALETTE_GUIDE_STEP --params: step
@@ -6011,4 +6013,66 @@ DATA_REPORT_PALETTE_GUIDE_STEP --params: step
 STORE_BUY_GOODS_SUCCESSFUL
 {
     GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:store", ToString($storeId), ToString($index)])
+}
+
+SHOW_EDIT_FAMILY_NAME_UI
+{
+    $title = {
+        name = "ui_edit_title_name"
+    }
+
+    $inputTitle = {
+        name = "ui_edit_input_name"
+    }
+
+    $buttons = [
+        {
+            event = "cancel",
+            normalImage = "set:tip_dialog.json image:btn_big_blue",
+            pushedImage = "set:tip_dialog.json image:btn_big_blue",
+            name = "ui_cancel"
+        },
+        {
+            event = "EDIT_TEAM_NAME_BUTTON_SURE",
+            normalImage = "set:tip_dialog.json image:btn_big_green",
+            pushedImage = "set:tip_dialog.json image:btn_big_green",
+            name = "ui_sure"
+        }
+    ]
+
+    $contents = {
+        title = $title,
+        inputTitle = $inputTitle,
+        buttons = $buttons,
+        text = $name,
+        textLength = 15
+    }
+
+    ShowInputDialog(entity = $obj1, contents = $contents)
+}
+
+EDIT_TEAM_NAME_BUTTON_SURE
+{
+    If(not IsPlayer(entity = $obj1))
+    {
+        Return()
+    }
+
+    $teamId = GetEntityTeam(entity = $obj1)
+    If(not $teamId or $teamId == 0)
+    {
+        Return()
+    }
+
+    $name = FilterWord(msg = $name, len = 15) or ""
+    DictionarySet(dict = @FamilyName, key = $teamId, value = $name)
+
+    $entityList = GetTeamEntityList(teamId = $teamId)
+    ForeachDictionary(keyName = "objID", valueName = "entity", dict = NewDictionary($entityList))
+    {
+        If(IsPlayer(entity = $entity))
+        {
+            UpdateUIData(player = $entity, ui = "win_team_name", data = $name)
+        }
+    }
 }

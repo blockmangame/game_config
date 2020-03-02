@@ -12,3 +12,9 @@ function handles:SetItemUse(packet)
 	local isUse = packet.isUse
 	self:setItemUse(tid, slot, isUse)
 end
+
+function handles:showChangeTeamName(packet)
+    local name = packet.name
+
+    Trigger.CheckTriggers(self:cfg(), "SHOW_EDIT_FAMILY_NAME_UI", {obj1 = self, name = name})
+end

@@ -15,8 +15,20 @@ end
 
 function M:initTitle()
     self.team_title = self:child("Team-Main-Title")
-    self.team_title_button = self:child("Team-Main-Title-Button")
     self.team_title_text = self:child("Team-Main-Title-Name")
+    self.team_title_button = self:child("Team-Main-Title-Button")
+    self:subscribe(self.team_title_button, UIEvent.EventButtonClick, function()
+        self:showChangeTeamNameUI()
+    end)
+
+
+    Lib.subscribeEvent(Event.EVENT_UPDATE_UI_DATA, function(UIName)
+		if UI:isOpen(self) and UIName == "win_team_name" then
+			local name = UI:getRemoterData("win_team_name") or ""
+			self.team_title_text:SetText(name)
+		end
+	end)
+
 end
 
 function M:initContent()
@@ -177,4 +189,12 @@ end
 
 function M:closeWindow()
     Lib.emitEvent(Event.EVENT_SHOW_TEAM, false)
+end
+
+function M:showChangeTeamNameUI()
+     local packet = {
+         pid = "showChangeTeamName",
+         name = self.team_title_text:GetText()
+     }
+     Me:sendPacket(packet)
 end
