@@ -2,7 +2,7 @@
     "Dialog": {
         "Window": {
             "Type": "Layout",
-            "Name": "SingleFamily",
+            "Name": "SingleTeam",
             "Property": [
                 {
                     "Name": "Area",
@@ -20,7 +20,7 @@
             "Window": [
                 {
                     "Type": "Layout",
-                    "Name": "SingleFamily-Main",
+                    "Name": "SingleTeam-Main",
                     "Property": [
                         {
                             "Name": "Area",
@@ -58,7 +58,7 @@
                     "Window": [
                         {
                             "Type": "Layout",
-                            "Name": "SingleFamily-Main-TextLayout",
+                            "Name": "SingleTeam-Main-TextLayout",
                             "Property": [
                                 {
                                     "Name": "Area",
@@ -80,7 +80,7 @@
                             "Window": [
                                 {
                                     "Type": "StaticText",
-                                    "Name": "SingleFamily-Main-TextLayout-Text",
+                                    "Name": "SingleTeam-Main-TextLayout-Text",
                                     "Property": [
                                         {
                                             "Name": "Area",
@@ -111,12 +111,12 @@
                                             "Value": "0"
                                         },
                                         {
-                                            "Name": "TextWordWrap",
-                                            "Value": "true"
-                                        },
-                                        {
                                             "Name": "TextLineExtraSpace",
                                             "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextWordWrap",
+                                            "Value": "true"
                                         }
                                     ]
                                 }
@@ -124,7 +124,7 @@
                         },
                         {
                             "Type": "StaticImage",
-                            "Name": "SingleFamily-Main-Image",
+                            "Name": "SingleTeam-Main-Image",
                             "Property": [
                                 {
                                     "Name": "Area",
@@ -151,19 +151,7 @@
                                     "Value": "0"
                                 },
                                 {
-                                    "Name": "HexgonTopImage",
-                                    "Value": ""
-                                },
-                                {
-                                    "Name": "HexgonTopColor",
-                                    "Value": "1 1 1 1"
-                                },
-                                {
-                                    "Name": "HexgonSideImage",
-                                    "Value": ""
-                                },
-                                {
-                                    "Name": "HexgonSideColor",
+                                    "Name": "HexgonOverlayerColor",
                                     "Value": "1 1 1 1"
                                 },
                                 {
@@ -171,14 +159,26 @@
                                     "Value": ""
                                 },
                                 {
-                                    "Name": "HexgonOverlayerColor",
+                                    "Name": "HexgonSideColor",
                                     "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
                                 }
                             ]
                         },
                         {
                             "Type": "Layout",
-                            "Name": "SingleFamily-Main-Bottom",
+                            "Name": "SingleTeam-Main-Bottom",
                             "Property": [
                                 {
                                     "Name": "Area",
@@ -204,7 +204,7 @@
                             "Window": [
                                 {
                                     "Type": "Button",
-                                    "Name": "SingleFamily-Main-Bottom-Left-Btn",
+                                    "Name": "SingleTeam-Main-Bottom-Left-Btn",
                                     "Property": [
                                         {
                                             "Name": "Area",
@@ -231,6 +231,30 @@
                                             "Value": "16 20 0 0"
                                         },
                                         {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
                                             "Name": "NormalImage",
                                             "Value": "set:team.json image:blue_btn"
                                         },
@@ -241,30 +265,6 @@
                                         {
                                             "Name": "SoundName",
                                             "Value": "0"
-                                        },
-                                        {
-                                            "Name": "HexgonTopImage",
-                                            "Value": ""
-                                        },
-                                        {
-                                            "Name": "HexgonTopColor",
-                                            "Value": "1 1 1 1"
-                                        },
-                                        {
-                                            "Name": "HexgonSideImage",
-                                            "Value": ""
-                                        },
-                                        {
-                                            "Name": "HexgonSideColor",
-                                            "Value": "1 1 1 1"
-                                        },
-                                        {
-                                            "Name": "HexgonOverlayerImage",
-                                            "Value": ""
-                                        },
-                                        {
-                                            "Name": "HexgonOverlayerColor",
-                                            "Value": "1 1 1 1"
                                         },
                                         {
                                             "Name": "TextHorzAlignment",
@@ -278,7 +278,7 @@
                                     "Window": [
                                         {
                                             "Type": "StaticText",
-                                            "Name": "SingleFamily-Main-Bottom-Left-Btn-Text",
+                                            "Name": "SingleTeam-Main-Bottom-Left-Btn-Text",
                                             "Property": [
                                                 {
                                                     "Name": "Area",
@@ -313,12 +313,12 @@
                                                     "Value": "Centre"
                                                 },
                                                 {
-                                                    "Name": "TextVertAlignment",
-                                                    "Value": "Centre"
-                                                },
-                                                {
                                                     "Name": "TextLineExtraSpace",
                                                     "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "TextVertAlignment",
+                                                    "Value": "Centre"
                                                 }
                                             ]
                                         }
@@ -326,7 +326,7 @@
                                 },
                                 {
                                     "Type": "Button",
-                                    "Name": "SingleFamily-Main-Bottom-Right-Btn",
+                                    "Name": "SingleTeam-Main-Bottom-Right-Btn",
                                     "Property": [
                                         {
                                             "Name": "Area",
@@ -404,7 +404,7 @@
                                     "Window": [
                                         {
                                             "Type": "StaticText",
-                                            "Name": "SingleFamily-Main-Bottom-Right-Btn-Text",
+                                            "Name": "SingleTeam-Main-Bottom-Right-Btn-Text",
                                             "Property": [
                                                 {
                                                     "Name": "Area",
@@ -454,7 +454,7 @@
                         },
                         {
                             "Type": "Button",
-                            "Name": "SingleFamily-CloseBtn",
+                            "Name": "SingleTeam-CloseBtn",
                             "Property": [
                                 {
                                     "Name": "Area",
@@ -473,6 +473,30 @@
                                     "Value": "0"
                                 },
                                 {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
                                     "Name": "NormalImage",
                                     "Value": "set:team.json image:close"
                                 },
@@ -483,30 +507,6 @@
                                 {
                                     "Name": "SoundName",
                                     "Value": "0"
-                                },
-                                {
-                                    "Name": "HexgonTopImage",
-                                    "Value": ""
-                                },
-                                {
-                                    "Name": "HexgonTopColor",
-                                    "Value": "1 1 1 1"
-                                },
-                                {
-                                    "Name": "HexgonSideImage",
-                                    "Value": ""
-                                },
-                                {
-                                    "Name": "HexgonSideColor",
-                                    "Value": "1 1 1 1"
-                                },
-                                {
-                                    "Name": "HexgonOverlayerImage",
-                                    "Value": ""
-                                },
-                                {
-                                    "Name": "HexgonOverlayerColor",
-                                    "Value": "1 1 1 1"
                                 },
                                 {
                                     "Name": "TextHorzAlignment",

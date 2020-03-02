@@ -11,11 +11,24 @@ Lib.subscribeEvent(Event.EVENT_SHOW_GOLD_SHOP, function(show)
 	end
 end)
 
-Lib.subscribeEvent(Event.EVENT_SHOW_SINGLE_FAMILY, function(show, ...)
-    local window = UI:getWnd("singleFamily", true)
+Lib.subscribeEvent(Event.EVENT_SHOW_SINGLE_TEAM, function(show, ...)
+    local window = UI:getWnd("singleTeam", true)
     if show then
-        UI:openWnd("singleFamily", ...)
+        UI:openWnd("singleTeam", ...)
     else
-        UI:closeWnd("singleFamily")
+        UI:closeWnd("singleTeam")
+    end
+end)
+
+Lib.subscribeEvent(Event.EVENT_SHOW_TEAM, function(show, ...)
+    local window = UI:getWnd("team", true)
+    if show then
+        if window and UI:isOpen(window) then
+            window:onOpen(...)
+            return
+        end
+        UI:openWnd("team", ...)
+    else
+        UI:closeWnd("team")
     end
 end)

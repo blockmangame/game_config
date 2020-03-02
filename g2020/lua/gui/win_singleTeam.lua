@@ -1,5 +1,5 @@
 function M:init()
-    WinBase.init(self, "SingleFamily.json", false)
+    WinBase.init(self, "SingleTeam.json", false)
     self:initTextLayout()
     self:initImage()
     self:initBottom()
@@ -14,26 +14,26 @@ function M:onOpen(info)
 end
 
 function M:initTextLayout()
-    self.text = self:child("SingleFamily-Main-TextLayout-Text")
+    self.text = self:child("SingleTeam-Main-TextLayout-Text")
 end
 
 function M:initImage()
-    self.image = self:child("SingleFamily-Main-Image")
+    self.image = self:child("SingleTeam-Main-Image")
 end
 
 function M:initBottom()
-    self.bottom = self:child("SingleFamily-Main-Bottom")
+    self.bottom = self:child("SingleTeam-Main-Bottom")
 end
 
 function M:initCloseBtn()
-    self.closeBtn = self:child("SingleFamily-CloseBtn")
+    self.closeBtn = self:child("SingleTeam-CloseBtn")
     self:subscribe(self.closeBtn, UIEvent.EventButtonClick, function()
         self:onBtnClose()
     end)
 end
 
 function M:onBtnClose()
-    Lib.emitEvent(Event.EVENT_SHOW_SINGLE_FAMILY, false)
+    Lib.emitEvent(Event.EVENT_SHOW_SINGLE_TEAM, false)
 end
 
 function M:updateText(text)

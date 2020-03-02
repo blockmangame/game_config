@@ -2529,7 +2529,7 @@ QUIT_FAMILY
         ShowTip(entity = $obj1, tipType = 2,textKey = "gui_quit_family_success", keepTime = 40)
         CallTrigger(event = "INIT_TEAM_UI", obj1 = $obj1, show = false)
         CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId, object = $obj1)
-        ShowSingleFamilyUI(entity = $obj1, show = false)    -- todo: 关闭一个人的窗口
+        ShowSingleTeamUI(entity = $obj1, show = false)    -- todo: 关闭一个人的窗口
     }
 }
 
@@ -2730,8 +2730,8 @@ INIT_TEAM_UI
         closeBtn = $closeBtn
     }
 
-    ShowTeam(entity = $obj1, show = $show, info = $info)
-    -- ShowSingleFamilyUI(entity = $obj1, show = true, info = $info)    -- todo： for test
+    ShowTeamUI(entity = $obj1, show = $show, info = $info)
+    -- ShowSingleTeamUI(entity = $obj1, show = true, info = $info)    -- todo： for test
 }
 
 SHOW_FAMILY_ALBUM
