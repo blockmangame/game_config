@@ -4237,6 +4237,9 @@ SURE_BUY {
    If($enoughMoney){ --够钱
          $checkBag = AddItem(entity = $obj1, cfg = $sellItem, count = 1)
          If($checkBag ~= false){
+			GameAnalyticsCustomEvent(player = $obj1, parts = ["shop:buy:common",
+				Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $sellItem))])
+				
             If($coinId == 0){
                 BuyGoods(player = $obj1, uniqueId = 20201999,  coinId = $coinId, price = $price, event = "SHOP_BUY_COIN", objID = GetObjectID(object = $obj1), sellItem = $sellItem)
             }Else{
