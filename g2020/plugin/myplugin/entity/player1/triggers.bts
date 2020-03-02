@@ -5895,7 +5895,7 @@ LOAD_USER_MONEY
     {
         $obj1.cubeReport = true
         $num = GetCurrency(entity = $obj1, coinName = "gDiamonds")
-        CallTrigger(event = "SET_RANGE_BOUNDARY", num = $num, array = [0, 59, 19999, 299, 1999, 4999, 9999, 49999, 99999, 100000])
+        CallTrigger(event = "SET_RANGE_BOUNDARY", num = $num, array = [0, 59, 299, 1999, 4999, 9999, 49999, 99999, 100000])
         GameAnalyticsCustomEvent(player = $obj1, parts = ["player:cube", @rangeBoundary])
     }
 }
