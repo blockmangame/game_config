@@ -5895,7 +5895,7 @@ DATA_REPORT_CHAT_MESSAGE
         $obj1.curChatMsgNum = 0
     }
 
-    CallTrigger(obj1 = $obj1, event = "SET_RANGE_BOUNDARY", num = $obj1.curChatMsgNum, array = [0, 5, 10, 20, 30, 31])
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.curChatMsgNum, array = [0, 5, 10, 20, 30, 31])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:chat:single_game", @rangeBoundary])
 
     CallTrigger(event = "SET_RANGE_BOUNDARY" , num = $obj1.chatMsgNum, array = [0, 9, 19, 49, 99, 199, 499, 999, 1999, 4999, 9999, 10000])
