@@ -16,6 +16,7 @@ local function getItem(cfg)
 	item:invoke("text", cfg.text or "")
 	item:invoke("image", cfg.image)
 	item:invoke("textFontSize", cfg.textFontSize or "HT16")
+	item:invoke("enableTextBorder", true)
 	local buttonImage = item:invoke("child", "widget_button-image")
 	if buttonImage then
 		buttonImage:SetEnabled(false)
