@@ -18,6 +18,10 @@ function handles:SyncItemUse(packet)
 	self:setItemUse(packet.tid, packet.slot, packet.isUse, true)
 end
 
-function handles:ShowSingleFamilyUI(packet)
-    Lib.emitEvent(Event.EVENT_SHOW_SINGLE_FAMILY, packet.show, packet.info)
+function handles:ShowSingleTeamUI(packet)
+    Lib.emitEvent(Event.EVENT_SHOW_SINGLE_TEAM, packet.show, packet.info)
+end
+
+function handles:ShowTeamUI(packet)
+    Lib.emitEvent(Event.EVENT_SHOW_TEAM, packet.show, packet.info)
 end
