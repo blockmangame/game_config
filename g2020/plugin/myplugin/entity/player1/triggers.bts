@@ -499,19 +499,19 @@ DATA_REPORT_HOUSE_SIZE{
 
 DATA_REPORT_BAG{
 	@count = CountTrayItemNum(entity = $obj1, trayType = 21) --baby_car
-    CallTrigger(event = "SET_RANGE_BOUNDARY", num = @count, array = [0, 2, 5, 10, 20, 30, 50])
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = @count, array = [0, 2, 5, 10, 20, 30, 50, 51])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:bag:trolley", @rangeBoundary])
 	
 	@count = CountTrayItemNum(entity = $obj1, trayType = 22) --food
-    CallTrigger(event = "SET_RANGE_BOUNDARY", num = @count, array = [0, 2, 5, 10, 20, 30, 50])
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = @count, array = [0, 2, 5, 10, 20, 30, 50, 51])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:bag:food", @rangeBoundary])
 	
 	@count = CountTrayItemNum(entity = $obj1, trayType = 23) --car
-    CallTrigger(event = "SET_RANGE_BOUNDARY", num = @count, array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 30, 50, 70])
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = @count, array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 30, 50, 70, 71])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:bag:car", @rangeBoundary])
 	
 	@count = CountTrayItemNum(entity = $obj1, trayType = 24) --toy
-    CallTrigger(event = "SET_RANGE_BOUNDARY", num = @count, array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30, 50, 70])
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = @count, array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30, 50, 70, 71])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:bag:toy", @rangeBoundary])
 }
 
