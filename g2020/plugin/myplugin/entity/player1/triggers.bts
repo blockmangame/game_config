@@ -486,6 +486,8 @@ ENTITY_LEAVE_DATA_REPORT{
     CallTrigger(object = $obj1, event = "DATA_REPORT_FINISH_WORK_SUM")
     -- 统计玩家下线时添加好友数量
     CallTrigger(object = $obj1, event = "DATA_REPORT_ADD_FRIEND")
+    -- 统计玩家下线时派对邀请相关
+    CallTrigger(object = $obj1, event = "DATA_REPORT_PARTY_INVITE")
 }
 DATA_REPORT_FINISH_WORK_SUM{
     --打工完成数量埋点
@@ -5094,21 +5096,34 @@ PLAYER_BE_INVITE {
 }
 
 ---party invite ↓↓
+DATA_REPORT_PARTY_INVITE{
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.partyInviteAutoClose, array = [0, 2, 5, 10, 15, 20, 21])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:party:no_response", @rangeBoundary])
+    
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.partyInviteBeReplaced, array = [0, 2, 5, 10, 15, 20, 21])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:party:cover", @rangeBoundary])
+
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.partyInviteAgree, array = [0, 2, 5, 10, 15, 20, 21])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:party:agree", @rangeBoundary])
+
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.partyInviteRefuse, array = [0, 2, 5, 10, 15, 20, 21])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:party:deny", @rangeBoundary])
+}
 PARTY_INVITE_AUTO_CLOSE(debug1 = true){
-    --GA
+    $obj1.partyInviteAutoClose = $obj1.partyInviteAutoClose + 1
 }
 
 PARTY_INVITE_BE_REPLCED(debug1 = true){
-    --GA
+    $obj1.partyInviteBeReplaced = $obj1.partyInviteBeReplaced + 1
 }
 
 JOIN_PARTY_REFUSE(debug1 = true){
-    --GA
+    $obj1.partyInviteRefuse = $obj1.partyInviteRefuse + 1
     $obj1.partyInfo = nil
 }
 
 JOIN_PARTY_ARGEE(debug1 = true){
-    --GA
+    $obj1.partyInviteAgree = $obj1.partyInviteAgree + 1
     CallTrigger(event = "PLAYER_ON_VISIT_OTHER_SERVER", object = $obj1)
 }
 ---party invite ↑↑
