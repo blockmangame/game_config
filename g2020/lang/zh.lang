@@ -37,25 +37,25 @@ language_end:dress
 language_start:family_status
 
 state_hunger_title=饥饿
-state_hunger_contents=你饿了！找点吃的吧
+state_hunger_contents=我感觉有点饿了，找点东西吃吧！
 state_thirsty_title=口渴
-state_thirsty_contents=你渴了！找点喝的吧
+state_thirsty_contents=我口渴了，想喝点果汁！
 state_dirty_title=脏
-state_dirty_contents=你现在脏了！回家洗个澡吧
+state_dirty_contents=我身上脏了，赶紧回家洗澡恢复干净吧！
 state_fatigue_title=疲惫
-state_fatigue_contents=你需要睡觉！在家里或镇长的家找一个床休息一下
+state_fatigue_contents=我困了，现在需要一张床睡一会！
 state_camp_title=露营
-state_camp_contents=去露营地玩一下吧
+state_camp_contents=到了森林露营时间了，尽情享受露营乐趣吧！
 state_school_title=学校
-state_school_contents=该去学校了
-state_playground_title=游乐场
-state_playground_contents=去游乐场玩一下吧
-state_pool_title=泳池
-state_pool_contents=去泳池玩一下吧
+state_school_contents=要上课了，去学校学习有趣的知识吧！
+state_playground_title=无聊
+state_playground_contents=我好无聊啊，想去游乐场荡秋千！
+state_pool_title=热
+state_pool_contents=今天好热啊，快去游泳池玩一会吧！
 state_ill_title=生病
-state_ill_contents=你生病了！去医院看看吧
+state_ill_contents=我感觉生病了，需要去医院治疗！
 state_dances_title=跳舞
-state_dances_contents=去舞池玩一下吧
+state_dances_contents=去舞池玩一下吧，我就是最棒的舞蹈明星！
 state_btntext=打开GPS
 state_subtitle=进度:
 you_came=你来了
@@ -113,9 +113,9 @@ state_playground_reward_other_tip=▢FF6FFF1D你的朋友{}不无聊了 (+{}金�
 state_pool_reward_self_tip=▢FF6FFF1D你感到凉爽了 (+{}金币)▢FFFFFFFF
 state_pool_reward_family_tip=▢FF6FFF1D你的家人{}感到凉爽了 (+{}金币)▢FFFFFFFF
 state_pool_reward_other_tip=▢FF6FFF1D你的朋友{}感到凉爽了 (+{}金币)▢FFFFFFFF
-state_camp_reward_self_tip=▢FF6FFF1D你野营完了 (+{}金币)▢FFFFFFFF
-state_camp_reward_family_tip=▢FF6FFF1D你的家人{}野营完了 (+{}金币)▢FFFFFFFF
-state_camp_reward_other_tip=▢FF6FFF1D你的朋友{}野营完了 (+{}金币)▢FFFFFFFF
+state_camp_reward_self_tip=▢FF6FFF1D你结束了露营 (+{}金币)▢FFFFFFFF
+state_camp_reward_family_tip=▢FF6FFF1D你的家人{}结束了露营 (+{}金币)▢FFFFFFFF
+state_camp_reward_other_tip=▢FF6FFF1D你的朋友{}结束了露营 (+{}金币)▢FFFFFFFF
 
 language_end:family_status
 
@@ -533,8 +533,10 @@ gui_dialog_tip_common_cancel=取消
 ui_dress_archive_delete_dialog_context=确定要删除这个存档吗？
 ui_tip_sure_lock_house_and_kick_some_one=确定锁门并踢出房内非家庭成员的玩家吗？
 house_owner_lock_house_and_kick_you=房主把房子锁上了
+lock_cur_house_door=锁门
+show_change_house_menu=更换房屋
+show_party_list=派对
 
-show_house_lock_tip_when_closein_outside_door=房主自闭了，请勿打扰！
 language_end:house
 
 language_start:item
@@ -1017,7 +1019,6 @@ can_not_chane_rose=交互状态无法改变年龄
 ui_lang_reach_maximum_length=已达到最大长度
 ui_lang_have_banned_words=包含违禁词
 ui_lang_with_the_same_name与原昵称重复
-ui_lang_remaining_length=剩余： 
 homeView_name=家
 door1_name=广场
 gui_str_app_shop_insufficient_inventory=已拥有
@@ -1065,5 +1066,11 @@ action_role_not_matching_child=只能对小孩做这个动作
 action_role_not_matching_child_or_adult=只能对大人做这个动作
 action_role_not_matching_adult=只能对大人做这个动作
 action_role_not_matching_adult_child_and=只能对小孩做这个动作
+gui.text.partylist.title=派对列表
+gui.text.refresh=刷新
+gui.text.createparty=创建派对
+friend_visit_cross_server=跨服传送
+show_house_lock_tip_when_closein_outside_door=门锁上了
+ui_lang_remaining_length=剩余：
 
 language_end:system
