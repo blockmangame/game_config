@@ -5627,15 +5627,18 @@ ON_SEND_INVITE_TO_GAME(debug1 = true){
         $obj1.inviteCount = 1
     }
     $partyOwnerUserId = DictionaryGet(dict = $partyInfoDict, key = "userId")
-    $inviterUserId = GetPlayerUserID(player = $obj1)
-    BroadcastPartyInvite(partyOwnerUserId = $partyOwnerUserId, inviterUserId = $inviterUserId)
+    BroadcastPartyInvite(partyOwnerUserId = $partyOwnerUserId, inviter = $obj1)
     If($obj1.inviteCount >= (GetWorldVar(key = "autoInvitePartyCount") or 2)){
         Return()
     }
-    $obj1.autoInviteTimer = StartTimer(event = "BROADCAST_PARTY_INVITE", object = $obj1, partyOwnerUserId = $partyOwnerUserId, inviterUserId = $inviterUserId, time = GetWorldVar(key = "autoInvitePartyInterval") or 120 * 20, rep = true)
+    $obj1.autoInviteTimer = StartTimer(event = "BROADCAST_PARTY_INVITE", object = $obj1, partyOwnerUserId = $partyOwnerUserId, time = GetWorldVar(key = "autoInvitePartyInterval") or 120 * 20, rep = true)
 }
 BROADCAST_PARTY_INVITE(debug1 = true){
-    BroadcastPartyInvite(partyOwnerUserId = $partyOwnerUserId, inviterUserId = $inviterUserId)
+    If(not IsValidObject(object = $obj1)){
+        StopTimer(timer = $obj1.autoInviteTimer)
+        Return()
+    }
+    BroadcastPartyInvite(partyOwnerUserId = $partyOwnerUserId, inviter = $obj1)
     $obj1.inviteCount = $obj1.inviteCount + 1
     If($obj1.inviteCount >= (GetWorldVar(key = "autoInvitePartyCount") or 2)){
         StopTimer(timer = $obj1.autoInviteTimer)
