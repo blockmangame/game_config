@@ -5550,6 +5550,33 @@ RESET_GAME_FAILED(debug = true){
         }
     }
 }
+ON_SEND_INVITE_TO_GAME(debug1 = true){
+    $contentDict = NewDictionary($content)
+    $partyInfoDict = NewDictionary(DictionaryGet(dict = $contentDict, key = "partyInfo"))
+    If(not $obj1.inviteCount){
+        $obj1.inviteCount = 1
+    }
+    If($obj1.autoInviteTimer){
+        StopTimer(timer = $obj1.autoInviteTimer)
+        $obj1.inviteCount = 1
+    }
+    $partyOwnerUserId = DictionaryGet(dict = $partyInfoDict, key = "userId")
+    $inviterUserId = GetPlayerUserID(player = $obj1)
+    BroadcastPartyInvite(partyOwnerUserId = $partyOwnerUserId, inviterUserId = $inviterUserId)
+    If($obj1.inviteCount >= (GetWorldVar(key = "autoInvitePartyCount") or 2)){
+        Return()
+    }
+    $obj1.autoInviteTimer = StartTimer(event = "BROADCAST_PARTY_INVITE", object = $obj1, partyOwnerUserId = $partyOwnerUserId, inviterUserId = $inviterUserId, time = GetWorldVar(key = "autoInvitePartyInterval") or 120 * 20, rep = true)
+}
+BROADCAST_PARTY_INVITE(debug1 = true){
+    BroadcastPartyInvite(partyOwnerUserId = $partyOwnerUserId, inviterUserId = $inviterUserId)
+    $obj1.inviteCount = $obj1.inviteCount + 1
+    If($obj1.inviteCount >= (GetWorldVar(key = "autoInvitePartyCount") or 2)){
+        StopTimer(timer = $obj1.autoInviteTimer)
+        $obj1.autoInviteTimer = nil
+        $obj1.inviteCount = 1
+    }
+}
 --↑↑↑↑↑↑ party
 
 START_PLAY_BGM  {
