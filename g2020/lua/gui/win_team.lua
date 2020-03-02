@@ -76,12 +76,12 @@ function M:updateContent()
         return
     end
 
+    if not UI:isOpen(self) then
+        return
+    end
+
     local func = function(userInfo, viewInfo)
-
-        if not UI:isOpen(self) then
-            return
-        end
-
+        
         local item = GUIWindowManager.instance:LoadWindowFromJSON("TeamItems.json")
         item:SetArea({0, 0}, {0, 0}, {1, 0}, {0, 90})
 
