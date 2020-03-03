@@ -2591,7 +2591,7 @@ UPDATE_TEAM_MEMBER_LIST
     }
 }
 
-INTERACTION_REQUEST_FAMILY  -- 邀请加入家庭
+INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
 {
     -- obj2 邀请 obj1 加入家庭
     -- obj2是点击UI的那个人
@@ -2618,15 +2618,15 @@ INTERACTION_REQUEST_FAMILY  -- 邀请加入家庭
     }
     
     $content = {
-        msg = "ui_family_request",
+        msg = "ui_family_invite",
         args = NewArray(GetEntityName(entity = $obj2))
     }
 
     ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
-    ShowDialogTip(entity = $obj1, tipType = 5, event = "REQUEST_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "INVITE_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
-REQUEST_JOIN_FAMILY
+INVITE_JOIN_FAMILY
 {
     $targetPlayer = $obj1.requestFamilyPlayer
     If($button == "left")
@@ -2690,6 +2690,21 @@ REQUEST_JOIN_FAMILY
             CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $obj1)
         }
     }
+}
+
+INTERACTION_APPLY_FAMILY   --申请加入家庭
+{
+    -- obj2 申请加入 obj1 的家庭
+    -- obj2是点击UI的那个人
+    -- obj1是被点击的那个人
+    
+    $a = GetEntityTeam(entity = $obj1)
+    $b = GetEntityTeam(entity = $obj2)
+
+    Test("aaaaaaaa : ", $a)
+    Test("bbbbbbbb : ", $b)
+
+
 }
 
 SHOW_TEAM_UI

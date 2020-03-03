@@ -317,21 +317,22 @@
                 "event": "INTERACTION_ACT"
             },
             {
-                "/ps": "这个是邀请加入家庭的按钮",
-                "text": "interact_request_family",
-                "image": "set:party_interaction_ui.json image:interaction_join_family",
-                "customCheckCanShow": {
-                    "funcName": "checkCanShowJoinFamily"
-                },
-                "event": "INTERACTION_REQUEST_FAMILY"
-            },
-            {
+                "/ps": "邀请",
                 "text": "interact_invite_family",
                 "image": "set:party_interaction_ui.json image:interaction_join_family",
                 "customCheckCanShow": {
                     "funcName": "checkCanShowInviteFamily"
                 },
                 "event": "INTERACTION_INVITE_FAMILY"
+            },
+            {
+                "/ps": "申请",
+                "text": "interact_apply_family",
+                "image": "set:party_interaction_ui.json image:interaction_join_family",
+                "customCheckCanShow": {
+                    "funcName": "checkCanShowApplyFamily"
+                },
+                "event": "INTERACTION_APPLY_FAMILY"
             },
             {
                 "text": "interact_trolley",

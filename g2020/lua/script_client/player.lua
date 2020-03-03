@@ -75,6 +75,7 @@ local customCheckFuncs = {}
 
 
 customCheckFuncs.checkCanShowInviteFamily = function (entity, checkCond, targetObjID)
+    -- 邀请
     local target = World.CurWorld:getObject(targetObjID)
     if not target then
         return false
@@ -93,7 +94,8 @@ customCheckFuncs.checkCanShowInviteFamily = function (entity, checkCond, targetO
     end
 end
 
-customCheckFuncs.checkCanShowJoinFamily = function (entity, checkCond, targetObjID)
+customCheckFuncs.checkCanShowApplyFamily = function (entity, checkCond, targetObjID)
+    -- 申请
     local target = World.CurWorld:getObject(targetObjID)
     if not target then
         return false
