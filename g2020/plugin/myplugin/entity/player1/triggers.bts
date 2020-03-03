@@ -5162,20 +5162,12 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
                 text = "ui_cancel"
             }
         ]
-        $content = {
-            msg = "gui_friend_invite_notice",
-            args = [
-                $nickName
-            ]
-        }
         $eventMap = {
             button1 = "JOIN_PARTY_ARGEE",
             button2 = "JOIN_PARTY_REFUSE",
             autoClose = "PARTY_INVITE_AUTO_CLOSE",
             beReplced = "PARTY_INVITE_BE_REPLCED",
         }
-
-        $fullName = "myplugin/friendInviteView"
     }
     Else{--[common] friend invite
         $buttonInfo = [
