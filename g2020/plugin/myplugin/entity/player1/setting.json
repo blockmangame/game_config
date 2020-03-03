@@ -320,10 +320,18 @@
                 "/ps": "这个是邀请加入家庭的按钮",
                 "text": "interact_request_family",
                 "image": "set:party_interaction_ui.json image:interaction_join_family",
-                "checkCanHide": {
-                    "funcName": "checkInSameTeam"
+                "customCheckCanShow": {
+                    "funcName": "checkCanShowJoinFamily"
                 },
                 "event": "INTERACTION_REQUEST_FAMILY"
+            },
+            {
+                "text": "interact_invite_family",
+                "image": "set:party_interaction_ui.json image:interaction_join_family",
+                "customCheckCanShow": {
+                    "funcName": "checkCanShowInviteFamily"
+                },
+                "event": "INTERACTION_INVITE_FAMILY"
             },
             {
                 "text": "interact_trolley",

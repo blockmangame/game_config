@@ -70,3 +70,53 @@ function Player:isItemUse(item)
     end
     return true
 end
+
+local customCheckFuncs = {}
+
+
+customCheckFuncs.checkCanShowInviteFamily = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return false
+    end
+    if entity == target then
+        return false
+    end
+
+    local id1 = entity:getValue("teamId")
+    local id2 = target:getValue("teamId")
+
+    if id1 == 0 then
+        return false
+    else
+        return id1 ~= id2
+    end
+end
+
+customCheckFuncs.checkCanShowJoinFamily = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return false
+    end
+    if entity == target then
+        return false
+    end
+
+    local id1 = entity:getValue("teamId")
+    local id2 = target:getValue("teamId")
+
+    if id2 == 0 then
+        return id1 == 0
+    else
+        return id1 ~= id2
+    end
+end
+
+function Player:customCheckCond(checkCond, ...)
+    local func = customCheckFuncs[checkCond.funcName]
+    if not func then
+        print("not definded function! ", checkCond.funcName)
+        return false
+    end
+    return func(self, checkCond, ...)
+end
