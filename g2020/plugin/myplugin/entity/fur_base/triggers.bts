@@ -73,6 +73,10 @@ LIGHT_ON_OFF_RESET{
 }
 
 STOP_EDIT_ENTITY{
+    $entityPos = DictionaryGet(dict = NewDictionary($params or {}), key = "entityPos")
+    If($entityPos){
+        SetEntityPosition(entity = $obj1, pos = $entityPos)
+    }
     CallTrigger(object = $obj1, obj1 = $obj1, event = "REMOVE_END_MOVEMENT_BUFF")
     CallTrigger(object = $obj1, event = "REMOVE_EDIT_BUFF")
     CallTrigger(object = $obj1, event = "LIGHT_ON_OFF_RESET")

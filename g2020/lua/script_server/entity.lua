@@ -81,15 +81,20 @@ function EntityServer:setItemUse(tid, slot, isUse)
 		Trigger.CheckTriggers(self:cfg(), "SET_ITEM_USE", {obj1 = self,isUse = isUse , item = lastItem})
     end
 	useItemList[tid][slot] = isUse and item or nil
-	if item and not item:null() then
+    if item and not item:null() then
 		local buffName = item:cfg().equip_buff
 		if buffName then
 			self:removeTypeBuff("type", "HandBuff")
 		end
-		if isUse and buffName then
+        if isUse and buffName then
 			self:data("main").handItem = item
             self:addBuff(buffName)
-		end
+        elseif not isUse then
+            local handItem =  self:data("main").handItem
+            if handItem and not handItem:null() and handItem:cfg().fullName == item:cfg().fullName then
+                self:data("main").handItem = nil
+            end
+        end
     end
     self:syncItemUse(tid, slot, isUse)
 end
