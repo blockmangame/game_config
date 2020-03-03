@@ -2532,9 +2532,9 @@ QUIT_FAMILY
         SetEntityTeam(entity = $obj1, teamId = 0)
         RecheckAllInteractionUIs(player = $obj1)
         ShowTip(entity = $obj1, tipType = 2,textKey = "gui_quit_family_success", keepTime = 40)
-        CallTrigger(event = "INIT_TEAM_UI", obj1 = $obj1, show = false)
+        CallTrigger(event = "INIT_TEAM_UI", obj1 = $obj1, show = false)     --  关闭家庭UI
         CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId, object = $obj1)
-        -- ShowSingleTeamUI(entity = $obj1, show = false)    -- todo: 关闭一个人的窗口
+        CallTrigger(event = "SHOW_TEAM_UI", obj1 = $obj1)                   -- 打开创建队伍的UI
     }
 }
 
