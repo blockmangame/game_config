@@ -3926,48 +3926,23 @@ GUIDE_POSITION_CHANGE { --客户端关闭GPS
     }
 }
 GET_TASK_UI_DATA(){ --更新打工UI数据。
-    $count = ($obj1.worktaskCount or 0) % 10
-    If($count == 0 && $obj1.worktaskCount >0){
-        $count = 10 
-    }
-    $textCount = $obj1.worktaskCount
+    $newFinsh = $obj1.worktaskCount
+    $textCount = $count
     $isTasking = false
     If($obj1.taskKey){
-        $count = $count - 1
+        $newFinsh = $newFinsh - 1
         $isTasking = true
     }
+    $textCount = ($newFinsh or 0) % @NumCycle
+    If($textCount == 0 && $newFinsh >0){
+        $textCount = 10 
+    }
     $str = "/"
-    If($obj1.taskKey){
-        If($textCount == 1){
-            $str = "st/"
-        }ElseIf($textCount == 2){
-            $str = "nd/"
-        }ElseIf($textCount == 3){
-            $str = "rd/"
-        }Else{
-            $str = "th/"
-        }
-    }
-    $text = Concat(p1 = $textCount, p2 = $str, p3 = @CircleNum)
+    $text = Concat(p1 = $textCount, p2 = $str, p3 = @NumCycle)
     $rateArray = [0.02, 0.11, 0.35, 0.485, 0.5, 0.52, 0.61, 0.9485, 0.98, 1]
-    $rate = 1 - (ArrayGet(array = $rateArray, index = $count) or 0)
+    $rate = 1 - (ArrayGet(array = $rateArray, index = $textCount) or 0)
     $imgcount = $obj1.worktaskCount
-    If($obj1.taskKey){
-        $imgcount = $imgcount - 1
-    }
-    If($imgcount >=0 and $imgcount <10){
-        $btnImg = "set:indentImg.json image:btn1.png"
-    }ElseIf($imgcount >=10 &&  $imgcount <20){
-        $btnImg = "set:indentImg.json image:BtnGreen.png"
-    }ElseIf($imgcount >=20 && $imgcount <30){
-        $btnImg = "set:indentImg.json image:btnBule.png"
-    }ElseIf($imgcount >=30){
-        $btnImg = "set:indentImg.json image:BtnRed.png"
-    }
-    If($obj1.worktaskCount == @CircleNum or $imgcount == 0 or $obj1.isinintTask){
-        $resetImg = true
-        $obj1.isinintTask = nil
-    }
+    $btnImg = "set:indentImg.json image:BtnGreen.png"
     $taskData = Table(
         Progress =  $rate,
         BtnText = $text,
@@ -4020,21 +3995,6 @@ GET_TASK_GPS  --得到打工的GPS位置
 }
 TASK_NPC_ADD_BUFF  --给任务npc还动作加buff, 订单NPC加buff动作
 {
-    $map = GetPlayerMap(player = $obj1)
-    $mapNpc = GetMapNpc(map = $map)
-    --任务NPC
-    Foreach(array = $mapNpc, key = "npc"){
-        --$name = GetConfigVar(obj = $npc, key = "fullName")
-        $name = $npc.taskKey
-        If($obj1.lastTaskKey and $name == $obj1.lastTaskKey){
-            --PlayAction(entity = $npc, target = $obj1, actionName = "idle", actionTime = -1)
-            --UnMarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/task_npc_buff")
-        }
-        If($obj1.taskKey and $name == $obj1.taskKey){
-            --PlayAction(entity = $npc, target = $obj1, actionName = "idle_1", actionTime = -1)
-            --MarkEntityForPlayer(player = $obj1, entity = $npc, buffName = "myplugin/task_npc_buff")
-        }
-    }
     --订单NPC
     $checkMax = @workmaxCount <= ($obj1.maxtaskCount or 0)
     --订单NPC新的计算buff方法：
@@ -4082,9 +4042,8 @@ TASK_UPDATE_DATA(){ --更新打工数据
     CallTrigger(event = "GET_TASK_UI_DATA", object = $obj1) --更新客户端
 }
 PUNISH_END(){--惩罚结束
-    If($obj1 and $obj2){
+    If($obj1){
         $obj1.punishmentCD = false
-        CallTrigger(object = $obj2, event = "CHANG_ACTOR", actorName = "actorName", obj2 = $obj1)
         CallTrigger(event = "TASK_UPDATE_DATA", object = $obj1)
     }
 }
@@ -4094,7 +4053,6 @@ DELETE_ITEM(){--267.0,19.0,371.0
         $obj1.punishmentCD = true
         If(@INDENT_MODEL){
             ShowEntityHeadCountDown(show = true, entity = @INDENT_MODEL, player = $obj1, time = @punishmentTime)
-            CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "punishmentActor", obj2 = $obj1)
             StartTimer(object = $obj1, event = "PUNISH_END", obj2 = @INDENT_MODEL, time = @punishmentTime * 20)
         }
         CancelTask(player = $obj1, name = $obj1.taskKey)
@@ -4117,9 +4075,7 @@ DELETE_ITEM(){--267.0,19.0,371.0
 MAC_TASK_COUNT_RESET(){--第二天，刷新最大累计
     If($obj1 and IsValidObject(object = $obj1)){
         $obj1.maxtaskCount = 0
-        If(@INDENT_MODEL and IsValidObject(object = @INDENT_MODEL)){
-            CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "actorName", obj2 = $obj1)-- 换模型
-        }
+        CallTrigger(event = "TASK_UPDATE_DATA", object = $obj1)
     }
 }
 INIT_WORK_TASK(){ --初始打工
@@ -4192,8 +4148,7 @@ FINISH_TASK(debug = false){ --完成打工的对话
 FINISH_AWARD(){ --完成打工的奖励
     $obj1.maxtaskCount = ($obj1.maxtaskCount or 0 ) + 1
     $obj1.workTaskfinish = $obj1.workTaskfinish + 1
-    If($obj1.maxtaskCount >= @workmaxCount && not $obj1.maxActor and @INDENT_MODEL){ --最大累计数，改变模型
-        $obj1.maxActor = true
+    If($obj1.maxtaskCount >= @workmaxCount){ --最大累计数，改变模型
         CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "maxCountActor", obj2 = $obj1)
     }
     If($obj1.finishworkTime){
@@ -6206,4 +6161,17 @@ EDIT_TEAM_NAME_BUTTON_SURE
             UpdateUIData(player = $entity, ui = "win_team_name", data = $name)
         }
     }
+}
+
+--交易内容
+REQ_TRADE()
+{
+    ShowDialogTip(entity = $obj1, tipType = 2, event = "REQ_CREATE", p1 = "ui_tip")
+}
+REQ_CREATE(){
+    $trayType =  [ 21, 22, 23, 24 ]
+	$itemFilters = {
+		canTrade = true
+	}
+	RequestTrade(player = $obj2, target = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
 }
