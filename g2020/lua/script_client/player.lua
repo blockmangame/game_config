@@ -6,13 +6,18 @@ function Player:setItemUse(tid, slot, isUse, disSendSer)
 		if not handItem or handItem:null() then
 			self:data("main").handItem = nil
 		end 
-		local item = Item.CreateSlotItem(self, tid, slot)
-		if isUse and item and not item:null() then
+        local item = Item.CreateSlotItem(self, tid, slot)
+        if item and not item:null() then
 			local buffName = item:cfg().equip_buff
-			if buffName then
+			if isUse and buffName then
 				self:data("main").handItem = item
-			end
-		end
+            elseif not isUse then
+                local handItem =  self:data("main").handItem
+                if handItem and not handItem:null() and handItem:cfg().fullName == item:cfg().fullName then
+                    self:data("main").handItem = nil
+                end
+            end
+        end
 		Lib.emitEvent(Event.EVENT_HAND_ITEM_CHANGE)
 	end
 
