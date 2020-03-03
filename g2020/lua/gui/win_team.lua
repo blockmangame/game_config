@@ -4,6 +4,8 @@ function M:init()
     self:initContent()
     self:initBottom()
     self:initCloseButton()
+
+    self.waitForRequest = {}
 end
 
 function M:onOpen(info)
@@ -93,6 +95,10 @@ function M:updateTitle(title)
 end
 
 function M:updateContent()
+    if next(self.waitForRequest) then
+        return
+    end
+    
     self.team_content_list:ClearAllItem()
     self.team_content_list:SetInterval(2)
     local teamID = Me:getValue("teamId")
@@ -141,6 +147,8 @@ function M:updateContent()
 
 
         self.team_content_list:AddItem(item)
+
+        self.waitForRequest[userInfo.objID] = nil
     end
 
     local playersInfo = Game.GetAllPlayersInfo()
@@ -150,6 +158,7 @@ function M:updateContent()
         if userInfo then
             userInfo.userId = playerInfo.userId
             userInfo.objID = playerInfo.objID
+            self.waitForRequest[userInfo.objID] = true
             Me:sendPacket({
                 pid = "QuerySimpleView",
                 objID = userInfo.objID

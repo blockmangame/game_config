@@ -2570,15 +2570,21 @@ UPDATE_TEAM_MEMBER_LIST
         If(IsPlayer(entity = $entity))
         {
             RecheckAllInteractionUIs(player = $entity)
-            -- 单人的家庭UI 和 多人的家庭UI 的相互切换 
+
+            If($disableUpdate and $obj1 == $entity)
+            {
+                Continue()
+            }
+            
+            -- 单人的家庭UI 和 多人的家庭UI 的相互切换
             If($size <= 1)
             {
-                UpdateUIData(player = $entity, ui = "win_team", data = {close = true, title = $teamName})
-                UpdateUIData(player = $entity, ui = "win_single_team")
+                UpdateUIData(player = $entity, ui = "win_team", data = {close = true})
+                -- UpdateUIData(player = $entity, ui = "win_single_team")
             }
             Else
             {
-                UpdateUIData(player = $entity, ui = "win_single_team", data = {close = true})
+                UpdateUIData(player = $entity, ui = "win_single_team", data = {close = true, title = $teamName})
                 UpdateUIData(player = $entity, ui = "win_team")
             }
         }
@@ -2653,10 +2659,14 @@ REQUEST_JOIN_FAMILY
             }
 
             SetEntityTeam(entity = $obj1, teamId = $targetFamilyID)
-            CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $targetFamilyID, object = $obj1)
+
+            -- 打开家庭UI
+            CallTrigger(event = "SHOW_TEAM_UI", obj1 = $obj1) -- 打开家庭UI
+            CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $targetFamilyID, object = $obj1, disableUpdate = true)
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", keepTime = 40)
             $obj1.requestFamilyPlayer = nil
 
+            -- 上报统计
             CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $obj1)
         }
         Else
@@ -2668,17 +2678,19 @@ REQUEST_JOIN_FAMILY
             SetEntityTeam(entity = $targetPlayer, teamId = $teamId)
             SetEntityTeam(entity = $obj1, teamId = $teamId)
            
-            CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId, object = $obj1)
+            -- 打开家庭UI
+            CallTrigger(event = "SHOW_TEAM_UI", obj1 = $obj1) -- 打开家庭UI
+            CallTrigger(event = "SHOW_TEAM_UI", obj1 = $targetPlayer) -- 打开家庭UI
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", keepTime = 40)
             $obj1.requestFamilyPlayer = nil
 
+            -- 上报统计
             DictionarySet(dict = @FamilyCreateDuration, key = $teamId, value = GetGameTime())    --记录家庭生成时间
             CallTrigger(event = "ADD_CREATE_FAMILY_REPORT_NUM", object = $targetPlayer)
             CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $obj1)
         }
     }
 }
-
 
 SHOW_TEAM_UI
 {
