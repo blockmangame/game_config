@@ -316,12 +316,13 @@
                 "event": "INTERACTION_ACT"
             },
             {
-                "text": "interact_join_family",
+                "/ps": "这个是邀请加入家庭的按钮",
+                "text": "interact_request_family",
                 "image": "set:party_interaction_ui.json image:interaction_join_family",
                 "checkCanHide": {
                     "funcName": "checkInSameTeam"
                 },
-                "event": "INTERACTION_JOIN_FAMILY"
+                "event": "INTERACTION_REQUEST_FAMILY"
             },
             {
                 "text": "interact_trolley",

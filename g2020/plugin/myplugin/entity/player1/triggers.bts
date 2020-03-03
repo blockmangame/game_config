@@ -2560,18 +2560,34 @@ LEAVE_TEAM
 UPDATE_TEAM_MEMBER_LIST
 {
     $entityList = GetTeamEntityList(teamId = $teamId)
+    $dict = NewDictionary($entityList)
+    $size = DictionarySize(dict = $dict)
+
+    $teamName = DictionaryGet(dict = @FamilyName, key = $teamId) or nil
+
     ForeachDictionary(keyName = "objID", valueName = "entity", dict = NewDictionary($entityList))
     {
         If(IsPlayer(entity = $entity))
         {
             RecheckAllInteractionUIs(player = $entity)
-            UpdateUIData(player = $entity, ui = "win_team")
+            -- 单人的家庭UI 和 多人的家庭UI 的相互切换 
+            If($size <= 1)
+            {
+                UpdateUIData(player = $entity, ui = "win_team", data = {close = true, title = $teamName})
+                UpdateUIData(player = $entity, ui = "win_single_team")
+            }
+            Else
+            {
+                UpdateUIData(player = $entity, ui = "win_single_team", data = {close = true})
+                UpdateUIData(player = $entity, ui = "win_team")
+            }
         }
     }
 }
 
-INTERACTION_JOIN_FAMILY
+INTERACTION_REQUEST_FAMILY  -- 邀请加入家庭
 {
+    -- obj2 邀请 obj1 加入家庭
     -- obj2是点击UI的那个人
     -- obj1是被点击的那个人
 
@@ -2728,7 +2744,7 @@ INIT_TEAM_UI
             event = "SHOW_FAMILY_ALBUM",
             normalImage = "set:team.json image:blue_btn",
             pushedImage = "set:team.json image:blue_btn",
-             name = "ui_family_album"
+            name = "ui_family_album"
         },
         {
             event = "SHOW_QUIT_FAMILY_UI",

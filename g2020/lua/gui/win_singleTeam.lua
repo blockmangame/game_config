@@ -15,6 +15,49 @@ end
 
 function M:initTextLayout()
     self.text = self:child("SingleTeam-Main-TextLayout-Text")
+
+    Lib.subscribeEvent(Event.EVENT_UPDATE_UI_DATA, function(UIName)
+        if UI:isOpen(self) and UIName == "win_single_team" then
+            local data = UI:getRemoterData("win_single_team")
+            if not (data and data.close) then
+                -- todo: 刷新UI界面
+            else
+                -- 关闭当前的UI、切换到多人的组队UI
+                self:onBtnClose()
+                
+                local title = data.title or "gui_my_family"
+
+                local buttons = {
+                    {
+                        event = "SHOW_FAMILY_ALBUM",
+                        normalImage = "set:team.json image:blue_btn",
+                        pushedImage = "set:team.json image:blue_btn",
+                        name = "ui_family_album"
+                    },
+                    {
+                        event = "SHOW_QUIT_FAMILY_UI",
+                        normalImage = "set:team.json image:green_btn",
+                        pushedImage = "set:team.json image:green_btn",
+                        name = "ui_family_quit"
+                    }
+                }
+
+                local closeBtn = {
+                    disableClose = false
+                }
+        
+                local info = {
+                    title = title,
+                    buttons = buttons,
+                    closeBtn = closeBtn
+                }
+            
+                Lib.emitEvent(Event.EVENT_SHOW_TEAM, true, info)
+
+            end
+        end
+    end)
+
 end
 
 function M:initImage()

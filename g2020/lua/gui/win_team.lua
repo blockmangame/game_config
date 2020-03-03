@@ -35,7 +35,36 @@ function M:initContent()
     self.team_content_list = self:child("Team-Main-Content-List")
     Lib.subscribeEvent(Event.EVENT_UPDATE_UI_DATA, function(UIName)
         if UI:isOpen(self) and UIName == "win_team" then
-            self:updateContent()
+            local data = UI:getRemoterData("win_team")
+            if not (data and data.close) then
+                self:updateContent()
+            else
+                -- 关闭当前的UI、切换到单人的UI
+                self:closeWindow()
+                
+                -- todo: 内容要修改
+                local info = {
+                    buttons = {
+                        {
+                            event = "SHOW_FAMILY_ALBUM",
+                            normalImage = "set:team.json image:blue_btn",
+                            pushedImage = "set:team.json image:blue_btn",
+                            name = "ui_family_album"
+                        },
+                        {
+                            event = "SHOW_QUIT_FAMILY_UI",
+                            normalImage = "set:team.json image:green_btn",
+                            pushedImage = "set:team.json image:green_btn",
+                            name = "ui_family_quit"
+                        }
+                    },
+                    closeBtn = {
+                        disableClose = false,
+                    }
+                }
+
+                Lib.emitEvent(Event.EVENT_SHOW_SINGLE_TEAM, true, info)
+            end
         end
     end)
 end
@@ -73,10 +102,6 @@ function M:updateContent()
 
     local teamInfo = Game.GetAllTeamsInfo()[teamID]
     if not teamInfo then
-        return
-    end
-
-    if not UI:isOpen(self) then
         return
     end
 
