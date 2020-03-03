@@ -88,7 +88,7 @@ customCheckFuncs.checkCanShowInviteFamily = function (entity, checkCond, targetO
     local id2 = target:getValue("teamId")
 
     if id1 == 0 then
-        return false
+        return id1 == 0
     else
         return id1 ~= id2
     end
@@ -108,7 +108,7 @@ customCheckFuncs.checkCanShowApplyFamily = function (entity, checkCond, targetOb
     local id2 = target:getValue("teamId")
 
     if id2 == 0 then
-        return id1 == 0
+        return false
     else
         return id1 ~= id2
     end
