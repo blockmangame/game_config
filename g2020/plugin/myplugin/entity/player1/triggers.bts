@@ -1,3 +1,10 @@
+CHECK_CAN_INTERACT(debug1 = true){
+    If(IsCameraMode(player = $obj1))
+    {
+        $canInteract = false
+        Return()
+    }
+}
 SET_ITEM_USE {
     If($isUse)
     {
