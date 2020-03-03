@@ -2486,8 +2486,8 @@ CREATE_FAMILY
         $teamId = @familyIndex
         SetEntityTeam(entity = $obj1, teamId = $teamId)
         @familyIndex = @familyIndex + 1
-        ShowTip(entity = $obj1, tipType = 2,textKey = "gui_create_family_success", keepTime = 40)
-
+        
+        CallTrigger(event = "INIT_TEAM_UI", object = $obj1, memberNum = 1, show = true) 
         CallTrigger(event = "ADD_CREATE_FAMILY_REPORT_NUM", object = $obj1)
         DictionarySet(dict = @FamilyCreateDuration, key = $teamId, value = GetGameTime())    --记录家庭生成时间
     }
@@ -2534,7 +2534,7 @@ QUIT_FAMILY
         ShowTip(entity = $obj1, tipType = 2,textKey = "gui_quit_family_success", keepTime = 40)
         CallTrigger(event = "INIT_TEAM_UI", obj1 = $obj1, show = false)
         CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId, object = $obj1)
-        ShowSingleTeamUI(entity = $obj1, show = false)    -- todo: 关闭一个人的窗口
+        -- ShowSingleTeamUI(entity = $obj1, show = false)    -- todo: 关闭一个人的窗口
     }
 }
 
@@ -2669,8 +2669,11 @@ SHOW_TEAM_UI
     $teamId = GetEntityTeam(entity = $obj1)
     If($teamId and $teamId ~= 0)
     {
+        $teamEntityList = GetTeamEntityList(teamId = $teamId)
+        $dict = NewDictionary($teamEntityList)
+        $memberNum = DictionarySize(dict = $dict)
         $teamName = DictionaryGet(dict = @FamilyName, key = $teamId) or nil
-        CallTrigger(event = "INIT_TEAM_UI", object = $obj1, teamName = $teamName) 
+        CallTrigger(event = "INIT_TEAM_UI", object = $obj1, teamName = $teamName, memberNum = $memberNum, show = true) 
     }
     Else
     {
@@ -2709,6 +2712,13 @@ TEAM_CREATE_RESULT
 
 INIT_TEAM_UI
 {
+    If(not $show)
+    {
+        ShowTeamUI(entity = $obj1, show = false)
+        ShowSingleTeamUI(entity = $obj1, show = false)
+        Return()
+    }
+
     $title = {
         name = $teamName or "gui_my_family"
     }
@@ -2738,8 +2748,14 @@ INIT_TEAM_UI
         closeBtn = $closeBtn
     }
 
-    ShowTeamUI(entity = $obj1, show = $show, info = $info)
-    -- ShowSingleTeamUI(entity = $obj1, show = true, info = $info)    -- todo： for test
+    If($memberNum > 1)
+    {
+        ShowTeamUI(entity = $obj1, show = true, info = $info)
+    }
+    Else
+    {
+        ShowSingleTeamUI(entity = $obj1, show = true, info = $info)
+    }
 }
 
 SHOW_FAMILY_ALBUM
