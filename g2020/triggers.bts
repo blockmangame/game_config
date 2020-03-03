@@ -938,8 +938,15 @@ EDIT_PUBLIC_BLACKBOARD_BUTTON_SURE
 SET_RANGE_BOUNDARY
 {
     $index = 1
+    If(not $num || not $array)
+    {
+        @rangeBoundary = "0"
+        Return()
+    }
+
     @rangeBoundary = "0"
-    $size = ArraySize(array = $array or {})
+    SortNumberArray(array = $array)
+    $size = ArraySize(array = $array)
     Foreach(array = $array or {}, key = "value")
     {
         If($index == $size)
