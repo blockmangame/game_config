@@ -86,3 +86,41 @@ function Actions.ShowTeamUI(data, params, context)
         info = params.info
     })
 end
+
+function Actions.ShowProgressFollowObj(data, params, context)
+    local player = params.entity
+    if not player then
+        return
+    end
+    player:sendPacket({
+        pid = "ShowProgressFollowObj",
+        isOpen = params.isOpen,
+        pgImg = params.pgImg,
+        pgBackImg = params.pgBackImg,
+        pgName = params.pgName,
+        usedTime = params.usedTime,
+        totalTime = params.totalTime,
+        pgText = params.pgText,
+    })
+end
+
+function Actions.ShowDetails(data, params, content)
+    local entity = params.entity
+    if not entity.isPlayer then
+		return
+	end
+    entity:sendPacket({
+        pid = "ShowDetails",
+        fullName = params.fullName,
+        contents = params.contents,
+        uiArea = params.uiArea,
+        isOpen = params.isOpen,
+    })
+end
+
+function Actions.SetLoadSectionMaxInterval(data, params, context)
+	params.entity:sendPacket({
+		pid = "SetLoadSectionMaxInterval",
+		value = params.value,
+	})
+end

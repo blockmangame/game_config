@@ -2430,12 +2430,14 @@ USER_INTERACTION_ACTION
     $receiver = $obj1   --接收方。被发起人
     $promoter = $obj1 == $from and $to or $from --发起方
 
-    If($receiver.interactionObjId || GetRideOn(entity = $receiver))
+    $conA = $receiver.role == @child && $skillName == "myplugin/action_pickup" && not $receiver.useTrolley
+    If($receiver.interactionObjId || (not $conA && GetRideOn(entity = $receiver)))
     {
         ShowTip(entity = $promoter, tipType = 2, textKey = "target_is_intercting", keepTime = 40)
         Return()
     }
 
+    CallTrigger(obj1 = $receiver, event = "PLAYER_CLEAR_RIDE")
     If($promoter.interactionObjId)
     {
         CallTrigger(obj1 = $promoter, event = "ENTITY_REMOVE_INTERACTION")
@@ -2472,6 +2474,13 @@ ENTITY_REMOVE_INTERACTION {
 
     If($obj1.interactionBuff){
         RemoveEntityBuff(buff = $obj1.interactionBuff, entity = $obj1)
+    }
+}
+
+ENTITY_ADD_DINGDONG_BUFF{
+    $dingDongBuff = GetConfigVar(object = $obj1, key = $buffKey)
+    If($dingDongBuff){
+        AddEntityBuff(entity = $obj1, cfg = $dingDongBuff, buffTime = 200)
     }
 }
 
@@ -2629,6 +2638,7 @@ INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
 
 INVITE_JOIN_FAMILY
 {
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteJoinFamilyBuff")
     $targetPlayer = $obj1.inviteFamilyPlayer
     $obj1.inviteFamilyPlayer = nil
 
@@ -2732,6 +2742,7 @@ INTERACTION_APPLY_FAMILY   --申请加入家庭
 
 APPLY_JOIN_FAMILY
 {
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "applyJoinFamilyBuff")
     $targetPlayer = $obj1.applyFamilyPlayer
     $obj1.applyFamilyPlayer = nil
 
@@ -4334,8 +4345,11 @@ SURE_BUY {
             If($coinId == 0){
                 BuyGoods(player = $obj1, uniqueId = 20201999,  coinId = $coinId, price = $price, event = "SHOP_BUY_COIN", objID = GetObjectID(object = $obj1), sellItem = $sellItem)
             }Else{
-                --ShowTip(textKey = "ui_buy_success", tipType = 2, entity = $obj1, keepTime = 20)
-                ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
+                If(GetItemCfg(fullName = $sellItem, key = "base") == "car_base"){
+                    ShowDialogTip(entity = $obj1, tipType = 0,p1="gui.hint",p2="item.pick.bag",p3="sure", event = "OPEN_HINT_BUY",context = {sellItem = $sellItem})
+                }Else{
+                    ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
+                }
                 PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
             }
          }Else{ --背包满了
@@ -4345,14 +4359,21 @@ SURE_BUY {
         CallTrigger(object = $obj1, event = "GO_TO_BUY_UI", coinName = $coinName)
    }
 }
+OPEN_HINT_BUY()
+{
+    ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
+}
 SHOP_BUY_COIN {
     $dict = NewDictionary($response)
     $objID = DictionaryGet(dict = $dict, key = "objID")
     $obj1 = GetObject(objID = $objID)
     $sellItem = DictionaryGet(dict = $dict, key = "sellItem")
     If($isSucceed and $obj1){
-        ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
-        --ShowTip(textKey = "ui_buy_success", tipType = 2, entity = $obj1, keepTime = 20)
+        If(GetItemCfg(fullName = $sellItem, key = "base") == "car_base"){
+            ShowDialogTip(entity = $obj1, tipType = 0,p1="gui.hint",p3="gui.hint.btn",p2="item.pick.bag", event = "OPEN_HINT_BUY",context = {sellItem = $sellItem})
+        }Else{
+            ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
+        }
     }ElseIf($obj1){
         ShowRecharge(player = $obj1)
         ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
@@ -5149,6 +5170,7 @@ PLAYER_BE_INVITE {
     }
     $obj1.visitTarget = $obj2
 
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteFriendBuff")
     $contentDict = NewDictionary($content)
     $nickName = DictionaryGet(dict = $contentDict, key = "nickName")
     $showTime = DictionaryGet(dict = $contentDict, key = "showTime")
@@ -5243,6 +5265,7 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
 
     If($partyInfo){--[party] friend invite
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "invitePartyBuff")
         $obj1.partyInfo = $partyInfo
         $partyInfoDict = NewDictionary($partyInfo)
         $targetPartyId = DictionaryGet(dict = $partyInfoDict, key = "partyId")
@@ -5282,6 +5305,7 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
         }
     }
     Else{--[common] friend invite
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteFriendBuff")
         $buttonInfo = [
             {
                 normalImage = "set:invite_tip.json image:green_btn",

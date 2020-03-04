@@ -191,10 +191,10 @@ DEC_INTERACTION_MOVE_TOUCH_END{
     -- entityPos = $entityPos, entityYaw = $entityYaw, entityPitch = $entityPitch, entityScale = $entityScale)
     $dict = NewDictionary($params or {})
     $obj1.lastSideNormal = DictionaryGet(dict = $dict, key = "lastSideNormal") or Table(x = 0,y = 0,z = 0)    
-    SetEntityRoll(entity = $obj1, rotationRoll = DictionaryGet(dict = $dict, key = "entityRoll") or GetEntityRoll(entity = $obj1))
     CallTrigger(object = $obj1, obj1 = $obj1, lastSideNormal = $obj1.lastSideNormal, pos = DictionaryGet(dict = $dict, key = "entityPos") or GetEntityPosition(entity = $obj1), 
         ry = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), 
         rp = DictionaryGet(dict = $dict, key = "entityPitch") or GetEntityPitch(entity = $obj1), event = "UPDATE_POSITION")
+    SetEntityRoll(entity = $obj1, rotationRoll = DictionaryGet(dict = $dict, key = "entityRoll") or GetEntityRoll(entity = $obj1))
     StartTimer(rep = false, object =$obj1, obj1 =$obj1, time = 2, yaw = DictionaryGet(dict = $dict, key = "entityYaw") or GetEntityYaw(entity = $obj1), event = "ROTATION_BODY_YAW")
     -- 移动家具特效buff2
     $decEndMovementEffectBuff = GetConfigVar(obj = $obj1, key = "decEndMovementEffectBuff")

@@ -32,3 +32,16 @@ Lib.subscribeEvent(Event.EVENT_SHOW_TEAM, function(show, ...)
         UI:closeWnd("team")
     end
 end)
+
+Lib.subscribeEvent(Event.EVENT_SHOW_PROGRESS_FOLLOW_OBJ, function(packet)
+    UI:openWnd("objProgress")
+    Lib.emitEvent(Event.EVENT_SET_OBJ_PROGRESS_ARGS, packet)
+end)
+
+Lib.subscribeEvent(Event.EVENT_SHOW_DETAILS, function(packet)
+    if packet.isOpen then
+        UI:openWnd("showDetails", packet)
+    else
+        UI:closeWnd("showDetails")
+    end
+end)
