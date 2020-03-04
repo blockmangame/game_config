@@ -2630,13 +2630,14 @@ INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
 INVITE_JOIN_FAMILY
 {
     $targetPlayer = $obj1.inviteFamilyPlayer
+    $obj1.inviteFamilyPlayer = nil
+
     If($button == "left")
     {
         If(IsPlayer(entity = $targetPlayer))
         {
             ShowTip(entity = $targetPlayer, tipType = 2,textKey = "ui_family_reject", keepTime = 40)
         }
-        $obj1.inviteFamilyPlayer = nil
         Return()
     }
     ElseIf($button == "right")
@@ -2644,7 +2645,6 @@ INVITE_JOIN_FAMILY
         If(not IsPlayer(entity = $targetPlayer))
         {
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_offline", keepTime = 40)
-            $obj1.inviteFamilyPlayer = nil
             Return()
         }
 
@@ -2658,7 +2658,6 @@ INVITE_JOIN_FAMILY
             If(not $playerCount or $playerCount >= 4)
             {
                 ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_full_member", keepTime = 40)
-                $obj1.inviteFamilyPlayer = nil
                 Return()
             }
 
@@ -2671,8 +2670,6 @@ INVITE_JOIN_FAMILY
             
             -- 上报统计
             CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $obj1)
-
-            $obj1.inviteFamilyPlayer = nil
         }
         Else
         {
@@ -2692,8 +2689,6 @@ INVITE_JOIN_FAMILY
             DictionarySet(dict = @FamilyCreateDuration, key = $teamId, value = GetGameTime())    --记录家庭生成时间
             CallTrigger(event = "ADD_CREATE_FAMILY_REPORT_NUM", object = $targetPlayer)
             CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $obj1)
-
-            $obj1.inviteFamilyPlayer = nil
         }
     }
 }
@@ -2738,6 +2733,7 @@ INTERACTION_APPLY_FAMILY   --申请加入家庭
 APPLY_JOIN_FAMILY
 {
     $targetPlayer = $obj1.applyFamilyPlayer
+    $obj1.applyFamilyPlayer = nil
 
     If($button == "left")
     {
@@ -2745,7 +2741,6 @@ APPLY_JOIN_FAMILY
         {
             ShowTip(entity = $targetPlayer, tipType = 2,textKey = "ui_family_reject", keepTime = 40)
         }
-        $obj1.applyFamilyPlayer = nil
         Return()
     }
     ElseIf($button == "right")
@@ -2753,14 +2748,12 @@ APPLY_JOIN_FAMILY
         If(not IsPlayer(entity = $targetPlayer))
         {
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_offline", keepTime = 40)
-            $obj1.applyFamilyPlayer = nil
             Return()
         }
 
         $teamId = GetEntityTeam(entity = $obj1)
         If(not $teamId or $teamId == 0)
         {
-            $obj1.applyFamilyPlayer = nil
             Return()
         }
 
@@ -2768,7 +2761,6 @@ APPLY_JOIN_FAMILY
         If($playerCount >= 4)
         {
             ShowTip(entity = $targetPlayer, tipType = 2,textKey = "ui_family_full_member", keepTime = 40)
-            $obj1.applyFamilyPlayer = nil
             Return()
         }
 
@@ -2781,8 +2773,6 @@ APPLY_JOIN_FAMILY
        
         -- 上报统计
         CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $targetPlayer)
-
-        $obj1.applyFamilyPlayer = nil
     }
 }
 
