@@ -5382,6 +5382,7 @@ PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
             }
         }
         Else{--me not in party
+            $obj1.targetUserId = DictionaryGet(dict = $partyDict, key = "userId")
             CallTrigger(object = $obj1, event = "JOIN_OTHERS_PARTY")
         }
     }
