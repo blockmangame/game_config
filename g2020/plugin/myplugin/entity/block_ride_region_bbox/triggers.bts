@@ -1,0 +1,22 @@
+ENTITY_ENTER{
+    StartTimer(rep = false, time = 1, object = $obj1, event = "CREATE_REGION")
+}
+
+CREATE_REGION{
+    $curBoundingBox = GetEntityBoundingBox(entity = $obj1)
+    $map = GetEntityMap(entity = $obj1)
+    $regionArea = Table(
+        min = ArrayGet(array = $curBoundingBox, index = 2),
+        max = ComputeV3(op = "add", p1 = {x = -0.5, y = -0.5, z = -0.5}, p2 = ArrayGet(array = $curBoundingBox, index = 3))
+    )
+    $blockRideRegionCfg = GetConfigVar(obj = $obj1, key = "blockRideRegionCfg")
+    $blockRideRegionKey = Concat(p1 = GetConfigVar(obj = $obj1, key = "blockRideRegionKey"), p2 = GetObjectID(object = $obj1))
+
+    $region = AddRegion(map = $map, key = $blockRideRegionKey, region = $regionArea, regionCfg = $blockRideRegionCfg, obj1 = $obj1)
+    SetRegionOwner(region = $region, owner = $obj1)
+    SetObjectVar(obj = $obj1, key = "curRegionKey", value = $blockRideRegionKey)
+}
+
+ENTITY_DIE{
+    RemoveRegion(map = GetEntityMap(entity = $obj1), key = GetObjectVar(obj = $obj1, key = "curRegionKey"))
+}
