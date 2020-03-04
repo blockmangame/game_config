@@ -117,3 +117,10 @@ function Actions.ShowDetails(data, params, content)
         isOpen = params.isOpen,
     })
 end
+
+function Actions.SetLoadSectionMaxInterval(data, params, context)
+	params.entity:sendPacket({
+		pid = "SetLoadSectionMaxInterval",
+		value = params.value,
+	})
+end

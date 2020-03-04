@@ -3,7 +3,7 @@ ENTITY_ENTER
     $curBoundingBox = GetEntityBoundingBox(entity = $obj1)
     $regionArea = Table(
         min = ComputeV3(p1 = ArrayGet(array = $curBoundingBox, index = 2), p2 = V3(5, 0, 5), op = "sub"),
-        max = ComputeV3(p1 = ArrayGet(array = $curBoundingBox, index = 3), p2 = V3(5, 0, 5), op = "add")
+        max = ComputeV3(op = "add", p1 = {x = -0.5, y = -0.5, z = -0.5}, p2 = ComputeV3(p1 = ArrayGet(array = $curBoundingBox, index = 3), p2 = V3(5, 0, 5), op = "add"))
     )
     
     $region = AddRegion(

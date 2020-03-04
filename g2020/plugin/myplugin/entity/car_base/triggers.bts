@@ -37,6 +37,7 @@ RIDE_ON
             CallTrigger(obj1 = $obj2, event = "PLAYER_CLEAR_RIDE")
             RideOn(entity = $obj2, target = $obj1)
         }
+        StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "CLAC_IS_ON_BLOCK_RIDE_FILED")
     }
 }
 
@@ -52,6 +53,34 @@ RIDE_ON_CAR
     CallTrigger(object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "ADD_TARGET_ATTACH_POINT_INDEX_BUFF")
     CallTrigger(obj1 = $obj2, event = "PLAYER_CLEAR_RIDE")
     RideOn(entity = $obj2, target = $obj1)
+    StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "CLAC_IS_ON_BLOCK_RIDE_FILED")
+}
+
+CLAC_IS_ON_BLOCK_RIDE_FILED{
+    If(not $obj2.lastInBlockRideRegion){
+        Return()
+    }
+    If(not IsPosInRegion(pos = GetEntityPosition(entity = $obj1), region = $obj2.lastInBlockRideRegion)){
+        Return()
+    }
+    $blockRideEntity = GetRegionOwner(region = $obj2.lastInBlockRideRegion)
+    $door = $blockRideEntity.door
+    $house = $door.house
+    $map = GetEntityMap(entity = $house)
+    $ry = GetEntityYaw(entity = $house.door)
+    $regionCenter = GetRegionCenter(region = $house.region)
+    $pos = {x = GetPosX(pos = $regionCenter), y = GetPosY(pos = GetRegionMin(region = GetObjectVar(obj = $house, key = "region"))), z = GetPosZ(pos = $regionCenter)}
+    $pos = ComputeV3(
+        p1 = $pos,
+        p2 = V3RotationYaw(
+            vector = GetConfigVar(obj = $house, key = "entityTeleportToOutsidePosOffset") or Table(x = 0, y = 0.5, z = 3),
+            yaw = $ry
+        ),
+        op = "add"
+    )
+    SetEntityPosition(entity = $carrier or $obj1, map = $map, ry = $ry or 0, pos = $pos)
+    ChangeCameraView(entity = $obj2, yaw = $ry, pitch = 30, distance = 5, smooth = 1, offset = {x = 0, y = 0, z = 0})
+    $obj2.lastInBlockRideRegion = nil
 }
 
 ENTITY_RIDE_ON
@@ -62,6 +91,13 @@ ENTITY_RIDE_ON
     If($hidePlayer)
     {
         $obj2.driveHideBuff = AddEntityBuff(entity = $obj2, cfg = "myplugin/driveHide_buff")
+    }
+	StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "CLAC_IS_ON_BLOCK_RIDE_FILED")
+
+    $loadSectionMaxInterval = GetConfigVar(obj = $obj1, key = "loadSectionMaxInterval")
+    If($loadSectionMaxInterval)
+    {
+        SetLoadSectionMaxInterval(entity = $obj2, value = $loadSectionMaxInterval)
     }
 }
 
@@ -79,6 +115,12 @@ ENTITY_RIDE_OFF
     If($obj2.driveHideBuff)
     {
         RemoveEntityBuff(entity = $obj2, buff = $obj2.driveHideBuff)
+    }
+
+    $loadSectionMaxInterval = GetConfigVar(obj = $obj1, key = "loadSectionMaxInterval")
+    If($loadSectionMaxInterval)
+    {
+        SetLoadSectionMaxInterval(entity = $obj2, value = 3500)
     }
 }
 
