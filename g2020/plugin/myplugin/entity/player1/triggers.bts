@@ -293,7 +293,7 @@ ENTITY_ENTER
         SetEntityName(entity = $obj1, name = $obj1.nickName)
 
         $obj1.isReadyReward = false
-        $obj1.requestFamilyPlayer = nil
+        $obj1.inviteFamilyPlayer = nil
 
         CallTrigger(event = "ADD_MONEY", object = $obj1)
         If($obj1.inPartyOwnerId == 0)   -- not in party
@@ -2609,7 +2609,7 @@ INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
         }
     }
 
-    $obj1.requestFamilyPlayer = $obj2
+    $obj1.inviteFamilyPlayer = $obj2
     $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
@@ -2628,7 +2628,7 @@ INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
 
 INVITE_JOIN_FAMILY
 {
-    $targetPlayer = $obj1.requestFamilyPlayer
+    $targetPlayer = $obj1.inviteFamilyPlayer
     If($button == "left")
     {
         If(IsPlayer(entity = $targetPlayer))
@@ -2664,7 +2664,7 @@ INVITE_JOIN_FAMILY
             CallTrigger(event = "SHOW_TEAM_UI", obj1 = $obj1) -- 打开家庭UI
             CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $targetFamilyID, object = $obj1, disableUpdate = true)
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", keepTime = 40)
-            $obj1.requestFamilyPlayer = nil
+            $obj1.inviteFamilyPlayer = nil
 
             -- 上报统计
             CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $obj1)
@@ -2682,7 +2682,7 @@ INVITE_JOIN_FAMILY
             CallTrigger(event = "SHOW_TEAM_UI", obj1 = $obj1) -- 打开家庭UI
             CallTrigger(event = "SHOW_TEAM_UI", obj1 = $targetPlayer) -- 打开家庭UI
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", keepTime = 40)
-            $obj1.requestFamilyPlayer = nil
+            $obj1.inviteFamilyPlayer = nil
 
             -- 上报统计
             DictionarySet(dict = @FamilyCreateDuration, key = $teamId, value = GetGameTime())    --记录家庭生成时间
