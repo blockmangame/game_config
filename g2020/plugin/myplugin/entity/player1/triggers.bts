@@ -1660,6 +1660,8 @@ ADD_MONEY
     {
         $obj1.rewardCounts = 1
         $obj1.rewardDay = $today
+        $obj1.rewardCDTime = 0
+        $obj1.rewardMoney = 0
     }
 
     $count = $obj1.rewardCounts
@@ -1687,15 +1689,27 @@ ADD_MONEY
         $money = $money * 2
     }
 
+    $obj1.rewardCDTime = $cdTime
+    $obj1.rewardMoney = $money
+
     If($obj1.isReadyReward)
     {
-        AddCurrency(count = $money, coinName = "green_currency", entity = $obj1)
-        ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
-        $obj1.rewardCounts = $obj1.rewardCounts + 1
+        ShowDialogTip(entity = $obj1, p1 = "ui_tip", p2 = "gui.reward.tip", p3 = "gui.text.sure", tipType = 0, event = "GET_REWARD_MONEY")
+        Return()
     }
+
     StartTimer(rep = false, time = $cdTime, object = $obj1, event = "ADD_MONEY")
     ShowRewardCD(player = $obj1, time = $cdTime)
     $obj1.isReadyReward = true
+}
+
+GET_REWARD_MONEY
+{
+    AddCurrency(count = $obj1.rewardMoney, coinName = "green_currency", entity = $obj1)
+    ShowRewardItemEffect(type = "Coin", count = $obj1.rewardMoney, fullName = "green_currency", player = $obj1)
+    $obj1.rewardCounts = $obj1.rewardCounts + 1
+    StartTimer(rep = false, time = $obj1.rewardCDTime, object = $obj1, event = "ADD_MONEY")
+    ShowRewardCD(player = $obj1, time = $obj1.rewardCDTime)
 }
 
 FUNC_STATE_GENERATE --params: stateBase, col, skill
