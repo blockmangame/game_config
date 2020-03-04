@@ -4,10 +4,10 @@
     "disableDrawSelectionBox": true,
     "defaultAvatar": "set:party_common_1.json image:default_head_icon.png",
     "broadcastPartyInviteItemIndex": 16,
-    "autoInvitePartyInterval":10,
-    "autoInvitePartyCount":5,
-    "partyInviteNumFactor":100,
-    "partyTipTime": 100,
+    "autoInvitePartyInterval": 1200,
+    "autoInvitePartyCount": 2,
+    "partyInviteNumFactor": 1.1,
+    "partyTipTime": 600,
     "canJoinMidway": true,
     "hidehandItemName": true,
     "playerCfg": "myplugin/player1",
@@ -140,8 +140,8 @@
                 ]
             },
             {
-                "key" : "rangeBoundary",
-                "value" : "0"
+                "key": "rangeBoundary",
+                "value": "0"
             },
             {
                 "key": "firstTimeLoginMoney",
@@ -543,7 +543,7 @@
             "position": {
                 "x": 173.2,
                 "y": 18.83,
-                "z": 101.2
+                "z": 61.2
             }
         },
         {
@@ -558,7 +558,7 @@
             "position": {
                 "x": 188,
                 "y": 18.83,
-                "z": 96.7
+                "z": 56.7
             }
         },
         {
@@ -573,7 +573,7 @@
             "position": {
                 "x": 211.5,
                 "y": 18.83,
-                "z": 96.7
+                "z": 56.7
             }
         },
         {
@@ -588,7 +588,7 @@
             "position": {
                 "x": 226.3,
                 "y": 18.83,
-                "z": 101.7
+                "z": 61.7
             }
         }
     ],
@@ -598,10 +598,10 @@
         "onTrolley": 0,
         "lightState": "off",
         "hideDeep": 0.75
-	},
-	"cameraSetting": {
-		"cameraDistance": 5
-	},
+    },
+    "cameraSetting": {
+        "cameraDistance": 5
+    },
     "toolBarSetting": {
         "addBtnList": [
             "friend",
@@ -630,7 +630,7 @@
     "freeChangeNameTimes": 0,
     "changeNamePrice": 100,
     "changeNameCoinId": 0,
-	"viewMode": 1,
+    "viewMode": 1,
     "hidePerSpec": true,
     "personalSettingUI": {
         "volume": true,

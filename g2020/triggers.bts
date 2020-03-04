@@ -181,24 +181,11 @@ SHOW_SELECT_ROLE
         }
     ]
 
-    $bgImage = {
-        name = "set:select_role.json image:background", 
-        stretchType = "NineGrid", 
-        stretchOffset = "227 227 150 80"
-    }
-
     ShowCardOptionsView(
         entity = $obj1,
+        uiCfg = "myplugin/select_role",
         title = "ui_title_select_role",
-        titleArea = [[0,0],[0,10],[0,400],[0,50]],
-        options = $options,
-        showMask = true,
-        itemSpace = 50,
-        itemSize = [180, 260],
-        pageSize = 2,
-        contentArea = [[0, 0], [0, 0], [0, 774], [0, 375]],
-        itemImageSize = [150, 150],
-        bgImage = $bgImage
+        options = $options
     )
 }
 

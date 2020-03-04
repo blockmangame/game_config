@@ -6,7 +6,7 @@ local mapDoor = {}
 local mapDoorTimer = {}
 local homeDoor = nil
 local lastShowTimer = nil
-local pluginCfg = setting:fetch("customizable_ui", "myplugin/homeView") or {}
+local pluginCfg = setting:fetch("ui_config", "myplugin/homeView") or {}
 local uicfg = pluginCfg["settingCfg"]
 
 local function getItem(cfg)
