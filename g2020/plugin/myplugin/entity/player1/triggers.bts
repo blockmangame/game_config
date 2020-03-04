@@ -1904,10 +1904,10 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
                 $dis = GetObjectDistance(obj1 = $obj1, obj2 = $entity)
                 $myTeamId =  GetEntityTeam(entity = $entity)
 
-                If($count < $rewardCount && $dis < $rewardDis)
+                If($count < $rewardCount && $dis < $rewardDis && ($teamId == $myTeamId))
                 {
                     SetObjectVar(obj = $entity, key = $countKey, value = $count + 1)
-                    $isSameFamily = $teamId ~= 0 && $teamId == $myTeamId
+                    $isSameFamily = $teamId ~= 0
                     $rewardSum = $isSameFamily and $rewardFamily or $rewardOther
                     $textKey = $isSameFamily and $rewardFamilyTip or $rewardOtherTip
                     CallTrigger(
