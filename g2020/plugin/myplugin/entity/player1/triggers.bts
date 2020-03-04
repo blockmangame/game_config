@@ -2475,6 +2475,13 @@ ENTITY_REMOVE_INTERACTION {
     }
 }
 
+ENTITY_ADD_DINGDONG_BUFF{
+    $dingDongBuff = GetConfigVar(object = $obj1, key = $buffKey)
+    If($dingDongBuff){
+        AddEntityBuff(entity = $obj1, cfg = $dingDongBuff, buffTime = 200)
+    }
+}
+
 CREATE_FAMILY
 {
     If(IsPlayer(entity = $obj1))
@@ -2629,6 +2636,7 @@ INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
 
 INVITE_JOIN_FAMILY
 {
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteJoinFamilyBuff")
     $targetPlayer = $obj1.inviteFamilyPlayer
     $obj1.inviteFamilyPlayer = nil
 
@@ -2732,6 +2740,7 @@ INTERACTION_APPLY_FAMILY   --申请加入家庭
 
 APPLY_JOIN_FAMILY
 {
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "applyJoinFamilyBuff")
     $targetPlayer = $obj1.applyFamilyPlayer
     $obj1.applyFamilyPlayer = nil
 
@@ -5149,6 +5158,7 @@ PLAYER_BE_INVITE {
     }
     $obj1.visitTarget = $obj2
 
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteFriendBuff")
     $contentDict = NewDictionary($content)
     $nickName = DictionaryGet(dict = $contentDict, key = "nickName")
     $showTime = DictionaryGet(dict = $contentDict, key = "showTime")
@@ -5243,6 +5253,7 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
 
     If($partyInfo){--[party] friend invite
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "invitePartyBuff")
         $obj1.partyInfo = $partyInfo
         $partyInfoDict = NewDictionary($partyInfo)
         $targetPartyId = DictionaryGet(dict = $partyInfoDict, key = "partyId")
@@ -5282,6 +5293,7 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
         }
     }
     Else{--[common] friend invite
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteFriendBuff")
         $buttonInfo = [
             {
                 normalImage = "set:invite_tip.json image:green_btn",
