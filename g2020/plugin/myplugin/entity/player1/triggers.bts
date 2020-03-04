@@ -4345,8 +4345,11 @@ SURE_BUY {
             If($coinId == 0){
                 BuyGoods(player = $obj1, uniqueId = 20201999,  coinId = $coinId, price = $price, event = "SHOP_BUY_COIN", objID = GetObjectID(object = $obj1), sellItem = $sellItem)
             }Else{
-                --ShowTip(textKey = "ui_buy_success", tipType = 2, entity = $obj1, keepTime = 20)
-                ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
+                If(GetItemCfg(fullName = $sellItem, key = "base") == "car_base"){
+                    ShowDialogTip(entity = $obj1, tipType = 0,p1="gui.hint",p2="item.pick.bag",p3="sure", event = "OPEN_HINT_BUY",context = {sellItem = $sellItem})
+                }Else{
+                    ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
+                }
                 PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
             }
          }Else{ --背包满了
@@ -4356,14 +4359,21 @@ SURE_BUY {
         CallTrigger(object = $obj1, event = "GO_TO_BUY_UI", coinName = $coinName)
    }
 }
+OPEN_HINT_BUY()
+{
+    ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
+}
 SHOP_BUY_COIN {
     $dict = NewDictionary($response)
     $objID = DictionaryGet(dict = $dict, key = "objID")
     $obj1 = GetObject(objID = $objID)
     $sellItem = DictionaryGet(dict = $dict, key = "sellItem")
     If($isSucceed and $obj1){
-        ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
-        --ShowTip(textKey = "ui_buy_success", tipType = 2, entity = $obj1, keepTime = 20)
+        If(GetItemCfg(fullName = $sellItem, key = "base") == "car_base"){
+            ShowDialogTip(entity = $obj1, tipType = 0,p1="gui.hint",p3="gui.hint.btn",p2="item.pick.bag", event = "OPEN_HINT_BUY",context = {sellItem = $sellItem})
+        }Else{
+            ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
+        }
     }ElseIf($obj1){
         ShowRecharge(player = $obj1)
         ShowTip(textKey = "app_shop_lack_of_money", tipType = 2, entity = $obj1, keepTime = 20)
