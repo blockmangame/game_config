@@ -294,6 +294,7 @@ ENTITY_ENTER
 
         $obj1.isReadyReward = false
         $obj1.inviteFamilyPlayer = nil
+        $obj1.applyFamilyPlayer = nil
 
         CallTrigger(event = "ADD_MONEY", object = $obj1)
         If($obj1.inPartyOwnerId == 0)   -- not in party
@@ -2635,6 +2636,7 @@ INVITE_JOIN_FAMILY
         {
             ShowTip(entity = $targetPlayer, tipType = 2,textKey = "ui_family_reject", keepTime = 40)
         }
+        $obj1.inviteFamilyPlayer = nil
         Return()
     }
     ElseIf($button == "right")
@@ -2642,6 +2644,7 @@ INVITE_JOIN_FAMILY
         If(not IsPlayer(entity = $targetPlayer))
         {
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_offline", keepTime = 40)
+            $obj1.inviteFamilyPlayer = nil
             Return()
         }
 
@@ -2655,6 +2658,7 @@ INVITE_JOIN_FAMILY
             If(not $playerCount or $playerCount >= 4)
             {
                 ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_full_member", keepTime = 40)
+                $obj1.inviteFamilyPlayer = nil
                 Return()
             }
 
@@ -2664,10 +2668,11 @@ INVITE_JOIN_FAMILY
             CallTrigger(event = "SHOW_TEAM_UI", obj1 = $obj1) -- 打开家庭UI
             CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $targetFamilyID, object = $obj1, disableUpdate = true)
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", keepTime = 40)
-            $obj1.inviteFamilyPlayer = nil
-
+            
             -- 上报统计
             CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $obj1)
+
+            $obj1.inviteFamilyPlayer = nil
         }
         Else
         {
@@ -2682,12 +2687,13 @@ INVITE_JOIN_FAMILY
             CallTrigger(event = "SHOW_TEAM_UI", obj1 = $obj1) -- 打开家庭UI
             CallTrigger(event = "SHOW_TEAM_UI", obj1 = $targetPlayer) -- 打开家庭UI
             ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_join_in", keepTime = 40)
-            $obj1.inviteFamilyPlayer = nil
 
             -- 上报统计
             DictionarySet(dict = @FamilyCreateDuration, key = $teamId, value = GetGameTime())    --记录家庭生成时间
             CallTrigger(event = "ADD_CREATE_FAMILY_REPORT_NUM", object = $targetPlayer)
             CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $obj1)
+
+            $obj1.inviteFamilyPlayer = nil
         }
     }
 }
@@ -2697,14 +2703,87 @@ INTERACTION_APPLY_FAMILY   --申请加入家庭
     -- obj2 申请加入 obj1 的家庭
     -- obj2是点击UI的那个人
     -- obj1是被点击的那个人
+
+    $targetFamilyID = GetEntityTeam(entity = $obj1)
+    If(not $targetFamilyID or $targetFamilyID == 0)
+    {
+        -- 对方家庭不存在
+        Return()
+    }
+
+    $playerCount = GetTeamInfo(teamId = $targetFamilyID, key = "playerCount")
+    If($playerCount >= 4)
+    {
+        ShowTip(entity = $obj2, tipType = 2,textKey = "ui_family_full_member", keepTime = 40)
+        Return()
+    }
+
+    $obj1.applyFamilyPlayer = $obj2
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = nil,
+        rightContent = "ui_sure"
+    }
     
-    $a = GetEntityTeam(entity = $obj1)
-    $b = GetEntityTeam(entity = $obj2)
+    $content = {
+        msg = "ui_family_invite",
+        args = NewArray(GetEntityName(entity = $obj2))
+    }
 
-    Test("aaaaaaaa : ", $a)
-    Test("bbbbbbbb : ", $b)
+    ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "APPLY_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
+}
 
+APPLY_JOIN_FAMILY
+{
+    $targetPlayer = $obj1.applyFamilyPlayer
 
+    If($button == "left")
+    {
+        If(IsPlayer(entity = $targetPlayer))
+        {
+            ShowTip(entity = $targetPlayer, tipType = 2,textKey = "ui_family_reject", keepTime = 40)
+        }
+        $obj1.applyFamilyPlayer = nil
+        Return()
+    }
+    ElseIf($button == "right")
+    {
+        If(not IsPlayer(entity = $targetPlayer))
+        {
+            ShowTip(entity = $obj1, tipType = 2,textKey = "ui_family_offline", keepTime = 40)
+            $obj1.applyFamilyPlayer = nil
+            Return()
+        }
+
+        $teamId = GetEntityTeam(entity = $obj1)
+        If(not $teamId or $teamId == 0)
+        {
+            $obj1.applyFamilyPlayer = nil
+            Return()
+        }
+
+        $playerCount = GetTeamInfo(teamId = $teamId, key = "playerCount")
+        If($playerCount >= 4)
+        {
+            ShowTip(entity = $targetPlayer, tipType = 2,textKey = "ui_family_full_member", keepTime = 40)
+            $obj1.applyFamilyPlayer = nil
+            Return()
+        }
+
+        SetEntityTeam(entity = $targetPlayer, teamId = $teamId)
+
+        -- 打开家庭UI
+        CallTrigger(event = "SHOW_TEAM_UI", obj1 = $targetPlayer) -- 打开家庭UI
+        CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId, object = $targetPlayer, disableUpdate = true)
+        ShowTip(entity = $targetPlayer, tipType = 2,textKey = "ui_family_join_in", keepTime = 40)
+       
+        -- 上报统计
+        CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $targetPlayer)
+
+        $obj1.applyFamilyPlayer = nil
+    }
 }
 
 SHOW_TEAM_UI
