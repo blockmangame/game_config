@@ -117,7 +117,7 @@ end
 function Player:customCheckCond(checkCond, ...)
     local func = customCheckFuncs[checkCond.funcName]
     if not func then
-        print("not definded function! ", checkCond.funcName)
+        print("not definded custom check function! ", checkCond.funcName)
         return false
     end
     return func(self, checkCond, ...)

@@ -127,6 +127,10 @@
                 "enableTextBorder": true,
                 "image": "plugin/myplugin/image/hand_click.png",
                 "event": "RIDE_ON",
+                "checkCanHide": {
+                    "funcName": "checkRideOnIndex",
+                    "index": 1
+                },
                 "imageSize": {
                     "width": "60",
                     "height": "60"

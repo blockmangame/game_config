@@ -45,6 +45,7 @@ CHANGE_DOOR_YAW{
     SetEntityPosition(entity = $door, map = GetEntityMap(entity = $obj1), 
         pos = ComputeV3(p1 = GetEntityPosition(entity = $obj1), p2 = V3RotationYaw(vector = GetConfigVar(obj = $obj1, key = "doorPos") or {x = 0,y = 0, z = 0}, yaw = $yaw), op = "add"))
     StartTimer(time = 1, object = $door, event = "CREATE_DOOR_REGION")
+    StartTimer(time = 1, object = $door, event = "CREATE_DOOR_BLOCK_RIDE_FILED")
 }
 
 CREATR_HOUSE_INSIDE_SUBSIDIARY{
