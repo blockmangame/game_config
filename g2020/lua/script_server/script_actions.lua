@@ -86,3 +86,10 @@ function Actions.ShowTeamUI(data, params, context)
         info = params.info
     })
 end
+
+function Actions.SetLoadSectionMaxInterval(data, params, context)
+	params.entity:sendPacket({
+		pid = "SetLoadSectionMaxInterval",
+		value = params.value,
+	})
+end

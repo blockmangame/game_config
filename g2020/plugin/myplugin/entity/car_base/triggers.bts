@@ -92,7 +92,13 @@ ENTITY_RIDE_ON
     {
         $obj2.driveHideBuff = AddEntityBuff(entity = $obj2, cfg = "myplugin/driveHide_buff")
     }
-    StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "CLAC_IS_ON_BLOCK_RIDE_FILED")
+	StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "CLAC_IS_ON_BLOCK_RIDE_FILED")
+
+    $loadSectionMaxInterval = GetConfigVar(obj = $obj1, key = "loadSectionMaxInterval")
+    If($loadSectionMaxInterval)
+    {
+        SetLoadSectionMaxInterval(entity = $obj2, value = $loadSectionMaxInterval)
+    }
 }
 
 REMOVE_TARGET_ATTACH_POINT_INDEX_BUFF{
@@ -109,6 +115,12 @@ ENTITY_RIDE_OFF
     If($obj2.driveHideBuff)
     {
         RemoveEntityBuff(entity = $obj2, buff = $obj2.driveHideBuff)
+    }
+
+    $loadSectionMaxInterval = GetConfigVar(obj = $obj1, key = "loadSectionMaxInterval")
+    If($loadSectionMaxInterval)
+    {
+        SetLoadSectionMaxInterval(entity = $obj2, value = 3500)
     }
 }
 

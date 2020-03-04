@@ -25,3 +25,9 @@ end
 function handles:ShowTeamUI(packet)
     Lib.emitEvent(Event.EVENT_SHOW_TEAM, packet.show, packet.info)
 end
+
+function handles:SetLoadSectionMaxInterval(packet)
+    if packet.value and packet.value > 0 then
+        Blockman.instance.gameSettings:setAsynLoadSectionMaxInterval(packet.value)
+    end
+end
