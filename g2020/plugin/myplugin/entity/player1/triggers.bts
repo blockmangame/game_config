@@ -2430,12 +2430,14 @@ USER_INTERACTION_ACTION
     $receiver = $obj1   --接收方。被发起人
     $promoter = $obj1 == $from and $to or $from --发起方
 
-    If($receiver.interactionObjId || GetRideOn(entity = $receiver))
+    $conA = $receiver.role == @child && $skillName == "myplugin/action_pickup" && not $receiver.useTrolley
+    If($receiver.interactionObjId || (not $conA && GetRideOn(entity = $receiver)))
     {
         ShowTip(entity = $promoter, tipType = 2, textKey = "target_is_intercting", keepTime = 40)
         Return()
     }
 
+    CallTrigger(obj1 = $receiver, event = "PLAYER_CLEAR_RIDE")
     If($promoter.interactionObjId)
     {
         CallTrigger(obj1 = $promoter, event = "ENTITY_REMOVE_INTERACTION")
