@@ -634,7 +634,7 @@
     "freeChangeNameTimes": 0,
     "changeNamePrice": 100,
     "changeNameCoinId": 0,
-    "viewMode": 1,
+	"viewMode": 3,
     "hidePerSpec": true,
     "personalSettingUI": {
         "volume": true,
@@ -645,5 +645,23 @@
         "jumpSneakState": false,
         "imageQuality": true
     },
-    "asynLoadSectionMaxInterval" : 3500
+    "asynLoadSectionMaxInterval" : 3500,
+	"cameraCfg": {
+		"viewModeConfig":[
+			{
+				"enable": false
+			},
+			{
+				"enable": false
+			},
+			{
+				"enable": false
+			},
+			{
+				"enable": true,
+				"distance": 6,
+				"lockBodyRotation": false
+			}
+		]
+	}
 }
