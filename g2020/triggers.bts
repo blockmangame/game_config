@@ -367,14 +367,15 @@ WORKS_WALL_TIMER_START
     {
         Return()
     }
-    $worksWallUpdateTime = GetWorldVar(key = "worksWallUpdateTime")
-    $time = $worksWallUpdateTime
+
+    @worksTimers = NewDictionary({})
+    $time = GetWorldVar(key = "worksWallUpdateTime")
     Foreach(array = $worksWallConfig, key = "data")
     {
         $dict = NewDictionary($data)
         $name = DictionaryGet(dict = $dict, key = "name")
-        StartTimer(rep = true, time = $time, event = "WORKS_WALL_UPDATE", wallName = $name)
-        $time = 40 + $time
+        $timer = StartTimer(rep = true, time = $time, event = "WORKS_WALL_UPDATE", wallName = $name)
+        DictionarySet(dict = @worksTimers, key = $name, value = $timer)
     }
 }
 
@@ -426,6 +427,18 @@ PLAYER_PUBLISH_WORKS
     }
 
     GameAnalyticsCustomEvent(player = $player, parts = ["player:works:publish"])
+
+    If (@worksTimers)
+    {
+        $timer = DictionaryGet(dict = @worksTimers, key = $wallName)
+        If($timer)
+        {
+            StopTimer(timer = $timer)
+        }
+        $time = GetWorldVar(key = "worksWallUpdateTime")
+        $timer = StartTimer(rep = true, time = $time, event = "WORKS_WALL_UPDATE", wallName = $wallName)
+        DictionarySet(dict = @worksTimers, key = $wallName, value = $timer)
+    }
 }
 
 SET_WORKS_WALL_INDEX
