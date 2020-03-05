@@ -45,3 +45,13 @@ Lib.subscribeEvent(Event.EVENT_SHOW_DETAILS, function(packet)
         UI:closeWnd("showDetails")
     end
 end)
+
+Lib.subscribeEvent(Event.EVENT_OPEN_BAG_BY_GIVEAWAY, function(objID)
+    local player = World.CurWorld:getObject(objID) -- 目标
+    if not player then
+        return
+    end
+    assert(player.isPlayer)
+    UI:openWnd("bag_g2020")
+    Player.CurPlayer:updateGiveAwayStatus(true, objID)
+end)

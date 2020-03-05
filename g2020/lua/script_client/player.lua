@@ -122,3 +122,10 @@ function Player:customCheckCond(checkCond, ...)
     end
     return func(self, checkCond, ...)
 end
+
+function Player:updateGiveAwayStatus(status, targetObjID)
+    self.giveAwayStatusTable = {
+        status = status,
+        targetObjID = targetObjID
+    }
+end

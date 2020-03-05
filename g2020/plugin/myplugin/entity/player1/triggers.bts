@@ -4588,6 +4588,10 @@ ENTITY_BUY_RESULT()
     }
 }
 
+GIVE_AWAY{
+    AddItem(entity = $obj1, cfg = $cfg, count = $count or 1)
+}
+
 CLEAR_EQUIP_CAR_CD{
     $obj1.equipCarCd = nil
 }
