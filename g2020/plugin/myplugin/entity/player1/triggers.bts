@@ -151,6 +151,7 @@ CREATE_OWNER_HOUSE{
         -- 玩家第一次游戏时，给他一点钱
         $money = @firstTimeLoginMoney
         AddCurrency(count = $money, coinName = "green_currency", entity = $obj1)
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "getMoneyTipSoundBuff")
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
 
     }
@@ -860,6 +861,7 @@ SELL_HOUSE_SURE{
     $sellHouseCfg = DictionaryGet(dict = $curSelectDict, key = "houseCfg")
     AddCurrency(entity = $obj1, coinName = "green_currency", 
         count = GetEntityCfg(fullName = $sellHouseCfg, key = "sellMoney"))
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "getMoneyTipSoundBuff")
     $sellHouseFurnitures = DictionaryGet(dict = $curSelectDict, key = "houseInsideFurnishing") or {}
     Foreach(array = $sellHouseFurnitures, key = "furniture"){
         $fDict = NewDictionary($furniture)
@@ -870,6 +872,7 @@ SELL_HOUSE_SURE{
         }
         $coinName = GetEntityCfg(fullName = $cfg, key = "coinName")
         AddCurrency(entity = $obj1, coinName = $coinName, count = $sellMoney)
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "getMoneyTipSoundBuff")
     }
 
     ShowGenericListDisplayBox(entity = $obj1, closeWin = true)
@@ -1706,6 +1709,7 @@ ADD_MONEY
 GET_REWARD_MONEY
 {
     AddCurrency(count = $obj1.rewardMoney, coinName = "green_currency", entity = $obj1)
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "getMoneyTipSoundBuff")
     ShowRewardItemEffect(type = "Coin", count = $obj1.rewardMoney, fullName = "green_currency", player = $obj1)
     $obj1.rewardCounts = $obj1.rewardCounts + 1
     StartTimer(rep = false, time = $obj1.rewardCDTime, object = $obj1, event = "ADD_MONEY")
@@ -2031,6 +2035,7 @@ FUNC_STATE_RELEASE_SUSPEND --params: state
 FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey, rewardType [, textP1, textP2, textP3, showMoneyEffect]
 {
     AddCurrency(coinName = $rewardType or "green_currency", entity = $obj1, count = $rewardSum)
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "getMoneyTipSoundBuff")
     ShowRewardItemEffect(type = "Coin", count = $rewardSum, fullName = $rewardType or "green_currency", player = $obj1)
     ShowTip(entity = $obj1, tipType = 3, textKey = $textKey, textP1 = $textP1, textP2 = $textP2, textP3 = $textP3)
     If($showMoneyEffect)
@@ -3025,6 +3030,7 @@ ADD_DANCE_EXPIRY_DATE
     If($status == 1 || $status == 2 )
     {
         AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "getMoneyTipSoundBuff")
         Return()
     }
 
@@ -4315,6 +4321,7 @@ FINISH_AWARD(){ --完成打工的奖励
     }
     If($money){
         AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "getMoneyTipSoundBuff")
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
     }
     $taskItem = searchEquipItem(entity = $obj1, key = "newTaskitem", val = true)
@@ -4428,6 +4435,7 @@ SURE_FURNITURE_BUY {
                If(IsPlayer(entity = $owner)){
                     ShowTip(textKey = "gui_buys_your_stuff",textP1 = $name, textP2 = $itemName, tipType = 2, entity = $owner, keepTime = 20)
                     AddCurrency(entity = $owner, coinName = $coinName, count = $price)
+                    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $owner, buffKey = "getMoneyTipSoundBuff")
                     ShowRewardItemEffect(type = "Coin", count = $price, fullName = "green_currency", player = $owner)
                }
             }Else{
@@ -4854,6 +4862,7 @@ CASH_BOX_BUTTON_SURE
         }
 
         AddCurrency(entity = $owner, coinName = "green_currency", count = $money)
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $owner, buffKey = "getMoneyTipSoundBuff")
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $owner)
         ShowTip(entity = $owner, tipType = 2, textKey = "gui_cashbox_get_money", textP1 = GetEntityName(entity = $obj1), textP2 = $money, keepTime = 40)
     }
@@ -5663,6 +5672,7 @@ JOIN_PARTY_GIVE_OWNER_MONEY(debug = false){
         $partyOwner = GetPlayerByUserId(userId = $targetUserId)
         $giveCount = GetConfigVar(obj = $obj1, key = "joinPartyGiveMoney")
         AddCurrency(entity = $partyOwner, coinName = "green_currency", count = $giveCount)
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $partyOwner, buffKey = "getMoneyTipSoundBuff")
         ShowTip(entity = $partyOwner, tipType = 2, textKey = "other.player.join.cur.player.party", textP1 = GetEntityName(entity = $obj1), textP2 = $giveCount)
         ArrayAppend(array = $userIds, value = $targetUserId)
         $obj1.joinUserPartyData = DictionaryToTable(dict = $joinUserPartyDataDict)
@@ -5985,6 +5995,7 @@ GET_SVIP_REWARD()
         $money = GetConfigValue(type = "reward", fullName = "myplugin/privilege", key = "svipMoney")
         ShowRewardItemEffect(type = "Coin", count = $money, fullName = "green_currency", player = $obj1)
         AddCurrency(entity = $obj1, coinName = "green_currency", count = $money)
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "getMoneyTipSoundBuff")
         ShowToolBarButton(name = "svip", show = false, player = $obj1)
     }
 }

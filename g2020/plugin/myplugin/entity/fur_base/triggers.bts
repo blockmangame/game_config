@@ -243,6 +243,7 @@ DEC_INTERACTION_SALE{
                 }
             }
             AddCurrency(entity = $owner, coinName = "green_currency", count = $sellMoney or 0)
+            CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $owner, buffKey = "getMoneyTipSoundBuff")
             ArrayRemove(array = $furnitures, index = $index)
             Break()
         }

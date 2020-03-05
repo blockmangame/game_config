@@ -106,6 +106,7 @@ DEC_INTERACTION_SALE{
                 $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
             }
             AddCurrency(entity = $owner, coinName = "green_currency", count = $sellMoney)
+            CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $owner, buffKey = "getMoneyTipSoundBuff")
             ArrayRemove(array = $furnitures, index = $index)
             Break()
         }
