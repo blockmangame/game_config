@@ -162,6 +162,18 @@ customCheckFuncs.checkCanAdultPutBabyIntoTrolley = function (entity, checkCond, 
     return role1 and (not role2) and entity:prop("onTrolley") == 1
 end
 
+customCheckFuncs.checkCanSitInTrolley = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return false
+    end
+    if not isSameTeamID(entity, target) then
+        return false
+    end
+    local role1, role2 = isAdult(entity), isAdult(target)
+    return role2 and (not role1) and target:prop("onTrolley") == 1
+end
+
 customCheckFuncs.checkCanBabyHandInHand = function (entity, checkCond, targetObjID)
     local target = World.CurWorld:getObject(targetObjID)
     if not target then
