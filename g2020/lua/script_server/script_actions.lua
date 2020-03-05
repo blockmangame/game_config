@@ -124,3 +124,21 @@ function Actions.SetLoadSectionMaxInterval(data, params, context)
 		value = params.value,
 	})
 end
+
+function Actions.ShowShopItemDetail(data, params, context)
+	local player = params.player
+	local eventMap = {
+		["sure"] = params.eventSure or params.event or false,
+		["no"] = params.eventNo or false
+	}
+	local regId = player:regCallBack("ItemDetail", eventMap, true, true, params.context)
+	player:sendPacket({
+		pid = "ShopItemDetail",
+		fullName = params.fullName,
+		regId = regId,
+		price = params.price,
+		tip = params.tip,
+		desc = params.desc,
+		coinId = params.coinId or 0
+	})
+end

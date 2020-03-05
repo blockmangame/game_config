@@ -39,3 +39,12 @@ function handles:SetLoadSectionMaxInterval(packet)
         Blockman.instance.gameSettings:setAsynLoadSectionMaxInterval(packet.value)
     end
 end
+
+function handles:ShopItemDetail(packet)
+    UILib.openShopBuy(packet.fullName, function(selectedLeft)
+        if not selectedLeft then
+            return
+        end
+        Me:doCallBack("ItemDetail", "sure", packet.regId)
+    end,packet.coinId, packet.price, packet.desc, packet.tip) 
+end
