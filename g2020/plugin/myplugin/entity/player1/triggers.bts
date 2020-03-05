@@ -4532,6 +4532,7 @@ POP_UP_BUY_PRIVILEGE
     $itemdesc = GetShopItem(shopIndex = $shopIndex, key = "desc")
     $itemName = GetShopItem(shopIndex = $shopIndex, key = "itemName")
     $descName = GetShopItem(shopIndex = $shopIndex, key = "name")
+    $hintImage = GetItemCfg(fullName = $itemName, key = "hintImage")
     $Context = {
         seccionid = $obj1.checkprid,
         shopIndex = $shopIndex,
@@ -4547,7 +4548,7 @@ POP_UP_BUY_PRIVILEGE
         msg = "gui_sure_buy_this",
         args = [$itemdesc]
     }
-    ShowShopItemDetail(player = $obj1, event = "SURE_BUY_PRI", context = $Context, fullName = $itemName, price = $price, desc = $itemdesc, tip = $descName)
+    ShowShopItemDetail(player = $obj1, event = "SURE_BUY_PRI", context = $Context, hintImage = $hintImage, price = $price, desc = $itemdesc, tip = $descName)
     --ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_BUY_PRI", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
 }
 SURE_BUY_PRI 
