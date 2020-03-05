@@ -73,12 +73,11 @@ ui_family_create=Stwórz rodzinę
 ui_family_album=Album rodzinny
 ui_family_quit=Wyjdź z rodziny
 ui_family_full_member=Rodzina jest pełna
-ui_family_invite={} Chcesz założyć z tobą rodzinę
+ui_family_request={} Chcesz założyć z tobą rodzinę
 ui_family_reject=Twoje zaproszenie rodzinne zostało odrzucone
 ui_family_offline=Druga strona jest offline
 ui_family_join_in=Dołączyłeś do rodziny
 ui_family_ask_for_family={} Chcę założyć z tobą rodzinę
-ui_family_find_member=
 gui_you_want_to_buy_this=Kup {} za {}?
 gui_buys_your_stuff={} Kupiłeś {}.
 interact_feed=Karmienie
@@ -608,23 +607,23 @@ car_old_02.name=Sedan
 car_old_03.name=Samochód sportowy
 car_old_04.name=Jeep
 car_horse_01.name=Biały koń
-car_01.buy=Kup supersamochód \n($3000)
+car_01.buy=Kup supersamochód \n($2200)
 car_02.buy=Kup samochód Maglev \n(★999)
 car_03.buy=Kup samochodziki \n(★299)
 car_04.buy=Kup samochód rajdowy \n(★499)
-car_05.buy=Kup Wild Moto \n($1500)
+car_05.buy=Kup Wild Moto \n($1000)
 car_06.buy=Kup monocykle \n($120)
 car_07.buy=Kup rowery \n($75)
 car_08.buy=Kup jeźdźca pizzy \n(★499)
 car_09.buy=Kup dwukołowy monocykl \n($200)
 car_10.buy=Kup fajny monocykl \n($500)
-car_11.buy=Kup Desert Knight \n($2000)
+car_11.buy=Kup Desert Knight \n($1000)
 car_12.buy=Kup rower górski \n($200)
 car_13.buy=Kup motocykle \n($400)
 car_old_01.buy=Kup samochód policyjny \n(★499)
-car_old_02.buy=Kupując sedana \n($1000)
-car_old_03.buy=Kup samochód sportowy \n($1500)
-car_old_04.buy=Kup Jeep \n($1200)
+car_old_02.buy=Kupując sedana \n($1100)
+car_old_03.buy=Kup samochód sportowy \n($1800)
+car_old_04.buy=Kup Jeep \n($1600)
 car_horse_01.buy=Kup białego konia \n(★999)
 gift_01.name=Mały prezent
 gift_02.name=Obecny
@@ -645,9 +644,9 @@ trolley_01.buy=Kup wózek \n($100)
 trolley_02.buy=Kup wózek do piłki \n($300)
 trolley_03.buy=Koszyk \n($200)
 trolley_04.buy=Kup wózek do biegania super \n($500)
-trolley_05.buy=Kup wózki kolejowe \n($700)
-trolley_06.buy=Kup wózek lotniczy \n($1000)
-trolley_07.buy=Kup UFO Trolley \n($2000)
+trolley_05.buy=Kup wózki kolejowe \n($500)
+trolley_06.buy=Kup wózek lotniczy \n($1250)
+trolley_07.buy=Kup UFO Trolley \n($1500)
 balloon_01.name=Niebieski balon
 balloon_02.name=Czerwony balonik
 balloon_03.name=Żółty balon
@@ -762,57 +761,58 @@ mian_ui_bag= 
 zz01food_hotdog=Hot Dog
 zz01food_hotdog_shop=Stojak na hot dogi
 myplugin/food_zz01food_hotdog=Kup hot dog\n(3USD)
-myplugin/food_zz01food_hotdog_shop=Kup hot dog\n(3USD)
+zz01food_hotdog_shop.buy=Kup hot dog\n(3USD)
 car_02.describe=
 car_03.describe=
 car_04.describe=
 bag_item_cannel=Anuluj
 ui_edit_title_name=
+zz01food_sandwich.name=
 
 language_end:item
 
 language_start:npc
 
-npc_01.name=[B=1]Albert
-npc_02.name=[B=1]Allen
-npc_03.name=[B=1]Karl
-npc_04.name=[B=1]Dulu
-npc_10.name=[B=1]Neil
-npc_11.name=[B=1]Paul
-npc_12.name=[B=1]Raymond
-npc_13.name=[B=1]Nicole
-npc_15.name=[B=1]Nat
-npc_16.name=[B=1]Alice
-npc_17.name=[B=1]Kevin
-npc_18.name=[B=1]Bella
-npc_19.name=[B=1]Daisy
-npc_20.name=[B=1]Jason
-npc_21.name=[B=1]Gilbert
-npc_22.name=[B=1]Charlotte
-npc_23.name=[B=1]Grace
-npc_24.name=[B=1]Janet
-npc_25.name=[B=1]Henry
-npc_26.name=[B=1]Izaak
-npc_27.name=[B=1]Jeff
-npc_28.name=[B=1]Justin
-npc_29.name=[B=1]Lew
-npc_30.name=[B=1]Linton
-npc_31.name=[B=1]Rolla
-npc_32.name=[B=1]Nancy
-npc_33.name=[B=1]Oliwka
-npc_34.name=[B=1]Peer
-npc_35.name=[B=1]Jakub
-npc_36.name=[B=1]Grosz
-npc_37.name=[B=1]Ford
-npc_38.name=[B=1]Ross
-npc_39.name=[B=1]Sally
-npc_40.name=[B=1]Frank
-npc_42.name=[B=1]Rebecca
-npc_43.name=[B=1]Eric
-npc_44.name=[B=1]Doktor
-npc_45.name=[B=1]Pielęgniarka
-npc_46.name=[B=1]Dr. Ma
-npc_47.name=[B=1]Mary
+npc_01.name=Albert
+npc_02.name=Allen
+npc_03.name=Karl
+npc_04.name=Dulu
+npc_10.name=Neil
+npc_11.name=Paul
+npc_12.name=Raymond
+npc_13.name=Nicole
+npc_15.name=Nat
+npc_16.name=Alice
+npc_17.name=Kevin
+npc_18.name=Bella
+npc_19.name=Daisy
+npc_20.name=Jason
+npc_21.name=Gilbert
+npc_22.name=Charlotte
+npc_23.name=Grace
+npc_24.name=Janet
+npc_25.name=Henry
+npc_26.name=Izaak
+npc_27.name=Jeff
+npc_28.name=Justin
+npc_29.name=Lew
+npc_30.name=Linton
+npc_31.name=Rolla
+npc_32.name=Nancy
+npc_33.name=Oliwka
+npc_34.name=Peer
+npc_35.name=Jakub
+npc_36.name=Grosz
+npc_37.name=Ford
+npc_38.name=Ross
+npc_39.name=Sally
+npc_40.name=Frank
+npc_42.name=Rebecca
+npc_43.name=Eric
+npc_44.name=Doktor
+npc_45.name=Pielęgniarka
+npc_46.name=Dr. Ma
+npc_47.name=Mary
 npc_01.dialog=Witajcie, mieszkańcy tego miasta.\nBurmistrz Jessi jest zwykle zajęty, a wszystko w mieście jest teraz reprezentowane przeze mnie.
 npc_02.dialog=Słyszałem, że w basenie jest magiczna ryba, ktoś poszedł za nią i znalazł skrót do innego miasta!
 npc_03.dialog=Jestem pewien, że Allen mówi, że na basenie są magiczne ryby, w rzeczywistości są to zwykłe plastikowe torby i mogą iść tylko do kanałów!
@@ -997,8 +997,7 @@ interact_feed=Karmienie
 interact_banish=Wydalić
 interact_add_friend=Dodaj znajomego
 interact_act=Interaktywna akcja
-interact_invite_family=
-interact_apply_family=
+interact_join_family=Utwórz rodzinę
 additionalcell.shop_icon.text=Kupuj
 additionalcell.dressArchive_icon.text=Archiwum dekoracji
 additionalcell.team_icon.text=Rodzina
@@ -1072,5 +1071,13 @@ gui.text.createparty=
 friend_visit_cross_server=
 show_house_lock_tip_when_closein_outside_door=
 ui_lang_remaining_length=
+gui.go.buy=
+ui_sure_giveaway_something_to_anybody=
+cant_give_away_task_item=
+gui.hint.btn=
+item.pick.bag=
+gui.hint=
+gui.had.house.privilege=
+gui.reward.tip=
 
 language_end:system
