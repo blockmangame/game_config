@@ -2302,11 +2302,6 @@ OPEN_PRIVILEGE_SHOP
     }
 }
 
-INTERACTION_BACK
-{
-    UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
-}
-
 INTERACTION_ACT
 {
     If($obj2.role == @child)

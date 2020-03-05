@@ -114,6 +114,79 @@ customCheckFuncs.checkCanShowApplyFamily = function (entity, checkCond, targetOb
     end
 end
 
+local function isAdult(entity)
+    local scale = entity:data("actorScale")
+    return scale.x == 1 and scale.y == 1 and scale.z == 1
+end
+
+
+local function isSameTeamID(entity1, entity2)
+    local id1 = entity1:getValue("teamId")
+    local id2 = entity2:getValue("teamId")
+    return id1 == id2
+end
+
+customCheckFuncs.checkCanAdultPickBaby = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return false
+    end
+    if not isSameTeamID(entity, target) then
+        return false
+    end
+    local role1, role2 = isAdult(entity), isAdult(target)
+    return role1 and (not role2) and entity:prop("onTrolley") ~= 1
+end
+
+customCheckFuncs.checkCanAdultCarryBaby = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return false
+    end
+    if not isSameTeamID(entity, target) then
+        return false
+    end
+    local role1, role2 = isAdult(entity), isAdult(target)
+    return role2 and (not role1) and target:prop("onTrolley") ~= 1
+end
+
+customCheckFuncs.checkCanAdultPutBabyIntoTrolley = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return false
+    end
+    if not isSameTeamID(entity, target) then
+        return false
+    end
+    local role1, role2 = isAdult(entity), isAdult(target)
+    return role1 and (not role2) and entity:prop("onTrolley") == 1
+end
+
+customCheckFuncs.checkCanBabyHandInHand = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return false
+    end
+    if not isSameTeamID(entity, target) then
+        return false
+    end
+    local role1, role2 = isAdult(entity), isAdult(target)
+    return (not role1) and (not role2)
+end
+
+customCheckFuncs.checkCanHideInteract = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return true
+    end
+    if not isSameTeamID(entity, target) then
+        return true
+    end
+    local role1, role2 = isAdult(entity), isAdult(target)
+    return role2 and (not role1) and target:prop("onTrolley") == 1
+end
+
+
 function Player:customCheckCond(checkCond, ...)
     local func = customCheckFuncs[checkCond.funcName]
     if not func then

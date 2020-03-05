@@ -319,6 +319,10 @@
             },
             {
                 "text": "interact_act",
+                "/ps":"交互菜单",
+                "customCheckCanHide": {
+                    "funcName": "checkCanHideInteract"
+                },
                 "image": "set:party_interaction_ui.json image:interaction_act",
                 "event": "INTERACTION_ACT"
             },
@@ -341,9 +345,51 @@
                 "event": "INTERACTION_APPLY_FAMILY"
             },
             {
+                "text": "",
+                "/ps":"拉手",
+                "image": "plugin/myplugin/image/handinhand.png",
+                "event": "INTERACTION_HAND_IN_HAND",
+                "customCheckCanShow":{
+                    "funcName":"checkCanBabyHandInHand"
+                },
+                "imageSize": {
+                    "width": 96,
+                    "height": 96
+                }
+            },
+            {
+                "text": "",
+                "/ps":"大背小",
+                "image": "plugin/myplugin/image/piggyback.png",
+                "event": "INTERACTION_PIGGYBACK",
+                "customCheckCanShow":{
+                    "funcName":"checkCanAdultCarryBaby"
+                },
+                "imageSize": {
+                    "width": 96,
+                    "height": 96
+                }
+            },
+            {
+                "text": "",
+                "/ps":"大抱小",
+                "image": "plugin/myplugin/image/pickup.png",
+                "event": "INTERACTION_PICK",
+                "customCheckCanShow":{
+                    "funcName":"checkCanAdultPickBaby"
+                },
+                "imageSize": {
+                    "width": 96,
+                    "height": 96
+                }
+            },
+            {
                 "text": "interact_trolley",
                 "image": "plugin/myplugin/image/trolley.png",
                 "event": "INTERACTION_BABY_TROLLEY",
+                "customCheckCanShow":{
+                    "funcName":"checkCanAdultPutBabyIntoTrolley"
+                },
                 "checkCanShow": {
                     "funcName": "checkProp",
                     "p1": "onTrolley",
@@ -380,7 +426,7 @@
             {
                 "text": "",
                 "image": "plugin/myplugin/image/back.png",
-                "event": "INTERACTION_BACK",
+                "nextCfgKey":"interaction_choices",
                 "imageSize": {
                     "width": 96,
                     "height": 96
@@ -406,15 +452,6 @@
             },
             {
                 "text": "",
-                "image": "plugin/myplugin/image/handinhand.png",
-                "event": "INTERACTION_HAND_IN_HAND",
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
-                }
-            },
-            {
-                "text": "",
                 "image": "plugin/myplugin/image/follow.png",
                 "event": "INTERACTION_FOLLOW",
                 "imageSize": {
@@ -426,15 +463,6 @@
                 "text": "",
                 "image": "plugin/myplugin/image/rideon.png",
                 "event": "INTERACTION_RIDE",
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
-                }
-            },
-            {
-                "text": "",
-                "image": "plugin/myplugin/image/piggyback.png",
-                "event": "INTERACTION_PIGGYBACK",
                 "imageSize": {
                     "width": 96,
                     "height": 96
@@ -493,15 +521,6 @@
                 "text": "",
                 "image": "plugin/myplugin/image/follow.png",
                 "event": "INTERACTION_FOLLOW",
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
-                }
-            },
-            {
-                "text": "",
-                "image": "plugin/myplugin/image/pickup.png",
-                "event": "INTERACTION_PICK",
                 "imageSize": {
                     "width": 96,
                     "height": 96
