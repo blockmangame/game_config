@@ -40,13 +40,31 @@ GAME_INIT
     CallTrigger(event = "FUNC_NAVIGATION_GET_MAPS_ALL_PATH")
     CallTrigger(event = "FUNC_LOAD_WORKS_WALL_TOP")
     @Map001 = GetStaticMap(name = "map001", create = true)--load map001
+    CallTrigger(event = "CREATE_EMAIL_NPC", npc1 = true, npc2 = true)
     CallTrigger(event = "SHOW_SHOP_TITLE")
-
     @FamilyCreateDuration = NewDictionary({})   -- 保存家庭创建的时间，用来数据统计
     @FamilyName = NewDictionary({})             -- 保存队伍的名字
 
     --
     @HOME_SUM = 0
+}
+--创建邮箱npc
+CREATE_EMAIL_NPC
+{   
+    If($npc2)
+    {
+        $pos = GetConfigValue(type = "entity", key = "pos", fullName = "myplugin/email_entity2")
+        $ry = GetConfigValue(type = "entity", key = "ry", fullName = "myplugin/email_entity2")
+        $rp = GetConfigValue(type = "entity", key = "rp", fullName = "myplugin/email_entity2")
+        @ENTITY_ENTER2 = CreateNpc(pos = $pos, map = @Map001, cfgName = "myplugin/email_entity2", ry = $ry, rp = $rp)
+    }
+    If($npc1)
+    {
+        $pos = GetConfigValue(type = "entity", key = "pos", fullName = "myplugin/email_entity1")
+        $ry = GetConfigValue(type = "entity", key = "ry", fullName = "myplugin/email_entity1")
+        $rp = GetConfigValue(type = "entity", key = "rp", fullName = "myplugin/email_entity1")
+        @ENTITY_ENTER1 = CreateNpc(pos = $pos, map = @Map001, cfgName = "myplugin/email_entity1", ry = $ry, rp = $rp)
+    }
 }
 --场景商店的牌子
 SHOW_SHOP_TITLE(){
