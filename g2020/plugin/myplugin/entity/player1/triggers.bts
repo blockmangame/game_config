@@ -2856,10 +2856,6 @@ INIT_TEAM_UI
         Return()
     }
 
-    $title = {
-        name = $teamName or "gui_my_family"
-    }
-    
     $buttons = [
         {
             event = "SHOW_FAMILY_ALBUM",
@@ -2879,18 +2875,32 @@ INIT_TEAM_UI
         disableClose = false
     }
 
-    $info = {
-        title = $title,
-        buttons = $buttons,
-        closeBtn = $closeBtn
-    }
-
     If($memberNum > 1)
     {
+         $title = {
+            name = $teamName or "gui_my_family"
+        }
+
+        $info = {
+            title = $title,
+            buttons = $buttons,
+            closeBtn = $closeBtn
+        }
+
         ShowTeamUI(entity = $obj1, show = true, info = $info)
     }
     Else
     {
+        $text = "ui_family_find_member"
+        $image = "set:default_icon.json image:header_icon"
+
+        $info = {
+            text = $text,
+            image = $image,
+            buttons = $buttons,
+            closeBtn = $closeBtn
+        }
+
         ShowSingleTeamUI(entity = $obj1, show = true, info = $info)
     }
 }
