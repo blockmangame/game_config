@@ -324,7 +324,7 @@
                     "funcName": "checkCanHideInteract"
                 },
                 "image": "set:party_interaction_ui.json image:interaction_act",
-                "event": "INTERACTION_ACT"
+                "nextCfgKey":"interaction_act_choices"
             },
             {
                 "/ps": "邀请",
@@ -403,13 +403,13 @@
             }
         ]
     },
-    "interaction_child": {
-        "cfgKey": "interaction_child",
+    "interaction_act_choices": {
+        "cfgKey": "interaction_act_choices",
         "aroundParams": {
             "startAngle": 0,
             "endAngle": 360,
             "widgetFileName": "widget_button_2",
-            "radius": 200,
+            "radius": 100,
             "imageSize": {
                 "width": 200,
                 "height": 97
@@ -436,6 +436,9 @@
                 "text": "",
                 "image": "plugin/myplugin/image/clap.png",
                 "event": "INTERACTION_CLAP",
+                "customCheckCanShow":{
+                    "funcName":"checkCanClap"
+                },
                 "imageSize": {
                     "width": 96,
                     "height": 96
@@ -445,6 +448,9 @@
                 "text": "",
                 "image": "plugin/myplugin/image/hug.png",
                 "event": "INTERACTION_HUG",
+                "customCheckCanHide":{
+                    "funcName":"checkCanHideHug"
+                },
                 "imageSize": {
                     "width": 96,
                     "height": 96
@@ -454,55 +460,6 @@
                 "text": "",
                 "image": "plugin/myplugin/image/follow.png",
                 "event": "INTERACTION_FOLLOW",
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
-                }
-            },
-            {
-                "text": "",
-                "image": "plugin/myplugin/image/rideon.png",
-                "event": "INTERACTION_RIDE",
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
-                }
-            }
-        ]
-    },
-    "interaction_adult": {
-        "cfgKey": "interaction_adult",
-        "aroundParams": {
-            "startAngle": 0,
-            "endAngle": 360,
-            "widgetFileName": "widget_button_2",
-            "radius": 150,
-            "imageSize": {
-                "width": 200,
-                "height": 97
-            },
-            "imageStretchType": "NineGrid",
-            "imageStretchOffset": "100 20 0 0"
-        },
-        "followParams": {
-            "followScenePos": true,
-            "showRange": 5,
-            "resetWhenHide": true
-        },
-        "aroundBtns": [
-            {
-                "text": "",
-                "image": "plugin/myplugin/image/back.png",
-                "event": "INTERACTION_BACK",
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
-                }
-            },
-            {
-                "text": "",
-                "image": "plugin/myplugin/image/hug.png",
-                "event": "INTERACTION_HUG",
                 "imageSize": {
                     "width": 96,
                     "height": 96
@@ -512,15 +469,9 @@
                 "text": "",
                 "image": "plugin/myplugin/image/handshake.png",
                 "event": "INTERACTION_HANDSHAKE",
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
-                }
-            },
-            {
-                "text": "",
-                "image": "plugin/myplugin/image/follow.png",
-                "event": "INTERACTION_FOLLOW",
+                "customCheckCanShow":{
+                    "funcName":"checkCanShakeHand"
+                },
                 "imageSize": {
                     "width": 96,
                     "height": 96
@@ -530,6 +481,9 @@
                 "text": "",
                 "image": "plugin/myplugin/image/raiseheight.png",
                 "event": "INTERACTION_RAISE_HEIGHT",
+                "customCheckCanShow":{
+                    "funcName":"checkCanAdultRaiseBaby"
+                },
                 "imageSize": {
                     "width": 96,
                     "height": 96
@@ -539,6 +493,21 @@
                 "text": "",
                 "image": "plugin/myplugin/image/coax.png",
                 "event": "INTERACTION_COAX",
+                "customCheckCanShow":{
+                    "funcName":"checkCanTouchHead"
+                },
+                "imageSize": {
+                    "width": 96,
+                    "height": 96
+                }
+            },
+            {
+                "text": "",
+                "image": "plugin/myplugin/image/rideon.png",
+                "event": "INTERACTION_RIDE",
+                "customCheckCanShow":{
+                    "funcName":"checkCanBabyRideAdult"
+                },
                 "imageSize": {
                     "width": 96,
                     "height": 96

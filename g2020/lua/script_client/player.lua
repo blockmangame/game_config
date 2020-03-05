@@ -186,6 +186,59 @@ customCheckFuncs.checkCanHideInteract = function (entity, checkCond, targetObjID
     return role2 and (not role1) and target:prop("onTrolley") == 1
 end
 
+customCheckFuncs.checkCanClap = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return false
+    end
+    local role1, role2 = isAdult(entity), isAdult(target)
+    return (not role2) and (not role1)
+end
+
+customCheckFuncs.checkCanTouchHead = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return false
+    end
+    local role1, role2 = isAdult(entity), isAdult(target)
+    return (not role2) and role1
+end
+
+customCheckFuncs.checkCanShakeHand = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return false
+    end
+    local role1, role2 = isAdult(entity), isAdult(target)
+    return role2 and role1
+end
+
+customCheckFuncs.checkCanHideHug = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return true
+    end
+    local role1, role2 = isAdult(entity), isAdult(target)
+    return (not role2) and role1
+end
+
+customCheckFuncs.checkCanBabyRideAdult = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return false
+    end
+    local role1, role2 = isAdult(entity), isAdult(target)
+    return (not role1) and role2
+end
+
+customCheckFuncs.checkCanAdultRaiseBaby = function (entity, checkCond, targetObjID)
+    local target = World.CurWorld:getObject(targetObjID)
+    if not target then
+        return false
+    end
+    local role1, role2 = isAdult(entity), isAdult(target)
+    return (not role2) and role1
+end
 
 function Player:customCheckCond(checkCond, ...)
     local func = customCheckFuncs[checkCond.funcName]
