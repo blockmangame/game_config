@@ -255,3 +255,15 @@ function Player:updateGiveAwayStatus(status, targetObjID)
         targetObjID = targetObjID
     }
 end
+
+function Player:commentWorks(id, msg)
+    self:sendPacket({pid = "CommentWorks", id = id, msg = msg})
+end
+
+function Player:setWorksArchiveNum(num)
+    self:data("main").worksArchiveNum = num
+end
+
+function Player:getWorksArchiveNum()
+    return self:data("main").worksArchiveNum or 3
+end

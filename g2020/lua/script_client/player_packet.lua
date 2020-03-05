@@ -48,3 +48,11 @@ function handles:ShopItemDetail(packet)
         Me:doCallBack("ItemDetail", "sure", packet.regId)
     end,packet.coinId, packet.price, packet.desc, packet.tip) 
 end
+
+function handles:WorksWallsOperation(packet)
+    Lib.emitEvent(Event.EVENT_WORKS_WALLS_OPERATION, packet.isOpen)
+end
+
+function handles:SetWorksArchiveNum(packet)
+    Me:data("main").worksArchiveNum = packet.num
+end

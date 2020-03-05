@@ -142,3 +142,11 @@ function Actions.ShowShopItemDetail(data, params, context)
 		coinId = params.coinId or 0
 	})
 end
+
+function Actions.WorksWallsOperation(data, params, context)
+	params.player:sendPacket({pid = "WorksWallsOperation", isOpen = params.isOpen})
+end
+
+function Actions.SetWorksArchiveNum(data, params, context)
+	params.player:sendPacket({ pid = "SetWorksArchiveNum", num = params.num })
+end

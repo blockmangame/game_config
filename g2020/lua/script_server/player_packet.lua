@@ -29,3 +29,13 @@ function handles:GiveAwayToTarget(packet)
 		count = packet.count or 1
 	})
 end
+
+function handles:CommentWorks(packet)
+	local context = {
+		obj1 = self,
+		id = packet.id,
+		msg = packet.msg
+	}
+
+	Trigger.CheckTriggers(self:cfg(), "COMMENT_WORKS", context)
+end
