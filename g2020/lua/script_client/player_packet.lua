@@ -41,7 +41,7 @@ function handles:SetLoadSectionMaxInterval(packet)
 end
 
 function handles:ShopItemDetail(packet)
-    UILib.openShopBuy(packet.fullName, function(selectedLeft)
+    UILib.openShopBuy(packet.hintImage, function(selectedLeft)
         if not selectedLeft then
             return
         end

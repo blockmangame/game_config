@@ -134,7 +134,7 @@ function Actions.ShowShopItemDetail(data, params, context)
 	local regId = player:regCallBack("ItemDetail", eventMap, true, true, params.context)
 	player:sendPacket({
 		pid = "ShopItemDetail",
-		fullName = params.fullName,
+		hintImage = params.hintImage,
 		regId = regId,
 		price = params.price,
 		tip = params.tip,

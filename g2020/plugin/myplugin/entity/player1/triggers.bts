@@ -740,7 +740,21 @@ SURE_BUY_HOUSE{
     $buyMoney = GetEntityCfg(fullName = $houseCfg, key = "buyMoney") or 0
     $coinId = GetEntityCfg(fullName = $houseCfg, key = "coinId")
     If(3 ~= $coinId){
-        BuyGoods(player = $obj1, uniqueId = 20201001,  coinId = $coinId, price = $buyMoney, houseCfg = $houseCfg, event = "BUY_HOUSE_BY_APP" )
+        $Context = {
+            coinId = $coinId,
+            buyMoney = $buyMoney,
+            houseCfg = $houseCfg
+        }
+        $hintImage = GetEntityCfg(fullName = $houseCfg, key = "hintImage")
+        $hintDesc = GetEntityCfg(fullName = $houseCfg, key = "hintDesc")
+        $houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName")
+        ShowShopItemDetail(
+            player = $obj1, 
+            event = "TIP_SURE_BUY_HOUSE", 
+            context = $Context, 
+            hintImage = $hintImage, 
+            price = $buyMoney, tip = $houseName, desc = $hintDesc
+        )
         Return()
     }
     If(not PayCurrency(entity = $obj1, coinName = "green_currency", count = $buyMoney)){
@@ -750,7 +764,9 @@ SURE_BUY_HOUSE{
     }
     CallTrigger(object = $obj1, event = "GIVE_HOUSE", houseCfg = $houseCfg)
 }
-
+TIP_SURE_BUY_HOUSE(){
+    BuyGoods(player = $obj1, uniqueId = 20201001,  coinId = $coinId, price = $buyMoney, houseCfg = $houseCfg, event = "BUY_HOUSE_BY_APP" )
+}
 BUY_HOUSE_BY_APP{
     $dictValue = NewDictionary($response)
     $houseCfg = DictionaryGet(dict = $dictValue, key = "houseCfg")
@@ -2286,23 +2302,6 @@ OPEN_PRIVILEGE_SHOP
     }
 }
 
-INTERACTION_BACK
-{
-    UpdateObjectInteractionUI(cfgKey = "interaction_choices", player = $obj2, target = $obj1, show = true)
-}
-
-INTERACTION_ACT
-{
-    If($obj2.role == @child)
-    {
-        UpdateObjectInteractionUI(cfgKey = "interaction_child", player = $obj2, target = $obj1, show = true)
-    }
-    Else
-    {
-        UpdateObjectInteractionUI(cfgKey = "interaction_adult", player = $obj2, target = $obj1, show = true)
-    }
-}
-
 INTERACTION_CLAP
 { --拍手 小孩和小孩
 
@@ -2670,12 +2669,12 @@ INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
     }
 
     ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteJoinFamilyBuff")
     ShowDialogTip(entity = $obj1, tipType = 5, event = "INVITE_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
 INVITE_JOIN_FAMILY
 {
-    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteJoinFamilyBuff")
     $targetPlayer = $obj1.inviteFamilyPlayer
     $obj1.inviteFamilyPlayer = nil
 
@@ -2774,12 +2773,12 @@ INTERACTION_APPLY_FAMILY   --申请加入家庭
     }
 
     ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "applyJoinFamilyBuff")
     ShowDialogTip(entity = $obj1, tipType = 5, event = "APPLY_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
 APPLY_JOIN_FAMILY
 {
-    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "applyJoinFamilyBuff")
     $targetPlayer = $obj1.applyFamilyPlayer
     $obj1.applyFamilyPlayer = nil
 
@@ -4532,6 +4531,7 @@ POP_UP_BUY_PRIVILEGE
     $itemdesc = GetShopItem(shopIndex = $shopIndex, key = "desc")
     $itemName = GetShopItem(shopIndex = $shopIndex, key = "itemName")
     $descName = GetShopItem(shopIndex = $shopIndex, key = "name")
+    $hintImage = GetItemCfg(fullName = $itemName, key = "hintImage")
     $Context = {
         seccionid = $obj1.checkprid,
         shopIndex = $shopIndex,
@@ -4547,7 +4547,7 @@ POP_UP_BUY_PRIVILEGE
         msg = "gui_sure_buy_this",
         args = [$itemdesc]
     }
-    ShowShopItemDetail(player = $obj1, event = "SURE_BUY_PRI", context = $Context, fullName = $itemName, price = $price, desc = $itemdesc, tip = $descName)
+    ShowShopItemDetail(player = $obj1, event = "SURE_BUY_PRI", context = $Context, hintImage = $hintImage, price = $price, desc = $itemdesc, tip = $descName)
     --ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_BUY_PRI", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
 }
 SURE_BUY_PRI 
