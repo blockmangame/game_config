@@ -2670,12 +2670,12 @@ INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
     }
 
     ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteJoinFamilyBuff")
     ShowDialogTip(entity = $obj1, tipType = 5, event = "INVITE_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
 INVITE_JOIN_FAMILY
 {
-    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteJoinFamilyBuff")
     $targetPlayer = $obj1.inviteFamilyPlayer
     $obj1.inviteFamilyPlayer = nil
 
@@ -2774,12 +2774,12 @@ INTERACTION_APPLY_FAMILY   --申请加入家庭
     }
 
     ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "applyJoinFamilyBuff")
     ShowDialogTip(entity = $obj1, tipType = 5, event = "APPLY_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
 APPLY_JOIN_FAMILY
 {
-    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "applyJoinFamilyBuff")
     $targetPlayer = $obj1.applyFamilyPlayer
     $obj1.applyFamilyPlayer = nil
 
