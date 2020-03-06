@@ -1015,7 +1015,7 @@ GIVE_STORE{
     CallTrigger(object = $obj1, obj1 = $obj1, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")
     GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:decoration",$storeId,
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $cfg))])
-    -- StartTimer(rep = false, object =$obj1, obj1 =$obj1, npc = $npc, time = 1, event = "CLICK_BUY_STORE")
+    $npc.isBuyByShop = true
 }
 
 UPDATE_PLAYER_3DUI_ENTITY{
@@ -1044,10 +1044,6 @@ UPDATE_PLAYER_3DUI_ENTITY{
         DictionarySet(dict = $entityOf3DUIDict, key = $typeOf3DUI, value = $typeTable)
         SetObjectVar(obj = $obj1, key = "entityOf3DUI", value = DictionaryToTable(dict = $entityOf3DUIDict))
     }
-}
-
-CLICK_BUY_STORE{
-    CastSkill(skill = "/click", from = $obj1, packet = {targetID = GetObjectID(object = $npc)})
 }
 
 SAVE_FURNITURE{
@@ -2685,7 +2681,7 @@ INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
 
     ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
     CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteJoinFamilyBuff")
-    ShowDialogTip(entity = $obj1, tipType = 5, event = "INVITE_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "INVITE_JOIN_FAMILY", stackTime = 200, dialogContinuedTime = 200, p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
 INVITE_JOIN_FAMILY

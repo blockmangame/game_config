@@ -1,6 +1,13 @@
 ENTITY_ENTER
 {
     AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_swimming_idle_2_idel_buff")
+    StartTimer(object = $obj1, obj1 = $obj1, time = 5, event = "ENTITY_CLICK_BY_BUY_DEC")
+}
+
+ENTITY_CLICK_BY_BUY_DEC{
+    If($obj1.house and $obj1.house.owner and $obj1.isBuyByShop){
+        CastSkill(skill = "/click", from = $obj1.house.owner, packet = {targetID = GetObjectID(object = $obj1)})
+    }
 }
 
 ENTITY_RIDE_ON{
