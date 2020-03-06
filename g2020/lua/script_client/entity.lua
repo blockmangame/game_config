@@ -1,7 +1,9 @@
-function EntityClient:updateShowName()
+
+
+function EntityClient:updateShowName()  -- 覆盖引擎的EntityClient:updateShowName()
 
     if self.isPlayer and self ~= Me then
-        
+
         local cfg = self._cfg
         local x = cfg.familyIdentityX
         local y = cfg.familyIdentityY
