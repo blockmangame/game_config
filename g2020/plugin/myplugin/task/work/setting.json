@@ -1,11 +1,11 @@
 {
 	"indentPos": {
-		"x": 214.5,
-		"y": 15.2,
-		"z": 224.5
+		"x": 211.5,
+		"y": 15.01,
+		"z": 219.5
 	},
 	"disableHint": true,
-	"circleNum": 40,
+	"circleNum": 10,
 	"maxCount": 10,
 	"punishmentTime": 60,
 	"msgNotTask": "gui_not_task_msg",
@@ -28,7 +28,7 @@
 					"type": "Interaction",
 					"targetBuff": "myplugin/task_npc_buff",
 					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc02"
+					"cfgName": "myplugin/npc_indent1"
 				}
 			]
 		},
@@ -43,7 +43,7 @@
 					"type": "Interaction",
 					"targetBuff": "myplugin/task_npc_buff",
 					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc03"
+					"cfgName": "myplugin/npc_indent2"
 				}
 			]
 		},
@@ -58,7 +58,7 @@
 					"type": "Interaction",
 					"targetBuff": "myplugin/task_npc_buff",
 					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc04"
+					"cfgName": "myplugin/npc_indent3"
 				}
 			]
 		},
@@ -73,7 +73,7 @@
 					"type": "Interaction",
 					"targetBuff": "myplugin/task_npc_buff",
 					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc10"
+					"cfgName": "myplugin/npc_indent4"
 				}
 			]
 		},
@@ -88,7 +88,7 @@
 					"type": "Interaction",
 					"targetBuff": "myplugin/task_npc_buff",
 					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc11"
+					"cfgName": "myplugin/npc_indent5"
 				}
 			]
 		},
@@ -103,7 +103,7 @@
 					"type": "Interaction",
 					"targetBuff": "myplugin/task_npc_buff",
 					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc12"
+					"cfgName": "myplugin/npc_indent6"
 				}
 			]
 		},
@@ -118,157 +118,7 @@
 					"type": "Interaction",
 					"targetBuff": "myplugin/task_npc_buff",
 					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc15"
-				}
-			]
-		},
-		{
-			"key": "key_8",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc16"
-				}
-			]
-		},
-		{
-			"key": "key_9",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc17"
-				}
-			]
-		},
-		{
-			"key": "key_10",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc18"
-				}
-			]
-		},
-		{
-			"key": "key_11",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc23"
-				}
-			]
-		},
-		{
-			"key": "key_12",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc24"
-				}
-			]
-		},
-		{
-			"key": "key_13",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc25"
-				}
-			]
-		},
-		{
-			"key": "key_14",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc26"
-				}
-			]
-		},
-		{
-			"key": "key_15",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc28"
-				}
-			]
-		},
-		{
-			"key": "key_16",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc29"
-				}
-			]
-		},
-		{
-			"key": "key_17",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 50,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc30"
+					"cfgName": "myplugin/npc_indent7"
 				}
 			]
 		}
