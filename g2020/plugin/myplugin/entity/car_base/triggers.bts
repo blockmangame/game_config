@@ -1,5 +1,20 @@
+RIDE_ON_INDEX_1(){
+    CallTrigger(object = $obj1, obj2 = $obj2, event = "RIDE_ON", targetIndex = 1)
+}
+RIDE_ON_INDEX_2(){
+    CallTrigger(object = $obj1, obj2 = $obj2, event = "RIDE_ON", targetIndex = 2)
+}
+RIDE_ON_INDEX_3(){
+    CallTrigger(object = $obj1, obj2 = $obj2, event = "RIDE_ON", targetIndex = 3)
+}
+RIDE_ON_INDEX_4(){
+    CallTrigger(object = $obj1, obj2 = $obj2, event = "RIDE_ON", targetIndex = 4)
+}
 RIDE_ON
 {
+    If(not $targetIndex){
+        $targetIndex = 1
+    }
     $owner = GetOwner(entity = $obj1)
     $canDrive = false
     If($owner)
@@ -30,12 +45,12 @@ RIDE_ON
             --ClearRide(entity = $obj2.createdTrolley)
 			--EquipItem(entity = $obj2, item = $obj2.equipItem)
             ClearItemUseByKey(entity = $obj2, key = "typeIndex", valueArray = NewArray(1, 2, 4, 5))
-            StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "RIDE_ON_CAR")
+            StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "RIDE_ON_CAR", targetIndex = $targetIndex)
         }
         Else
         {
             CallTrigger(obj1 = $obj2, event = "PLAYER_CLEAR_RIDE")
-            RideOn(entity = $obj2, target = $obj1)
+            RideOn(entity = $obj2, target = $obj1, targetIndex = $targetIndex)
         }
         StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "CLAC_IS_ON_BLOCK_RIDE_FILED")
     }
@@ -52,7 +67,7 @@ RIDE_ON_CAR
 {
     CallTrigger(object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "ADD_TARGET_ATTACH_POINT_INDEX_BUFF")
     CallTrigger(obj1 = $obj2, event = "PLAYER_CLEAR_RIDE")
-    RideOn(entity = $obj2, target = $obj1)
+    RideOn(entity = $obj2, target = $obj1, targetIndex = $targetIndex)
     StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "CLAC_IS_ON_BLOCK_RIDE_FILED")
 }
 
