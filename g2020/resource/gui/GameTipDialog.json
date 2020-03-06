@@ -1,0 +1,406 @@
+{
+    "Dialog": {
+        "Window": {
+            "Type": "Layout",
+            "Name": "GameTipDialog",
+            "Property": [
+                {
+                    "Name": "Area",
+                    "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                },
+                {
+                    "Name": "Touchable",
+                    "Value": "false"
+                },
+                {
+                    "Name": "Level",
+                    "Value": "48"
+                },
+                {
+                    "Name": "AlwaysOnTop",
+                    "Value": "true"
+                },
+                {
+                    "Name": "BackgroundColor",
+                    "Value": "0 0 0 0.627451"
+                },
+                {
+                    "Name": "WndOpenSound",
+                    "Value": "0"
+                },
+                {
+                    "Name": "WndCloseSound",
+                    "Value": "0"
+                }
+            ],
+            "Window": [
+                {
+                    "Type": "Layout",
+                    "Name": "GameTipDialog-Panel",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0,0},{0,618},{0,332}}"
+                        },
+                        {
+                            "Name": "VerticalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "Touchable",
+                            "Value": "false"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "StretchType",
+                            "Value": "NineGrid"
+                        },
+                        {
+                            "Name": "StretchOffset",
+                            "Value": "145 145 100 30"
+                        },
+                        {
+                            "Name": "LayoutBackImage",
+                            "Value": "set:tip_dialog.json image:background"
+                        }
+                    ],
+                    "Window": [
+                        {
+                            "Type": "StaticText",
+                            "Name": "GameTipDialog-Title",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{0,0},{1,0},{0.15,0}}"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "Text",
+                                    "Value": "Tip"
+                                },
+                                {
+                                    "Name": "Font",
+                                    "Value": "HT20"
+                                },
+                                {
+                                    "Name": "Touchable",
+                                    "Value": "false"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "TextHorzAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextLineExtraSpace",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "TextShadow",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "TextVertAlignment",
+                                    "Value": "Centre"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "StaticText",
+                            "Name": "GameTipDialog-MsgText",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{-0.03,0},{0.81,0},{0.438,0}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "Text",
+                                    "Value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                                },
+                                {
+                                    "Name": "Font",
+                                    "Value": "HT22"
+                                },
+                                {
+                                    "Name": "Touchable",
+                                    "Value": "false"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "TextHorzAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextLineExtraSpace",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "TextVertAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextWordWrap",
+                                    "Value": "true"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Layout",
+                            "Name": "GameTipDialog-Btn-Bg",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{0,0},{0.971,0},{0.255,0}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Bottom"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
+                                    "Name": "StretchOffset",
+                                    "Value": "15 15 0 0"
+                                },
+                                {
+                                    "Name": "LayoutBackImage",
+                                    "Value": "set:tip_dialog.json image:btn_background"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Button",
+                            "Name": "GameTipDialog-BtnCancel",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{-0.198,0},{-0.04,0},{0.11,0},{0.14,0}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Bottom"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "Text",
+                                    "Value": "取消"
+                                },
+                                {
+                                    "Name": "Font",
+                                    "Value": "HT18"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
+                                    "Name": "StretchOffset",
+                                    "Value": "20 20 0 0"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "NormalImage",
+                                    "Value": "set:tip_dialog.json image:btn_big_blue"
+                                },
+                                {
+                                    "Name": "PushedImage",
+                                    "Value": "set:tip_dialog.json image:btn_big_blue"
+                                },
+                                {
+                                    "Name": "SoundName",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "TextHorzAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextShadow",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "TextVertAlignment",
+                                    "Value": "Centre"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Button",
+                            "Name": "GameTipDialog-BtnSure",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0.198,0},{-0.04,0},{0.506,0},{0.14,0}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Bottom"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "Text",
+                                    "Value": "确定"
+                                },
+                                {
+                                    "Name": "Font",
+                                    "Value": "HT18"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
+                                    "Name": "StretchOffset",
+                                    "Value": "20 20 0 0"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "NormalImage",
+                                    "Value": "set:tip_dialog.json image:btn_big_green"
+                                },
+                                {
+                                    "Name": "PushedImage",
+                                    "Value": "set:tip_dialog.json image:btn_big_green"
+                                },
+                                {
+                                    "Name": "SoundName",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "TextHorzAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextShadow",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "TextVertAlignment",
+                                    "Value": "Centre"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
