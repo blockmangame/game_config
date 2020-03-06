@@ -16,3 +16,13 @@ function UI:setViewTexture(key, view)
     view:setMaterial(5)
     view:SetImage(texture:getTextureName())
 end
+
+Lib.subscribeEvent(Event.EVENT_OPEN_DRESS_ARCHIVE, function(isUpdateData)
+    UI:openWnd("dressArchive", isUpdateData)
+end)
+
+Lib.subscribeEvent(Event.EVENT_SHOW_DRESS_STORE, function(index, actorInfo, curActorSkin, appSkin)
+    if index then
+        UI:openWnd("dressStore", index, actorInfo, curActorSkin, appSkin)
+    end
+end)
