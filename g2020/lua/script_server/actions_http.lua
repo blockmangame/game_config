@@ -18,7 +18,6 @@ function Actions.CreateWorks(data, params, context)
         if player then
             Trigger.CheckTriggers(player:cfg(), params.event, { obj1 = player, response = response, isPublish = params.isPublish })
         end
-        print("===========================" .. Lib.v2s(response))
     end, params.body, true)
 end
 
