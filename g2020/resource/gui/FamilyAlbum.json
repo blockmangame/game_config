@@ -1,0 +1,604 @@
+{
+    "Dialog": {
+        "Window": {
+            "Type": "Layout",
+            "Name": "FamilyAlbum",
+            "Property": [
+                {
+                    "Name": "Area",
+                    "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                },
+                {
+                    "Name": "BackgroundColor",
+                    "Value": "0 0 0 0.392157"
+                },
+                {
+                    "Name": "WndOpenSound",
+                    "Value": "0"
+                },
+                {
+                    "Name": "WndCloseSound",
+                    "Value": "0"
+                }
+            ],
+            "Window": [
+                {
+                    "Type": "Layout",
+                    "Name": "FamilyAlbum-Panel",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0,0},{0.71875,0},{0.840278,0}}"
+                        },
+                        {
+                            "Name": "VerticalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "Touchable",
+                            "Value": "false"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "StretchType",
+                            "Value": "NineGrid"
+                        },
+                        {
+                            "Name": "StretchOffset",
+                            "Value": "15 15 15 15"
+                        },
+                        {
+                            "Name": "LayoutBackImage",
+                            "Value": "set:family_album.json image:bg"
+                        }
+                    ],
+                    "Window": [
+                        {
+                            "Type": "Layout",
+                            "Name": "FamilyAlbum-Head-Bg-Decorate",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{0,-7},{1.011,0},{0.276,-7}}"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "Touchable",
+                                    "Value": "false"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
+                                    "Name": "StretchOffset",
+                                    "Value": "10 10 0 0"
+                                },
+                                {
+                                    "Name": "LayoutBackImage",
+                                    "Value": "set:family_album.json image:bg_decorate"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "StaticImage",
+                            "Name": "FamilyAlbum-Bottom-Bg-Decorate",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0.01413,0},{0.01,0},{0.166304,0},{0.17529,0}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Bottom"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Right"
+                                },
+                                {
+                                    "Name": "Touchable",
+                                    "Value": "false"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "ImageName",
+                                    "Value": "set:family_album.json image:decorate"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "GridView",
+                            "Name": "FamilyAlbum-Items",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{0,0},{0.98152,0},{0.7438,0}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "ClipChild",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "ItemAlignment",
+                                    "Value": "Left"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "StaticImage",
+                            "Name": "FamilyAlbum-Title-Bg",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,-15},{0,-25},{0,324},{0,86}}"
+                                },
+                                {
+                                    "Name": "Text",
+                                    "Value": "Album"
+                                },
+                                {
+                                    "Name": "Touchable",
+                                    "Value": "false"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "ImageName",
+                                    "Value": "set:family_album.json image:title_bg"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "StaticText",
+                                    "Name": "FamilyAlbum-Title-Text",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,0},{-0.04,0},{0,271},{0.46,0}}"
+                                        },
+                                        {
+                                            "Name": "VerticalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "HorizontalAlignment",
+                                            "Value": "Right"
+                                        },
+                                        {
+                                            "Name": "Text",
+                                            "Value": "Album"
+                                        },
+                                        {
+                                            "Name": "Font",
+                                            "Value": "HT20"
+                                        },
+                                        {
+                                            "Name": "Touchable",
+                                            "Value": "false"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextBorder",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "TextBorderColor",
+                                            "Value": "0.0313726 0.576471 0.643137 1"
+                                        },
+                                        {
+                                            "Name": "TextHorzAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextLineExtraSpace",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextVertAlignment",
+                                            "Value": "Centre"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Type": "StaticImage",
+                                    "Name": "FamilyAlbum-Title-Icon",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,0},{0,0},{0,106},{0,95}}"
+                                        },
+                                        {
+                                            "Name": "VerticalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "Touchable",
+                                            "Value": "false"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "ImageName",
+                                            "Value": "set:family_album.json image:head_icon"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Button",
+                            "Name": "FamilyAlbum-CloseBtn",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0.011,0},{-0.0248,0},{0.011,62},{-0.0248,58}}"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Right"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "NormalImage",
+                                    "Value": "set:family_album.json image:close"
+                                },
+                                {
+                                    "Name": "PushedImage",
+                                    "Value": "set:family_album.json image:close"
+                                },
+                                {
+                                    "Name": "SoundName",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "TextHorzAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextVertAlignment",
+                                    "Value": "Centre"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Button",
+                            "Name": "FamilyAlbum-DeleteBtn",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0.05434,0},{0,-5},{0.302166,0},{0.114,-5}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Bottom"
+                                },
+                                {
+                                    "Name": "Text",
+                                    "Value": "delete"
+                                },
+                                {
+                                    "Name": "Font",
+                                    "Value": "HT18"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
+                                    "Name": "StretchOffset",
+                                    "Value": "18 18 15 15"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "NormalImage",
+                                    "Value": "set:family_album.json image:blue_btn"
+                                },
+                                {
+                                    "Name": "PushedImage",
+                                    "Value": "set:family_album.json image:blue_btn"
+                                },
+                                {
+                                    "Name": "SoundName",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "TextHorzAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextVertAlignment",
+                                    "Value": "Centre"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Button",
+                            "Name": "FamilyAlbum-CheckBtn",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{-0.05434,0},{0,-5},{0.193486,0},{0.114,-5}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Bottom"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Right"
+                                },
+                                {
+                                    "Name": "Text",
+                                    "Value": "Check"
+                                },
+                                {
+                                    "Name": "Font",
+                                    "Value": "HT18"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
+                                    "Name": "StretchOffset",
+                                    "Value": "18 18 15 15"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "NormalImage",
+                                    "Value": "set:family_album.json image:green_btn"
+                                },
+                                {
+                                    "Name": "PushedImage",
+                                    "Value": "set:family_album.json image:green_btn"
+                                },
+                                {
+                                    "Name": "SoundName",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "TextHorzAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextVertAlignment",
+                                    "Value": "Centre"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
