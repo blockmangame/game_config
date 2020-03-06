@@ -2520,6 +2520,13 @@ ENTITY_ADD_DINGDONG_BUFF{
     }
 }
 
+UPDATE_FAMILY_IDENTITY()
+{
+    $x = GetConfigVar(obj = $obj1, key = "familyIdentityX")
+    $y = GetConfigVar(obj = $obj1, key = "familyIdentityY")
+    SetHeadText(entity = $obj1, x = $x, y = $y, headText = "")
+}
+
 CREATE_FAMILY
 {
     If(IsPlayer(entity = $obj1))
@@ -2536,6 +2543,8 @@ CREATE_FAMILY
         CallTrigger(event = "INIT_TEAM_UI", object = $obj1, memberNum = 1, show = true) 
         CallTrigger(event = "ADD_CREATE_FAMILY_REPORT_NUM", object = $obj1)
         DictionarySet(dict = @FamilyCreateDuration, key = $teamId, value = GetGameTime())    --记录家庭生成时间
+
+        CallTrigger(event = "UPDATE_FAMILY_IDENTITY", object = $obj1)
     }
 }
 
@@ -2581,6 +2590,8 @@ QUIT_FAMILY
         CallTrigger(event = "INIT_TEAM_UI", obj1 = $obj1, show = false)     --  关闭家庭UI
         CallTrigger(event = "UPDATE_TEAM_MEMBER_LIST", teamId = $teamId, object = $obj1)
         CallTrigger(event = "SHOW_TEAM_UI", obj1 = $obj1)                   -- 打开创建队伍的UI
+
+        CallTrigger(event = "UPDATE_FAMILY_IDENTITY", object = $obj1) 
     }
 }
 
@@ -2615,6 +2626,8 @@ UPDATE_TEAM_MEMBER_LIST
     {
         If(IsPlayer(entity = $entity))
         {
+            CallTrigger(event = "UPDATE_FAMILY_IDENTITY", object = $entity)
+
             RecheckAllInteractionUIs(player = $entity)
 
             If($disableUpdate and $obj1 == $entity)
@@ -2735,6 +2748,9 @@ INVITE_JOIN_FAMILY
             DictionarySet(dict = @FamilyCreateDuration, key = $teamId, value = GetGameTime())    --记录家庭生成时间
             CallTrigger(event = "ADD_CREATE_FAMILY_REPORT_NUM", object = $targetPlayer)
             CallTrigger(event = "ADD_JOIN_FAMILY_REPORT_NUM", object = $obj1)
+
+            CallTrigger(event = "UPDATE_FAMILY_IDENTITY", object = $obj1)
+            CallTrigger(event = "UPDATE_FAMILY_IDENTITY", object = $targetPlayer)
         }
     }
 }
