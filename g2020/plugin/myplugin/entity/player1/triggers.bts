@@ -4902,7 +4902,7 @@ PICK_HAND_ITEM {
     }
 }
 
-LEAVE_EQUIPMEN {
+TRAY_PICK_ITEM {
 	CallTrigger(event = "TAKEOFF_ITEM", obj1 = $obj1, item = $item)
     $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
 	If($typeIndex ~= 3)
@@ -6369,6 +6369,5 @@ REQ_CREATE(){
 --空地邮箱购买房子特权
 EMAIL_BUY_HOUSE_PRI()
 {
-    Test("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
     RequestCanBuy(shopIndex = 2, player = $obj1, count = 1)
 }
