@@ -328,7 +328,6 @@ function M:updateHistory()
             circleFrontSight:invoke("setRadius", 16)
             
             local color = colorHistory[i]
-            print("color history"..Lib.v2s(color))
             circleFrontSight:invoke("setColor", color[1], color[2], color[3], color[4])
             self:subscribe(itemView, UIEvent.EventWindowClick, function(_, x, y)
                 self:onPenChange(OP_TYPE.DRAW)
