@@ -3601,7 +3601,7 @@ DRESS_STORE_ITEM_BUY
 SHOW_SAVE_WORKS_TIP -- 作品保存提示框
 {
     $price = GetWorldVar(key = "publishWorksPrice")
-    $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = nil, rightContent = "works_save" }
+    $btnInfo = { rightCoinId = 3, rightContent = $price, leftCoinId = nil, leftContent = "works_save" }
     $context = { url = $url, isEdit = $isEdit, worksId = $worksId}
     ShowDialogTip(entity = $obj1, tipType = 5, event = "SAVE_WORKS_TIP_CLICK_EVENT", p1 = "ui_tip", p2= "publish_works_tip", p3 = $btnInfo, context = $context)
 }
@@ -3613,7 +3613,7 @@ SAVE_WORKS_TIP_CLICK_EVENT
     }
 
     $isPublish = false
-    If($button == "left")
+    If($button == "right")
     {
         $price = GetWorldVar(key = "publishWorksPrice")
         If(CheckBalance(entity = $obj1, coinName = "green_currency", price = $price))
@@ -3727,7 +3727,7 @@ BUY_WORKS_ARCHIVE_RESPONSE_2
 SHOW_BYU_WORKS_ARCHIVE_UI--购买存档
 {
     $price = GetWorldVar(key = "worksArchivePrice")
-    $btnInfo = { leftCoinId = 0, leftContent = $price, rightCoinId = nil, rightContent = "works_save_coverage_new" }
+    $btnInfo = { rightCoinId = 0, rightContent = $price, leftCoinId = nil, leftContent = "works_save_coverage_new" }
     $context = { url = $url, isPublish = $isPublish }
     ShowDialogTip(entity = $obj1, tipType = 5, event = "BUY_WORKS_ARCHIVE", p1 = "publish_works_buy_archive_title", p2= "publish_works_buy_archive", p3 = $btnInfo, context = $context)
 }
@@ -3739,7 +3739,7 @@ BUY_WORKS_ARCHIVE
         Return()
     }
 
-    If($button == "left")
+    If($button == "right")
     {
         $price = GetWorldVar(key = "worksArchivePrice")
         If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
@@ -3751,7 +3751,7 @@ BUY_WORKS_ARCHIVE
         BuyGoods(player = $obj1, uniqueId = 1000001,  coinId = 0, price = $price, url = $url, isPublish = $isPublish, event = "BUY_WORKS_ARCHIVE_RESPONSE" )
     }
 
-    If($button == "right")
+    If($button == "left")
     {
         CallTrigger(event = "GET_NEW_UN_PUBLISH_WORKS", obj1 = $obj1, url = $url, isPublish = $isPublish)
     }
