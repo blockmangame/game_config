@@ -39,6 +39,9 @@
                         "funcName": "checkRideOnIndex",
                         "index": 23
                     },
+                    "customCheckCanHide":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
                     "imageSize": {
                         "width": "60",
                         "height": "60"
@@ -51,6 +54,69 @@
                 "offset": {
                     "x": 0.5,
                     "y": 0.5,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit2_low_1.you.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_low_1",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 23
+                    },
+                    "customCheckCanShow":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "disableAutoHideText":true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.5,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit2_low_1.baby.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_low_1",
+                    "toOther":true,
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 23
+                    },
+                    "customCheckCanShow":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "disableAutoHideText":true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.5,
+                    "y": 0,
                     "z": 0
                 }
             }

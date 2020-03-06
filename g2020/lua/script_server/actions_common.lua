@@ -13,6 +13,20 @@ function Actions.ShowHomeGuide(data, params, context)
 	})
 end
 
+function Actions.SendInteractionEnd(data, params, context)
+	params.player:sendPacket({
+		pid = "SendInteractionEnd",
+	})
+end
+
+function Actions.SendInteractionBegin(data, params, context)
+	params.player:sendPacket({
+		pid = "SendInteractionBegin",
+		targetID = params.target.objID,
+		skillName = params.skillName
+	})
+end
+
 function Actions.CheckUseItemClear(data, params, context)
 	local entity = params.entity
 	entity:checkUseItemClear()

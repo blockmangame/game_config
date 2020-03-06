@@ -252,6 +252,60 @@ customCheckFuncs.checkCanAdultRaiseBaby = function (entity, checkCond, targetObj
     return (not role2) and role1
 end
 
+local function getTrolleyPassenger(target)
+    if target:cfg()["base"] ~= "trolley_base" then
+        return false
+    end
+    local passengers = target:data("passengers")
+    local sittingBabyID = nil
+    for _, objID in pairs(passengers) do
+        if Me.objID ~= objID then
+            sittingBabyID = objID
+            break
+        end
+    end
+    if not sittingBabyID then
+        return false
+    end
+    return World.CurWorld:getObject(sittingBabyID)
+end
+
+customCheckFuncs.checkCanPutBabyOnto = function (entity, checkCond)
+    entity.targetBaby = nil
+    local rideOnId, targetPlayerID = entity.rideOnId, entity.interactingPlayer
+    if rideOnId == 0 and not targetPlayerID then
+        return false
+    end
+    local targetPlayer
+    if rideOnId ~= 0 and not targetPlayerID then
+        if entity:prop("onTrolley") ~= 1 then
+            return false
+        end
+        local trolley = World.CurWorld:getObject(rideOnId)
+        local sittingBaby = trolley and getTrolleyPassenger(trolley)
+        if not sittingBaby then
+            return false
+        end
+        targetPlayer = sittingBaby
+    elseif rideOnId ~= 0 and targetPlayerID and rideOnId ~= targetPlayerID then
+        return false
+    else
+        targetPlayer = World.CurWorld:getObject(targetPlayerID)
+    end
+
+    if not targetPlayer then
+        return false
+    end
+
+    local role1, role2 = isAdult(entity), isAdult(targetPlayer)
+    if role2 then
+        return false
+    end
+    entity.targetBaby = targetPlayer
+    return true
+end
+
+
 function Player:customCheckCond(checkCond, ...)
     local func = customCheckFuncs[checkCond.funcName]
     if not func then
@@ -259,6 +313,41 @@ function Player:customCheckCond(checkCond, ...)
         return false
     end
     return func(self, checkCond, ...)
+end
+
+local skillList = {
+    ["myplugin/action_piggyback"] = true,
+    ["myplugin/action_handinhand"] = true,
+    ["myplugin/action_ride"] = true,
+    ["myplugin/action_pickup"] = true,
+}
+
+function Player:setInteractingPlayer(targetID, skillName)
+    if not targetID then
+        self.interactingPlayer = nil
+        return
+    end
+    if skillList[skillName] then
+        self.interactingPlayer = targetID
+    end
+end
+
+function Player:interactWithObject(objID, cfgKey, cfgIndex, btnType, btnIndex)
+    local object = World.CurWorld:getObject(objID)
+    if not object then--it may be deleted at previous frame
+        return
+    end
+    if object.isEntity then
+        self:sendPacket({
+            pid = "InteractWithEntity",
+            targetID = self.targetBaby and self.targetBaby.objID,
+            objID = objID,
+            cfgKey = cfgKey,
+            cfgIndex = cfgIndex,
+            btnType = btnType,
+            btnIndex = btnIndex,
+        })
+    end
 end
 
 function Player:updateGiveAwayStatus(status, targetObjID)

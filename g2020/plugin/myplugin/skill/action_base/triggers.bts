@@ -15,5 +15,7 @@ SKILL_CAST  {
 
         $obj1.interactionObjId = GetObjectID(object = $obj2)
         $obj2.interactionObjId = GetObjectID(object = $obj1)
+        SendInteractionBegin(player = $obj1, target = $obj2, skillName = $fullName)
+        SendInteractionBegin(player = $obj2, target = $obj1, skillName = $fullName)
     }
 }
