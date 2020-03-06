@@ -332,6 +332,24 @@ function Player:setInteractingPlayer(targetID, skillName)
     end
 end
 
+function Player:interactWithObject(objID, cfgKey, cfgIndex, btnType, btnIndex)
+    local object = World.CurWorld:getObject(objID)
+    if not object then--it may be deleted at previous frame
+        return
+    end
+    if object.isEntity then
+        self:sendPacket({
+            pid = "InteractWithEntity",
+            targetID = self.targetBaby and self.targetBaby.objID,
+            objID = objID,
+            cfgKey = cfgKey,
+            cfgIndex = cfgIndex,
+            btnType = btnType,
+            btnIndex = btnIndex,
+        })
+    end
+end
+
 function Player:updateGiveAwayStatus(status, targetObjID)
     self.giveAwayStatusTable = {
         status = status,
