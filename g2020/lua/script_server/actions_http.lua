@@ -18,7 +18,8 @@ function Actions.CreateWorks(data, params, context)
         if player then
             Trigger.CheckTriggers(player:cfg(), params.event, { obj1 = player, response = response, isPublish = params.isPublish })
         end
-    end, params.body)
+        print("===========================" .. Lib.v2s(response))
+    end, params.body, true)
 end
 
 --更新作品
@@ -38,13 +39,13 @@ function Actions.UpdateWorks(data, params, context)
     AsyncProcess.HttpRequest("POST", url, args, function (response)
         local player = Game.GetPlayerByUserId(userId)
         if player then
-            Trigger.CheckTriggers(player:cfg(), params.event, { obj1 = player,
-                                                                response = response,
-                                                                isPublish = params.isPublish,
-                                                                worksId = params.worksId,
-                                                                isEdit = params.isEdit})
+            Trigger.CheckTriggers(player:cfg(), params.event, {
+                obj1 = player,response = response,
+                isPublish = params.isPublish,
+                worksId = params.worksId,
+                isEdit = params.isEdit})
         end
-    end, params.body)
+    end, params.body, true)
 end
 
 --获取最新未发布的作品
@@ -60,7 +61,7 @@ function Actions.GetNewUnPublishWorks(data, params, context)
         if player then
             Trigger.CheckTriggers(player:cfg(), params.event, { obj1 = player, response = response, url = params.url, isPublish = params.isPublish})
         end
-    end, params.body)
+    end, params.body, true)
 end
 
 
@@ -70,7 +71,7 @@ function Actions.GetTopWorks(data, params, context)
     local args = {{"gameId", gameName}, {"count", params.count or 10}}
     AsyncProcess.HttpRequest("GET", url, args, function (response)
         Trigger.CheckTriggers(nil, params.event, { response = response })
-    end, params.body)
+    end, params.body, true)
 end
 
 --获取最新涂鸦墙作品
@@ -84,7 +85,7 @@ function Actions.GetNewWorks(data, params, context)
     }
     AsyncProcess.HttpRequest("GET", url, args, function (response)
         Trigger.CheckTriggers(nil, params.event, { response = response })
-    end, params.body)
+    end, params.body, true)
 end
 
 --获取优秀作品
@@ -97,7 +98,7 @@ function Actions.GetExcellentWorks(data, params, context)
     }
     AsyncProcess.HttpRequest("GET", url, args, function (response)
         Trigger.CheckTriggers(nil, params.event, { response = response })
-    end, params.body)
+    end, params.body, true)
 end
 
 --评论作品
@@ -114,7 +115,7 @@ function Actions.CommentWorks(data, params, context)
         if player then
             Trigger.CheckTriggers(player:cfg(), params.event, { obj1 = player, response = response })
         end
-    end, params.body)
+    end, params.body, true)
 end
 
 --发布作品
@@ -133,7 +134,8 @@ function Actions.PublishWorks(data, params, context)
         if player then
             Trigger.CheckTriggers(player:cfg(), params.event, { obj1 = player, response = response, worksId = params.id })
         end
-    end, params.body)
+        print("===========================" .. Lib.v2s(response))
+    end, params.body, true)
 end
 
 function Actions.GetWorksCount(data, params, context)
@@ -146,7 +148,7 @@ function Actions.GetWorksCount(data, params, context)
             local newParams = { obj1 = player, response = response, url = params.url, isPublish = params.isPublish }
             Trigger.CheckTriggers(player:cfg(), params.event, newParams)
         end
-    end)
+    end, nil,true)
 end
 
 function Actions.WorksArchiveReport(data, params, context)
@@ -159,5 +161,5 @@ function Actions.WorksArchiveReport(data, params, context)
             num = response.data
         end
         GameAnalytics.Design(userId, 0,{"player:works:archive", num})
-    end)
+    end, nil,true)
 end

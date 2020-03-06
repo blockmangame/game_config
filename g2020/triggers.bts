@@ -362,20 +362,19 @@ FUNC_STATE_ADD_INTERACTLIST --params: entities
 
 WORKS_WALL_TIMER_START
 {
+    @userPublishWorks = NewDictionary({})
     $worksWallConfig = GetWorldVar(key = "worksWalls")
     If($worksWallConfig == nil)
     {
         Return()
     }
 
-    @worksTimers = NewDictionary({})
     $time = GetWorldVar(key = "worksWallUpdateTime")
     Foreach(array = $worksWallConfig, key = "data")
     {
         $dict = NewDictionary($data)
         $name = DictionaryGet(dict = $dict, key = "name")
-        $timer = StartTimer(rep = true, time = $time, event = "WORKS_WALL_UPDATE", wallName = $name)
-        DictionarySet(dict = @worksTimers, key = $name, value = $timer)
+        StartTimer(rep = true, time = $time, event = "WORKS_WALL_UPDATE", wallName = $name)
     }
 }
 
@@ -417,28 +416,29 @@ PLAYER_PUBLISH_WORKS
        $worksList = {}
     }
 
+    If(not @userPublishWorks)
+    {
+        @userPublishWorks = {}
+    }
+
     ArrayAppend(array= $worksList, value = {graffitiId = $worksId})
     DictionarySet(dict = $dictValue, key = $wallName, value = $worksList)
     @worksWalls = DictionaryToTable(dict = $dictValue)
 
-    Foreach(array = GetAllPlayers(), key = "player")
+    If(ArraySize(array= $worksList) == 1)
     {
-        UpdateUIData(player =$player, ui = $wallName, data = {graffitiId = $worksId})
-    }
-
-    GameAnalyticsCustomEvent(player = $player, parts = ["player:works:publish"])
-
-    If (@worksTimers)
-    {
-        $timer = DictionaryGet(dict = @worksTimers, key = $wallName)
-        If($timer)
+        Foreach(array = GetAllPlayers(), key = "user")
         {
-            StopTimer(timer = $timer)
+            UpdateUIData(player = $user, ui = $wallName, data = {graffitiId = $worksId})
         }
-        $time = GetWorldVar(key = "worksWallUpdateTime")
-        $timer = StartTimer(rep = true, time = $time, event = "WORKS_WALL_UPDATE", wallName = $wallName)
-        DictionarySet(dict = @worksTimers, key = $wallName, value = $timer)
     }
+    Else
+    {
+        UpdateUIData(player = $player, ui = $wallName, data = {graffitiId = $worksId})
+    }
+
+    DictionarySet(dict = @userPublishWorks, key = GetPlayerUserID(player = $player), value = GetTime())
+    GameAnalyticsCustomEvent(player = $player, parts = ["player:works:publish"])
 }
 
 SET_WORKS_WALL_INDEX
@@ -488,7 +488,9 @@ WORKS_WALL_UPDATE
     }
 
     $index = 1
+    $curTime = GetTime()
     $size = ArraySize(array = $worksList)
+    $worksWallUpdateTime = GetWorldVar(key = "worksWallUpdateTime")
     Foreach(array = $worksList, key = "works")
     {
         If($worksIndex < $index || ($worksIndex >= $size && $index == 1))
@@ -500,7 +502,23 @@ WORKS_WALL_UPDATE
             {
                 If(GetEntityMapName(entity = $player) == "map001")
                 {
-                    UpdateUIData(player = $player, ui = $wallName, data = $works)
+                    If($wallName ==  "curServerPublishWorks")
+                    {
+                        $userId = GetPlayerUserID(player = $player)
+                        $userUpdateTime = DictionaryGet(dict = @userPublishWorks, key = $userId)
+                        If(not $userUpdateTime || ($curTime - $userUpdateTime) * 20 > $worksWallUpdateTime)
+                        {
+                            UpdateUIData(player = $player, ui = $wallName, data = $works)
+                        }
+                        Else
+                        {
+                            DictionarySet(dict = @userPublishWorks, key = $userId)
+                        }
+                    }
+                    Else
+                    {
+                        UpdateUIData(player = $player, ui = $wallName, data = $works)
+                    }
                 }
             }
             Break()
