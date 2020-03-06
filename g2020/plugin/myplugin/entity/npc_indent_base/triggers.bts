@@ -1,0 +1,13 @@
+SHOW_CONVERSATION_UI
+{
+    $talkList = GetConfigVar(obj = $obj1, key = "talkList")
+    $optionList = GetConfigVar(obj = $obj1, key = "optionList")
+    $optionNpc = GetConfigVar(obj = $obj1, key = "optionNpc")
+
+    $fullName = GetConfigVar(obj = $obj1, key = "fullName")
+    If($obj2.taskNpc == $fullName){
+        CallTrigger(event = "DO_SUBMIT_ORDER", object = $obj2, obj2 = $obj1)
+    }Else{
+        OpenConversation(entity = $obj2, talkList = $talkList, optionList = $optionList, optionNpc = $optionNpc)
+    }
+}
