@@ -7,6 +7,14 @@ function handles:ShowHomeGuide(packet)
 	GuideHome.showHomeUI(packet.pos)
 end
 
+function handles:SendInteractionEnd(packet)
+    self:setInteractingPlayer()
+end
+
+function handles:SendInteractionBegin(packet)
+    self:setInteractingPlayer(packet.targetID, packet.skillName)
+end
+
 function handles:UpdateEntityDate(packet)
     local obj = World.CurWorld:getObject(packet.objId)
     if obj then

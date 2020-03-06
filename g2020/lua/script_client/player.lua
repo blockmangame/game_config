@@ -261,6 +261,23 @@ function Player:customCheckCond(checkCond, ...)
     return func(self, checkCond, ...)
 end
 
+local skillList = {
+    ["myplugin/action_piggyback"] = true,
+    ["myplugin/action_handinhand"] = true,
+    ["myplugin/action_ride"] = true,
+    ["myplugin/action_pickup"] = true,
+}
+
+function Player:setInteractingPlayer(targetID, skillName)
+    if not targetID then
+        self.interactingPlayer = nil
+        return
+    end
+    if skillList[skillName] then
+        self.interactingPlayer = targetID
+    end
+end
+
 function Player:updateGiveAwayStatus(status, targetObjID)
     self.giveAwayStatusTable = {
         status = status,
