@@ -975,6 +975,7 @@ BUY_STORE_BY_APP{
     $dictValue = NewDictionary($response)
     $cfg = DictionaryGet(dict = $dictValue, key = "cfg")
     $obj1 = DictionaryGet(dict = $dictValue, key = "player")
+    $storeId = DictionaryGet(dict = $dictValue, key = "storeId")
     If(not $isSucceed){
         ShowRecharge(player = $obj1)
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_store_not_enough_money", keepTime = 40)
@@ -1572,6 +1573,7 @@ BUY_REGION_COLOR_BY_APP{
     $childRegionKey = DictionaryGet(dict = $dictValue, key = "childRegionKey")
     $colorBlock = DictionaryGet(dict = $dictValue, key = "colorBlock")
     $obj1 = DictionaryGet(dict = $dictValue, key = "player")
+    $storeId = DictionaryGet(dict = $dictValue, key = "storeId")
     If(not $isSucceed){
         ShowRecharge(player = $obj1)
         ShowTip(entity = $obj1, tipType = 2,textKey = "buy_house_region_color_not_enough_money", keepTime = 40)
