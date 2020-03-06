@@ -6356,18 +6356,19 @@ EDIT_TEAM_NAME_BUTTON_SURE
 --交易内容
 REQ_TRADE()
 {
-    ShowDialogTip(entity = $obj1, tipType = 2, event = "REQ_CREATE", p1 = "ui_tip")
-}
-REQ_CREATE(){
-    $trayType =  [ 21, 22, 23, 24 ]
+    $trayType =  [21, 22, 23, 24 ]
 	$itemFilters = {
-		canTrade = true
+		
 	}
 	RequestTrade(player = $obj2, target = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
 }
-
---空地邮箱购买房子特权
-EMAIL_BUY_HOUSE_PRI()
+TRADE_CAR()
 {
-    RequestCanBuy(shopIndex = 2, player = $obj1, count = 1)
+    ShowDialogTip(entity = $obj1, tipType = 0,p1="gui.hint",p2="item.pick.bag",p3="sure", event = "SHOW_TRADE_CAR",context = {car = $car})
+}
+SHOW_TRADE_CAR()
+{
+    Foreach(array = $car, key = "fullName"){
+        ShowRewardItemEffect(fullName = $fullName, count = 1, type = "Item", player = $obj1)
+    }
 }
