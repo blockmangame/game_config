@@ -73,12 +73,11 @@ ui_family_create=Aile oluştur
 ui_family_album=Aile albümü
 ui_family_quit=Aileden çık
 ui_family_full_member=Aile dolu
-ui_family_invite={} Sizinle bir aile kurmak istiyorum
+ui_family_request={} Sizinle bir aile kurmak istiyorum
 ui_family_reject=Aile davetiyeniz reddedildi
 ui_family_offline=Karşı taraf çevrimdışı
 ui_family_join_in=Aileye katıldın
 ui_family_ask_for_family={}, Seninle bir aile kurmak istiyorum
-ui_family_find_member=
 gui_you_want_to_buy_this={} İçin {} satın alıyor musunuz?
 gui_buys_your_stuff={}Sizinkini aldım{}。
 interact_feed=besleme
@@ -608,23 +607,23 @@ car_old_02.name=araba
 car_old_03.name=Spor araba
 car_old_04.name=jip
 car_horse_01.name=Beyaz at
-car_01.buy=Supercar \n($3000) satın al
+car_01.buy=Supercar \n($2200) satın al
 car_02.buy=Maglev araba satın al \n(★999)
 car_03.buy=Çarpışan Arabalar \n(★299) alın
 car_04.buy=Ralli arabası satın \n(★499)
-car_05.buy=Wild Moto \n($1500) alın
+car_05.buy=Wild Moto \n($1000) alın
 car_06.buy=Bisiklet satın al \n($120)
 car_07.buy=Bisiklet satın al \n($75)
 car_08.buy=Pizza binicisi \n(★499) satın al
 car_09.buy=İki tekerlekli unicycle \n($200) alın
 car_10.buy=Serin unicycle \n($500) satın al
-car_11.buy=Desert Knight \n($2000) alın
+car_11.buy=Desert Knight \n($1000) alın
 car_12.buy=Dağ bisikleti satın al \n($200)
 car_13.buy=Motosiklet satın al \n($400)
 car_old_01.buy=Polis arabası satın al \n(★499)
-car_old_02.buy=Sedan Alış \n($1000)
-car_old_03.buy=Spor araba satın al \n($1500)
-car_old_04.buy=Jeep \n($1200) alın
+car_old_02.buy=Sedan Alış \n($1100)
+car_old_03.buy=Spor araba satın al \n($1800)
+car_old_04.buy=Jeep \n($1600) alın
 car_horse_01.buy=Beyaz at satın al \n(★999)
 gift_01.name=Küçük hediye
 gift_02.name=hediye
@@ -645,9 +644,9 @@ trolley_01.buy=Gezginci \n($100) alın
 trolley_02.buy=Top arabası satın al \n($300)
 trolley_03.buy=Alışveriş sepeti \n($200)
 trolley_04.buy=Süper koşu arabası \n($500) alın
-trolley_05.buy=Tren küçük yük arabalar \n($700)
-trolley_06.buy=Uçuş arabası \n($1000) alın
-trolley_07.buy=UFO El Arabası \n($2000) alın
+trolley_05.buy=Tren küçük yük arabalar \n($500)
+trolley_06.buy=Uçuş arabası \n($1250) alın
+trolley_07.buy=UFO El Arabası \n($1500) alın
 balloon_01.name=Mavi balon
 balloon_02.name=Kırmızı balon
 balloon_03.name=Sarı balon
@@ -762,57 +761,58 @@ mian_ui_bag= 
 zz01food_hotdog=Sosisli sandviç
 zz01food_hotdog_shop=Sosisli sandviç standı
 myplugin/food_zz01food_hotdog=Sosisli sandviç satın al\n($3)
-myplugin/food_zz01food_hotdog_shop=Sosisli sandviç satın al\n($3)
+zz01food_hotdog_shop.buy=Sosisli sandviç satın al\n($3)
 car_02.describe=
 car_03.describe=
 car_04.describe=
 bag_item_cannel=iptal edildi
 ui_edit_title_name=
+zz01food_sandwich.name=
 
 language_end:item
 
 language_start:npc
 
-npc_01.name=[B=1]köstek
-npc_02.name=[B=1]Alan
-npc_03.name=[B=1]Carl
-npc_04.name=[B=1]Duluth
-npc_10.name=[B=1]Neal
-npc_11.name=[B=1]Paul
-npc_12.name=[B=1]Raymond
-npc_13.name=[B=1]Nicole
-npc_15.name=[B=1]Nath
-npc_16.name=[B=1]Alice
-npc_17.name=[B=1]Kevin
-npc_18.name=[B=1]Bella
-npc_19.name=[B=1]papatya
-npc_20.name=[B=1]Jason
-npc_21.name=[B=1]gilbert birimi
-npc_22.name=[B=1]Charlotte
-npc_23.name=[B=1]zarafet
-npc_24.name=[B=1]Janet
-npc_25.name=[B=1]Henry
-npc_26.name=[B=1]Izaak
-npc_27.name=[B=1]Jeff
-npc_28.name=[B=1]Justin
-npc_29.name=[B=1]Lew
-npc_30.name=[B=1]Linton
-npc_31.name=[B=1]Rolla
-npc_32.name=[B=1]Nancy
-npc_33.name=[B=1]zeytin
-npc_34.name=[B=1]çocuklar
-npc_35.name=[B=1]Jacob
-npc_36.name=[B=1]peni
-npc_37.name=[B=1]Ford
-npc_38.name=[B=1]Roth
-npc_39.name=[B=1]çıkış hareketi
-npc_40.name=[B=1]dürüst
-npc_42.name=[B=1]Rebecca
-npc_43.name=[B=1]Eric
-npc_44.name=[B=1]tıbbi
-npc_45.name=[B=1]hemşire
-npc_46.name=[B=1]Dr. Ma
-npc_47.name=[B=1]Mary
+npc_01.name=köstek
+npc_02.name=Alan
+npc_03.name=Carl
+npc_04.name=Duluth
+npc_10.name=Neal
+npc_11.name=Paul
+npc_12.name=Raymond
+npc_13.name=Nicole
+npc_15.name=Nath
+npc_16.name=Alice
+npc_17.name=Kevin
+npc_18.name=Bella
+npc_19.name=papatya
+npc_20.name=Jason
+npc_21.name=gilbert birimi
+npc_22.name=Charlotte
+npc_23.name=zarafet
+npc_24.name=Janet
+npc_25.name=Henry
+npc_26.name=Izaak
+npc_27.name=Jeff
+npc_28.name=Justin
+npc_29.name=Lew
+npc_30.name=Linton
+npc_31.name=Rolla
+npc_32.name=Nancy
+npc_33.name=zeytin
+npc_34.name=çocuklar
+npc_35.name=Jacob
+npc_36.name=peni
+npc_37.name=Ford
+npc_38.name=Roth
+npc_39.name=çıkış hareketi
+npc_40.name=dürüst
+npc_42.name=Rebecca
+npc_43.name=Eric
+npc_44.name=tıbbi
+npc_45.name=hemşire
+npc_46.name=Dr. Ma
+npc_47.name=Mary
 npc_01.dialog=Hoş geldin, bu kasaba sakinleri.\nJessi belediye başkanı genellikle meşgul ve kasabadaki her şey şimdi benim tarafımdan temsil ediliyor.
 npc_02.dialog=Havuzda büyülü bir balık olduğunu duydum, birisi onu başka bir şehre kısayol bulmak için takip etti!
 npc_03.dialog=Eminim Allen yüzme havuzunda büyülü balık olduğunu söylüyor, aslında sıradan plastik torbalar ve sadece kanalizasyona gidebilirler!
@@ -997,8 +997,7 @@ interact_feed=besleme
 interact_banish=Expel
 interact_add_friend=Arkadaş ekle
 interact_act=Etkileşimli eylem
-interact_invite_family=
-interact_apply_family=
+interact_join_family=Bir aile kur
 additionalcell.shop_icon.text=mağaza
 additionalcell.dressArchive_icon.text=Dekorasyon Arşivi
 additionalcell.team_icon.text=aile
@@ -1072,5 +1071,13 @@ gui.text.createparty=
 friend_visit_cross_server=
 show_house_lock_tip_when_closein_outside_door=
 ui_lang_remaining_length=
+gui.go.buy=
+ui_sure_giveaway_something_to_anybody=
+cant_give_away_task_item=
+gui.hint.btn=
+item.pick.bag=
+gui.hint=
+gui.had.house.privilege=
+gui.reward.tip=
 
 language_end:system
