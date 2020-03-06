@@ -57,6 +57,11 @@ function handles:ShopItemDetail(packet)
     end,packet.coinId, packet.price, packet.desc, packet.tip) 
 end
 
+function handles:UpdateUIData(packet)
+    UI:setRemoterData(packet.ui, packet.data)
+    Lib.emitEvent(Event.EVENT_UPDATE_UI_DATA, packet.ui, packet.data or {})
+end
+
 function handles:WorksWallsOperation(packet)
     Lib.emitEvent(Event.EVENT_WORKS_WALLS_OPERATION, packet.isOpen)
 end

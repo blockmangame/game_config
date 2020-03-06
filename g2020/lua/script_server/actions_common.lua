@@ -157,6 +157,10 @@ function Actions.ShowShopItemDetail(data, params, context)
 	})
 end
 
+function Actions.UpdateUIData(data, params, content)
+	params.player:sendPacket({pid = "UpdateUIData", ui = params.ui, data = params.data})
+end
+
 function Actions.WorksWallsOperation(data, params, context)
 	params.player:sendPacket({pid = "WorksWallsOperation", isOpen = params.isOpen})
 end
