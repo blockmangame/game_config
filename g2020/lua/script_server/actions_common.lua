@@ -164,3 +164,13 @@ end
 function Actions.SetWorksArchiveNum(data, params, context)
 	params.player:sendPacket({ pid = "SetWorksArchiveNum", num = params.num })
 end
+
+function Actions.ShowDialogTip(data, params, context)
+    local arg = {}
+    local num = 1
+    while params["p" .. num] ~= nil do
+        table.insert(arg, params["p" .. num])
+        num = num + 1
+    end
+    params.entity:showDialogTip(params.tipType, params.event, arg, params.context)
+end
