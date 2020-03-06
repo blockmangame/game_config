@@ -69,3 +69,8 @@ end
 function handles:SetWorksArchiveNum(packet)
     Me:data("main").worksArchiveNum = packet.num
 end
+
+function handles:ShowDialogTip(packet)
+    local args = packet.args
+    Lib.emitEvent(Event.EVENT_SHOW_DIALOG_TIP, packet.tipType, packet.regId, table.unpack(args))
+end

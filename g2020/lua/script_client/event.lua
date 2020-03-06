@@ -11,6 +11,7 @@ local Events = {
     "EVENT_OPEN_DRESS_ARCHIVE",
     "EVENT_SHOW_DRESS_STORE",
     "EVENT_SHOW_WORK_DETAILS",
+    "EVENT_SHOW_DIALOG_TIP",
 }
 
 for _, name in pairs(Events) do

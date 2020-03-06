@@ -55,3 +55,9 @@ Lib.subscribeEvent(Event.EVENT_OPEN_BAG_BY_GIVEAWAY, function(objID)
     UI:openWnd("bag_g2020")
     Player.CurPlayer:updateGiveAwayStatus(true, objID)
 end)
+
+Lib.subscribeEvent(Event.EVENT_SHOW_DIALOG_TIP, function(tipType,  ...)
+    if tipType then
+        UI:openWnd("tipDialog", tipType, ...)
+    end
+end)
