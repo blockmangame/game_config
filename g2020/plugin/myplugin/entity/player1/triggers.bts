@@ -2946,7 +2946,23 @@ INIT_TEAM_UI
     Else
     {
         $text = "ui_family_find_member"
-        $image = "set:default_icon.json image:header_icon"
+        $image = "set:single_family.json image:icon"
+
+        $buttons = [
+            {
+                event = "SHOW_FAMILY_ALBUM",
+                normalImage = "set:single_family.json image:greenBtn",
+                pushedImage = "set:single_family.json image:greenBtn",
+                name = "ui_family_album"
+            },
+            {
+                event = "SHOW_QUIT_FAMILY_UI",
+                normalImage = "set:single_family.json image:blueBtn",
+                pushedImage = "set:single_family.json image:blueBtn",
+                name = "ui_family_quit"
+            }
+        ]
+
 
         $info = {
             text = $text,

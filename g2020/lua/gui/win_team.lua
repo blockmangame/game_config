@@ -46,23 +46,27 @@ function M:initContent()
                 
                 -- todo: 内容要修改
                 local info = {
+                    text = "ui_family_find_member",
+                    image = "set:single_family.json image:icon",
+                    
                     buttons = {
                         {
                             event = "SHOW_FAMILY_ALBUM",
-                            normalImage = "set:team.json image:blue_btn",
-                            pushedImage = "set:team.json image:blue_btn",
+                            normalImage = "set:single_family.json image:greenBtn",
+                            pushedImage = "set:single_family.json image:greenBtn",
                             name = "ui_family_album"
                         },
                         {
                             event = "SHOW_QUIT_FAMILY_UI",
-                            normalImage = "set:team.json image:green_btn",
-                            pushedImage = "set:team.json image:green_btn",
+                            normalImage = "set:single_family.json image:blueBtn",
+                            pushedImage = "set:single_family.json image:blueBtn",
                             name = "ui_family_quit"
                         }
                     },
+
                     closeBtn = {
                         disableClose = false,
-                    }
+                    },
                 }
 
                 Lib.emitEvent(Event.EVENT_SHOW_SINGLE_TEAM, true, info)

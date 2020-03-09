@@ -19,9 +19,7 @@ function M:initTextLayout()
     Lib.subscribeEvent(Event.EVENT_UPDATE_UI_DATA, function(UIName)
         if UI:isOpen(self) and UIName == "win_single_team" then
             local data = UI:getRemoterData("win_single_team")
-            if not (data and data.close) then
-                -- todo: 刷新UI界面
-            else
+            if data and data.close then
                 -- 关闭当前的UI、切换到多人的组队UI
                 self:onBtnClose()
                 
@@ -107,11 +105,9 @@ function M:updateBottom(buttons)
 
     for i, btn in pairs(buttons or {}) do
         local button = GUIWindowManager.instance:CreateGUIWindow1("Button", "Team-Main-Bottom-Button-" .. i)
-        button:SetNormalImage(btn.normalImage or "set:team.json image:blue_btn")
-        button:SetPushedImage(btn.pushedImage or "set:team.json image:blue_btn")
+        button:SetNormalImage(btn.normalImage or "set:single_family.json image:greenBtn")
+        button:SetPushedImage(btn.pushedImage or "set:single_family.json image:greenBtn")
         button:SetVerticalAlignment(1)
-        button:SetProperty("StretchType", "NineGrid")
-        button:SetProperty("StretchOffset", "16 20 0 0")
         button:SetArea({ 0, (228 + 40) * (i - 1) }, { 0, 0 }, { 0, 228 }, { 0, 80 })
         self:subscribe(button, UIEvent.EventButtonClick, function()
             if btn.event then

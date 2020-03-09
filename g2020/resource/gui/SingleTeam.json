@@ -9,6 +9,10 @@
                     "Value": "{{0,0},{0,0},{1,0},{1,0}}"
                 },
                 {
+                    "Name": "BackgroundColor",
+                    "Value": "0 0 0 0.392157"
+                },
+                {
                     "Name": "WndOpenSound",
                     "Value": "0"
                 },
@@ -24,7 +28,7 @@
                     "Property": [
                         {
                             "Name": "Area",
-                            "Value": "{{0,0},{0,0},{0.45,0},{0.72,0}}"
+                            "Value": "{{0,0},{0,0},{0,709},{0,461}}"
                         },
                         {
                             "Name": "VerticalAlignment",
@@ -52,7 +56,7 @@
                         },
                         {
                             "Name": "LayoutBackImage",
-                            "Value": "set:team.json image:bg"
+                            "Value": "set:single_family.json image:bg"
                         }
                     ],
                     "Window": [
@@ -62,11 +66,7 @@
                             "Property": [
                                 {
                                     "Name": "Area",
-                                    "Value": "{{0.05,0},{-0.04,0},{0.65,0},{0.56,0}}"
-                                },
-                                {
-                                    "Name": "VerticalAlignment",
-                                    "Value": "Centre"
+                                    "Value": "{{0,50},{0,93},{0.55,50},{0.5,93}}"
                                 },
                                 {
                                     "Name": "WndOpenSound",
@@ -95,12 +95,8 @@
                                             "Value": "Centre"
                                         },
                                         {
-                                            "Name": "Text",
-                                            "Value": ""
-                                        },
-                                        {
                                             "Name": "Font",
-                                            "Value": "HT22"
+                                            "Value": "HT24"
                                         },
                                         {
                                             "Name": "WndOpenSound",
@@ -109,6 +105,10 @@
                                         {
                                             "Name": "WndCloseSound",
                                             "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextColor",
+                                            "Value": "0.360784 0.345098 0.329412 1"
                                         },
                                         {
                                             "Name": "TextLineExtraSpace",
@@ -128,19 +128,11 @@
                             "Property": [
                                 {
                                     "Name": "Area",
-                                    "Value": "{{-0.08,0},{-0.24,0},{0.12,0},{-0.04,0}}"
-                                },
-                                {
-                                    "Name": "VerticalAlignment",
-                                    "Value": "Centre"
+                                    "Value": "{{0,-36},{0,95},{0,184},{0,313}}"
                                 },
                                 {
                                     "Name": "HorizontalAlignment",
                                     "Value": "Right"
-                                },
-                                {
-                                    "Name": "BackgroundColor",
-                                    "Value": "0 0 0 0.482353"
                                 },
                                 {
                                     "Name": "WndOpenSound",
@@ -173,6 +165,10 @@
                                 {
                                     "Name": "HexgonTopImage",
                                     "Value": ""
+                                },
+                                {
+                                    "Name": "ImageName",
+                                    "Value": "set:single_family.json image:icon"
                                 }
                             ]
                         },
@@ -182,7 +178,7 @@
                             "Property": [
                                 {
                                     "Name": "Area",
-                                    "Value": "{{0,0},{0,0},{1,0},{0.19,0}}"
+                                    "Value": "{{0,0},{0,0},{1,0},{0.28,0}}"
                                 },
                                 {
                                     "Name": "VerticalAlignment",
@@ -208,11 +204,11 @@
                                     "Property": [
                                         {
                                             "Name": "Area",
-                                            "Value": "{{0.08,0},{0,0},{0.48,0},{0.8,0}}"
+                                            "Value": "{{0,63},{0,-24},{0,292},{0,57}}"
                                         },
                                         {
                                             "Name": "VerticalAlignment",
-                                            "Value": "Centre"
+                                            "Value": "Bottom"
                                         },
                                         {
                                             "Name": "WndOpenSound",
@@ -256,11 +252,11 @@
                                         },
                                         {
                                             "Name": "NormalImage",
-                                            "Value": "set:team.json image:blue_btn"
+                                            "Value": "set:single_family.json image:greenBtn"
                                         },
                                         {
                                             "Name": "PushedImage",
-                                            "Value": "set:team.json image:blue_btn"
+                                            "Value": "set:single_family.json image:greenBtn"
                                         },
                                         {
                                             "Name": "SoundName",
@@ -291,10 +287,6 @@
                                                 {
                                                     "Name": "HorizontalAlignment",
                                                     "Value": "Centre"
-                                                },
-                                                {
-                                                    "Name": "Text",
-                                                    "Value": "Cancel"
                                                 },
                                                 {
                                                     "Name": "Font",
@@ -330,11 +322,7 @@
                                     "Property": [
                                         {
                                             "Name": "Area",
-                                            "Value": "{{-0.08,0},{0,0},{0.32,0},{0.8,0}}"
-                                        },
-                                        {
-                                            "Name": "VerticalAlignment",
-                                            "Value": "Centre"
+                                            "Value": "{{0,-63},{0,24},{0,166},{0,105}}"
                                         },
                                         {
                                             "Name": "HorizontalAlignment",
@@ -382,11 +370,11 @@
                                         },
                                         {
                                             "Name": "NormalImage",
-                                            "Value": "set:team.json image:green_btn"
+                                            "Value": "set:single_family.json image:blueBtn"
                                         },
                                         {
                                             "Name": "PushedImage",
-                                            "Value": "set:team.json image:green_btn"
+                                            "Value": "set:single_family.json image:blueBtn"
                                         },
                                         {
                                             "Name": "SoundName",
@@ -417,10 +405,6 @@
                                                 {
                                                     "Name": "HorizontalAlignment",
                                                     "Value": "Centre"
-                                                },
-                                                {
-                                                    "Name": "Text",
-                                                    "Value": "Sure"
                                                 },
                                                 {
                                                     "Name": "Font",
@@ -458,7 +442,7 @@
                             "Property": [
                                 {
                                     "Name": "Area",
-                                    "Value": "{{-0.015,0},{0.02,0},{0.105,0},{0.1322,0}}"
+                                    "Value": "{{0,0},{-0.01,0},{0,76},{-0.01,73}}"
                                 },
                                 {
                                     "Name": "HorizontalAlignment",
@@ -498,11 +482,11 @@
                                 },
                                 {
                                     "Name": "NormalImage",
-                                    "Value": "set:team.json image:close"
+                                    "Value": "set:single_family.json image:close"
                                 },
                                 {
                                     "Name": "PushedImage",
-                                    "Value": "set:team.json image:close"
+                                    "Value": "set:single_family.json image:close"
                                 },
                                 {
                                     "Name": "SoundName",
