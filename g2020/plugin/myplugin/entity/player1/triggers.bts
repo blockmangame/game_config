@@ -1830,23 +1830,24 @@ FUNC_STATE_AFFECT_OTHER --params: state, skill
     }
 }
 
-FUNC_STATE_RIDE_OPERATION --params: ride, opt
+FUNC_STATE_RIDE_OPERATION --params: ride, isRideOff
 {
     If(not $ride)
     {
         Return()
     }
+    $event = $isRideOff and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE"
     If($ride.cfg.releaseState)
     {
-        CallTrigger(object = $obj1, state = $ride.cfg.releaseState, event = $opt ~= "RIDE_OFF" and "FUNC_STATE_RELEASE" or "FUNC_STATE_RELEASE_SUSPEND")
+        CallTrigger(object = $obj1, state = $ride.cfg.releaseState, event = $event)
     }
 }
 
-FUNC_STATE_MAP_OPERATION --params: map, opt(LEAVE or ENTER)
+FUNC_STATE_MAP_OPERATION --params: map, isLeave
 {
     If($map.cfg.releaseState)
     {
-        CallTrigger(object = $obj1, state = $map.cfg.releaseState, event = $opt ~= "LEAVE" and "FUNC_STATE_RELEASE" or "FUNC_STATE_RELEASE_SUSPEND")
+        CallTrigger(object = $obj1, state = $map.cfg.releaseState, event = $isLeave and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE")
     }
 }
 
@@ -1868,9 +1869,9 @@ FUNC_STATE_CHECK_REGION --params: state
     }
 }
 
-FUNC_REGION_STATE_OPERATION --parmas: opt, state
+FUNC_REGION_STATE_OPERATION --parmas: isLeave, state
 {
-    CallTrigger(object = $obj1, state = $state, event = $opt ~= "LEAVE" and "FUNC_STATE_RELEASE" or "FUNC_STATE_RELEASE_SUSPEND")
+    CallTrigger(object = $obj1, state = $state, event = $isLeave and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE")
 }
 
 FUNC_STATE_SUSPEND_PROGRESS --params: state, stateBase, duration
@@ -4958,7 +4959,7 @@ ENTER_MAP
         WorksWallsOperation(player = $obj1, isOpen = true)
         CallTrigger(player = $obj1, event = "SYNC_CUR_WALL_WORKS")
     }
-    CallTrigger(object = $obj1, event = "FUNC_STATE_MAP_OPERATION", map = $map, opt = "ENTER")
+    CallTrigger(object = $obj1, event = "FUNC_STATE_MAP_OPERATION", map = $map, isLeave = false)
     CallTrigger(event = "FUNC_GPS_SET_OR_SYNC", object = $obj1, gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict"))
     CallTrigger(object = $obj1, event = "TASK_UPDATE_DATA") --打工导航/不止是导航
     CallTrigger(event = "ENTER_HOUSE_MAP", object = $obj1)
@@ -4972,7 +4973,7 @@ LEAVE_MAP
     {
         WorksWallsOperation(player = $obj1, isOpen = false)
     }
-    CallTrigger(object = $obj1, event = "FUNC_STATE_MAP_OPERATION", map = $map, opt = "LEAVE")
+    CallTrigger(object = $obj1, event = "FUNC_STATE_MAP_OPERATION", map = $map, isLeave = true)
     CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = false)
 
     If($map.owner == $obj1.house)

@@ -6,12 +6,7 @@ REGION_ENTER {
         {
             CallTrigger(object = $obj1, event = "OPEN_DANCE")
         }
-        CallTrigger(
-            event = "FUNC_REGION_STATE_OPERATION", 
-            object = $obj1, 
-            opt = "ENTER", 
-            state = $inRegionKey,
-        )
+        CallTrigger(event = "FUNC_REGION_STATE_OPERATION", object = $obj1, isLeave = false, state = $inRegionKey)
     }
 }
 
@@ -22,11 +17,6 @@ REGION_LEAVE {
         {
             CallTrigger(object = $obj1, event = "CLOSE_DANCE")
         }
-        CallTrigger(
-            event = "FUNC_REGION_STATE_OPERATION",
-            object = $obj1,
-            opt = "LEAVE",
-            state = $inRegionKey,
-        )
+        CallTrigger(event = "FUNC_REGION_STATE_OPERATION", object = $obj1, isLeave = true, state = $inRegionKey)
     }
 }
