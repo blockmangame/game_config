@@ -1187,7 +1187,7 @@ HOUSE_LOCK{
                 msg = "ui_tip_sure_lock_house_and_kick_some_one"
             }
             $tipType = 5
-            ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "SURE_LOCK_HOUSE_AND_KICK_OTHERS", 
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "SURE_LOCK_HOUSE_AND_KICK_OTHERS", 
                 p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
         }Else{
             StartTimer(object =$obj1, obj1 =$obj1, house = $house, isLock = true, textKey = "house_lock", time = 2, event = "LOCK_HOUSE_CONTENT")
@@ -1526,7 +1526,7 @@ BUY_HOUSE_REGION_COLOR{
         storeId = $storeId
     }
     $tipType = 5
-    ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "SURE_BUY_SET_REGION_COLOR", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $context)
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "SURE_BUY_SET_REGION_COLOR", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $context)
 }
 
 SURE_BUY_SET_REGION_COLOR
@@ -1732,6 +1732,7 @@ ADD_MONEY
     {
         $tipType = 0
         ShowRewardDialog(player = $obj1, event = "GET_REWARD_MONEY")
+		-- ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p1 = "ui_tip", p2 = "gui.reward.tip", p3 = "gui.text.sure", tipType = $tipType, event = "GET_REWARD_MONEY")
         Return()
     }
 
@@ -2292,7 +2293,7 @@ SHOW_BUY_PRIVILEGE_TIP
         rightContent = "ui_cancel"
     }
     $tipType = 5
-    ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "OPEN_PRIVILEGE_SHOP", p1 = "ui_tip", p2= "action_not_have_privilege", p3 = $btnInfo)
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "OPEN_PRIVILEGE_SHOP", p1 = "ui_tip", p2= "action_not_have_privilege", p3 = $btnInfo)
 }
 
 OPEN_PRIVILEGE_SHOP
@@ -2313,7 +2314,7 @@ INTERACTION_CLAP
     Else
     {
         	$tipType = 2
-	ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_child")
+	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_child")
     }
 }
 
@@ -2331,7 +2332,7 @@ INTERACTION_HUG
     Else
     {
         	$tipType = 2
-	ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_child_or_adult")
+	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_child_or_adult")
     }
 }
 
@@ -2344,7 +2345,7 @@ INTERACTION_HANDSHAKE
     Else
     {
         	$tipType = 2
-	ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult")
+	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult")
     }
 }
 
@@ -2357,7 +2358,7 @@ INTERACTION_RIDE
     Else
     {
         	$tipType = 2
-	ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_child_and_adult")
+	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_child_and_adult")
     }
 }
 
@@ -2370,7 +2371,7 @@ INTERACTION_HAND_IN_HAND
     Else
     {
         	$tipType = 2
-	ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_child")
+	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_child")
     }
 }
 
@@ -2388,7 +2389,7 @@ INTERACTION_PICK
     Else
     {
         	$tipType = 2
-	ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
+	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
     }
 }
 
@@ -2405,13 +2406,13 @@ INTERACTION_BABY_TROLLEY {
         ElseIf(not $trolley)
         {
             	$tipType = 2
-	ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "trolley_pls_equip")
+	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "trolley_pls_equip")
         }
     }
     Else
     {
         	$tipType = 2
-	ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
+	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
     }
 }
 
@@ -2425,7 +2426,7 @@ INTERACTION_RAISE_HEIGHT
     Else
     {
         	$tipType = 2
-	ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
+	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
     }
 }
 
@@ -2438,7 +2439,7 @@ INTERACTION_COAX
     Else
     {
         	$tipType = 2
-	ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
+	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
     }
 }
 
@@ -2451,7 +2452,7 @@ INTERACTION_PIGGYBACK
     Else
     {
         	$tipType = 2
-	ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_child")
+	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_child")
     }
 }
 
@@ -2584,7 +2585,7 @@ ADD_JOIN_FAMILY_REPORT_NUM
 SHOW_QUIT_FAMILY_UI
 {
     $tipType = 2
-    ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "QUIT_FAMILY",p1 = "gui_want_to_quit_family")
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "QUIT_FAMILY",p1 = "gui_want_to_quit_family")
 }
 
 QUIT_FAMILY
@@ -2882,7 +2883,7 @@ SHOW_TEAM_CREATE_UI
         rightContent = "ui_family_album"
     }
     $tipType = 5
-    ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "TEAM_CREATE_RESULT", p1 = "ui_tip", p2= "ui_not_in_family", p3 = $btnInfo)
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "TEAM_CREATE_RESULT", p1 = "ui_tip", p2= "ui_not_in_family", p3 = $btnInfo)
 }
 
 TEAM_CREATE_RESULT
@@ -3316,7 +3317,7 @@ ADD_DRESS_ARCHIVE
 SHOW_DELETE_DRESS_ARCHIVE_DIALOG
 {
     $tipType = 2
-    ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, 
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, 
         p1 = "ui_dress_archive_delete_dialog_context",
         event = "DELETE_DRESS_ARCHIVE",
         tipType = $tipType,
@@ -3607,7 +3608,7 @@ SHOW_OPERATE_DRESS_STORE_ITEM
             targetIndex = $targetIndex
         }
         $tipType = 5
-        ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1,tipType = 5, event = "DRESS_STORE_ITEM_BUY", p1 = "ui_tip", p2 = "ui_sure_to_pay", p3 = $btnInfo, context = $context)
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1,tipType = 5, event = "DRESS_STORE_ITEM_BUY", p1 = "ui_tip", p2 = "ui_sure_to_pay", p3 = $btnInfo, context = $context)
     }
     Else
     {
@@ -3636,7 +3637,7 @@ SHOW_SAVE_WORKS_TIP -- 作品保存提示框
     $btnInfo = { rightCoinId = 3, rightContent = $price, leftCoinId = nil, leftContent = "works_save" }
     $context = { url = $url, isEdit = $isEdit, worksId = $worksId}
     $tipType = 5
-    ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "SAVE_WORKS_TIP_CLICK_EVENT", p1 = "ui_tip", p2= "publish_works_tip", p3 = $btnInfo, context = $context)
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "SAVE_WORKS_TIP_CLICK_EVENT", p1 = "ui_tip", p2= "publish_works_tip", p3 = $btnInfo, context = $context)
 }
 
 SAVE_WORKS_TIP_CLICK_EVENT
@@ -3692,7 +3693,7 @@ CHECK_WORKS_ARCHIVE_RESPONSE
         If($count >= $maxArchiveNum)
         {
             $tipType = 0
-            ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_failure_archive_full", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_failure_archive_full", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
             Return()
         }
 
@@ -3710,11 +3711,11 @@ CHECK_WORKS_ARCHIVE_RESPONSE
         $tipType = 0
         If($isPublish)
         {
-            ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         }
         Else
         {
-            ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         }
     }
 }
@@ -3724,7 +3725,7 @@ SHOW_BYU_WORKS_ARCHIVE_UI_2--购买存档
     $price = GetWorldVar(key = "worksArchivePrice")
     $btnInfo = { leftCoinId = nil, leftContent = "gui.text.cancel", rightCoinId = 0, rightContent = $price }
     $tipType = 5
-    ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "BUY_WORKS_ARCHIVE_2", p1 = "composition.tip.title", p2= "buy_works_archive", p3 = $btnInfo)
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "BUY_WORKS_ARCHIVE_2", p1 = "composition.tip.title", p2= "buy_works_archive", p3 = $btnInfo)
 }
 
 BUY_WORKS_ARCHIVE_2
@@ -3751,12 +3752,12 @@ BUY_WORKS_ARCHIVE_RESPONSE_2
         $obj1.worksArchiveNum = $obj1.worksArchiveNum + 1
         SetWorksArchiveNum(player = $obj1, num = $obj1.worksArchiveNum)
         UpdateUIData(player =$obj1, ui = "works_person", data = true)
-        ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "buy_works_archive_succeed", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "buy_works_archive_succeed", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
     Else
     {
         ShowRecharge(player = $obj1)
-        ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "buy_works_archive_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "buy_works_archive_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
 
@@ -3767,7 +3768,7 @@ SHOW_BYU_WORKS_ARCHIVE_UI--购买存档
     $btnInfo = { rightCoinId = 0, rightContent = $price, leftCoinId = nil, leftContent = "works_save_coverage_new" }
     $context = { url = $url, isPublish = $isPublish }
     $tipType = 5
-    ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "BUY_WORKS_ARCHIVE", p1 = "publish_works_buy_archive_title", p2= "publish_works_buy_archive", p3 = $btnInfo, context = $context)
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "BUY_WORKS_ARCHIVE", p1 = "publish_works_buy_archive_title", p2= "publish_works_buy_archive", p3 = $btnInfo, context = $context)
 }
 
 BUY_WORKS_ARCHIVE
@@ -3811,7 +3812,7 @@ BUY_WORKS_ARCHIVE_RESPONSE
     {
         ShowRecharge(player = $obj1)
         $tipType = 0
-        ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_buy_archive_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_buy_archive_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
 
@@ -3832,11 +3833,11 @@ GET_NEW_UN_PUBLISH_RESPONSE
      }
      ElseIf($code == 2047)
      {
-        ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_coverage_new_works_failure_not_un_publish", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_coverage_new_works_failure_not_un_publish", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
      }
      Else
      {
-        ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_coverage_new_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_coverage_new_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
      }
 }
 
@@ -3886,11 +3887,11 @@ UPDATE_WORKS_RESPONSE
         $tipType = 0
         If($isEdit)
         {
-            ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_edit_new_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_edit_new_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         }
         Else
         {
-            ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_coverage_new_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_coverage_new_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         }
      }
 }
@@ -3928,11 +3929,11 @@ CREATE_WORKS_RESPONSE
         $tipType = 0
         If($isPublish)
         {
-            ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         }
         Else
         {
-            ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         }
     }
 }
@@ -3944,7 +3945,7 @@ SHOW_PUBLISH_WORKS_UI
     $btnInfo = { leftCoinId = 3, leftContent = $price, rightCoinId = 0, rightContent = $cubePrice }
     $context = { worksId = $worksId, isEdit = false }
     $tipType = 5
-    ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "PUBLISH_WORKS", p1 = "ui_tip", p2= "publish_works_tip", p3 = $btnInfo, context = $context)
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "PUBLISH_WORKS", p1 = "ui_tip", p2= "publish_works_tip", p3 = $btnInfo, context = $context)
 }
 
 PUBLISH_WORKS
@@ -3983,7 +3984,7 @@ PUBLISH_WORKS_RESPONSE
     {
         $price = GetWorldVar(key = "publishWorksPrice")
         PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
-        ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_succeed", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_succeed", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
         SetWorksArchiveNum(player = $obj1, num = $obj1.worksArchiveNum)
         UpdateUIData(player =$obj1, ui = "works_person", data = true)
         CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId, player = $obj1)
@@ -3991,7 +3992,7 @@ PUBLISH_WORKS_RESPONSE
     Else
     {
         $tipType = 0
-        ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
     }
 }
 
@@ -4011,7 +4012,7 @@ PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE
         ShowRecharge(player = $obj1)
         $tipType = 0
         ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip"
-            ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+            ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
     }
 }
 
@@ -4029,7 +4030,7 @@ PUBLISH_WORKS_BY_CUBE_RESPONSE
     {
         $tipType = 0
         ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip"
-            ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+            ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
     }
 }
 
@@ -4468,7 +4469,7 @@ SURE_BUY {
                 If(GetItemCfg(fullName = $sellItem, key = "base") == "car_base"){
                     $tipType = 0
                     ShowDialogTip(entity = $obj1, tipType = $tipType,p1="gui.hint",p2="item.pick.bag",p3="sure", event = "OPEN_HINT_BUY",context = {sellItem = $sellItem}
-                        ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+                        ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
                 }Else{
                     ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
                 }
@@ -4494,7 +4495,7 @@ SHOP_BUY_COIN {
         If(GetItemCfg(fullName = $sellItem, key = "base") == "car_base"){
             $tipType = 0
             ShowDialogTip(entity = $obj1, tipType = $tipType,p1="gui.hint",p3="gui.hint.btn",p2="item.pick.bag", event = "OPEN_HINT_BUY",context = {sellItem = $sellItem}
-                ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+                ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
         }Else{
             ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
         }
@@ -4555,7 +4556,7 @@ CHOICE_OPEN_BUY(debug = true){
     $msg = $coinName == "gDiamonds" and "pay_failure_gDiamonds_insufficient" or "pay_failure_game_money_insufficient"
     $tipType = 2
     ShowDialogTip(entity = $obj1, tipType = $tipType, event = "OPEN_BUY_COIN",p1 = $msg, context = {coinName = $coinName}
-        ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+        ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
 }
 OPEN_BUY_COIN()
 {
@@ -5296,11 +5297,11 @@ CHECK_LEAVE_PARTY_FROM_DOOR {
     $tipType = 2
     If($obj1.inSelfParty == 1){
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.close", event = "CHECK_CLOSE_PARTY", tipType = $tipType
-            ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+            ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
     }
     Else{
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.exit", event = "ASK_LEAVE_PARTY", tipType = $tipType
-            ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+            ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
     }
 }
 PLAYER_BE_INVITE {
@@ -5636,7 +5637,7 @@ LEAVE_PARTY_SUCCESS(debug = false){
     If(not $obj1.dontAskShowPartyList){
         $tipType = 2
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "ASK_SHOW_PARTY_LIST", tipType = $tipType
-            ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+            ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
     }
     ElseIf($obj1.dontReenterGame){
         $obj1.dontReenterGame = false
@@ -5723,7 +5724,7 @@ GET_TARGET_PARTY_INFO(debug = false){
             Else{
                 $tipType = 2
                 ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.return.party", event = "ASK_RETURN_PARTY_RESULT", tipType = $tipType
-                    ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+                    ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
             }
         }
     }
@@ -5979,7 +5980,7 @@ SAVE_PHOTO
         }
         $tipType = 5
         ShowDialogTip(entity = $obj1,tipType = $tipType, event = "CLICK_SAVE_FAMILY_ALBUM_TIP", p1 = "ui_tip", p2 = "ui_save_photo", p3 = $btnInfo
-            ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+            ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
     }
     Else
     {
@@ -5991,7 +5992,7 @@ SAVE_PHOTO
         }
         $tipType = 5
         ShowDialogTip(entity = $obj1,tipType = $tipType, event = "CLICK_SAVE_FAMILY_ALBUM_TIP", p1 = "ui_tip", p2 = "ui_family_album_full", p3 = $btnInfo
-            ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+            ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
     }
 }
 
@@ -6456,7 +6457,7 @@ TRADE_CAR()
 {
     $tipType = 0
     ShowDialogTip(entity = $obj1, tipType = $tipType,p1="gui.hint",p2="item.pick.bag",p3="sure", event = "SHOW_TRADE_CAR",context = {car = $car},
-        dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+        _dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
 }
 SHOW_TRADE_CAR()
 {
