@@ -54,7 +54,7 @@ function handles:ShopItemDetail(packet)
             return
         end
         Me:doCallBack("ItemDetail", "sure", packet.regId)
-    end,packet.coinId, packet.price, packet.desc, packet.tip) 
+    end, packet.coinId, packet.price, packet.desc, packet.tip)
 end
 
 function handles:UpdateUIData(packet)
@@ -73,4 +73,8 @@ end
 function handles:ShowDialogTip(packet)
     local args = packet.args
     Lib.emitEvent(Event.EVENT_SHOW_DIALOG_TIP, packet.tipType, packet.regId, table.unpack(args))
+end
+
+function handles:SyncStatesData(packet)
+    Lib.emitEvent(Event.EVENT_SYNC_STATES_DATA, packet)
 end

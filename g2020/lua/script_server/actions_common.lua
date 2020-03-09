@@ -178,3 +178,14 @@ function Actions.ShowDialogTip(data, params, context)
     end
     params.entity:showDialogTip(params.tipType, params.event, arg, params.context)
 end
+
+function Actions.SyncStatesData(data, params, context)
+    params.player:sendPacket({
+        pid = "SyncStatesData",
+        data = {
+			isAdd = params.isAdd,
+			states = params.states,
+			userID = params.objID or params.player.objID,
+		},
+    })
+end
