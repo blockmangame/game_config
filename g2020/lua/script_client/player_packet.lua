@@ -129,3 +129,7 @@ function handles:TradePlayerCancel(packet) --对方中途取消
     self:clearTrade()
     UI:closeWnd("tradeUI")
 end
+
+function handles:ShowRewardDialog(packet)
+    Lib.emitEvent(Event.EVENT_SHOW_REWARD_DIALOG, packet)
+end

@@ -1731,7 +1731,7 @@ ADD_MONEY
     If($obj1.isReadyReward)
     {
         $tipType = 0
-        ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p1 = "ui_tip", p2 = "gui.reward.tip", p3 = "gui.text.sure", tipType = $tipType, event = "GET_REWARD_MONEY")
+        ShowRewardDialog(player = $obj1, event = "GET_REWARD_MONEY")
         Return()
     }
 
