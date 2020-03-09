@@ -5349,7 +5349,6 @@ PLAYER_BE_INVITE {
         button1 = "PLAYER_ON_VISIT",
         button2 = "PLAYER_BE_INVITE_REFUSE",
         autoClose = "FRIEND_INVITE_AUTO_CLOSE",
-        beReplced = "FRIEND_INVITE_BE_REPLCED",
     }
     ShowInviteTip(player = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, content = $content, fullName = $fullName, showTime = $showTime, eventMap = $eventMap)
 
@@ -5360,8 +5359,6 @@ DATA_REPORT_PARTY_INVITE{
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.partyInviteAutoClose, array = [0, 2, 5, 10, 15, 20, 21])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:party:no_response", @rangeBoundary])
     
-    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.partyInviteBeReplaced, array = [0, 2, 5, 10, 15, 20, 21])
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:party:cover", @rangeBoundary])
 
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.partyInviteAgree, array = [0, 2, 5, 10, 15, 20, 21])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:party:agree", @rangeBoundary])
@@ -5371,10 +5368,6 @@ DATA_REPORT_PARTY_INVITE{
 }
 PARTY_INVITE_AUTO_CLOSE(debug1 = true){
     $obj1.partyInviteAutoClose = $obj1.partyInviteAutoClose + 1
-}
-
-PARTY_INVITE_BE_REPLCED(debug1 = true){
-    $obj1.partyInviteBeReplaced = $obj1.partyInviteBeReplaced + 1
 }
 
 JOIN_PARTY_REFUSE(debug1 = true){
@@ -5391,12 +5384,10 @@ JOIN_PARTY_ARGEE(debug1 = true){
 ------cross server invite ↓↓
 -- PLAYER_BE_INVITE_OTHER_SERVER_REFUSE
 -- FRIEND_INVITE_OTHER_SERVER_AUTO_CLOSE
--- FRIEND_INVITE_OTHER_SERVER_BE_REPLCED
 ------cross server invite ↑↑
 ----- same server invite ↓↓
 -- PLAYER_BE_INVITE_REFUSE(debug = true){}
 -- FRIEND_INVITE_AUTO_CLOSE(debug = true){}
--- FRIEND_INVITE_BE_REPLCED(debug = true){}
 ----- same server invite ↑↑
     
 PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
@@ -5449,7 +5440,6 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
             button1 = "JOIN_PARTY_ARGEE",
             button2 = "JOIN_PARTY_REFUSE",
             autoClose = "PARTY_INVITE_AUTO_CLOSE",
-            beReplced = "PARTY_INVITE_BE_REPLCED",
         }
     }
     Else{--[common] friend invite
@@ -5476,7 +5466,6 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
             button1 = "PLAYER_ON_VISIT_OTHER_SERVER",
             button2 = "PLAYER_BE_INVITE_OTHER_SERVER_REFUSE",
             autoClose = "FRIEND_INVITE_OTHER_SERVER_AUTO_CLOSE",
-            beReplced = "FRIEND_INVITE_OTHER_SERVER_BE_REPLCED",
         }
         $fullName = "myplugin/friendInviteView"
     }
