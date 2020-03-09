@@ -412,7 +412,7 @@ function M:showPay(title, content, buttonInfo)
             self:child("TipDialog-Btn-Pay-Right-Currency"):SetVisible(true)
         else
             self:child("TipDialog-Btn-Pay-Right-Currency"):SetVisible(false)
-            self.m_payRightBtnShowText = Lang:toText(rightContent or "gui_dialog_tip_pay_right")
+            self.m_payRightBtnShowText = Lang:toText(rightContent or "gui_dialog_tip_pay_right") or ""
             self.m_payRightBtn:SetText(self.m_payRightBtnShowText)
             self.m_payRightBtn:SetTextColor({ 1, 1, 1, 1 })
             self.m_payRightBtn:SetProperty("TextShadow", "true")
