@@ -76,8 +76,8 @@ function M:init()
 			tradeID = self.tradeID,
 			isConfirm = self.isConfirm
 		})
-		local text = self.isConfirm and "cancel" or "sure"
-		self.confirmBtn:SetText(text)
+		local text = self.isConfirm and "ui_cancel" or "ui_sure"
+		self.confirmBtn:SetText(Lang:toText(text))
 	end)
 
 	--对方确认
@@ -99,12 +99,26 @@ end
 --任意玩家添加一个物品后任意玩家添加一个物品后，双方的接受按钮都会变灰双方的接受按钮都会变灰，
 --并且后面加上倒计时并且后面加上倒计时10秒，倒计时结束后才可以接受倒计时结束后才可以接受
 function M:updateCanConfim()
-	local temp = self.canConfirm
-	self.canConfirm = self.lastIndex > 0
-	if temp or temp ~= self.canConfirm then
-		return
+ 	self.canConfirm = false
+	if self.confirmTimer then
+		self.confirmTimer()
 	end
-
+	local countDown = 10
+	self.confirmBtn:SetNormalImage("set:partyTrade.json image:grayBtn.png")
+	self.confirmBtn:SetPushedImage("set:partyTrade.json image:grayBtn.png")
+	self.confirmBtn:SetText(Lang:toText({"gui.trade.countDown", 10}))
+	self.confirmTimer = World.Timer(20, function()
+		countDown = countDown - 1
+		self.confirmBtn:SetText(Lang:toText({"gui.trade.countDown", countDown}))
+		if countDown == 0 then
+			self.canConfirm = true
+			self.confirmBtn:SetNormalImage("set:partyTrade.json image:buleButton.png")
+			self.confirmBtn:SetPushedImage("set:partyTrade.json image:buleButton.png")
+			self.confirmBtn:SetText(Lang:toText("ui_sure"))
+			return false
+		end
+		return true
+	end)
 end
 
 function M:getSelectIndex(tid, slot)
@@ -180,7 +194,7 @@ function M:delSelected(index)
 	self.lastIndex = self.lastIndex - 1
 	self:setSelectIndex(item:tid(), item:slot(), nil)
 	self:refreshSelected()
-	--self:updateCanConfim()
+	self:updateCanConfim()
 end
 
 function M:addSelected(item)
@@ -250,12 +264,12 @@ function M:changGoods(operation, data)
 	local tid, slot, itemData = data.tid, data.slot, data.itemData
 	local tb = self.goods[tid]
 	if operation == "add" then
+		self.goodsAdd = self.goodsAdd + 1
 		if not tb then
 			tb = {}
 			self.goods[tid] = tb
 		end
 		tb[slot] = itemData and Item.DeseriItem(itemData)
-		self:updateCanConfim()
 	elseif tb and tb[slot] then
 		tb[slot] = nil
 	end
@@ -299,6 +313,7 @@ end
 
 function M:startTrade(tradeID, targetUid)
 	UI:closeWnd("bag_g2020")
+	self.goodsAdd = 0
 	self.lastIndex = 0
 	self.canConfirm = false
 	self.isConfirm = false
@@ -309,12 +324,18 @@ function M:startTrade(tradeID, targetUid)
 	self:setStyle(targetUid)
 	self:initLeftContainer()
 	self:initRightContainer()
+	if self.confirmTimer then
+		self.confirmTimer()
+		self.confirmTimer = nil
+	end
 end
 
 function M:setStyle(targetUid)
 	self:child("partyTradeUI-leftConfrim"):SetVisible(false)
 	self:child("partyTradeUI-rightConfrim"):SetVisible(false)
-	self.confirmBtn:SetText("trade.cool")
+	self.confirmBtn:SetNormalImage("set:partyTrade.json image:buleButton.png")
+	self.confirmBtn:SetPushedImage("set:partyTrade.json image:buleButton.png")
+	self.confirmBtn:SetText(Lang:toText("gui.trade.cool"))
 
 	local mapid = {Me.platformUserId, targetUid}
 	UserInfoCache.LoadCacheByUserIds(mapid, function()
