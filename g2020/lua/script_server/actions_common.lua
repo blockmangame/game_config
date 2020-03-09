@@ -187,7 +187,7 @@ function Actions.ShowDialogTip(data, params, context)
         table.insert(arg, params["p" .. num])
         num = num + 1
     end
-    params.entity:showDialogTip(params.tipType, params.event, arg, params.context, params.stackTime, params.dialogContinuedTime)
+    params.entity:showDialogTip(params.tipType, params.event, arg, params.context, params.dialogContinuedTime)
 end
 
 function Actions.SyncStatesData(data, params, context)

@@ -17,6 +17,19 @@ GAME_INIT
         "plugin/myplugin/image/coin.png"
     ]
 
+    @ShowDialogTipTimeTable = [
+        -- dialogContinuedTime
+        -- dialogContinuedTime:窗口持续时间
+        -- dialogContinuedTime 是打开的时候就开始计时,如果希望某个弹窗不会被挤掉，那么把该tip设置为nil即可
+        [nil], -- tipType = 0
+        [nil], -- tipType = 1
+        [nil], -- tipType = 2
+        [nil], -- tipType = 3
+        [nil], -- tipType = 4
+        [600],  -- tipType = 5
+        [nil]  -- tipType = 6
+    ]
+
     @interactionWithMovementEventMap = {
         WindowTouchDown = {
             startHorn = "START_HORN",

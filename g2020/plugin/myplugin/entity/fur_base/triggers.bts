@@ -649,7 +649,8 @@ COOK_BUY {
          isTeam = $isTeam,
          owner = $owner
       }
-      ShowDialogTip(entity = $obj2, tipType = 5, event = "SURE_FURNITURE_BUY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
+      $tipType = 5
+      ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj2, tipType = $tipType, event = "SURE_FURNITURE_BUY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
    }
 }
 --上面是编辑的，下面是购买食物或者道具的
@@ -693,7 +694,8 @@ FOOD_BUY {
          isTeam = $isTeam,
          owner = $owner
       }
-      ShowDialogTip(entity = $obj2, tipType = 5, event = "SURE_FURNITURE_BUY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
+      $tipType = 5
+      ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj2, tipType = $tipType, event = "SURE_FURNITURE_BUY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
    }
 }
 
@@ -720,8 +722,8 @@ BUY_SHOP(){
          objID = GetObjectID(object = $obj1),
          checkId = $obj2.buySessionSS
       }
-
-      ShowDialogTip(entity = $obj2, tipType = 5, event = "SURE_BUY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
+      $tipType = 5
+      ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj2, tipType = $tipType, event = "SURE_BUY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
    }
 }
 

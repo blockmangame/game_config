@@ -19,6 +19,47 @@ local TipType = {
     PAY = 5
 }
 
+local ISOPEN = false
+
+local function resetBtnTextTimer(self, dialogContinuedTime)
+    if self.updateBtnTextTimer then
+        self.updateBtnTextTimer()
+    end
+    local function updatePayDialogRightText()
+        if self.m_payRightBtn:IsVisible() then
+            local lessTime = (dialogContinuedTime - World.Now() + self.openTime) // 20
+            self.m_payRightBtn:SetText(self.m_payRightBtnShowText .. " ( " .. lessTime .. " )")
+        end
+    end
+    self.updateBtnTextTimer = dialogContinuedTime and World.Timer(20, function()
+        if ISOPEN then
+            updatePayDialogRightText()
+            -- todo ext
+            return true
+        end
+        return false
+    end) or nil
+end
+
+local function resetDialogContinuedTimer(self, dialogContinuedTime)
+    if self.dialogContinuedTimer then
+        self.dialogContinuedTimer()
+    end
+    self.dialogContinuedTimer = dialogContinuedTime and World.Timer(dialogContinuedTime, function()
+        if self.ui_timer then
+            self.ui_timer()
+            self.ui_timer = nil
+        end
+        if self.m_rewardTipTimer then
+            self.m_rewardTipTimer()
+            self.m_rewardTipTimer = nil
+        end
+        if ISOPEN then
+            UI:closeWnd(self)
+        end
+    end) or nil
+end
+
 function M:init()
     WinBase.init(self, "TipDialog.json", false)
 
@@ -82,7 +123,12 @@ function M:init()
     end)
 end
 
-function M:onOpen(tipType, regId, ...)
+function M:onOpen(dialogContinuedTime, tipType, regId, modName, ...)
+    ISOPEN = true
+    self.modName = modName
+    self.openTime = World.Now()
+    resetBtnTextTimer(self, dialogContinuedTime)
+    resetDialogContinuedTimer(self, dialogContinuedTime)
     m_regIds[tipType] = regId
     if tipType == TipType.HINT then
         self:showHint(...)
@@ -97,7 +143,7 @@ function M:onOpen(tipType, regId, ...)
     elseif tipType == TipType.PAY then
         self:showPay(...)
     end
-    self.reloadArg = table.pack(tipType, regId, ...)
+    self.reloadArg = table.pack(dialogContinuedTime, tipType, regId, modName, ...)
 end
 
 function M:onUpdateMsg(msg, countDown)
@@ -366,7 +412,8 @@ function M:showPay(title, content, buttonInfo)
             self:child("TipDialog-Btn-Pay-Right-Currency"):SetVisible(true)
         else
             self:child("TipDialog-Btn-Pay-Right-Currency"):SetVisible(false)
-            self.m_payRightBtn:SetText(Lang:toText(rightContent or "gui_dialog_tip_pay_right"))
+            self.m_payRightBtnShowText = Lang:toText(rightContent or "gui_dialog_tip_pay_right")
+            self.m_payRightBtn:SetText(self.m_payRightBtnShowText)
             self.m_payRightBtn:SetTextColor({ 1, 1, 1, 1 })
             self.m_payRightBtn:SetProperty("TextShadow", "true")
         end
@@ -390,20 +437,20 @@ function M:sendResult(result, viewId)
     local regId = m_regIds[self.m_showTipType]
     m_regIds[self.m_showTipType] = nil
     if self.m_showTipType == TipType.HINT then
-        Me:doCallBack("dialogTip", tostring(self.m_showTipType), regId, {result=result})
+        Me:doCallBack(self.modName or "dialogTip", tostring(self.m_showTipType), regId, {result=result})
     elseif self.m_showTipType == TipType.REVIVE then
-        Me:doCallBack("buyRevive", tostring(self.m_showTipType), regId, {result=result,coinName=self.m_coinName,cost=self.m_coinCost})
+        Me:doCallBack(self.modName or "buyRevive", tostring(self.m_showTipType), regId, {result=result,coinName=self.m_coinName,cost=self.m_coinCost})
     elseif self.m_showTipType == TipType.COMMON then
-        Me:doCallBack("dialogTip", tostring(self.m_showTipType), regId, {result=result})
+        Me:doCallBack(self.modName or "dialogTip", tostring(self.m_showTipType), regId, {result=result})
     elseif self.m_showTipType == TipType.CONSUME then
-        Me:doCallBack("dialogTip", tostring(self.m_showTipType), regId, {result=result,coinName=self.m_coinName,cost=m_consumeCost})
+        Me:doCallBack(self.modName or "dialogTip", tostring(self.m_showTipType), regId, {result=result,coinName=self.m_coinName,cost=m_consumeCost})
     elseif self.m_showTipType == TipType.PAY then
         if viewId == ViewId.BTN_PAY_LEFT then
-            Me:doCallBack("dialogTip", tostring(self.m_showTipType), regId, {result=result,coinName=self.m_payLeftCoinName,cost=self.m_payLeftCost, button = "left"})
+            Me:doCallBack(self.modName or "dialogTip", tostring(self.m_showTipType), regId, {result=result,coinName=self.m_payLeftCoinName,cost=self.m_payLeftCost, button = "left"})
         elseif viewId == ViewId.BTN_PAY_RIGHT then
-            Me:doCallBack("dialogTip", tostring(self.m_showTipType), regId, {result=result,coinName=self.m_payRightCoinName,cost=self.m_payRightCost, button = "right"})
+            Me:doCallBack(self.modName or "dialogTip", tostring(self.m_showTipType), regId, {result=result,coinName=self.m_payRightCoinName,cost=self.m_payRightCost, button = "right"})
         elseif viewId == ViewId.BTN_CLOSE then
-            Me:doCallBack("dialogTip", tostring(self.m_showTipType), regId, {result = result, button = "close"})
+            Me:doCallBack(self.modName or "dialogTip", tostring(self.m_showTipType), regId, {result = result, button = "close"})
         end
     end
 end
@@ -443,8 +490,29 @@ function M:onBtnClose()
     UI:closeWnd(self)
 end
 
+-- function M:onReload(reloadArg)
+--     self:onOpen(table.unpack(reloadArg))
+-- end
 function M:onReload(reloadArg)
-    self:onOpen(table.unpack(reloadArg))
+    if self.reloadTimer then
+        self.reloadTimer()
+    end
+    self._root:SetVisible(false)
+    self.reloadTimer = World.Timer(2, function()
+        self._root:SetVisible(true)
+        self:onOpen(table.unpack(reloadArg))
+		self.reloadTimer = nil
+    end)
+end
+
+function M:onClose()
+    ISOPEN = false
+    resetBtnTextTimer(self, nil)
+    resetDialogContinuedTimer(self, nil)
+    local ret = Lib.PopStack(Player.CurPlayer, "tipDialog")
+    if ret then
+        ret.func()
+    end
 end
 
 return M

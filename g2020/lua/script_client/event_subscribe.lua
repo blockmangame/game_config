@@ -57,9 +57,24 @@ Lib.subscribeEvent(Event.EVENT_OPEN_BAG_BY_GIVEAWAY, function(objID)
     Player.CurPlayer:updateGiveAwayStatus(true, objID)
 end)
 
-Lib.subscribeEvent(Event.EVENT_SHOW_DIALOG_TIP, function(tipType,  ...)
+Lib.subscribeEvent(Event.EVENT_SHOW_DIALOG_TIP, function(tipType, dialogContinuedTime,  ...)
     if tipType then
-        UI:openWnd("tipDialog", tipType, ...)
+        local t = {tipType, ...}
+        if dialogContinuedTime then
+            local pushInStackTime = World.Now()
+            Lib.RegStack(Player.CurPlayer, "tipDialog", dialogContinuedTime, function()
+                World.Timer(2, function()
+                    UI:openWnd("tipDialog", dialogContinuedTime and (100 + dialogContinuedTime + pushInStackTime - World.Now()) or nil, table.unpack(t))
+                end)
+            end)
+            if UI:isOpen("tipDialog") then
+                UI:getWnd("tipDialog", true):onReload({dialogContinuedTime, table.unpack(t)})
+            else
+                UI:openWnd("tipDialog", dialogContinuedTime, table.unpack(t))
+            end
+        else
+            UI:openWnd("tipDialog", dialogContinuedTime, table.unpack(t))
+        end
     end
 end)
 
