@@ -993,3 +993,44 @@ SET_RANGE_BOUNDARY
         $index = $index + 1
     }
 }
+--Trade
+DOFINISH_TRADE()
+{
+    $new1 = NewArray()
+    Foreach(array = $items1, key = "item1"){
+        $name = GetConfigVar(obj = $item1, key = "fullName")
+        ArrayAppend(array = $new1, value = $name)
+    }
+    $new2 = NewArray()
+    Foreach(array = $items2, key = "item2"){
+        $name = GetConfigVar(obj = $item2, key = "fullName")
+        ArrayAppend(array = $new2, value = $name)
+    }
+    Foreach(array = $items1, key = "item"){
+        $re = DeleteItem(player = $obj1, item = $item) 
+    }
+    Foreach(array = $items2, key = "item"){
+        $re = DeleteItem(player = $obj2, item = $item) 
+    }
+    $car1 = NewArray()
+    Foreach(array = $new2, key = "fullName"){
+        $add = AddItem(entity = $obj1, cfg = $fullName, count = 1)
+        If(GetItemCfg(fullName = $fullName, key = "base") == "car_base"){
+            ArrayAppend(array = $car1, value = $fullName)
+        }
+    }
+    $car2 = NewArray()
+    Foreach(array = $new1, key = "fullName"){
+        $add = AddItem(entity = $obj2, cfg = $fullName, count = 1)
+        If(GetItemCfg(fullName = $fullName, key = "base") == "car_base"){
+            ArrayAppend(array = $car2, value = $fullName)
+        }
+    }
+    If(ArraySize(array = $car1) >0 ){
+        StartTimer(object = $obj1, event = "TRADE_CAR", car = $car1, time = 20)
+    }
+    If(ArraySize(array = $car2) > 0){
+        StartTimer(object = $obj2, event = "TRADE_CAR", car = $car2, time = 20)
+    }
+    $needswap = false
+}

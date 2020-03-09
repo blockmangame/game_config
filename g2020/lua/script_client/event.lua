@@ -16,6 +16,9 @@ local Events = {
     "EVENT_SYNC_STATES_DATA",
     "EVENT_SET_DETAILS",
     "EVENT_SET_UI_VISIBLE",
+    "EVENT_TRADE_CHANGE_ITEM",
+    "EVENT_TRADE_SUCCEED",
+    "SHOW_TRADE_HINT"
 }
 
 for _, name in pairs(Events) do

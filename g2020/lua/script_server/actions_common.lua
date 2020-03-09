@@ -66,6 +66,17 @@ function Actions.SetItemUse(data, params, context)
 	entity:setItemUse(item:tid(), item:slot(), params.isUse)
 end
 
+function Actions.IsItemUse(data, params, context)
+	local entity = params.entity
+	local list = entity:getUseItemList()
+	local item = params.item
+	local temp = list[item:tid()]
+	if not temp then
+		return false
+	end
+	return temp[item:slot()]
+end
+
 function Actions.ClearItemUseByKey(data, params, context)
 	local entity = params.entity
 	entity:clearItemUseByKey(params.key, params.valueArray)
@@ -317,4 +328,16 @@ end
 
 function Actions.ClacEntityPushOutBlock(data, params, context)
 	params.entity:setPosition(clacPushOutWithBlock(params.entity, params.player))
+end
+
+function Actions.DeleteItem(data, params, context)
+	local player = params.player
+	local item = params.item
+	if not player or not item or item:null() then
+		return false
+	end
+	local my_tray = player:data("tray")
+    local bag = my_tray:fetch_tray(item:tid())
+    local item = bag:remove_item(item:slot())
+	return true
 end
