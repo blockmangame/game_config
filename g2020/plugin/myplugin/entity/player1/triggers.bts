@@ -5358,7 +5358,9 @@ PLAYER_BE_INVITE {
 DATA_REPORT_PARTY_INVITE{
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.partyInviteAutoClose, array = [0, 2, 5, 10, 15, 20, 21])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:party:no_response", @rangeBoundary])
-    
+
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.partyInviteReceiveCount, array = [0, 2, 5, 10, 15, 20, 21])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["player:party:receive", @rangeBoundary])
 
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.partyInviteAgree, array = [0, 2, 5, 10, 15, 20, 21])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:party:agree", @rangeBoundary])
@@ -5404,6 +5406,7 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
 
     If($partyInfo){--[party] friend invite
+        $obj1.partyInviteReceiveCount = $obj1.partyInviteReceiveCount + 1
         CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "invitePartyBuff")
         $obj1.partyInfo = $partyInfo
         $partyInfoDict = NewDictionary($partyInfo)
