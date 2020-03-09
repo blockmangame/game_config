@@ -265,19 +265,6 @@ end
 calcBoundingBoxTouchBlock = function(worldPos, entity, sideNormal)
     local boundingBox = entity:getBoundingBox()
     local retTouchBlockPos = {}
-    --[[ -- boundingBox value : scale, min pos, max pos
-        [1] = 1.0,
-        [2] = {
-            ["z"] = 39.014602661133,
-            ["y"] = 2.0,
-            ["x"] = 42.380867004395
-        },
-        [3] = {
-            ["z"] = 41.014602661133,
-            ["y"] = 2.2000000476837,
-            ["x"] = 44.380867004395
-        }
-    ]]
     local boundBoxSize = Lib.v3cut(boundingBox[3], boundingBox[2])
     boundBoxSize = {x = boundBoxSize.x * boundingBox[1], y = boundBoxSize.y * boundingBox[1], z = boundBoxSize.z * boundingBox[1]}
     local sideNormalX,sideNormalY,sideNormalZ = sideNormal.x, sideNormal.y, sideNormal.z
@@ -327,7 +314,7 @@ calcBoundingBoxTouchBlock = function(worldPos, entity, sideNormal)
 end
 
 function Actions.ClacEntityPushOutBlock(data, params, context)
-	params.entity:setPosition(clacPushOutWithBlock(params.entity, params.player))
+	params.entity:setPosition(clacPushOutWithBlock(params.entity, params.player) or params.entity:getPosition())
 end
 
 function Actions.DeleteItem(data, params, context)
