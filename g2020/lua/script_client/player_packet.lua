@@ -54,7 +54,7 @@ function handles:ShopItemDetail(packet)
             return
         end
         Me:doCallBack("ItemDetail", "sure", packet.regId)
-    end,packet.coinId, packet.price, packet.desc, packet.tip) 
+    end, packet.coinId, packet.price, packet.desc, packet.tip)
 end
 
 function handles:UpdateUIData(packet)
@@ -73,4 +73,58 @@ end
 function handles:ShowDialogTip(packet)
     local args = packet.args
     Lib.emitEvent(Event.EVENT_SHOW_DIALOG_TIP, packet.tipType, packet.regId, table.unpack(args))
+end
+
+function handles:SyncStatesData(packet)
+    Lib.emitEvent(Event.EVENT_SYNC_STATES_DATA, packet)
+end
+
+--TRADE
+function handles:RequestTrade(packet) --接到请求交易
+    local showArgs = {
+        titleText = "TRADE",
+	    msgText = {"gui_request_trade", packet.playerName}
+    }
+    UILib.openChoiceDialog(showArgs, function(isLeft)
+        if not isLeft then
+            Me:sendPacket({pid = "AcceptTrade", sessionId = packet.sessionId})
+        else 
+            Me:sendPacket({pid = "RefuseTrade", sessionId = packet.sessionId})
+        end
+    end)
+end
+
+local showTop = 1
+function handles:TradeRefused(packet)--对方拒绝
+	Client.ShowTip(showTop, "gui_trade_refuse", 50)
+end
+
+function handles:TradeSucceed(packet) -- 交易成功提示
+    Client.ShowTip(showTop, "gui_request_accomplish", 50)
+    self:clearTrade()
+    Lib.emitEvent(Event.EVENT_TRADE_SUCCEED, packet.tradeID)
+end
+
+function handles:StartTrade(packet)--交易开始：
+	self:StartTrade(packet)
+end
+
+function handles:TradeClose(packet) --一些非正常关闭
+    local showType = {
+		showCenter = 2,
+		keepTime = 40,
+		textKey = "gui.trade." .. packet.reason
+	}
+    Client.ShowTip(showType.showCenter, showType.textKey, showType.keepTime)
+    self:clearTrade()
+end
+
+--function handles:TradePlayerConfirm(packet) --对方确认, 不需要重写
+
+--function handles:TradeItemChange(packet) --对方选择改变， 不需要重写
+
+function handles:TradePlayerCancel(packet) --对方中途取消
+    Client.ShowTip(1, "gui.trade.close", 40)
+    self:clearTrade()
+    UI:closeWnd("tradeUI")
 end

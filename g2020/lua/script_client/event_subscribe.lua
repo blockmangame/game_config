@@ -40,7 +40,8 @@ end)
 
 Lib.subscribeEvent(Event.EVENT_SHOW_DETAILS, function(packet)
     if packet.isOpen then
-        UI:openWnd("showDetails", packet)
+        UI:openWnd("showDetails")
+        Lib.emitEvent(Event.EVENT_SET_DETAILS, packet)
     else
         UI:closeWnd("showDetails")
     end
@@ -60,4 +61,9 @@ Lib.subscribeEvent(Event.EVENT_SHOW_DIALOG_TIP, function(tipType,  ...)
     if tipType then
         UI:openWnd("tipDialog", tipType, ...)
     end
+end)
+
+Lib.subscribeEvent(Event.EVENT_SYNC_STATES_DATA, function(packet)
+    UI:openWnd("playerState")
+    Lib.emitEvent(Event.EVENT_SYNC_DATA, packet.data)
 end)

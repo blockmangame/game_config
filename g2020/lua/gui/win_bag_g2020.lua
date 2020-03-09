@@ -249,6 +249,14 @@ function M:isItemEquip(item)
 	return Me:isItemUse(item)
 end
 
+function M:isItemTrade(item)
+	return Me:isTradeItem(item)
+end
+
+local function isTrading()
+	return Me:data("trade").tradeID
+end
+
 function M:setBagItemUI(itemUI, item)
     itemUI:child("root-icon"):SetImage(item:icon())
     itemUI:setData("item", item)
@@ -259,7 +267,10 @@ function M:setBagItemUI(itemUI, item)
         qualityUI:SetImage(imageSet["equip_level_" .. quality])
     end
     local isEquip =  self:isItemEquip(item)
-    itemUI:child("root-tip-bg"):SetVisible(isEquip)
+    local isTrade = self:isItemTrade(item)
+    itemUI:child("root-tip-bg"):SetVisible(isEquip or isTrade)
+	local text = isTrade and "gui.item.trading" or "g2020-equiping"
+	itemUI:child("root-tip-text"):SetText(Lang:toText(text))
 end
 
 function M:setItemDescUI(isShow, item, itemUI)
@@ -314,6 +325,16 @@ function M:fetchAllBagItem()
             if not item.tray_type then
                 return
             end
+            --trade
+            if isTrading() then
+                if item:cfg().canTrade == false then
+                    Client.ShowTip(1, Lang:toText("gui.item.cantTrade"), 20)
+                    return
+                end
+				Me:addTradeItem(item, not self:isItemTrade(item))
+				UI:closeWnd(self)
+				return
+            end
             -- 3-5 begin giveAway 
             local giveAwayStatusTable = Me.giveAwayStatusTable
             if giveAwayStatusTable and giveAwayStatusTable.status then
@@ -347,7 +368,7 @@ function M:fetchAllBagItem()
         grid:AddItem(itemUI)
 		::continue::
     end
-    if #self.items > 0 then
+    if #self.items > 0 and not isTrading() then
         itemUI = self:newSubItemUI()
         grid:AddItem(itemUI)
     end
@@ -460,6 +481,12 @@ function M:registerEvent()
     end)
 
 	Lib.subscribeEvent(Event.EVENT_HAND_ITEM_CHANGE, function()
+		if not self.curDelStatus then
+			self:fetchAllBagItem()
+		end
+    end)
+    
+    Lib.subscribeEvent(Event.EVENT_TRADE_CHANGE_ITEM, function()
 		if not self.curDelStatus then
 			self:fetchAllBagItem()
 		end

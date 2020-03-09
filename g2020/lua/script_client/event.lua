@@ -12,6 +12,13 @@ local Events = {
     "EVENT_SHOW_DRESS_STORE",
     "EVENT_SHOW_WORK_DETAILS",
     "EVENT_SHOW_DIALOG_TIP",
+    "EVENT_SYNC_DATA",
+    "EVENT_SYNC_STATES_DATA",
+    "EVENT_SET_DETAILS",
+    "EVENT_SET_UI_VISIBLE",
+    "EVENT_TRADE_CHANGE_ITEM",
+    "EVENT_TRADE_SUCCEED",
+    "SHOW_TRADE_HINT"
 }
 
 for _, name in pairs(Events) do

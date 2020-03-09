@@ -368,3 +368,77 @@ end
 function Player:getWorksArchiveNum()
     return self:data("main").worksArchiveNum or 3
 end
+
+--Trade: 因为需要和背包交互，通过palyer进行桥接
+function Player:StartTrade(packet) -- packet.tradeID, packet.targetUid, packet.tradeItem
+    self:data("trade").tradeID = packet.tradeID
+    local wnd = UI:openWnd("tradeUI")
+    if wnd then
+        wnd:startTrade(packet.tradeID, packet.targetUid)
+    end
+end
+
+function Player:clearTrade()
+    self:data("trade").tradeID = nil
+    self:data("trade").tradeList = {}
+end
+
+function Player:addTradeItem(item, add)
+    local tid = item:tid()
+	local slot = item:slot()
+	local funcAddItem = function(can, msg)
+        if not can then
+			Client.ShowTip(1, msg, 40)
+			return
+        end
+        -- to 通知ui， 添加/减少了 item
+        self:setTradeItem(item, add)
+        Lib.emitEvent(Event.EVENT_TRADE_CHANGE_ITEM, item, add)
+	end
+	Me:sendPacket({
+		pid = "ChangTradeItem",
+		tradeID = self:data("trade").tradeID,
+		tid = tid,
+		slot = slot,
+		add = add
+	}, funcAddItem)
+end
+
+function Player:setTradeItem(item, add)
+    local list = self:data("trade").tradeList
+    if not list then
+        list = {}
+        self:data("trade").tradeList = list
+    end
+    if not item or item:null() then
+        return false
+    end
+    local tid = item:tid()
+    local slot = item:slot()
+    local temp = list[tid]
+    if not temp then
+        temp = {}
+        list[tid] = temp
+    end
+    temp[slot] = add
+end
+
+function Player:isTradeItem(item)
+    if item and item:cfg().canTrade == false then
+        return false
+    end
+    local list = self:data("trade").tradeList
+    if not list then
+       return false
+    end
+    if not item or item:null() then
+        return false
+    end
+    local tid = item:tid()
+    local slot = item:slot()
+    local temp = list[tid]
+    if not temp then
+        return false
+    end
+    return temp[slot]
+end

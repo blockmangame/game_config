@@ -21,19 +21,16 @@ function M:init()
 end
 
 function M:initProp()
+    self._root:SetTouchable(false)
     self.child = {
         titleText = self:child("Details-Title-Text"),
         titleIcon = self:child("Details-Title-Icon"),
-
         subtitleText = self:child("Details-Subtitle-Text"),
         subtitleVal = self:child("Details-Subtitle-Val"),
-
         contentsText = self:child("Details-Contents-Text"),
-
         commentsText = self:child("Details-Comments-Text"),
         commentsIcon = self:child("Details-Comments-Icon"),
         commentsVal = self:child("Details-Comments-Val"),
-
         btn = self:child("Details-Btn")
     }
 end
@@ -43,30 +40,30 @@ function M:initEvent()
         self:updateSubtitleVal(updateName, val)
     end)
 
+    Lib.subscribeEvent(Event.EVENT_SET_DETAILS, function(packet)
+        cfg = setting:fetch("ui_config", packet.fullName)
+        contents = packet.contents
+        self:setBtn()
+        self:setRootUIArea(packet.uiArea)
+        for _, typeName in pairs(widgets) do
+            self:setWidgetArgs(typeName)
+        end
+    end)
+
     self:subscribe(self.child.btn, UIEvent.EventButtonClick, function()
         Me:sendTrigger(Me, trigger, Me, nil, {
             rtVal = getCfg("btnRtVal")
         })
         UI:closeWnd(self)
-    end)
-
-    self:subscribe(self._root, UIEvent.EventWindowClick, function()
-        UI:closeWnd(self)
+        Lib.emitEvent(Event.EVENT_SET_UI_VISIBLE, true)
     end)
 end
 
-function M:onOpen(packet)
-    cfg = setting:fetch("ui_config", packet.fullName)
-    contents = packet.contents
-    self:setBtn()
-    self:setRootUIArea(packet.uiArea)
-    for _, typeName in pairs(widgets) do
-        self:setWidgetArgs(typeName)
-    end
+function M:onOpen()
+
 end
 
 function M:onClose()
-
 end
 
 function M:setRootUIArea(info)
