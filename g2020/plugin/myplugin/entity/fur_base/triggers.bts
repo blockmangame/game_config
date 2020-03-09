@@ -6,7 +6,9 @@ ENTITY_ENTER
 
 ENTITY_CLICK_BY_BUY_DEC{
     If($obj1.house and $obj1.house.owner and $obj1.isBuyByShop){
-        CastSkill(skill = "/click", from = $obj1.house.owner, packet = {targetID = GetObjectID(object = $obj1)})
+        -- CastSkill(skill = "/click", from = $obj1.house.owner, packet = {targetID = GetObjectID(object = $obj1)})
+        ClacEntityPushOutBlock(player = $obj1.house.owner, entity = $obj1)
+        $obj1.isBuyByShop = nil
     }
 }
 
