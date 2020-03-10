@@ -6464,12 +6464,12 @@ REQ_TRADE()
     $Context = {
         obj1 = $obj2
     }
-    ShowRiskHint(player = $obj1, sureEvent = "CALL_TRADE_REQ", text = "gui.trade.xxxx")
-	--RequestTrade(player = $obj2, target = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
+    --ShowRiskHint(player = $obj1, sureEvent = "CALL_TRADE_REQ", text = "gui.trade.xxxx")
+	RequestTrade(player = $obj2, target = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
 }
 CALL_TRADE_REQ()
 {
-    Test("----CALL_TRADE_REQCALL_TRADE_REQCALL_TRADE_REQCALL_TRADE_REQCALL_TRADE_REQ")
+    
 }
 TRADE_CAR()
 {
