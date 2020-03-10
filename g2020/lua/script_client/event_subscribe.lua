@@ -79,6 +79,10 @@ Lib.subscribeEvent(Event.EVENT_SHOW_DIALOG_TIP, function(tipType, dialogContinue
 end)
 
 Lib.subscribeEvent(Event.EVENT_SYNC_STATES_DATA, function(packet)
+    if packet.isClose then
+        UI:closeWnd("playerState")
+        return
+    end
     UI:openWnd("playerState")
     Lib.emitEvent(Event.EVENT_SYNC_DATA, packet.data)
 end)

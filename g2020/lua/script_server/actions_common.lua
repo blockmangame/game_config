@@ -191,12 +191,18 @@ function Actions.ShowDialogTip(data, params, context)
 end
 
 function Actions.SyncStatesData(data, params, context)
-    params.player:sendPacket({
+    local player = params.player
+    if not player or not player:isValid() or not player.isPlayer then
+        return
+    end
+
+    player:sendPacket({
         pid = "SyncStatesData",
+        isClose = params.isClose,
         data = {
 			isAdd = params.isAdd,
 			states = params.states,
-			userID = params.objID or params.player.objID,
+			targetID = (params.target and {params.target.objID} or {player.objID})[1]
 		},
     })
 end
