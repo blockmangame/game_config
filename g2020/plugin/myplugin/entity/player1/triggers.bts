@@ -71,7 +71,7 @@ TAKEOFF_ITEM {
     ElseIf($typeIndex == 1)
     {
         --baby trolley
-        SetObjectVar(obj = $obj1, key = "equipTakeOff", value = true)
+        --SetObjectVar(obj = $obj1, key = "equipTakeOff", value = true)
         CallTrigger(event = "DEMOUNT_BABY_TROLLEY", object = $obj1)
 	    $obj1.otherItem = false
         $obj1.equipItem = nil
@@ -4758,12 +4758,6 @@ EQUIP_ITEM_IMMEDIATELY --params: item
 	$immediately = $item and GetConfigVar(obj = $item, key = "equipImmediately")
     If(not $immediately )
     {
-        Return()
-    }
-    $equipTakeOff = GetObjectVar(obj = $obj1, key = "equipTakeOff")
-    If($equipTakeOff)
-    {
-        SetObjectVar(obj = $obj1, key = "equipTakeOff", value = false)
         Return()
     }
     SetItemUse(entity = $obj1, item =$item, isUse = true)
