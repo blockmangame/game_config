@@ -3,12 +3,15 @@ local states = {}
 local close = {}
 local imgPath = "set:state_detail.json image:"
 local skillPath = "myplugin/skill_state_"
-local specs = {
-    width = 60,
-    height = 60,
-    space = 15,
-    xAbs = 0,
-    yAbs = 150,
+local specs = World.cfg.stateSpecs or {
+    itemWidth = 80,
+    itemHeight = 80,
+    itemSpace = 15,
+    itemXAbs = 0,
+    itemYAbs = 150,
+    mainHAlign = 2,
+    mainVAlign = 2,
+    mainArea = {{0, -260}, {0, -50}, {0, 110}, {0, 110}}
 }
 
 local function _getIndexByValueKey(tab, val, key)
@@ -50,6 +53,9 @@ function M:initMain()
     ui.root:SetVisible(true)
     ui.txt:SetTextHorzAlign(1)
     ui.txt:SetTextVertAlign(1)
+    ui.root:SetArea(table.unpack(specs.mainArea))
+    ui.root:SetVerticalAlignment(specs.mainVAlign)
+    ui.root:SetHorizontalAlignment(specs.mainHAlign)
     self:subscribe(main.UI.root, UIEvent.EventWindowTouchUp, function()
         self:showMain(false)
         self:dynamicCalculateStatesArea()
@@ -81,7 +87,7 @@ function M:operateStateCell(isAdd, state, stateIndex)
             Skill.Cast(skillPath..state)
         end)
         local txt = GUIWindowManager.instance:CreateGUIWindow1("StaticText", state.."Sum")
-        txt:SetArea({0, 0}, {0, 0}, {0, specs.width / 3}, {0, specs.height / 3})
+        txt:SetArea({0, 0}, {0, 0}, {0, specs.itemWidth / 3}, {0, specs.itemHeight / 3})
         txt:SetVerticalAlignment(2)
         txt:SetHorizontalAlignment(2)
         txt:SetTextVertAlign(1)
@@ -102,8 +108,8 @@ function M:operateStateCell(isAdd, state, stateIndex)
     end
 
     if cell then
-        local x = (stateIndex - 1) * (specs.width + specs.space)
-        cell.btn:SetArea({0, x}, {0, 0}, {0, specs.width}, {0, specs.height})
+        local x = (stateIndex - 1) * (specs.itemWidth + specs.itemSpace)
+        cell.btn:SetArea({0, x}, {0, 0}, {0, specs.itemWidth}, {0, specs.itemHeight})
         cell.txt:SetText(stateData.stateUsersCount)
     end
 
@@ -127,8 +133,8 @@ function M:dynamicCalculateStatesArea()
         i = i + 1
         self:operateStateCell(true, v.name, i)
     end
-    local width = i * (specs.width + specs.space) - specs.space
-    states.UI.root:SetArea({0, specs.xAbs}, {0, specs.yAbs}, {0, width}, {0, specs.height})
+    local width = i * (specs.itemWidth + specs.itemSpace) - specs.itemSpace
+    states.UI.root:SetArea({0, specs.itemXAbs}, {0, specs.itemYAbs}, {0, width}, {0, specs.itemHeight})
     states.UI.root:SetHorizontalAlignment(1)
     states.UI.root:SetVerticalAlignment(0)
     states.UI.root:SetBackgroundColor({1, 0, 0, 100/255})
