@@ -2,14 +2,14 @@
     "canClick": true,
     "carMove": true,
     "carConfig": {
-        "traction": 800,
-        "reverseTraction": 600,
-        "brakingForce": 1000,
-        "mass": 50,
-        "coefAirDrag": 11,
+        "traction": 2400,
+        "reverseTraction": 1500,
+        "brakingForce": 3000,
+        "mass": 200,
+        "coefAirDrag": 9,
         "coefRollingFriction": 0.7,
         "minTurningRadius": 1,
-        "maxCentripetalForce": 600,
+        "maxCentripetalForce": 500,
         "corneringStiffness": 0.05,
         "maxCoefLateralFriction": 100,
         "coefRestitution": 0.2,
@@ -70,7 +70,7 @@
             }
         ]
     },
-     "interactionUI": [
+    "interactionUI": [
         {
             "cfgKey": "interactionUI",
             "followParams": {
@@ -95,7 +95,7 @@
                         "width": "60",
                         "height": "60"
                     },
-					"widgetFileName": "widget_button_image_center"
+                    "widgetFileName": "widget_button_image_center"
                 }
             ]
         }

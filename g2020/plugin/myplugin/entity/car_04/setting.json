@@ -2,18 +2,18 @@
     "canClick": true,
     "carMove": true,
     "carConfig": {
-        "traction": 15000,
+        "traction": 16000,
         "reverseTraction": 10000,
         "brakingForce": 20000,
         "mass": 1500,
         "coefAirDrag": 3,
         "coefRollingFriction": 0.7,
-        "minTurningRadius": 2,
-        "maxCentripetalForce": 7000,
+        "minTurningRadius": 1,
+        "maxCentripetalForce": 4000,
         "corneringStiffness": 0.05,
         "maxCoefLateralFriction": 30,
         "coefRestitution": 0.3,
-        "minBounceSpeed": 4,
+        "minBounceSpeed": 5,
         "cameraDistance": 7
     },
     "collision": true,
@@ -142,7 +142,7 @@
                         "width": "60",
                         "height": "60"
                     },
-					"widgetFileName": "widget_button_image_center"
+                    "widgetFileName": "widget_button_image_center"
                 }
             ]
         },
@@ -170,7 +170,7 @@
                         "width": "60",
                         "height": "60"
                     },
-					"widgetFileName": "widget_button_image_center"
+                    "widgetFileName": "widget_button_image_center"
                 }
             ]
         }
