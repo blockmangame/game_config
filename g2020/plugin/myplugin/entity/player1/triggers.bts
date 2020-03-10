@@ -994,7 +994,18 @@ GIVE_STORE{
     ShowGenericActorShowStore(entity = $obj1, closeWin =true)
 
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
-    $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg, ry = 0, rp = 0, owner = $obj1)
+    $rideOn = GetRideOn(entity = $obj1.house.owner)
+    If($rideOn){
+        $rideOnLastSideNormal = $rideOn.lastSideNormal
+        $rideOnYaw = GetEntityYaw(entity = $rideOn)
+        $rideOnPitch = GetEntityPitch(entity = $rideOn)
+        $rideOnRoll = GetEntityRoll(entity = $rideOn)
+    }
+    $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg, ry = $rideOnYaw or 0, rp = $rideOnPitch or 0, owner = $obj1)
+    If($rideOnRoll){
+        SetEntityRoll(entity = $npc, rotationRoll = $rideOnRoll)
+    }
+    $npc.lastSideNormal = $rideOnLastSideNormal
     SetObjectVar(obj = $npc, key = "house", value = GetObjectVar(obj = $obj1, key = "house"))
     
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
