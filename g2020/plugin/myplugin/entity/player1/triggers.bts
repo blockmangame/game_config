@@ -954,7 +954,7 @@ BUY_STORE{
             $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
             $sellMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellMoney") or 0)
             $sellByDiscountMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "sellByDiscountMoney") or 0)
-            $storeId = DictionaryGet(dict = $decorationDic, key = "storeId") or "other"
+            $storeId = $storeId or DictionaryGet(dict = $decorationDic, key = "storeId") or "other"
         }
     }
     If(3 ~= $coinId){
@@ -1317,7 +1317,8 @@ UPDATE_STORE_LIST{
                     showDesc = DictionaryGet(dict = $decorationDic, key = "showDesc"),
                     event = DictionaryGet(dict = $dic, key = "event") or "BUY_STORE",
                     context = {
-                        cfg = $fullName
+                        cfg = $fullName,
+                        storeId = $storeId
                     }
                 })
             }
@@ -1332,7 +1333,8 @@ UPDATE_STORE_LIST{
                     event = "BUY_HOUSE_REGION_COLOR",
                     context = {
                         colorBlock = $fullName,
-                        childRegionKey = $childRegionKey
+                        childRegionKey = $childRegionKey,
+                        storeId = $storeId
                     }
                 })
             }
@@ -1459,7 +1461,6 @@ BUY_HOUSE_REGION_COLOR{
         ShowTip(entity = $obj1, tipType = 2, textKey = "buy_house_region_color_had_not_inside_region", keepTime = 40)
         Return()
     }
-
     $curInsideRegionKey = GetRegionConfig(region = $curInsideRegion, key = "regionkey")
     $curInsideRegionChildReionArr = GetRegionConfig(region = $curInsideRegion, key = "childRegionKey")
     ForLoop(from = 1, to = ArraySize(array = $curInsideRegionChildReionArr), key = "index"){
@@ -1505,7 +1506,7 @@ BUY_HOUSE_REGION_COLOR{
             If(DictionaryGet(dict = $decorationDic, key = "fullName") == $colorBlock){
                 $buyMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "buyMoney") or 0)
                 $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
-                $storeId = DictionaryGet(dict = $decorationDic, key = "storeId") or "other"
+                $storeId = $storeId or DictionaryGet(dict = $decorationDic, key = "storeId") or "other"
                 Break()
             }
         }
