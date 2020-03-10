@@ -1,10 +1,23 @@
 ENTITY_RIDE_ON
 {
     $obj2.useTrolley = true
+    CallTrigger(object = $obj1, event = "FUNC_STATE_SYNC_TO_RIDER_AND_PASSENGERS", isAdd = true, player = $obj2)
 }
 
 ENTITY_RIDE_OFF
 {
     $obj2.useTrolley = false
     CallTrigger(object = $obj2, event = "DEMOUNT_BABY_TROLLEY")
+    CallTrigger(object = $obj1, event = "FUNC_STATE_SYNC_TO_RIDER_AND_PASSENGERS", isAdd = false, player = $obj2)
+}
+
+FUNC_STATE_SYNC_TO_RIDER_AND_PASSENGERS --params: isAdd, player
+{
+    $owner = GetOwner(entity = $obj1)
+    If($owner == $player) {
+        Test("shield self")    
+        Return()
+    }
+    SyncStatesData(player = $player, isAdd = $isAdd, states = $owner.curStates, target = $owner)
+    SyncStatesData(player = $owner, isAdd = $isAdd, states = $player.curStates, target = $player)
 }
