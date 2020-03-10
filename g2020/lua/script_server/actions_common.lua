@@ -346,3 +346,17 @@ function Actions.ShowRewardDialog(data, params, context)
     })
 
 end
+
+function Actions.ShowRiskHint(data, params, context)
+    local player = params.player
+    if not player then
+        return
+    end
+    local regId = player:regCallBack("ShowRiskHint", {["sure"] = params.sureEvent, ["no"] = params.noEvent}, true, true, params.context)
+    player:sendPacket({
+        pid = "ShowRiskHint",
+        regId = regId,
+        text = params.text,
+        btnText = params.btnText
+    })
+end
