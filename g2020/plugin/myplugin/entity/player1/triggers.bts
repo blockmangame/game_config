@@ -1545,7 +1545,7 @@ SURE_BUY_SET_REGION_COLOR
             If(DictionaryGet(dict = $decorationDic, key = "fullName") == $colorBlock){
                 $buyMoney = ToNumber(DictionaryGet(dict = $decorationDic, key = "buyMoney") or 0)
                 $coinId = ToNumber(DictionaryGet(dict = $decorationDic, key = "coinId") or 3)
-                $storeId = DictionaryGet(dict = $decorationDic, key = "storeId") or "other"
+                $storeId = $storeId or DictionaryGet(dict = $decorationDic, key = "storeId") or "other"
                 Break()
             }
         }
