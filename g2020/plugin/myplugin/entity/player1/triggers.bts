@@ -304,8 +304,8 @@ ENTITY_ENTER
         SetEntityName(entity = $obj1, name = $obj1.nickName)
 
         $obj1.isReadyReward = false
-        $obj1.inviteFamilyPlayer = nil
-        $obj1.applyFamilyPlayer = nil
+        -- $obj1.inviteFamilyPlayer = nil
+        -- $obj1.applyFamilyPlayer = nil
 
         CallTrigger(event = "ADD_MONEY", object = $obj1)
         If($obj1.inPartyOwnerId == 0)   -- not in party
@@ -2687,7 +2687,7 @@ INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
         }
     }
 
-    $obj1.inviteFamilyPlayer = $obj2
+    -- $obj1.inviteFamilyPlayer = $obj2
     $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
@@ -2699,19 +2699,21 @@ INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
         msg = "ui_family_invite",
         args = NewArray(GetEntityName(entity = $obj2))
     }
-
+    $context = {
+        targetID = GetObjectID(object = $obj2)
+    }
     ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
     CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteJoinFamilyBuff")
     $tipType = 5
-    ShowDialogTip(entity = $obj1, tipType = $tipType, event = "INVITE_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, 
+    ShowDialogTip(context = $context, entity = $obj1, tipType = $tipType, event = "INVITE_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, 
         dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
 }
 
 INVITE_JOIN_FAMILY
 {
-    $targetPlayer = $obj1.inviteFamilyPlayer
-    $obj1.inviteFamilyPlayer = nil
-
+    -- $targetPlayer = $obj1.inviteFamilyPlayer
+    -- $obj1.inviteFamilyPlayer = nil
+    $targetPlayer = GetObject(objID = $targetID)
     If($button == "left")
     {
         If(IsPlayer(entity = $targetPlayer))
@@ -2796,7 +2798,7 @@ INTERACTION_APPLY_FAMILY   --申请加入家庭
         Return()
     }
 
-    $obj1.applyFamilyPlayer = $obj2
+    -- $obj1.applyFamilyPlayer = $obj2
     $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
@@ -2808,18 +2810,21 @@ INTERACTION_APPLY_FAMILY   --申请加入家庭
         msg = "ui_family_invite",
         args = NewArray(GetEntityName(entity = $obj2))
     }
+    $context = {
+        targetID = GetObjectID(object = $obj2)
+    }
 
     ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
-    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "applyJoinFamilyBuff")
+    CallTrigger(context = $context, event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "applyJoinFamilyBuff")
     $tipType = 5
     ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "APPLY_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
 APPLY_JOIN_FAMILY
 {
-    $targetPlayer = $obj1.applyFamilyPlayer
-    $obj1.applyFamilyPlayer = nil
-
+    -- $targetPlayer = $obj1.applyFamilyPlayer
+    -- $obj1.applyFamilyPlayer = nil
+    $targetPlayer = GetObject(objID = $targetID)
     If($button == "left")
     {
         If(IsPlayer(entity = $targetPlayer))
