@@ -5673,6 +5673,7 @@ REALLY_AT_PARTY(debug = false){
         $obj1.createPartyCountPerGame = $obj1.createPartyCountPerGame + 1
         $obj1.inSelfParty = 1
         BroadcastPartyInvite(player = $obj1)
+        ShowRiskHint(player = $obj1, text = "gui.party.broadcast.success", btnText = "ui_sure")
     }
     Else{
         $obj1.joinPartyCount = $obj1.joinPartyCount + 1
