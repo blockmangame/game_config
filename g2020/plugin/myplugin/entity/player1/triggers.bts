@@ -4743,9 +4743,14 @@ EQUIP_CAR {
     $newPos = ComputeV3(op = "add", p1= $pos, p2 = {x = 0, y = 2, z = 0})
     $yaw = GetEntityYaw(entity = $obj1)
     $car = CreateNpc(cfgName = $carName, pos = $newPos, map = GetEntityMap(entity = $obj1), owner = $obj1, ry = $yaw)
-    RideOn(entity = $obj1, target = $car)
+    If(not $car)
+    {
+        Test( $carName ,  "   Bts Function [ EQUIP_CAR ] :  Car not found by name ")
+        Return()
+    }
 
-    SetObjectVar(obj = $obj1, key = "createdCar", value = $car)
+    $obj1.createdCar = $car
+    RideOn(entity = $obj1, target = $car)
 }
 
 DEBARK {
@@ -4754,13 +4759,15 @@ DEBARK {
 
 TAKEOFF_EQUIP_CAR
 {
-    If(not $obj1.createdCar)
+    $car = $obj1.createdCar
+    $obj1.createdCar = nil
+
+    If(not $car)
     {
         Return()
     }
 
-    $car = $obj1.createdCar
-    $passengers = NewDictionary(GetPassengers(entity = $obj1.createdCar))
+    $passengers = NewDictionary(GetPassengers(entity = $car))
     ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val")
     {
         If(GetObject(objID = $val) ~= $obj1)
@@ -4768,9 +4775,8 @@ TAKEOFF_EQUIP_CAR
         ShowTip(entity = GetObject(objID = $val), tipType = 2, textKey = "car_owner_already_remove_car", keepTime = 40)
     }
     }
-    ClearRide(entity = $obj1.createdCar)
-    KillEntity(entity = $obj1.createdCar)
-    $obj1.createdCar = nil
+    ClearRide(entity = $car)
+    KillEntity(entity = $car)
 }
 
 EQUIP_ITEM_IMMEDIATELY --params: item
