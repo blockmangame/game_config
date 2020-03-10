@@ -5,4 +5,9 @@ ENTITY_TOUCH_ALL
     $toRy = GetConfigVar(obj = $obj1, key = "toRy")
 
     CallTrigger(event = "FUNC_TRANSMIT_CARRIER", object = $obj2, toMap = $toMap, toPos = $toPos, toRy = $toRy)
+    StartTimer(time = 2, object = $obj1, obj2 = $obj2, ry = $toRy, event = "CHANGE_ENTITY_FACE")
+}
+
+CHANGE_ENTITY_FACE{
+    SetBodyYaw(entity = $obj2, yaw = $ry)
 }
