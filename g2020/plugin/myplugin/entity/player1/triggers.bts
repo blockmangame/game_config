@@ -4726,13 +4726,10 @@ TAKEOFF_EQUIP_CAR
     }
 
     $car = $obj1.createdCar
-    $passengers = GetPassengers(entity = $obj1.createdCar)
-    Foreach(array = $passengers, key = "passenger")
+    $passengers = NewDictionary(GetPassengers(entity = $obj1.createdCar))
+    ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val")
     {
-        If($passenger ~= GetObjectID(object = $obj1))
-        {
-            ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", keepTime = 40)
-        }
+        ShowTip(entity = GetObject(objID = $val), tipType = 2, textKey = "car_owner_already_remove_car", keepTime = 40)
     }
     ClearRide(entity = $obj1.createdCar)
     KillEntity(entity = $obj1.createdCar)
@@ -4797,13 +4794,10 @@ DEMOUNT_BABY_TROLLEY
     If($obj1.createdTrolley && not $obj1.demounttingTrolley && not $obj1.keepCreatedTrolley)
     {
         $obj1.demounttingTrolley = true
-        $passengers = GetPassengers(entity = $obj1.createdTrolley)
-        Foreach(array = $passengers, key = "passenger")
-        {
-            If($passenger ~= GetObjectID(object = $obj1))
+        $passengers = NewDictionary(GetPassengers(entity = $obj1.createdTrolley))
+        ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val")
             {
-                ShowTip(entity = GetObject(objID = $passenger), tipType = 2, textKey = "car_owner_already_remove_car", keepTime = 40)
-            }
+            ShowTip(entity = GetObject(objID = $val), tipType = 2, textKey = "car_owner_already_remove_car", keepTime = 40)
         }
         ClearRide(entity = $obj1.createdTrolley)
         RemoveEntityBuff(entity = $obj1.createdTrolley, buff = GetObjectVar(obj = $obj1.createdTrolley, key = "scaleBuff"))
