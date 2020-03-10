@@ -99,9 +99,9 @@ end
 --任意玩家添加一个物品后任意玩家添加一个物品后，双方的接受按钮都会变灰双方的接受按钮都会变灰，
 --并且后面加上倒计时并且后面加上倒计时10秒，倒计时结束后才可以接受倒计时结束后才可以接受
 function M:updateCanConfim()
-	local temp = self.canConfirm
-	if self.canConfirm or self.confirmTimer or not (self.lastIndex > 0 or self.goodsAdd > 0) then
-		return
+ 	self.canConfirm = false
+	if self.confirmTimer then
+		self.confirmTimer()
 	end
 	local countDown = 10
 	self.confirmBtn:SetNormalImage("set:partyTrade.json image:grayBtn.png")
@@ -194,7 +194,7 @@ function M:delSelected(index)
 	self.lastIndex = self.lastIndex - 1
 	self:setSelectIndex(item:tid(), item:slot(), nil)
 	self:refreshSelected()
-	--self:updateCanConfim()
+	self:updateCanConfim()
 end
 
 function M:addSelected(item)
@@ -270,10 +270,10 @@ function M:changGoods(operation, data)
 			self.goods[tid] = tb
 		end
 		tb[slot] = itemData and Item.DeseriItem(itemData)
-		self:updateCanConfim()
 	elseif tb and tb[slot] then
 		tb[slot] = nil
 	end
+	self:updateCanConfim()
 	self:refreshGoods()
 end
 
