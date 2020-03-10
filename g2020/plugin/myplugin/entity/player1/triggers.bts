@@ -6146,7 +6146,11 @@ GET_SVIP_REWARD()
 }
 
 FUNC_TRANSMIT_CARRIER --param: toMap, toPos, toRy
-{   
+{
+    If (IsCameraMode(player = $obj1))
+    {
+        Return()
+    }
     $obj1.transmitCancel = false
     $carrier = GetRideOn(entity = $obj1)
     If($carrier)
