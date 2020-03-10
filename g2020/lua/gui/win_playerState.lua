@@ -158,10 +158,11 @@ function M:syncData(packet)
 
         i = i or _getSize(data)
         local addend = (isAdd and {1} or {-1})[1]
-        main.totalUsersCount = main.totalUsersCount + addend
         data[i].stateUsersCount = (data[i].stateUsersCount or 0) + addend
         self:operateStateCell(isAdd, v, i)
-        main.img = isAdd and v or data[_getSize(data)].name
+        local lastState = data[_getSize(data)]
+        main.totalUsersCount = main.totalUsersCount + addend
+        main.img = isAdd and v or (lastState and lastState.name)
         ::continue::
     end
     self:dynamicCalculateStatesArea()

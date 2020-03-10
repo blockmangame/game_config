@@ -1790,8 +1790,8 @@ FUNC_STATE_ADD --params: state, stateBase, skill
 
 FUNC_STATE_SYNC_TO_OTHER --params: isAdd, state
 {
-    $ride = GetRideOn(entity = $ride)
     $states = [$state]
+    $ride = GetRideOn(entity = $ride)
     $passengers = NewDictionary(GetPassengers(entity = $obj1))
     ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val")
     {
@@ -1799,6 +1799,16 @@ FUNC_STATE_SYNC_TO_OTHER --params: isAdd, state
     }
     SyncStatesData(player = $ride, isAdd = $isAdd, states = $states, target = $obj1)
     SyncStatesData(player = $obj1, isAdd = $isAdd, states = $states, target = $obj1)
+    If($obj1.createdTrolley) {
+        $trolleyPassengers = NewDictionary(GetPassengers(entity = $obj1.createdTrolley))
+        ForeachDictionary(dict = $trolleyPassengers, keyName = "key", valueName = "val") {
+            $player = GetObject(objID = $val)
+            SyncStatesData(player = $player ~= $obj1 and $player or nil, isAdd = $isAdd, states = $states, target = $obj1)
+        }
+    } ElseIf($obj1.useTrolley) {
+        $trolleyOwner = GetOwner(entity = $ride)
+        SyncStatesData(player = $trolleyOwner, isAdd = $isAdd, states = $states, target = $obj1)
+    }
 }
 
 FUNC_STATE_START_AUTO_VANISH_TIME --parmas: state, skill
@@ -1855,8 +1865,7 @@ FUNC_STATE_RIDE_OPERATION --params: ride, isRideOff
     {
         Return()
     }
-    If(IsPlayer(entity = $ride))
-    {
+    If(IsPlayer(entity = $ride)) {
         SyncStatesData(player = $ride, isAdd = not $isRideOff, states = $obj1.curStates, target = $obj1)
         SyncStatesData(player = $obj1, isAdd = not $isRideOff, states = $ride.curStates, target = $ride)
     }
