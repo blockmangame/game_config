@@ -4744,7 +4744,10 @@ TAKEOFF_EQUIP_CAR
     $passengers = NewDictionary(GetPassengers(entity = $obj1.createdCar))
     ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val")
     {
+        If(GetObject(objID = $val) ~= $obj1)
+    {
         ShowTip(entity = GetObject(objID = $val), tipType = 2, textKey = "car_owner_already_remove_car", keepTime = 40)
+    }
     }
     ClearRide(entity = $obj1.createdCar)
     KillEntity(entity = $obj1.createdCar)
@@ -4811,8 +4814,11 @@ DEMOUNT_BABY_TROLLEY
         $obj1.demounttingTrolley = true
         $passengers = NewDictionary(GetPassengers(entity = $obj1.createdTrolley))
         ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val")
+        {
+            If(GetObject(objID = $val) ~= $obj1)
             {
             ShowTip(entity = GetObject(objID = $val), tipType = 2, textKey = "car_owner_already_remove_car", keepTime = 40)
+        }
         }
         ClearRide(entity = $obj1.createdTrolley)
         RemoveEntityBuff(entity = $obj1.createdTrolley, buff = GetObjectVar(obj = $obj1.createdTrolley, key = "scaleBuff"))
