@@ -20,6 +20,7 @@ local Events = {
     "EVENT_TRADE_SUCCEED",
     "SHOW_TRADE_HINT",
     "EVENT_SHOW_REWARD_DIALOG",
+    "EVENT_SHOW_INVITE_TIP_BY_SCRIPT",
 }
 
 for _, name in pairs(Events) do

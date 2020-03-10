@@ -78,7 +78,32 @@ Lib.subscribeEvent(Event.EVENT_SHOW_DIALOG_TIP, function(tipType, dialogContinue
     end
 end)
 
+Lib.subscribeEvent(Event.EVENT_SHOW_INVITE_TIP_BY_SCRIPT, function(packet)
+    local time = packet.time
+    if time then
+        local pushInStackTime = World.Now()
+        Lib.RegStack(Player.CurPlayer, "invite_tip", time, function()
+            World.Timer(2, function()
+                packet.showTime = 100 + time + pushInStackTime - World.Now()
+                UI:openWnd("invite_tip", packet)
+            end)
+        end)
+        packet.showTime = time
+        if UI:isOpen("invite_tip") then
+            UI:getWnd("invite_tip", true):onReload(packet)
+        else
+            UI:openWnd("invite_tip", packet)
+        end
+    else
+        UI:openWnd("invite_tip", packet)
+    end
+end)
+
 Lib.subscribeEvent(Event.EVENT_SYNC_STATES_DATA, function(packet)
+    if packet.isClose then
+        UI:closeWnd("playerState")
+        return
+    end
     UI:openWnd("playerState")
     Lib.emitEvent(Event.EVENT_SYNC_DATA, packet.data)
 end)

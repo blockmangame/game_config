@@ -287,6 +287,7 @@ ENTITY_ENTER
     AddItem(entity = $obj1, cfg = "myplugin/free_food", count = 1)
     ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 3, 4, 5))
     $obj1.outOfCameraModeState = {}
+    $obj1.curStates = {}
     CallTrigger(event = "CHECK_SHOW_SVIP_UI", object = $obj1)
     AddEntityBuff(entity = $obj1, cfg = "myplugin/click_action")
     CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
@@ -1765,8 +1766,7 @@ FUNC_STATE_GENERATE --params: stateBase, col, skill
         $preState = GetObjectVar(obj = $obj1, key = Concat(p1 = "pre", p2 = $stateBase))
         If($preState)
         {
-            RemoveSkill(entity = $obj1, name = Concat(p1 = @skillPath, p2 = $preState))
-            CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $preState, hideTip = true)
+            CallTrigger(object = $obj1, event = "FUNC_STATESKILL_REMOVE", state = $preState, skill = Concat(p1 = @skillPath, p2 = $preState))
         }
         $state = ArrayGet(array = $subdivided, index = $col)
         $skill = Concat(p1 = @skillPath, p2 = $state)
@@ -1779,15 +1779,26 @@ FUNC_STATE_GENERATE --params: stateBase, col, skill
 
 FUNC_STATE_ADD --params: state, stateBase, skill
 {
+    ArrayAppend(array = $obj1.curStates, value = $state)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_SYNC_TO_OTHER", isAdd = true, state = $state)
+
     SetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase), value = true)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
-    If(not IsCameraMode(player = $obj1)){
-        AddSkill(entity = $obj1, name = $skill)
-    }
-    ArrayAppend(array = $obj1.outOfCameraModeState, value = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
     CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA")
     CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state, skill = $skill)
+}
+
+FUNC_STATE_SYNC_TO_OTHER --params: isAdd, state
+{
+    $ride = GetRideOn(entity = $ride)
+    $states = [$state]
+    $passengers = NewDictionary(GetPassengers(entity = $obj1))
+    ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val")
+    {
+        SyncStatesData(player = GetObject(objID = $val), isAdd = $isAdd, states = $states, target = $obj1)
+    }
+    SyncStatesData(player = $ride, isAdd = $isAdd, states = $states, target = $obj1)
+    SyncStatesData(player = $obj1, isAdd = $isAdd, states = $states, target = $obj1)
 }
 
 FUNC_STATE_START_AUTO_VANISH_TIME --parmas: state, skill
@@ -1843,6 +1854,11 @@ FUNC_STATE_RIDE_OPERATION --params: ride, isRideOff
     If(not $ride)
     {
         Return()
+    }
+    If(IsPlayer(entity = $ride))
+    {
+        SyncStatesData(player = $ride, isAdd = not $isRideOff, states = $obj1.curStates, target = $obj1)
+        SyncStatesData(player = $obj1, isAdd = not $isRideOff, states = $ride.curStates, target = $ride)
     }
     $event = $isRideOff and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE"
     If($ride.cfg.releaseState)
@@ -2004,11 +2020,9 @@ FUNC_STATESKILL_REMOVE --params: state, skill
         Return()
     }
 
-    RemoveSkill(entity = $obj1, name = $skill)
-    $index = ArrayFind(array = $obj1.outOfCameraModeState, value = $state)
-    If($index){
-        ArrayRemove(array = $obj1.outOfCameraModeState, index = $index)
-    }
+    $index = ArrayFind(array = $obj1.curStates, value = $state)
+    If($index){ ArrayRemove(array = $obj1.curStates, index = $index) }
+    CallTrigger(object = $obj1, event = "FUNC_STATE_SYNC_TO_OTHER", isAdd = false, state = $state)
 
     SetObjectVar(obj = $obj1, key = $hadState, value = false)
     CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
@@ -5331,7 +5345,8 @@ PLAYER_BE_INVITE {
     If($inPartyOwnerId ~= 0){
         Return()--in party
     }
-    $obj1.visitTarget = $obj2
+    -- $obj1.visitTarget = $obj2
+    $context = {visitTargetUserId = GetObjectID(object = $obj2)}
 
     CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteFriendBuff")
     $contentDict = NewDictionary($content)
@@ -5343,6 +5358,7 @@ PLAYER_BE_INVITE {
         {
             normalImage = "set:invite_tip.json image:green_btn",
             pushedImage = "set:invite_tip.json image:green_btn",
+            pushInTextTimer = true,
             text = "ui_sure"
         },
         {
@@ -5365,7 +5381,7 @@ PLAYER_BE_INVITE {
         button2 = "PLAYER_BE_INVITE_REFUSE",
         autoClose = "FRIEND_INVITE_AUTO_CLOSE",
     }
-    ShowInviteTip(player = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, content = $content, fullName = $fullName, showTime = $showTime, eventMap = $eventMap)
+    ShowInviteTipByScript(context = $context, player = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, content = $content, fullName = $fullName, showTime = $showTime, eventMap = $eventMap)
 
 }
 
@@ -5418,7 +5434,9 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
     $showTime = DictionaryGet(dict = $contentDict, key = "showTime")
     $picUrl = DictionaryGet(dict = $contentDict, key = "picUrl")
     $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
-    $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
+    -- $obj1.visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
+    $visitTargetUserId = DictionaryGet(dict = $contentDict, key = "userId")
+    $context = {visitTargetUserId = $visitTargetUserId}
 
     If($partyInfo){--[party] friend invite
         $obj1.partyInviteReceiveCount = $obj1.partyInviteReceiveCount + 1
@@ -5428,11 +5446,11 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
         $targetPartyId = DictionaryGet(dict = $partyInfoDict, key = "partyId")
         $ownerId = DictionaryGet(dict = $partyInfoDict, key = "userId")
         $likeNum = DictionaryGet(dict = $partyInfoDict, key = "likeNum")
-        If($targetPartyId == $obj1.excludedPartyId and $ownerId == $obj1.visitTargetUserId){--party owner invited me
+        If($targetPartyId == $obj1.excludedPartyId and $ownerId == $visitTargetUserId){--party owner invited me
             $obj1.excludedPartyId = "0"
         }
-        $obj1.visitTargetUserId = $ownerId
-
+        -- $obj1.visitTargetUserId = $ownerId
+        $context = {visitTargetUserId = $ownerId}
         -- party invite ui style
         $content = {
             msg = "gui_party_invite_notice",
@@ -5466,6 +5484,7 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
             {
                 normalImage = "set:invite_tip.json image:green_btn",
                 pushedImage = "set:invite_tip.json image:green_btn",
+                pushInTextTimer = true,
                 text = "ui_sure"
             },  
             {
@@ -5488,7 +5507,7 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
         $fullName = "myplugin/friendInviteView"
     }
 
-    ShowInviteTip(player = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, titleText = $likeNum, content = $content, fullName = $fullName, showTime = $showTime, eventMap = $eventMap)
+    ShowInviteTipByScript(context = $context, player = $obj1, buttonInfo = $buttonInfo, pic = $picUrl, titleText = $likeNum, content = $content, fullName = $fullName, showTime = $showTime, eventMap = $eventMap)
 }
 JOIN_OTHERS_PARTY(debug = false){
     $partyDict = NewDictionary($obj1.partyInfo)
@@ -5499,7 +5518,7 @@ CROSS_SERVER_VISIT(debug = false){
     CrossServerVisitPlayerByUserId(targetUserId = $obj1.targetUserId, player = $obj1)
 }
 PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
-    $targetUserId = $targetUserId or $obj1.visitTargetUserId
+    $targetUserId = $visitTargetUserId or $targetUserId or $obj1.visitTargetUserId
     $obj1.targetUserId = $targetUserId
     $contentDict = NewDictionary($content)
     $partyInfo = DictionaryGet(dict = $contentDict, key = "partyInfo")
@@ -5549,7 +5568,7 @@ PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
 }
 PLAYER_ON_VISIT {--same server
     If(not $target){
-        $target = $obj2 or $obj1.visitTarget
+        $target = $visitTargetUserId and GetObject(objID = $visitTargetUserId) or $obj2 or $obj1.visitTarget
     }
     If(not $target or $target.interactionObjId == GetObjectID(object = $obj1)){
         Return()
@@ -6132,7 +6151,11 @@ GET_SVIP_REWARD()
 }
 
 FUNC_TRANSMIT_CARRIER --param: toMap, toPos, toRy
-{   
+{
+    If (IsCameraMode(player = $obj1))
+    {
+        Return()
+    }
     $obj1.transmitCancel = false
     $carrier = GetRideOn(entity = $obj1)
     If($carrier)

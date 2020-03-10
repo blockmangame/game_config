@@ -3,12 +3,15 @@ local states = {}
 local close = {}
 local imgPath = "set:state_detail.json image:"
 local skillPath = "myplugin/skill_state_"
-local specs = {
-    width = 60,
-    height = 60,
-    space = 15,
-    xAbs = 0,
-    yAbs = 150,
+local specs = World.cfg.stateSpecs or {
+    itemWidth = 80,
+    itemHeight = 80,
+    itemSpace = 15,
+    itemXAbs = 0,
+    itemYAbs = 150,
+    mainHAlign = 2,
+    mainVAlign = 2,
+    mainArea = {{0, -260}, {0, -50}, {0, 110}, {0, 110}}
 }
 
 local function _getIndexByValueKey(tab, val, key)
@@ -29,7 +32,6 @@ local function _getSize(tab)
 end
 
 function M:onOpen()
-    self:showMain(true)
 end
 
 function M:onClose()
@@ -44,15 +46,19 @@ function M:initMain()
             txt = self:child("StateTxt"),
         },
         img = "",
-        count = 0,
-        visible = false
+        visible = true,
+        totalUsersCount = 0,
     }
     local ui = main.UI
+    ui.root:SetVisible(true)
     ui.txt:SetTextHorzAlign(1)
     ui.txt:SetTextVertAlign(1)
+    ui.root:SetArea(table.unpack(specs.mainArea))
+    ui.root:SetVerticalAlignment(specs.mainVAlign)
+    ui.root:SetHorizontalAlignment(specs.mainHAlign)
     self:subscribe(main.UI.root, UIEvent.EventWindowTouchUp, function()
         self:showMain(false)
-        self:recalculateStatesArea()
+        self:dynamicCalculateStatesArea()
     end)
 end
 
@@ -68,9 +74,8 @@ function M:initClose()
     end)
 end
 
-function M:operateStateCell(isAdd, state, index)
-    local data = states.data[index] or {}
-    local count = _getSize(data.UserID)
+function M:operateStateCell(isAdd, state, stateIndex)
+    local stateData = states.data[stateIndex] or {}
     local cell = states.UI.cell[state]
 
     if not main.visible and isAdd and not cell then
@@ -82,7 +87,7 @@ function M:operateStateCell(isAdd, state, index)
             Skill.Cast(skillPath..state)
         end)
         local txt = GUIWindowManager.instance:CreateGUIWindow1("StaticText", state.."Sum")
-        txt:SetArea({0, 0}, {0, 0}, {0, specs.width / 3}, {0, specs.height / 3})
+        txt:SetArea({0, 0}, {0, 0}, {0, specs.itemWidth / 3}, {0, specs.itemHeight / 3})
         txt:SetVerticalAlignment(2)
         txt:SetHorizontalAlignment(2)
         txt:SetTextVertAlign(1)
@@ -93,69 +98,73 @@ function M:operateStateCell(isAdd, state, index)
         cell = { btn = btn, txt = txt }
     end
 
-    if cell then
-        local x = (index - 1) * (specs.width + specs.space)
-        cell.btn:SetArea({0, x}, {0, 0}, {0, specs.width}, {0, specs.height})
-        cell.txt:SetText(count)
-        if count <= 0 then
-            table.remove(states.data, index)
+    if stateData.stateUsersCount <= 0 then
+        table.remove(states.data, stateIndex)
+        if cell then
             cell.btn:RemoveChildWindow1(cell.txt)
             states.UI.root:RemoveChildWindow1(cell.btn)
             cell = nil
         end
     end
+
+    if cell then
+        local x = (stateIndex - 1) * (specs.itemWidth + specs.itemSpace)
+        cell.btn:SetArea({0, x}, {0, 0}, {0, specs.itemWidth}, {0, specs.itemHeight})
+        cell.txt:SetText(stateData.stateUsersCount)
+    end
+
     states.UI.cell[state] = cell
 end
 
-function M:recalculateStatesArea()
-    if main.count <= 0 then
+function M:dynamicCalculateStatesArea()
+    if main.totalUsersCount <= 0 then
         UI:closeWnd(self)
         return
     end
 
     if main.visible then
-        local size = _getSize(states.data)
-        local img = states.data[size] and states.data[size].Name
-        main.UI.txt:SetText(main.count)
-        main.UI.img:SetImage(imgPath..img)
+        main.UI.txt:SetText(main.totalUsersCount)
+        main.UI.img:SetImage(imgPath..main.img)
         return
     end
 
     local i = 0
     for _, v in ipairs(states.data) do
         i = i + 1
-        self:operateStateCell(true, v.Name, i)
+        self:operateStateCell(true, v.name, i)
     end
-    local width = i * (specs.width + specs.space) - specs.space
-    states.UI.root:SetArea({0, specs.xAbs}, {0, specs.yAbs}, {0, width}, {0, specs.height})
+    local width = i * (specs.itemWidth + specs.itemSpace) - specs.itemSpace
+    states.UI.root:SetArea({0, specs.itemXAbs}, {0, specs.itemYAbs}, {0, width}, {0, specs.itemHeight})
     states.UI.root:SetHorizontalAlignment(1)
     states.UI.root:SetVerticalAlignment(0)
     states.UI.root:SetBackgroundColor({1, 0, 0, 100/255})
 end
 
 function M:syncData(packet)
-    local isAdd, userID = packet.isAdd, packet.userID
+    local isAdd, userID = packet.isAdd, packet.targetID
+    local data = states.data
     for _, v in pairs(packet.states) do
-        local data = states.data
-        local i = _getIndexByValueKey(data, v, "Name")
-        local usersInData = (i == nil and {{}} or {data[i].UserID})[1]
-        local idx = _getIndexByValueKey(usersInData, userID)
+        local i = _getIndexByValueKey(data, v, "name")
+        local idx = _getIndexByValueKey(data[i] and data[i].userID, userID)
         if isAdd and i == nil then
-            table.insert(data, {["Name"] = v, ["UserID"] = {userID}})
+            table.insert(data, {["name"] = v, ["userID"] = {userID}})
         elseif isAdd and idx == nil then
-            table.insert(data[i].UserID, userID)
+            table.insert(data[i].userID, userID)
         elseif not isAdd and i ~= nil and idx ~= nil then
-            table.remove(data[i].UserID, idx)
+            table.remove(data[i].userID, idx)
         else
             goto continue
         end
 
-        states.data = data
-        main.count = main.count + (isAdd and {1} or {-1})[1]
-        self:operateStateCell(isAdd, v, i or _getSize(data))
+        i = i or _getSize(data)
+        local addend = (isAdd and {1} or {-1})[1]
+        main.totalUsersCount = main.totalUsersCount + addend
+        data[i].stateUsersCount = (data[i].stateUsersCount or 0) + addend
+        self:operateStateCell(isAdd, v, i)
+        main.img = isAdd and v or data[_getSize(data)].name
         ::continue::
     end
-    self:recalculateStatesArea()
+    self:dynamicCalculateStatesArea()
 end
 
 function M:showMain(visible)
@@ -164,7 +173,7 @@ function M:showMain(visible)
     states.UI.root:SetVisible(not visible)
     close.UI.root:SetVisible(not visible)
     self._root:SetTouchable(not visible)
-    self:recalculateStatesArea()
+    self:dynamicCalculateStatesArea()
 end
 
 function M:init()
@@ -172,6 +181,7 @@ function M:init()
     self:initMain()
     self:initStates()
     self:initClose()
+    self._root:SetTouchable(false)
 
     Lib.subscribeEvent(Event.EVENT_SYNC_DATA, function(packet)
         self:syncData(packet)

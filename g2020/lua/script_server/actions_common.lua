@@ -190,13 +190,36 @@ function Actions.ShowDialogTip(data, params, context)
     params.entity:showDialogTip(params.tipType, params.event, arg, params.context, params.dialogContinuedTime)
 end
 
+function Actions.ShowInviteTipByScript(data, params, context)
+    local player = params.player
+    local modName = "ShowInviteTip" .. (params.pic or "") .. (params.fullName or "") .. World.Now() .. os.time() .. math.random(0, 99999)
+    local regId = player:regCallBack(modName, params.eventMap, true, true, params.context)
+    player:sendPacket({
+        pid = "ShowInviteTipByScript",
+        regId = regId,
+        pic = params.pic,
+        titleText = params.titleText,
+        content = params.content,
+        buttonInfo = params.buttonInfo,
+        fullName = params.fullName,
+        time = params.showTime,
+        modName = modName
+	})
+end
+
 function Actions.SyncStatesData(data, params, context)
-    params.player:sendPacket({
+    local player = params.player
+    if not player or not player:isValid() or not player.isPlayer then
+        return
+    end
+
+    player:sendPacket({
         pid = "SyncStatesData",
+        isClose = params.isClose,
         data = {
 			isAdd = params.isAdd,
 			states = params.states,
-			userID = params.objID or params.player.objID,
+			targetID = (params.target and {params.target.objID} or {player.objID})[1]
 		},
     })
 end

@@ -53,42 +53,6 @@
             "passengerAction": {
                 "base": "riding"
             }
-        },
-        {
-            "yaw": 0,
-            "pos": {
-                "y": -0.1,
-                "z": -0.7,
-                "x": 0.6
-            },
-            "out": {
-                "y": 2,
-                "z": 0,
-                "x": 0.5
-            },
-            "ctrl": false,
-            "view": false,
-            "passengerAction": {
-                "base": "riding"
-            }
-        },
-        {
-            "yaw": 0,
-            "pos": {
-                "y": -0.1,
-                "z": -0.7,
-                "x": 0.6
-            },
-            "out": {
-                "y": 2,
-                "z": 0,
-                "x": 0.5
-            },
-            "ctrl": false,
-            "view": false,
-            "passengerAction": {
-                "base": "riding"
-            }
         }
     ],
     "boundingVolume": {
@@ -97,38 +61,73 @@
             {
                 "type": "VerticalBox",
                 "params": [
-                    3,
+                    2.2,
                     1.2,
                     5
                 ]
             }
         ]
     },
-    "interactionUI": {
-        "cfgKey": "interactionUI",
-        "followParams": {
-            "followScenePos": false,
-            "offset": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            }
-        },
-        "centerBtns": [
-            {
-                "text": "interaction_drive",
-                "enableTextBorder": true,
-                "image": "plugin/myplugin/image/hand_click.png",
-                "event": "RIDE_ON",
-                "imageSize": {
-                    "width": "60",
-                    "height": "60"
+    "interactionUI": [
+        {
+            "cfgKey": "interactionUI",
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.5,
+                    "y": 1,
+                    "z": 0
                 }
-            }
-        ]
-    },
+            },
+            "centerBtns": [
+                {
+                    "text": "interaction_drive",
+                    "enableTextBorder": true,
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "RIDE_ON_INDEX_1",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 1
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+					"widgetFileName": "widget_button_image_center"
+                }
+            ]
+        },
+        {
+            "cfgKey": "interactionUI",
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.5,
+                    "y": 1,
+                    "z": 0
+                }
+            },
+            "centerBtns": [
+                {
+                    "text": "interation_get_on",
+                    "enableTextBorder": true,
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "RIDE_ON_INDEX_2",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 2
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+					"widgetFileName": "widget_button_image_center"
+                }
+            ]
+        }
+    ],
     "interaction": {
-        "radius": 3,
+        "radius": 5,
         "offset": {
             "x": 0,
             "y": -1,
