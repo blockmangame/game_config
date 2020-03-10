@@ -4691,7 +4691,7 @@ ENTITY_BUY_RESULT()
                 CallTrigger(object = $obj1, event = "GO_TO_BUY_UI", coinName = "gDiamonds")
             }ElseIf($succeed){
                 $itemName = GetShopItem(shopIndex = $itemIndex, key = "itemName")
-                ShowRewardItemEffect(type = "Item", count = 1, fullName = $itemName, player = $obj1)
+                --ShowRewardItemEffect(type = "Item", count = 1, fullName = $itemName, player = $obj1)
             }
         }
     }
