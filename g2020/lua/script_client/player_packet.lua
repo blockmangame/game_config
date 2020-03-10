@@ -86,13 +86,19 @@ function handles:RequestTrade(packet) --接到请求交易
         titleText = "TRADE",
 	    msgText = {"gui_request_trade", packet.playerName}
     }
-    UILib.openChoiceDialog(showArgs, function(isLeft)
-        if not isLeft then
-            Me:sendPacket({pid = "AcceptTrade", sessionId = packet.sessionId})
-        else 
-            Me:sendPacket({pid = "RefuseTrade", sessionId = packet.sessionId})
+    local callback = function(sure)
+        if not sure then
+            return
         end
-    end)
+        UILib.openChoiceDialog(showArgs, function(isLeft)
+            if not isLeft then
+                Me:sendPacket({pid = "AcceptTrade", sessionId = packet.sessionId})
+            else 
+                Me:sendPacket({pid = "RefuseTrade", sessionId = packet.sessionId})
+            end
+        end)
+    end
+    UI:openWnd("tradeHint", {text = "gui.trade.risk.hint"}, callback)
 end
 
 local showTop = 1
