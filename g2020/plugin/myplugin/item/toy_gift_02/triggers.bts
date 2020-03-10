@@ -63,7 +63,7 @@ USE_ITEM(debug = false) --随机抽奖，抽奖道具使用后随机获得奖品
     {
         ConsumeItem(item = $sloter, num = 1)
         ShowAnimationReward(cfgKey = "myplugin/toy_gift_02", player = $obj1, type = "Item", count = 1, fullName = $addItem)
-        StartTimer(rep = false, time = 40, object = $obj1, obj1 = $obj1, addItem = $addItem, event = "ADD_TOY_GIFT")
+        StartTimer(rep = false, time = 50, object = $obj1, obj1 = $obj1, addItem = $addItem, event = "ADD_TOY_GIFT")
         --ShowRewardItemEffect(type = "Item", count = 1, fullName = $addItem, player = $obj1) -- todo 改变弹窗
     }
     If($onlyOnce){-- 如果是不可重复的， 把item记到obj.vars里面

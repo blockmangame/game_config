@@ -4574,6 +4574,16 @@ ENTITY_BUY_APPSTOP {
             UploadPrivilege(player = $obj1) --上报租地特权
         }
     }
+    If($shopType ~= "1"){
+        Return()
+    }
+    If(GetItemCfg(fullName = $itemName, key = "base") == "car_base"){
+        $tipType = 0
+        ShowDialogTip(entity = $obj1, tipType = $tipType,p1="gui.hint",p2="item.pick.bag",p3="sure", event = "OPEN_HINT_BUY",context = {sellItem = $itemName}
+            ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+    }Else{
+        ShowRewardItemEffect(fullName = $itemName, count = 1, type = "Item", player = $obj1)
+    }
 }
 UPLOAD_PRIVILEGE_SUCCEED(){-- 购买租地特权成功，重新分配服务器
     $obj1.hasRelease = true
@@ -6201,6 +6211,11 @@ SHOW_GOTO_APP_SHOP_UI_RESULT
 }
 
 ADD_TOY_GIFT(){
+    If(GetItemCfg(fullName = $addItem, key = "base") == "car_base"){
+        $tipType = 0
+        ShowDialogTip(entity = $obj1, tipType = $tipType,p1="gui.hint",p2="item.pick.bag",p3="sure"
+            ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+    }
     AddItem(entity = $obj1, cfg = $addItem, count = 1)
 }
 
