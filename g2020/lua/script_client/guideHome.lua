@@ -80,7 +80,7 @@ local function rangeShowUIOnVPos(pos, ui, minDis, maxDis)
 end
 
 --mapdoor
-do
+function GuideHome.MakeMapDoor()
 	for name, cfg in pairs(uicfg) do
 		if name == "home" or mapDoor[name] then
 			goto continue
@@ -93,11 +93,12 @@ do
 end
 
 --homedoor
-if not homeDoor then
-	homeDoor = getItem(uicfg["home"])
-end
-
 function GuideHome.showHomeUI(pos)
+	if not homeDoor then
+		homeDoor = getItem(uicfg["home"])
+	else
+		homeDoor:SetVisible(false)
+	end
 	if lastShowTimer then
 		lastShowTimer()
 		lastShowTimer = nil
@@ -106,6 +107,27 @@ function GuideHome.showHomeUI(pos)
 	pos.y = pos.y + 1
 	local cfg = uicfg["home"]
 	lastShowTimer = rangeShowUIOnVPos(pos, homeDoor, cfg.minDis, cfg.maxDis)
+end
+
+function GuideHome.resetDoor(pos)
+	if lastShowTimer then
+		lastShowTimer()
+		lastShowTimer = nil
+	end
+	if homeDoor then
+		homeDoor:SetVisible(false)
+		homeDoor = nil
+	end
+	for _, ui in pairs(mapDoor) do
+		ui:SetVisible(false)
+	end
+	for _, timer in pairs(mapDoorTimer) do
+		timer()
+	end
+	mapDoor = {}
+	mapDoorTimer = {}
+	GuideHome.MakeMapDoor()
+	GuideHome.showHomeUI(pos)
 end
 
 return GuideHome
