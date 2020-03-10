@@ -76,6 +76,10 @@ function handles:ShowDialogTip(packet)
         packet.regId, packet.modName, table.unpack(args))
 end
 
+function handles:ShowInviteTipByScript(packet)
+    Lib.emitEvent(Event.EVENT_SHOW_INVITE_TIP_BY_SCRIPT, packet)
+end
+
 function handles:SyncStatesData(packet)
     Lib.emitEvent(Event.EVENT_SYNC_STATES_DATA, packet)
 end
