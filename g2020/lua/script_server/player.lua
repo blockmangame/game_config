@@ -1,6 +1,6 @@
 
 function Player:showDialogTip(tipType, event, args, context, dialogContinuedTime)
-	local modName = "dialogTip" .. self.objID .. World.Now()
+	local modName = "dialogTip" .. (tipType or "") .. (event or "") .. World.Now() .. os.time() .. math.random(0, 99999)
 	local regId = event and self:regCallBack(modName, {[tostring(tipType)] = event}, true, true, context)
 	-- if use "dialogTip" to get regId, then , if have more than twice request, this regId will wrong
 	self:sendPacket({
