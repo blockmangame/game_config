@@ -94,7 +94,7 @@ CLAC_IS_ON_BLOCK_RIDE_FILED{
         op = "add"
     )
     SetEntityPosition(entity = $carrier or $obj1, map = $map, ry = $ry or 0, pos = $pos)
-    ChangeCameraView(entity = $obj2, yaw = $ry, pitch = 30, distance = 5, smooth = 1, offset = {x = 0, y = 0, z = 0})
+    ChangeCameraView(player = $obj2, yaw = $ry, pitch = 30, distance = 5, smooth = 1, offset = {x = 0, y = 0, z = 0})
     $obj2.lastInBlockRideRegion = nil
 }
 
