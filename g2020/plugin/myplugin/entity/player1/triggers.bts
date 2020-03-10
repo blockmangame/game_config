@@ -4300,6 +4300,11 @@ MAC_TASK_COUNT_RESET(){--第二天，刷新最大累计
     }
 }
 INIT_WORK_TASK(){ --初始打工
+    $tempDay = GetDayOfYear(time = GetTime())
+    If($tempDay ~= $obj1.taskLastDay){
+        $obj1.worktaskCount = 0
+        $obj1.taskLastDay = $tempDay
+    }
     $taskKey = [
         "myplugin/orderNpc/key_4",
         "myplugin/orderNpc/key_3",
