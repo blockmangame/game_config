@@ -67,24 +67,36 @@
             "z": 2
         }
     },
-    "interactionUI": {
-        "cfgKey": "interactionUI",
-        "centerBtns": [
-            {
-                "text": "interaction_drive",
-                "enableTextBorder": true,
-                "image": "plugin/myplugin/image/hand_click.png",
-                "event": "RIDE_ON",
-                "imageSize": {
-                    "width": "60",
-                    "height": "60"
+    "interactionUI": [
+        {
+            "cfgKey": "interactionUI",
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0.7,
+                    "z": 0
                 }
-            }
-        ],
-        "followParams": {
-            "followScenePos": false
+            },
+            "centerBtns": [
+                {
+                    "text": "interaction_drive",
+                    "enableTextBorder": true,
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "RIDE_ON_INDEX_1",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 1
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+					"widgetFileName": "widget_button_image_center"
+                }
+            ]
         }
-    },
+    ],
     "actorName": "g2020_car06.actor",
     "base": "car_base",
     "autoRotateColliderBox": true,

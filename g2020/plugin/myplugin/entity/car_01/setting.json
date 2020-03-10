@@ -107,31 +107,66 @@
             }
         ]
     },
-    "interactionUI": {
-        "cfgKey": "interactionUI",
-        "followParams": {
-            "followScenePos": false,
-            "offset": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            }
-        },
-        "centerBtns": [
-            {
-                "text": "interaction_drive",
-                "enableTextBorder": true,
-                "image": "plugin/myplugin/image/hand_click.png",
-                "event": "RIDE_ON",
-                "imageSize": {
-                    "width": "60",
-                    "height": "60"
+    "interactionUI": [
+        {
+            "cfgKey": "interactionUI",
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.6,
+                    "y": 1,
+                    "z": -0.3
                 }
-            }
-        ]
-    },
+            },
+            "centerBtns": [
+                {
+                    "text": "interaction_drive",
+                    "enableTextBorder": true,
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "RIDE_ON_INDEX_1",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 1
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+					"widgetFileName": "widget_button_image_center"
+                }
+            ]
+        },
+        {
+            "cfgKey": "interactionUI",
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.6,
+                    "y": 1,
+                    "z": -0.3
+                }
+            },
+            "centerBtns": [
+                {
+                    "text": "interation_get_on",
+                    "enableTextBorder": true,
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "RIDE_ON_INDEX_2",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 2
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+					"widgetFileName": "widget_button_image_center"
+                }
+            ]
+        }
+    ],
     "interaction": {
-        "radius": 3,
+        "radius": 5,
         "offset": {
             "x": 0,
             "y": -1,

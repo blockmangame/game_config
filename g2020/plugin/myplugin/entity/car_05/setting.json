@@ -36,6 +36,25 @@
                 "base": "riding"
             },
             "attachPoint": "ride1"
+        },
+        {
+            "yaw": 0,
+            "pos": {
+                "y": 1,
+                "z": 0,
+                "x": 0
+            },
+            "out": {
+                "y": 2,
+                "z": 0,
+                "x": 0.5
+            },
+            "ctrl": false,
+            "view": false,
+            "passengerAction": {
+                "base": "riding"
+            },
+            "attachPoint": "ride2"
         }
     ],
     "attachPoints": [
@@ -48,7 +67,24 @@
                 "z": 90
             },
             "position": {
+                "x": 0.2,
+                "y": 0,
+                "z": 0
+            },
+            "scale": 1,
+            "propagateScaling": true,
+            "matchActorOrientation": true
+        },
+        {
+            "name": "ride2",
+            "bone": "s_car_05",
+            "rotation": {
                 "x": 0,
+                "y": 90,
+                "z": 90
+            },
+            "position": {
+                "x": -0.4,
                 "y": 0,
                 "z": 0
             },
@@ -70,31 +106,66 @@
             }
         ]
     },
-    "interactionUI": {
-        "cfgKey": "interactionUI",
-        "followParams": {
-            "followScenePos": false,
-            "offset": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            }
-        },
-        "centerBtns": [
-            {
-                "text": "interaction_drive",
-                "enableTextBorder": true,
-                "image": "plugin/myplugin/image/hand_click.png",
-                "event": "RIDE_ON",
-                "imageSize": {
-                    "width": "60",
-                    "height": "60"
+    "interactionUI": [
+        {
+            "cfgKey": "interactionUI",
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0.1
                 }
-            }
-        ]
-    },
+            },
+            "centerBtns": [
+                {
+                    "text": "interaction_drive",
+                    "enableTextBorder": true,
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "RIDE_ON_INDEX_1",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 1
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+					"widgetFileName": "widget_button_image_center"
+                }
+            ]
+        },
+        {
+            "cfgKey": "interactionUI",
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": -0.6
+                }
+            },
+            "centerBtns": [
+                {
+                    "text": "interation_get_on",
+                    "enableTextBorder": true,
+                    "image": "plugin/myplugin/image/hand_click.png",
+                    "event": "RIDE_ON_INDEX_2",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 2
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+					"widgetFileName": "widget_button_image_center"
+                }
+            ]
+        }
+    ],
     "interaction": {
-        "radius": 3,
+        "radius": 4,
         "offset": {
             "x": 0,
             "y": -1,
