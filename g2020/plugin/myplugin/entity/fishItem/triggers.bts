@@ -29,6 +29,6 @@ BUY_SHOP(){
          args = [$Name]
       }
       $tipType = 5
-      ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj2, tipType = $tipType, event = "SURE_BUY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
+      ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj2, tipType = $tipType, event = "SURE_BUY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
    }
 }

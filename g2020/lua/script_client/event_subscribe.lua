@@ -82,3 +82,7 @@ Lib.subscribeEvent(Event.EVENT_SYNC_STATES_DATA, function(packet)
     UI:openWnd("playerState")
     Lib.emitEvent(Event.EVENT_SYNC_DATA, packet.data)
 end)
+
+Lib.subscribeEvent(Event.EVENT_SHOW_REWARD_DIALOG, function(info)
+    UI:openWnd("rewardTip", info)
+end)

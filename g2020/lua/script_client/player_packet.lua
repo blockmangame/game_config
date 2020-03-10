@@ -86,13 +86,19 @@ function handles:RequestTrade(packet) --接到请求交易
         titleText = "TRADE",
 	    msgText = {"gui_request_trade", packet.playerName}
     }
-    UILib.openChoiceDialog(showArgs, function(isLeft)
-        if not isLeft then
-            Me:sendPacket({pid = "AcceptTrade", sessionId = packet.sessionId})
-        else 
-            Me:sendPacket({pid = "RefuseTrade", sessionId = packet.sessionId})
+    local callback = function(sure)
+        if not sure then
+            return
         end
-    end)
+        UILib.openChoiceDialog(showArgs, function(isLeft)
+            if not isLeft then
+                Me:sendPacket({pid = "AcceptTrade", sessionId = packet.sessionId})
+            else 
+                Me:sendPacket({pid = "RefuseTrade", sessionId = packet.sessionId})
+            end
+        end)
+    end
+    UI:openWnd("tradeHint", {text = "gui.trade.risk.hint"}, callback)
 end
 
 local showTop = 1
@@ -128,4 +134,8 @@ function handles:TradePlayerCancel(packet) --对方中途取消
     Client.ShowTip(1, "gui.trade.close", 40)
     self:clearTrade()
     UI:closeWnd("tradeUI")
+end
+
+function handles:ShowRewardDialog(packet)
+    Lib.emitEvent(Event.EVENT_SHOW_REWARD_DIALOG, packet)
 end

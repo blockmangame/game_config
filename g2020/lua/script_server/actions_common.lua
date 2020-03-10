@@ -328,3 +328,21 @@ function Actions.DeleteItem(data, params, context)
     local item = bag:remove_item(item:slot())
 	return true
 end
+
+function Actions.ShowRewardDialog(data, params, context)
+    local player = params.player
+    if not player then
+        return
+    end
+
+    local regId = nil
+    if params.event then
+        regId = player:regCallBack("rewardTipDialog", { rewardTip = params.event}, true, true)
+    end
+
+    player:sendPacket({
+        pid = "ShowRewardDialog",
+        regId = regId,
+    })
+
+end

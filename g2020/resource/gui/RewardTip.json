@@ -1,0 +1,828 @@
+{
+    "Dialog": {
+        "Window": {
+            "Type": "Layout",
+            "Name": "RewardTip",
+            "Property": [
+                {
+                    "Name": "Area",
+                    "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                },
+                {
+                    "Name": "BackgroundColor",
+                    "Value": "0 0 0 0.392157"
+                },
+                {
+                    "Name": "WndOpenSound",
+                    "Value": "0"
+                },
+                {
+                    "Name": "WndCloseSound",
+                    "Value": "0"
+                }
+            ],
+            "Window": [
+                {
+                    "Type": "StaticImage",
+                    "Name": "RewardTip-bg",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0,0},{0,779},{0,359}}"
+                        },
+                        {
+                            "Name": "VerticalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "StretchType",
+                            "Value": "NineGrid"
+                        },
+                        {
+                            "Name": "StretchOffset",
+                            "Value": "130 130 110 75"
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "ImageName",
+                            "Value": "set:reward_tip.json image:bg"
+                        }
+                    ],
+                    "Window": [
+                        {
+                            "Type": "StaticImage",
+                            "Name": "RewardTip-bank",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,135},{0,35},{0,272},{0,87}}"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "ImageName",
+                                    "Value": "set:reward_tip.json image:bank"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "StaticImage",
+                            "Name": "RewardTip-dollar",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,-265},{0,90},{0,-244},{0,142}}"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Right"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "ImageName",
+                                    "Value": "set:reward_tip.json image:money"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "StaticImage",
+                                    "Name": "RewardTip-dollar-bg",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,40},{0,0},{0,136},{0,52}}"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "ImageName",
+                                            "Value": "set:reward_tip.json image:input"
+                                        }
+                                    ],
+                                    "Window": [
+                                        {
+                                            "Type": "StaticText",
+                                            "Name": "RewardTip-dollar-text",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                },
+                                                {
+                                                    "Name": "VerticalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "HorizontalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "Text",
+                                                    "Value": "20"
+                                                },
+                                                {
+                                                    "Name": "Font",
+                                                    "Value": "HT20"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "TextHorzAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "TextLineExtraSpace",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "TextVertAlignment",
+                                                    "Value": "Centre"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Layout",
+                            "Name": "RewardTip-contents",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,113},{0,20},{0,665},{0,297}}"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "StaticText",
+                                    "Name": "RewardTip-text1",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,20},{0,80},{0,125},{0,119}}"
+                                        },
+                                        {
+                                            "Name": "Text",
+                                            "Value": "pay to the  order of"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextColor",
+                                            "Value": "0.0823529 0.698039 0.74902 1"
+                                        },
+                                        {
+                                            "Name": "TextLineExtraSpace",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextVertAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextWordWrap",
+                                            "Value": "true"
+                                        }
+                                    ],
+                                    "Window": [
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "RewardTip-line1",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,100},{0,43},{0,348},{0,46}}"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:reward_tip.json image:line"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticText",
+                                            "Name": "RewardTip-name",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,107},{0,0},{0,347},{0,45}}"
+                                                },
+                                                {
+                                                    "Name": "Text",
+                                                    "Value": "Hahahahaha"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "TextColor",
+                                                    "Value": "0.396078 0.380392 0.360784 1"
+                                                },
+                                                {
+                                                    "Name": "TextHorzAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "TextLineExtraSpace",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "TextVertAlignment",
+                                                    "Value": "Centre"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Type": "StaticText",
+                                    "Name": "RewardTip-text2",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,-30},{0,135},{0,38},{0,160}}"
+                                        },
+                                        {
+                                            "Name": "HorizontalAlignment",
+                                            "Value": "Right"
+                                        },
+                                        {
+                                            "Name": "Text",
+                                            "Value": "Bucks"
+                                        },
+                                        {
+                                            "Name": "Font",
+                                            "Value": "HT22"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextColor",
+                                            "Value": "0.00784314 0.647059 0.698039 1"
+                                        },
+                                        {
+                                            "Name": "TextHorzAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextLineExtraSpace",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextVertAlignment",
+                                            "Value": "Centre"
+                                        }
+                                    ],
+                                    "Window": [
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "RewardTip-line2",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,-433},{0,28},{0,75},{0,31}}"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:reward_tip.json image:line"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticText",
+                                            "Name": "RewardTip-number",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,-240},{0,0},{0,-170},{0,30}}"
+                                                },
+                                                {
+                                                    "Name": "Text",
+                                                    "Value": "twenty"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "TextColor",
+                                                    "Value": "0.396078 0.380392 0.360784 1"
+                                                },
+                                                {
+                                                    "Name": "TextLineExtraSpace",
+                                                    "Value": "0"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Type": "StaticText",
+                                    "Name": "RewardTip-text3",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,20},{0,185},{0,95},{0,211}}"
+                                        },
+                                        {
+                                            "Name": "Text",
+                                            "Value": "Memo"
+                                        },
+                                        {
+                                            "Name": "Font",
+                                            "Value": "HT20"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextColor",
+                                            "Value": "0.00784314 0.647059 0.698039 1"
+                                        },
+                                        {
+                                            "Name": "TextHorzAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextVertAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextLineExtraSpace",
+                                            "Value": "0"
+                                        }
+                                    ],
+                                    "Window": [
+                                        {
+                                            "Type": "StaticText",
+                                            "Name": "RewardTip-time",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,110},{0,0},{0,345},{0,30}}"
+                                                },
+                                                {
+                                                    "Name": "Text",
+                                                    "Value": "playing for 10 mins"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "TextColor",
+                                                    "Value": "0.396078 0.380392 0.360784 1"
+                                                },
+                                                {
+                                                    "Name": "TextVertAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "TextLineExtraSpace",
+                                                    "Value": "0"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "RewardTip-line3",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,82},{0,29},{0,330},{0,32}}"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:reward_tip.json image:line"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticText",
+                                            "Name": "RewardTip-gameName",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,345},{0,0},{0,509},{0,30}}"
+                                                },
+                                                {
+                                                    "Name": "Text",
+                                                    "Value": "Blockman Go"
+                                                },
+                                                {
+                                                    "Name": "Font",
+                                                    "Value": "HT20"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "TextColor",
+                                                    "Value": "0.00784314 0.647059 0.698039 1"
+                                                },
+                                                {
+                                                    "Name": "TextVertAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "TextLineExtraSpace",
+                                                    "Value": "0"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Button",
+                            "Name": "RewardTip-btn",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,286},{0,-40},{0,516},{0,28}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Bottom"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
+                                    "Name": "StretchOffset",
+                                    "Value": "16 16 0 0"
+                                },
+                                {
+                                    "Name": "NormalImage",
+                                    "Value": "set:reward_tip.json image:blueBtn"
+                                },
+                                {
+                                    "Name": "PushedImage",
+                                    "Value": "set:reward_tip.json image:blueBtn"
+                                },
+                                {
+                                    "Name": "SoundName",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "TextHorzAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextVertAlignment",
+                                    "Value": "Centre"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "StaticText",
+                                    "Name": "RewardTip-btn-text",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,0},{-0.08,0},{1,0},{0.92,0}}"
+                                        },
+                                        {
+                                            "Name": "Text",
+                                            "Value": "兑现"
+                                        },
+                                        {
+                                            "Name": "Font",
+                                            "Value": "HT22"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextHorzAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextVertAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextLineExtraSpace",
+                                            "Value": "0"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
