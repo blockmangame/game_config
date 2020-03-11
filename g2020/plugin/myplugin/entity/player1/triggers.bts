@@ -5625,7 +5625,7 @@ PLAYER_ON_VISIT {--same server
         If($isInHouse and $obj1.teleMap ~= GetEntityMap(entity = $obj1)){
             ShowTitleBarPage(entity = $obj1, closeWin = true)
         }
-        CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
+        CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
         SetEntityPosition(map = $obj1.teleMap, entity = $obj1, pos = $obj1.telePos)
         $obj1.teleMap = nil
         $obj1.telePos = nil
