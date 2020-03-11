@@ -370,16 +370,17 @@ function Actions.ShowRewardDialog(data, params, context)
 
 end
 
-function Actions.ShowRiskHint(data, params, context)
+function Actions.ShowWarmPrompt(data, params, context)
     local player = params.player
     if not player then
         return
     end
-    local regId = player:regCallBack("ShowRiskHint", {["sure"] = params.sureEvent, ["no"] = params.noEvent}, true, true, params.context)
+    local regId = player:regCallBack("ShowWarmPrompt", {["sure"] = params.sureEvent or false, ["no"] = params.noEvent or false}, true, true, params.context)
     player:sendPacket({
-        pid = "ShowRiskHint",
+        pid = "ShowWarmPrompt",
         regId = regId,
         text = params.text,
-        btnText = params.btnText
+        btnText = params.btnText,
+        disableClose = params.disableClose
     })
 end

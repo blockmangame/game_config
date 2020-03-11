@@ -5759,7 +5759,7 @@ REALLY_AT_PARTY(debug = false){
         $obj1.createPartyCountPerGame = $obj1.createPartyCountPerGame + 1
         $obj1.inSelfParty = 1
         BroadcastPartyInvite(player = $obj1)
-        ShowRiskHint(player = $obj1, text = "gui.party.broadcast.success", btnText = "ui_sure")
+        ShowWarmPrompt(player = $obj1, text = "gui.party.broadcast.success", btnText = "ui_sure")
     }
     Else{
         $obj1.joinPartyCount = $obj1.joinPartyCount + 1
@@ -6533,19 +6533,43 @@ EDIT_TEAM_NAME_BUTTON_SURE
 --交易内容
 REQ_TRADE()
 {
+    If($obj1.trading){
+        ShowTip(entity = $obj2, tipType = 1, textKey = "gui.target.trading")
+        Return()
+    }
+    $Context = {
+        obj2 = $obj1
+    }
+    ShowWarmPrompt(player = $obj2, sureEvent = "CALL_TRADE_REQ", noEvent = "CALL_TRADE_REQ", context = $Context, disableClose = true)
+}
+CALL_TRADE_REQ()
+{
+    $tipType = 2
+    ShowDialogTip(entity = $obj2, tipType = $tipType,p1=["gui_request_trade", GetEntityName(entity = $obj1)], event = "SURE_DO_TRADE",context = {obj2 =$obj1},
+    dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+}
+SURE_DO_TRADE()
+{
+    If($result == false){
+        ShowTip(entity = $obj2, tipType = 1, textKey = "gui_trade_refuse")
+        Return()
+    }
+    $Context = {
+        obj1 = $obj1,
+        obj2 = $obj2
+    }
+    ShowWarmPrompt(player = $obj1, sureEvent = "SURE_TRADE_RISK", noEvent = "SURE_TRADE_RISK", context = $Context, disableClose = true)
+}
+SURE_TRADE_RISK()
+{
     $trayType =  [21, 22, 23, 24 ]
 	$itemFilters = {
 		
     }
-    $Context = {
-        obj1 = $obj2
-    }
-    --ShowRiskHint(player = $obj1, sureEvent = "CALL_TRADE_REQ", text = "gui.trade.xxxx")
-	RequestTrade(player = $obj2, target = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
-}
-CALL_TRADE_REQ()
-{
-    
+    $obj1.trading = true
+    $obj2.trading = true
+    --RequestTrade(player = $obj2, target = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
+    CreateTrade(player1 = $obj2, player2 = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
 }
 TRADE_CAR()
 {
