@@ -1,0 +1,67 @@
+{
+    "skin": {
+        "body": "45"
+    },
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    -0.9,
+                    1.1,
+                    -0.4,
+                    0.9,
+                    0,
+                    -0.7
+                ]
+            },
+            {
+                "type": "Box",
+                "params": [
+                    -0.9,
+                    1.1,
+                    0.4,
+                    0.9,
+                    0,
+                    0.7
+                ]
+            },
+            {
+                "type": "Box",
+                "params": [
+                    1.3,
+                    1.1,
+                    0.4,
+                    0.9,
+                    0,
+                    -0.4
+                ]
+            },
+            {
+                "type": "Box",
+                "params": [
+                    -1.3,
+                    1.1,
+                    0.4,
+                    -0.9,
+                    0,
+                    -0.4
+                ]
+            }
+        ]
+    },
+    "actorName": "g2020_fru_chairs4.actor",
+    "base": "fur_base",
+    "sellMoney": 1,
+    "sellByDiscountMoney": 0,
+    "interaction": {
+        "radius": 3,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "interactionUI": 0
+}
