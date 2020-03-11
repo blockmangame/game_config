@@ -4706,8 +4706,12 @@ POP_UP_BUY_PRIVILEGE
         msg = "gui_sure_buy_this",
         args = [$itemdesc]
     }
-    ShowShopItemDetail(player = $obj1, event = "SURE_BUY_PRI", context = $Context, hintImage = $hintImage, price = $price, desc = $itemdesc, tip = $descName)
+    ShowShopItemDetail(player = $obj1, event = "SURE_BUY_PRI", eventNo = "POP_PRI_NO", context = $Context, hintImage = $hintImage, price = $price, desc = $itemdesc, tip = $descName)
     --ShowDialogTip(entity = $obj1, tipType = 5, event = "SURE_BUY_PRI", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
+}
+POP_PRI_NO()
+{
+    CallTrigger(object = $obj1, event = $buyResultEvent, succeed = false, shopIndex = $shopIndex)
 }
 SURE_BUY_PRI 
 {
@@ -6545,20 +6549,37 @@ REQ_TRADE()
 }
 CALL_TRADE_REQ()
 {
-    $tipType = 2
-    ShowDialogTip(entity = $obj2, tipType = $tipType,p1=["gui_request_trade", GetEntityName(entity = $obj1)], event = "SURE_DO_TRADE",context = {obj2 =$obj1},
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = nil,
+        rightContent = "ui_sure"
+    }
+    $content = {
+        msg = "gui_request_trade",
+        args = [GetEntityName(entity = $obj1)]
+    }
+    $tipType = 5
+    ShowDialogTip(entity = $obj2, tipType = $tipType,p1 = "ui_tip", p2 = $content, p3 = $btnInfo, event = "SURE_DO_TRADE", context = {obj2 =$obj1},
     dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
 }
 SURE_DO_TRADE()
 {
-    If($result == false){
+    If($button == "left" or $button == "close"){
         ShowTip(entity = $obj2, tipType = 1, textKey = "gui_trade_refuse")
+        Return()
+    }    
+    If($obj1.trading or $obj2.trading){
+        ShowTip(entity = $obj1, tipType = 1, textKey = $obj1.trading and "gui.trading.cantTrading" or "gui.ohthertrading.cantTrading" )
+        ShowTip(entity = $obj2, tipType = 1, textKey = $obj2.trading and "gui.trading.cantTrading" or "gui.ohthertrading.cantTrading")
         Return()
     }
     $Context = {
         obj1 = $obj1,
         obj2 = $obj2
     }
+    $obj1.trading = true
+    $obj2.trading = true
     ShowWarmPrompt(player = $obj1, sureEvent = "SURE_TRADE_RISK", noEvent = "SURE_TRADE_RISK", context = $Context, disableClose = true)
 }
 SURE_TRADE_RISK()
@@ -6567,8 +6588,6 @@ SURE_TRADE_RISK()
 	$itemFilters = {
 		
     }
-    $obj1.trading = true
-    $obj2.trading = true
     --RequestTrade(player = $obj2, target = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
     CreateTrade(player1 = $obj2, player2 = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
 }

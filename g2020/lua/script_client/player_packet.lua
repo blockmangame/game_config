@@ -51,6 +51,7 @@ end
 function handles:ShopItemDetail(packet)
     UILib.openShopBuy(packet.hintImage, function(selectedLeft)
         if not selectedLeft then
+            Me:doCallBack("ItemDetail", "no", packet.regId)
             return
         end
         Me:doCallBack("ItemDetail", "sure", packet.regId)

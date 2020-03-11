@@ -1049,3 +1049,13 @@ DOFINISH_TRADE()
     $obj2.trading = false
     $needswap = false
 }
+TRADE_CANCEL()
+{
+    $obj1.trading = false
+    $obj2.trading = false
+}
+TRADE_CLOSE()
+{
+    $obj1.trading = false
+    $obj2.trading = false
+}

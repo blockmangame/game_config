@@ -17,6 +17,9 @@ function M:init()
 
 	self:subscribe(self.colseButton, UIEvent.EventButtonClick, function()
 		UI:closeWnd(self)
+		if self.callBack then
+			self.callBack(false)
+		end
 	end)
 
 	self:subscribe(self.sureButton, UIEvent.EventButtonClick, function()
