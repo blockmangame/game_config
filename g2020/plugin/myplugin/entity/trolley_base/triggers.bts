@@ -17,6 +17,5 @@ FUNC_STATE_SYNC_TO_RIDER_AND_PASSENGERS --params: isAdd, player
     If($owner == $player) {
         Return()
     }
-    SyncStatesData(player = $player, isAdd = $isAdd, states = $owner.curStates, target = $owner)
-    SyncStatesData(player = $owner, isAdd = $isAdd, states = $player.curStates, target = $player)
+    CallTrigger(object = $player, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = $isAdd, needSyncPlayers = [$owner], isSyncAll = true)
 }

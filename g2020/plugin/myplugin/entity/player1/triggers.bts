@@ -1815,27 +1815,41 @@ FUNC_STATE_ADD --params: state, stateBase, skill
     CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state, skill = $skill)
 }
 
+FUNC_SYNC_STATES_TO_OTHERS --params: isAdd, states, needSyncPlayers, isSyncAll
+{
+    Foreach(array = $needSyncPlayers or [], key = "player")
+    {
+        If($isSyncAll) { $states = $obj1.curStates }
+        SyncStatesData(player = $player, isAdd = $isAdd, states = $states, target = $obj1)
+        If($isSyncAll) { $states = $player.curStates }
+        SyncStatesData(player = $obj1, isAdd = $isAdd, states = $states, target = $player)
+    }
+}
+
 FUNC_STATE_SYNC_TO_OTHER --params: isAdd, state
 {
     $states = [$state]
-    $ride = GetRideOn(entity = $ride)
+    $ride = GetRideOn(entity = $obj1)
+    $needSyncPlayers = [$obj1, $ride]
     $passengers = NewDictionary(GetPassengers(entity = $obj1))
     ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val")
     {
-        SyncStatesData(player = GetObject(objID = $val), isAdd = $isAdd, states = $states, target = $obj1)
+        $player = GetObject(objID = $val)
+        ArrayAppend(array = $needSyncPlayers, value = $player)
     }
-    SyncStatesData(player = $ride, isAdd = $isAdd, states = $states, target = $obj1)
-    SyncStatesData(player = $obj1, isAdd = $isAdd, states = $states, target = $obj1)
     If($obj1.createdTrolley) {
         $trolleyPassengers = NewDictionary(GetPassengers(entity = $obj1.createdTrolley))
         ForeachDictionary(dict = $trolleyPassengers, keyName = "key", valueName = "val") {
             $player = GetObject(objID = $val)
-            SyncStatesData(player = $player ~= $obj1 and $player or nil, isAdd = $isAdd, states = $states, target = $obj1)
+            If($player ~= $obj1) {
+                ArrayAppend(array = $needSyncPlayers, value = $player)
+            }
         }
     } ElseIf($obj1.useTrolley) {
         $trolleyOwner = GetOwner(entity = $ride)
-        SyncStatesData(player = $trolleyOwner, isAdd = $isAdd, states = $states, target = $obj1)
+        ArrayAppend(array = $needSyncPlayers, value = $trolleyOwner)
     }
+    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = $isAdd, states = $states, needSyncPlayers = $needSyncPlayers)
 }
 
 FUNC_STATE_START_AUTO_VANISH_TIME --parmas: state, skill
@@ -1893,8 +1907,7 @@ FUNC_STATE_RIDE_OPERATION --params: ride, isRideOff
         Return()
     }
     If(IsPlayer(entity = $ride)) {
-        SyncStatesData(player = $ride, isAdd = not $isRideOff, states = $obj1.curStates, target = $obj1)
-        SyncStatesData(player = $obj1, isAdd = not $isRideOff, states = $ride.curStates, target = $ride)
+        CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = not $isRideOff, needSyncPlayers = [$ride], isSyncAll = true)
     }
     $event = $isRideOff and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE"
     If($ride.cfg.releaseState)
