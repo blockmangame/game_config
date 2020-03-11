@@ -320,8 +320,9 @@ function M:fetchAllBagItem()
         end)
         self:subscribe(itemUI, UIEvent.EventWindowLongTouchEnd, function()
             self:setItemDescUI(false, item)
-        end)
-        self:subscribe(itemUI, UIEvent.EventButtonClick, function(ui)
+		end)
+		unifyProc(self, itemUI, func)
+		unifyProc(self, itemUI, function(ui)
             if not item.tray_type then
                 return
             end
