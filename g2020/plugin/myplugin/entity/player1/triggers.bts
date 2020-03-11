@@ -214,6 +214,10 @@ CREATE_OWNER_HOUSE{
     If(not $house){
         KickOutPlayer(entity = $obj1) -- 踢出服务器多分配的玩家
     }
+    CallTrigger(object = $obj1, obj1 = $obj1, house = $house, event = "GOTO_INSIDE_HOUSE")
+}
+
+GOTO_INSIDE_HOUSE{
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     $yaw = 0
     If($obj1.curHouseCfg){
@@ -222,6 +226,18 @@ CREATE_OWNER_HOUSE{
     SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
 	  pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+}
+
+ENTITY_DIE{
+    $house = $obj1.house
+    $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+    ReviveEntity(entity = $obj1, map = $houseInsideMap)
+    If($obj1.role == @child){
+        CallTrigger(obj1 = $obj1, event = "CHANGE_PLAYER_SCALE_CHILD")
+    }Else{
+        CallTrigger(obj1 = $obj1, event = "CHANGE_PLAYER_SCALE_ADULT")
+    }
+    CallTrigger(object = $obj1, obj1 = $obj1, house = $house, event = "GOTO_INSIDE_HOUSE")
 }
 
 MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建房子/这个逻辑作废，购买特权重新分配服务器
