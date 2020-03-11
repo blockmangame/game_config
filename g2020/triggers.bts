@@ -22,9 +22,9 @@ GAME_INIT
         -- dialogContinuedTime:窗口持续时间
         -- dialogContinuedTime 是打开的时候就开始计时,如果希望某个弹窗不会被挤掉，那么把该tip设置为nil即可
         [nil], -- tipType = 0
-        [nil], -- tipType = 1
-        [nil], -- tipType = 2
-        [nil], -- tipType = 3
+        [200], -- tipType = 1
+        [500], -- tipType = 2
+        [100], -- tipType = 3
         [nil], -- tipType = 4
         [600],  -- tipType = 5
         [nil]  -- tipType = 6
@@ -1045,5 +1045,7 @@ DOFINISH_TRADE()
     If(ArraySize(array = $car2) > 0){
         StartTimer(object = $obj2, event = "TRADE_CAR", car = $car2, time = 20)
     }
+    $obj1.trading = false
+    $obj2.trading = false
     $needswap = false
 }

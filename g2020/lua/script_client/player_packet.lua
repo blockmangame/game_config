@@ -144,10 +144,10 @@ function handles:ShowRewardDialog(packet)
     Lib.emitEvent(Event.EVENT_SHOW_REWARD_DIALOG, packet)
 end
 
-function handles:ShowRiskHint(packet)
+function handles:ShowWarmPrompt(packet)
     local callback = function(sure)
         local type = sure and "sure" or "no"
-        Me:doCallBack("ShowRiskHint", type, packet.regId)
+        Me:doCallBack("ShowWarmPrompt", type, packet.regId)
     end
-    UI:openWnd("tradeHint", {text = packet.text, btnText = packet.btnText}, callback)
+    UI:openWnd("tradeHint", {text = packet.text, btnText = packet.btnText, disableClose = packet.disableClose}, callback)
 end

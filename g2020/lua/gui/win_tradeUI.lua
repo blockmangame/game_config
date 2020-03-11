@@ -29,7 +29,7 @@ function M:init()
 	
 	--πÊ‘Ú∞¥≈•
 	self:subscribe(self:child("partyTradeUI-ruleBtn"), UIEvent.EventButtonClick, function()
-		UI:openWnd("tradeHint", {text = "gui.trade.risk.hint"})
+		UI:openWnd("tradeHint", {text = "gui.trade.risk.hint", disableClose = true})
 	end)
 
 	local closeTradeF = function()
