@@ -1807,7 +1807,7 @@ FUNC_STATE_GENERATE --params: stateBase, col, skill
 FUNC_STATE_ADD --params: state, stateBase, skill
 {
     ArrayAppend(array = $obj1.curStates, value = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_SYNC_TO_OTHER", isAdd = true, state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = true, state = $state)
 
     SetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase), value = true)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
@@ -1826,7 +1826,7 @@ FUNC_SYNC_STATES_TO_OTHERS --params: isAdd, states, needSyncPlayers, isSyncAll
     }
 }
 
-FUNC_STATE_SYNC_TO_OTHER --params: isAdd, state
+FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state
 {
     $states = [$state]
     $ride = GetRideOn(entity = $obj1)
@@ -2071,7 +2071,7 @@ FUNC_STATESKILL_REMOVE --params: state, skill
 
     $index = ArrayFind(array = $obj1.curStates, value = $state)
     If($index){ ArrayRemove(array = $obj1.curStates, index = $index) }
-    CallTrigger(object = $obj1, event = "FUNC_STATE_SYNC_TO_OTHER", isAdd = false, state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = false, state = $state)
 
     SetObjectVar(obj = $obj1, key = $hadState, value = false)
     CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
