@@ -5731,9 +5731,7 @@ LEAVE_PARTY_SUCCESS(debug = false){
     }
 }
 DATA_REPORT_PARTY{
-    $obj1.createPartyCountPerGame = 0
-    $obj1.joinPartyCountPerGame = 0
-
+    Test(msg = "DATA_REPORT_PARTY", createPartyCount = $obj1.createPartyCount, createPartyCountPerGame = $obj1.createPartyCountPerGame, joinPartyCount = $obj1.joinPartyCount, joinPartyCountPerGame = $obj1.joinPartyCountPerGame)
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.createPartyCount, array = [0, 9, 19, 49, 99, 199,  499, 999, 1999, 4999, 9999, 10000])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["party:create:sum", @rangeBoundary])
 
@@ -5745,6 +5743,9 @@ DATA_REPORT_PARTY{
 
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.joinPartyCountPerGame, array = [0, 9, 19, 49, 99, 100])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["party:join:single_game", @rangeBoundary])
+
+    $obj1.createPartyCountPerGame = 0
+    $obj1.joinPartyCountPerGame = 0
 }
 REALLY_AT_PARTY(debug = false){
     --in party now!
