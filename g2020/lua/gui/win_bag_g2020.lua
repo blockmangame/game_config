@@ -1,4 +1,4 @@
-local imageSet = L("imageSet", {})
+﻿local imageSet = L("imageSet", {})
 local path = "set:g2020_bag.json image:"
 
 local g2020ItemLevelDesc = {
@@ -322,7 +322,6 @@ function M:fetchAllBagItem()
         self:subscribe(itemUI, UIEvent.EventWindowLongTouchEnd, function()
             self:setItemDescUI(false, item)
 		end)
-		unifyProc(self, itemUI, func)
 		unifyProc(self, itemUI, function(ui)
             if not item.tray_type then
                 return
