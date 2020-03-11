@@ -27,6 +27,108 @@
             "z": 0
         }
     },
+    "interaction_choices_sit2_low_1": [
+        {
+            "cfgKey": "interaction_choices_sit2_low_1",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_low_1",
+                    "disableAutoHideText":true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.5,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit2_low_1",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_low_1",
+                    "toOther":true,
+                    "disableAutoHideText":true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.5,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "interaction_choices_sit2_low_2": [
+        {
+            "cfgKey": "interaction_choices_sit2_low_2",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_low_2",
+                    "disableAutoHideText":true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.5,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit2_low_2",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_low_2",
+                    "toOther":true,
+                    "disableAutoHideText":true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.5,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
     "interactionUI": [
         {
             "cfgKey": "interactionUI",
@@ -62,9 +164,9 @@
             "cfgKey": "interactionUI",
             "centerBtns": [
                 {
-                    "text": "you",
+                    "text": "sit2_low_1.text",
                     "image": "plugin/myplugin/image/fru_intUI/sit2.png",
-                    "event": "ENTITY_sit2_low_1",
+                    "nextCfgKey": "interaction_choices_sit2_low_1",
                     "checkCanHide": {
                         "funcName": "checkRideOnIndex",
                         "index": 23
@@ -72,7 +174,6 @@
                     "customCheckCanShow":{
                         "funcName": "checkCanPutBabyOnto"
                     },
-                    "disableAutoHideText":true,
                     "imageSize": {
                         "width": "60",
                         "height": "60"
@@ -84,39 +185,7 @@
                 "followScenePos": false,
                 "offset": {
                     "x": 0.5,
-                    "y": 1,
-                    "z": 0
-                }
-            }
-        },
-        {
-            "cfgKey": "interactionUI",
-            "centerBtns": [
-                {
-                    "showInteractingPlayerName": true,
-                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
-                    "event": "ENTITY_sit2_low_1",
-                    "toOther":true,
-                    "checkCanHide": {
-                        "funcName": "checkRideOnIndex",
-                        "index": 23
-                    },
-                    "customCheckCanShow":{
-                        "funcName": "checkCanPutBabyOnto"
-                    },
-                    "disableAutoHideText":true,
-                    "imageSize": {
-                        "width": "60",
-                        "height": "60"
-                    },
-                    "widgetFileName": "widget_button"
-                }
-            ],
-            "followParams": {
-                "followScenePos": false,
-                "offset": {
-                    "x": 0.5,
-                    "y": 0,
+                    "y": 0.5,
                     "z": 0
                 }
             }
@@ -135,6 +204,39 @@
                     "checkCanHide": {
                         "funcName": "checkRideOnIndex",
                         "index": 24
+                    },
+                    "customCheckCanHide":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "widgetFileName": "widget_button"
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.5,
+                    "y": 0.5,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit2_low_2.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "nextCfgKey": "interaction_choices_sit2_low_2",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 24
+                    },
+                    "customCheckCanShow":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
                     },
                     "widgetFileName": "widget_button"
                 }
