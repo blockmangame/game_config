@@ -374,6 +374,8 @@ function Player:StartTrade(packet) -- packet.tradeID, packet.targetUid, packet.t
     self:data("trade").tradeID = packet.tradeID
     local wnd = UI:openWnd("tradeUI")
     if wnd then
+        wnd:root():SetAlwaysOnTop(true)
+        wnd:root():SetLevel(0)
         wnd:startTrade(packet.tradeID, packet.targetUid)
     end
 end

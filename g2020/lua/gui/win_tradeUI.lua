@@ -176,7 +176,9 @@ end
 
 function M:openBagAddItem()
 	 World.Timer(10, function()
-        UI:openWnd("bag_g2020")
+		local wnd = UI:openWnd("bag_g2020")
+		wnd:root():SetAlwaysOnTop(true)
+        wnd:root():SetLevel(0)
     end)
 end
 

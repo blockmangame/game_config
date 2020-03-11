@@ -31,7 +31,6 @@ function M:onOpen(showArg, callBack)
 	else
 		self:child("tradeRiskHint-close"):SetVisible(true)
 	end
-	self:root():SetAlwaysOnTop(true)
 end
 
 return M

@@ -74,7 +74,8 @@ function M:initData()
     end
     self.tabItemList = {}
     self.curDelStatus = false
-	self.isOpen = false
+    self.isOpen = false
+    self.toplevel = self:root():GetLevel()
 end
 
 
@@ -502,6 +503,8 @@ end
 function M:onClose()
     self.isOpen = false
     Me:updateGiveAwayStatus(false, nil) -- 3-5
+    self:root():SetAlwaysOnTop(false)
+    self:root():SetLevel(self.toplevel)
 end
 
 

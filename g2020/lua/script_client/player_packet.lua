@@ -150,5 +150,7 @@ function handles:ShowWarmPrompt(packet)
         local type = sure and "sure" or "no"
         Me:doCallBack("ShowWarmPrompt", type, packet.regId)
     end
-    UI:openWnd("tradeHint", {text = packet.text, btnText = packet.btnText, disableClose = packet.disableClose}, callback)
+    local ui = UI:openWnd("tradeHint", {text = packet.text, btnText = packet.btnText, disableClose = packet.disableClose}, callback)
+    ui:root():SetAlwaysOnTop(true)
+	ui:root():SetLevel(0)
 end
