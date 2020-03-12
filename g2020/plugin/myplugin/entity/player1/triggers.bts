@@ -2883,9 +2883,9 @@ INTERACTION_APPLY_FAMILY   --申请加入家庭
     }
 
     ShowBubbleMsg(entity = $obj2, textKey = "ui_family_ask_for_family", textP1 = GetEntityName(entity = $obj1))
-    CallTrigger(context = $context, event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "applyJoinFamilyBuff")
+    CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "applyJoinFamilyBuff")
     $tipType = 5
-    ShowDialogTip(dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "APPLY_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
+    ShowDialogTip(context = $context, dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "APPLY_JOIN_FAMILY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
 }
 
 APPLY_JOIN_FAMILY
