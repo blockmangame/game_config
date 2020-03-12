@@ -1765,8 +1765,7 @@ ADD_MONEY
     {
         $tipType = 0
         ShowRewardDialog(player = $obj1, event = "GET_REWARD_MONEY")
-		-- ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p1 = "ui_tip", p2 = "gui.reward.tip", p3 = "gui.text.sure", tipType = $tipType, event = "GET_REWARD_MONEY")
-        Return()
+		Return()
     }
 
     StartTimer(rep = false, time = $cdTime, object = $obj1, event = "ADD_MONEY")
