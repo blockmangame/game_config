@@ -5666,7 +5666,16 @@ GET_VISIT_TELE_POS {
     }
     If($toInside){
         --transfer to the targets pos
-        $from.telePos = GetEntityPosition(entity = $obj1)
+        ShowTip(entity = $from, tipType = 2, textKey = "gui.to.telepos.success", keepTime = 100)
+        $tp = GetEntityPosition(entity = $obj1)
+        $targetRideOn = GetRideOn(entity = $obj1)
+        If($targetRideOn and GetConfigVar(obj = $targetRideOn, key = "base") == "fur_base" and $targetRideOn.lastSideNormal){
+            $tp = ComputeV3(op = "add", p1 = $tp, p2 = $targetRideOn.lastSideNormal)
+            If(GetPosY(pos = $targetRideOn.lastSideNormal) == -1){
+                $tp = ComputeV3(op = "add", p1 = $tp, p2 = {x = 0, y = -2, z = 0})
+            }
+        }
+        $from.telePos = $tp
         $from.teleMap = GetEntityMap(entity = $obj1)
     }
     Else{
