@@ -538,8 +538,10 @@ ENTITY_LEAVE_DATA_REPORT{
     CallTrigger(object = $obj1, event = "DATA_REPORT_PARTY_INVITE")
     -- 统计玩家下线时派对操作总数相关
     CallTrigger(object = $obj1, event = "DATA_REPORT_PARTY_ALL_GAME")
-    -- 统计玩家下线时派对操作单个游戏相关(普通服下线且不打算去派对时)
+    -- 统计玩家下线时派对操作单个游戏相关(普通下线而不是主动跳转)
     CallTrigger(object = $obj1, event = "DATA_REPORT_PARTY_SINGLE_GAME")
+    -- 统计玩家加入派对/创建/租地传送情况 成功上报
+    CallTrigger(object = $obj1, event = "DATA_REPORT_JUMP_SERVER_SUCCESS")
 }
 DATA_REPORT_FINISH_WORK_SUM{
     --打工完成数量埋点
@@ -4686,6 +4688,7 @@ UPLOAD_PRIVILEGE_SUCCEED(){-- 购买租地特权成功，重新分配服务器
     $obj1.hasRelease = true
     Test("BUY_SUCCEED :", GetPlayerUserID(player = $obj1))
     ReleaseManor(player = $obj1)
+    $player.jumpSeverToSpecial = true
     ReenterGame(player = $obj1)
 }
 --弹窗购买特权
@@ -5571,6 +5574,7 @@ JOIN_OTHERS_PARTY(debug = false){
     TryJoinParty(player = $obj1, targetUserId = $obj1.targetUserId, partyId = $partyId)
 }
 CROSS_SERVER_VISIT(debug = false){
+    $obj1.jumpSeverToSpecial = true
     CrossServerVisitPlayerByUserId(targetUserId = $obj1.targetUserId, player = $obj1)
 }
 PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
@@ -5720,6 +5724,7 @@ ASK_LEAVE_PARTY{
 }
 ASK_SHOW_PARTY_LIST {
     If($result == false) {
+        $obj1.jumpSeverToNormal = true
         ReenterGame(player = $obj1)
         Return()
     }
@@ -5730,6 +5735,7 @@ CHECK_CLOSE_PARTY {
     CloseParty(player = $obj1)
 }
 REENTER_GAME(debug = false){
+    $obj1.jumpSeverToNormal = true
     ReenterGame(player = $obj1)
 }
 LEAVE_PARTY_SUCCESS(debug = false){
@@ -5751,6 +5757,7 @@ LEAVE_PARTY_SUCCESS(debug = false){
         }
     }
     Else{
+        $obj1.jumpSeverToNormal = true
         ReenterGame(player = $obj1)
     }
 }
@@ -5764,12 +5771,10 @@ DATA_REPORT_PARTY_ALL_GAME{
     GameAnalyticsCustomEvent(player = $obj1, parts = ["party:join:sum", @rangeBoundary])
 }
 DATA_REPORT_PARTY_SINGLE_GAME(){
-    If(not $obj1.notInParty){--in party
+    If($obj1.jumpSeverToSpecial or $obj1.jumpSeverToNormal){
         Return()
     }
-    If($obj1.inPartyOwnerId ~= 0){--to party
-        Return()
-    }
+    --no jump server action
     Test(msg = "DATA_REPORT_PARTY_SINGLE_GAME", createPartyCountPerGame = $obj1.createPartyCountPerGame, joinPartyCountPerGame = $obj1.joinPartyCountPerGame)
 
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.createPartyCountPerGame, array = [0, 9, 19, 49, 99, 100])
@@ -5780,6 +5785,11 @@ DATA_REPORT_PARTY_SINGLE_GAME(){
 
     $obj1.createPartyCountPerGame = 0
     $obj1.joinPartyCountPerGame = 0
+}
+DATA_REPORT_JUMP_SERVER_SUCCESS{
+    If($obj1.jumpSeverToSpecial or $obj1.jumpSeverToNormal){
+        GameAnalyticsCustomEvent(player = $obj1, parts = ["player:delivery:success"])
+    }
 }
 REALLY_AT_PARTY(debug = false){
     --in party now!
@@ -5853,6 +5863,7 @@ ASK_RETURN_PARTY_RESULT(debug = false){
     }
     $obj1.resetGameToJoinParty = true
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", keepTime =  100)
+    $obj1.jumpSeverToSpecial = true
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
 }
 CHECK_IN_PARTY(debug = false){
@@ -5878,6 +5889,7 @@ CREATE_PARTY_SUCCESS {
     $obj1.resetGameToOpenParty = true
     $house = $obj1.house
     $house.createPartyBuff = AddEntityBuff(entity = $house, cfg = GetConfigVar(obj = $house, key = "houseCreatePartyBuff"))
+    $obj1.jumpSeverToSpecial = true
     ReenterGame(player = $obj1)
 
 }
@@ -5904,6 +5916,7 @@ JOIN_PARTY_GIVE_OWNER_MONEY(debug = false){
 JOIN_PARTY_FAILED(debug = false){
     If($obj1.needReenterGameWhenJoinPartyFailed){
         $obj1.needReenterGameWhenJoinPartyFailed = nil
+        $obj1.jumpSeverToNormal = true
         ReenterGame(player = $obj1)
     }
 }
@@ -5911,6 +5924,7 @@ JOIN_PARTY_SUCCESS(debug = false){
     $obj1.inPartyOwnerId = $targetUserId
     $obj1.resetGameToJoinParty = true
     ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.join.success", keepTime =  100)
+    $obj1.jumpSeverToSpecial = true
     CrossServerVisitPlayerByUserId(player = $obj1, targetUserId = $targetUserId)
 }
 UPDATE_CREATE_PARTY_VIEW_INFO {
@@ -5954,6 +5968,7 @@ CLOSE_PARTY_SUCCESS(debug = false){
         ShowTip(entity = $player, tipType = 2, textKey = "gui.party.be.closed", keepTime =  20, textP1 = $name)
         $player.inPartyOwnerId = 0
         $player.inSelfParty = nil
+        $player.jumpSeverToNormal = true
         ReenterGame(player = $player)
     }
     If($obj1.closePartyEvent){
@@ -5978,6 +5993,11 @@ PARTY_BE_LIKED{
 }
 RESET_GAME_FAILED(debug = true){
     If($resultCode ~= 1){
+
+        GameAnalyticsCustomEvent(player = $obj1, parts = ["player:delivery:fail"])
+        $obj1.jumpSeverToSpecial = nil
+        $obj1.jumpSeverToNormal = nil
+
         If($obj1.resetGameToJoinParty){
             ShowTip(entity = $obj1, tipType = 2, textKey = "tip.user.join.party.failed")
             $obj1.dontReenterGame = true
