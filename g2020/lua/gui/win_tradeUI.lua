@@ -317,7 +317,7 @@ function M:startTrade(tradeID, targetUid)
 	UI:closeWnd("bag_g2020")
 	self.goodsAdd = 0
 	self.lastIndex = 0
-	self.canConfirm = false
+	self.canConfirm = true
 	self.isConfirm = false
 	self.itemMap = {}
 	self.selected = {}
@@ -337,7 +337,7 @@ function M:setStyle(targetUid)
 	self:child("partyTradeUI-rightConfrim"):SetVisible(false)
 	self.confirmBtn:SetNormalImage("set:partyTrade.json image:buleButton.png")
 	self.confirmBtn:SetPushedImage("set:partyTrade.json image:buleButton.png")
-	self.confirmBtn:SetText(Lang:toText("gui.trade.cool"))
+	self.confirmBtn:SetText(Lang:toText("ui_sure"))
 
 	local mapid = {Me.platformUserId, targetUid}
 	UserInfoCache.LoadCacheByUserIds(mapid, function()
