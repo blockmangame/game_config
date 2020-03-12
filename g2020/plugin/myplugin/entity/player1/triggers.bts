@@ -4639,6 +4639,9 @@ OPEN_BUY_COIN()
 }
 --特权购买成功
 ENTITY_BUY_APPSTOP {
+    If($itemName == "myplugin/broadcast_party_invite"){
+        $addItem = false
+    }
     $dict = NewDictionary(Copy(value = $shop))
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
