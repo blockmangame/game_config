@@ -18,4 +18,5 @@ FUNC_STATE_SYNC_TO_RIDER_AND_PASSENGERS --params: isAdd, player
         Return()
     }
     CallTrigger(object = $player, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = $isAdd, needSyncPlayers = [$owner], isSyncAll = true)
+    CallTrigger(object = $player, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", isAdd = $isAdd, needSyncPlayers = [$owner])
 }
