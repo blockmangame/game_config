@@ -321,8 +321,6 @@ ENTITY_ENTER
         SetEntityName(entity = $obj1, name = $obj1.nickName)
 
         $obj1.isReadyReward = false
-        -- $obj1.inviteFamilyPlayer = nil
-        -- $obj1.applyFamilyPlayer = nil
 
         CallTrigger(event = "ADD_MONEY", object = $obj1)
         If($obj1.inPartyOwnerId == 0)   -- not in party
@@ -2755,7 +2753,6 @@ INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
         }
     }
 
-    -- $obj1.inviteFamilyPlayer = $obj2
     $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
@@ -2779,8 +2776,6 @@ INTERACTION_INVITE_FAMILY  -- 邀请加入家庭
 
 INVITE_JOIN_FAMILY
 {
-    -- $targetPlayer = $obj1.inviteFamilyPlayer
-    -- $obj1.inviteFamilyPlayer = nil
     $targetPlayer = GetObject(objID = $targetID)
     If($button == "left")
     {
@@ -2866,7 +2861,6 @@ INTERACTION_APPLY_FAMILY   --申请加入家庭
         Return()
     }
 
-    -- $obj1.applyFamilyPlayer = $obj2
     $btnInfo = {
         leftCoinId = nil,
         leftContent = "ui_cancel",
@@ -2890,8 +2884,6 @@ INTERACTION_APPLY_FAMILY   --申请加入家庭
 
 APPLY_JOIN_FAMILY
 {
-    -- $targetPlayer = $obj1.applyFamilyPlayer
-    -- $obj1.applyFamilyPlayer = nil
     $targetPlayer = GetObject(objID = $targetID)
     If($button == "left")
     {
