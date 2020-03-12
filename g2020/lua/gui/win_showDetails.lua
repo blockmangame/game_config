@@ -3,15 +3,26 @@ local setting = require "common.setting"
 local trigger
 local cfg = {}
 local contents = {}
-local widgets ={
-    "title",
-    "subtitle",
-    "contents",
-    "comments"
+local subtitleSpecs = {
+    lineSpace = 2,
+    font = 20,
+    txtVAlign = 1,
+    txtHAlign = 2,
+    vAlign = 0,
+    hAlign = 2,
+    nameXPos = {0, -72},
+    nameWidth = 130,
+    nameHeight = 47,
+    percent = {{0.52, 0}, {0, 0}, {0, 70}, {1, 0}}
 }
+local widgets ={ "title", "contents", "comments" }
 
 local function getCfg(name)
     return contents[name] or cfg[name]
+end
+
+local _getRate = function(usedTime, duration)
+    return (duration <= 0 and {0} or {math.floor(100 * usedTime / duration)})[1]
 end
 
 function M:init()
@@ -22,11 +33,15 @@ end
 
 function M:initProp()
     self._root:SetTouchable(false)
+    self.detailsPanel = self:child("Details-Panel") --Layout
+    self.detailsMain = self:child("Details-Main")   --Layout
+    self.headLine = self:child("Details-HeadLine")  --Layout
+    self.mainBody = self:child("Details-MainBody")  --Layout
+    self.subtitle = {}
+    self.subtitleHadLines = 0
     self.child = {
         titleText = self:child("Details-Title-Text"),
         titleIcon = self:child("Details-Title-Icon"),
-        subtitleText = self:child("Details-Subtitle-Text"),
-        subtitleVal = self:child("Details-Subtitle-Val"),
         contentsText = self:child("Details-Contents-Text"),
         commentsText = self:child("Details-Comments-Text"),
         commentsIcon = self:child("Details-Comments-Icon"),
@@ -35,16 +50,95 @@ function M:initProp()
     }
 end
 
-function M:initEvent()
-    Lib.subscribeEvent(Event.EVENT_UPDATE_DETAILS, function(updateName, val)
-        self:updateSubtitleVal(updateName, val)
-    end)
+function M:calculatePanelArea(isReset)
+    local hadLines = self.subtitleHadLines
+    if isReset then
+        self.subtitleHadLines = 0
+    end
+    if hadLines <= 1 then
+        return
+    end
+    local multiplier = isReset and -1 or 1
+    local panelAddedLine = hadLines - 1
+    local heightAdded = panelAddedLine * (subtitleSpecs.nameHeight + subtitleSpecs.lineSpace) - subtitleSpecs.lineSpace
+    local mainBodyY = self.mainBody:GetYPosition()
+    mainBodyY[2] = mainBodyY[2] + heightAdded * multiplier
+    self.mainBody:SetYPosition(mainBodyY)
+    for _, v in pairs({self.headLine, self.detailsMain, self.detailsPanel}) do
+        local height = v:GetHeight()
+        height[2] = height[2] + heightAdded * multiplier
+        v:SetHeight(height)
+    end
+end
 
+function M:setSubtitleArgs()
+    local subtitleData = getCfg("subtitle")
+    for objID, data in pairs(subtitleData) do
+        objID = tonumber(objID)
+        local entity = World.CurWorld:getEntity(objID)
+        if not entity then
+            goto continue
+        end
+        if not self.subtitle[objID] then
+            local name = GUIWindowManager.instance:CreateGUIWindow1("StaticText", "")
+            local percent = GUIWindowManager.instance:CreateGUIWindow1("StaticText", "")
+            name:SetBackgroundColor({1, 0, 0, 100/255})
+            percent:SetBackgroundColor({0, 1, 0, 100/255})
+            name:AddChildWindow(percent)
+            self.headLine:AddChildWindow(name)
+            name:SetArea(
+                    subtitleSpecs.nameXPos,
+                    {0, self.subtitleHadLines * (subtitleSpecs.nameHeight + subtitleSpecs.lineSpace)},
+                    {0, subtitleSpecs.nameWidth},
+                    {0, subtitleSpecs.nameHeight}
+            )
+            percent:SetArea(table.unpack(subtitleSpecs.percent))
+            for _, v in pairs({name, percent}) do
+                v:SetVerticalAlignment(subtitleSpecs.vAlign)
+                v:SetHorizontalAlignment(subtitleSpecs.hAlign)
+                v:SetTextVertAlign(subtitleSpecs.txtVAlign)
+                v:SetTextHorzAlign(subtitleSpecs.txtHAlign)
+                v:SetProperty("Font", "HT"..subtitleSpecs.font)
+            end
+            self.subtitleHadLines = self.subtitleHadLines + 1
+            self.subtitle[objID] = {name = name, percent = percent}
+        end
+        local subtitle = self.subtitle[objID]
+        local usedTime = data.usedTime
+        local duration = data.duration
+        if subtitle.cdTimer then
+            subtitle.cdTimer()
+        end
+        subtitle.name:SetText(entity.name)
+        subtitle.percent:SetText(_getRate(usedTime, duration).."%")
+        subtitle.cdTimer = (not data.isReleasing and {nil} or {World.Timer(20, function ()
+            usedTime = usedTime + 20
+            subtitle.percent:SetText(_getRate(usedTime, duration).."%")
+            return (usedTime < duration and {true} or {false})[1]
+        end)})[1]
+        ::continue::
+    end
+    self:calculatePanelArea()
+end
+
+function M:removeSubtitleCell()
+    for _, v in pairs(self.subtitle) do
+        v.name:RemoveChildWindow1(v.percent)
+        self.headLine:RemoveChildWindow1(v.name)
+        if v.cdTimer then v.cdTimer() end
+        v.name, v.percent, v.cdTimer  = nil, nil, nil
+    end
+    self.subtitle = {}
+end
+
+function M:initEvent()
     Lib.subscribeEvent(Event.EVENT_SET_DETAILS, function(packet)
         cfg = setting:fetch("ui_config", packet.fullName)
         contents = packet.contents
+        self:removeSubtitleCell()
+        self:calculatePanelArea(true)
+        self:setSubtitleArgs()
         self:setBtn()
-        self:setRootUIArea(packet.uiArea)
         for _, typeName in pairs(widgets) do
             self:setWidgetArgs(typeName)
         end
@@ -54,8 +148,8 @@ function M:initEvent()
         Me:sendTrigger(Me, trigger, Me, nil, {
             rtVal = getCfg("btnRtVal")
         })
-        UI:closeWnd(self)
         Lib.emitEvent(Event.EVENT_SET_UI_VISIBLE, true)
+        UI:closeWnd(self)
     end)
 end
 
@@ -64,43 +158,26 @@ function M:onOpen()
 end
 
 function M:onClose()
-end
-
-function M:setRootUIArea(info)
-    if not info or not next(info) then
-        return
+    local closeTrigger = getCfg("closeEvent")
+    if closeTrigger then
+        Me:sendTrigger(Me, closeTrigger, Me, nil, {uiName = getCfg("btnRtVal")})
     end
-
-    self._root:SetArea(
-        {info[1][1], info[1][2]},
-        {info[2][1], info[2][2]},
-        {info[3][1], info[3][2]},
-        {info[4][1], info[4][2]}
-    )
 end
 
 function M:setBtn()
     local btn = self.child.btn
 
     local text = getCfg("btnText")
-    if text then
-        btn:SetText(Lang:toText(text))
-    end
+    if text then btn:SetText(Lang:toText(text)) end
 
     local event = getCfg("btnEvent")
-    if event then
-        trigger = event
-    end
+    if event then trigger = event end
 
     local pushedImg = getCfg("btnPushedImg")
-    if pushedImg then
-        btn:SetPushedImage(pushedImg)
-    end
+    if pushedImg then btn:SetPushedImage(pushedImg) end
 
     local normalImg = getCfg("btnNormalImg")
-    if normalImg then
-        btn:SetNormalImage(normalImg)
-    end
+    if normalImg then btn:SetNormalImage(normalImg) end
 end
 
 function M:setWidgetFontSize(widget, name)
@@ -141,13 +218,6 @@ function M:setWidgetArgs(typeName)
         local val = getCfg(name)
         widget:SetText(val or 0)
         self:setWidgetFontSize(widget, name)
-    end
-end
-
-function M:updateSubtitleVal(updateName, val)
-    local isNeedUpdate = getCfg("isNeedUpdate")
-    if UI:isOpen(self) and updateName == isNeedUpdate then
-        self.child["subtitleVal"]:SetText(val)
     end
 end
 

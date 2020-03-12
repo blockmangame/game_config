@@ -89,7 +89,6 @@ function M:createCell(args)
         usedTime = usedTime + 20
         local rate = getRate(usedTime, totalTime)
         progress.pgui:SetProgress(rate)
-        Lib.emitEvent(Event.EVENT_UPDATE_DETAILS, pgName, math.floor(rate * 100).."%")
         if rate == 1 then
             self:removeCell(pgName)
             return false
