@@ -509,6 +509,8 @@ ENTITY_LEAVE{
     If(not $obj1.punishmentCD){
         $obj1.punishTime = 0
     }
+    --清除家指向
+    ShowHomeGuide(entity = nil, player = $obj1)
 }
 
 ENTITY_LEAVE_DATA_REPORT{
@@ -6614,4 +6616,8 @@ SHOW_TRADE_CAR()
     Foreach(array = $car, key = "fullName"){
         ShowRewardItemEffect(fullName = $fullName, count = 1, type = "Item", player = $obj1)
     }
+}
+TEST_Y()
+{
+    GetUserAction(player = $obj1)
 }

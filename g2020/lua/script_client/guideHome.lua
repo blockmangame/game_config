@@ -1,11 +1,12 @@
 local setting = require "common.setting"
 
 local GuideHome = {}
+local self = GuideHome
 
-local mapDoor = {}
-local mapDoorTimer = {}
-local homeDoor = nil
-local lastShowTimer = nil
+GuideHome.mapDoor = {}
+GuideHome.mapDoorTimer = {}
+GuideHome.homeDoor = nil
+GuideHome.homeTimer = nil
 local pluginCfg = setting:fetch("ui_config", "myplugin/homeView") or {}
 local uicfg = pluginCfg["settingCfg"]
 
@@ -82,52 +83,52 @@ end
 --mapdoor
 function GuideHome.MakeMapDoor()
 	for name, cfg in pairs(uicfg) do
-		if name == "home" or mapDoor[name] then
-			goto continue
+		if name ~= "home" and not self.mapDoor[name] then
+			local ui = getItem(cfg)
+			self.mapDoor[name] = ui
+			self.mapDoorTimer[name] = rangeShowUIOnVPos(cfg.pos, ui, cfg.minDis, cfg.maxDis)
 		end
-		local ui = getItem(cfg)
-		mapDoor[name] = ui
-		mapDoorTimer[name] = rangeShowUIOnVPos(cfg.pos, ui, cfg.minDis, cfg.maxDis)
-		:: continue :: 
 	end
 end
 
 --homedoor
 function GuideHome.showHomeUI(pos)
-	if not homeDoor then
-		homeDoor = getItem(uicfg["home"])
-	else
-		homeDoor:SetVisible(false)
+	if self.homeTimer then
+		self.homeTimer()
+		self.homeTimer = nil
 	end
-	if lastShowTimer then
-		lastShowTimer()
-		lastShowTimer = nil
+	if not self.homeDoor then
+		self.homeDoor = getItem(uicfg["home"])
+	else
+		self.homeDoor:SetVisible(false)
 	end
 	pos = pos or { x = 0, y = 0, z = 0}
 	pos.y = pos.y + 1
 	local cfg = uicfg["home"]
-	lastShowTimer = rangeShowUIOnVPos(pos, homeDoor, cfg.minDis, cfg.maxDis)
+	self.homeTimer = rangeShowUIOnVPos(pos, self.homeDoor, cfg.minDis, cfg.maxDis)
 end
 
 function GuideHome.resetDoor(pos)
-	if lastShowTimer then
-		lastShowTimer()
-		lastShowTimer = nil
+	if self.homeTimer then
+		self.homeTimer()
+		self.homeTimer = nil
 	end
-	if homeDoor then
-		homeDoor:SetVisible(false)
-		homeDoor = nil
+	if self.homeDoor then
+		self.homeDoor:SetVisible(false)
+		self.homeDoor = nil
 	end
-	for _, ui in pairs(mapDoor) do
+	for _, ui in pairs(self.mapDoor) do
 		ui:SetVisible(false)
 	end
-	for _, timer in pairs(mapDoorTimer) do
+	for _, timer in pairs(self.mapDoorTimer) do
 		timer()
 	end
-	mapDoor = {}
-	mapDoorTimer = {}
-	GuideHome.MakeMapDoor()
-	GuideHome.showHomeUI(pos)
+	self.mapDoor = {}
+	self.mapDoorTimer = {}
+	if pos then
+		self.MakeMapDoor()
+		self.showHomeUI(pos)
+	end
 end
 
 return GuideHome
