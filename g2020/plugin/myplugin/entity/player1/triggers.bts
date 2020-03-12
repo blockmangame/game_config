@@ -538,6 +538,10 @@ ENTITY_LEAVE_DATA_REPORT{
     CallTrigger(object = $obj1, event = "DATA_REPORT_ADD_FRIEND")
     -- 统计玩家下线时派对邀请相关
     CallTrigger(object = $obj1, event = "DATA_REPORT_PARTY_INVITE")
+    -- 统计玩家下线时派对操作总数相关
+    CallTrigger(object = $obj1, event = "DATA_REPORT_PARTY_ALL_GAME")
+    -- 统计玩家下线时派对操作单个游戏相关(普通服下线且不打算去派对时)
+    CallTrigger(object = $obj1, event = "DATA_REPORT_PARTY_SINGLE_GAME")
 }
 DATA_REPORT_FINISH_WORK_SUM{
     --打工完成数量埋点
@@ -5748,16 +5752,26 @@ LEAVE_PARTY_SUCCESS(debug = false){
         ReenterGame(player = $obj1)
     }
 }
-DATA_REPORT_PARTY{
-    Test(msg = "DATA_REPORT_PARTY", createPartyCount = $obj1.createPartyCount, createPartyCountPerGame = $obj1.createPartyCountPerGame, joinPartyCount = $obj1.joinPartyCount, joinPartyCountPerGame = $obj1.joinPartyCountPerGame)
+DATA_REPORT_PARTY_ALL_GAME{
+    Test(msg = "DATA_REPORT_PARTY_ALL_GAME", createPartyCount = $obj1.createPartyCount, joinPartyCount = $obj1.joinPartyCount)
+
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.createPartyCount, array = [0, 9, 19, 49, 99, 199,  499, 999, 1999, 4999, 9999, 10000])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["party:create:sum", @rangeBoundary])
 
-    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.createPartyCountPerGame, array = [0, 9, 19, 49, 99, 100])
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:create:single_game", @rangeBoundary])
-
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.joinPartyCount, array = [0, 9, 19, 49, 99, 199,  499, 999, 1999, 4999, 9999, 10000])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["party:join:sum", @rangeBoundary])
+}
+DATA_REPORT_PARTY_SINGLE_GAME(){
+    If(not $obj1.notInParty){--in party
+        Return()
+    }
+    If($obj1.inPartyOwnerId ~= 0){--to party
+        Return()
+    }
+    Test(msg = "DATA_REPORT_PARTY_SINGLE_GAME", createPartyCountPerGame = $obj1.createPartyCountPerGame, joinPartyCountPerGame = $obj1.joinPartyCountPerGame)
+
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.createPartyCountPerGame, array = [0, 9, 19, 49, 99, 100])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:create:single_game", @rangeBoundary])
 
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.joinPartyCountPerGame, array = [0, 9, 19, 49, 99, 100])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["party:join:single_game", @rangeBoundary])
@@ -5789,7 +5803,7 @@ REALLY_AT_PARTY(debug = false){
     }
 }
 RESET_NOT_IN_PARTY(debug = false){
-    CallTrigger(object = $obj1, event = "DATA_REPORT_PARTY")
+    $obj1.notInParty = true
     $obj1.inPartyOwnerId = 0
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
     $obj1.role = @adult
@@ -5845,7 +5859,7 @@ CHECK_IN_PARTY(debug = false){
         GetPartyInfoByUserId(player = $obj1, targetUserId = $inPartyOwnerId, callback = "GET_TARGET_PARTY_INFO")
     }
     Else{
-        CallTrigger(object = $obj1, event = "DATA_REPORT_PARTY")
+        $obj1.notInParty = true
     }
 }
 INTERACTION_BANISH(debug = false){
