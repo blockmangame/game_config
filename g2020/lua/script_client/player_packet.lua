@@ -154,3 +154,7 @@ function handles:ShowWarmPrompt(packet)
     ui:root():SetAlwaysOnTop(true)
 	ui:root():SetLevel(0)
 end
+
+function handles:UpdateExtensionBtn(packet)
+    Lib.emitEvent(Event.EVENT_UPDATE_EXTENSION_BTN, packet.btnList)
+end

@@ -386,3 +386,15 @@ function Actions.ShowWarmPrompt(data, params, context)
         disableClose = params.disableClose
     })
 end
+
+function Actions.UpdateExtensionBtn(data, params, context)
+    local entity = params.entity
+    if not entity.isPlayer then
+        return
+    end
+
+    entity:sendPacket({
+        pid = "UpdateExtensionBtn",
+        btnList = params.btnList
+    })
+end
