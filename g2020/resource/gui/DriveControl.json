@@ -13,6 +13,10 @@
                     "Value": "false"
                 },
                 {
+                    "Name": "Level",
+                    "Value": "61"
+                },
+                {
                     "Name": "WndOpenSound",
                     "Value": "0"
                 },
@@ -33,6 +37,10 @@
                         {
                             "Name": "VerticalAlignment",
                             "Value": "Bottom"
+                        },
+                        {
+                            "Name": "Level",
+                            "Value": "61"
                         },
                         {
                             "Name": "WndOpenSound",
@@ -85,6 +93,10 @@
                             "Value": "Bottom"
                         },
                         {
+                            "Name": "Level",
+                            "Value": "61"
+                        },
+                        {
                             "Name": "WndOpenSound",
                             "Value": "0"
                         },
@@ -124,56 +136,6 @@
                 },
                 {
                     "Type": "StaticImage",
-                    "Name": "DriveControl-Brake",
-                    "Property": [
-                        {
-                            "Name": "Area",
-                            "Value": "{{0,30},{0,-200},{0,116},{0,-114}}"
-                        },
-                        {
-                            "Name": "VerticalAlignment",
-                            "Value": "Bottom"
-                        },
-                        {
-                            "Name": "WndOpenSound",
-                            "Value": "0"
-                        },
-                        {
-                            "Name": "WndCloseSound",
-                            "Value": "0"
-                        },
-                        {
-                            "Name": "HexgonOverlayerColor",
-                            "Value": "1 1 1 1"
-                        },
-                        {
-                            "Name": "HexgonOverlayerImage",
-                            "Value": ""
-                        },
-                        {
-                            "Name": "HexgonSideColor",
-                            "Value": "1 1 1 1"
-                        },
-                        {
-                            "Name": "HexgonSideImage",
-                            "Value": ""
-                        },
-                        {
-                            "Name": "HexgonTopColor",
-                            "Value": "1 1 1 1"
-                        },
-                        {
-                            "Name": "HexgonTopImage",
-                            "Value": ""
-                        },
-                        {
-                            "Name": "ImageName",
-                            "Value": "set:drive.json image:brake"
-                        }
-                    ]
-                },
-                {
-                    "Type": "StaticImage",
                     "Name": "DriveControl-Left",
                     "Property": [
                         {
@@ -187,6 +149,10 @@
                         {
                             "Name": "HorizontalAlignment",
                             "Value": "Right"
+                        },
+                        {
+                            "Name": "Level",
+                            "Value": "61"
                         },
                         {
                             "Name": "WndOpenSound",
@@ -243,6 +209,10 @@
                             "Value": "Right"
                         },
                         {
+                            "Name": "Level",
+                            "Value": "61"
+                        },
+                        {
                             "Name": "WndOpenSound",
                             "Value": "0"
                         },
@@ -282,19 +252,19 @@
                 },
                 {
                     "Type": "StaticImage",
-                    "Name": "DriveControl-Debark",
+                    "Name": "DriveControl-Brake",
                     "Property": [
                         {
                             "Name": "Area",
-                            "Value": "{{0,-110},{0,-335},{0,-24},{0,-249}}"
+                            "Value": "{{0,30},{0,-200},{0,116},{0,-114}}"
                         },
                         {
                             "Name": "VerticalAlignment",
                             "Value": "Bottom"
                         },
                         {
-                            "Name": "HorizontalAlignment",
-                            "Value": "Right"
+                            "Name": "Level",
+                            "Value": "61"
                         },
                         {
                             "Name": "WndOpenSound",
@@ -330,7 +300,7 @@
                         },
                         {
                             "Name": "ImageName",
-                            "Value": "set:drive.json image:debark"
+                            "Value": "set:drive.json image:brake"
                         }
                     ]
                 },
@@ -349,6 +319,10 @@
                         {
                             "Name": "HorizontalAlignment",
                             "Value": "Right"
+                        },
+                        {
+                            "Name": "Level",
+                            "Value": "61"
                         },
                         {
                             "Name": "WndOpenSound",
@@ -390,6 +364,64 @@
                 },
                 {
                     "Type": "StaticImage",
+                    "Name": "DriveControl-Debark",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,-110},{0,-335},{0,-24},{0,-249}}"
+                        },
+                        {
+                            "Name": "VerticalAlignment",
+                            "Value": "Bottom"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Right"
+                        },
+                        {
+                            "Name": "Level",
+                            "Value": "61"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "ImageName",
+                            "Value": "set:drive.json image:debark"
+                        }
+                    ]
+                },
+                {
+                    "Type": "StaticImage",
                     "Name": "DriveControl-NOS",
                     "Property": [
                         {
@@ -403,6 +435,10 @@
                         {
                             "Name": "HorizontalAlignment",
                             "Value": "Right"
+                        },
+                        {
+                            "Name": "Level",
+                            "Value": "61"
                         },
                         {
                             "Name": "WndOpenSound",
