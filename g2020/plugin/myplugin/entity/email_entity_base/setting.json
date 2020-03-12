@@ -1,0 +1,35 @@
+{
+    "actorName": "g2020_fru_chairs.actor",
+    "canClick": true,
+    "skin": {
+        "body": "22"
+    },
+    "hpBarColor": 0,
+    "textHeight": 1.5,
+    "disableShadow": true,
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "centerBtns": [
+            {
+                "widgetFileName": "widget_button",
+                "event": "SHOW_BUY_UI",
+                "image": "plugin/myplugin/image/fru_intUI/hand_click.png",
+                "imageSize": {
+                    "width": "60",
+                    "height": "60"
+                }
+            }
+        ],
+        "followParams": {
+            "followScenePos": false
+        }
+    }
+}

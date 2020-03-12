@@ -1,0 +1,20 @@
+ENTITY_ENTER
+{
+    $obj1.pos = GetEntityPosition(entity = $obj1)
+    $index = GetConfigVar(obj = $obj1, key = "emailIndex")
+    If($index == 1){
+        @ENTITY_ENTER1 = $obj1
+    }Else{
+        @ENTITY_ENTER2 = $obj1
+    }
+}
+
+SHOW_BUY_UI(){
+    If(ArrayFind(array = $obj2.privilege, value = "myplugin/home_privilege"))
+    {
+        ShowTip(entity = $obj2, tipType = 1, textKey = "gui.had.house.privilege", keepTime =  50)
+        Return()
+    }
+    $index = GetShopItemIndex(itemName = "myplugin/home_privilege") or 9
+    CallTrigger(object = $obj2, event = "POP_UP_BUY_PRIVILEGE", shopIndex = $index)
+}
