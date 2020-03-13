@@ -268,7 +268,10 @@ function M:setBagItemUI(itemUI, item)
         qualityUI:SetVisible(true)
         qualityUI:SetImage(imageSet["equip_level_" .. quality])
     end
-    local isEquip =  self:isItemEquip(item)
+	local isEquip =  self:isItemEquip(item)
+	if isEquip then
+		self.equipUI = itemUI:child("root-tip-bg")
+	end
     local isTrade = self:isItemTrade(item)
     itemUI:child("root-tip-bg"):SetVisible(isEquip or isTrade)
 	local text = isTrade and "gui.item.trading" or "g2020-equiping"
@@ -307,75 +310,79 @@ function M:fetchAllBagItem()
         itemUI = self:newAddItemUI(addItemData, typeIndex)
         grid:AddItem(itemUI)
     end
-
+	self.equipUI = nil
     --加载装备 
     local filterTrays = Merge({BAG_TRAY_TYPE[typeIndex]}, EQUIP_TRAY_TYPE)
 	self.items = self.items or self:filterTray(filterTrays, typeIndex)
-    for index, item in ipairs(self.items) do
-		if not item or item.isDel then
-			goto continue
-		end
-		local itemUI = self:newBagItemUI()
-        itemUI:setEnableLongTouch(true)
-        self:subscribe(itemUI, UIEvent.EventWindowLongTouchStart, function(ui)
-            self:setItemDescUI(true, item, ui)
-        end)
-        self:subscribe(itemUI, UIEvent.EventWindowLongTouchEnd, function()
-            self:setItemDescUI(false, item)
-		end)
-		self:subscribe(itemUI, UIEvent.EventButtonClick, function(ui)
-            if not item.tray_type then
-                return
-            end
-            --trade
-            if isTrading() then
-                if item:cfg().canTrade == false then
-                    Client.ShowTip(1, Lang:toText("gui.item.cantTrade"), 20)
-                    return
-                end
-				Me:addTradeItem(item, not self:isItemTrade(item))
-				UI:closeWnd(self)
-				return
-            end
-            -- 3-5 begin giveAway 
-            local giveAwayStatusTable = Me.giveAwayStatusTable
-            if giveAwayStatusTable and giveAwayStatusTable.status then
-                if item:cfg().typeIndex and BAG_TRAY_TYPE[item:cfg().typeIndex] == Define.TRAY_TYPE.EXTEND_BAG_5 then
-                    Client.ShowTip(1, Lang:toText("cant_give_away_task_item"), 20)
-                    return
-                end
-                UILib.openChoiceDialog({msgText = {"ui_sure_giveaway_something_to_anybody", item:cfg().itemname or ""}}, function(isTrue)
-                    if not isTrue then
-                        item.isDel = true
-                        if self:isItemEquip(item) then
-                            Me:setItemUse(item:tid(), item:slot(), false)
-                        end
-                        Me:sendPacket({ pid = "DeleteItem", objID = Me.objID, bag = item:tid(), slot = item:slot() }, function()
-                            grid:RemoveItem(ui)
-                        end)
-                        Me:sendPacket({ pid = "GiveAwayToTarget", objID = giveAwayStatusTable.targetObjID, cfg = item:cfg().fullName, count = 1 })
-                    end
-                end) 
-            else
-			-- 3-5 end giveAway
-				local canEquipStatus = self:canEquip(item)
-                if canEquipStatus == 1 then
-                    -- 提示不能装备要下车
-                    Client.ShowTip(1, Lang:toText("please_takeoff_your_car"), 20)
-					return
-				elseif canEquipStatus == 2 then
+	for index, item in ipairs(self.items) do
+		World.Timer(math.ceil(index / 2), function()
+			if not item or item.isDel then
+				goto continue
+			end
+			local itemUI = self:newBagItemUI()
+			itemUI:setEnableLongTouch(true)
+			self:subscribe(itemUI, UIEvent.EventWindowLongTouchStart, function(ui)
+				self:setItemDescUI(true, item, ui)
+			end)
+			self:subscribe(itemUI, UIEvent.EventWindowLongTouchEnd, function()
+				self:setItemDescUI(false, item)
+			end)
+			self:subscribe(itemUI, UIEvent.EventButtonClick, function(ui)
+				if not item.tray_type then
 					return
 				end
-				
-				Me:setItemUse(item:tid(), item:slot(), not self:isItemEquip(item))
-				self:setBagItemUI(itemUI, item)
-				--self:setBagItemUI(itemUI, item)
-            end
-        end)
-        self:setBagItemUI(itemUI, item)
-        grid:AddItem(itemUI)
-		::continue::
-    end
+				--trade
+				if isTrading() then
+					if item:cfg().canTrade == false then
+						Client.ShowTip(1, Lang:toText("gui.item.cantTrade"), 20)
+						return
+					end
+					Me:addTradeItem(item, not self:isItemTrade(item))
+					UI:closeWnd(self)
+					return
+				end
+				-- 3-5 begin giveAway 
+				local giveAwayStatusTable = Me.giveAwayStatusTable
+				if giveAwayStatusTable and giveAwayStatusTable.status then
+					if item:cfg().typeIndex and BAG_TRAY_TYPE[item:cfg().typeIndex] == Define.TRAY_TYPE.EXTEND_BAG_5 then
+						Client.ShowTip(1, Lang:toText("cant_give_away_task_item"), 20)
+						return
+					end
+					UILib.openChoiceDialog({msgText = {"ui_sure_giveaway_something_to_anybody", item:cfg().itemname or ""}}, function(isTrue)
+						if not isTrue then
+							item.isDel = true
+							if self:isItemEquip(item) then
+								Me:setItemUse(item:tid(), item:slot(), false)
+							end
+							Me:sendPacket({ pid = "DeleteItem", objID = Me.objID, bag = item:tid(), slot = item:slot() }, function()
+								grid:RemoveItem(ui)
+							end)
+							Me:sendPacket({ pid = "GiveAwayToTarget", objID = giveAwayStatusTable.targetObjID, cfg = item:cfg().fullName, count = 1 })
+						end
+					end) 
+				else
+				-- 3-5 end giveAway
+					local canEquipStatus = self:canEquip(item)
+					if canEquipStatus == 1 then
+						-- 提示不能装备要下车
+						Client.ShowTip(1, Lang:toText("please_takeoff_your_car"), 20)
+						return
+					elseif canEquipStatus == 2 then
+						return
+					end
+					if self.equipUI then
+						self.equipUI:SetVisible(false)
+					end
+					Me:setItemUse(item:tid(), item:slot(), not self:isItemEquip(item))
+					self:setBagItemUI(itemUI, item)
+					--self:setBagItemUI(itemUI, item)
+				end
+			end)
+			self:setBagItemUI(itemUI, item)
+			grid:AddItem(itemUI)
+			::continue::
+		end)
+	end
     if #self.items > 0 and not isTrading() then
         itemUI = self:newSubItemUI()
         grid:AddItem(itemUI)
@@ -500,7 +507,7 @@ function M:registerEvent()
 
 	Lib.subscribeEvent(Event.EVENT_HAND_ITEM_CHANGE, function()
 		if not self.curDelStatus then
-			self:fetchAllBagItem()
+			--self:fetchAllBagItem()
 		end
     end)
     
