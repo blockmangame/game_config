@@ -27,108 +27,7 @@
             "z": 0
         }
     },
-    "interaction_choices_sit2_low_1": [
-        {
-            "cfgKey": "interaction_choices_sit2_low_1",
-            "centerBtns": [
-                {
-                    "text": "you",
-                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
-                    "event": "ENTITY_sit2_low_1",
-                    "disableAutoHideText":true,
-                    "imageSize": {
-                        "width": "60",
-                        "height": "60"
-                    },
-                    "widgetFileName": "widget_button"
-                }
-            ],
-            "followParams": {
-                "followScenePos": false,
-                "offset": {
-                    "x": 0.5,
-                    "y": 1,
-                    "z": 0
-                }
-            }
-        },
-        {
-            "cfgKey": "interaction_choices_sit2_low_1",
-            "centerBtns": [
-                {
-                    "showInteractingPlayerName": true,
-                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
-                    "event": "ENTITY_sit2_low_1",
-                    "toOther":true,
-                    "disableAutoHideText":true,
-                    "imageSize": {
-                        "width": "60",
-                        "height": "60"
-                    },
-                    "widgetFileName": "widget_button"
-                }
-            ],
-            "followParams": {
-                "followScenePos": false,
-                "offset": {
-                    "x": 0.5,
-                    "y": 0,
-                    "z": 0
-                }
-            }
-        }
-    ],
-    "interaction_choices_sit2_low_2": [
-        {
-            "cfgKey": "interaction_choices_sit2_low_2",
-            "centerBtns": [
-                {
-                    "text": "you",
-                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
-                    "event": "ENTITY_sit2_low_2",
-                    "disableAutoHideText":true,
-                    "imageSize": {
-                        "width": "60",
-                        "height": "60"
-                    },
-                    "widgetFileName": "widget_button"
-                }
-            ],
-            "followParams": {
-                "followScenePos": false,
-                "offset": {
-                    "x": -0.5,
-                    "y": 1,
-                    "z": 0
-                }
-            }
-        },
-        {
-            "cfgKey": "interaction_choices_sit2_low_2",
-            "centerBtns": [
-                {
-                    "showInteractingPlayerName": true,
-                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
-                    "event": "ENTITY_sit2_low_2",
-                    "toOther":true,
-                    "disableAutoHideText":true,
-                    "imageSize": {
-                        "width": "60",
-                        "height": "60"
-                    },
-                    "widgetFileName": "widget_button"
-                }
-            ],
-            "followParams": {
-                "followScenePos": false,
-                "offset": {
-                    "x": -0.5,
-                    "y": 0,
-                    "z": 0
-                }
-            }
-        }
-    ],
+
     "interactionUI": [
         {
             "cfgKey": "interactionUI",
@@ -148,7 +47,8 @@
                         "width": "60",
                         "height": "60"
                     },
-                    "widgetFileName": "widget_button"
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
@@ -178,7 +78,8 @@
                         "width": "60",
                         "height": "60"
                     },
-                    "widgetFileName": "widget_button"
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
@@ -208,7 +109,8 @@
                     "customCheckCanHide":{
                         "funcName": "checkCanPutBabyOnto"
                     },
-                    "widgetFileName": "widget_button"
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
@@ -238,7 +140,8 @@
                         "width": "60",
                         "height": "60"
                     },
-                    "widgetFileName": "widget_button"
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
