@@ -64,6 +64,7 @@
             "z": 0
         }
     },
+    "/4":"",
     "interactionUI": [
         {
             "cfgKey": "interactionUI",
@@ -72,11 +73,50 @@
                     "text": "chairs6_bathtub1.text",
                     "image": "plugin/myplugin/image/fru_intUI/sit2.png",
                     "event": "ENTITY_chairs6_bathtub1",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 25
+                    },
+                    "customCheckCanHide":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
                     "imageSize": {
                         "width": "60",
                         "height": "60"
                     },
-                    "widgetFileName": "widget_button"
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0.5,
+                    "z": 1
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "chairs6_bathtub1.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "nextCfgKey": "interaction_choices_chairs6_bathtub1",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 25
+                    },
+                    "customCheckCanShow":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
@@ -99,7 +139,15 @@
                         "width": "60",
                         "height": "60"
                     },
-                    "widgetFileName": "widget_button"
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 26
+                    },
+                    "customCheckCanHide":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
@@ -115,14 +163,83 @@
             "cfgKey": "interactionUI",
             "centerBtns": [
                 {
-                    "text": "chairs6_bathtub3.text",
+                    "text": "chairs6_bathtub2.text",
                     "image": "plugin/myplugin/image/fru_intUI/sit2.png",
-                    "event": "ENTITY_chairs6_bathtub3",
+                    "nextCfgKey": "interaction_choices_chairs6_bathtub2",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 26
+                    },
+                    "customCheckCanShow":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
                     "imageSize": {
                         "width": "60",
                         "height": "60"
                     },
-                    "widgetFileName": "widget_button"
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0.5,
+                    "z": 1
+                }
+            }
+        },{
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "chairs6_bathtub3.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs6_bathtub3",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 27
+                    },
+                    "customCheckCanHide":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0.5,
+                    "z": -1
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "chairs6_bathtub3.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "nextCfgKey": "interaction_choices_chairs6_bathtub3",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 27
+                    },
+                    "customCheckCanShow":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
@@ -145,7 +262,46 @@
                         "width": "60",
                         "height": "60"
                     },
-                    "widgetFileName": "widget_button"
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 28
+                    },
+                    "customCheckCanHide":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0.5,
+                    "z": -1
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "chairs6_bathtub4.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "nextCfgKey": "interaction_choices_chairs6_bathtub4",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 28
+                    },
+                    "customCheckCanShow":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
@@ -158,4 +314,5 @@
             }
         }
     ]
+   
 }

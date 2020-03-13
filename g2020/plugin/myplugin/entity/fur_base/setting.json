@@ -2142,7 +2142,6 @@
             "matchActorOrientation": false
         }
     ],
-
     "/index1": "",
     "interaction_choices_sit1_1_1": [
         {
@@ -2150,7 +2149,7 @@
             "centerBtns": [
                 {
                     "text": "you",
-                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
                     "event": "ENTITY_sit1_1_1",
                     "disableAutoHideText": true,
                     "imageSize": {
@@ -2175,8 +2174,62 @@
             "centerBtns": [
                 {
                     "showInteractingPlayerName": true,
-                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
                     "event": "ENTITY_sit1_1_1",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index7": "",
+    "interaction_choices_sit1_bar_1": [
+        {
+            "cfgKey": "interaction_choices_sit1_bar_1",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_sit1_bar_1",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit1_bar_1",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_sit1_bar_1",
                     "toOther": true,
                     "disableAutoHideText": true,
                     "imageSize": {
@@ -2251,7 +2304,439 @@
             }
         }
     ],
-    "/index23": "1",
+    "/index14": "",
+    "interaction_choices_sit2_2_1": [
+        {
+            "cfgKey": "interaction_choices_sit2_2_1",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_2_1",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.5,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit2_2_1",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_2_1",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.5,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index15": "",
+    "interaction_choices_sit2_2_2": [
+        {
+            "cfgKey": "interaction_choices_sit2_2_2",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_2_2",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.5,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit2_2_2",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_2_2",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.5,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index16": "",
+    "interaction_choices_sit2_3_1": [
+        {
+            "cfgKey": "interaction_choices_sit2_3_1",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_3_1",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit2_3_1",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_3_1",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index17": "",
+    "interaction_choices_sit2_3_2": [
+        {
+            "cfgKey": "interaction_choices_sit2_3_2",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_3_2",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit2_3_2",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_3_2",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index18": "",
+    "interaction_choices_sit2_3_3": [
+        {
+            "cfgKey": "interaction_choices_sit2_3_3",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_3_3",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit2_3_3",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_3_3",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index20": "",
+    "interaction_choices_sit2_corner_1": [
+        {
+            "cfgKey": "interaction_choices_sit2_corner_1",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_corner_1",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.6,
+                    "y": 1,
+                    "z": 0.5
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit2_corner_1",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_corner_1",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.6,
+                    "y": 0,
+                    "z": 0.5
+                }
+            }
+        }
+    ],
+    "/index21": "",
+    "interaction_choices_sit2_corner_2": [
+        {
+            "cfgKey": "interaction_choices_sit2_corner_2",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_corner_2",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.6,
+                    "y": 1,
+                    "z": -0.3
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit2_corner_2",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_corner_2",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -0.6,
+                    "y": 0,
+                    "z": -0.3
+                }
+            }
+        }
+    ],
+    "/index22": "",
+    "interaction_choices_sit2_corner_3": [
+        {
+            "cfgKey": "interaction_choices_sit2_corner_3",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_corner_3",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.8,
+                    "y": 1,
+                    "z": -0.4
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit2_corner_3",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_corner_3",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.8,
+                    "y": 0,
+                    "z": -0.4
+                }
+            }
+        }
+    ],
+    "/index23": "",
     "interaction_choices_sit2_low_1": [
         {
             "cfgKey": "interaction_choices_sit2_low_1",
@@ -2305,7 +2790,7 @@
             }
         }
     ],
-    "/index24": "1",
+    "/index24": "",
     "interaction_choices_sit2_low_2": [
         {
             "cfgKey": "interaction_choices_sit2_low_2",
@@ -2355,6 +2840,1248 @@
                     "x": -0.5,
                     "y": 0,
                     "z": 0
+                }
+            }
+        }
+    ],
+    "/index25": "",
+    "interaction_choices_chairs6_bathtub1": [
+        {
+            "cfgKey": "interaction_choices_chairs6_bathtub1",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_chairs6_bathtub1",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 1,
+                    "z": 1
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_chairs6_bathtub1",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_chairs6_bathtub1",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": 1
+                }
+            }
+        }
+    ],
+    "/index26": "",
+    "interaction_choices_chairs6_bathtub2": [
+        {
+            "cfgKey": "interaction_choices_chairs6_bathtub2",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_chairs6_bathtub2",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_chairs6_bathtub2",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_chairs6_bathtub2",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 1
+                }
+            }
+        }
+    ],
+    "/index27": "",
+    "interaction_choices_chairs6_bathtub3": [
+        {
+            "cfgKey": "interaction_choices_chairs6_bathtub3",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_chairs6_bathtub3",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 1,
+                    "z": -1
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_chairs6_bathtub3",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_chairs6_bathtub3",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": -1
+                }
+            }
+        }
+    ],
+    "/index28": "",
+    "interaction_choices_chairs6_bathtub4": [
+        {
+            "cfgKey": "interaction_choices_chairs6_bathtub4",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_chairs6_bathtub4",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 1,
+                    "z": -1
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_chairs6_bathtub4",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_chairs6_bathtub4",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": -1
+                }
+            }
+        }
+    ],
+    "/index29": "",
+    "interaction_choices_chairs5_bathtub": [
+        {
+            "cfgKey": "interaction_choices_chairs5_bathtub",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_chairs5_bathtub",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_chairs5_bathtub",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_chairs5_bathtub",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index35": "",
+    "interaction_choices_sleep1": [
+        {
+            "cfgKey": "interaction_choices_sleep1",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                    "event": "ENTITY_sleep1",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sleep1",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                    "event": "ENTITY_sleep1",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index40": "",
+    "interaction_choices_qiuqian": [
+        {
+            "cfgKey": "interaction_choices_qiuqian",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/qiuqian.png",
+                    "event": "ENTITY_qiuqian",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_qiuqian",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/qiuqian.png",
+                    "event": "ENTITY_qiuqian",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index41": "",
+    "interaction_choices_qiaoqiaoban_l": [
+        {
+            "cfgKey": "interaction_choices_qiaoqiaoban_l",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "event": "ENTITY_qiaoqiaoban_l",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_qiaoqiaoban_l",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "event": "ENTITY_qiaoqiaoban_l",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index42": "",
+    "interaction_choices_qiaoqiaoban_r": [
+        {
+            "cfgKey": "interaction_choices_qiaoqiaoban_r",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "event": "ENTITY_qiaoqiaoban_r",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_qiaoqiaoban_r",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "event": "ENTITY_qiaoqiaoban_r",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index43": "",
+    "interaction_choices_sit2_low1fb": [
+        {
+            "cfgKey": "interaction_choices_sit2_low1fb",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_low1fb",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit2_low1fb",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit2_low1fb",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index44": "",
+    "interaction_choices_sit1_1_1fb": [
+        {
+            "cfgKey": "interaction_choices_sit1_1_1fb",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_sit1_1_1fb",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit1_1_1fb",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_sit1_1_1fb",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index45": "",
+    "interaction_choices_cirb1": [
+        {
+            "cfgKey": "interaction_choices_cirb1",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                    "event": "ENTITY_cirb1",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_cirb1",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                    "event": "ENTITY_cirb1",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index46": "",
+    "interaction_choices_cirb2": [
+        {
+            "cfgKey": "interaction_choices_cirb2",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                    "event": "ENTITY_cirb2",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_cirb2",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                    "event": "ENTITY_cirb2",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index47": "",
+    "interaction_choices_cirb3": [
+        {
+            "cfgKey": "interaction_choices_cirb3",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                    "event": "ENTITY_cirb3",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_cirb3",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                    "event": "ENTITY_cirb3",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index48": "",
+    "interaction_choices_qiaoqiaoban_l2": [
+        {
+            "cfgKey": "interaction_choices_qiaoqiaoban_l2",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "event": "ENTITY_qiaoqiaoban_l2",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_qiaoqiaoban_l2",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "event": "ENTITY_qiaoqiaoban_l2",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index49": "",
+    "interaction_choices_qiaoqiaoban_r2": [
+        {
+            "cfgKey": "interaction_choices_qiaoqiaoban_r2",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "event": "ENTITY_qiaoqiaoban_r2",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_qiaoqiaoban_r2",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "event": "ENTITY_qiaoqiaoban_r2",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index50": "",
+    "interaction_choices_sit1_bar_2": [
+        {
+            "cfgKey": "interaction_choices_sit1_bar_2",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit1_bar_2",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_sit1_bar_2",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_sit1_bar_2",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index51": "",
+    "interaction_choices_qiaoqiaoban_l3": [
+        {
+            "cfgKey": "interaction_choices_qiaoqiaoban_l3",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "event": "ENTITY_qiaoqiaoban_l3",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_qiaoqiaoban_l3",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "event": "ENTITY_qiaoqiaoban_l3",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index52": "",
+    "interaction_choices_qiaoqiaoban_r3": [
+        {
+            "cfgKey": "interaction_choices_qiaoqiaoban_r3",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "event": "ENTITY_qiaoqiaoban_r3",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 1,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_qiaoqiaoban_r3",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "event": "ENTITY_qiaoqiaoban_r3",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "/index53": "",
+    "interaction_choices_chairs4_zhoudeng1": [
+        {
+            "cfgKey": "interaction_choices_chairs4_zhoudeng1",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs4_zhoudeng1",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 1,
+                    "z": 1
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_chairs4_zhoudeng1",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs4_zhoudeng1",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": 1
+                }
+            }
+        }
+    ],
+    "/index54": "",
+    "interaction_choices_chairs4_zhoudeng2": [
+        {
+            "cfgKey": "interaction_choices_chairs4_zhoudeng2",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs4_zhoudeng2",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_chairs4_zhoudeng2",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs4_zhoudeng2",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 1
+                }
+            }
+        }
+    ],
+    "/index55": "",
+    "interaction_choices_chairs4_zhoudeng3": [
+        {
+            "cfgKey": "interaction_choices_chairs4_zhoudeng3",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs4_zhoudeng3",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 1,
+                    "z": -1
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_chairs4_zhoudeng3",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs4_zhoudeng3",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": -1
+                }
+            }
+        }
+    ],
+    "/index56": "",
+    "interaction_choices_chairs4_zhoudeng4": [
+        {
+            "cfgKey": "interaction_choices_chairs4_zhoudeng4",
+            "centerBtns": [
+                {
+                    "text": "you",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs4_zhoudeng4",
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 1,
+                    "z": -1
+                }
+            }
+        },
+        {
+            "cfgKey": "interaction_choices_chairs4_zhoudeng4",
+            "centerBtns": [
+                {
+                    "showInteractingPlayerName": true,
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "event": "ENTITY_chairs4_zhoudeng4",
+                    "toOther": true,
+                    "disableAutoHideText": true,
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": -1
                 }
             }
         }

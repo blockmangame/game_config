@@ -35,11 +35,19 @@
                     "text": "sit2_3_1.text",
                     "image": "plugin/myplugin/image/fru_intUI/sit2.png",
                     "event": "ENTITY_sit2_3_1",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 16
+                    },
+                    "customCheckCanHide":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
                     "imageSize": {
                         "width": "60",
                         "height": "60"
                     },
-                    "widgetFileName": "widget_button"
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
@@ -57,12 +65,82 @@
                 {
                     "text": "sit2_3_1.text",
                     "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "nextCfgKey": "interaction_choices_sit2_3_1",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 16
+                    },
+                    "customCheckCanShow":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0.5,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit2_3_2.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
                     "event": "ENTITY_sit2_3_2",
                     "imageSize": {
                         "width": "60",
                         "height": "60"
                     },
-                    "widgetFileName": "widget_button"
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 17
+                    },
+                    "customCheckCanHide":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0.5,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit2_3_2.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "nextCfgKey": "interaction_choices_sit2_3_2",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 17
+                    },
+                    "customCheckCanShow":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
@@ -85,7 +163,46 @@
                         "width": "60",
                         "height": "60"
                     },
-                    "widgetFileName": "widget_button"
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 18
+                    },
+                    "customCheckCanHide":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0.5,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "sit2_3_3.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sit2.png",
+                    "nextCfgKey": "interaction_choices_sit2_3_3",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 18
+                    },
+                    "customCheckCanShow":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
@@ -98,4 +215,5 @@
             }
         }
     ]
+    
 }
