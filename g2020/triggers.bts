@@ -316,12 +316,12 @@ FUNC_OPEN_GPS --params: gpsDict
     ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
 }
 
-FUNC_CLOSE_DETAILS_UI --params: uiName
+FUNC_CLOSE_DETAILS_UI --params: uiName [, closeFromServer]
 {
     If(not $uiName || $uiName == GetObjectVar(obj = $obj1, key = "detailsUI"))
     {
-        ShowDetails(entity = $obj1, isOpen = false)
-        SetObjectVar(obj = $obj1, key = "detailsUI", value = nil)
+        $obj1.detailsUI = nil
+        If($closeFromServer) { ShowDetails(entity = $obj1, isClose = true) }
     }
 }
 

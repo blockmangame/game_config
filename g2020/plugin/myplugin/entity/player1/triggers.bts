@@ -39,7 +39,7 @@ CHECK_CLEAR_HAND_ITEM{
 WEAR_ITEM {
     ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 4, 5))
     $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
-    If($typeIndex == 3 and not $obj1.equipCarCd)
+    If($typeIndex == 3)
     {
 		-- on car
 		
@@ -1811,12 +1811,11 @@ FUNC_STATE_GENERATE --params: stateBase, col, skill
 
 FUNC_STATE_ADD --params: state, stateBase, skill
 {
+    $hadStateKey = Concat(p1 = "had", p2 = $stateBase)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
+    SetObjectVar(obj = $obj1, key = $hadStateKey, value = true)
     ArrayAppend(array = $obj1.curStates, value = $state)
     CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = true, state = $state)
-
-    SetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase), value = true)
-    SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
-    CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA")
     CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state, skill = $skill)
 }
 
@@ -1824,6 +1823,7 @@ FUNC_SYNC_STATES_TO_OTHERS --params: isAdd, states, needSyncPlayers, isSyncAll
 {
     Foreach(array = $needSyncPlayers or [], key = "player")
     {
+        If(not IsPlayer(entity = $player)) { Continue() }
         If($isSyncAll) { $states = $obj1.curStates }
         SyncStatesData(player = $player, isAdd = $isAdd, states = $states, target = $obj1)
         If($isSyncAll) { $states = $player.curStates }
@@ -1831,30 +1831,43 @@ FUNC_SYNC_STATES_TO_OTHERS --params: isAdd, states, needSyncPlayers, isSyncAll
     }
 }
 
-FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state
+FUNC_SYNC_STATE_DETAILS_TO_OTHER --params: isAdd, state, needSyncPlayers
 {
-    $states = [$state]
+    ShowDetails( player = $obj1, isAdd = $isAdd, state = $state)
+    Foreach(array = $needSyncPlayers or [], key = "partner") {
+        ShowDetails( player = $obj1, isAdd = $isAdd, state = $state, partner = $partner)
+        ShowDetails( player = $partner, isAdd = $isAdd, state = $state, partner = $obj1)
+    }
+}
+
+FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state [, isOnlySyncDetails]
+{
     $ride = GetRideOn(entity = $obj1)
     $needSyncPlayers = [$obj1, $ride]
     $passengers = NewDictionary(GetPassengers(entity = $obj1))
-    ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val")
-    {
+    ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val") {
         $player = GetObject(objID = $val)
         ArrayAppend(array = $needSyncPlayers, value = $player)
     }
     If($obj1.createdTrolley) {
+        Test("I got trolley!!!!")
         $trolleyPassengers = NewDictionary(GetPassengers(entity = $obj1.createdTrolley))
         ForeachDictionary(dict = $trolleyPassengers, keyName = "key", valueName = "val") {
             $player = GetObject(objID = $val)
             If($player ~= $obj1) {
+                Test("IN FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", "player.name = ", GetEntityName(entity = $player))
                 ArrayAppend(array = $needSyncPlayers, value = $player)
             }
         }
     } ElseIf($obj1.useTrolley) {
         $trolleyOwner = GetOwner(entity = $ride)
+        Test("I used Trolley", "trolleyOwner.name = ", GetEntityName(entity = $trolleyOwner))
         ArrayAppend(array = $needSyncPlayers, value = $trolleyOwner)
     }
-    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = $isAdd, states = $states, needSyncPlayers = $needSyncPlayers)
+    If(not $isOnlySyncDetails) {
+        CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = $isAdd, states = [$state], needSyncPlayers = $needSyncPlayers)
+    }
+    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", isAdd = $isAdd, state = $state, needSyncPlayers = $needSyncPlayers)
 }
 
 FUNC_STATE_START_AUTO_VANISH_TIME --parmas: state, skill
@@ -1913,6 +1926,7 @@ FUNC_STATE_RIDE_OPERATION --params: ride, isRideOff
     }
     If(IsPlayer(entity = $ride)) {
         CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = not $isRideOff, needSyncPlayers = [$ride], isSyncAll = true)
+        CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", isAdd = not $isRideOff, needSyncPlayers = [$ride])
     }
     $event = $isRideOff and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE"
     If($ride.cfg.releaseState)
@@ -1963,6 +1977,8 @@ FUNC_STATE_SUSPEND_PROGRESS --params: state, stateBase, duration
     {
         SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime"), value = GetTime() - $sTime + $usedTime)
     }
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "STime"), value = nil)
+    CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = true, state = $state, isOnlySyncDetails = true)
 }
 
 FUNC_STATE_START_PROGRESS --params: state, stateBase, duration
@@ -1972,20 +1988,13 @@ FUNC_STATE_START_PROGRESS --params: state, stateBase, duration
     SetObjectVar(obj = $obj1, value = GetTime(), key = Concat(p1 = $stateBase, p2 = "STime"))
     SetObjectVar(obj = $obj1, value = $usedTime, key = Concat(p1 = $stateBase, p2 = "UsedTime"))
 
-    ShowProgressFollowObj(
-        isOpen = true,
-        pgName = $state,
-        entity = $obj1,
-        totalTime = $duration * 20,
-        usedTime = $usedTime * 20,
-        pgText = Concat(p1 = "state_", p2 = $state, p3 = "_title"),
-    )
+    $pgText = Concat(p1 = "state_", p2 = $state, p3 = "_title")
+    ShowProgressFollowObj( isOpen = true, pgName = $state, entity = $obj1, totalTime = $duration * 20, usedTime = $usedTime * 20, pgText = $pgText)
 
-    SetObjectVar(
-        obj = $obj1,
-        key = Concat(p1 = $stateBase, p2 = "_TIMER"),
-        value = StartTimer(rep = false, object =$obj1, state = $state, event = "FUNC_STATE_REWARD", time = (($duration - $usedTime) * 20) // 1)
-    )
+    $value = StartTimer(rep = false, object =$obj1, state = $state, event = "FUNC_STATE_REWARD", time = (($duration - $usedTime) * 20) // 1)
+    SetObjectVar( obj = $obj1, value = $value, key = Concat(p1 = $stateBase, p2 = "_TIMER") )
+
+    CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = true, state = $state, isOnlySyncDetails = true)
 }
 
 FUNC_STATE_REWARD --state [, stateBase, skill]
@@ -2069,16 +2078,15 @@ FUNC_STATESKILL_REMOVE --params: state, skill
 {
     $stateBase = $stateBase or GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $hadState = Concat(p1 = "had", p2 = $stateBase)
-    If(not GetObjectVar(obj = $obj1, key = $hadState))
-    {
+    If(not GetObjectVar(obj = $obj1, key = $hadState)) {
         Return()
     }
 
+    SetObjectVar(obj = $obj1, key = $hadState, value = false)
     $index = ArrayFind(array = $obj1.curStates, value = $state)
     If($index){ ArrayRemove(array = $obj1.curStates, index = $index) }
     CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = false, state = $state)
 
-    SetObjectVar(obj = $obj1, key = $hadState, value = false)
     CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
     CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
 }
@@ -2153,28 +2161,11 @@ FUNC_STATE_REWARD_AND_TIP --params: rewardSum, textKey, rewardType [, textP1, te
     }
 }
 
-FUNC_STATE_SHOW_DETAILS_UI -- params: skill(fullName)
+FUNC_STATE_SHOW_DETAILS_UI -- params: skill(fullName) [, partner]
 {
     $state = GetSkillVar(fullName = $skill, key = "state")
-    $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
-    $duration = GetSkillVar(fullName = $skill, key = "duration")
-
-    $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime")) or 0
-    $percent = (not $duration or $duration <= 0) and 0 or NumberFloor(p1 = 100 * $usedTime / $duration)
-    
-    ShowDetails(
-        entity = $obj1,
-        fullName = Concat(p1 = "myplugin/", p2 = $state, p3 = "Detail"),
-        isOpen = true,
-        contents = {
-            isNeedUpdate = $state,
-            subtitleVal = Concat(p1 = $percent, p2 = "%"),
-            commentsVal = GetSkillVar(fullName = $skill, key = "rewardSelf"),
-            commentsCurrencyIcon = GetSkillVar(fullName = $skill, key = "rewardType")
-        }
-    )
-    
-    SetObjectVar(obj = $obj1, key = "detailsUI", value = $state)
+    $obj1.detailsUI = $state
+    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", isAdd = true, state = $state, needSyncPlayers = [$partner])
 }
 
 FUNC_STATE_OPEN_GPS --params: rtVal
@@ -2333,7 +2324,7 @@ FUNC_STATE_RESET_DATA --params: state[, hideTip]
 {
     ShowProgressFollowObj(entity = $obj1, isOpen = false, pgName = $state)
     CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state, hideTip = $hideTip)
-    CallTrigger(object = $obj1, event = "FUNC_CLOSE_DETAILS_UI", uiName = $state)
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_DETAILS_UI", uiName = $state, closeFromServer = true)
     CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = Concat(p1 = $state, p2 = "Effect"))
     CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "AFFECT_TIMER"))
 }
@@ -2467,23 +2458,18 @@ INTERACTION_PICK
 }
 
 INTERACTION_BABY_TROLLEY {
-    If($obj2.role == @adult && $obj1.role == @child)
-    {
+    If($obj2.role == @adult && $obj1.role == @child) {
         $trolley = $obj2.createdTrolley
-        If($trolley && ArraySize(array = GetPassengers(entity = $trolley)) < 2)
-        {
+        If($trolley && ArraySize(array = GetPassengers(entity = $trolley)) < 2) {
             CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
             RideOn(entity = $obj1, ctrl = false, target = $obj2.createdTrolley, targetIndex = 3) --乘车人
             CallTrigger(event = "FUNC_STATE_ADD_INTERACTLIST", entities = [$obj1, $obj2])
         }
-        ElseIf(not $trolley)
-        {
+        ElseIf(not $trolley) {
             	$tipType = 2
 	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "trolley_pls_equip")
         }
-    }
-    Else
-    {
+    } Else {
         	$tipType = 2
 	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
     }
@@ -4653,6 +4639,9 @@ OPEN_BUY_COIN()
 }
 --特权购买成功
 ENTITY_BUY_APPSTOP {
+    If($itemName == "myplugin/broadcast_party_invite"){
+        $addItem = false
+    }
     $dict = NewDictionary(Copy(value = $shop))
     $shopType = DictionaryGet(dict = $dict, key = "type")
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
@@ -4774,7 +4763,7 @@ CLEAR_EQUIP_CAR_CD{
 
 EQUIP_CAR {
     $obj1.equipCarCd = true
-    StartTimer(time = 20,object = $obj1, event = "CLEAR_EQUIP_CAR_CD")
+    StartTimer(time = 8,object = $obj1, event = "CLEAR_EQUIP_CAR_CD")
     $mapName = GetEntityName(entity = GetEntityMap(entity = $obj1))
     If($mapName ~= "map001" && $mapName ~= "map002")
     {

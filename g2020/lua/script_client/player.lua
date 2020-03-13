@@ -48,11 +48,11 @@ function Player:setItemUse(tid, slot, isUse, disSendSer)
         slot = slot,
         isUse = isUse
 	}
-    self:sendPacket(packet)
+	self:sendPacket(packet)
 end
 
 function Player:isItemUse(item)
-    local useItemList = self:data("main").useItemList
+	local useItemList = self:data("main").useItemList
     if not useItemList then
         return false
     end

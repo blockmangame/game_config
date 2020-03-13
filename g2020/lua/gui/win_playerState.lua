@@ -35,7 +35,7 @@ function M:onOpen()
 end
 
 function M:onClose()
-    UI:closeWnd("ShowDetails")
+    UI:closeWnd("showDetails")
 end
 
 function M:initMain()
@@ -84,7 +84,14 @@ function M:operateStateCell(isAdd, state, stateIndex)
         btn:SetPushedImage(imgPath..state.."_chosen")
         btn:SetTouchable(true)
         self:subscribe(btn, UIEvent.EventWindowTouchUp, function()
-            Skill.Cast(skillPath..state)
+            local otherID = nil
+            for _, v in ipairs(stateData.userID) do
+                if v ~= Me.objID then
+                    otherID = v
+                    break ---目前最多仅有两围玩家交互，所以暂时先这么做
+                end
+            end
+            Skill.Cast(skillPath..state, {targetID = otherID})
         end)
         local txt = GUIWindowManager.instance:CreateGUIWindow1("StaticText", state.."Sum")
         txt:SetArea({0, 0}, {0, 0}, {0, specs.itemWidth / 3}, {0, specs.itemHeight / 3})

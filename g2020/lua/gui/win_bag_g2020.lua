@@ -125,10 +125,11 @@ function M:initUIStyle()
     self.titleName:SetText(Lang:toText("g2020-bag"))
 end
 
+local canEquipCarTimeEnd
 local function unifyProc(self, btn, proc)
     self:subscribe(btn, UIEvent.EventButtonClick, function()
         self:unsubscribe(btn)
-        World.Timer(20, function()
+        World.Timer(5, function()
             if not btn then
                 return
             end
@@ -309,12 +310,12 @@ function M:fetchAllBagItem()
 
     --加载装备 
     local filterTrays = Merge({BAG_TRAY_TYPE[typeIndex]}, EQUIP_TRAY_TYPE)
-    self.items = self.items or self:filterTray(filterTrays, typeIndex)
+	self.items = self.items or self:filterTray(filterTrays, typeIndex)
     for index, item in ipairs(self.items) do
 		if not item or item.isDel then
 			goto continue
 		end
-        itemUI = self:newBagItemUI()
+		local itemUI = self:newBagItemUI()
         itemUI:setEnableLongTouch(true)
         self:subscribe(itemUI, UIEvent.EventWindowLongTouchStart, function(ui)
             self:setItemDescUI(true, item, ui)
@@ -322,7 +323,7 @@ function M:fetchAllBagItem()
         self:subscribe(itemUI, UIEvent.EventWindowLongTouchEnd, function()
             self:setItemDescUI(false, item)
 		end)
-		unifyProc(self, itemUI, function(ui)
+		self:subscribe(itemUI, UIEvent.EventButtonClick, function(ui)
             if not item.tray_type then
                 return
             end
@@ -356,13 +357,19 @@ function M:fetchAllBagItem()
                     end
                 end) 
             else
-            -- 3-5 end giveAway
-                if not self:canEquip(item) then
+			-- 3-5 end giveAway
+				local canEquipStatus = self:canEquip(item)
+                if canEquipStatus == 1 then
                     -- 提示不能装备要下车
                     Client.ShowTip(1, Lang:toText("please_takeoff_your_car"), 20)
-                    return
-                end
-                Me:setItemUse(item:tid(), item:slot(), not self:isItemEquip(item))
+					return
+				elseif canEquipStatus == 2 then
+					return
+				end
+				
+				Me:setItemUse(item:tid(), item:slot(), not self:isItemEquip(item))
+				self:setBagItemUI(itemUI, item)
+				--self:setBagItemUI(itemUI, item)
             end
         end)
         self:setBagItemUI(itemUI, item)
@@ -378,16 +385,24 @@ end
 function M:canEquip(item)
 	local isEquip = self:isItemEquip(item)
 	if isEquip then
-		return true
+		return 0
 	end
     local world = Me.world
 	if Me.rideOnId then
 		local old = world:getEntity(Me.rideOnId)
 		if old and old:cfg().carMove and item and item:cfg().typeIndex ~= 3 then
-			return false
+			return 1
 		end
 	end
-	return true
+	if item:cfg().typeIndex == 3 then
+		local now = World.Now()
+		if canEquipCarTimeEnd and now < canEquipCarTimeEnd then
+			return 2 
+		else
+			canEquipCarTimeEnd = now + 15
+		end
+	end
+	return 0
 end
 
 function M:filterTray(trays, typeIndex)
@@ -409,8 +424,10 @@ function M:filterTray(trays, typeIndex)
     table.sort(result, function(item1, item2)
         local isEquip1 = self:isItemEquip(item1)
         local isEquip2 = self:isItemEquip(item2)
-        if isEquip1 == isEquip2 then
-            return item1:cfg().quality > item2:cfg().quality
+		if isEquip1 == isEquip2 then
+			local quality1 = item1:cfg().quality or 1
+			local quality2 = item2:cfg().quality or 1
+            return quality1 > quality2
         else 
             return isEquip1
         end
