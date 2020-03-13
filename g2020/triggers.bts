@@ -171,7 +171,7 @@ FUNC_BROADCAST_STATE
             Continue()
         }
         
-        If($generateType == "B" && GetObjectVar(obj = $player, key = Concat(p1 = $stateBase, p2 = "UsedTime")))
+        If($generateType == "B" && GetObjectVar(obj = $player, key = Concat(p1 = $stateBase, p2 = "TriggerRelease")))
         {
             Continue()
         }

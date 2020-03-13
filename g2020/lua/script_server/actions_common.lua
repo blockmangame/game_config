@@ -131,17 +131,23 @@ function Actions.ShowProgressFollowObj(data, params, context)
     })
 end
 
-local _getStateReleaseData = function(player, stateBase)
+local _getObjVar = function(obj, key)
+    return obj and key and obj.vars[key]
+end
+local _getSkillVar = function(skillName, key)
+    local skill = Skill.Cfg(skillName)
+    return (skill and {skill[key]} or {nil})[1]
+end
+local _getStateReleaseData = function(player, state)
     if not player or not player:isValid() or not player.isPlayer then
         return nil
     end
-    local objVar = player.vars or {}
-    if not objVar["had"..stateBase] then
+    if not _getObjVar(player, state.."got") then
         return nil
     end
-    local isReleasing = objVar["releasing"..stateBase] or false
-    local sTime = objVar[stateBase.."STime"]
-    local usedTime = objVar[stateBase.."UsedTime"] or 0
+    local isReleasing = _getObjVar(player, "releasing"..state) or false
+    local sTime = _getObjVar(player, state.."STime")
+    local usedTime = _getObjVar(player, state.."UsedTime") or 0
     if sTime and usedTime >= 0 then
         usedTime = os.time() - sTime + usedTime
     end
@@ -152,32 +158,24 @@ function Actions.ShowDetails(data, params, content)
     if not player or not player:isValid() or not player.isPlayer then
         return
     end
-    local _getObjVar = function(obj, key)
-        return obj and key and obj.vars[key]
-    end
-    local _getSkillVar = function(skillName, key)
-        local skill = Skill.Cfg(skillName)
-        return (skill and {skill[key]} or {nil})[1]
-    end
     local detailsUI = _getObjVar(player, "detailsUI")
     local state = params.state or detailsUI
     if not state or detailsUI ~= state then
         return
     end
     local skillName = "myplugin/skill_state_"..state
-    local stateBase = _getSkillVar(skillName, "stateBase") or state
     local duration = _getSkillVar(skillName, "duration") or 0
-    local isAdd = params.isAdd
     local packet = {
         pid = "ShowDetails",
         isOpen = false
     }
+    local syncPlayers = {player}
+    if params.isAddPartner then
+        table.insert(syncPlayers, params.partner)
+    end
     local subtitle = {}
-    for i, v in ipairs({player, params.partner}) do
-        if i == 2 and not isAdd then
-            goto next
-        end
-        local usedTime, isReleasing = _getStateReleaseData(v, stateBase)
+    for _, v in ipairs(syncPlayers) do
+        local usedTime, isReleasing = _getStateReleaseData(v, state)
         if usedTime ~= nil then
             packet.isOpen = true
             subtitle[v.objID] = { usedTime = usedTime*20, duration = duration*20, isReleasing = isReleasing }
