@@ -131,17 +131,17 @@ function Actions.ShowProgressFollowObj(data, params, context)
     })
 end
 
-local _getStateReleaseData = function(player, stateBase)
+local _getStateReleaseData = function(player, state, stateBase)
     if not player or not player:isValid() or not player.isPlayer then
         return nil
     end
     local objVar = player.vars or {}
-    if not objVar["had"..stateBase] then
+    if not objVar[state.."got"] then
         return nil
     end
-    local isReleasing = objVar["releasing"..stateBase] or false
-    local sTime = objVar[stateBase.."STime"]
-    local usedTime = objVar[stateBase.."UsedTime"] or 0
+    local isReleasing = objVar["releasing"..state] or false
+    local sTime = objVar[state.."STime"]
+    local usedTime = objVar[state.."UsedTime"] or 0
     if sTime and usedTime >= 0 then
         usedTime = os.time() - sTime + usedTime
     end
@@ -165,19 +165,14 @@ function Actions.ShowDetails(data, params, content)
         return
     end
     local skillName = "myplugin/skill_state_"..state
-    local stateBase = _getSkillVar(skillName, "stateBase") or state
     local duration = _getSkillVar(skillName, "duration") or 0
-    local isAdd = params.isAdd
     local packet = {
         pid = "ShowDetails",
         isOpen = false
     }
     local subtitle = {}
-    for i, v in ipairs({player, params.partner}) do
-        if i == 2 and not isAdd then
-            goto next
-        end
-        local usedTime, isReleasing = _getStateReleaseData(v, stateBase)
+    for _, v in ipairs({player, params.partner}) do
+        local usedTime, isReleasing = _getStateReleaseData(v, state)
         if usedTime ~= nil then
             packet.isOpen = true
             subtitle[v.objID] = { usedTime = usedTime*20, duration = duration*20, isReleasing = isReleasing }

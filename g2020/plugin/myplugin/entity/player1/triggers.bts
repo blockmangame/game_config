@@ -1811,9 +1811,9 @@ FUNC_STATE_GENERATE --params: stateBase, col, skill
 
 FUNC_STATE_ADD --params: state, stateBase, skill
 {
-    $hadStateKey = Concat(p1 = "had", p2 = $stateBase)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
-    SetObjectVar(obj = $obj1, key = $hadStateKey, value = true)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase), value = true)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "got"), value = true)
     ArrayAppend(array = $obj1.curStates, value = $state)
     CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = true, state = $state)
     CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state, skill = $skill)
@@ -1833,11 +1833,13 @@ FUNC_SYNC_STATES_TO_OTHERS --params: isAdd, states, needSyncPlayers, isSyncAll
 
 FUNC_SYNC_STATE_DETAILS_TO_OTHER --params: isAdd, state, needSyncPlayers
 {
-    ShowDetails( player = $obj1, isAdd = $isAdd, state = $state)
+    $hadPartner = false
     Foreach(array = $needSyncPlayers or [], key = "partner") {
+        $hadPartner = true
         ShowDetails( player = $obj1, isAdd = $isAdd, state = $state, partner = $partner)
         ShowDetails( player = $partner, isAdd = $isAdd, state = $state, partner = $obj1)
     }
+    If(not $hadPartner){ ShowDetails( player = $obj1, isAdd = $isAdd, state = $state) }
 }
 
 FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state [, isOnlySyncDetails]
@@ -1850,18 +1852,15 @@ FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state [, isO
         ArrayAppend(array = $needSyncPlayers, value = $player)
     }
     If($obj1.createdTrolley) {
-        Test("I got trolley!!!!")
         $trolleyPassengers = NewDictionary(GetPassengers(entity = $obj1.createdTrolley))
         ForeachDictionary(dict = $trolleyPassengers, keyName = "key", valueName = "val") {
             $player = GetObject(objID = $val)
             If($player ~= $obj1) {
-                Test("IN FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", "player.name = ", GetEntityName(entity = $player))
                 ArrayAppend(array = $needSyncPlayers, value = $player)
             }
         }
     } ElseIf($obj1.useTrolley) {
         $trolleyOwner = GetOwner(entity = $ride)
-        Test("I used Trolley", "trolleyOwner.name = ", GetEntityName(entity = $trolleyOwner))
         ArrayAppend(array = $needSyncPlayers, value = $trolleyOwner)
     }
     If(not $isOnlySyncDetails) {
@@ -1969,30 +1968,29 @@ FUNC_REGION_STATE_OPERATION --parmas: isLeave, state
 FUNC_STATE_SUSPEND_PROGRESS --params: state, stateBase, duration
 {
     ShowProgressFollowObj(entity = $obj1, isOpen = false, pgName = $state)
-    CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $stateBase, p2 = "_TIMER"))
+    CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "_TIMER"))
 
-    $sTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "STime"))
-    $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime"))
+    $sTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "STime"))
+    $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "UsedTime"))
     If($sTime && $usedTime)
     {
-        SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime"), value = GetTime() - $sTime + $usedTime)
+        SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "UsedTime"), value = GetTime() - $sTime + $usedTime)
     }
-    SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "STime"), value = nil)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "STime"), value = nil)
     CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = true, state = $state, isOnlySyncDetails = true)
 }
 
 FUNC_STATE_START_PROGRESS --params: state, stateBase, duration
 {
-    $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime")) or 0
-
-    SetObjectVar(obj = $obj1, value = GetTime(), key = Concat(p1 = $stateBase, p2 = "STime"))
-    SetObjectVar(obj = $obj1, value = $usedTime, key = Concat(p1 = $stateBase, p2 = "UsedTime"))
+    $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "UsedTime")) or 0
+    SetObjectVar(obj = $obj1, value = GetTime(), key = Concat(p1 = $state, p2 = "STime"))
+    SetObjectVar(obj = $obj1, value = $usedTime, key = Concat(p1 = $state, p2 = "UsedTime"))
 
     $pgText = Concat(p1 = "state_", p2 = $state, p3 = "_title")
     ShowProgressFollowObj( isOpen = true, pgName = $state, entity = $obj1, totalTime = $duration * 20, usedTime = $usedTime * 20, pgText = $pgText)
 
     $value = StartTimer(rep = false, object =$obj1, state = $state, event = "FUNC_STATE_REWARD", time = (($duration - $usedTime) * 20) // 1)
-    SetObjectVar( obj = $obj1, value = $value, key = Concat(p1 = $stateBase, p2 = "_TIMER") )
+    SetObjectVar( obj = $obj1, value = $value, key = Concat(p1 = $state, p2 = "_TIMER") )
 
     CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = true, state = $state, isOnlySyncDetails = true)
 }
@@ -2100,7 +2098,7 @@ FUNC_STATE_RELEASE --params: state[, duration]
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $hadState = Concat(p1 = "had", p2 = $stateBase)
-    $releasingState = Concat(p1 = "releasing", p2 = $stateBase)
+    $releasingState = Concat(p1 = "releasing", p2 = $state)
     CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state)
     If(GetObjectVar(obj = $obj1, key = $hadState) && not GetObjectVar(obj = $obj1, key = $releasingState))
     {
@@ -2138,7 +2136,7 @@ FUNC_STATE_RELEASE_SUSPEND --params: state
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $hadState = Concat(p1 = "had", p2 = $stateBase)
-    $releasingState = Concat(p1 = "releasing", p2 = $stateBase)
+    $releasingState = Concat(p1 = "releasing", p2 = $state)
     If(GetObjectVar(obj = $obj1, key = $hadState) && GetObjectVar(obj = $obj1, key = $releasingState))
     {
         SetObjectVar(obj = $obj1, key = $releasingState, value = false)
@@ -2324,6 +2322,10 @@ FUNC_UPDATE_STATE_SKILL_JACK_AREA --params: up
 FUNC_STATE_RESET_DATA --params: state[, hideTip]
 {
     ShowProgressFollowObj(entity = $obj1, isOpen = false, pgName = $state)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "got"), value = nil)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "STime"), value = nil)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "UsedTime"), value = nil)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = "releasing", p2 = $state), value = nil)
     CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state, hideTip = $hideTip)
     CallTrigger(object = $obj1, event = "FUNC_CLOSE_DETAILS_UI", uiName = $state, closeFromServer = true)
     CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = Concat(p1 = $state, p2 = "Effect"))
