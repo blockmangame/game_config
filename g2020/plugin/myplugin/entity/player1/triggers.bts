@@ -229,6 +229,7 @@ GOTO_INSIDE_HOUSE{
 }
 
 ENTITY_DIE{
+	CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     $house = $obj1.house
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     ReviveEntity(entity = $obj1, map = $houseInsideMap)
@@ -237,7 +238,21 @@ ENTITY_DIE{
     }Else{
         CallTrigger(obj1 = $obj1, event = "CHANGE_PLAYER_SCALE_ADULT")
     }
+    If($obj1.damageTimer){
+        StopTimer(timer = $obj1.damageTimer)
+        $obj1.damageTimer = nil
+    }
     CallTrigger(object = $obj1, obj1 = $obj1, house = $house, event = "GOTO_INSIDE_HOUSE")
+}
+
+CHRONIC_KILL_SELF{
+    $damage = GetEntityMaxHp(entity = $obj1) / 5
+    $obj1.damageTimer = StartTimer(time = 20, object = $obj1, obj1 = $obj1, damage = $damage, event = "CHRONIC_KILL_SELF_BY_DAMAGE")
+}
+
+CHRONIC_KILL_SELF_BY_DAMAGE{
+    Damage(entity = $obj1, damage = $damage)
+    $obj1.damageTimer = StartTimer(time = 20, object = $obj1, obj1 = $obj1, damage = $damage, event = "CHRONIC_KILL_SELF_BY_DAMAGE")
 }
 
 MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建房子/这个逻辑作废，购买特权重新分配服务器
@@ -2567,10 +2582,6 @@ ENTITY_JUMP {
         }
         Dismount(entity = $obj1)
     }
-}
-
-ENTITY_DIE {
-	CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
 }
 
 ENTITY_REMOVE_INTERACTION {
