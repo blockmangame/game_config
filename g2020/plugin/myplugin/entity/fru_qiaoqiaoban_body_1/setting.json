@@ -35,11 +35,50 @@
                     "text": "qiaoqiaoban_l.text",
                     "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
                     "event": "ENTITY_qiaoqiaoban_l",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 41
+                    },
+                    "customCheckCanHide":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
                     "imageSize": {
                         "width": "60",
                         "height": "60"
                     },
-                    "widgetFileName": "widget_button"
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "qiaoqiaoban_l.text",
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "nextCfgKey": "interaction_choices_qiaoqiaoban_l",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 41
+                    },
+                    "customCheckCanShow":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
@@ -62,7 +101,46 @@
                         "width": "60",
                         "height": "60"
                     },
-                    "widgetFileName": "widget_button"
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 42
+                    },
+                    "customCheckCanHide":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": -1,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "qiaoqiaoban_r.text",
+                    "image": "plugin/myplugin/image/fru_intUI/qiaoqiaoban.png",
+                    "nextCfgKey": "interaction_choices_qiaoqiaoban_r",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 42
+                    },
+                    "customCheckCanShow":{
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
                 }
             ],
             "followParams": {
@@ -75,4 +153,5 @@
             }
         }
     ]
+   
 }
