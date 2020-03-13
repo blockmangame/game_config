@@ -99,11 +99,3 @@ function M:hideLayout()
 
     World.Timer(1, callback)
 end
-
-function M:refreshBtnShowOrHide(btnList)
-    for _, changeItem in pairs(btnList) do
-        if changeItem == "party" then
-            self.partyBtn:SetVisible(false)
-        end
-    end
-end
