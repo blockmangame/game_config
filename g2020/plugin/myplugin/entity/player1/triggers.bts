@@ -2557,9 +2557,9 @@ USER_INTERACTION_ACTION
 }
 
 ENTITY_JUMP {
-    CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     $ride = GetRideOn(entity = $obj1)
     If ($ride && not IsCameraMode(player = $obj1)){
+        CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
         If(GetOwner(entity = $ride) == $obj1 && GetConfigVar(obj = $ride, key = "driverJumpShiled"))
         {
             Return()
