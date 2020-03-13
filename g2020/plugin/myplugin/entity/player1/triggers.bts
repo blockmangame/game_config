@@ -1836,10 +1836,10 @@ FUNC_SYNC_STATE_DETAILS_TO_OTHER --params: isAdd, state, needSyncPlayers
     $hadPartner = false
     Foreach(array = $needSyncPlayers or [], key = "partner") {
         $hadPartner = true
-        ShowDetails( player = $obj1, isAdd = $isAdd, state = $state, partner = $partner)
-        ShowDetails( player = $partner, isAdd = $isAdd, state = $state, partner = $obj1)
+        ShowDetails( player = $obj1, isAddPartner = $isAdd, state = $state, partner = $partner)
+        ShowDetails( player = $partner, isAddPartner = $isAdd, state = $state, partner = $obj1)
     }
-    If(not $hadPartner){ ShowDetails( player = $obj1, isAdd = $isAdd, state = $state) }
+    If(not $hadPartner){ ShowDetails( player = $obj1, isAddPartner = false, state = $state) }
 }
 
 FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state [, isOnlySyncDetails]

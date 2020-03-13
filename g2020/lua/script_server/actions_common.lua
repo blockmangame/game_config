@@ -131,17 +131,23 @@ function Actions.ShowProgressFollowObj(data, params, context)
     })
 end
 
-local _getStateReleaseData = function(player, state, stateBase)
+local _getObjVar = function(obj, key)
+    return obj and key and obj.vars[key]
+end
+local _getSkillVar = function(skillName, key)
+    local skill = Skill.Cfg(skillName)
+    return (skill and {skill[key]} or {nil})[1]
+end
+local _getStateReleaseData = function(player, state)
     if not player or not player:isValid() or not player.isPlayer then
         return nil
     end
-    local objVar = player.vars or {}
-    if not objVar[state.."got"] then
+    if not _getObjVar(player, state.."got") then
         return nil
     end
-    local isReleasing = objVar["releasing"..state] or false
-    local sTime = objVar[state.."STime"]
-    local usedTime = objVar[state.."UsedTime"] or 0
+    local isReleasing = _getObjVar(player, "releasing"..state) or false
+    local sTime = _getObjVar(player, state.."STime")
+    local usedTime = _getObjVar(player, state.."UsedTime") or 0
     if sTime and usedTime >= 0 then
         usedTime = os.time() - sTime + usedTime
     end
@@ -151,13 +157,6 @@ function Actions.ShowDetails(data, params, content)
     local player = params.player
     if not player or not player:isValid() or not player.isPlayer then
         return
-    end
-    local _getObjVar = function(obj, key)
-        return obj and key and obj.vars[key]
-    end
-    local _getSkillVar = function(skillName, key)
-        local skill = Skill.Cfg(skillName)
-        return (skill and {skill[key]} or {nil})[1]
     end
     local detailsUI = _getObjVar(player, "detailsUI")
     local state = params.state or detailsUI
@@ -170,8 +169,12 @@ function Actions.ShowDetails(data, params, content)
         pid = "ShowDetails",
         isOpen = false
     }
+    local syncPlayers = {player}
+    if params.isAddPartner then
+        table.insert(syncPlayers, params.partner)
+    end
     local subtitle = {}
-    for _, v in ipairs({player, params.partner}) do
+    for _, v in ipairs(syncPlayers) do
         local usedTime, isReleasing = _getStateReleaseData(v, state)
         if usedTime ~= nil then
             packet.isOpen = true
