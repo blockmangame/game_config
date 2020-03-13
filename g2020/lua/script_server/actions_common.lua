@@ -161,35 +161,36 @@ function Actions.ShowDetails(data, params, content)
     end
     local detailsUI = _getObjVar(player, "detailsUI")
     local state = params.state or detailsUI
-    --print("???????????", state, detailsUI, "!!!!!!!!!!!")
     if not state or detailsUI ~= state then
-        --print("not state or detailsUI ~= state")
         return
     end
     local skillName = "myplugin/skill_state_"..state
     local stateBase = _getSkillVar(skillName, "stateBase") or state
     local duration = _getSkillVar(skillName, "duration") or 0
-    local fullName = "myplugin/"..state.."Detail"
     local isAdd = params.isAdd
     local packet = {
         pid = "ShowDetails",
-        isOpen = true,
-        fullName = fullName,
-        contents = {
-            subtitle = {},
-            commentsVal = _getSkillVar(skillName, "rewardSelf"),
-            commentsCurrencyIcon = _getSkillVar(skillName, "rewardType")
-        }
+        isOpen = false
     }
+    local subtitle = {}
     for i, v in ipairs({player, params.partner}) do
         if i == 2 and not isAdd then
             goto next
         end
         local usedTime, isReleasing = _getStateReleaseData(v, stateBase)
         if usedTime ~= nil then
-            packet.contents.subtitle[v.objID] = { usedTime = usedTime*20, duration = duration*20, isReleasing = isReleasing }
+            packet.isOpen = true
+            subtitle[v.objID] = { usedTime = usedTime*20, duration = duration*20, isReleasing = isReleasing }
         end
         ::next::
+    end
+    if packet.isOpen then
+        packet.fullName = "myplugin/"..state.."Detail"
+        packet.contents = {
+            subtitle = subtitle,
+            commentsVal = _getSkillVar(skillName, "rewardSelf"),
+            commentsCurrencyIcon = _getSkillVar(skillName, "rewardType")
+        }
     end
     player:sendPacket(packet)
 end
