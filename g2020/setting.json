@@ -40,68 +40,13 @@
     "hideSettingPlayerList": true,
     "mainUiList": [
         "main_tray_g2020",
-        "newmainextension"
+        "mainExtension"
     ],
     "hideItemBar": true,
     "playerInfoUI": {
         "isShowHp": false,
         "isShowFood": false,
         "isShowExp": false
-    },
-    "uiExtension": {
-        "hideBtnIcon": "set:btn_extension.json image:hide",
-        "openBtnIcon": "set:btn_extension.json image:open",
-        "btnList": [
-            {
-                "name": "shop",
-                "showName": false,
-                "iconPath": "set:btn_extension.json image:shop",
-                "event": "EVENT_SHOW_PRI_SHOP",
-                "callbackType": 3,
-                "callbackEvent": "EVENT_SHOW_PRI_SHOP"
-            },
-            {
-                "name": "dress",
-                "showName": false,
-                "iconPath": "set:btn_extension.json image:dress",
-                "event": "EVENT_OPEN_DRESS_ARCHIVE",
-                "callbackType": 3,
-                "callbackEvent": "EVENT_OPEN_DRESS_ARCHIVE"
-            },
-            {
-                "name": "family",
-                "showName": false,
-                "iconPath": "set:btn_extension.json image:family",
-                "event": "EVENT_SHOW_FAMILY",
-                "callbackType": 2,
-                "callbackEvent": "SHOW_TEAM_UI"
-            },
-            {
-                "name": "photo",
-                "showName": false,
-                "iconPath": "set:btn_extension.json image:photo",
-                "event": "EVENT_SHOW_FAMILY_ALBUM",
-                "callbackType": 2,
-                "callbackEvent": "START_CAMERA_MODE",
-                "hideLayout": true
-            },
-            {
-                "name": "party",
-                "showName": false,
-                "iconPath": "set:btn_extension.json image:party",
-                "event": "EVENT_SHOW_PARTY",
-                "callbackType": 3,
-                "callbackEvent": "EVENT_SHOW_PARTY_LIST"
-            },
-            {
-                "name": "order",
-                "showName": false,
-                "iconPath": "set:btn_extension.json image:order",
-                "event": "EVENT_SHOW_WORK_DETAILS",
-                "callbackType": 3,
-                "callbackEvent": "EVENT_SHOW_WORK_DETAILS"
-            }
-        ]
     },
     "vars": {
         "global": [

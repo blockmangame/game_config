@@ -5783,7 +5783,6 @@ REALLY_AT_PARTY(debug = false){
     $inPartyOwnerId = $obj1.inPartyOwnerId
     $partyOwner = GetPlayerByUserId(userId = $inPartyOwnerId)
     UpdatePartyInnerSettingUI(player = $obj1, inPartyOwnerId = $inPartyOwnerId, isShow = true)
-    UpdateExtensionBtn(entity = $obj1, btnList = [{name = "party"}])
     CallTrigger(object = $obj1, event = "OPEN_DANCE")
     If($userId == $inPartyOwnerId){
         $obj1.createPartyCount = $obj1.createPartyCount + 1
