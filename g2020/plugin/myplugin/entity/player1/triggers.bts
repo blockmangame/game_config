@@ -2115,6 +2115,7 @@ FUNC_STATE_RELEASE --params: state[, duration]
         }
         SetObjectVar(obj = $obj1, key = $releasingState, value = true)
         CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "AUTOVANISH_TIMER"))
+        SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "TriggerRelease"), value = true)
         $duration = $duration or GetSkillVar(fullName = $skill, key = "duration")
         If($duration && $duration > 0)
         {
@@ -2332,9 +2333,7 @@ FUNC_STATE_RESET_DATA --params: state[, hideTip]
 FUNC_STATEBASE_RESET_DATA -- params: stateBase
 {
     SetObjectVar(obj = $obj1, key = Concat(p1 = "pre", p2 = $stateBase), value = nil)
-    SetObjectVar(obj = $obj1, key = Concat(p1 = "releasing", p2 = $stateBase), value = nil)
-    SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "STime"), value = nil)
-    SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "UsedTime"), value = nil)
+    SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "TriggerRelease"), value = nil)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"), value = nil)
 }
 
