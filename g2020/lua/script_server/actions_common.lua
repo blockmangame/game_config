@@ -180,7 +180,6 @@ function Actions.ShowDetails(data, params, content)
             packet.isOpen = true
             subtitle[v.objID] = { usedTime = usedTime*20, duration = duration*20, isReleasing = isReleasing }
         end
-        ::next::
     end
     if packet.isOpen then
         packet.fullName = "myplugin/"..state.."Detail"
