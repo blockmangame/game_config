@@ -82,8 +82,6 @@ function M:setSubtitleArgs()
         if not self.subtitle[objID] then
             local name = GUIWindowManager.instance:CreateGUIWindow1("StaticText", "")
             local percent = GUIWindowManager.instance:CreateGUIWindow1("StaticText", "")
-            name:SetBackgroundColor({1, 0, 0, 100/255})
-            percent:SetBackgroundColor({0, 1, 0, 100/255})
             name:AddChildWindow(percent)
             self.headLine:AddChildWindow(name)
             name:SetArea(
@@ -114,7 +112,7 @@ function M:setSubtitleArgs()
         subtitle.cdTimer = (not data.isReleasing and {nil} or {World.Timer(20, function ()
             usedTime = usedTime + 20
             subtitle.percent:SetText(_getRate(usedTime, duration).."%")
-            return (usedTime < duration and {true} or {false})[1]
+            return usedTime < duration
         end)})[1]
         ::continue::
     end
