@@ -401,7 +401,7 @@ function M:canEquip(item)
 			return 1
 		end
 	end
-	if item:cfg().typeIndex == 3 then
+	if item:cfg().typeIndex == 3 or item:cfg().typeIndex == 1 then
 		local now = World.Now()
 		if canEquipCarTimeEnd and now < canEquipCarTimeEnd then
 			return 2 
