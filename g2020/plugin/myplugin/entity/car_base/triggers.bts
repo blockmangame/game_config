@@ -137,15 +137,12 @@ ENTITY_RIDE_OFF
     {
         SetLoadSectionMaxInterval(entity = $obj2, value = 3500)
     }
-    StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, event = "REMOVE_ALL_CAR_MOVEMENT_BUFF")
+    StartTimer(rep = false, time = 5, object = $obj1, obj1 = $obj1, event = "REMOVE_ALL_CAR_MOVEMENT_BUFF")
 }
 
 CLAC_REMOVE_ALL_CAR_MOVEMENT_BUFF{
     If($buffCfg){
-        $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $backBuffCfg)
-        If($buff){
-            RemoveEntityBuff(entity = $obj1, buff = $buff)
-        }
+        RemoveEntityTypeBuff(entity = $obj1, key = "fullName", value = $buffCfg)
     }
 }
 
@@ -160,6 +157,10 @@ REMOVE_ALL_CAR_MOVEMENT_BUFF{
     $dict = NewDictionary($buffDice)
     $buffCfg = DictionaryGet(dict = $dict, key = "buff")
     CallTrigger(object = $obj1, obj1 = $obj1, buffCfg = $buffCfg, event = "CLAC_REMOVE_ALL_CAR_MOVEMENT_BUFF")
+    If($obj1.movementTimer){
+        StopTimer(timer = $obj1.movementTimer)
+        $obj1.movementTimer = nil
+    }
 }
 
 START_HORN{

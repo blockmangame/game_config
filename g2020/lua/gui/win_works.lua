@@ -109,6 +109,9 @@ function M:onRadioChanged(viewId)
         self:child("Works-Items"):ResetPos()
         self.curTabView = viewId
         self:initItems()
+        if self.curTabView == TabView.COLLECT then
+            self:loadCollectWorks()
+        end
     end
 end
 

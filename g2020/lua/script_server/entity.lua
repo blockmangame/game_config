@@ -73,7 +73,8 @@ function EntityServer:setItemUse(tid, slot, isUse)
     }
     if isUse then
         Trigger.CheckTriggers(self:cfg(), "CHECK_CAN_USE_ITEM", checkContext)
-        if not checkContext.result then
+		if not checkContext.result then
+			self:syncItemUse(tid, slot, false)
 			return
         end
     end

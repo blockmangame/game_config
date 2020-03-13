@@ -94,7 +94,7 @@ end
 --homedoor
 function GuideHome.showHomeUI(pos)
 	if self.homeTimer then
-		self.homeTimer()
+		--self.homeTimer()
 		self.homeTimer = nil
 	end
 	if not self.homeDoor then
@@ -110,21 +110,25 @@ end
 
 function GuideHome.resetDoor(pos)
 	if self.homeTimer then
-		self.homeTimer()
+		--self.homeTimer()
 		self.homeTimer = nil
 	end
 	if self.homeDoor then
 		self.homeDoor:SetVisible(false)
 		self.homeDoor = nil
 	end
-	for _, ui in pairs(self.mapDoor) do
-		ui:SetVisible(false)
-	end
+	
 	for _, timer in pairs(self.mapDoorTimer) do
 		timer()
 	end
+	
+	for _, ui in pairs(self.mapDoor) do
+		ui:SetVisible(false)
+	end
+
 	self.mapDoor = {}
 	self.mapDoorTimer = {}
+
 	if pos then
 		self.MakeMapDoor()
 		self.showHomeUI(pos)
