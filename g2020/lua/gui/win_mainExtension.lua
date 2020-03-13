@@ -56,7 +56,12 @@ function M:initBtnsEvent()
     end)
 
     self:subscribe(self.partyBtn, UIEvent.EventButtonClick, function()
-        Lib.emitEvent(Event.EVENT_SHOW_PARTY_LIST, true)
+        local wnd = UI:getWnd("party_setting", true)
+        if not wnd then
+            Lib.emitEvent(Event.EVENT_SHOW_PARTY_LIST, true)
+        else
+            Client.ShowTip(3, Lang:toText("tip.user.already.in.other.party"), 40)
+        end
     end)
 end
 
