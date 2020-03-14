@@ -6653,3 +6653,22 @@ SHOW_TRADE_CAR()
         ShowRewardItemEffect(fullName = $fullName, count = 1, type = "Item", player = $obj1)
     }
 }
+
+TOGGLE_MAIN_UI  --点击状态详情时，隐藏或显示主界面UI, show为true时显示主界面UI
+{
+    If($show)
+    {
+        --显示主界面UI
+        ShowOpenedWnd(player = $obj1, showFuncId = $obj1.showFuncId)
+        ShowInteractionWindow(player = $obj1)
+        OperationWindows(player = $obj1, isOpen = true, win = "main_tray_g2020")
+    }
+    Else
+    {
+        --隐藏主界面UI
+        $obj1.showFuncId = HideOpenedWnd(player = $obj1, excluded = {a = "playerState"})    -- 只保留打开"playerState"窗口
+        CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+        HideInteractionWindow(player = $obj1)
+        OperationWindows(player = $obj1, isOpen = false, win = "main_tray_g2020")
+    }
+}

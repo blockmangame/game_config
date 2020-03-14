@@ -14,6 +14,15 @@ local specs = World.cfg.stateSpecs or {
     mainArea = {{0, -260}, {0, -50}, {0, 110}, {0, 110}}
 }
 
+
+local function ToggleMainUI(show)
+    local packet = {
+        pid = "ToggleMainUI",
+        show = show,
+	}
+	Me:sendPacket(packet)
+end
+
 local function _getIndexByValueKey(tab, val, key)
     for i, v in ipairs(tab or {}) do
         if (key and val == v[key]) or (not key and val == v) then
@@ -182,6 +191,7 @@ function M:showMain(visible)
     close.UI.root:SetVisible(not visible)
     self._root:SetTouchable(not visible)
     self:dynamicCalculateStatesArea()
+    ToggleMainUI(visible)
 end
 
 function M:init()
