@@ -119,8 +119,23 @@ function Actions.ShowProgressFollowObj(data, params, context)
     if not player then
         return
     end
-    player:sendPacket({
+
+    local playerList = {}
+    playerList[player.objID] = player
+
+    local teamId = player:getValue("teamId")
+    if teamId and teamId ~= 0 then
+        local teamList = Game.GetTeam(teamId)
+        for i,v in pairs(teamList.entityList)do
+            playerList[v.objID] = v
+        end
+    end
+
+    -- todo: 把有交互的人从bts传递过来
+
+    local packet = {
         pid = "ShowProgressFollowObj",
+        objID = player.objID,
         isOpen = params.isOpen,
         pgImg = params.pgImg,
         pgBackImg = params.pgBackImg,
@@ -128,7 +143,13 @@ function Actions.ShowProgressFollowObj(data, params, context)
         usedTime = params.usedTime,
         totalTime = params.totalTime,
         pgText = params.pgText,
-    })
+    }
+
+    for _, entity in pairs(playerList) do
+        if entity.isPlayer then
+            entity:sendPacket(packet)
+        end
+    end
 end
 
 local _getObjVar = function(obj, key)
