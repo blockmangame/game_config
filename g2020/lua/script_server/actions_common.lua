@@ -190,12 +190,13 @@ function Actions.ShowDetails(data, params, content)
         pid = "ShowDetails",
         isOpen = false
     }
-    local syncPlayers = {player}
-    if params.isAddPartner then
-        table.insert(syncPlayers, params.partner)
+    local shouldSyncPlayers = {player}
+    local target = params.target
+    if target and not params.isRemoveTarget then
+        table.insert(shouldSyncPlayers, target)
     end
     local subtitle = {}
-    for _, v in ipairs(syncPlayers) do
+    for _, v in pairs(shouldSyncPlayers) do
         local usedTime, isReleasing = _getStateReleaseData(v, state)
         if usedTime ~= nil then
             packet.isOpen = true
@@ -279,17 +280,30 @@ end
 
 function Actions.SyncStatesData(data, params, context)
     local player = params.player
-    if not player or not player:isValid() or not player.isPlayer then
-        return
+    local target = params.target
+    for _, v in pairs({player, target}) do
+        if not v or not v:isValid() or not v.isPlayer then
+            return
+        end
     end
-
+    local states = {}
+    local isAdd = params.isAdd
+    local isWithoutCheck = params.isWithoutCheck or not params.states
+    local tmpStates = params.states or _getObjVar(target, "curStates")
+    --如果有声明isWithoutCheck为true或者为target.curStates则不需要再去检查states里的状态是否为target获得的了
+    if not isWithoutCheck and isAdd then
+        for _, v in pairs(states) do
+            if _getObjVar(target, v.."got") then
+                table.insert(states, v)
+            end
+        end
+    end
     player:sendPacket({
         pid = "SyncStatesData",
-        isClose = params.isClose,
         data = {
-			isAdd = params.isAdd,
-			states = params.states,
-			targetID = (params.target and {params.target.objID} or {player.objID})[1]
+			isAdd = isAdd,
+			states = (isWithoutCheck and {tmpStates} or {states})[1],
+			targetID = target.objID
 		},
     })
 end

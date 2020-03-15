@@ -1834,33 +1834,33 @@ FUNC_STATE_ADD --params: state, stateBase, skill
     CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state, skill = $skill)
 }
 
-FUNC_SYNC_STATES_TO_OTHERS --params: isAdd, states, needSyncPlayers, isSyncAll
+FUNC_SYNC_STATES_TO_OTHERS --params: isAdd, states, needSyncPlayers
 {
-    Foreach(array = $needSyncPlayers or [], key = "player")
-    {
-        If(not IsPlayer(entity = $player)) { Continue() }
-        If($isSyncAll) { $states = $obj1.curStates }
-        SyncStatesData(player = $player, isAdd = $isAdd, states = $states, target = $obj1)
-        If($isSyncAll) { $states = $player.curStates }
+    SyncStatesData(player = $obj1, isAdd = $isAdd, states = $states, isWithoutCheck = true, target = $obj1)
+    Foreach(array = $needSyncPlayers, key = "player") {
+        SyncStatesData(player = $player, isAdd = $isAdd, states = $states, isWithoutCheck = true, target = $obj1)
         SyncStatesData(player = $obj1, isAdd = $isAdd, states = $states, target = $player)
     }
 }
 
-FUNC_SYNC_STATE_DETAILS_TO_OTHER --params: isAdd, state, needSyncPlayers
+FUNC_SYNC_STATE_DETAILS_TO_OTHER --params: state, needSyncPlayers[, isRemoveTarget]
 {
-    $hadPartner = false
-    Foreach(array = $needSyncPlayers or [], key = "partner") {
-        $hadPartner = true
-        ShowDetails( player = $obj1, isAddPartner = $isAdd, state = $state, partner = $partner)
-        ShowDetails( player = $partner, isAddPartner = $isAdd, state = $state, partner = $obj1)
+    --Test("haha", $needSyncPlayers)
+    --ShowDetails(player = $obj1, state = $state)
+    $hadTarget = false
+    Foreach(array = $needSyncPlayers, key = "target") {
+        $hadTarget = true
+        ShowDetails(player = $obj1, state = $state, target = $target, isRemoveTarget = $isRemoveTarget)
+        ShowDetails(player = $target, state = $state, target = $obj1, isRemoveTarget = $isRemoveTarget)
     }
-    If(not $hadPartner){ ShowDetails( player = $obj1, isAddPartner = false, state = $state) }
+    If(not $hadTarget) { ShowDetails(player = $obj1, state = $state) }
 }
 
 FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state [, isOnlySyncDetails]
 {
+    $needSyncPlayers = []
     $ride = GetRideOn(entity = $obj1)
-    $needSyncPlayers = [$obj1, $ride]
+    If(IsPlayer(entity = $ride)) { ArrayAppend(array = $needSyncPlayers, value = $ride)}
     $passengers = NewDictionary(GetPassengers(entity = $obj1))
     ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val") {
         $player = GetObject(objID = $val)
@@ -1881,7 +1881,7 @@ FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state [, isO
     If(not $isOnlySyncDetails) {
         CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = $isAdd, states = [$state], needSyncPlayers = $needSyncPlayers)
     }
-    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", isAdd = $isAdd, state = $state, needSyncPlayers = $needSyncPlayers)
+    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", state = $state, needSyncPlayers = $needSyncPlayers)
 }
 
 FUNC_STATE_START_AUTO_VANISH_TIME --parmas: state, skill
@@ -1940,7 +1940,7 @@ FUNC_STATE_RIDE_OPERATION --params: ride, isRideOff
     }
     If(IsPlayer(entity = $ride)) {
         CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = not $isRideOff, needSyncPlayers = [$ride], isSyncAll = true)
-        CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", isAdd = not $isRideOff, needSyncPlayers = [$ride])
+        CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", needSyncPlayers = [$ride], isRemoveTarget = $isRideOff)
     }
     $event = $isRideOff and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE"
     If($ride.cfg.releaseState)
@@ -2096,12 +2096,12 @@ FUNC_STATESKILL_REMOVE --params: state, skill
     }
 
     SetObjectVar(obj = $obj1, key = $hadState, value = false)
+    CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
+    CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
+    
     $index = ArrayFind(array = $obj1.curStates, value = $state)
     If($index){ ArrayRemove(array = $obj1.curStates, index = $index) }
     CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = false, state = $state)
-
-    CallTrigger(object = $obj1, event = "FUNC_STATEBASE_RESET_DATA", stateBase = $stateBase)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_RESET_DATA", state = $state)
 }
 
 FUNC_STATE_RELEASE --params: state[, duration]
@@ -2179,7 +2179,7 @@ FUNC_STATE_SHOW_DETAILS_UI -- params: skill(fullName) [, partner]
 {
     $state = GetSkillVar(fullName = $skill, key = "state")
     $obj1.detailsUI = $state
-    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", isAdd = true, state = $state, needSyncPlayers = [$partner])
+    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", state = $state, needSyncPlayers = [$partner])
 }
 
 FUNC_STATE_OPEN_GPS --params: rtVal
@@ -2342,7 +2342,6 @@ FUNC_STATE_RESET_DATA --params: state[, hideTip]
     SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "UsedTime"), value = nil)
     SetObjectVar(obj = $obj1, key = Concat(p1 = "releasing", p2 = $state), value = nil)
     CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state, hideTip = $hideTip)
-    CallTrigger(object = $obj1, event = "FUNC_CLOSE_DETAILS_UI", uiName = $state, closeFromServer = true)
     CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = Concat(p1 = $state, p2 = "Effect"))
     CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "AFFECT_TIMER"))
 }
