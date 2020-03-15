@@ -3,6 +3,7 @@ local states = {}
 local close = {}
 local imgPath = "set:state_detail.json image:"
 local skillPath = "myplugin/skill_state_"
+local isOdd = true
 local specs = World.cfg.stateSpecs or {
     itemWidth = 80,
     itemHeight = 80,
@@ -207,6 +208,25 @@ function M:init()
     Lib.subscribeEvent(Event.EVENT_SET_UI_VISIBLE, function(visible)
         self:showMain(visible)
     end)
+    Lib.subscribeEvent(Event.EVENT_STATE_RELEASING_ANIMATION, function(state)
+        self:stateReleasingAnimation(state)
+    end)
+end
+
+function M:stateReleasingAnimation(state)
+    local UI = states.UI
+    local img = isOdd and imgPath..state or imgPath..state.."_chosen"
+    if main.visible then
+        main.UI.img:SetImage(img)
+    elseif UI.cell[state] then
+        local btn = UI.cell[state].btn
+        if btn:IsSelected() then
+            btn:SetPushedImage(img)
+        else
+            btn:SetNormalImage(img)
+        end
+    end
+    isOdd = not isOdd
 end
 
 return M

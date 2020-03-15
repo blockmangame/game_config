@@ -85,17 +85,18 @@ function M:createCell(args, objID)
     self._root:AddChildWindow(progress.pgui)
     self:updateArea(objID)
 
-    progress.cdTimer = World.Timer(20, function ()
-        usedTime = usedTime + 20
+    progress.cdTimer = World.Timer(10, function ()
+        usedTime = usedTime + 10
         local rate = getRate(usedTime, totalTime)
         progress.pgui:SetProgress(rate)
-        if rate == 1 then
+        if rate >= 0.7 then
+            Lib.emitEvent(Event.EVENT_STATE_RELEASING_ANIMATION, pgName)
+        elseif rate == 1 then
             self:removeCell(pgName)
             return false
         end
-
-        return true
-    end)
+            return true
+        end)
 end
 
 function M:removeCell(pgName, objID)
