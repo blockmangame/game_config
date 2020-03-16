@@ -2649,12 +2649,35 @@
             "z": 0.6
         },
         "brightness": {
-            "x": 0.55,
-            "y": 0.55,
-            "z": 0.55
+            "x": 5.0,
+            "y": 5.0,
+            "z": 5.0
         }
     },
-	"skyLightScale":0.1,
-	"minOpacityValue": 0.5,
+	"actorLight":{
+     "mainLightColor": {
+      "x": 0.6,
+      "y": 0.6,
+      "z": 0.6
+     },
+    "subLightColor": {
+      "x": 0.6,
+      "y": 0.6,
+      "z": 0.6
+      },
+    "ambientLightColor": {
+      "x": 0.6,
+      "y": 0.6,
+      "z": 0.6
+     },
+    "brightness": {
+      "x": 0.6,
+      "y": 0.6,
+      "z": 0.6
+    }
+	},
+	"actorReceiveBlockLight":false,
+	"skyLightScale":0.8,
+	"minOpacityValue": 3,
 	"maxLightMode":false
 }
