@@ -35,10 +35,10 @@
             {
                 "text": "food_buy.text",
                 "image": "plugin/myplugin/image/fru_intUI/buy_money.png",
-                "event": "FOOD_BUY",
-                "customCheckCanHide": {
-                    "funcName": "checkCanPutBabyOnto"
+                "checkCanHide": {
+                    "funcName": "checkOwnerInSameTeam"
                 },
+                "event": "FOOD_BUY",
                 "imageSize": {
                     "width": "60",
                     "height": "60"
@@ -49,10 +49,10 @@
             {
                 "text": "food_buy.text2",
                 "image": "plugin/myplugin/image/fru_intUI/hand_click.png",
-                "event": "FOOD_BUY",
-                "customCheckCanHide": {
-                    "funcName": "checkCanPutBabyOnto"
+                "checkCanShow": {
+                    "funcName": "checkOwnerInSameTeam"
                 },
+                "event": "FOOD_BUY",
                 "imageSize": {
                     "width": "60",
                     "height": "60"

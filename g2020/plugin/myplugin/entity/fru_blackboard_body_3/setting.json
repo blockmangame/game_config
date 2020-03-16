@@ -48,14 +48,16 @@
             {
                 "text": "blackboard.text",
                 "image": "plugin/myplugin/image/fru_intUI/hand_click.png",
-                "checkCanShow": {
-                    "funcName": "checkOwnership"
-                },
                 "event": "SHOW_EDIT_BLACKBOARD_INPUT_DIALOG",
+                "customCheckCanHide": {
+                    "funcName": "checkCanPutBabyOnto"
+                },
                 "imageSize": {
                     "width": "60",
                     "height": "60"
-                }
+                },
+                "widgetFileName": "widget_button_image_center",
+                "enableTextBorder": true
             }
         ],
         "followParams": {
