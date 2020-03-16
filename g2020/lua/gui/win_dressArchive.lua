@@ -104,6 +104,9 @@ function M:updateActorScale()
 end
 
 function M:onClickCloseBtn()
+	Me:sendPacket({
+		pid = "CloseDress"
+	})
     UI:closeWnd(self)
     self:modPlayerSkin()
 end
@@ -259,10 +262,4 @@ function M:modPlayerSkin()
 			skin = self.curActorSkin
 		})
 	end
-end
-
-function M:onClose()
-	Me:sendPacket({
-		pid = "CloseDress"
-	})
 end

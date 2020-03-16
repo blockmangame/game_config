@@ -1,12 +1,12 @@
 ENTITY_ENTER
 {
-    $obj1.pos = GetEntityPosition(entity = $obj1)
-    $index = GetConfigVar(obj = $obj1, key = "emailIndex")
-    If($index == 1){
-        @ENTITY_ENTER1 = $obj1
-    }Else{
-        @ENTITY_ENTER2 = $obj1
-    }
+    --$obj1.pos = GetEntityPosition(entity = $obj1)
+    --$index = GetConfigVar(obj = $obj1, key = "emailIndex")
+    -- If($index == 1){
+       -- @ENTITY_ENTER1 = $obj1
+    --}Else{
+    --    @ENTITY_ENTER2 = $obj1
+    --}
 }
 
 SHOW_BUY_UI(){
