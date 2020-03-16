@@ -5598,7 +5598,7 @@ PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
             }
             If($obj1.inSelfParty == 0){--not my party
                 $obj1.dontAskShowPartyList = true
-                $obj1.dontReenterGame = true
+                $obj1.dontReenterGameWhenLeaveParty = true
                 $obj1.leavePartyEvent = "JOIN_OTHERS_PARTY"
                 LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
             }
@@ -5612,12 +5612,14 @@ PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
         If($obj1.inSelfParty){--me in party
             If($obj1.inSelfParty == 1){--my party
                 $obj1.dontReenterGameWhenCloseParty = true
+                $obj1.reenterGameWhenCrossVisitFailed = true
                 $obj1.closePartyEvent = "CROSS_SERVER_VISIT"
                 CloseParty(player = $obj1)
             }
             If($obj1.inSelfParty == 0){--not my party
                 $obj1.dontAskShowPartyList = true
-                $obj1.dontReenterGame = true
+                $obj1.dontReenterGameWhenLeaveParty = true
+                $obj1.reenterGameWhenCrossVisitFailed = true
                 $obj1.leavePartyEvent = "CROSS_SERVER_VISIT"
                 LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
             }
@@ -5751,8 +5753,8 @@ LEAVE_PARTY_SUCCESS(debug = false){
         ShowDialogTip(entity = $obj1, p1 = "gui.party.ask.show.party", event = "ASK_SHOW_PARTY_LIST", tipType = $tipType
             ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
     }
-    ElseIf($obj1.dontReenterGame){
-        $obj1.dontReenterGame = false
+    ElseIf($obj1.dontReenterGameWhenLeaveParty){
+        $obj1.dontReenterGameWhenLeaveParty = false
         If($obj1.leavePartyEvent){
             CallTrigger(object = $obj1, event = $obj1.leavePartyEvent)
         }
@@ -6005,7 +6007,7 @@ RESET_GAME_FAILED(debug = true){
 
         If($obj1.resetGameToJoinParty){
             ShowTip(entity = $obj1, tipType = 2, textKey = "tip.user.join.party.failed")
-            $obj1.dontReenterGame = true
+            $obj1.dontReenterGameWhenLeaveParty = true
             $obj1.dontAskShowPartyList = true
             LeaveParty(player = $obj1, targetUserId = $obj1.inPartyOwnerId)
         }
@@ -6014,6 +6016,11 @@ RESET_GAME_FAILED(debug = true){
             $obj1.openPartyFailed = true
             ShowTip(entity = $obj1, tipType = 2, textKey = "tip.user.create.party.failed")
             CloseParty(player = $obj1)
+        }
+        ElseIf($obj1.reenterGameWhenCrossVisitFailed){
+            $obj1.reenterGameWhenCrossVisitFailed = nil
+            ShowTip(entity = $obj1, tipType = 2, textKey = "tip.user.visit.friend.failed")
+            ReenterGame(player = $obj1)
         }
         Else{
             ShowTip(entity = $obj1, tipType = 2, textKey = $resultType)
