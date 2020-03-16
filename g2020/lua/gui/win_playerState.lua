@@ -41,6 +41,11 @@ local function _getSize(tab)
 end
 
 function M:onOpen()
+    main.visible = true
+    main.UI.root:SetVisible(true)
+    states.UI.root:SetVisible(false)
+    close.UI.root:SetVisible(false)
+    self._root:SetTouchable(false)
 end
 
 function M:onClose()
