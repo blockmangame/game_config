@@ -117,10 +117,12 @@ end
 local _getObjVar = function(obj, key)
     return obj and key and obj.vars[key]
 end
+
 local _getSkillVar = function(skillName, key)
     local skill = Skill.Cfg(skillName)
     return (skill and {skill[key]} or {nil})[1]
 end
+
 function Actions.ShowProgressFollowObj(data, params, context)
     local player = params.entity
     if not player or not player:isValid() or not player.isPlayer then
@@ -130,16 +132,8 @@ function Actions.ShowProgressFollowObj(data, params, context)
     local playerList = {}
     playerList[player.objID] = player
 
-    --local teamId = player:getValue("teamId")
-    --if teamId and teamId ~= 0 then
-    --    local teamList = Game.GetTeam(teamId)
-    --    for i,v in pairs(teamList.entityList)do
-    --        playerList[v.objID] = v
-    --    end
-    --end
-
+    -- 找出和player有交互的玩家, 需要同步头顶条状态
     local pgName = params.pgName
-    -- todo: 把有交互的人从bts传递过来
     local teamId = player:getValue("teamId")
     if params.type and params.type == "state" then
         local skillPath = "myplugin/skill_state_"..pgName
@@ -171,9 +165,7 @@ function Actions.ShowProgressFollowObj(data, params, context)
     }
 
     for _, entity in pairs(playerList) do
-        --if entity.isPlayer then --前面做了限制了
-            entity:sendPacket(packet)
-        --end
+        entity:sendPacket(packet)
     end
 end
 
