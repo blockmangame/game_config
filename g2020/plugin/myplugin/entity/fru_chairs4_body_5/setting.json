@@ -50,27 +50,68 @@
             "z": 0
         }
     },
-    "interactionUI": {
-        "cfgKey": "interactionUI",
-        "centerBtns": [
-            {
-                "text": "crib2.text",
-                "image": "plugin/myplugin/image/fru_intUI/sleep.png",
-                "event": "ENTITY_cirb3",
-                "imageSize": {
-                    "width": "60",
-                    "height": "60"
-                },
-                "widgetFileName": "widget_button"
+    "interactionUI": [
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "crib3.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                    "event": "ENTITY_cirb3",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 47
+                    },
+                    "customCheckCanHide": {
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0.5,
+                    "z": 0
+                }
             }
-        ],
-        "followParams": {
-            "followScenePos": false,
-            "offset": {
-                "x": 0,
-                "y": 0,
-                "z": 0
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "crib3.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                    "nextCfgKey": "interaction_choices_cirb3",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 47
+                    },
+                    "customCheckCanShow": {
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0,
+                    "y": 0.5,
+                    "z": 0
+                }
             }
         }
-    }
+    ]
 }
