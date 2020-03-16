@@ -4765,6 +4765,11 @@ ENTITY_BUY_RESULT()
 }
 
 GIVE_AWAY{
+    If(GetItemCfg(fullName = $cfg, key = "base") == "car_base"){
+        $tipType = 0
+        ShowDialogTip(entity = $obj1, tipType = $tipType,p1="gui.hint",p2="item.pick.bag",p3="sure"
+            ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
+    }
     AddItem(entity = $obj1, cfg = $cfg, count = $count or 1)
 }
 
