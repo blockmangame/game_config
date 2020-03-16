@@ -134,6 +134,7 @@ function Actions.ShowProgressFollowObj(data, params, context)
 
     -- 找出和player有交互的玩家, 需要同步头顶条状态
     local pgName = params.pgName
+    local isOpen = params.isOpen
     local teamId = player:getValue("teamId")
     if params.type and params.type == "state" then
         local skillPath = "myplugin/skill_state_"..pgName
@@ -145,8 +146,8 @@ function Actions.ShowProgressFollowObj(data, params, context)
             local rewardDis = _getSkillVar(skillPath, "rewardDis")
             local objRewardCount = _getObjVar(obj, stateBase.."RewardCount") or 0
 
-            if obj and obj:isValid() and obj.isPlayer and obj:getValue("teamId") == teamId and player.map ==
-                    obj.map and objRewardCount < rewardCount and player:distance(obj) < rewardDis then
+            if obj and obj:isValid() and obj.isPlayer and (not isOpen or (obj:getValue("teamId") == teamId
+                    and player.map == obj.map and objRewardCount < rewardCount and player:distance(obj) < rewardDis)) then
                 playerList[v] = obj
             end
         end
@@ -156,7 +157,7 @@ function Actions.ShowProgressFollowObj(data, params, context)
         pid = "ShowProgressFollowObj",
         objID = player.objID,
         pgName = pgName,
-        isOpen = params.isOpen,
+        isOpen = isOpen,
         pgImg = params.pgImg,
         pgBackImg = params.pgBackImg,
         usedTime = params.usedTime,
