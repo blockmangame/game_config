@@ -103,22 +103,29 @@ function M:operateStateCell(isAdd, state, stateIndex)
             end
             Skill.Cast(skillPath..state, {targetID = otherID})
         end)
+        local txtLv = GUIWindowManager.instance:CreateGUIWindow1("Layout", state.."txtLv")
+        txtLv:SetArea({0, 0}, {0, -6}, {0, specs.itemWidth / 3}, {0, specs.itemHeight / 3})
+        txtLv:SetProperty("StretchType", "NineGrid")
+        txtLv:SetVerticalAlignment(2)
+        txtLv:SetHorizontalAlignment(2)
+        txtLv:SetBackImage(imgPath.."number_background")
         local txt = GUIWindowManager.instance:CreateGUIWindow1("StaticText", state.."Sum")
-        txt:SetArea({0, 0}, {0, 0}, {0, specs.itemWidth / 3}, {0, specs.itemHeight / 3})
-        txt:SetVerticalAlignment(2)
-        txt:SetHorizontalAlignment(2)
+        txt:SetArea({0, 0}, {0, 0}, {1, 0}, {1, 0})
         txt:SetTextVertAlign(1)
         txt:SetTextHorzAlign(1)
+        txt:SetTextColor({0, 0, 0, 1})
         txt:SetTouchable(true)
-        btn:AddChildWindow(txt)
+        txtLv:AddChildWindow(txt)
+        btn:AddChildWindow(txtLv)
         states.UI.root:AddChildWindow(btn)
-        cell = { btn = btn, txt = txt }
+        cell = { btn = btn, txtLv = txtLv, txt = txt }
     end
 
     if stateData.stateUsersCount <= 0 then
         table.remove(states.data, stateIndex)
         if cell then
-            cell.btn:RemoveChildWindow1(cell.txt)
+            cell.txtLv:RemoveChildWindow1(cell.txt)
+            cell.btn:RemoveChildWindow1(cell.txtLv)
             states.UI.root:RemoveChildWindow1(cell.btn)
             cell = nil
         end
@@ -154,7 +161,6 @@ function M:dynamicCalculateStatesArea()
     states.UI.root:SetArea({0, specs.itemXAbs}, {0, specs.itemYAbs}, {0, width}, {0, specs.itemHeight})
     states.UI.root:SetHorizontalAlignment(1)
     states.UI.root:SetVerticalAlignment(0)
-    states.UI.root:SetBackgroundColor({1, 0, 0, 100/255})
 end
 
 function M:syncData(packet)
