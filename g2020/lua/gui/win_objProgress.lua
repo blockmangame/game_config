@@ -11,15 +11,16 @@ local uiFollowObjectParams = {
     anchor = { x = 0.5, y = 0.5 },
     offset = { x = 0, y = paramsOffsetY, z = 0 },
 }
-local function dynamicAdjustUIParams(self, row, objID)
+local function dynamicAdjustUIParams(self, row, wnd, objID)
+
     uiFollowObjectParams.offset.y = paramsOffsetY + (row - 1) * 0.1
-    UILib.uiFollowObject(self._root, objID, uiFollowObjectParams)
+    UILib.uiFollowObject(wnd, objID, uiFollowObjectParams)
 end
 
 function M:init()
-    WinBase.init(self, "ObjProgress.json", true)
+    WinBase.init(self, "ProgressContainer.json", true)
     self._root:SetTouchable(false)
-    self._root:SetVisible(false)
+    self._root:SetVisible(true)
     self:initEvent()
     --UILib.uiFollowObject(self._root, Me.objID, uiFollowObjectParams)
 end
@@ -57,6 +58,43 @@ function M:createCell(args, objID)
             --staticText ui
             ["stui"] = GUIWindowManager.instance:CreateGUIWindow1("StaticText", "staticText"..pgName),
         }
+        local progress = progressList[pgName..objID]
+        -- progress._root = GUIWindowManager.instance:CreateGUIWindow1("Layout", "layout"..pgName)
+        progress._root = GUIWindowManager.instance:LoadWindowFromJSON("ObjProgress.json")
+        progress._root:SetTouchable(false)
+
+
+progress._root:SetBackgroundColor({1, 0, 0, 100/255})
+
+        -- progress._root:SetWidth({1, 0})
+        -- progress._root:SetHeight({0, specs.height})
+        progress._root:SetArea({0, 0}, {0, 0}, {1, 0}, {0, specs.height})
+        progress.pgui:AddChildWindow(progress.stui)
+        progress._root:AddChildWindow(progress.pgui)
+
+        progress.pgui:SetBackImage(args.pgBackImg or "set:state_detail.json image:pgBackImg")
+        progress.pgui:SetProgressImage(args.pgImg or "set:state_detail.json image:pgImg")
+        progress.pgui:SetProgress(getRate(usedTime, totalTime))
+        -- progress.pgui:SetWidth({1, 0})
+        -- progress.pgui:SetHeight({0, specs.height})
+        progress.pgui:SetArea({0, 0}, {0, 0}, {1, 0}, {1, 0})
+        progress.pgui:SetTouchable(false)
+        progress.pgui:SetVisible(true)
+        progress.pgui:SetProperty("StretchType", "NineGrid")
+        progress.pgui:SetProperty("StretchOffset", "0, 0, 0, 0")
+
+        -- progress.pgui:AddChildWindow(progress.stui)
+        progress.stui:SetArea({0, 0}, {0, 0}, {1, 0}, {1, 0})
+        progress.stui:SetText(Lang:toText(args.pgText or ""))
+        progress.stui:SetTextVertAlign(1)
+        progress.stui:SetTextHorzAlign(1)
+        progress.stui:SetTouchable(false)
+    
+        -- self._root:AddChildWindow(progress.pgui)
+        self._root:AddChildWindow(progress._root)
+
+        self._root:SetBackgroundColor({0, 1, 0, 100/255})
+        self:updateArea(pgName, objID)
     end
 
     local progress = progressList[pgName..objID]
@@ -64,26 +102,6 @@ function M:createCell(args, objID)
         progress.cdTimer()
         progress.cdTimer = nil
     end
-
-    progress.pgui:SetBackImage(args.pgBackImg or "set:state_detail.json image:pgBackImg")
-    progress.pgui:SetProgressImage(args.pgImg or "set:state_detail.json image:pgImg")
-    progress.pgui:SetWidth({1, 0})
-    progress.pgui:SetProgress(getRate(usedTime, totalTime))
-    progress.pgui:SetHeight({0, specs.height})
-    progress.pgui:SetTouchable(false)
-    progress.pgui:SetVisible(true)
-    progress.pgui:SetProperty("StretchType", "NineGrid")
-    progress.pgui:SetProperty("StretchOffset", "0, 0, 0, 0")
-
-    progress.pgui:AddChildWindow(progress.stui)
-    progress.stui:SetArea({0, 0}, {0, 0}, {1, 0}, {1, 0})
-    progress.stui:SetText(Lang:toText(args.pgText or ""))
-    progress.stui:SetTextVertAlign(1)
-    progress.stui:SetTextHorzAlign(1)
-    progress.stui:SetTouchable(false)
-
-    self._root:AddChildWindow(progress.pgui)
-    self:updateArea(objID)
 
     progress.cdTimer = World.Timer(10, function ()
         usedTime = usedTime + 10
@@ -112,24 +130,28 @@ function M:removeCell(pgName, objID)
         cdTimer()
         cdTimer = nil
     end
-    self._root:RemoveChildWindow1(progress.pgui)
-    self._root:RemoveChildWindow1(progress.stui)
+    progress.pgui:RemoveChildWindow1(progress.stui)
+    progress._root:RemoveChildWindow1(progress.pgui)
+    self._root:RemoveChildWindow1(progress._root)
+    -- self._root:RemoveChildWindow1(progress.pgui)
+    -- self._root:RemoveChildWindow1(progress.stui)
     progressList[pgName..objID] = nil
-    self:updateArea(objID)
+    self:updateArea(pgName, objID)
 end
 
-function M:updateArea(objID)
+function M:updateArea(name, objID)
     local i = 0
     for _, v in pairs(progressList) do
         v.pgui:SetXPosition({0, 0})
         v.pgui:SetYPosition({0, i * (specs.lineSpace + v.pgui:GetHeight()[2])})
         i = i + 1
     end
-    if i > 0 then
+    local progress = progressList[name..objID]
+    if i > 0 and progress then
         local totalHeight = i * (specs.height + specs.lineSpace) - specs.lineSpace
-        self._root:SetArea({0, 0}, {0, 0}, {0, specs.width}, {0, totalHeight})
-        dynamicAdjustUIParams(self, i, objID)
-        self._root:SetVisible(true)
+        progress._root:SetArea({0, 0}, {0, 0}, {0, specs.width}, {0, totalHeight})
+        progress._root:SetVisible(true)
+        dynamicAdjustUIParams(self, i, progress._root, objID)
     end
 end
 
