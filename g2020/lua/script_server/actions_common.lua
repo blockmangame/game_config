@@ -151,12 +151,10 @@ function Actions.ShowProgressFollowObj(data, params, context)
             local rewardDis = _getSkillVar(skillPath, "rewardDis")
             local objRewardCount = _getObjVar(obj, stateBase.."RewardCount") or 0
 
-            if not obj or not obj:isValid() or not obj.isPlayer or obj:getValue("teamId") ~= teamId or player.map ~=
-                    obj.map or objRewardCount >= rewardCount or player:distance(obj) > rewardDis then
-                goto next
+            if obj and obj:isValid() and obj.isPlayer and obj:getValue("teamId") == teamId and player.map ==
+                    obj.map and objRewardCount < rewardCount and player:distance(obj) < rewardDis then
+                playerList[v] = obj
             end
-            playerList[v] = obj
-            ::next::
         end
     end
 
