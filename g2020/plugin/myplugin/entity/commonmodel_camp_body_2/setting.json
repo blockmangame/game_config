@@ -1,0 +1,80 @@
+{
+    "skin": {
+        "body": "2"
+    },
+    "actorName": "g2020_camp.actor",
+    "base": "commonmodel_base",
+    "interaction": {
+        "radius": 5,
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    "interactionUI": [
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "camp1.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                    "event": "ENTITY_camp1",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 1
+                    },
+                    "customCheckCanHide": {
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.5,
+                    "y": 0.5,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "cfgKey": "interactionUI",
+            "centerBtns": [
+                {
+                    "text": "camp1.text",
+                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
+                    "nextCfgKey": "interaction_choices_camp1",
+                    "checkCanHide": {
+                        "funcName": "checkRideOnIndex",
+                        "index": 1
+                    },
+                    "customCheckCanShow": {
+                        "funcName": "checkCanPutBabyOnto"
+                    },
+                    "imageSize": {
+                        "width": "60",
+                        "height": "60"
+                    },
+                    "widgetFileName": "widget_button_image_center",
+                    "enableTextBorder": true
+                }
+            ],
+            "followParams": {
+                "followScenePos": false,
+                "offset": {
+                    "x": 0.5,
+                    "y": 0.5,
+                    "z": 0
+                }
+            }
+        }
+    ],
+    "releaseState": "fatigue"
+}
