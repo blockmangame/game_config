@@ -1982,7 +1982,7 @@ FUNC_REGION_STATE_OPERATION --parmas: isLeave, state
 
 FUNC_STATE_SUSPEND_PROGRESS --params: state, stateBase, duration
 {
-    ShowProgressFollowObj(entity = $obj1, isOpen = false, pgName = $state)
+    ShowProgressFollowObj(entity = $obj1, isOpen = false, pgName = $state, type = "state")
     CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "_TIMER"))
 
     $sTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "STime"))
@@ -2002,7 +2002,7 @@ FUNC_STATE_START_PROGRESS --params: state, stateBase, duration
     SetObjectVar(obj = $obj1, value = $usedTime, key = Concat(p1 = $state, p2 = "UsedTime"))
 
     $pgText = Concat(p1 = "state_", p2 = $state, p3 = "_title")
-    ShowProgressFollowObj( isOpen = true, pgName = $state, entity = $obj1, totalTime = $duration * 20, usedTime = $usedTime * 20, pgText = $pgText)
+    ShowProgressFollowObj( isOpen = true, pgName = $state, entity = $obj1, totalTime = $duration * 20, usedTime = $usedTime * 20, pgText = $pgText, type = "state")
 
     $value = StartTimer(rep = false, object =$obj1, state = $state, event = "FUNC_STATE_REWARD", time = (($duration - $usedTime) * 20) // 1)
     SetObjectVar( obj = $obj1, value = $value, key = Concat(p1 = $state, p2 = "_TIMER") )

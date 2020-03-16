@@ -114,44 +114,6 @@ function Actions.ShowTeamUI(data, params, context)
     })
 end
 
-function Actions.ShowProgressFollowObj(data, params, context)
-    local player = params.entity
-    if not player then
-        return
-    end
-
-    local playerList = {}
-    playerList[player.objID] = player
-
-    local teamId = player:getValue("teamId")
-    if teamId and teamId ~= 0 then
-        local teamList = Game.GetTeam(teamId)
-        for i,v in pairs(teamList.entityList)do
-            playerList[v.objID] = v
-        end
-    end
-
-    -- todo: 把有交互的人从bts传递过来
-
-    local packet = {
-        pid = "ShowProgressFollowObj",
-        objID = player.objID,
-        isOpen = params.isOpen,
-        pgImg = params.pgImg,
-        pgBackImg = params.pgBackImg,
-        pgName = params.pgName,
-        usedTime = params.usedTime,
-        totalTime = params.totalTime,
-        pgText = params.pgText,
-    }
-
-    for _, entity in pairs(playerList) do
-        if entity.isPlayer then
-            entity:sendPacket(packet)
-        end
-    end
-end
-
 local _getObjVar = function(obj, key)
     return obj and key and obj.vars[key]
 end
@@ -159,6 +121,64 @@ local _getSkillVar = function(skillName, key)
     local skill = Skill.Cfg(skillName)
     return (skill and {skill[key]} or {nil})[1]
 end
+function Actions.ShowProgressFollowObj(data, params, context)
+    local player = params.entity
+    if not player or not player:isValid() or not player.isPlayer then
+        return
+    end
+
+    local playerList = {}
+    playerList[player.objID] = player
+
+    --local teamId = player:getValue("teamId")
+    --if teamId and teamId ~= 0 then
+    --    local teamList = Game.GetTeam(teamId)
+    --    for i,v in pairs(teamList.entityList)do
+    --        playerList[v.objID] = v
+    --    end
+    --end
+
+    local pgName = params.pgName
+    -- todo: 把有交互的人从bts传递过来
+    local teamId = player:getValue("teamId")
+    if params.type and params.type == "state" then
+        local skillPath = "myplugin/skill_state_"..pgName
+        local stateBase = _getSkillVar(skillPath, "stateBase") or pgName
+        local interactionList = _getObjVar(player, stateBase.."InteractList") or {}
+        for _, v in pairs(interactionList) do
+            local obj = World.CurWorld:getObject(v)
+            local rewardCount = _getSkillVar(skillPath, "rewardCount")
+            local rewardDis = _getSkillVar(skillPath, "rewardDis")
+            local objRewardCount = _getObjVar(obj, stateBase.."RewardCount") or 0
+
+            if not obj or not obj:isValid() or not obj.isPlayer or obj:getValue("teamId") ~= teamId or player.map ~=
+                    obj.map or objRewardCount >= rewardCount or player:distance(obj) > rewardDis then
+                goto next
+            end
+            playerList[v] = obj
+            ::next::
+        end
+    end
+
+    local packet = {
+        pid = "ShowProgressFollowObj",
+        objID = player.objID,
+        pgName = pgName,
+        isOpen = params.isOpen,
+        pgImg = params.pgImg,
+        pgBackImg = params.pgBackImg,
+        usedTime = params.usedTime,
+        totalTime = params.totalTime,
+        pgText = params.pgText,
+    }
+
+    for _, entity in pairs(playerList) do
+        --if entity.isPlayer then --前面做了限制了
+            entity:sendPacket(packet)
+        --end
+    end
+end
+
 local _getStateReleaseData = function(player, state)
     if not player or not player:isValid() or not player.isPlayer then
         return nil
