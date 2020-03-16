@@ -17,6 +17,6 @@ FUNC_STATE_SYNC_TO_RIDER_AND_PASSENGERS --params: isRideOn, player
     If($owner == $player) {
         Return()
     }
-    CallTrigger(object = $player, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = $isRideOn, needSyncPlayers = [$owner])
+    CallTrigger(object = $player, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = $isRideOn, needSyncPlayers = [$owner], excludeSelf = true)
     CallTrigger(object = $player, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", needSyncPlayers = [$owner], isRemoveTarget = not $isRideOn)
 }

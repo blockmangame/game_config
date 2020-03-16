@@ -69,6 +69,10 @@
                                     "Value": "0"
                                 },
                                 {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
                                     "Name": "HexgonOverlayerColor",
                                     "Value": "1 1 1 1"
                                 },
@@ -95,12 +99,12 @@
                             ]
                         },
                         {
-                            "Type": "StaticText",
-                            "Name": "StateTxt",
+                            "Type": "Layout",
+                            "Name": "StateTxtLv",
                             "Property": [
                                 {
                                     "Name": "Area",
-                                    "Value": "{{0,0},{0,0},{0,25},{0,25}}"
+                                    "Value": "{{0,0},{0,0},{0.4,0},{0.4,0}}"
                                 },
                                 {
                                     "Name": "VerticalAlignment",
@@ -111,10 +115,6 @@
                                     "Value": "Right"
                                 },
                                 {
-                                    "Name": "Text",
-                                    "Value": "99"
-                                },
-                                {
                                     "Name": "WndOpenSound",
                                     "Value": "0"
                                 },
@@ -123,16 +123,56 @@
                                     "Value": "0"
                                 },
                                 {
-                                    "Name": "TextHorzAlignment",
-                                    "Value": "Centre"
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
                                 },
                                 {
-                                    "Name": "TextLineExtraSpace",
-                                    "Value": "0"
-                                },
+                                    "Name": "LayoutBackImage",
+                                    "Value": "set:state_detail.json image:number_background"
+                                }
+                            ],
+                            "Window": [
                                 {
-                                    "Name": "TextVertAlignment",
-                                    "Value": "Centre"
+                                    "Type": "StaticText",
+                                    "Name": "StateTxt",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                        },
+                                        {
+                                            "Name": "Text",
+                                            "Value": "99"
+                                        },
+                                        {
+                                            "Name": "Font",
+                                            "Value": "HT18"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextColor",
+                                            "Value": "0 0 0 1"
+                                        },
+                                        {
+                                            "Name": "TextHorzAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextLineExtraSpace",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextVertAlignment",
+                                            "Value": "Centre"
+                                        }
+                                    ]
                                 }
                             ]
                         }
@@ -162,7 +202,7 @@
                     "Property": [
                         {
                             "Name": "Area",
-                            "Value": "{{0,0},{0,60},{0,50},{0,110}}"
+                            "Value": "{{0,-15},{0,60},{0,58},{0,133}}"
                         },
                         {
                             "Name": "HorizontalAlignment",
@@ -171,10 +211,6 @@
                         {
                             "Name": "Visible",
                             "Value": "false"
-                        },
-                        {
-                            "Name": "BackgroundColor",
-                            "Value": "1 0 0 0.392157"
                         },
                         {
                             "Name": "WndOpenSound",
@@ -207,6 +243,14 @@
                         {
                             "Name": "HexgonTopImage",
                             "Value": ""
+                        },
+                        {
+                            "Name": "NormalImage",
+                            "Value": "set:state_detail.json image:close"
+                        },
+                        {
+                            "Name": "PushedImage",
+                            "Value": "set:state_detail.json image:close"
                         },
                         {
                             "Name": "SoundName",
