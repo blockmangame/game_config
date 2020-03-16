@@ -11,9 +11,9 @@ local uiFollowObjectParams = {
     anchor = { x = 0.5, y = 0.5 },
     offset = { x = 0, y = paramsOffsetY, z = 0 },
 }
-local function dynamicAdjustUIParams(self, row)
+local function dynamicAdjustUIParams(self, row, objID)
     uiFollowObjectParams.offset.y = paramsOffsetY + (row - 1) * 0.1
-    UILib.uiFollowObject(self._root, Me.objID, uiFollowObjectParams)
+    UILib.uiFollowObject(self._root, objID, uiFollowObjectParams)
 end
 
 function M:init()
@@ -27,9 +27,9 @@ end
 function M:initEvent()
     Lib.subscribeEvent(Event.EVENT_SET_OBJ_PROGRESS_ARGS, function(args)
         if args.isOpen then
-            self:createCell(args)
+            self:createCell(args, args.objID)
         else
-            self:removeCell(args.pgName)
+            self:removeCell(args.pgName, args.objID)
         end
     end)
 end
@@ -38,7 +38,7 @@ local function getRate(usedTime, totalTime)
     return (usedTime <= totalTime and {usedTime / totalTime} or {1})[1]
 end
 
-function M:createCell(args)
+function M:createCell(args, objID)
     local pgName = args.pgName
     if not pgName then
         return
@@ -83,22 +83,23 @@ function M:createCell(args)
     progress.stui:SetTouchable(false)
 
     self._root:AddChildWindow(progress.pgui)
-    self:updateArea()
+    self:updateArea(objID)
 
-    progress.cdTimer = World.Timer(20, function ()
-        usedTime = usedTime + 20
+    progress.cdTimer = World.Timer(10, function ()
+        usedTime = usedTime + 10
         local rate = getRate(usedTime, totalTime)
         progress.pgui:SetProgress(rate)
-        if rate == 1 then
+        if rate >= 0.7 then
+            Lib.emitEvent(Event.EVENT_STATE_RELEASING_ANIMATION, pgName)
+        elseif rate == 1 then
             self:removeCell(pgName)
             return false
         end
-
-        return true
-    end)
+            return true
+        end)
 end
 
-function M:removeCell(pgName)
+function M:removeCell(pgName, objID)
     if not pgName then
         return
     end
@@ -114,10 +115,10 @@ function M:removeCell(pgName)
     self._root:RemoveChildWindow1(progress.pgui)
     self._root:RemoveChildWindow1(progress.stui)
     progressList[pgName] = nil
-    self:updateArea()
+    self:updateArea(objID)
 end
 
-function M:updateArea()
+function M:updateArea(objID)
     local i = 0
     for _, v in pairs(progressList) do
         v.pgui:SetXPosition({0, 0})
@@ -127,7 +128,7 @@ function M:updateArea()
     if i > 0 then
         local totalHeight = i * (specs.height + specs.lineSpace) - specs.lineSpace
         self._root:SetArea({0, 0}, {0, 0}, {0, specs.width}, {0, totalHeight})
-        dynamicAdjustUIParams(self, i)
+        dynamicAdjustUIParams(self, i, objID)
         self._root:SetVisible(true)
     end
 end

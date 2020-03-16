@@ -71,3 +71,7 @@ function handles:CommentWorks(packet)
 
 	Trigger.CheckTriggers(self:cfg(), "COMMENT_WORKS", context)
 end
+
+function handles:ToggleMainUI(packet)
+	Trigger.CheckTriggers(self:cfg(), "TOGGLE_MAIN_UI", {obj1 = self, show = packet.show})
+end

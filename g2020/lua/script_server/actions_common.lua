@@ -114,30 +114,61 @@ function Actions.ShowTeamUI(data, params, context)
     })
 end
 
-function Actions.ShowProgressFollowObj(data, params, context)
-    local player = params.entity
-    if not player then
-        return
-    end
-    player:sendPacket({
-        pid = "ShowProgressFollowObj",
-        isOpen = params.isOpen,
-        pgImg = params.pgImg,
-        pgBackImg = params.pgBackImg,
-        pgName = params.pgName,
-        usedTime = params.usedTime,
-        totalTime = params.totalTime,
-        pgText = params.pgText,
-    })
-end
-
 local _getObjVar = function(obj, key)
     return obj and key and obj.vars[key]
 end
+
 local _getSkillVar = function(skillName, key)
     local skill = Skill.Cfg(skillName)
     return (skill and {skill[key]} or {nil})[1]
 end
+
+function Actions.ShowProgressFollowObj(data, params, context)
+    local player = params.entity
+    if not player or not player:isValid() or not player.isPlayer then
+        return
+    end
+
+    local playerList = {}
+    playerList[player.objID] = player
+
+    -- 找出和player有交互的玩家, 需要同步头顶条状态
+    local pgName = params.pgName
+    local teamId = player:getValue("teamId")
+    if params.type and params.type == "state" then
+        local skillPath = "myplugin/skill_state_"..pgName
+        local stateBase = _getSkillVar(skillPath, "stateBase") or pgName
+        local interactionList = _getObjVar(player, stateBase.."InteractList") or {}
+        for _, v in pairs(interactionList) do
+            local obj = World.CurWorld:getObject(v)
+            local rewardCount = _getSkillVar(skillPath, "rewardCount")
+            local rewardDis = _getSkillVar(skillPath, "rewardDis")
+            local objRewardCount = _getObjVar(obj, stateBase.."RewardCount") or 0
+
+            if obj and obj:isValid() and obj.isPlayer and obj:getValue("teamId") == teamId and player.map ==
+                    obj.map and objRewardCount < rewardCount and player:distance(obj) < rewardDis then
+                playerList[v] = obj
+            end
+        end
+    end
+
+    local packet = {
+        pid = "ShowProgressFollowObj",
+        objID = player.objID,
+        pgName = pgName,
+        isOpen = params.isOpen,
+        pgImg = params.pgImg,
+        pgBackImg = params.pgBackImg,
+        usedTime = params.usedTime,
+        totalTime = params.totalTime,
+        pgText = params.pgText,
+    }
+
+    for _, entity in pairs(playerList) do
+        entity:sendPacket(packet)
+    end
+end
+
 local _getStateReleaseData = function(player, state)
     if not player or not player:isValid() or not player.isPlayer then
         return nil
@@ -169,12 +200,13 @@ function Actions.ShowDetails(data, params, content)
         pid = "ShowDetails",
         isOpen = false
     }
-    local syncPlayers = {player}
-    if params.isAddPartner then
-        table.insert(syncPlayers, params.partner)
+    local shouldSyncPlayers = {player}
+    local target = params.target
+    if target and not params.isRemoveTarget then
+        table.insert(shouldSyncPlayers, target)
     end
     local subtitle = {}
-    for _, v in ipairs(syncPlayers) do
+    for _, v in pairs(shouldSyncPlayers) do
         local usedTime, isReleasing = _getStateReleaseData(v, state)
         if usedTime ~= nil then
             packet.isOpen = true
@@ -258,17 +290,30 @@ end
 
 function Actions.SyncStatesData(data, params, context)
     local player = params.player
-    if not player or not player:isValid() or not player.isPlayer then
-        return
+    local target = params.target
+    for _, v in pairs({player, target}) do
+        if not v or not v:isValid() or not v.isPlayer then
+            return
+        end
     end
-
+    local states = {}
+    local isAdd = params.isAdd
+    local isWithoutCheck = params.isWithoutCheck or not params.states
+    local tmpStates = params.states or _getObjVar(target, "curStates")
+    --如果有声明isWithoutCheck为true或者为target.curStates则不需要再去检查states里的状态是否为target获得的了
+    if not isWithoutCheck and isAdd then
+        for _, v in pairs(states) do
+            if _getObjVar(target, v.."got") then
+                table.insert(states, v)
+            end
+        end
+    end
     player:sendPacket({
         pid = "SyncStatesData",
-        isClose = params.isClose,
         data = {
-			isAdd = params.isAdd,
-			states = params.states,
-			targetID = (params.target and {params.target.objID} or {player.objID})[1]
+			isAdd = isAdd,
+			states = (isWithoutCheck and {tmpStates} or {states})[1],
+			targetID = target.objID
 		},
     })
 end

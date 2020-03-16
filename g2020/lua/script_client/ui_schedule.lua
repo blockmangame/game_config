@@ -27,6 +27,32 @@ function UI:setViewTexture(key, view)
     view:SetImage(texture:getTextureName())
 end
 
+function UI:hideOpenedWnd(excluded)
+    local wnds = {}
+    excluded = excluded or ""
+    local excludedMap = {}
+    if type(excluded) == "table" then
+        for _, excludedName in pairs(excluded) do
+            excludedMap[excludedName] = true
+        end
+    end
+    excludedMap[excluded] = true
+    for name, wnd in pairs(UI._windows) do
+        if not excludedMap[name] and wnd:isvisible() then
+            wnd:hide()
+            if not string.match(name, "*head_") then
+                wnds[#wnds + 1] = wnd
+            end
+        end
+    end
+    return function ()
+        for _, wnd in ipairs(wnds) do
+            wnd:show()
+        end
+        wnds = {}
+    end
+end
+
 Lib.subscribeEvent(Event.EVENT_OPEN_DRESS_ARCHIVE, function(isUpdateData)
     UI:openWnd("dressArchive", isUpdateData)
 end)

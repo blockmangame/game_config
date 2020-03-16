@@ -14,6 +14,7 @@ SKILL_CAST
         RemoveEntityBuff(entity = $obj1, buff = $obj1.cameraModeCloseBuff)
         RemoveEntityBuff(entity = $obj1, buff = $obj1.cameraModeTakePhotosBuff)
         OperationWindows(player = $obj1, isOpen = true, win = "main_tray_g2020")
+        -- ShowBubbleMsg(entity = $obj1, hide = true)      -- 为了解决重新打开主界面后，bubble消息不消失的bug，手动调用关闭
         $obj1.cameraModeCloseBuff = nil
         $obj1.cameraModeTakePhotosBuff = nil
         If($obj1.role == @child){

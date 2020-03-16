@@ -35,7 +35,10 @@ function handles:ShowTeamUI(packet)
 end
 
 function handles:ShowProgressFollowObj(packet)
-    Lib.emitEvent(Event.EVENT_SHOW_PROGRESS_FOLLOW_OBJ, packet)
+    local obj = World.CurWorld:getObject(packet.objID)
+    if obj then
+        Lib.emitEvent(Event.EVENT_SHOW_PROGRESS_FOLLOW_OBJ, packet)
+    end
 end
 
 function handles:ShowDetails(packet)
