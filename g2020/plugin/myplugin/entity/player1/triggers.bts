@@ -5724,6 +5724,7 @@ ASK_LEAVE_PARTY{
 }
 ASK_SHOW_PARTY_LIST {
     If($result == false) {
+        ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", keepTime =  100)
         $obj1.jumpSeverToNormal = true
         ReenterGame(player = $obj1)
         Return()
@@ -5735,13 +5736,11 @@ CHECK_CLOSE_PARTY {
     CloseParty(player = $obj1)
 }
 REENTER_GAME(debug = false){
+    ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", keepTime =  100)
     $obj1.jumpSeverToNormal = true
     ReenterGame(player = $obj1)
 }
 LEAVE_PARTY_SUCCESS(debug = false){
-    If($obj1.excludedPartyId == "0"){
-        ShowTip(entity = $obj1, tipType = 2, textKey = "gui.party.leave.success", keepTime =  100)
-    }
     $obj1.inPartyOwnerId = 0
     $obj1.inSelfParty = nil--can join other party
     --cases need ask: from door/ from the client exit button
