@@ -44,6 +44,7 @@ function M:onOpen()
 end
 
 function M:onClose()
+    ToggleMainUI(true)
     UI:closeWnd("showDetails")
 end
 
