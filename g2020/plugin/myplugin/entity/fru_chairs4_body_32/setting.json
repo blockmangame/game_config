@@ -33,13 +33,13 @@
             "centerBtns": [
                 {
                     "text": "barsit.text",
-                "image": "plugin/myplugin/image/fru_intUI/sit1.png",
-                "event": "ENTITY_sit1_bar_1",
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "event": "ENTITY_sit1_bar_1",
                     "checkCanHide": {
                         "funcName": "checkRideOnIndex",
                         "index": 7
                     },
-                    "customCheckCanHide":{
+                    "customCheckCanHide": {
                         "funcName": "checkCanPutBabyOnto"
                     },
                     "imageSize": {
@@ -64,13 +64,13 @@
             "centerBtns": [
                 {
                     "text": "barsit.text",
-                "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
                     "nextCfgKey": "interaction_choices_sit1_bar_1",
                     "checkCanHide": {
                         "funcName": "checkRideOnIndex",
                         "index": 7
                     },
-                    "customCheckCanShow":{
+                    "customCheckCanShow": {
                         "funcName": "checkCanPutBabyOnto"
                     },
                     "imageSize": {
@@ -91,5 +91,4 @@
             }
         }
     ]
-   
 }
