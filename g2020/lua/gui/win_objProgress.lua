@@ -21,7 +21,7 @@ function M:init()
     self._root:SetTouchable(false)
     self._root:SetVisible(false)
     self:initEvent()
-    UILib.uiFollowObject(self._root, Me.objID, uiFollowObjectParams)
+    --UILib.uiFollowObject(self._root, Me.objID, uiFollowObjectParams)
 end
 
 function M:initEvent()
@@ -50,8 +50,8 @@ function M:createCell(args, objID)
         return
     end
 
-    if not progressList[pgName] then
-        progressList[pgName] = {
+    if not progressList[pgName..objID] then
+        progressList[pgName..objID] = {
             --progressBar ui
             ["pgui"] = GUIWindowManager.instance:CreateGUIWindow1("ProgressBar", "progress"..pgName),
             --staticText ui
@@ -59,8 +59,8 @@ function M:createCell(args, objID)
         }
     end
 
-    local progress = progressList[pgName]
-    if progress.cdTimer then
+    local progress = progressList[pgName..objID]
+    if progress and progress.cdTimer then
         progress.cdTimer()
         progress.cdTimer = nil
     end
@@ -89,21 +89,21 @@ function M:createCell(args, objID)
         usedTime = usedTime + 10
         local rate = getRate(usedTime, totalTime)
         progress.pgui:SetProgress(rate)
-        if rate >= 0.7 then
+        if objID == Me.objID then
             Lib.emitEvent(Event.EVENT_STATE_RELEASING_ANIMATION, pgName)
         elseif rate == 1 then
-            self:removeCell(pgName)
+            self:removeCell(pgName, objID)
             return false
         end
-            return true
-        end)
+        return true
+    end)
 end
 
 function M:removeCell(pgName, objID)
     if not pgName then
         return
     end
-    local progress =progressList[pgName]
+    local progress =progressList[pgName..objID]
     if not progress then
         return
     end
@@ -114,7 +114,7 @@ function M:removeCell(pgName, objID)
     end
     self._root:RemoveChildWindow1(progress.pgui)
     self._root:RemoveChildWindow1(progress.stui)
-    progressList[pgName] = nil
+    progressList[pgName..objID] = nil
     self:updateArea(objID)
 end
 

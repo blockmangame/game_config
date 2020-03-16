@@ -3,7 +3,6 @@ local states = {}
 local close = {}
 local imgPath = "set:state_detail.json image:"
 local skillPath = "myplugin/skill_state_"
-local isOdd = true
 local specs = World.cfg.stateSpecs or {
     itemWidth = 80,
     itemHeight = 80,
@@ -56,6 +55,7 @@ function M:initMain()
             txt = self:child("StateTxt"),
         },
         img = "",
+        isOdd = true,
         visible = true,
         totalUsersCount = 0,
     }
@@ -118,7 +118,7 @@ function M:operateStateCell(isAdd, state, stateIndex)
         txtLv:AddChildWindow(txt)
         btn:AddChildWindow(txtLv)
         states.UI.root:AddChildWindow(btn)
-        cell = { btn = btn, txtLv = txtLv, txt = txt }
+        cell = { btn = btn, txtLv = txtLv, txt = txt, isOdd = true }
     end
 
     if stateData.stateUsersCount <= 0 then
@@ -221,18 +221,21 @@ end
 
 function M:stateReleasingAnimation(state)
     local UI = states.UI
-    local img = isOdd and imgPath..state or imgPath..state.."_chosen"
     if main.visible then
+        local img = main.isOdd and imgPath..state or imgPath..state.."_chosen"
         main.UI.img:SetImage(img)
+        main.isOdd = not main.isOdd
     elseif UI.cell[state] then
+        local isOdd = UI.cell[state].isOdd
         local btn = UI.cell[state].btn
+        local img = isOdd and imgPath..state or imgPath..state.."_chosen"
         if btn:IsSelected() then
             btn:SetPushedImage(img)
         else
             btn:SetNormalImage(img)
         end
+        UI.cell[state].isOdd = not isOdd
     end
-    isOdd = not isOdd
 end
 
 return M
