@@ -5576,7 +5576,7 @@ JOIN_OTHERS_PARTY(debug = false){
     TryJoinParty(player = $obj1, targetUserId = $obj1.targetUserId, partyId = $partyId)
 }
 CROSS_SERVER_VISIT(debug = false){
-    $obj1.jumpSeverToSpecial = true
+    $obj1.jumpSeverToNormal = true
     CrossServerVisitPlayerByUserId(targetUserId = $obj1.targetUserId, player = $obj1)
 }
 PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
