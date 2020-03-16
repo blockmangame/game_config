@@ -75,3 +75,24 @@ end
 function handles:ToggleMainUI(packet)
 	Trigger.CheckTriggers(self:cfg(), "TOGGLE_MAIN_UI", {obj1 = self, show = packet.show})
 end
+
+function handles:CloseDress(packet)
+	local context = {
+		obj1 = self
+	}
+	Trigger.CheckTriggers(self:cfg(), "CLOSE_DRESS", context)
+end
+
+function handles:CloseNewSignIn(packet)
+	local context = {
+		obj1 = self
+	}
+	Trigger.CheckTriggers(self:cfg(), "CLOSE_SIGN_IN", context)
+end
+
+function handles:ClickPlayerState(packet)
+	local context = {
+		obj1 = self
+	}
+	Trigger.CheckTriggers(self:cfg(), "CLICK_PLAYER_STATE", context)
+end

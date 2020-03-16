@@ -7,7 +7,23 @@ SHOW_CONVERSATION_UI
     $fullName = GetConfigVar(obj = $obj1, key = "fullName")
     If($obj2.taskNpc == $fullName){
         CallTrigger(event = "DO_SUBMIT_ORDER", object = $obj2, obj2 = $obj1)
-    }Else{
+    }ElseIf($fullName ~= "myplugin/npc27"){
         OpenConversation(entity = $obj2, talkList = $talkList, optionList = $optionList, optionNpc = $optionNpc)
+    }ElseIf($fullName == "myplugin/npc27"){
+        If($obj2.guideStep == @GuideEnd){
+            OpenConversation(entity = $obj2, talkList = $talkList, optionList = $optionList, optionNpc = $optionNpc)
+        }Else{
+            $obj2.guideStep = @GuideEnd
+            $guideTalk =  [
+                {
+                    msg = "guide.I.have.a.gift.give.you",
+                    npc = "myplugin/npc27"
+                }
+            ]
+            SetGPSButton(player = $obj2, show = true)
+            SetGuideTarget(entity = $obj2, pos = nil, guideSpeed = 0.05)
+            AddItem(entity = $obj2, cfg = "myplugin/guide_gift", count = 1)
+            OpenConversation(entity = $obj2, talkList = $guideTalk, optionList = [], optionNpc = $optionNpc)
+        }
     }
 }

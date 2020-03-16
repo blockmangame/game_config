@@ -39,7 +39,7 @@ function M:initProp()
     self.mainBody = self:child("Details-MainBody")  --Layout
     self.subtitle = {}
     self.subtitleHadLines = 0
-    self.child = {
+    self.Child = {
         titleText = self:child("Details-Title-Text"),
         titleIcon = self:child("Details-Title-Icon"),
         contentsText = self:child("Details-Contents-Text"),
@@ -142,7 +142,7 @@ function M:initEvent()
         end
     end)
 
-    self:subscribe(self.child.btn, UIEvent.EventButtonClick, function()
+    self:subscribe(self.Child.btn, UIEvent.EventButtonClick, function()
         Me:sendTrigger(Me, trigger, Me, nil, {
             rtVal = getCfg("btnRtVal")
         })
@@ -163,7 +163,7 @@ function M:onClose()
 end
 
 function M:setBtn()
-    local btn = self.child.btn
+    local btn = self.Child.btn
 
     local text = getCfg("btnText")
     if text then btn:SetText(Lang:toText(text)) end
@@ -187,7 +187,7 @@ end
 
 function M:setWidgetArgs(typeName)
     local name = typeName.."Text"
-    local widget = self.child[name]
+    local widget = self.Child[name]
     if widget then
         local text = getCfg(name)
         if text then
@@ -197,7 +197,7 @@ function M:setWidgetArgs(typeName)
     end
 
     name = typeName.."Icon"
-    widget = self.child[name]
+    widget = self.Child[name]
     if widget then
         local icon = getCfg(name)
         if icon then
@@ -211,7 +211,7 @@ function M:setWidgetArgs(typeName)
     end
 
     name = typeName.."Val"
-    widget = self.child[name]
+    widget = self.Child[name]
     if widget then
         local val = getCfg(name)
         widget:SetText(val or 0)

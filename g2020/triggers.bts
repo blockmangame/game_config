@@ -60,6 +60,24 @@ GAME_INIT
 
     --
     @HOME_SUM = 0
+
+    --指引：
+    --存档1：装扮商店指引
+    @FirstInto = 10 --开始指引
+    @ToDress = 11 --进行对话，指引玩家打开 装扮商店，配置 ButtonTip
+    @DressDialog = 12 --装扮商店对话， 配置表None
+    --存档2：装扮房子指引
+    @DressHouse = 13 -- 指引玩家装扮房子。
+    @NoneHouse = 14 --让玩家自由操作， 配置None，
+    --存档3：指引玩家去游乐场
+    @PlayGround = 15 --开启游乐场状态，指引玩家点击游乐场按钮
+    @PlayGroundNone1 = 16 --空状态
+    @PlayGroundClick = 17 --ButtonTip, 点击状态
+    @PlayGruondNone2 = 18 --空状态
+    @PlayStartGps = 19 --开启GPS，去游乐场
+    @PlayEnd = 20 --存档3完成，准备存档4
+    @GuideEnd = 21 --完成所有指引
+
 }
 --创建邮箱npc
 CREATE_EMAIL_NPC
@@ -159,7 +177,7 @@ FUNC_STATE_STARTTIMER
 FUNC_BROADCAST_STATE
 {
     Foreach(array = GetAllPlayers(), key = "player"){
-        If($player.inPartyOwnerId ~= 0){
+        If($player.inPartyOwnerId ~= 0 or $player.guideStep < @GuideEnd){
             Continue()
         }
         SetObjectVar(obj = $player, value = 0, key = Concat(p1 = $stateBase, p2 = "RewardCount"))
@@ -222,7 +240,11 @@ SHOW_SELECT_ROLE
 
 CHANGE_PLAYER_SCALE_ADULT
 {
-    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn){
+    If(not $obj1.doOnceGuide){
+        $obj1.doOnceGuide = true
+        CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
+    }
+    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep >= @NoneHouse){
         CheckSignInShow(player = $obj1)
         $obj1.checkSignIn = true
     }
@@ -257,7 +279,11 @@ CHANGE_PLAYER_SCALE_ADULT
 
 CHANGE_PLAYER_SCALE_CHILD
 {
-    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn){
+    If(not $obj1.doOnceGuide){
+        $obj1.doOnceGuide = true
+        CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
+    }
+    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep >= @NoneHouse){
         CheckSignInShow(player = $obj1)
         $obj1.checkSignIn = true
     }

@@ -260,3 +260,9 @@ function M:modPlayerSkin()
 		})
 	end
 end
+
+function M:onClose()
+	Me:sendPacket({
+		pid = "CloseDress"
+	})
+end

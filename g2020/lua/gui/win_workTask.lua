@@ -10,6 +10,7 @@ function M:init()
 	self:root():AddChildWindow(closeGpsBtn)
 	self.closeGpsBtn = closeGpsBtn
 	self.closeGpsBtn:SetVisible(false)
+	self.forceClose = false
 
 	self.context = self:child("CircleProgress-context")
 	self.centerBtn = self:child("CircleProgress-centerBtn")
@@ -23,7 +24,7 @@ function M:init()
 	end)
 
 	Lib.subscribeEvent(Event.EVENT_GUIDE_POSITION_CHANGE, function(pos)
-		if UI:isOpen(self) and World.cfg.showCloseGpsBtn then
+		if UI:isOpen(self) and World.cfg.showCloseGpsBtn and not self.forceClose then
 			self.closeGpsBtn:SetVisible(pos ~= nil)
 		end
 	end)

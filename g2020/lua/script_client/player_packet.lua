@@ -157,3 +157,27 @@ function handles:ShowWarmPrompt(packet)
     ui:root():SetAlwaysOnTop(true)
 	ui:root():SetLevel(0)
 end
+
+function handles:ShowGuidePop(packet)
+    local callback = function(sure)
+        Me:doCallBack("ShowGuidePop", "sure", packet.regId)
+    end
+    local ui = UI:openWnd("guidePop", {texts = packet.texts}, callback)
+end
+
+function handles:OpenMainExtension(packet)
+    local ui = UI:getWnd("mainExtension")
+    if packet.open then
+        ui:openLayout()
+    else
+        ui:hideLayout()
+    end
+end
+
+function handles:SetGPSButton(packet)
+    local ui = UI:getWnd("workTask")
+    if ui then
+        ui.forceClose = not packet.show     
+        ui.closeGpsBtn:SetVisible(packet.show)
+    end
+end

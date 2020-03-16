@@ -479,3 +479,38 @@ function Actions.ShowWarmPrompt(data, params, context)
         disableClose = params.disableClose
     })
 end
+
+function Actions.ShowGuidePop(data, params, context)
+    local player = params.player
+    if not player then
+        return
+    end
+    local regId = player:regCallBack("ShowGuidePop", {["sure"] = params.event or false}, true, true, params.context)
+    player:sendPacket({
+        pid = "ShowGuidePop",
+        regId = regId,
+        texts = params.texts
+    })
+end
+
+function Actions.OpenMainExtension(data, params, context)
+    local player = params.player
+    if not player then
+        return
+    end
+    local open = params.open
+    if open == nil then
+        open = true
+    end
+    player:sendPacket({
+        pid = "OpenMainExtension",
+        open = open
+    })
+end
+
+function Actions.SetGPSButton(data, params, context)
+    params.player:sendPacket({
+        pid = "SetGPSButton",
+        show = params.show
+    })
+end
