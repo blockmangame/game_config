@@ -1834,9 +1834,11 @@ FUNC_STATE_ADD --params: state, stateBase, skill
     CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state, skill = $skill)
 }
 
-FUNC_SYNC_STATES_TO_OTHERS --params: isAdd, states, needSyncPlayers
+FUNC_SYNC_STATES_TO_OTHERS --params: isAdd, states, needSyncPlayers, excludeSelf
 {
-    SyncStatesData(player = $obj1, isAdd = $isAdd, states = $states, isWithoutCheck = true, target = $obj1)
+    If(not $excludeSelf) {
+        SyncStatesData(player = $obj1, isAdd = $isAdd, states = $states, isWithoutCheck = true, target = $obj1)
+    }
     Foreach(array = $needSyncPlayers, key = "player") {
         SyncStatesData(player = $player, isAdd = $isAdd, states = $states, isWithoutCheck = true, target = $obj1)
         SyncStatesData(player = $obj1, isAdd = $isAdd, states = $states, target = $player)
@@ -1845,8 +1847,6 @@ FUNC_SYNC_STATES_TO_OTHERS --params: isAdd, states, needSyncPlayers
 
 FUNC_SYNC_STATE_DETAILS_TO_OTHER --params: state, needSyncPlayers[, isRemoveTarget]
 {
-    --Test("haha", $needSyncPlayers)
-    --ShowDetails(player = $obj1, state = $state)
     $hadTarget = false
     Foreach(array = $needSyncPlayers, key = "target") {
         $hadTarget = true
@@ -1939,7 +1939,7 @@ FUNC_STATE_RIDE_OPERATION --params: ride, isRideOff
         Return()
     }
     If(IsPlayer(entity = $ride)) {
-        CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = not $isRideOff, needSyncPlayers = [$ride], isSyncAll = true)
+        CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = not $isRideOff, needSyncPlayers = [$ride], excludeSelf = true)
         CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", needSyncPlayers = [$ride], isRemoveTarget = $isRideOff)
     }
     $event = $isRideOff and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE"
