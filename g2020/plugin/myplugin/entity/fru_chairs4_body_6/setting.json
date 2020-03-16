@@ -37,10 +37,15 @@
                 "text": "Radio.text",
                 "image": "plugin/myplugin/image/fru_intUI/buy_money.png",
                 "event": "EVENT_BROADCAST_PARTY_INVITE",
+                "customCheckCanHide": {
+                    "funcName": "checkCanPutBabyOnto"
+                },
                 "imageSize": {
                     "width": "60",
                     "height": "60"
-                }
+                },
+                "widgetFileName": "widget_button_image_center",
+                "enableTextBorder": true
             }
         ],
         "followParams": {
