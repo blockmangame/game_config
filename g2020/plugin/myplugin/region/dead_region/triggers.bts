@@ -1,7 +1,7 @@
 REGION_ENTER {
     -- 非玩家直接杀死，玩家慢性死亡
     If(not IsPlayer(entity = $obj1)){
-        KillEntity(entity = $obj1)
+        -- KillEntity(entity = $obj1)
     }Else{
         CallTrigger(object = $obj1, event = "CHRONIC_KILL_SELF")
     }

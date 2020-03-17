@@ -232,27 +232,25 @@ ENTITY_DIE{
 	CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     $house = $obj1.house
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+    If($obj1.damageTimer){
+        StopTimer(timer = $obj1.damageTimer)
+        $obj1.damageTimer = nil
+    }
     ReviveEntity(entity = $obj1, map = $houseInsideMap)
     If($obj1.role == @child){
         CallTrigger(obj1 = $obj1, event = "CHANGE_PLAYER_SCALE_CHILD")
     }Else{
         CallTrigger(obj1 = $obj1, event = "CHANGE_PLAYER_SCALE_ADULT")
     }
-    If($obj1.damageTimer){
-        StopTimer(timer = $obj1.damageTimer)
-        $obj1.damageTimer = nil
-    }
     CallTrigger(object = $obj1, obj1 = $obj1, house = $house, event = "GOTO_INSIDE_HOUSE")
 }
 
 CHRONIC_KILL_SELF{
-    $damage = GetEntityMaxHp(entity = $obj1) / 5
-    $obj1.damageTimer = StartTimer(time = 20, object = $obj1, obj1 = $obj1, damage = $damage, event = "CHRONIC_KILL_SELF_BY_DAMAGE")
+    $obj1.damageTimer = StartTimer(time = 100, object = $obj1, obj1 = $obj1, damage = GetEntityMaxHp(entity = $obj1), event = "CHRONIC_KILL_SELF_BY_DAMAGE")
 }
 
 CHRONIC_KILL_SELF_BY_DAMAGE{
     Damage(entity = $obj1, damage = $damage)
-    $obj1.damageTimer = StartTimer(time = 20, object = $obj1, obj1 = $obj1, damage = $damage, event = "CHRONIC_KILL_SELF_BY_DAMAGE")
 }
 
 MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建房子/这个逻辑作废，购买特权重新分配服务器
@@ -1081,6 +1079,14 @@ GIVE_STORE{
     GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:decoration",$storeId,
         Concat(p1 = "myplugin_", p2 = FindStr(where_ = "/", back_ = true, str = $cfg))])
     $npc.isBuyByShop = true
+    If(GetConfigVar(obj = $npc, key = "isBgmSpeakers")) {
+        $counts = GetMapVar(map = $map, key = "SpeakersCount")
+        If(not $counts){
+            $counts = 0
+        }
+        $counts = $counts + 1
+        SetMapVar(map = $map, key = "SpeakersCount", value = $counts)
+    }
 }
 
 UPDATE_PLAYER_3DUI_ENTITY{
@@ -6152,15 +6158,22 @@ START_PLAY_BGM  {
 
     Foreach(array = GetMapNpc(map = GetEntityMap(entity = $obj1)), key = "entity") {
         If(GetConfigVar(obj = $entity, key = "isBgmSpeakers")) {
-            If($entity.bgmBuff) {
-                RemoveEntityBuff(entity = $entity, buff = $entity.bgmBuff)
+            If($entity.bgmSpeakersBuff) {
+                RemoveEntityBuff(entity = $entity, buff = $entity.bgmSpeakersBuff)
             }
-            $entity.bgmBuff = AddEntityBuff(entity = $entity, cfg = DictionaryGet(dict = $cfg, key = "buff"), buffTime = nil)
+            $entity.bgmSpeakersBuff = AddEntityBuff(entity = $entity, cfg = DictionaryGet(dict = $cfg, key = "buff"), buffTime = nil)
+            $entity.bgmSpeakersBuffIndex = $index
         }
     }
     HideBgmList(player = $obj1, playingIndex = $index)
     Foreach(array = GetMapPlayer(map = GetEntityMap(entity = $obj1)), key = "player") {
         SendUpdatePlayingBgmIndex(player = $player, playingIndex = $index)
+        If($index == 1 and $player.gameBgmBuffCfg) {
+            $player.gameBgmBuff = AddEntityBuff(entity = $obj1, cfg = $player.gameBgmBuffCfg)
+        }ElseIf($player.gameBgmBuff){
+            RemoveEntityBuff(entity = $player, buff = $player.gameBgmBuff)
+            $player.gameBgmBuff = nil
+        }
     }
 }
 

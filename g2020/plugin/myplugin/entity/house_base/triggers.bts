@@ -133,6 +133,14 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
 
             CallTrigger(object = GetObjectVar(obj = $obj1, key = "owner"), obj1 = GetObjectVar(obj = $obj1, key = "owner"), 
                 npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")     
+            If(GetConfigVar(obj = $npc, key = "isBgmSpeakers")) {
+                $counts = GetMapVar(map = $map, key = "SpeakersCount")
+                If(not $counts){
+                    $counts = 0
+                }
+                $counts = $counts + 1
+                SetMapVar(map = $map, key = "SpeakersCount", value = $counts)
+            }
         }
     }
     ------------------------------------------ 内部门

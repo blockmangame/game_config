@@ -1,0 +1,19 @@
+ADD_REGION{
+	CallTrigger(region = $region, event = "GAME_BGM_TIMER")
+}
+
+REGION_ENTER{
+	If(IsPlayer(entity = $obj1) and not $obj1.gameBgmBuff){
+		$obj1.gameBgmBuffCfg = "myplugin/bgm_map001" -- TODO EXT
+		$obj1.gameBgmBuff = AddEntityBuff(entity = $obj1, cfg = $obj1.gameBgmBuffCfg)
+	}
+}
+
+REGION_LEAVE{
+	If(IsPlayer(entity = $obj1) and $obj1.gameBgmBuff){
+		RemoveEntityBuff(entity = $obj1, buff = $obj1.gameBgmBuff)
+		RemoveEntityTypeBuff(entity = $obj1, key = "hpBuff", value = true)
+		$obj1.gameBgmBuffCfg = nil
+		$obj1.gameBgmBuff = nil
+	}
+}

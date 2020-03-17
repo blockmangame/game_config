@@ -1,6 +1,26 @@
 ENTITY_ENTER
 {
     CallTrigger(object = $obj1, event = "PLAY_BGM", bgmIndex = 1)
+    CallTrigger(object = $obj1, event = "CREATE_CLEAR_GAMEBGM_REGION")
+    $obj1.bgmSpeakersBuffIndex = 0
+}
+
+CREATE_CLEAR_GAMEBGM_REGION{
+    $pos = GetEntityPosition(entity = $obj1)
+    $clearGameBgmRegionAddArr = GetConfigVar(obj = $obj1, key = "clearGameBgmRegionAddArr")
+    If(not $clearGameBgmRegionAddArr){
+        Return()
+    }
+    $regionKey = GetConfigVar(obj = $obj1, key = "clearGameBgmRegionKey")
+    $regionCfg = GetConfigVar(obj = $obj1, key = "clearGameBgmRegionCfg")
+    $regionArea = {
+        max = ComputeV3(op = "add", p1 = $pos, p2 = ArrayGet(array = $clearGameBgmRegionAddArr, index = 1)),
+        min = ComputeV3(op = "add", p1 = $pos, p2 = ArrayGet(array = $clearGameBgmRegionAddArr, index = 2))
+    }
+
+    $region = AddRegion(map = GetEntityMap(entity = $obj1), key = $regionKey, region = $regionArea, regionCfg = $regionCfg, obj1 = $obj1)
+    SetRegionOwner(region = $region, owner = $obj1)
+    SetObjectVar(obj = $obj1, key = "clearGameBgmRegion", value = $region)
 }
 
 PLAY_BGM{
@@ -16,4 +36,10 @@ PLAY_BGM{
 
 OPEN_BGM_LIST{
     ShowTip(entity = $obj2, tipType = 2, textKey = "square_bgm_sound_cant_inter")
+}
+
+ENTITY_DIE{
+    If(GetObjectVar(obj = $obj1, key = "clearGameBgmRegion")){
+        RemoveRegion(map = GetEntityMap(entity = $obj1), key = GetObjectVar(obj = $obj1, key = "clearGameBgmRegion"))
+    }
 }

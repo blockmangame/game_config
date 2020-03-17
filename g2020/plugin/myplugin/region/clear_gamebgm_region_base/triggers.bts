@@ -1,0 +1,14 @@
+REGION_ENTER {
+    $owner = GetRegionOwner(region = $region)
+    $index = $owner.bgmSpeakersBuffIndex or 1
+    If($index ~= 1 and IsPlayer(entity = $obj1) and $obj1.gameBgmBuff){
+        RemoveEntityBuff(entity = $obj1, buff = $obj1.gameBgmBuff)
+        $obj1.gameBgmBuff = nil
+	}
+}
+
+REGION_LEAVE {
+    If(IsPlayer(entity = $obj1) and not $obj1.gameBgmBuff and $obj1.gameBgmBuffCfg){
+        $obj1.gameBgmBuff = AddEntityBuff(entity = $obj1, cfg = $obj1.gameBgmBuffCfg)
+    }
+}

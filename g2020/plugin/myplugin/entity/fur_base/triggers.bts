@@ -2,6 +2,7 @@ ENTITY_ENTER
 {
     AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_swimming_idle_2_idel_buff")
     StartTimer(object = $obj1, obj1 = $obj1, time = 5, event = "ENTITY_CLICK_BY_BUY_DEC")
+    CallTrigger(object = $obj1, event = "CREATE_CLEAR_GAMEBGM_REGION")
 }
 
 ENTITY_CLICK_BY_BUY_DEC{
@@ -9,6 +10,49 @@ ENTITY_CLICK_BY_BUY_DEC{
         -- CastSkill(skill = "/click", from = $obj1.house.owner, packet = {targetID = GetObjectID(object = $obj1)})
         ClacEntityPushOutBlock(player = $obj1.house.owner, entity = $obj1)
         $obj1.isBuyByShop = nil
+    }
+}
+
+CREATE_CLEAR_GAMEBGM_REGION{
+    $pos = GetEntityPosition(entity = $obj1)
+    $clearGameBgmRegionAddArr = GetConfigVar(obj = $obj1, key = "clearGameBgmRegionAddArr")
+    If(not $clearGameBgmRegionAddArr){
+        Return()
+    }
+    $regionKey = GetConfigVar(obj = $obj1, key = "clearGameBgmRegionKey")
+    $regionCfg = GetConfigVar(obj = $obj1, key = "clearGameBgmRegionCfg")
+    $regionArea = {
+        max = ComputeV3(op = "add", p1 = $pos, p2 = ArrayGet(array = $clearGameBgmRegionAddArr, index = 1)),
+        min = ComputeV3(op = "add", p1 = $pos, p2 = ArrayGet(array = $clearGameBgmRegionAddArr, index = 2))
+    }
+
+    $region = AddRegion(map = GetEntityMap(entity = $obj1), key = $regionKey, region = $regionArea, regionCfg = $regionCfg, obj1 = $obj1)
+    SetRegionOwner(region = $region, owner = $obj1)
+    SetObjectVar(obj = $obj1, key = "clearGameBgmRegion", value = $region)
+}
+
+ENTITY_DIE{
+    CallTrigger(object = $obj1, event = "REMOVE_CLEAR_GAMEBGM_REGION")
+}
+
+REMOVE_CLEAR_GAMEBGM_REGION{
+    $map = GetEntityMap(entity = $obj1)
+    If(GetObjectVar(obj = $obj1, key = "clearGameBgmRegion")){
+        RemoveRegion(map = $map, key = GetObjectVar(obj = $obj1, key = "clearGameBgmRegion"))
+    }
+    If(GetConfigVar(obj = $obj1, key = "isBgmSpeakers")) {
+        $counts = GetMapVar(map = $map, key = "SpeakersCount")
+        If($counts){
+            $counts = $counts - 1
+            SetMapVar(map = $map, key = "SpeakersCount", value = $counts > 0 and $counts or nil)
+        }
+    }
+    $counts = GetMapVar(map = $map, key = "SpeakersCount")
+    If(not $counts){
+        $player = $obj1.house.owner
+        If($player and IsPlayer(entity = $player) and not $player.gameBgmBuff and $player.gameBgmBuffCfg){
+            $player.gameBgmBuff = AddEntityBuff(entity = $player, cfg = $player.gameBgmBuffCfg)
+        }
     }
 }
 
