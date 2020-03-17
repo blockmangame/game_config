@@ -1,0 +1,13 @@
+REGION_ENTER{
+	If(IsPlayer(entity = $obj1)){
+		$obj1.bgmBuff = AddEntityBuff(entity = $obj1, cfg = "myplugin/bgm_map001")
+	}
+}
+
+REGION_LEAVE{
+	If($obj1.bgmBuff){
+		RemoveEntityBuff(entity = $obj1, buff = $obj1.bgmBuff)
+		RemoveEntityTypeBuff(entity = $obj1, key = "hpBuff", value = true)
+		$obj1.bgmBuff = nil
+	}
+}
