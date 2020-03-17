@@ -2011,12 +2011,17 @@ FUNC_STATE_CHECK_REGION --params: state
 
 FUNC_REGION_STATE_OPERATION --parmas: isLeave, state
 {
-    If($obj1.guideStep == @PlayGoGround and not $isLeave) --如果是指引
+    If($obj1.guideStep == @PlayGoGround and $state == "playground" and not $isLeave) --如果是指引
     {
         $Context = {
             obj1 = $obj1,
             isLeave = $isLeave,
             state = $state
+        }
+        $obj1.guideCantMove = AddEntityBuff(entity = $obj1, cfg = "myplugin/freeze_buff", buffTime = 800)
+        $ride = GetRideOn(entity = $obj1)
+        If($ride and IsValidObject(object = $ride)){
+            $ride.guideCantMove = AddEntityBuff(entity = $ride, cfg = "myplugin/freeze_buff", buffTime = 800)
         }
         ShowGuidePop(player = $obj1, event = "GUIDE_STATE_RELEASE",context = $Context, texts = [
             "guide.you.in.playground",
@@ -2028,6 +2033,11 @@ FUNC_REGION_STATE_OPERATION --parmas: isLeave, state
 }
 GUIDE_STATE_RELEASE()
 {
+    RemoveEntityBuff(buff = $obj1.guideCantMove, entity = $obj1)
+    $ride = GetRideOn(entity = $obj1)
+    If($ride and IsValidObject(object = $ride)){
+        RemoveEntityBuff(buff = $ride.guideCantMove, entity = $ride)
+    }
     CallTrigger(object = $obj1, state = $state, event = $isLeave and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE")
 }
 
@@ -2050,7 +2060,7 @@ FUNC_STATE_SUSPEND_PROGRESS --params: state, stateBase, duration
 
 FUNC_STATE_START_PROGRESS --params: state, stateBase, duration
 {
-    Test("xxxxxxxxxxx FUNC_STATE_START_PROGRESS", $state, $stateBase, $duration)
+    --如果是引导，
     If($obj1.guideStep == @PlayGoGround and $state == "playground"){
         $duration = 3
     }
@@ -2207,6 +2217,10 @@ FUNC_STATE_RELEASE --params: state[, duration]
 
 FUNC_STATE_RELEASE_SUSPEND --params: state
 {
+    If($obj1.guideStep == @PlayGoGround and $state == "playground")
+    {
+        Return()
+    }
     If(not $state)
     {
         Return()

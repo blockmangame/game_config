@@ -1,5 +1,28 @@
 USE_ITEM(debug = false) --新手礼物
 {
+    $ary = [
+        [
+            21
+        ],
+        [
+            23
+        ],
+        [
+            24
+        ]
+    ]
+    $msg = [
+        "baby_bag_full",
+        "car_bag_full",
+        "toy_bag_full",
+    ]
+    ForLoop(from = 1, to = 4,key = "index"){
+        $cap = GetEntityTrayAvailableCapacity(entity = $obj1, trayType = ArrayGet(array = $ary, index = $index))
+        If($cap <=0 ){
+            ShowTip(textKey = ArrayGet(array = $msg, index = $index), tipType = 1, entity = $obj1, keepTime = 30)
+            Return()
+        }
+    }
     ShowGuidePop(player = $obj1, event = "",context = {obj1 = $obj1}, texts = [
         "guide.rewad.tip",
         "guide.car.function",
