@@ -10,7 +10,7 @@ local function setWhiteScreen(self)
     end
 
     self.colorTimer = World.Timer(5, function()
-        self.colorSign = self.colorSign - 0.5
+        self.colorSign = self.colorSign - 0.333
         self._root:SetBackgroundColor({1, 1, 1, self.colorSign})
         setWhiteScreen(self)
     end)
