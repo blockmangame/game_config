@@ -1,0 +1,60 @@
+{
+    "canClick": true,
+    "actorName": "g2020_food.actor",
+    "skin": {
+        "body": "1"
+    },
+    "coinId": 3,
+    "sellPrice": 0,
+    "sellItem": "myplugin/food_food_apple",
+    "collision": false,
+    "name": "",
+    "pushable": null,
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "VerticalBox",
+                "params": [
+                    1,
+                    1,
+                    1
+                ]
+            }
+        ]
+    },
+    "interactionUI": {
+        "cfgKey": "interactionUI",
+        "followParams": {
+            "followScenePos": false,
+            "offset": {
+                "x": -0.1,
+                "y": 0.2,
+                "z": -0.1
+            }
+        },
+        "centerBtns": [
+            {
+                "text": "food_buy.text2",
+                "widgetFileName": "widget_button",
+                "enableTextBorder": true,
+                "image": "plugin/myplugin/image/hand_click.png",
+                "imageSize": {
+                    "width": "50",
+                    "height": "50"
+                },
+                "event": "BUY_SHOP"
+            }
+        ]
+    },
+    "interaction": {
+        "radius": 3,
+        "offset": {
+            "x": 0.2,
+            "y": -1,
+            "z": 2
+        }
+    },
+    "base": "shop_base",
+    "disableShadow": true
+}
