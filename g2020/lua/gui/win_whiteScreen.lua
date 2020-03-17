@@ -5,14 +5,14 @@ function M:init()
 end
 
 local function setWhiteScreen(self)
-    if self.colorSign <= 0 then
-        return
-    end
+    World.Timer(5, function()
+        if self.colorSign <= 0 then
+            return false
+        end
 
-    self.colorTimer = World.Timer(5, function()
         self.colorSign = self.colorSign - 0.333
         self._root:SetBackgroundColor({1, 1, 1, self.colorSign})
-        setWhiteScreen(self)
+        return true
     end)
 end
 
