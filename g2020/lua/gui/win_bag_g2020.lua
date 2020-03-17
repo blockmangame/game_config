@@ -75,7 +75,8 @@ function M:initData()
     self.tabItemList = {}
     self.curDelStatus = false
     self.isOpen = false
-    self.toplevel = self:root():GetLevel()
+	self.toplevel = self:root():GetLevel()
+	self.fetchItemTimer = {}
 end
 
 
@@ -294,6 +295,13 @@ function M:setItemDescUI(isShow, item, itemUI)
     self.itemLevel:SetText(Lang:toText(g2020ItemLevelDesc[item:cfg().quality or 1]))
 end
 
+function M:clearFetchItemTimer()
+	for index, timer in pairs(self.fetchItemTimer or {}) do
+		timer()
+		self.fetchItemTimer[index] = nil
+	end
+end
+
 function M:fetchAllBagItem()
 	if not self.isOpen then
 		return
@@ -301,7 +309,8 @@ function M:fetchAllBagItem()
     local grid = self.itemsGrid
     local typeIndex = self.typeIndex
     grid:InitConfig(5, 5, 4)
-    grid:HasItemHidden(false)
+	grid:HasItemHidden(false)
+	self:clearFetchItemTimer()
     grid:RemoveAllItems()
     local itemUI
     local addItemData = self.transferData[tostring(typeIndex)]
@@ -315,7 +324,7 @@ function M:fetchAllBagItem()
     local filterTrays = Merge({BAG_TRAY_TYPE[typeIndex]}, EQUIP_TRAY_TYPE)
 	self.items = self.items or self:filterTray(filterTrays, typeIndex)
 	for index, item in ipairs(self.items) do
-		World.Timer(math.ceil(index / 2), function()
+		self.fetchItemTimer[#self.fetchItemTimer + 1] = World.Timer(math.ceil(index / 2), function()
 			if not item or item.isDel then
 				goto continue
 			end
@@ -384,7 +393,7 @@ function M:fetchAllBagItem()
 		end)
 	end
 	if #self.items > 0 and not isTrading() then
-		World.Timer(#self.items, function()
+		self.fetchItemTimer[#self.fetchItemTimer + 1]  = World.Timer(#self.items, function()
 			itemUI = self:newSubItemUI()
 			grid:AddItem(itemUI)
 		end)
