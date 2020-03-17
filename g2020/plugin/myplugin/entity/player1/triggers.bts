@@ -2016,7 +2016,7 @@ FUNC_REGION_STATE_OPERATION --parmas: isLeave, state
         ShowGuidePop(player = $obj1, event = "GUIDE_STATE_RELEASE",context = $Context, texts = [
             "guide.you.in.playground",
             "guide.you.reward.after.play"
-        ])
+        ], btnText = ["next_page", "ui_begin"])
     }Else{
         CallTrigger(object = $obj1, state = $state, event = $isLeave and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE")
     }
@@ -6750,7 +6750,7 @@ GUIDE_STEP10()--第一次进来，选择体格后进行谈话：10
     ShowGuidePop(player = $obj1, event = "OPEN_MAIN_EXTENSION",context = {obj1 = $obj1}, texts = [
         "guide.welcome",
         "guide.goto.dress"
-    ])
+    ],btnText = ["next_page", "ui_begin"])
 }
 OPEN_MAIN_EXTENSION()--打开导航ui，让玩家点击 装备ui: 11
 {
@@ -6769,7 +6769,7 @@ STEP11_FINISH() --在装扮ui的时候进行谈话：  12, 空操作
     ShowGuidePop(player = $obj1, event = "DESS_GUIDE",context = {obj1 = $obj1}, texts = [
         "guide.alotof.dress",
         "guide.you.can.try.dress"
-    ])
+    ], btnText = ["next_page", "ui_begin"])
 }
 CLOSE_DRESS() --关闭装扮商店ui后，进行谈话：进入下一个存档
 {
@@ -6788,7 +6788,7 @@ GUIDE_HOUSE(){
         "guide.you.are.beautiful",
         "guide.you.in.your.house",
         "guide.you.can.dress.your.house"
-    ])
+    ], btnText=["next_page", "next_page", "ui_begin"])
 }
 GUIDE_CLICK_DRESS_HOUSE() --让玩家点击 装扮房子： 13
 {
@@ -6825,7 +6825,7 @@ CALL_GO_TO_PLAYGROUND()-- 开始引导玩家去游乐场对话
     Test("xxxxCALL_GO_TO_PLAYGROUND")
     ShowGuidePop(player = $obj1, event = "OPEN_PLAYGROUND_BUFF",context = {obj1 = $obj1}, texts = [
         "guide.you.are.boring",
-    ])
+    ], btnText=["guide_yes"])
 }
 OPEN_PLAYGROUND_BUFF()--开起游乐场buff，
 {
@@ -6859,7 +6859,7 @@ GUIDE_GIFT()
     ShowGuidePop(player = $obj1, event = "GUIDE_GO_TO_GIFT",context = {obj1 = $obj1}, texts = [
         "guide.do.task.reward",
         "guide.GF.have.gift.give.you"
-    ])
+    ], btnText= ["next_page", "begin_GPS"])
 }
 GUIDE_GO_TO_GIFT()-- 指引去礼品
 {
@@ -6937,5 +6937,5 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
 --告诉玩家引导未完成
 TIP_GUIDE_UNDONE()
 {
-    ShowTip(entity = $obj1, tipType = 2,textKey = "guide.un.done", keepTime = 40)
+    ShowTip(entity = $obj1, tipType = 2,textKey = "guide.undone", keepTime = 40)
 }

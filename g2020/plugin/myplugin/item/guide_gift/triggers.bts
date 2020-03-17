@@ -1,10 +1,10 @@
 USE_ITEM(debug = false) --新手礼物
 {
     ShowGuidePop(player = $obj1, event = "",context = {obj1 = $obj1}, texts = [
-        "guide.do.task.reward",
-        "guide.car.effect",
+        "guide.rewad.tip",
+        "guide.car.function",
         "guide.go.to.happy"
-    ])
+    ], btnText= ["next_page", "next_page", "ui_begin"])
     ConsumeItem(item = $sloter, num = 1)
     AddItem(entity = $obj1, cfg = "myplugin/baby_trolley_01", count = 1)
     ShowRewardItemEffect(type = "Item", count = 1, fullName = "myplugin/baby_trolley_01", player = $obj1) -- todo 改变弹窗

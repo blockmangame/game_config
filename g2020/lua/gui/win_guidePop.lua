@@ -22,13 +22,14 @@ function M:update()
 	end
 	self.index = self.index + 1
 	self.context:SetText(Lang:toText(self.texts[self.index]))
-	self.sureButton:SetText(Lang:toText(self.index ~= self.count and "next_page" or "ui_sure"))
+	self.sureButton:SetText(Lang:toText( self.btnText[self.index] or (self.index ~= self.count and "next_page" or "ui_sure") ))
 end
 
 function M:onOpen(showArg, callBack)
 	self.callBack = callBack
 	self.index = 0
-	self.texts = showArg.texts
+	self.texts = showArg.texts or {}
+	self.btnText = showArg.btnText or {}
 	self.count = #self.texts
 	self:update()
 end

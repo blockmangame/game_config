@@ -488,7 +488,8 @@ function Actions.ShowGuidePop(data, params, context)
     player:sendPacket({
         pid = "ShowGuidePop",
         regId = regId,
-        texts = params.texts
+        texts = params.texts,
+        btnText = params.btnText
     })
 end
 

@@ -162,7 +162,7 @@ function handles:ShowGuidePop(packet)
     local callback = function(sure)
         Me:doCallBack("ShowGuidePop", "sure", packet.regId)
     end
-    local ui = UI:openWnd("guidePop", {texts = packet.texts}, callback)
+    local ui = UI:openWnd("guidePop", {texts = packet.texts, btnText = packet.btnText}, callback)
 end
 
 function handles:OpenMainExtension(packet)
