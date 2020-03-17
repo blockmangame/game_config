@@ -40,12 +40,17 @@ local function _getSize(tab)
     return i
 end
 
+local function _resetUI(self, visible)
+    main.visible = visible
+    main.UI.root:SetVisible(visible)
+    states.UI.root:SetVisible(not visible)
+    close.UI.root:SetVisible(not visible)
+    self._root:SetTouchable(not visible)
+    self._root:SetBackgroundColor({192/255, 192/255, 192/255, (visible and {0} or {150/255})[1]})
+end
+
 function M:onOpen()
-    main.visible = true
-    main.UI.root:SetVisible(true)
-    states.UI.root:SetVisible(false)
-    close.UI.root:SetVisible(false)
-    self._root:SetTouchable(false)
+    _resetUI(self, true)
 end
 
 function M:onClose()
@@ -74,12 +79,11 @@ function M:initMain()
     ui.root:SetHorizontalAlignment(specs.mainHAlign)
     self:subscribe(main.UI.root, UIEvent.EventWindowTouchUp, function()
         self:showMain(false)
-        self:dynamicCalculateStatesArea()
     end)
 end
 
 function M:initStates()
-    states = { UI = { root = self:child("States"), cell = {} }, data = {}, selectIdx = 1 }
+    states = { UI = { root = self:child("States"), cell = {} }, data = {}, selectBtn = nil }
 end
 
 function M:initClose()
@@ -88,6 +92,37 @@ function M:initClose()
         UI:closeWnd("showDetails")
         self:showMain(true)
     end)
+end
+
+local _radioButtonTouchUpEvent = function(btn, state, stateData)
+    if not btn or (btn:IsSelected() and states.selectBtn == btn) then
+        return
+    end
+    states.selectBtn = btn
+    local otherID = nil
+    for _, v in ipairs(stateData.userID) do
+        if v ~= Me.objID then
+            otherID = v
+            break ---目前最多仅有两围玩家交互，所以暂时先这么做
+        end
+    end
+    Skill.Cast(skillPath..state, {targetID = otherID})
+    --Me:sendPacket({pid = "ClickPlayerState"})
+end
+
+local _toggleSelectBtn = function(isMainUIVisible)
+    if isMainUIVisible and states.selectBtn then
+        states.selectBtn:SetSelected(false)
+        states.selectBtn = nil
+    elseif not isMainUIVisible then
+        local stateData = states.data and states.data[1] or {}
+        local state = stateData.name
+        local btn = state and states.UI.cell[state] and states.UI.cell[state].btn
+        if btn then
+            btn:SetSelected(true)
+            _radioButtonTouchUpEvent(btn, state, stateData)
+        end
+    end
 end
 
 function M:operateStateCell(isAdd, state, stateIndex)
@@ -100,14 +135,7 @@ function M:operateStateCell(isAdd, state, stateIndex)
         btn:SetPushedImage(imgPath..state.."_chosen")
         btn:SetTouchable(true)
         self:subscribe(btn, UIEvent.EventWindowTouchUp, function()
-            local otherID = nil
-            for _, v in ipairs(stateData.userID) do
-                if v ~= Me.objID then
-                    otherID = v
-                    break ---目前最多仅有两围玩家交互，所以暂时先这么做
-                end
-            end
-            Skill.Cast(skillPath..state, {targetID = otherID})
+            _radioButtonTouchUpEvent(btn, state, stateData)
         end)
         local txtLv = GUIWindowManager.instance:CreateGUIWindow1("Layout", state.."txtLv")
         txtLv:SetArea({0, 0}, {0, -6}, {0, specs.itemWidth / 3}, {0, specs.itemHeight / 3})
@@ -199,13 +227,10 @@ function M:syncData(packet)
 end
 
 function M:showMain(visible)
-    main.visible = visible
-    main.UI.root:SetVisible(visible)
-    states.UI.root:SetVisible(not visible)
-    close.UI.root:SetVisible(not visible)
-    self._root:SetTouchable(not visible)
+    _resetUI(self, visible)
     self:dynamicCalculateStatesArea()
     ToggleMainUI(visible)
+    _toggleSelectBtn(visible)
 end
 
 function M:init()

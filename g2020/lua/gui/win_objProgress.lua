@@ -16,6 +16,14 @@ local function dynamicAdjustUIParams(row, wnd, objID)
     UILib.uiFollowObject(wnd, objID, uiFollowObjectParams)
 end
 
+function M:onOpen()
+
+end
+
+function M:onClose()
+
+end
+
 function M:init()
     WinBase.init(self, "ProgressContainer.json", true)
     self._root:SetTouchable(false)
@@ -144,14 +152,6 @@ function M:updateArea(objID)
         progress._root:SetVisible(true)
         dynamicAdjustUIParams(i, progress._root, objID)
     end
-end
-
-function M:onOpen()
-
-end
-
-function M:onClose()
-
 end
 
 return M
