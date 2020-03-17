@@ -312,6 +312,9 @@ MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建�
 
 ENTITY_ENTER
 {
+    If($obj1.guideStep == @GuideEnd){
+        $obj1.guideStep = 10
+    }
     If($obj1.guideStep ~= @GuideEnd){
         SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = 10),canBack = true)
     }
@@ -2003,7 +2006,7 @@ FUNC_STATE_CHECK_REGION --params: state
 
 FUNC_REGION_STATE_OPERATION --parmas: isLeave, state
 {
-    If($obj1.guideStep == @PlayStartGps) --如果是指引
+    If($obj1.guideStep == @PlayStartGps and not $isLeave) --如果是指引
     {
         $Context = {
             obj1 = $obj1,
@@ -2072,7 +2075,6 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     --游乐场指引完成
     Test("====== playEnd", $obj1.guideStep)
     If($obj1.guideStep == @PlayStartGps){--存档3，完成
-        SetGPSButton(player = $obj1, show = true)
         $obj1.guideStep = @PlayEnd 
     }
     CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
@@ -4270,11 +4272,7 @@ GET_TASK  --接单
     StartTask(player = $obj1 ,fullName = $obj1.taskKey)
     --得到任务道具，手持
     AddItem(entity = $obj1, cfg = "myplugin/taskItem", count = 1)
-    --总数加1
-    $obj1.worktaskCount = $obj1.worktaskCount + 1
-    If($obj1.worktaskCount > @CircleNum){
-        $obj1.worktaskCount = 1
-    }
+
     --显示接单GPS
     $obj1.taskShowGps = true
     --更新数据
@@ -4292,22 +4290,13 @@ GUIDE_POSITION_CHANGE { --客户端关闭GPS
     }
 }
 GET_TASK_UI_DATA(){ --更新打工UI数据。
-    $newFinsh = $obj1.worktaskCount
-    $textCount = $count
     $isTasking = false
     If($obj1.taskKey){
-        $newFinsh = $newFinsh - 1
         $isTasking = true
     }
-    $textCount = ($newFinsh or 0) % @NumCycle
-    If($textCount == 0 && $newFinsh >0){
-        $textCount = 10 
-    }
-    $str = "/"
-    $text = Concat(p1 = $textCount, p2 = $str, p3 = @NumCycle)
+    $text = Concat(p1 = $obj1.worktaskCount, p2 = "/", p3 = @NumCycle)
     $rateArray = [0.02, 0.11, 0.35, 0.485, 0.5, 0.52, 0.61, 0.9485, 0.98, 1]
     $rate = 1 - (ArrayGet(array = $rateArray, index = $textCount) or 0)
-    $imgcount = $obj1.worktaskCount
     $btnImg = "set:indentImg.json image:BtnGreen.png"
     $taskData = Table(
         Progress =  $rate,
@@ -4429,7 +4418,6 @@ DELETE_ITEM(){--267.0,19.0,371.0
         $obj1.taskPos = nil
         $obj1.npcMap = nil
         $obj1.taskIndex = nil
-        $obj1.worktaskCount = $obj1.worktaskCount - 1
         If($obj1.taskShowGps){
             SetGuideTarget(entity = $obj1)
         }
@@ -4528,10 +4516,8 @@ FINISH_TASK(debug = false){ --完成打工的对话
 }
 FINISH_AWARD(){ --完成打工的奖励
     $obj1.maxtaskCount = ($obj1.maxtaskCount or 0 ) + 1
+    $obj1.worktaskCount = ($obj1.worktaskCount or 0) + 1
     $obj1.workTaskfinish = $obj1.workTaskfinish + 1
-    If($obj1.maxtaskCount >= @workmaxCount){ --最大累计数，改变模型
-        CallTrigger(object = @INDENT_MODEL, event = "CHANG_ACTOR", actorName = "maxCountActor", obj2 = $obj1)
-    }
     If($obj1.finishworkTime){
         StopTimer(timer = $obj1.finishworkTime)
     }
@@ -6815,10 +6801,9 @@ STEP13_FINISH() -- 玩家点击装扮家后，None自由操作： 14
 --存档3： 指引玩家去游乐场 ，状态指引
 START_GUIDE_STEP14()--指引去游乐场 //存档3
 {
-    If(not $obj1.checkSignIn){
+    If(not $obj1.checkSignIn and  CheckSignInShow(player = $obj1)){
         $obj1.goPlayerguide = true
         $obj1.checkSignIn = true
-        CheckSignInShow(player = $obj1)
     }Else{
         CallTrigger(event = "CALL_GO_TO_PLAYGROUND", object = $obj1)
     }
@@ -6832,6 +6817,7 @@ CLOSE_SIGN_IN()--关闭签到后,
 }
 CALL_GO_TO_PLAYGROUND()-- 开始引导玩家去游乐场对话
 {
+    Test("xxxxCALL_GO_TO_PLAYGROUND")
     ShowGuidePop(player = $obj1, event = "OPEN_PLAYGROUND_BUFF",context = {obj1 = $obj1}, texts = [
         "guide.you.are.boring",
     ])
@@ -6876,9 +6862,8 @@ GUIDE_GO_TO_GIFT()-- 指引去礼品
         CallTrigger(event = "SHOW_GO_GIFT_GPS", object = $obj1)
     }
 }
-SHOW_GO_GIFT_GPS  --得到打工的GPS位置
+SHOW_GO_GIFT_GPS
 {
-    SetGPSButton(player = $obj1, show = false)
     $map = GetPlayerMap(player = $obj1)
     $owner = GetMapVar(map = $map, key = "owner")
     If($owner){
@@ -6921,21 +6906,25 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
     $step = $obj1.guideStep
     If($step>=10 and $step<12 and $obj1.curGoStep ~= 1){ --存档1：未完
         $obj1.curGoStep = 1
+        Test("====================1")
         CallTrigger(event = "GUIDE_STEP10", object = $obj1)
     }ElseIf($step>=12 and $step<14 and $obj1.curGoStep ~= 2){ --存档2：未完
+        Test("====================2")
         $obj1.curGoStep = 2
         CallTrigger(event = "GUIDE_HOUSE", object = $obj1)
     }ElseIf($step >= 14 and $step < @PlayEnd and $obj1.curGoStep ~= 3) -- 存档3：未完
     {
+        Test("====================3")
         $obj1.curGoStep = 3
         CallTrigger(event = "START_GUIDE_STEP14", object = $obj1)
     }ElseIf($step == @PlayEnd and $obj1.curGoStep ~= 4){
+        Test("====================4")
         $obj1.curGoStep = 4
         CallTrigger(event = "GUIDE_GIFT", object = $obj1)
     }
     If($step~=@GuideEnd){
-        SetGPSButton(player = $obj1, show = false)
+        HideCloseGPS(player = $obj1, show = false)
     }Else{
-        SetGPSButton(player = $obj1, show = true)
+        HideCloseGPS(player = $obj1, show = true)
     }
 }

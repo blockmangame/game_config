@@ -20,7 +20,7 @@ SHOW_CONVERSATION_UI
                     npc = "myplugin/npc27"
                 }
             ]
-            SetGPSButton(player = $obj2, show = true)
+            HideCloseGPS(player = $obj2, show = true)
             SetGuideTarget(entity = $obj2, pos = nil, guideSpeed = 0.05)
             AddItem(entity = $obj2, cfg = "myplugin/guide_gift", count = 1)
             OpenConversation(entity = $obj2, talkList = $guideTalk, optionList = [], optionNpc = $optionNpc)

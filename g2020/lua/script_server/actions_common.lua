@@ -507,9 +507,9 @@ function Actions.OpenMainExtension(data, params, context)
     })
 end
 
-function Actions.SetGPSButton(data, params, context)
+function Actions.HideCloseGPS(data, params, context)
     params.player:sendPacket({
-        pid = "SetGPSButton",
+        pid = "HideCloseGPS",
         show = params.show
     })
 end
