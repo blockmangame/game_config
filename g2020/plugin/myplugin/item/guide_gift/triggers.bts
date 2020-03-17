@@ -5,7 +5,8 @@ USE_ITEM(debug = false) --新手礼物
         "guide.car.function",
         "guide.go.to.happy"
     ], btnText= ["next_page", "next_page", "ui_begin"])
+    $babyCar = GetItemCfg(fullName = "myplugin/guide_gift", key = "guideGift") 
     ConsumeItem(item = $sloter, num = 1)
-    AddItem(entity = $obj1, cfg = "myplugin/baby_trolley_01", count = 1)
-    ShowRewardItemEffect(type = "Item", count = 1, fullName = "myplugin/baby_trolley_01", player = $obj1) -- todo 改变弹窗
+    AddItem(entity = $obj1, cfg = $babyCar, count = 1)
+    ShowRewardItemEffect(type = "Item", count = 1, fullName = $babyCar, player = $obj1) -- todo 改变弹窗
 }
