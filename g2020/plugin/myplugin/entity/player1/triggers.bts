@@ -6732,7 +6732,7 @@ TOGGLE_MAIN_UI  --点击状态详情时，隐藏或显示主界面UI, show为tru
     Else
     {
         --隐藏主界面UI
-        $obj1.showFuncId = HideOpenedWnd(player = $obj1, excluded = {a = "playerState",  b="Tip", c = "guide_mask"})    -- 只保留打开"playerState"窗口
+        $obj1.showFuncId = HideOpenedWnd(player = $obj1, excluded = {a = "playerState",  b="Tip", c = "guide_mask", d = "whiteScreen"})    -- 保留的窗口
         OperationWindows(player = $obj1, isOpen = false, win = "main_tray_g2020")
         -- HideInteractionWindow(player = $obj1)
     }
