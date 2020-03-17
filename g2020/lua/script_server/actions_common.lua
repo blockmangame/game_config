@@ -510,7 +510,7 @@ end
 function Actions.HideCloseGPS(data, params, context)
     params.player:sendPacket({
         pid = "HideCloseGPS",
-        show = params.show
+        hide = params.hide
     })
 end
 

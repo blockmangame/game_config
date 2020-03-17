@@ -176,9 +176,9 @@ end
 
 function handles:HideCloseGPS(packet)
     local ui = UI:getWnd("workTask")
-    ui.forceClose = not packet.show  
-    if ui and not packet.show then
-        ui.closeGpsBtn:SetVisible(packet.show)
+    ui.forceClose = packet.hide  
+    if ui and packet.hide then
+        ui.closeGpsBtn:SetVisible(not packet.hide)
     end
 end
 

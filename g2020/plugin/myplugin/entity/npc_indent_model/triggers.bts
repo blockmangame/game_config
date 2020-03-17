@@ -3,6 +3,10 @@ ENTITY_ENTER
     @INDENT_MODEL = $obj1
 }
 TALK_TASK(){ --交互
+    If($obj2.guideStep ~= @GuideEnd){
+        CallTrigger(event = "TIP_GUIDE_UNDONE", object = $obj2)
+        Return()
+    }
     $checkMax = @workmaxCount <= ($obj2.maxtaskCount or 0)
     If(not $obj2.taskKey &&  not $checkMax && not $obj2.punishmentCD)--未接单
     { 

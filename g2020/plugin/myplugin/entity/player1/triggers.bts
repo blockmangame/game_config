@@ -5452,6 +5452,10 @@ CHECK_LEAVE_PARTY_FROM_DOOR {
     }
 }
 PLAYER_BE_INVITE {
+    --player guide undone
+    If($obj1.guideStep ~= @GuideEnd){
+        Return()
+    }
     --party invite will call PLAYER_BE_INVITE_OTHER_SERVER
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
@@ -6905,15 +6909,15 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
 {
     Test("----cur：guideStep:", $obj1.guideStep, $obj1.curGoStep)
     $step = $obj1.guideStep
-    If($step>=10 and $step<12 and $obj1.curGoStep ~= 1){ --存档1：未完
+    If($step>=@FirstInto and $step<@DressDialog and $obj1.curGoStep ~= 1){ --存档1：未完
         $obj1.curGoStep = 1
         Test("====================1")
         CallTrigger(event = "GUIDE_STEP10", object = $obj1)
-    }ElseIf($step>=12 and $step<14 and $obj1.curGoStep ~= 2){ --存档2：未完
+    }ElseIf($step>=@DressDialog and $step<@NoneHouse and $obj1.curGoStep ~= 2){ --存档2：未完
         Test("====================2")
         $obj1.curGoStep = 2
         CallTrigger(event = "GUIDE_HOUSE", object = $obj1)
-    }ElseIf($step >= 14 and $step < @PlayEnd and $obj1.curGoStep ~= 3) -- 存档3：未完
+    }ElseIf($step >= @NoneHouse and $step < @PlayEnd and $obj1.curGoStep ~= 3) -- 存档3：未完
     {
         Test("====================3")
         $obj1.curGoStep = 3
@@ -6924,8 +6928,14 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
         CallTrigger(event = "GUIDE_GIFT", object = $obj1)
     }
     If($step~=@GuideEnd){
-        HideCloseGPS(player = $obj1, show = false)
+        HideCloseGPS(player = $obj1, hide = true)
     }Else{
-        HideCloseGPS(player = $obj1, show = true)
+        HideCloseGPS(player = $obj1, hide = false)
     }
+}
+
+--告诉玩家引导未完成
+TIP_GUIDE_UNDONE()
+{
+    ShowTip(entity = $obj1, tipType = 2,textKey = "guide.un.done", keepTime = 40)
 }
