@@ -31,8 +31,6 @@ INTER_WITH_DOOR{
     If(not IsPlayer(entity = $obj2) or $obj2.isMoveDec) {
         Return()
     }
-    --从家里出来，进行指引
-    CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj2)
     
     CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
     $house = GetMapVar(map = $map, key = "owner")
@@ -57,6 +55,9 @@ INTER_WITH_DOOR{
     )
 
     CallTrigger(event = "FUNC_TRANSMIT_CARRIER", object = $obj2, toPos = $pos, toRy = $ry, toMap = $map)
+    
+    --从家里出来，进行指引
+    CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj2)
     If($obj2.transmitCancel)
     {
         Return()

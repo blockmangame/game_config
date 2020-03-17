@@ -6856,6 +6856,7 @@ STEP17_FINISH()--点击开始GPS:指引去游乐场
 GUIDE_GIFT()
 {
     Test("======show Guide gift")
+    $obj1.canGoGift = true
     ShowGuidePop(player = $obj1, event = "GUIDE_GO_TO_GIFT",context = {obj1 = $obj1}, texts = [
         "guide.do.task.reward",
         "guide.GF.have.gift.give.you"
@@ -6863,7 +6864,8 @@ GUIDE_GIFT()
 }
 GUIDE_GO_TO_GIFT()-- 指引去礼品
 {
-    If($obj1.guideStep == @PlayEnd){
+    If($obj1.guideStep == @PlayEnd and $obj1.canGoGift){
+        $obj1.canGoGift = false
         CallTrigger(event = "SHOW_GO_GIFT_GPS", object = $obj1)
     }
 }
@@ -6907,6 +6909,8 @@ SHOW_GO_GIFT_GPS
 
 CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
 {
+    $map = GetPlayerMap(player = $obj1)
+    $owner = GetMapVar(map = $map, key = "owner")
     Test("----cur：guideStep:", $obj1.guideStep, $obj1.curGoStep)
     $step = $obj1.guideStep
     If($step>=@FirstInto and $step<@DressDialog and $obj1.curGoStep ~= 1){ --存档1：未完
@@ -6917,12 +6921,12 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
         Test("====================2")
         $obj1.curGoStep = 2
         CallTrigger(event = "GUIDE_HOUSE", object = $obj1)
-    }ElseIf($step >= @NoneHouse and $step < @PlayEnd and $obj1.curGoStep ~= 3) -- 存档3：未完
+    }ElseIf($step >= @NoneHouse and $step < @PlayEnd and $obj1.curGoStep ~= 3 and not $owner) -- 存档3：未完
     {
         Test("====================3")
         $obj1.curGoStep = 3
         CallTrigger(event = "START_GUIDE_STEP14", object = $obj1)
-    }ElseIf($step == @PlayEnd and $obj1.curGoStep ~= 4){
+    }ElseIf($step == @PlayEnd and $obj1.curGoStep ~= 4 and not $owner){
         Test("====================4")
         $obj1.curGoStep = 4
         CallTrigger(event = "GUIDE_GIFT", object = $obj1)
