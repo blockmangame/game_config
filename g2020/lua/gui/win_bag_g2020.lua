@@ -383,9 +383,11 @@ function M:fetchAllBagItem()
 			::continue::
 		end)
 	end
-    if #self.items > 0 and not isTrading() then
-        itemUI = self:newSubItemUI()
-        grid:AddItem(itemUI)
+	if #self.items > 0 and not isTrading() then
+		World.Timer(#self.items, function()
+			itemUI = self:newSubItemUI()
+			grid:AddItem(itemUI)
+		end)
     end
 end
 
