@@ -5192,6 +5192,7 @@ ENTER_MAP
     --指引导航
     CallTrigger(event = "GUIDE_GO_TO_GIFT", object = $obj1)
     ShowWhiteScreen(player = $obj1)
+    AddEntityBuff(entity = $obj1, cfg = "myplugin/freeze_buff", buffTime = 80)
 }
 
 LEAVE_MAP
