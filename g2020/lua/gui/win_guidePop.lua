@@ -4,6 +4,7 @@ function M:init()
 	self.sureButton = self:child("tradeRiskHint-sureBtn")
 	self.context = self:child("tradeRiskHint-hintText")
 	self:child("tradeRiskHint-close"):SetVisible(false)
+	self.context:SetFontSize("HT20")
 	self.callBack = nil
 
 	self:subscribe(self.sureButton, UIEvent.EventButtonClick, function()

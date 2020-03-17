@@ -2011,7 +2011,7 @@ FUNC_STATE_CHECK_REGION --params: state
 
 FUNC_REGION_STATE_OPERATION --parmas: isLeave, state
 {
-    If($obj1.guideStep == @PlayStartGps and not $isLeave) --如果是指引
+    If($obj1.guideStep == @PlayGoGround and not $isLeave) --如果是指引
     {
         $Context = {
             obj1 = $obj1,
@@ -2051,7 +2051,7 @@ FUNC_STATE_SUSPEND_PROGRESS --params: state, stateBase, duration
 FUNC_STATE_START_PROGRESS --params: state, stateBase, duration
 {
     Test("xxxxxxxxxxx FUNC_STATE_START_PROGRESS", $state, $stateBase, $duration)
-    If($obj1.guideStep == @PlayStartGps and $state == "playground"){
+    If($obj1.guideStep == @PlayGoGround and $state == "playground"){
         $duration = 3
     }
     $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "UsedTime")) or 0
@@ -2079,7 +2079,7 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     }
     --游乐场指引完成
     Test("====== playEnd", $obj1.guideStep)
-    If($obj1.guideStep == @PlayStartGps){--存档3，完成
+    If($obj1.guideStep == @PlayGoGround){--存档3，完成
         $obj1.guideStep = @PlayEnd 
     }
     CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
@@ -6824,7 +6824,6 @@ CLOSE_SIGN_IN()--关闭签到后,
 }
 CALL_GO_TO_PLAYGROUND()-- 开始引导玩家去游乐场对话
 {
-    Test("xxxxCALL_GO_TO_PLAYGROUND")
     ShowGuidePop(player = $obj1, event = "OPEN_PLAYGROUND_BUFF",context = {obj1 = $obj1}, texts = [
         "guide.you.are.boring",
     ], btnText=["guide_yes"])
@@ -6838,17 +6837,15 @@ OPEN_PLAYGROUND_BUFF()--开起游乐场buff，
 }
 STEP15_FINISH()
 {
-    Test("=====17",$obj1.guideStep)
-    $obj1.guideStep = 17
-    $obj1.canGuidePlay = true
+    Test("=====16",$obj1.guideStep)
+    $obj1.guideStep = 16
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
-STEP17_FINISH()--点击开始GPS:指引去游乐场
+STEP16_FINISH()--点击开始GPS:指引去游乐场
 {
-    Test("=====19",$obj1.guideStep)
-    If($obj1.guideStep == 17 and $obj1.canGuidePlay){
-        $obj1.canGuidePlay = false
-        $obj1.guideStep = 19
+    Test("=====17",$obj1.guideStep)
+    If($obj1.guideStep == 16){
+        $obj1.guideStep = @PlayGoGround
         SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
     }
 }

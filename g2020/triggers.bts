@@ -71,12 +71,11 @@ GAME_INIT
     @NoneHouse = 14 --让玩家自由操作， 配置None，
     --存档3：指引玩家去游乐场
     @PlayGround = 15 --开启游乐场状态，指引玩家点击游乐场按钮
-    @PlayGroundNone1 = 16 --空状态
-    @PlayGroundClick = 17 --ButtonTip, 点击状态
-    @PlayGruondNone2 = 18 --空状态
-    @PlayStartGps = 19 --开启GPS，去游乐场
-    @PlayEnd = 20 --存档3完成，准备存档4
-    @GuideEnd = 21 --完成所有指引
+    @PlayOpenGSP = 16 --点击游乐场GPS
+    @PlayGoGround = 17 --去游乐场
+    @PlayEnd = 18 --存档3完成，
+    --准备存档4
+    @GuideEnd = 19 --完成所有指引
 
 }
 --创建邮箱npc
