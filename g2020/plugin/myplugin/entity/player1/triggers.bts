@@ -322,6 +322,7 @@ ENTITY_ENTER
     ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 3, 4, 5))
     $obj1.outOfCameraModeState = {}
     $obj1.curStates = {}
+    $obj1.stateProgress = {}
     CallTrigger(event = "CHECK_SHOW_SVIP_UI", object = $obj1)
     AddEntityBuff(entity = $obj1, cfg = "myplugin/click_action")
     CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
@@ -1859,6 +1860,33 @@ FUNC_SYNC_STATE_DETAILS_TO_OTHER --params: state, needSyncPlayers[, isRemoveTarg
     If(not $hadTarget) { ShowDetails(player = $obj1, state = $state) }
 }
 
+FUNC_SYNC_STATE_PROGRESS_TO_TARGET --params: target, isExecute
+{
+    If(not $isExecute) { Return() }
+    $targetID = GetObjectID(object = $target)
+    $selfID = GetObjectID(object = $obj1)
+    Foreach(array = $obj1.stateProgress, key = "state") {
+        $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "UsedTime")) or 0
+        $sTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "STime"))
+        $duration = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "duration") or 0
+        $pgText = Concat(p1 = "state_", p2 = $state, p3 = "_title")
+        If($sTime && $usedTime) {
+            $usedTime = GetTime() - $sTime + $usedTime
+        }
+        ShowProgressFollowObj( isOpen = true, pgName = $state, entity = $obj1, totalTime = $duration * 20, usedTime = $usedTime * 20, pgText = $pgText, type = "state", interactionList = [$targetID])
+    }
+    Foreach(array = $target.stateProgress, key = "state") {
+        $usedTime = GetObjectVar(obj = $target, key = Concat(p1 = $state, p2 = "UsedTime")) or 0
+        $sTime = GetObjectVar(obj = $target, key = Concat(p1 = $state, p2 = "STime"))
+        $duration = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "duration") or 0
+        $pgText = Concat(p1 = "state_", p2 = $state, p3 = "_title")
+        If($sTime && $usedTime) {
+            $usedTime = GetTime() - $sTime + $usedTime
+        }
+        ShowProgressFollowObj( isOpen = true, pgName = $state, entity = $target, totalTime = $duration * 20, usedTime = $usedTime * 20, pgText = $pgText, type = "state", interactionList = [$selfID])
+    }
+}
+
 FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state [, isOnlySyncDetails]
 {
     $needSyncPlayers = []
@@ -1944,6 +1972,7 @@ FUNC_STATE_RIDE_OPERATION --params: ride, isRideOff
     If(IsPlayer(entity = $ride)) {
         CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = not $isRideOff, needSyncPlayers = [$ride], excludeSelf = true)
         CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", needSyncPlayers = [$ride], isRemoveTarget = $isRideOff)
+        CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_PROGRESS_TO_TARGET", target = $ride, isExecute = not $isRideOff)
     }
     $event = $isRideOff and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE"
     If($ride.cfg.releaseState)
@@ -2012,6 +2041,8 @@ FUNC_STATE_SUSPEND_PROGRESS --params: state, stateBase, duration
         SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "UsedTime"), value = GetTime() - $sTime + $usedTime)
     }
     SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "STime"), value = nil)
+    $index = ArrayFind(array = $obj1.stateProgress, value = $state)
+    If($index) { ArrayRemove(array = $obj1.stateProgress, index = $index) }
     CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = true, state = $state, isOnlySyncDetails = true)
 }
 
@@ -2031,6 +2062,7 @@ FUNC_STATE_START_PROGRESS --params: state, stateBase, duration
     $value = StartTimer(rep = false, object =$obj1, state = $state, event = "FUNC_STATE_REWARD", time = (($duration - $usedTime) * 20) // 1)
     SetObjectVar( obj = $obj1, value = $value, key = Concat(p1 = $state, p2 = "_TIMER") )
 
+    ArrayAppend(array = $obj1.stateProgress, value = $state)
     CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = true, state = $state, isOnlySyncDetails = true)
 }
 
@@ -2367,6 +2399,8 @@ FUNC_UPDATE_STATE_SKILL_JACK_AREA --params: up
 
 FUNC_STATE_RESET_DATA --params: state[, hideTip]
 {
+    $index = ArrayFind(array = $obj1.stateProgress, value = $state)
+    If($index) { ArrayRemove(array = $obj1.stateProgress, index = $index) }
     ShowProgressFollowObj(entity = $obj1, isOpen = false, pgName = $state)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "got"), value = nil)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "STime"), value = nil)
