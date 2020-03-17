@@ -139,13 +139,12 @@ function Actions.ShowProgressFollowObj(data, params, context)
     if params.type and params.type == "state" then
         local skillPath = "myplugin/skill_state_"..pgName
         local stateBase = _getSkillVar(skillPath, "stateBase") or pgName
+        local rewardCount = _getSkillVar(skillPath, "rewardCount")
+        local rewardDis = _getSkillVar(skillPath, "rewardDis")
         local interactionList = params.interactionList or _getObjVar(player, stateBase.."InteractList") or {}
         for _, v in pairs(interactionList) do
             local obj = World.CurWorld:getObject(v)
-            local rewardCount = _getSkillVar(skillPath, "rewardCount")
-            local rewardDis = _getSkillVar(skillPath, "rewardDis")
             local objRewardCount = _getObjVar(obj, stateBase.."RewardCount") or 0
-
             if obj and obj:isValid() and obj.isPlayer and (not isOpen or (obj:getValue("teamId") == teamId
                     and player.map == obj.map and objRewardCount < rewardCount and player:distance(obj) < rewardDis)) then
                 playerList[v] = obj

@@ -18,6 +18,6 @@ FUNC_STATE_SYNC_TO_RIDER_AND_PASSENGERS --params: isRideOn, player
         Return()
     }
     CallTrigger(object = $player, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = $isRideOn, needSyncPlayers = [$owner], excludeSelf = true)
-    CallTrigger(object = $player, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", needSyncPlayers = [$owner], isRemoveTarget = not $isRideOn)
-    CallTrigger(object = $player, event = "FUNC_SYNC_STATE_PROGRESS_TO_TARGET", target = $owner, isExecute = $isRideOn)
+    CallTrigger(object = $player, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHERS", needSyncPlayers = [$owner], isRemoveTarget = not $isRideOn)
+    CallTrigger(object = $player, event = "FUNC_SYNC_STATE_PROGRESS_TO_OTHERS", target = $owner, isExecute = $isRideOn)
 }
