@@ -90,9 +90,6 @@ function handles:CloseNewSignIn(packet)
 	Trigger.CheckTriggers(self:cfg(), "CLOSE_SIGN_IN", context)
 end
 
-function handles:ClickPlayerState(packet)
-	local context = {
-		obj1 = self
-	}
-	Trigger.CheckTriggers(self:cfg(), "CLICK_PLAYER_STATE", context)
+function handles:UpdateGuideRedPoint(packet)
+	Trigger.CheckTriggers(self:cfg(), "GUIDE_RED_POINT", {obj1 = self, hideParty = packet.hideParty, hideWork = packet.hideWork})
 end

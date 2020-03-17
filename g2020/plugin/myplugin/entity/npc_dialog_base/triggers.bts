@@ -23,7 +23,15 @@ SHOW_CONVERSATION_UI
             HideCloseGPS(player = $obj2, show = true)
             SetGuideTarget(entity = $obj2, pos = nil, guideSpeed = 0.05)
             AddItem(entity = $obj2, cfg = "myplugin/guide_gift", count = 1)
+            ShowRewardItemEffect(type = "Item", count = 1, fullName = "myplugin/guide_gift", player = $obj2)
             OpenConversation(entity = $obj2, talkList = $guideTalk, optionList = [], optionNpc = $optionNpc)
+            $obj2.guideWork = true
+            $obj2.guideParty = true
+            UpdateUIData(player = $obj2, ui = "mainExtension", data = {
+                guideEnd = $obj2.guideStep == @GuideEnd,
+                guideWork = $obj2.guideWork,
+                guideParty = $obj2.guideParty
+            })
         }
     }
 }

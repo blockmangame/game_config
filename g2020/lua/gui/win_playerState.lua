@@ -108,7 +108,6 @@ function M:operateStateCell(isAdd, state, stateIndex)
                 end
             end
             Skill.Cast(skillPath..state, {targetID = otherID})
-            --Me:sendPacket({pid = "ClickPlayerState"})
         end)
         local txtLv = GUIWindowManager.instance:CreateGUIWindow1("Layout", state.."txtLv")
         txtLv:SetArea({0, 0}, {0, -6}, {0, specs.itemWidth / 3}, {0, specs.itemHeight / 3})

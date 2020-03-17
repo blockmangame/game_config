@@ -11,6 +11,13 @@ function M:initWnd()
     self:initBtns()
     self:initBtnsEvent()
     self:hideLayout()
+
+    Lib.subscribeEvent(Event.EVENT_UPDATE_UI_DATA, function (UIName)
+		if UIName ~= "mainExtension" then
+			return
+        end
+        self:updateRedPoint()
+    end)
 end
 
 function M:initBtns()
@@ -48,7 +55,15 @@ function M:initBtnsEvent()
     end)
 
     self:subscribe(self.orderBtn, UIEvent.EventButtonClick, function()
-        Lib.emitEvent(Event.EVENT_SHOW_WORK_DETAILS, true)
+        local data = UI:getRemoterData("mainExtension")
+        if data.guideEnd then
+            Lib.emitEvent(Event.EVENT_SHOW_WORK_DETAILS, true)
+        else
+            Client.ShowTip(1, Lang:toText("guide.undone"), 40)
+        end
+        if self.orderRed then
+            Me:sendPacket({pid = "UpdateGuideRedPoint", hideWork = true})
+        end
     end)
 
     self:subscribe(self.dressBtn, UIEvent.EventButtonClick, function()
@@ -56,13 +71,36 @@ function M:initBtnsEvent()
     end)
 
     self:subscribe(self.partyBtn, UIEvent.EventButtonClick, function()
+        local data = UI:getRemoterData("mainExtension")
+        if not data.guideEnd then 
+            Client.ShowTip(1, Lang:toText("guide.undone"), 40)
+            return
+        end
         local wnd = UI:getWnd("party_setting", true)
         if not wnd then
             Lib.emitEvent(Event.EVENT_SHOW_PARTY_LIST, true)
         else
             Client.ShowTip(3, Lang:toText("tip.user.already.in.other.party"), 40)
         end
+        if self.partyRed then
+            Me:sendPacket({pid = "UpdateGuideRedPoint", hideParty = true})
+        end
     end)
+end
+
+function M:updateRedPoint()
+    local data = UI:getRemoterData("mainExtension")
+    self.deep = data.guideEnd and 0 or 0.5
+    self.orderBtn:setMask(1, 1, self.deep)
+    self.partyBtn:setMask(1, 1, self.deep)
+    if not data.guideEnd then
+        return
+    end
+    self.orderRed = data.guideWork
+    self.partyRed = data.guideParty
+    self:child("MainExtensionPanel-OpenRedPoint"):SetVisible(self.orderRed or self.partyRed)
+    self:child("MainExtensionPanel-PartyRedPoint"):SetVisible(data.guideParty)
+    self:child("MainExtensionPanel-OrderRedPoint"):SetVisible(data.guideWork)
 end
 
 function M:openLayout()

@@ -312,6 +312,11 @@ MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建�
 
 ENTITY_ENTER
 {
+    UpdateUIData(player = $obj1, ui = "mainExtension", data = {
+        guideEnd = $obj1.guideStep == @GuideEnd,
+        guideWork = $obj1.guideWork,
+        guideParty = $obj1.guideParty
+    })
     If($obj1.guideStep == @GuideEnd){
         $obj1.guideStep = 10
     }
@@ -4296,7 +4301,7 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
     }
     $text = Concat(p1 = $obj1.worktaskCount, p2 = "/", p3 = @NumCycle)
     $rateArray = [0.02, 0.11, 0.35, 0.485, 0.5, 0.52, 0.61, 0.9485, 0.98, 1]
-    $rate = 1 - (ArrayGet(array = $rateArray, index = $textCount) or 0)
+    $rate = 1 - (ArrayGet(array = $rateArray, index = $obj1.worktaskCount) or 0)
     $btnImg = "set:indentImg.json image:BtnGreen.png"
     $taskData = Table(
         Progress =  $rate,
@@ -4342,7 +4347,7 @@ GET_TASK_GPS  --得到打工的GPS位置
                     }
                 }
             }
-            $obj1.gpsPobj1os = $okPos or @INDENT_POS
+            $obj1.gpsPos = $okPos or @INDENT_POS
         }Else{
             $obj1.gpsPos = $obj1.taskPos or  @INDENT_POS
         }
@@ -5176,7 +5181,7 @@ ENTER_MAP
     CallTrigger(event = "ENTER_HOUSE_MAP", object = $obj1)
     CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
     --指引导航
-    CallTrigger(event = "GUIDE_GO_TO_GIFT", object = $obj1)
+    CallTrigger(event = "SHOW_GO_GIFT_GPS", object = $obj1)
     ShowWhiteScreen(player = $obj1)
     AddEntityBuff(entity = $obj1, cfg = "myplugin/freeze_buff", buffTime = 80)
 }
@@ -6863,11 +6868,15 @@ GUIDE_GO_TO_GIFT()-- 指引去礼品
 {
     If($obj1.guideStep == @PlayEnd and $obj1.canGoGift){
         $obj1.canGoGift = false
+        $obj1.goGiftGps = true
         CallTrigger(event = "SHOW_GO_GIFT_GPS", object = $obj1)
     }
 }
 SHOW_GO_GIFT_GPS
 {
+    If(not $obj1.goGiftGps){
+        Return()
+    }
     $map = GetPlayerMap(player = $obj1)
     $owner = GetMapVar(map = $map, key = "owner")
     If($owner){
@@ -6896,9 +6905,9 @@ SHOW_GO_GIFT_GPS
                     }
                 }
             }
-            $obj1.giftGPS = $okPos or {x = 180.782242, y = 14.006246, z = 190.036407}
+            $obj1.giftGPS = $okPos or {x = 180.782242, y = 13.006246, z = 190.036407}
         }Else{
-            $obj1.giftGPS = {x = 180.782242, y = 14.006246, z = 190.036407}
+            $obj1.giftGPS = {x = 180.782242, y = 13.006246, z = 190.036407}
         }
     }
     SetGuideTarget(entity = $obj1, pos = $obj1.giftGPS, guideSpeed = 0.05)
@@ -6938,5 +6947,19 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
 --告诉玩家引导未完成
 TIP_GUIDE_UNDONE()
 {
-    ShowTip(entity = $obj1, tipType = 2,textKey = "guide.undone", keepTime = 40)
+    ShowTip(entity = $obj1, tipType = 1,textKey = "guide.undone", keepTime = 40)
+}
+GUIDE_RED_POINT()
+{
+    If($hideParty){
+        $obj1.guideParty = false
+    }
+    If($hideWork){
+        $obj1.guideWork = false
+    }
+    UpdateUIData(player = $obj1, ui = "mainExtension", data = {
+        guideEnd = $obj1.guideStep == @GuideEnd,
+        guideWork = $obj1.guideWork,
+        guideParty = $obj1.guideParty
+    })
 }
