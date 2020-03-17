@@ -90,9 +90,8 @@ end
 
 function M:updateRedPoint()
     local data = UI:getRemoterData("mainExtension")
-    self.deep = data.guideEnd and 0 or 0.5
-    self.orderBtn:setMask(1, 1, self.deep)
-    self.partyBtn:setMask(1, 1, self.deep)
+    self.orderBtn:SetEnabled(data.guideEnd)
+    self.partyBtn:SetEnabled(data.guideEnd)
     if not data.guideEnd then
         return
     end
