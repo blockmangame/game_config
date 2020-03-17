@@ -1848,7 +1848,7 @@ FUNC_STATE_ADD --params: state, stateBase, skill
     SetObjectVar(obj = $obj1, key = Concat(p1 = "had", p2 = $stateBase), value = true)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "got"), value = true)
     ArrayAppend(array = $obj1.curStates, value = $state)
-    CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = true, state = $state)
+    CallTrigger(object = $obj1, event = "FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE", isAdd = true, state = $state, addToInteractList = true)
     CallTrigger(object = $obj1, event = "FUNC_STATE_ACTION", state = $state, skill = $skill)
 }
 
@@ -1895,7 +1895,7 @@ FUNC_SYNC_STATE_PROGRESS_TO_OTHERS --params: target, isExecute
     CallTrigger(object = $target, event = "FUNC_SYNC_STATE_PROGRESS_TO_TARGET", targetID = GetObjectID(object = $obj1))
 }
 
-FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state [, isOnlySyncDetails]
+FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state [, isOnlySyncDetails, addToInteractList]
 {
     $needSyncPlayers = []
     $ride = GetRideOn(entity = $obj1)
@@ -1921,6 +1921,12 @@ FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state [, isO
         CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = $isAdd, states = [$state], needSyncPlayers = $needSyncPlayers)
     }
     CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHERS", state = $state, needSyncPlayers = $needSyncPlayers)
+
+    If($addToInteractList) {
+        Foreach(array = $needSyncPlayers, key = "player") {
+            CallTrigger(event = "FUNC_STATE_ADD_INTERACTLIST", entities = [$obj1, $player])
+        }
+    }
 }
 
 FUNC_STATE_START_AUTO_VANISH_TIME --parmas: state, skill
@@ -2567,12 +2573,12 @@ INTERACTION_BABY_TROLLEY {
             CallTrigger(event = "FUNC_STATE_ADD_INTERACTLIST", entities = [$obj1, $obj2])
         }
         ElseIf(not $trolley) {
-            	$tipType = 2
-	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "trolley_pls_equip")
+            $tipType = 2
+	        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "trolley_pls_equip")
         }
     } Else {
-        	$tipType = 2
-	ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
+        $tipType = 2
+	    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
     }
 }
 
