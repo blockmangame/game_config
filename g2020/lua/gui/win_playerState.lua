@@ -182,6 +182,7 @@ function M:dynamicCalculateStatesArea()
     end
 
     if main.visible then
+        UI:closeWnd("showDetails")
         main.UI.txt:SetText(main.totalUsersCount)
         main.UI.img:SetImage(imgPath..main.img)
         return
