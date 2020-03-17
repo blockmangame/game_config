@@ -1849,7 +1849,7 @@ FUNC_SYNC_STATES_TO_OTHERS --params: isAdd, states, needSyncPlayers, excludeSelf
     }
 }
 
-FUNC_SYNC_STATE_DETAILS_TO_OTHER --params: state, needSyncPlayers[, isRemoveTarget]
+FUNC_SYNC_STATE_DETAILS_TO_OTHERS --params: state, needSyncPlayers[, isRemoveTarget]
 {
     $hadTarget = false
     Foreach(array = $needSyncPlayers, key = "target") {
@@ -1860,11 +1860,8 @@ FUNC_SYNC_STATE_DETAILS_TO_OTHER --params: state, needSyncPlayers[, isRemoveTarg
     If(not $hadTarget) { ShowDetails(player = $obj1, state = $state) }
 }
 
-FUNC_SYNC_STATE_PROGRESS_TO_TARGET --params: target, isExecute
+FUNC_SYNC_STATE_PROGRESS_TO_TARGET --params: targetID
 {
-    If(not $isExecute) { Return() }
-    $targetID = GetObjectID(object = $target)
-    $selfID = GetObjectID(object = $obj1)
     Foreach(array = $obj1.stateProgress, key = "state") {
         $usedTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "UsedTime")) or 0
         $sTime = GetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "STime"))
@@ -1875,16 +1872,13 @@ FUNC_SYNC_STATE_PROGRESS_TO_TARGET --params: target, isExecute
         }
         ShowProgressFollowObj( isOpen = true, pgName = $state, entity = $obj1, totalTime = $duration * 20, usedTime = $usedTime * 20, pgText = $pgText, type = "state", interactionList = [$targetID])
     }
-    Foreach(array = $target.stateProgress, key = "state") {
-        $usedTime = GetObjectVar(obj = $target, key = Concat(p1 = $state, p2 = "UsedTime")) or 0
-        $sTime = GetObjectVar(obj = $target, key = Concat(p1 = $state, p2 = "STime"))
-        $duration = GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "duration") or 0
-        $pgText = Concat(p1 = "state_", p2 = $state, p3 = "_title")
-        If($sTime && $usedTime) {
-            $usedTime = GetTime() - $sTime + $usedTime
-        }
-        ShowProgressFollowObj( isOpen = true, pgName = $state, entity = $target, totalTime = $duration * 20, usedTime = $usedTime * 20, pgText = $pgText, type = "state", interactionList = [$selfID])
-    }
+}
+
+FUNC_SYNC_STATE_PROGRESS_TO_OTHERS --params: target, isExecute
+{
+    If(not $isExecute) { Return() }
+    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_PROGRESS_TO_TARGET", targetID = GetObjectID(object = $target))
+    CallTrigger(object = $target, event = "FUNC_SYNC_STATE_PROGRESS_TO_TARGET", targetID = GetObjectID(object = $obj1))
 }
 
 FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state [, isOnlySyncDetails]
@@ -1912,7 +1906,7 @@ FUNC_GET_ALREADY_INTERACTION_PLAYERS_TO_SYNC_STATE --params: isAdd, state [, isO
     If(not $isOnlySyncDetails) {
         CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = $isAdd, states = [$state], needSyncPlayers = $needSyncPlayers)
     }
-    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", state = $state, needSyncPlayers = $needSyncPlayers)
+    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHERS", state = $state, needSyncPlayers = $needSyncPlayers)
 }
 
 FUNC_STATE_START_AUTO_VANISH_TIME --parmas: state, skill
@@ -1971,8 +1965,8 @@ FUNC_STATE_RIDE_OPERATION --params: ride, isRideOff
     }
     If(IsPlayer(entity = $ride)) {
         CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = not $isRideOff, needSyncPlayers = [$ride], excludeSelf = true)
-        CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", needSyncPlayers = [$ride], isRemoveTarget = $isRideOff)
-        CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_PROGRESS_TO_TARGET", target = $ride, isExecute = not $isRideOff)
+        CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHERS", needSyncPlayers = [$ride], isRemoveTarget = $isRideOff)
+        CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_PROGRESS_TO_OTHERS", target = $ride, isExecute = not $isRideOff)
     }
     $event = $isRideOff and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE"
     If($ride.cfg.releaseState)
@@ -2242,7 +2236,7 @@ FUNC_STATE_SHOW_DETAILS_UI -- params: skill(fullName) [, partner]
 {
     $state = GetSkillVar(fullName = $skill, key = "state")
     $obj1.detailsUI = $state
-    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHER", state = $state, needSyncPlayers = [$partner])
+    CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHERS", state = $state, needSyncPlayers = [$partner])
 }
 
 FUNC_STATE_OPEN_GPS --params: rtVal
