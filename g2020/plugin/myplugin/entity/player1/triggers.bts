@@ -6931,10 +6931,8 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
         CallTrigger(event = "START_GUIDE_STEP14", object = $obj1)
     }ElseIf($step == @PlayEnd and $obj1.curGoStep ~= 4){
         $obj1.curGoStep = 4
-        Test("===============4")
         CallTrigger(event = "GUIDE_GIFT", object = $obj1)
     }
-    Test("===============z")
     If($step~=@GuideEnd){
         SetGPSButton(player = $obj1, show = false)
     }Else{
