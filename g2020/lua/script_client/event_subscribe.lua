@@ -109,5 +109,7 @@ Lib.subscribeEvent(Event.EVENT_SYNC_STATES_DATA, function(packet)
 end)
 
 Lib.subscribeEvent(Event.EVENT_SHOW_REWARD_DIALOG, function(info)
-    UI:openWnd("rewardTip", info)
+    local ui = UI:openWnd("rewardTip", info)
+    ui:root():SetAlwaysOnTop(true)
+	ui:root():SetLevel(0)
 end)

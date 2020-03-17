@@ -174,10 +174,10 @@ function handles:OpenMainExtension(packet)
     end
 end
 
-function handles:SetGPSButton(packet)
+function handles:HideCloseGPS(packet)
     local ui = UI:getWnd("workTask")
-    if ui then
-        ui.forceClose = not packet.show     
+    ui.forceClose = not packet.show  
+    if ui and not packet.show then
         ui.closeGpsBtn:SetVisible(packet.show)
     end
 end

@@ -37,10 +37,3 @@ TALK_TASK(){ --交互
         ]
     )
 }
-CHANG_ACTOR(){ --变模型
-    If($obj1 and $obj2){
-        If($actorName == "actorName"){
-            $obj2.punishmentCD = false
-        }
-    }
-}
