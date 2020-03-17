@@ -40,7 +40,7 @@ function UI:hideOpenedWnd(excluded)
     for name, wnd in pairs(UI._windows) do
         if not excludedMap[name] and wnd:isvisible() then
             wnd:hide()
-            if not string.match(name, "*head_") and not name == "whiteScreen" then
+            if not string.match(name, "*head_") then
                 wnds[#wnds + 1] = wnd
             end
         end
