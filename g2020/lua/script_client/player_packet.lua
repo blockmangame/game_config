@@ -181,3 +181,8 @@ function handles:SetGPSButton(packet)
         ui.closeGpsBtn:SetVisible(packet.show)
     end
 end
+
+function handles:ShowWhiteScreen(packet)
+    UI:openWnd("whiteScreen")
+    Lib.emitEvent(Event.EVENT_SHOW_WHITE_SCREEN, packet)
+end

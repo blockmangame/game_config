@@ -514,3 +514,9 @@ function Actions.SetGPSButton(data, params, context)
         show = params.show
     })
 end
+
+function Actions.ShowWhiteScreen(data, params, context)
+    params.player:sendPacket({
+        pid = "ShowWhiteScreen",
+    })
+end

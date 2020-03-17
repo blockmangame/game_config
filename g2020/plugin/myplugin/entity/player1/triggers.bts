@@ -5197,6 +5197,7 @@ ENTER_MAP
     CallTrigger(event = "UPDATE_PLAYER_ALL_NUMBER_BOARD_ENTITY", object = $obj1, show = true)
     --指引导航
     CallTrigger(event = "GUIDE_GO_TO_GIFT", object = $obj1)
+    ShowWhiteScreen(player = $obj1)
 }
 
 LEAVE_MAP
