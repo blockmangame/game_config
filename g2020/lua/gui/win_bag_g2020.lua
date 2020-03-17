@@ -358,15 +358,19 @@ function M:fetchAllBagItem()
 						return
 					end
 					UILib.openChoiceDialog({msgText = {"ui_sure_giveaway_something_to_anybody", item:cfg().itemname or ""}}, function(isTrue)
-						if not isTrue then
-							item.isDel = true
-							if self:isItemEquip(item) then
-								Me:setItemUse(item:tid(), item:slot(), false)
-							end
-							Me:sendPacket({ pid = "DeleteItem", objID = Me.objID, bag = item:tid(), slot = item:slot() }, function()
-								grid:RemoveItem(ui)
-							end)
-							Me:sendPacket({ pid = "GiveAwayToTarget", objID = giveAwayStatusTable.targetObjID, cfg = item:cfg().fullName, count = 1 })
+                        if not isTrue then
+                            Me:sendPacket({pid = "CheckTargetTrayIsFull", objID = giveAwayStatusTable.targetObjID, tid = BAG_TRAY_TYPE[item:cfg().typeIndex]}, function(isFree)
+                                if isFree then
+                                    item.isDel = true
+                                    if self:isItemEquip(item) then
+                                        Me:setItemUse(item:tid(), item:slot(), false)
+                                    end
+                                    Me:sendPacket({ pid = "DeleteItem", objID = Me.objID, bag = item:tid(), slot = item:slot() }, function()
+                                        grid:RemoveItem(ui)
+                                    end)
+                                    Me:sendPacket({ pid = "GiveAwayToTarget", objID = giveAwayStatusTable.targetObjID, cfg = item:cfg().fullName, count = 1 })
+                                end
+                            end)
 						end
 					end) 
 				else

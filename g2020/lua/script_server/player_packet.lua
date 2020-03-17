@@ -62,6 +62,19 @@ function handles:GiveAwayToTarget(packet)
 	})
 end
 
+function handles:CheckTargetTrayIsFull(packet)
+    local objID = packet.objID
+	local object = World.CurWorld:getObject(objID)
+	local ret = object:tray():query_trays(packet.tid)
+	for _, element in pairs(ret) do
+		local _tray = element.tray
+		if _tray:find_free() then
+			return true
+		end
+	end
+    return false
+end
+
 function handles:CommentWorks(packet)
 	local context = {
 		obj1 = self,
