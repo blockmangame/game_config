@@ -6945,6 +6945,9 @@ SHOW_GO_GIFT_GPS
 
 CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
 {
+    If(not GetWorldVar(key = "doGuide")){
+        Return()
+    }
     $map = GetPlayerMap(player = $obj1)
     $owner = GetMapVar(map = $map, key = "owner")
     Test("----cur：guideStep:", $obj1.guideStep, $obj1.curGoStep)
