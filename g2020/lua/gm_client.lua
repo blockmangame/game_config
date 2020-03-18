@@ -27,7 +27,15 @@ end
 
 GMItem["关闭引导"] = function()
     Me:sendPacket({
-        pid = "GMCloseGuide"
+        pid = "GMGuide",
+        close = true
+    })
+end
+
+GMItem["重置引导"] = function()
+    Me:sendPacket({
+        pid = "GMGuide",
+        reset = true
     })
 end
 
