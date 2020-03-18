@@ -218,11 +218,6 @@ CREATE_OWNER_HOUSE{
 }
 
 GOTO_INSIDE_HOUSE{
-    $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
-    $yaw = 0
-    If($obj1.curHouseCfg){
-        $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
-    }
     SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
 	  pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
@@ -232,9 +227,22 @@ ENTITY_DIE{
 	CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     $house = $obj1.house
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+    $yaw = 0
+    If($obj1.curHouseCfg){
+        $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
+    }
     If($obj1.damageTimer){
         StopTimer(timer = $obj1.damageTimer)
         $obj1.damageTimer = nil
+    }
+    $mapOwner = GetMapVar(map = GetEntityMap(entity = $obj1), key = "owner")
+    If($mapOwner){
+        $house = $mapOwner.house
+        $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+        $yaw = 0
+        If($mapOwner.curHouseCfg){
+            $yaw = GetEntityCfg(fullName = $mapOwner.curHouseCfg, key = "insideMapRotationYaw")
+        }
     }
     ReviveEntity(entity = $obj1, map = $houseInsideMap)
     If($obj1.role == @child){
@@ -242,7 +250,7 @@ ENTITY_DIE{
     }Else{
         CallTrigger(obj1 = $obj1, event = "CHANGE_PLAYER_SCALE_ADULT")
     }
-    CallTrigger(object = $obj1, obj1 = $obj1, house = $house, event = "GOTO_INSIDE_HOUSE")
+    CallTrigger(object = $obj1, obj1 = $obj1, houseInsideMap = $houseInsideMap, yaw = $yaw, event = "GOTO_INSIDE_HOUSE")
 }
 
 CHRONIC_KILL_SELF{
