@@ -3,6 +3,10 @@ ENTITY_ENTER
 }
 
 SHOW_PARTY_LIST{
+    If($obj2.guideStep ~= @GuideEnd){
+        CallTrigger(event = "TIP_GUIDE_UNDONE", object = $obj2)
+        Return()
+    }
     ShowPartyList(player = $obj2)
 }
 

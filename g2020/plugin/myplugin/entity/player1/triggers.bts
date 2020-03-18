@@ -5783,12 +5783,20 @@ GET_VISIT_TELE_POS {
     }
 }
 TRY_JOIN_PARTY(debug = false){
+    If($obj1.guideStep ~= @GuideEnd){
+        CallTrigger(event = "TIP_GUIDE_UNDONE", object = $obj1)
+        Return()
+    }
     If($obj1.excludedPartyId == $partyId){
         $tip = "gui.party.be.excluded"
         $canJoin = false
     }
 }
 TRY_CREATE_PARTY {
+    If($obj1.guideStep ~= @GuideEnd){
+        CallTrigger(event = "TIP_GUIDE_UNDONE", object = $obj1)
+        Return()
+    }
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/vip_privilege")){
         $canCreate = true
     }Else{
