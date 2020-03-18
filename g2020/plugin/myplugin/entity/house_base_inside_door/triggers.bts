@@ -57,7 +57,7 @@ INTER_WITH_DOOR{
     CallTrigger(event = "FUNC_TRANSMIT_CARRIER", object = $obj2, toPos = $pos, toRy = $ry, toMap = $map)
     
     --从家里出来，进行指引
-    CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj2)
+    StartTimer(event = "CONTINUE_GUIDESTEP", object = $obj2, time = 5)
     If($obj2.transmitCancel)
     {
         Return()

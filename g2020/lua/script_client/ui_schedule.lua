@@ -75,3 +75,7 @@ Lib.subscribeEvent(Event.EVENT_SHOW_WORK_DETAILS, function(show)
         UI:closeWnd("workTask")
     end
 end)
+
+Lib.subscribeEvent(Event.EVENT_GUIDE_GM, function(packet)
+    Me:sendPacket(packet)
+end)
