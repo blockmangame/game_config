@@ -3,28 +3,9 @@
 language_start:#new
 
 #This_is_a_Remark#=凡是在多语言文件中添加的新字段，一律放在这里
-tip.user.visit.friend.failed=拜访好友失败, 正在重启游戏...
-guide.you.in.playground=这里是游乐场，你可以尽情的玩耍
-guide.you.reward.after.play=当你玩耍了，会获得奖励。你看玩还能赚钱，多好！
-guide.welcome=欢迎来到《养娃太难了！》
-guide.goto.dress=你想要美好的开始吗？首先是把自己打扮得漂漂亮亮的。
-guide.alotof.dress=这里有许多漂亮的衣服
-guide.you.can.try.dress=你可以找一件实事的衣服试一试。
-guide.you.are.beautiful=哇！你看起来很full！
-guide.you.in.your.house=你现在的位置是你自己的家
-guide.you.can.dress.your.house=你可以装扮你的房子，让它更漂亮。
-guide.you.are.boring=你现在是不是很无聊?去游乐场玩一玩吧
-guide.do.task.reward=帮助自己或他人获得更多奖励
-guide.GF.have.gift.give.you=杰夫为你准备了礼物，去看看吧。
-guide.rewad.tip=哇！你获得了一辆手推车
-guide.car.function=当你是大人的时候，你可以把小孩放在车上
-guide.go.to.happy=去快乐的玩耍吧！
-next_page=下一页
-ui_begin=开始
-begin_GPS=开始导航
-guide_yes=是！(YES)
-guide.undone=指引未完成，不能进行操作
-guide.I.have.a.gift.give.you=听说你刚刚到这个小镇上。这是我代表小镇给你的礼物，希望你能喜欢。
+
+food_bag_full=你的食物背包容量不够，请清理一下。
+trade.opposite.bag.fill=对方的背包满了
 language_end:#new
 
 language_start:dress
@@ -418,7 +399,7 @@ RIGHT_ROTATION=右旋
 SALE=出售
 MOVE=移动
 food_buy.text=购买食物
-food_buy.text2=免费获得食物
+food_buy.text2=获取
 sit1_1_1.text=坐
 sit1_2_1.text=坐
 sit1_2_2.text=坐
@@ -457,7 +438,7 @@ chairs6_bathtub3.text=洗
 chairs6_bathtub4.text=洗
 cook.text=厨具
 cook_buy.text=购买食物
-cook_buy.text2=免费获得食物
+cook_buy.text2=烹饪
 bgm.text=打开音乐列表
 blackboard.text=写
 indentModel_name=烦恼的外卖小哥
@@ -523,6 +504,28 @@ fru.fru_chairs5_body_1.desc=功能：开关
 sickbed.text=治病
 ui_decStoreList_partyStore=派对
 ui_decStoreList_courtyardStore=院子
+fru.fru_chairs4_body_44.name=圣诞盆栽
+fru.fru_chairs4_body_45.name=开纸盒
+fru.fru_chairs4_body_46.name=中纸盒
+fru.fru_chairs4_body_47.name=关闭纸盒
+fru.fru_chairs4_body_48.name=斜糖果棒
+fru.fru_chairs4_body_49.name=直糖果棒
+fru.fru_chairs4_body_50.name=木床头柜
+fru.fru_chairs4_body_51.name=木书柜
+fru.fru_chairs4_body_52.name=礼物盒
+fru.fru_chairs4_body_53.name=手提电脑
+fru.fru_chairs4_body_56.name=陶罐
+fru.fru_chairs4_body_44.desc=无
+fru.fru_chairs4_body_45.desc=无
+fru.fru_chairs4_body_46.desc=无
+fru.fru_chairs4_body_47.desc=无
+fru.fru_chairs4_body_48.desc=无
+fru.fru_chairs4_body_49.desc=无
+fru.fru_chairs4_body_50.desc=无
+fru.fru_chairs4_body_51.desc=无
+fru.fru_chairs4_body_52.desc=无
+fru.fru_chairs4_body_53.desc=无
+fru.fru_chairs4_body_56.desc=无
 
 language_end:furniture
 
@@ -537,7 +540,7 @@ house6_type_name=汉堡屋
 house7_type_name=菠萝房
 house8_type_name=皇家城堡
 house9_type_name=梅丽号
-house10_type_name=霍格沃兹城堡
+house10_type_name=魔法学院
 house_change=房子已更换，重置所有家具
 house_type_big_house=大房子
 house_default_name_nothing=家
@@ -568,6 +571,7 @@ house_owner_lock_house_and_kick_you=房主把房子锁上了
 lock_cur_house_door=锁门
 show_change_house_menu=更换房屋
 show_party_list=派对
+buy_house_region_color_had_not_inside_region=无法更换这个房间的地板和墙纸
 
 language_end:house
 
@@ -925,6 +929,10 @@ npc_45.dialog2=
 npc_46.dialog2=
 npc_47.dialog2=
 npc_48.dialog2=不妨试试小镇长推荐的香蕉乳酪披萨，他总是很了解孩子的口味。
+indentModel_name2=肖恩
+npc_indent1.name=<饥饿的订单主人>\n皮蛋
+npc_indent1.name2=皮蛋
+npc_indent1.dialog=我好饿啊，肚子都要饿扁了
 
 language_end:npc
 
@@ -1137,5 +1145,27 @@ gui.ohthertrading.cantTrading=对方现在正在交易中
 gui.trade.countDown=接受({.})
 gui.self.tele.to.target.success=你传送到{.}身边了
 gui.target.tele.to.self.success={.}刚刚传送到了你身边
+tip.user.visit.friend.failed=拜访好友失败, 正在重启游戏...
+guide.you.in.playground=这里是游乐场，你可以尽情的玩耍
+guide.you.reward.after.play=当你不再无聊时，会获得奖励
+guide.welcome=欢迎来到《养娃太难了！》
+guide.goto.dress=你想要美好的开始吗？首先是把自己打扮得漂漂亮亮的。
+guide.alotof.dress=这里有许多漂亮的衣服
+guide.you.can.try.dress=你可以找一件合适的衣服试一试。
+guide.you.are.beautiful=哇！你看起来很棒！
+guide.you.in.your.house=你现在的位置是你自己的家
+guide.you.can.dress.your.house=你可以装扮你的房子，让它更漂亮。
+guide.you.are.boring=你现在是不是很无聊?去游乐场玩一玩吧
+guide.do.task.reward=帮助自己或他人可以获得更多奖励
+guide.GF.have.gift.give.you=杰夫为你准备了礼物，去看看吧。
+guide.rewad.tip=哇！你获得了一辆手推车
+guide.car.function=当你是大人的时候，你可以把小孩放在车上
+guide.go.to.happy=去快乐的玩耍吧！
+next_page=下一页
+ui_begin=开始
+begin_GPS=开始导航
+guide_yes=是
+guide.undone=现在暂时无法使用该功能，请先完成引导
+guide.I.have.a.gift.give.you=我听说你刚刚到这个小镇上。这是我代表小镇给你的礼物，希望你能喜欢。
 
 language_end:system

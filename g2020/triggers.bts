@@ -75,6 +75,8 @@ GAME_INIT
     @PlayGoGround = 17 --去游乐场
     @PlayEnd = 18 --存档3完成，
     --准备存档4
+    @GuideGift = 19
+    --引导完成
     @GuideEnd = 19 --完成所有指引
 
 }
@@ -1084,7 +1086,84 @@ TRADE_CLOSE()
     $obj1.trading = false
     $obj2.trading = false
 }
+--交易检测，
+TRADE_CONFIRM()
+{
+    $caps1 = NewArray()
+    $caps2 = NewArray()
+    $trays = [21, 22, 23, 24]
+    Foreach(array = $trays, key = "type"){
+        $cap1 = GetEntityTrayAvailableCapacity(entity = $obj1, trayType = [ $type ])
+        $cap2 = GetEntityTrayAvailableCapacity(entity = $obj2, trayType = [ $type ]) 
+        ArrayAppend(array = $caps1, value = $cap1)
+        ArrayAppend(array = $caps2, value = $cap2)
+    }
+    $countDit1 = NewDictionary()
+    $countDit2 = NewDictionary()
+    Foreach(array = $items1, key = "item"){
+        $type = GetConfigVar(obj = $item, key = "exclusiveTray")
+        $count = DictionaryGet(dict = $countDit1, key = $type) or 0
+        DictionarySet(dict = $countDit1, key = $type, value = $count + 1)
+    }
+    Foreach(array = $items2, key = "item"){
+        $type = GetConfigVar(obj = $item, key = "exclusiveTray")
+        $count = DictionaryGet(dict = $countDit2, key = $type) or 0
+        DictionarySet(dict = $countDit2, key = $type, value = $count + 1)
+    }
+    $index = 1
+    $more1 = nil
+    $more2 = nil
+    Foreach(array = $trays, key = "type"){
+        $count1 = DictionaryGet(dict = $countDit1, key = $type) or 0
+        $count2 = DictionaryGet(dict = $countDit2, key = $type) or 0
+        $cap1 = ArrayGet(array = $caps1, index = $index) or 0
+        $cap2 = ArrayGet(array = $caps2, index = $index) or 0
+        If($cap1 + $count1 < $count2){
+            $resetTrade = true
+            $more1 = $index
+            --ArrayAppend(array = $more1, value = $index)
+        }
+        If($cap2 + $count2 < $count1){
+            $resetTrade = true
+            $more2 = $index
+            --ArrayAppend(array = $more2, value = $index)
+        }
+        $index = $index + 1
+    }
+    $msg = [
+        "baby_bag_full",
+        "food_bag_full",
+        "car_bag_full",
+        "toy_bag_full",
+    ]
+    If($more1){
+        ShowWarmPrompt(player = $obj1, text = ArrayGet(array = $msg, index = $more1), btnText = "ui_sure")
+    }
+    If($more2){
+        ShowWarmPrompt(player = $obj2, text = ArrayGet(array = $msg, index = $more2), btnText = "ui_sure")
+    }
+    If(not $more1 and $more2){
+        ShowWarmPrompt(player = $obj1, text = "trade.opposite.bag.fill", btnText = "ui_sure")
+    }
+    If($more1 and not $more2){
+        ShowWarmPrompt(player = $obj2, text = "trade.opposite.bag.fill", btnText = "ui_sure")
+    }
+}
 
 GAME_BGM_TIMER{
     -- Update gamebgm cfg ..
+}
+
+--GM 关闭引导
+GM_CLOSE_GUIDE(){
+    $obj1.closeGuide = true
+    $obj1.guideParty = false
+    $obj1.guideWork = false
+    $obj1.guideStep = @GuideEnd
+    HideCloseGPS(player = $obj1, hide = false)
+    UpdateUIData(player = $obj1, ui = "mainExtension", data = {
+        guideEnd = $obj1.guideStep == @GuideEnd,
+        guideWork = $obj1.guideWork,
+        guideParty = $obj1.guideParty
+    })
 }
