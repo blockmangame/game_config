@@ -339,8 +339,22 @@ local function clacPushOutWithBlock(object, player)
     local boundingBox = object:getBoundingBox()
     local boundBoxSize = Lib.v3cut(boundingBox[3], boundingBox[2])
     local curPlayerPos = player:getPosition()
-    local playerRegion = object.map:getRegionValue(curPlayerPos) -- object.map:getRegionValue(entityPos)
-    local region = not playerRegion and object.map:getRegionValue(entityPos) or playerRegion
+    -- local playerRegion = object.map:getRegionValue(curPlayerPos) -- object.map:getRegionValue(entityPos)
+    -- local region = not playerRegion and object.map:getRegionValue(entityPos) or playerRegion
+    local map = object.map
+    local function checkIsInRegion(region, pos)
+        local min = region.min
+        local max = region.max
+        return min.x <= pos.x and max.x >= pos.x and  min.y <= pos.y and max.y >= pos.y and min.z <= pos.z and max.z >= pos.z or false 
+    end
+    local function getRegion(map, pos)
+        for _, re in pairs(map:getAllRegion()) do
+            if re.cfg.isInsideRegion and checkIsInRegion(re, pos) then
+                return re
+            end
+        end
+    end
+    local region = getRegion(map, entityPos) or getRegion(map, curPlayerPos)
     local vectorAxis = Lib.v3cut(region and Lib.getRegionCenter(region) or curPlayerPos, entityPos)
     -- vectorAxis = Lib.v3add(boundBoxSize, vectorAxis)
     local kSize = math.max(math.abs(vectorAxis.x / 0.01), math.abs(vectorAxis.y / 0.01), math.abs(vectorAxis.z / 0.01))
