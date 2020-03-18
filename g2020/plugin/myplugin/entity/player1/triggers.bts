@@ -2101,13 +2101,13 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         $obj1.guideStep = @PlayEnd
         If($obj1.guideDoneGift){ -- 如果已经完成了礼品
             $obj1.guideStep = @GuideEnd
-            $obj2.guideWork = true
-            $obj2.guideParty = true
-            HideCloseGPS(player = $obj2, show = true)
-            UpdateUIData(player = $obj2, ui = "mainExtension", data = {
-                guideEnd = $obj2.guideStep == @GuideEnd,
-                guideWork = $obj2.guideWork,
-                guideParty = $obj2.guideParty
+            $obj1.guideWork = true
+            $obj1.guideParty = true
+            HideCloseGPS(player = $obj1, show = true)
+            UpdateUIData(player = $obj1, ui = "mainExtension", data = {
+                guideEnd = $obj1.guideStep == @GuideEnd,
+                guideWork = $obj1.guideWork,
+                guideParty = $obj1.guideParty
             })
         }Else{
             $obj1.guideStep = @GuideGift

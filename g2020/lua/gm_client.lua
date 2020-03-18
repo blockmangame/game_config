@@ -26,17 +26,19 @@ GMItem["g2020/派对内部设置"] = function()
 end
 
 GMItem["关闭引导"] = function()
-    Me:sendPacket({
+    local packet ={
         pid = "GMGuide",
         close = true
-    })
+    }
+    Lib.emitEvent(Event.EVENT_GUIDE_GM, packet)
 end
 
 GMItem["重置引导"] = function()
-    Me:sendPacket({
+    local packet = {
         pid = "GMGuide",
         reset = true
-    })
+    }
+    Lib.emitEvent(Event.EVENT_GUIDE_GM, packet)
 end
 
 return GMItem
