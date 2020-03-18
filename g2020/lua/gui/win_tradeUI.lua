@@ -26,6 +26,16 @@ function M:init()
 
 	self.leftGrid:InitConfig(5, 5, 2)
 	self.rightGrid:InitConfig(5, 5, 2)
+	--交易重置
+	Lib.subscribeEvent(Event.EVENT_RESET_TRADE, function(tradeID)
+		if tradeID ~= self.tradeID then
+			return
+		end
+		self.isConfirm = false
+		self:child("partyTradeUI-leftConfrim"):SetVisible(self.isConfirm)
+		self:child("partyTradeUI-rightConfrim"):SetVisible(false)
+		self.confirmBtn:SetText(Lang:toText("ui_sure"))
+	end)
 	
 	--规则按钮
 	self:subscribe(self:child("partyTradeUI-ruleBtn"), UIEvent.EventButtonClick, function()

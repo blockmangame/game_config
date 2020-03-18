@@ -6954,19 +6954,15 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
     $step = $obj1.guideStep
     If($step>=@FirstInto and $step<@DressDialog and $obj1.curGoStep ~= 1){ --存档1：未完
         $obj1.curGoStep = 1
-        Test("====================1")
         CallTrigger(event = "GUIDE_STEP10", object = $obj1)
     }ElseIf($step>=@DressDialog and $step<@NoneHouse and $obj1.curGoStep ~= 2){ --存档2：未完
-        Test("====================2")
         $obj1.curGoStep = 2
         CallTrigger(event = "GUIDE_HOUSE", object = $obj1)
     }ElseIf($step >= @NoneHouse and $step < @PlayEnd and $obj1.curGoStep ~= 3 and not $owner) -- 存档3：未完
     {
-        Test("====================3")
         $obj1.curGoStep = 3
         CallTrigger(event = "START_GUIDE_STEP14", object = $obj1)
     }ElseIf($step == @PlayEnd and $obj1.curGoStep ~= 4 and not $owner){
-        Test("====================4")
         $obj1.curGoStep = 4
         CallTrigger(event = "GUIDE_GIFT", object = $obj1)
     }
