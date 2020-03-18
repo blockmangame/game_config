@@ -107,6 +107,6 @@ function handles:UpdateGuideRedPoint(packet)
 	Trigger.CheckTriggers(self:cfg(), "GUIDE_RED_POINT", {obj1 = self, hideParty = packet.hideParty, hideWork = packet.hideWork})
 end
 
-function handles:GMCloseGuide(packet)
-	Trigger.CheckTriggers(nil, "GM_CLOSE_GUIDE", {obj1 = self})
+function handles:GMGuide(packet)
+	Trigger.CheckTriggers(nil, "GM_CLOSE_GUIDE", {obj1 = self, reset = packet.reset, close = packet.close})
 end

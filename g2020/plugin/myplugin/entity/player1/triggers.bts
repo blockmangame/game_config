@@ -218,11 +218,6 @@ CREATE_OWNER_HOUSE{
 }
 
 GOTO_INSIDE_HOUSE{
-    $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
-    $yaw = 0
-    If($obj1.curHouseCfg){
-        $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
-    }
     SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
 	  pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
@@ -232,9 +227,22 @@ ENTITY_DIE{
 	CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     $house = $obj1.house
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+    $yaw = 0
+    If($obj1.curHouseCfg){
+        $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
+    }
     If($obj1.damageTimer){
         StopTimer(timer = $obj1.damageTimer)
         $obj1.damageTimer = nil
+    }
+    $mapOwner = GetMapVar(map = GetEntityMap(entity = $obj1), key = "owner")
+    If($mapOwner){
+        $house = $mapOwner.house
+        $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+        $yaw = 0
+        If($mapOwner.curHouseCfg){
+            $yaw = GetEntityCfg(fullName = $mapOwner.curHouseCfg, key = "insideMapRotationYaw")
+        }
     }
     ReviveEntity(entity = $obj1, map = $houseInsideMap)
     If($obj1.role == @child){
@@ -242,7 +250,7 @@ ENTITY_DIE{
     }Else{
         CallTrigger(obj1 = $obj1, event = "CHANGE_PLAYER_SCALE_ADULT")
     }
-    CallTrigger(object = $obj1, obj1 = $obj1, house = $house, event = "GOTO_INSIDE_HOUSE")
+    CallTrigger(object = $obj1, obj1 = $obj1, houseInsideMap = $houseInsideMap, yaw = $yaw, event = "GOTO_INSIDE_HOUSE")
 }
 
 CHRONIC_KILL_SELF{
@@ -310,15 +318,12 @@ MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建�
 
 ENTITY_ENTER
 {
-    If($obj1.guideStep == @GuideEnd){
-        $obj1.guideStep = 10
-    }
     UpdateUIData(player = $obj1, ui = "mainExtension", data = {
         guideEnd = $obj1.guideStep == @GuideEnd,
         guideWork = $obj1.guideWork,
         guideParty = $obj1.guideParty
     })
-    If($obj1.guideStep ~= @GuideEnd){
+    If($obj1.guideStep ~= @GuideEnd){ --进入游戏的时候不让引导默认开启
         SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = 10),canBack = true)
     }
     UpdateUIData(player = $obj1, ui = "circleProgress", data = {})
@@ -1041,14 +1046,18 @@ GIVE_STORE{
     ShowGenericActorShowStore(entity = $obj1, closeWin =true)
 
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
+    $telPos = GetEntityPosition(entity = $obj1)
     $rideOn = GetRideOn(entity = $obj1.house.owner)
-    If($rideOn){
+    If($rideOn and GetConfigVar(obj = $rideOn, key = "base") == "fru_base"){
         $rideOnLastSideNormal = $rideOn.lastSideNormal
         $rideOnYaw = GetEntityYaw(entity = $rideOn)
         $rideOnPitch = GetEntityPitch(entity = $rideOn)
         $rideOnRoll = GetEntityRoll(entity = $rideOn)
     }
-    $npc = CreateNpc(pos = GetEntityPosition(entity = $obj1), map = $map, cfgName = $cfg, ry = $rideOnYaw or 0, rp = $rideOnPitch or 0, owner = $obj1)
+    If($rideOn){
+        $telPos = GetEntityPosition(entity = $rideOn)
+    }
+    $npc = CreateNpc(pos = $telPos, map = $map, cfgName = $cfg, ry = $rideOnYaw or 0, rp = $rideOnPitch or 0, owner = $obj1)
     If($rideOnRoll){
         SetEntityRoll(entity = $npc, rotationRoll = $rideOnRoll)
     }
@@ -2100,9 +2109,21 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
         Return()
     }
     --游乐场指引完成
-    Test("====== playEnd", $obj1.guideStep)
     If($obj1.guideStep == @PlayGoGround){--存档3，完成
-        $obj1.guideStep = @PlayEnd 
+        $obj1.guideStep = @PlayEnd
+        If($obj1.guideDoneGift){ -- 如果已经完成了礼品
+            $obj1.guideStep = @GuideEnd
+            $obj1.guideWork = true
+            $obj1.guideParty = true
+            HideCloseGPS(player = $obj1, show = true)
+            UpdateUIData(player = $obj1, ui = "mainExtension", data = {
+                guideEnd = $obj1.guideStep == @GuideEnd,
+                guideWork = $obj1.guideWork,
+                guideParty = $obj1.guideParty
+            })
+        }Else{
+            $obj1.guideStep = @GuideGift
+        }
     }
     CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
 
@@ -5569,6 +5590,9 @@ JOIN_PARTY_ARGEE(debug1 = true){
 ----- same server invite ↑↑
     
 PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
+    If($obj1.guideStep ~= @GuideEnd){
+        Return()
+    }
     $userId = GetPlayerUserID(player = $obj1)
     $inPartyOwnerId = $obj1.inPartyOwnerId
     If($inPartyOwnerId ~= 0){
@@ -5771,12 +5795,20 @@ GET_VISIT_TELE_POS {
     }
 }
 TRY_JOIN_PARTY(debug = false){
+    If($obj1.guideStep ~= @GuideEnd){
+        CallTrigger(event = "TIP_GUIDE_UNDONE", object = $obj1)
+        Return()
+    }
     If($obj1.excludedPartyId == $partyId){
         $tip = "gui.party.be.excluded"
         $canJoin = false
     }
 }
 TRY_CREATE_PARTY {
+    If($obj1.guideStep ~= @GuideEnd){
+        CallTrigger(event = "TIP_GUIDE_UNDONE", object = $obj1)
+        Return()
+    }
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/vip_privilege")){
         $canCreate = true
     }Else{
@@ -6841,6 +6873,10 @@ STEP13_FINISH() -- 玩家点击装扮家后，None自由操作： 14
 --存档3： 指引玩家去游乐场 ，状态指引
 START_GUIDE_STEP14()--指引去游乐场 //存档3
 {
+    $uiList = ["priShop", "familyAlbum", "dressArchive", "party_list", "bag_g2020"]
+    Foreach(array = $uiList ,key = "ui"){
+        OperationWindows(win = $ui, isOpen = false, player = $obj1)
+    }
     If(not $obj1.checkSignIn and  CheckSignInShow(player = $obj1)){
         $obj1.goPlayerguide = true
         $obj1.checkSignIn = true
@@ -6887,8 +6923,6 @@ STEP16_FINISH()--点击开始GPS:指引去游乐场
 --不配置guide, 全部使用BTS逻辑。
 GUIDE_GIFT()
 {
-    Test("======show Guide gift")
-    $obj1.canGoGift = true
     ShowGuidePop(player = $obj1, event = "GUIDE_GO_TO_GIFT",context = {obj1 = $obj1}, texts = [
         "guide.do.task.reward",
         "guide.GF.have.gift.give.you"
@@ -6896,7 +6930,7 @@ GUIDE_GIFT()
 }
 GUIDE_GO_TO_GIFT()-- 指引去礼品
 {
-    If($obj1.guideStep == @PlayEnd and $obj1.canGoGift){
+    If($obj1.guideStep == @GuideGift){
         $obj1.canGoGift = false
         $obj1.goGiftGps = true
         CallTrigger(event = "SHOW_GO_GIFT_GPS", object = $obj1)
@@ -6950,7 +6984,6 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
     }
     $map = GetPlayerMap(player = $obj1)
     $owner = GetMapVar(map = $map, key = "owner")
-    Test("----cur：guideStep:", $obj1.guideStep, $obj1.curGoStep)
     $step = $obj1.guideStep
     If($step>=@FirstInto and $step<@DressDialog and $obj1.curGoStep ~= 1){ --存档1：未完
         $obj1.curGoStep = 1
@@ -6962,7 +6995,7 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
     {
         $obj1.curGoStep = 3
         CallTrigger(event = "START_GUIDE_STEP14", object = $obj1)
-    }ElseIf($step == @PlayEnd and $obj1.curGoStep ~= 4 and not $owner){
+    }ElseIf($step == @GuideGift and not $obj1.guideDoneGift and $obj1.curGoStep ~= 4 and not $owner){
         $obj1.curGoStep = 4
         CallTrigger(event = "GUIDE_GIFT", object = $obj1)
     }

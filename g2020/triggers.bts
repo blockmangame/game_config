@@ -74,11 +74,10 @@ GAME_INIT
     @PlayOpenGSP = 16 --点击游乐场GPS
     @PlayGoGround = 17 --去游乐场
     @PlayEnd = 18 --存档3完成，
-    --准备存档4
+    --存档4
     @GuideGift = 19
     --引导完成
-    @GuideEnd = 19 --完成所有指引
-
+    @GuideEnd = 20 --完成所有指引
 }
 --创建邮箱npc
 CREATE_EMAIL_NPC
@@ -178,7 +177,7 @@ FUNC_STATE_STARTTIMER
 FUNC_BROADCAST_STATE
 {
     Foreach(array = GetAllPlayers(), key = "player"){
-        If($player.inPartyOwnerId ~= 0 or $player.guideStep < @GuideEnd){
+        If($player.inPartyOwnerId ~= 0 or $player.guideStep ~= @GuideEnd){
             Continue()
         }
         SetObjectVar(obj = $player, value = 0, key = Concat(p1 = $stateBase, p2 = "RewardCount"))
@@ -1156,6 +1155,10 @@ GAME_BGM_TIMER{
 
 --GM 关闭引导
 GM_CLOSE_GUIDE(){
+    If($reset){
+        $obj1.guideStep = 10
+        Return()
+    }
     $obj1.closeGuide = true
     $obj1.guideParty = false
     $obj1.guideWork = false

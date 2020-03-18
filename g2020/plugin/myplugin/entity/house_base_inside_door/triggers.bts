@@ -1,5 +1,14 @@
 ENTITY_ENTER
 {
+    StartTimer(time = 1, object = $obj1, event = "CREATE_PARTY_COLLISION_DOOR")
+}
+
+CREATE_PARTY_COLLISION_DOOR{
+    If($obj1.house.owner.inPartyOwnerId ~= 0){
+        $collisionEntityCfg = GetConfigVar(obj = $obj1, key = "inPartyBboxEntity")
+        $collisionEntity = CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = $collisionEntityCfg, pos = GetEntityPosition(entity = $obj1))
+        $obj1.collisionEntity = $collisionEntity
+    }
 }
 
 CREATE_DOOR_REGION{
@@ -57,7 +66,7 @@ INTER_WITH_DOOR{
     CallTrigger(event = "FUNC_TRANSMIT_CARRIER", object = $obj2, toPos = $pos, toRy = $ry, toMap = $map)
     
     --从家里出来，进行指引
-    CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj2)
+    StartTimer(event = "CONTINUE_GUIDESTEP", object = $obj2, time = 5)
     If($obj2.transmitCancel)
     {
         Return()
@@ -71,4 +80,7 @@ CHANGE_ENTITY_FACE{
 
 ENTITY_DIE{
     RemoveRegion(map = GetEntityMap(entity = $obj1), key = GetObjectVar(obj = $obj1, key = "curDoorRegionKey"))
+    If($obj1.collisionEntity){
+        KillEntity(entity = $obj1.collisionEntity)
+    }
 }

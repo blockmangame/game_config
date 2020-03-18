@@ -182,8 +182,15 @@ function M:updateItemInfo(item, view)
 	buyView:SetVisible(item.status == Store.itemStatus.NOT_BUY)
 
 	local dressItemCfg = setting:fetch("dress", item.itemName)
-	local picUrl = getCfg(dressItemCfg, "icon")
-	view:GetChildByIndex(0):SetImageUrl(picUrl)
+	local pic = getCfg(dressItemCfg, "icon")
+
+	if pic:find("http:") or pic:find("https:") then
+		view:GetChildByIndex(0):SetImage("")
+		view:GetChildByIndex(0):SetImageUrl(pic)
+	else
+		view:GetChildByIndex(0):SetImageUrl("xx")
+		view:GetChildByIndex(0):SetImage(pic)
+	end
 
 	self:unsubscribe(view, UIEvent.EventButtonClick)
 	self:subscribe(view, UIEvent.EventButtonClick, function()

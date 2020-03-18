@@ -37,7 +37,7 @@
         "followParams": {
             "followScenePos": false,
             "offset": {
-                "x": -0.1,
+                "x": 0,
                 "y": 1.5,
                 "z": 0.2
             }
@@ -48,15 +48,16 @@
                 "widgetFileName": "widget_button",
                 "image": "plugin/myplugin/image/paint.png",
                 "imageSize": {
-                    "width": "60",
-                    "height": "60"
+                    "width": "80",
+                    "height": "80"
                 },
+                "widgetFileName": "widget_button_image_center",
                 "event": "TUYA_HUABAN"
             }
         ]
     },
     "interaction": {
-        "radius": 7,
+        "radius": 14,
         "offset": {
             "x": 0,
             "y": -1,

@@ -339,15 +339,29 @@ local function clacPushOutWithBlock(object, player)
     local boundingBox = object:getBoundingBox()
     local boundBoxSize = Lib.v3cut(boundingBox[3], boundingBox[2])
     local curPlayerPos = player:getPosition()
-    local playerRegion = object.map:getRegionValue(curPlayerPos) -- object.map:getRegionValue(entityPos)
-    local region = not playerRegion and object.map:getRegionValue(entityPos) or playerRegion
+    -- local playerRegion = object.map:getRegionValue(curPlayerPos) -- object.map:getRegionValue(entityPos)
+    -- local region = not playerRegion and object.map:getRegionValue(entityPos) or playerRegion
+    local map = object.map
+    local function checkIsInRegion(region, pos)
+        local min = region.min
+        local max = region.max
+        return min.x <= pos.x and max.x >= (pos.x - 1) and  min.y <= pos.y and max.y >= (pos.y - 1) and min.z <= pos.z and max.z >= (pos.z - 1) or false 
+    end
+    local function getRegion(map, pos)
+        for _, re in pairs(map:getAllRegion()) do
+            if re.cfg.isInsideRegion and checkIsInRegion(re, pos) then
+                return re
+            end
+        end
+    end
+    local region = getRegion(map, entityPos) or getRegion(map, curPlayerPos)
     local vectorAxis = Lib.v3cut(region and Lib.getRegionCenter(region) or curPlayerPos, entityPos)
     -- vectorAxis = Lib.v3add(boundBoxSize, vectorAxis)
     local kSize = math.max(math.abs(vectorAxis.x / 0.01), math.abs(vectorAxis.y / 0.01), math.abs(vectorAxis.z / 0.01))
     local normalizeV3 = Lib.v3(
-        (lastSideNormal.x == 0 and vectorAxis.x or 0) / kSize,
-        (lastSideNormal.y == 0 and vectorAxis.y or 0) / kSize,
-        (lastSideNormal.z == 0 and vectorAxis.z or 0) / kSize
+        vectorAxis.x / kSize,
+        vectorAxis.y / kSize,
+        vectorAxis.z / kSize
     )
     local isCanPushOut = false
     for i=0,kSize do

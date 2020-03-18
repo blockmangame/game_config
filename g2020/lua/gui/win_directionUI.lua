@@ -1,16 +1,15 @@
 local setting = require "common.setting"
-
-local GuideHome = {}
-local self = GuideHome
-
-GuideHome.mapDoor = {}
-GuideHome.mapDoorTimer = {}
-GuideHome.homeDoor = nil
-GuideHome.homeTimer = nil
 local pluginCfg = setting:fetch("ui_config", "myplugin/homeView") or {}
 local uicfg = pluginCfg["settingCfg"]
 
-local function getItem(cfg)
+function M:init()
+    WinBase.init(self, "directionUI.json", true)
+    self.mapDoor = {}
+    self.mapDoorTimer = {}
+    self:initMapUI()
+end
+
+function M:getItem(cfg)
 	local item = UIMgr:new_widget("button", "widget_button")
 	item:invoke("imageSize",cfg.imageSize)
 	item:invoke("enable", false)
@@ -30,14 +29,13 @@ local function getItem(cfg)
 	if backImage then
 		backImage:SetEnabled(false)
 	end
-	local container = GUIWindowManager.instance:LoadWindowFromJSON("InteractionLayout.json")
+	local container = GUIWindowManager.instance:LoadWindowFromJSON("directionItem.json")
 	container:AddChildWindow(item)
-	local ui = UI:getWnd("interactionContainer")
-	ui._root:AddChildWindow(container)
+	self:root():AddChildWindow(container)
 	return container
 end
 
-local function rangeShowUIOnVPos(pos, ui, minDis, maxDis)
+function M:rangeShowUIOnVPos(pos, ui, minDis, maxDis)
 	if not ui then
 		return
 	end
@@ -80,59 +78,33 @@ local function rangeShowUIOnVPos(pos, ui, minDis, maxDis)
     end
 end
 
---mapdoor
-function GuideHome.MakeMapDoor()
-	for name, cfg in pairs(uicfg) do
+function M:initMapUI()
+    for name, cfg in pairs(uicfg) do
 		if name ~= "home" and not self.mapDoor[name] then
-			local ui = getItem(cfg)
+			local ui = self:getItem(cfg)
 			self.mapDoor[name] = ui
-			self.mapDoorTimer[name] = rangeShowUIOnVPos(cfg.pos, ui, cfg.minDis, cfg.maxDis)
+			self.mapDoorTimer[name] = self:rangeShowUIOnVPos(cfg.pos, ui, cfg.minDis, cfg.maxDis)
 		end
 	end
 end
 
---homedoor
-function GuideHome.showHomeUI(pos)
-	if self.homeTimer then
-		--self.homeTimer()
-		self.homeTimer = nil
-	end
-	if not self.homeDoor then
-		self.homeDoor = getItem(uicfg["home"])
-	else
-		self.homeDoor:SetVisible(false)
-	end
-	pos = pos or { x = 0, y = 0, z = 0}
-	pos.y = pos.y + 1
-	local cfg = uicfg["home"]
-	self.homeTimer = rangeShowUIOnVPos(pos, self.homeDoor, cfg.minDis, cfg.maxDis)
-end
-
-function GuideHome.resetDoor(pos)
-	if self.homeTimer then
-		--self.homeTimer()
+function M:updateHomeUI(pos)
+    if self.homeTimer then
+		self.homeTimer()
 		self.homeTimer = nil
 	end
 	if self.homeDoor then
-		self.homeDoor:SetVisible(false)
-		self.homeDoor = nil
-	end
-	
-	for _, timer in pairs(self.mapDoorTimer) do
-		timer()
-	end
-	
-	for _, ui in pairs(self.mapDoor) do
-		ui:SetVisible(false)
-	end
-
-	self.mapDoor = {}
-	self.mapDoorTimer = {}
-
-	if pos then
-		self.MakeMapDoor()
-		self.showHomeUI(pos)
-	end
+        self.homeDoor:SetVisible(false)
+        self.homeDoor = nil
+    end
+    if not pos then
+        return
+    end
+    self.homeDoor = self:getItem(uicfg["home"])
+	pos = pos or { x = 0, y = 0, z = 0}
+	pos.y = pos.y + 1
+	local cfg = uicfg["home"]
+	self.homeTimer = self:rangeShowUIOnVPos(pos, self.homeDoor, cfg.minDis, cfg.maxDis)
 end
 
-return GuideHome
+return M
