@@ -115,7 +115,7 @@ local function clacPushOutWithBlock(self, object)
     local function checkIsInRegion(region, pos)
         local min = region.min
         local max = region.max
-        return min.x <= pos.x and max.x >= pos.x and  min.y <= pos.y and max.y >= pos.y and min.z <= pos.z and max.z >= pos.z or false 
+        return min.x <= pos.x and max.x >= (pos.x - 1) and  min.y <= pos.y and max.y >= (pos.y - 1) and min.z <= pos.z and max.z >= (pos.z - 1) or false 
     end
     local function getRegion(map, pos)
         for _, re in pairs(map:getAllRegion()) do
