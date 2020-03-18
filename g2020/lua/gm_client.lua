@@ -25,7 +25,7 @@ GMItem["g2020/派对内部设置"] = function()
     Lib.emitEvent(Event.EVENT_SHOW_PARTY_INNER_SETTING, true, {inPartyOwnerId = 18512})
 end
 
-GMItem["关闭引导"] = function()
+GMItem["g2020/关闭引导"] = function()
     local packet ={
         pid = "GMGuide",
         close = true
@@ -33,12 +33,16 @@ GMItem["关闭引导"] = function()
     Lib.emitEvent(Event.EVENT_GUIDE_GM, packet)
 end
 
-GMItem["重置引导"] = function()
+GMItem["g2020/重置引导"] = function()
     local packet = {
         pid = "GMGuide",
         reset = true
     }
     Lib.emitEvent(Event.EVENT_GUIDE_GM, packet)
+end
+
+GMItem["g2020/派对列表"] = function()
+    UI:openWnd("party_list")
 end
 
 return GMItem
