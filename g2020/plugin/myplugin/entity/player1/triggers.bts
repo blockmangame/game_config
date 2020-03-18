@@ -6861,6 +6861,10 @@ STEP13_FINISH() -- 玩家点击装扮家后，None自由操作： 14
 --存档3： 指引玩家去游乐场 ，状态指引
 START_GUIDE_STEP14()--指引去游乐场 //存档3
 {
+    $uiList = ["priShop", "familyAlbum", "dressArchive", "party_list", "bag_g2020"]
+    Foreach(array = $uiList ,key = "ui"){
+        OperationWindows(win = $ui, isOpen = false, player = $obj1)
+    }
     If(not $obj1.checkSignIn and  CheckSignInShow(player = $obj1)){
         $obj1.goPlayerguide = true
         $obj1.checkSignIn = true
