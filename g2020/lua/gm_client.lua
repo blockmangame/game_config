@@ -25,4 +25,10 @@ GMItem["g2020/派对内部设置"] = function()
     Lib.emitEvent(Event.EVENT_SHOW_PARTY_INNER_SETTING, true, {inPartyOwnerId = 18512})
 end
 
+GMItem["关闭引导"] = function()
+    Me:sendPacket({
+        pid = "GMCloseGuide"
+    })
+end
+
 return GMItem

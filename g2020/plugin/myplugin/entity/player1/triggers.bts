@@ -6945,7 +6945,7 @@ SHOW_GO_GIFT_GPS
 
 CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
 {
-    If(not GetWorldVar(key = "doGuide")){
+    If(not GetWorldVar(key = "doGuide") or $obj1.closeGuide){
         Return()
     }
     $map = GetPlayerMap(player = $obj1)

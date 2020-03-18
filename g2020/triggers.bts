@@ -75,6 +75,8 @@ GAME_INIT
     @PlayGoGround = 17 --去游乐场
     @PlayEnd = 18 --存档3完成，
     --准备存档4
+    @GuideGift = 19
+    --引导完成
     @GuideEnd = 19 --完成所有指引
 
 }
@@ -1150,4 +1152,18 @@ TRADE_CONFIRM()
 
 GAME_BGM_TIMER{
     -- Update gamebgm cfg ..
+}
+
+--GM 关闭引导
+GM_CLOSE_GUIDE(){
+    $obj1.closeGuide = true
+    $obj1.guideParty = false
+    $obj1.guideWork = false
+    $obj1.guideStep = @GuideEnd
+    HideCloseGPS(player = $obj1, hide = false)
+    UpdateUIData(player = $obj1, ui = "mainExtension", data = {
+        guideEnd = $obj1.guideStep == @GuideEnd,
+        guideWork = $obj1.guideWork,
+        guideParty = $obj1.guideParty
+    })
 }
