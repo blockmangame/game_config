@@ -45,6 +45,12 @@ local function getRate(usedTime, totalTime)
     return (usedTime <= totalTime and {usedTime / totalTime} or {1})[1]
 end
 
+local function _stateReleasingAnimationEvent(objID, pgName, isAdd)
+    if objID == Me.objID then
+        Lib.emitEvent(Event.EVENT_STATE_RELEASING_ANIMATION, pgName, isAdd)
+    end
+end
+
 function M:createCell(args, objID)
     local pgName = args.pgName
     if not pgName then
@@ -106,9 +112,8 @@ function M:createCell(args, objID)
         usedTime = usedTime + 10
         local rate = getRate(usedTime, totalTime)
         progress.pgui:SetProgress(rate)
-        if objID == Me.objID then
-            Lib.emitEvent(Event.EVENT_STATE_RELEASING_ANIMATION, pgName)
-        elseif rate == 1 then
+        _stateReleasingAnimationEvent(objID, pgName, true)
+        if rate == 1 then
             self:removeCell(pgName, objID)
             return false
         end
@@ -117,6 +122,7 @@ function M:createCell(args, objID)
 end
 
 function M:removeCell(pgName, objID)
+    _stateReleasingAnimationEvent(objID, pgName, false)
     if not progressList[objID] or not progressList[objID][pgName] then
         return
     end

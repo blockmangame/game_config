@@ -49,6 +49,18 @@ local function _resetUI(self, visible)
     self._root:SetBackgroundColor({192/255, 192/255, 192/255, (visible and {0} or {150/255})[1]})
 end
 
+local function _removeMainAnimationTimer()
+    if main.animationCdTimer then
+        main.animationCdTimer()
+        main.animationCdTimer = nil
+    end
+end
+
+local function _resetMainAnimationData()
+    main.animationList = nil
+    _removeMainAnimationTimer()
+end
+
 function M:onOpen()
     _resetUI(self, true)
 end
@@ -66,7 +78,9 @@ function M:initMain()
             txt = self:child("StateTxt"),
         },
         img = "",
-        isOdd = true,
+        --isOdd = true,
+        animationList = {},
+        animationCdTimer = nil,
         visible = true,
         totalUsersCount = 0,
     }
@@ -247,17 +261,40 @@ function M:init()
     Lib.subscribeEvent(Event.EVENT_SET_UI_VISIBLE, function(visible)
         self:showMain(visible)
     end)
-    Lib.subscribeEvent(Event.EVENT_STATE_RELEASING_ANIMATION, function(state)
-        self:stateReleasingAnimation(state)
+    Lib.subscribeEvent(Event.EVENT_STATE_RELEASING_ANIMATION, function(state, isAdd)
+        self:stateReleasingAnimation(state, isAdd)
     end)
 end
 
-function M:stateReleasingAnimation(state)
+function M:stateReleasingAnimation(state, isAdd)
     local UI = states.UI
+    local isChange = false
+    local index = _getIndexByValueKey(main.animationList, state)
+    if isAdd and not index then
+        isChange = true
+        table.insert(main.animationList, state)
+    elseif not isAdd and index then
+        isChange = true
+        table.remove(main.animationList, index)
+    end
     if main.visible then
-        local img = main.isOdd and imgPath..state or imgPath..state.."_chosen"
-        main.UI.img:SetImage(img)
-        main.isOdd = not main.isOdd
+        local list = main.animationList
+        if #list == 0 then
+            _removeMainAnimationTimer()
+            main.UI.img:SetImage(imgPath..main.img)
+            return
+        end
+        if isChange then
+            local i, j = 1, 1
+            _removeMainAnimationTimer()
+            main.animationCdTimer = World.Timer(10, function ()
+                i = i > #list and 1 or i
+                main.UI.img:SetImage(j % 2 == 1 and imgPath..list[i] or imgPath..list[i].."_chosen")
+                j = j + 1
+                i = i + j % 2
+                return true
+            end)
+        end
     elseif UI.cell[state] then
         local isOdd = UI.cell[state].isOdd
         local btn = UI.cell[state].btn
