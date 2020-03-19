@@ -369,6 +369,8 @@ function M:fetchAllBagItem()
                                         grid:RemoveItem(ui)
                                     end)
                                     Me:sendPacket({ pid = "GiveAwayToTarget", objID = giveAwayStatusTable.targetObjID, cfg = item:cfg().fullName, count = 1 })
+                                else
+                                    Me:sendPacket({ pid = "GiveAwayToTarget", objID = giveAwayStatusTable.targetObjID, targetBagNotFree = true })
                                 end
                             end)
 						end

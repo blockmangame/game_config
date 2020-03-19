@@ -4869,6 +4869,11 @@ ENTITY_BUY_RESULT()
 }
 
 GIVE_AWAY{
+    If($targetBagNotFree){
+        ShowWarmPrompt(player = $obj1, text = "giveaway.self.bag.full", btnText = "ui_sure")
+        ShowWarmPrompt(player = $obj2, text = "giveaway.target.bag.full", btnText = "ui_sure")
+        Return()
+    }
     If(GetItemCfg(fullName = $cfg, key = "base") == "car_base"){
         $tipType = 0
         ShowDialogTip(entity = $obj1, tipType = $tipType,p1="gui.hint",p2="item.pick.bag",p3="sure"
@@ -5789,6 +5794,16 @@ GET_VISIT_TELE_POS {
             $tp = ComputeV3(op = "add", p1 = $tp, p2 = $targetRideOn.lastSideNormal)
             If(GetPosY(pos = $targetRideOn.lastSideNormal) == -1){
                 $tp = ComputeV3(op = "add", p1 = $tp, p2 = {x = 0, y = -2, z = 0})
+            }
+        }Else{
+            If($obj1.curInsideRegion){
+                $regionCenter = GetRegionCenter(region = $obj1.curInsideRegion)
+                $addV3 = {
+                    x = GetPosX(pos = $tp) - GetPosX(pos = $regionCenter) > 0 and -1 or 1,
+                    y = GetPosY(pos = $tp),
+                    z = GetPosZ(pos = $tp) - GetPosZ(pos = $regionCenter) > 0 and -1 or 1
+                }
+                $tp = ComputeV3(op = "add", p1 = $tp, p2 = $addV3)
             }
         }
         $from.telePos = $tp

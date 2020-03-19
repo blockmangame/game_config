@@ -58,7 +58,8 @@ function handles:GiveAwayToTarget(packet)
 		obj1 = object, 
 		obj2 = self, 
 		cfg = packet.cfg, 
-		count = packet.count or 1
+		count = packet.count or 1, 
+		targetBagNotFree = packet.targetBagNotFree
 	})
 end
 

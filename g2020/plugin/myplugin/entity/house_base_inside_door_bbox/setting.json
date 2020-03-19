@@ -3,5 +3,18 @@
     "disableShadow": true,
     "name": "",
     "collisionCamp": 2,
-    "collision": true
+    "collision": true,
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    1.5,
+                    3,
+                    1.5
+                ]
+            }
+        ]
+    }
 }
