@@ -145,8 +145,6 @@ function M:operateStateCell(isAdd, state, stateIndex)
 
     if not main.visible and isAdd and not cell then
         local btn = GUIWindowManager.instance:CreateGUIWindow1("RadioButton", state)
-        btn:SetNormalImage(imgPath..state)
-        btn:SetPushedImage(imgPath..state.."_chosen")
         btn:SetTouchable(true)
         self:subscribe(btn, UIEvent.EventWindowTouchUp, function()
             _radioButtonTouchUpEvent(btn, state, stateData)
@@ -181,6 +179,8 @@ function M:operateStateCell(isAdd, state, stateIndex)
     end
 
     if cell then
+        cell.btn:SetNormalImage(imgPath..state)
+        cell.btn:SetPushedImage(imgPath..state.."_chosen")
         local x = (stateIndex - 1) * (specs.itemWidth + specs.itemSpace)
         cell.btn:SetArea({0, x}, {0, 0}, {0, specs.itemWidth}, {0, specs.itemHeight})
         cell.txt:SetText(stateData.stateUsersCount)
@@ -268,13 +268,12 @@ end
 
 function M:stateReleasingAnimation(state, isAdd)
     local UI = states.UI
-    local isChange = false
     local index = _getIndexByValueKey(main.animationList, state)
     if isAdd and not index then
-        isChange = true
+        _removeMainAnimationTimer()
         table.insert(main.animationList, state)
     elseif not isAdd and index then
-        isChange = true
+        _removeMainAnimationTimer()
         table.remove(main.animationList, index)
     end
     if main.visible then
@@ -284,9 +283,8 @@ function M:stateReleasingAnimation(state, isAdd)
             main.UI.img:SetImage(imgPath..main.img)
             return
         end
-        if isChange then
+        if not main.animationCdTimer then
             local i, j = 1, 1
-            _removeMainAnimationTimer()
             main.animationCdTimer = World.Timer(10, function ()
                 i = i > #list and 1 or i
                 main.UI.img:SetImage(j % 2 == 1 and imgPath..list[i] or imgPath..list[i].."_chosen")
