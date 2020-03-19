@@ -22,7 +22,8 @@ local Events = {
     "EVENT_SHOW_INVITE_TIP_BY_SCRIPT",
     "EVENT_STATE_RELEASING_ANIMATION",
     "EVENT_SHOW_WHITE_SCREEN",
-    "EVENT_GUIDE_GM"
+    "EVENT_GUIDE_GM",
+    "EVENT_SHOW_REWARD_CD",
 }
 
 for _, name in pairs(Events) do

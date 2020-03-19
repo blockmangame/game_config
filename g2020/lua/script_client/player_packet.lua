@@ -187,3 +187,7 @@ function handles:ShowWhiteScreen(packet)
     UI:openWnd("whiteScreen")
     Lib.emitEvent(Event.EVENT_SHOW_WHITE_SCREEN, packet)
 end
+
+function handles:ShowRewardCD(packet)
+    Lib.emitEvent(Event.EVENT_SHOW_REWARD_CD, packet.time)
+end

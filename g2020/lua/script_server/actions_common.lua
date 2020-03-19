@@ -534,3 +534,7 @@ function Actions.ShowWhiteScreen(data, params, context)
         pid = "ShowWhiteScreen",
     })
 end
+
+function Actions.ShowRewardCD(data, params, context)
+    params.player:sendPacket({pid = "ShowRewardCD", time = params.time})
+end
