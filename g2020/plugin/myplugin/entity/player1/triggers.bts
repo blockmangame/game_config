@@ -229,7 +229,6 @@ GOTO_INSIDE_HOUSE{
 }
 
 ENTITY_DIE{
-    Test("---------------------------------------2")
 	CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     $house = $obj1.house
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
@@ -259,7 +258,6 @@ ENTITY_DIE{
 }
 
 CHRONIC_KILL_SELF{
-    Test("---------------------------------------1")
     $obj1.damageTimer = StartTimer(time = 100, object = $obj1, obj1 = $obj1, damage = GetEntityMaxHp(entity = $obj1), event = "CHRONIC_KILL_SELF_BY_DAMAGE")
 }
 
