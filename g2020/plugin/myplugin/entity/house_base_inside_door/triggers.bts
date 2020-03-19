@@ -31,6 +31,11 @@ ENTITY_inside_door{
 }
 
 INTER_WITH_DOOR{
+    $lastInteractionUiObjId = $obj2.lastInteractionUiObjId
+    If($lastInteractionUiObjId){
+        $fru = GetObject(objID = $lastInteractionUiObjId)
+        ClacEntityPushOutBlock(player = $obj2, entity = $fru)
+    }
     $obj2.isInnerInsideDoor = true
     StartTimer(rep = false, object = $obj2, obj1 = $obj2, time = 3, event = "RESET_PLAYER_INNER_INSIDE_DOOR_STATUS")
     If($obj2.inPartyOwnerId ~= 0){
