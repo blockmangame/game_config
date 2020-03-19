@@ -229,6 +229,7 @@ GOTO_INSIDE_HOUSE{
 }
 
 ENTITY_DIE{
+    Test("---------------------------------------2")
 	CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     $house = $obj1.house
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
@@ -242,11 +243,10 @@ ENTITY_DIE{
     }
     $mapOwner = GetMapVar(map = GetEntityMap(entity = $obj1), key = "owner")
     If($mapOwner){
-        $house = $mapOwner.house
-        $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+        $houseInsideMap = GetObjectVar(obj = $mapOwner, key = "houseInsideMap")
         $yaw = 0
-        If($mapOwner.curHouseCfg){
-            $yaw = GetEntityCfg(fullName = $mapOwner.curHouseCfg, key = "insideMapRotationYaw")
+        If($mapOwner.owner.curHouseCfg){
+            $yaw = GetEntityCfg(fullName = $mapOwner.owner.curHouseCfg, key = "insideMapRotationYaw")
         }
     }
     ReviveEntity(entity = $obj1, map = $houseInsideMap)
@@ -259,6 +259,7 @@ ENTITY_DIE{
 }
 
 CHRONIC_KILL_SELF{
+    Test("---------------------------------------1")
     $obj1.damageTimer = StartTimer(time = 100, object = $obj1, obj1 = $obj1, damage = GetEntityMaxHp(entity = $obj1), event = "CHRONIC_KILL_SELF_BY_DAMAGE")
 }
 
