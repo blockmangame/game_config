@@ -35,7 +35,7 @@ function M:getItem(cfg)
 	return container
 end
 
-function M:rangeShowUIOnVPos(pos, ui, minDis, maxDis)
+function M:rangeShowUIOnVPos(pos, ui, minDis, maxDis, uiSize)
 	if not ui then
 		return
 	end
@@ -46,15 +46,19 @@ function M:rangeShowUIOnVPos(pos, ui, minDis, maxDis)
       maxDis = math.huge - 1
     end
     local map = pos.map
-    local stopFollowFunc = UILib.uiFollowPos(ui, {
-      x = pos.x,
-      y = pos.y,
-      z = pos.z
-    }, {
-      autoScale = false,
-      anchorX = 0.5,
-      anchorY = 0.5
-    })
+    local stopFollowFunc = World.Timer(0, function()
+        UILib.showUIOnVector3Pos(ui, {
+            x = pos.x,
+            y = pos.y,
+            z = pos.z
+        }, {
+            uiSize = {width = {0, uiSize.width}, height = {0, uiSize.height}}, 
+            autoScale = false,
+            anchorX = 0.5,
+            anchorY = 0.5
+        })
+        return true
+    end)
     local resultTimer = World.Timer(5, function()
         local visible = true
         if Me.map.name ~= map then
@@ -83,7 +87,7 @@ function M:initMapUI()
 		if name ~= "home" and not self.mapDoor[name] then
 			local ui = self:getItem(cfg)
 			self.mapDoor[name] = ui
-			self.mapDoorTimer[name] = self:rangeShowUIOnVPos(cfg.pos, ui, cfg.minDis, cfg.maxDis)
+			self.mapDoorTimer[name] = self:rangeShowUIOnVPos(cfg.pos, ui, cfg.minDis, cfg.maxDis, cfg.imageSize)
 		end
 	end
 end
@@ -104,7 +108,7 @@ function M:updateHomeUI(pos)
 	pos = pos or { x = 0, y = 0, z = 0}
 	pos.y = pos.y + 1
 	local cfg = uicfg["home"]
-	self.homeTimer = self:rangeShowUIOnVPos(pos, self.homeDoor, cfg.minDis, cfg.maxDis)
+	self.homeTimer = self:rangeShowUIOnVPos(pos, self.homeDoor, cfg.minDis, cfg.maxDis, cfg.imageSize)
 end
 
 return M
