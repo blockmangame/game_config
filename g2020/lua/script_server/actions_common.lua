@@ -210,7 +210,7 @@ function Actions.ShowDetails(data, params, content)
         local usedTime, isReleasing = _getStateReleaseData(v, state)
         if usedTime ~= nil then
             packet.isOpen = true
-            subtitle[v.objID] = { usedTime = usedTime*20, duration = duration*20, isReleasing = isReleasing }
+            table.insert(subtitle, { objID = v.objID, usedTime = usedTime*20, duration = duration*20, isReleasing = isReleasing })
         end
     end
     if packet.isOpen then

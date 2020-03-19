@@ -1,5 +1,4 @@
 local setting = require "common.setting"
-
 local trigger
 local cfg = {}
 local contents = {}
@@ -73,8 +72,8 @@ end
 
 function M:setSubtitleArgs()
     local subtitleData = getCfg("subtitle")
-    for objID, data in pairs(subtitleData) do
-        objID = tonumber(objID)
+    for _, data in pairs(subtitleData) do
+        local objID = tonumber(data.objID)
         local entity = World.CurWorld:getEntity(objID)
         if not entity then
             goto continue
