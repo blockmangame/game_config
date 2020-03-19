@@ -226,7 +226,14 @@ function M:updateCurItem(item, isUnloadPart)
 			local picUrl = getCfg(dressItemCfg, "icon")
 			dressItemId = getCfg(dressItemCfg, "itemId")
 			self.actor:UseBodyPart(item.itemType, dressItemId)
-			self:child("DressStore-Cur-Part"):SetImageUrl(picUrl)
+
+			if picUrl:find("http:") or picUrl:find("https:") then
+				self:child("DressStore-Cur-Part"):SetImage("")
+				self:child("DressStore-Cur-Part"):SetImageUrl(picUrl)
+			else
+				self:child("DressStore-Cur-Part"):SetImageUrl("xx")
+				self:child("DressStore-Cur-Part"):SetImage(picUrl)
+			end
 		end
 
 		self.curActorSkin[item.itemType] = dressItemId
