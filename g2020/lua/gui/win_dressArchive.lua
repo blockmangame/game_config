@@ -108,7 +108,7 @@ function M:onClickCloseBtn()
 		pid = "CloseDress"
 	})
     UI:closeWnd(self)
-    self:modPlayerSkin()
+    --self:modPlayerSkin()
 end
 
 function M:onModPlayerScale()
@@ -205,6 +205,7 @@ function M:clickArchive(index)
 		self:updateActorDress(itemData.data.vars)
 		self.selectArchiveIndex = index
 		self:onSelectArchive()
+		self:modPlayerSkin()
 	end
 end
 

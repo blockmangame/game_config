@@ -112,7 +112,91 @@
             },
             {
                 "key": "dressArchive",
-                "value": [],
+                "value": [
+                    {
+                        "vars": {
+                            "isSelect": false,
+                            "name": "dress_file1_name",
+                            "data": {
+                                "vars": {
+                                    "clothes_tops": "g2020.02.boy",
+                                    "clothes_pants": "g2020.02.boy",
+                                    "custom_face": "g2020.02.boy",
+                                    "custom_shoes": "g2020.02.boy",
+                                    "custom_hair": "g2020.02.boy",
+                                    "custom_hat": "",
+                                    "custom_glasses": "",
+                                    "custom_scarf": "",
+                                    "custom_wing": "",
+                                    "custom_crown": "",
+                                    "custom_tail": ""
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "vars": {
+                            "isSelect": false,
+                            "name": "dress_file2_name",
+                            "data": {
+                                "vars": {
+                                    "clothes_tops": "g2020.02.girl",
+                                    "clothes_pants": "g2020.02.girl",
+                                    "custom_face": "g2020.02.girl",
+                                    "custom_shoes": "g2020.02.girl",
+                                    "custom_hair": "g2020.02.girl",
+                                    "custom_hat": "",
+                                    "custom_glasses": "",
+                                    "custom_scarf": "",
+                                    "custom_wing": "",
+                                    "custom_crown": "",
+                                    "custom_tail": ""
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "vars": {
+                            "isSelect": false,
+                            "name": "dress_file3_name",
+                            "data": {
+                                "vars": {
+                                    "clothes_tops": "g2020.03.boy",
+                                    "clothes_pants": "g2020.03.boy",
+                                    "custom_face": "g2020.03.boy",
+                                    "custom_shoes": "g2020.03.boy",
+                                    "custom_hair": "g2020.03.boy",
+                                    "custom_hat": "g2020.03.boy",
+                                    "custom_glasses": "",
+                                    "custom_scarf": "",
+                                    "custom_wing": "",
+                                    "custom_crown": "",
+                                    "custom_tail": ""
+                                }
+                            }
+                        }
+                    },{
+                        "vars": {
+                            "isSelect": false,
+                            "name": "dress_file4_name",
+                            "data": {
+                                "vars": {
+                                    "clothes_tops": "g2020.03.girl",
+                                    "clothes_pants": "g2020.03.girl",
+                                    "custom_face": "g2020.03.girl",
+                                    "custom_shoes": "g2020.03.girl",
+                                    "custom_hair": "g2020.03.girl",
+                                    "custom_hat": "",
+                                    "custom_glasses": "",
+                                    "custom_scarf": "",
+                                    "custom_wing": "",
+                                    "custom_crown": "",
+                                    "custom_tail": ""
+                                }
+                            }
+                        }
+                    }
+                ],
                 "save": true
             },
             {
@@ -616,7 +700,7 @@
     "freeChangeNameTimes": 0,
     "changeNamePrice": 100,
     "changeNameCoinId": 0,
-	"viewMode": 3,
+    "viewMode": 3,
     "hidePerSpec": true,
     "personalSettingUI": {
         "volume": true,
@@ -627,26 +711,26 @@
         "jumpSneakState": false,
         "imageQuality": true
     },
-    "asynLoadSectionMaxInterval" : 3500,
-	"cameraCfg": {
-		"viewModeConfig":[
-			{
-				"enable": false
-			},
-			{
-				"enable": false
-			},
-			{
-				"enable": false
-			},
-			{
-				"enable": true,
-				"distance": 6,
-				"lockBodyRotation": false
-			}
-		]
+    "asynLoadSectionMaxInterval": 3500,
+    "cameraCfg": {
+        "viewModeConfig": [
+            {
+                "enable": false
+            },
+            {
+                "enable": false
+            },
+            {
+                "enable": false
+            },
+            {
+                "enable": true,
+                "distance": 6,
+                "lockBodyRotation": false
+            }
+        ]
     },
-    "tradeCfg":{
+    "tradeCfg": {
         "WaitingTime": 5
     },
     "stateSpecs": {
@@ -655,7 +739,24 @@
         "itemSpace": 40,
         "itemXAbs": 0,
         "itemYAbs": 60,
-        "mainArea": [ [0, -300], [0, -50], [0, 115], [0, 115] ],
+        "mainArea": [
+            [
+                0,
+                -300
+            ],
+            [
+                0,
+                -50
+            ],
+            [
+                0,
+                115
+            ],
+            [
+                0,
+                115
+            ]
+        ],
         "mainHAlign": 2,
         "mainVAlign": 2
     },
