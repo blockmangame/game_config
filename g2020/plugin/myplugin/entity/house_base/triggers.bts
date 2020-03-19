@@ -247,6 +247,9 @@ CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION_WALL{
         $replaceTb = Table(Table($destBlock))
     }
     $firstRegion = ArrayGet(array = $regions, index = 1)
+    If(not $firstRegion){
+        Return()
+    }
     $firstRegionMin = GetRegionMin(region = $firstRegion)
     $firstRegionMax = GetRegionMax(region = $firstRegion)
     $maxHeight = GetPosY(pos = $firstRegionMax)
