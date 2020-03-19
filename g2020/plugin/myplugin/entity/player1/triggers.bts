@@ -1292,6 +1292,9 @@ SURE_LOCK_HOUSE_AND_KICK_OTHERS{
                 (0 == GetEntityTeam(entity = $player) or GetEntityTeam(entity = $player) ~= GetEntityTeam(entity = $obj1))){
                 -- CastSkill(skill = "/click", from = $player, packet = {targetID = GetObjectID(object = GetObjectVar(obj = $house, key = "insideDoor"))})
                 $insideDoor = GetObjectVar(obj = $house, key = "insideDoor")
+                If(GetRideOn(entity = $obj1) and GetObjectID(object = GetRideOn(entity = $obj1)) == GetObjectID(object = $player)){
+                    ClearRide(entity = $obj1)
+                }
                 CallTrigger(object = $insideDoor, obj1 = $insideDoor, obj2 = $player, event = "INTER_WITH_DOOR")
                 ShowTip(entity = $player, tipType = 2,textKey = "house_owner_lock_house_and_kick_you", keepTime = 40)
             }
