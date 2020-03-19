@@ -6832,7 +6832,7 @@ TOGGLE_MAIN_UI  --点击状态详情时，隐藏或显示主界面UI, show为tru
 GUIDE_STEP10()--第一次进来，选择体格后进行谈话：10
 {
     Test("10===guideStep: begin guide:", $obj1.guideStep, GetGuideStep(player = $obj1))
-    If(not ($step>=@FirstInto and $step<@DressDialog)){
+    If(not ($obj1.guideStep >= @FirstInto and $obj1.guideStep<@DressDialog)){
         Return()
     }
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
@@ -6870,7 +6870,7 @@ CLOSE_DRESS() --关闭装扮商店ui后，进行谈话：进入下一个存档
 
 --存档2： 指引玩家装扮 房子
 GUIDE_HOUSE(){
-    If(not ($step>=@DressDialog and $step<@NoneHouse)){
+    If(not ($obj1.guideStep >= @DressDialog and $obj1.guideStep < @NoneHouse)){
         Return()
     }
     ShowGuidePop(player = $obj1, event = "GUIDE_CLICK_DRESS_HOUSE",context = {obj1 = $obj1}, texts = [
