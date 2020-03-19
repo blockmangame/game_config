@@ -197,12 +197,16 @@ function M:updateItemInfo(item, view)
 		if item.status == Store.itemStatus.NOT_BUY then
 			Me:sendTrigger(Me, "SHOW_OPERATE_DRESS_STORE_ITEM", Me, nil, { storeId = self.curPartId, itemIndex = item.index, targetIndex = 0 })
 		else
-			self:updateCurItem(item)
+			self:updateCurItem(item, false, true)
 		end
     end)
 end
 
-function M:updateCurItem(item, isUnloadPart)
+function M:updateCurItem(item, isUnloadPart, isClick)
+	if isClick and self.curItem == item then
+		return
+	end
+
 	self.curItem = item
 	local isShowCurPart = false
 
