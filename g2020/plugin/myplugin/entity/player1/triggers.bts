@@ -242,11 +242,10 @@ ENTITY_DIE{
     }
     $mapOwner = GetMapVar(map = GetEntityMap(entity = $obj1), key = "owner")
     If($mapOwner){
-        $house = $mapOwner.house
-        $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
+        $houseInsideMap = GetObjectVar(obj = $mapOwner, key = "houseInsideMap")
         $yaw = 0
-        If($mapOwner.curHouseCfg){
-            $yaw = GetEntityCfg(fullName = $mapOwner.curHouseCfg, key = "insideMapRotationYaw")
+        If($mapOwner.owner.curHouseCfg){
+            $yaw = GetEntityCfg(fullName = $mapOwner.owner.curHouseCfg, key = "insideMapRotationYaw")
         }
     }
     ReviveEntity(entity = $obj1, map = $houseInsideMap)
@@ -1542,7 +1541,7 @@ GIVE_DOOR{
 BUY_HOUSE_REGION_COLOR{
     -- 如果换了墙纸或者地板，原有的不保留，当你没买     如果你原来买了A墙纸，你又换成了B，那么你要再花一遍钱去把A换回来
     $curInsideRegion = GetObjectVar(obj = $obj1, key = "curInsideRegion")
-    If(not $curInsideRegion){
+    If(not $curInsideRegion or GetRegionConfig(region = $curInsideRegion, key = "insideOutRegion")){
         ShowTip(entity = $obj1, tipType = 2, textKey = "buy_house_region_color_had_not_inside_region", keepTime = 40)
         Return()
     }
