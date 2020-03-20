@@ -5915,7 +5915,7 @@ LEAVE_PARTY_SUCCESS(debug = false){
     }
 }
 DATA_REPORT_PARTY_ALL_GAME{
-    Test(msg = "DATA_REPORT_PARTY_ALL_GAME", createPartyCount = $obj1.createPartyCount, joinPartyCount = $obj1.joinPartyCount)
+    -- Test(msg = "DATA_REPORT_PARTY_ALL_GAME", createPartyCount = $obj1.createPartyCount, joinPartyCount = $obj1.joinPartyCount)
 
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.createPartyCount, array = [0, 9, 19, 49, 99, 199,  499, 999, 1999, 4999, 9999, 10000])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["party:create:sum", @rangeBoundary])
@@ -5929,7 +5929,7 @@ DATA_REPORT_NORMAL_LOGOUT(){
     }
 
     --no jump server action
-    Test(msg = "DATA_REPORT_NORMAL_LOGOUT", createPartyCountPerGame = $obj1.createPartyCountPerGame, joinPartyCountPerGame = $obj1.joinPartyCountPerGame, partyInviteAgree = $obj1.partyInviteAgree)
+    -- Test(msg = "DATA_REPORT_NORMAL_LOGOUT", createPartyCountPerGame = $obj1.createPartyCountPerGame, joinPartyCountPerGame = $obj1.joinPartyCountPerGame, partyInviteAgree = $obj1.partyInviteAgree)
 
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.partyInviteAgree, array = [0, 2, 5, 10, 15, 20, 21])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:party:agree", @rangeBoundary])
@@ -6148,9 +6148,9 @@ PARTY_BE_LIKED{
     DictionarySet(dict = $curHousedict, key = "likeNum", value = $likeNum)
     ArraySet(array = $houseVars, index = $curHouseIndex, value = DictionaryToTable(dict = $curHousedict))
 }
-RESET_GAME_FAILED(debug = true){
+RESET_GAME_FAILED(debug = false){
     If($resultCode ~= 1){
-
+        Test(msg = "RESET_GAME_FAILED", resultCode = $resultCode)
         GameAnalyticsCustomEvent(player = $obj1, parts = ["player:delivery:fail", $resultCode])
         $obj1.jumpSeverToSpecial = nil
         $obj1.jumpSeverToNormal = nil
