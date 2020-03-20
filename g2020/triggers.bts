@@ -335,7 +335,7 @@ FUNC_CLOSE_GPS --params: destination[, hideTip]
         {
             ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
         }
-        SetGuideTarget(entity = $obj1)
+        CallTrigger(object = $obj1, event = "FUNC_SET_GUIDE_TARGET")
         SetObjectVar(obj = $obj1, key = "gpsDict", value = nil)
     }
 }
@@ -343,7 +343,7 @@ FUNC_CLOSE_GPS --params: destination[, hideTip]
 FUNC_OPEN_GPS --params: gpsDict
 {
     $obj1.taskShowGps = false
-    SetGuideTarget(pos = $gps, entity = $obj1, guideSpeed = 0.05)
+    CallTrigger(object = $obj1, event = "FUNC_SET_GUIDE_TARGET", pos = $gps)
     SetObjectVar(obj = $obj1, key = "gpsDict", value = $gpsDict)
     ShowTip(entity = $obj1, tipType = 3, textKey = "openning_gps")
 }
@@ -355,6 +355,11 @@ FUNC_CLOSE_DETAILS_UI --params: uiName [, closeFromServer]
         $obj1.detailsUI = nil
         If($closeFromServer) { ShowDetails(entity = $obj1, isClose = true) }
     }
+}
+
+FUNC_SET_GUIDE_TARGET --pos, guideSpeed = 0.05, guideTexture = "..."
+{
+    SetGuideTarget(entity = $obj1, pos = $pos, guideSpeed = $guideSpeed or 0.05, guideTexture = $guideTexture or "plugin/myplugin/image/guide_arrow.png")
 }
 
 FUNC_STOP_TIMER --params: timerStr
