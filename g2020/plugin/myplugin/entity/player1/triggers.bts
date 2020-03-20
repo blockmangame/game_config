@@ -6867,10 +6867,10 @@ TOGGLE_MAIN_UI  --点击状态详情时，隐藏或显示主界面UI, show为tru
 --存档1：指引玩家进行 换装装扮。
 GUIDE_STEP10()--第一次进来，选择体格后进行谈话：10
 {
-    Test("10===guideStep: begin guide:", $obj1.guideStep, GetGuideStep(player = $obj1))
     If(not ($obj1.guideStep >= @FirstInto and $obj1.guideStep<@DressDialog)){
         Return()
     }
+    $obj1.guideStep = 10
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
     ShowGuidePop(player = $obj1, event = "OPEN_MAIN_EXTENSION",context = {obj1 = $obj1}, texts = [
         "guide.welcome",
@@ -6879,14 +6879,12 @@ GUIDE_STEP10()--第一次进来，选择体格后进行谈话：10
 }
 OPEN_MAIN_EXTENSION()--打开导航ui，让玩家点击 装备ui: 11
 {
-    Test("11===guideStep:", $obj1.guideStep, GetGuideStep(player = $obj1))
     OpenMainExtension(player = $obj1)
     $obj1.guideStep = 11
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
 STEP11_FINISH() --在装扮ui的时候进行谈话：  12, 空操作
 {
-    Test("12===guideStep:", $obj1.guideStep, GetGuideStep(player = $obj1))
     OperationWindows(win = "dressArchive", isOpen = true, player = $obj1)
     OpenMainExtension(player = $obj1, open = false)
     $obj1.canDressHouse = true
@@ -6909,6 +6907,7 @@ GUIDE_HOUSE(){
     If(not ($obj1.guideStep >= @DressDialog and $obj1.guideStep < @NoneHouse)){
         Return()
     }
+    $obj1.guideStep = @DressDialog
     ShowGuidePop(player = $obj1, event = "GUIDE_CLICK_DRESS_HOUSE",context = {obj1 = $obj1}, texts = [
         "guide.you.are.beautiful",
         "guide.you.in.your.house",
@@ -6917,13 +6916,11 @@ GUIDE_HOUSE(){
 }
 GUIDE_CLICK_DRESS_HOUSE() --让玩家点击 装扮房子： 13
 {
-    Test("13===guideStep:", $obj1.guideStep)
     $obj1.guideStep = @DressHouse
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
 STEP13_FINISH() -- 玩家点击装扮家后，None自由操作： 14
 {
-    Test("14===guideStep:", $obj1.guideStep)
     $obj1.guideStep = @NoneHouse
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
@@ -6957,20 +6954,17 @@ CALL_GO_TO_PLAYGROUND()-- 开始引导玩家去游乐场对话
 }
 OPEN_PLAYGROUND_BUFF()--开起游乐场buff，
 {
-    Test("15===guideStep:", $obj1.guideStep, $obj1.checkSignIn)
     CallTrigger(object = $obj1, event = "FUNC_STATE_GENERATE", stateBase = "region", col = 1, skill = "myplugin/skill_state_region")
     $obj1.guideStep = 15
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
 STEP15_FINISH()
 {
-    Test("=====16",$obj1.guideStep)
     $obj1.guideStep = 16
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
 STEP16_FINISH()--点击开始GPS:指引去游乐场
 {
-    Test("=====17",$obj1.guideStep)
     If($obj1.guideStep == 16){
         $obj1.guideStep = @PlayGoGround
         SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
@@ -6996,7 +6990,7 @@ GUIDE_GO_TO_GIFT()-- 指引去礼品
 }
 SHOW_GO_GIFT_GPS
 {
-    If(not $obj1.goGiftGps){
+    If(not $obj1.goGiftGps and $obj1.guideStep~=@guideEnd){
         Return()
     }
     $map = GetPlayerMap(player = $obj1)
@@ -7027,9 +7021,9 @@ SHOW_GO_GIFT_GPS
                     }
                 }
             }
-            $obj1.giftGPS = $okPos or {x = 180.782242, y = 13.006246, z = 190.036407}
+            $obj1.giftGPS = $okPos or @guidePos or {x = 180.782242, y = 13.006246, z = 190.036407}
         }Else{
-            $obj1.giftGPS = {x = 180.782242, y = 13.006246, z = 190.036407}
+            $obj1.giftGPS = @guidePos or {x = 180.782242, y = 13.006246, z = 190.036407}
         }
     }
     SetGuideTarget(entity = $obj1, pos = $obj1.giftGPS, guideSpeed = 0.05)

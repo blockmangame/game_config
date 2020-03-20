@@ -17,6 +17,7 @@ SHOW_CONVERSATION_UI
                 $obj2.guideStep = @GuideEnd
                 $obj2.guideWork = true
                 $obj2.guideParty = true
+                $obj2.goGiftGps = nil
                 HideCloseGPS(player = $obj2, show = true)
                 SetGuideTarget(entity = $obj2, pos = nil, guideSpeed = 0.05)
                 UpdateUIData(player = $obj2, ui = "mainExtension", data = {

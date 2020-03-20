@@ -62,6 +62,7 @@ GAME_INIT
     @HOME_SUM = 0
 
     --指引：
+    @guidePos = GetWorldVar(key = "guidePos")
     --存档1：装扮商店指引
     @FirstInto = 10 --开始指引
     @ToDress = 11 --进行对话，指引玩家打开 装扮商店，配置 ButtonTip
@@ -229,7 +230,8 @@ SHOW_SELECT_ROLE
             detail = "ui_pick_adult"
         }
     ]
-
+    
+    $obj1.openCardShop = true
     ShowCardOptionsView(
         entity = $obj1,
         uiCfg = "myplugin/select_role",
@@ -240,11 +242,12 @@ SHOW_SELECT_ROLE
 
 CHANGE_PLAYER_SCALE_ADULT
 {
-    If(not $obj1.doOnceGuide and $obj1.selectedScale == 1){
+    Test("---------------CHANGE_PLAYER_SCALE_ADULT")
+    If(not $obj1.doOnceGuide and IsPlayer(entity = $obj1) and $obj1.openCardShop){
         $obj1.doOnceGuide = true
         CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
     }
-    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep >= @NoneHouse and $obj1.selectedScale == 1){
+    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep >= @NoneHouse and $obj1.openCardShop){
         CheckSignInShow(player = $obj1)
         $obj1.checkSignIn = true
     }
@@ -275,16 +278,17 @@ CHANGE_PLAYER_SCALE_ADULT
         CallTrigger(object = $obj1, event = "CHANGE_BABY_TROLLEY_SCALE")
     }
     CallTrigger(obj1 = $obj1, event = "ADD_SVIP_BUFF", object = $obj1)
-    $obj1.selectedScale = ($obj1.selectedScale or 0 ) + 1
+    $obj1.openCardShop = false
 }
 
 CHANGE_PLAYER_SCALE_CHILD
 {
-    If(not $obj1.doOnceGuide and $obj1.selectedScale == 1){
+    Test("---------------CHANGE_PLAYER_SCALE_CHILD")
+    If(not $obj1.doOnceGuide and IsPlayer(entity = $obj1) and $obj1.openCardShop){
         $obj1.doOnceGuide = true
         CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
     }
-    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep >= @NoneHouse and $obj1.selectedScale == 1){
+    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep >= @NoneHouse and $obj1.openCardShop){
         CheckSignInShow(player = $obj1)
         $obj1.checkSignIn = true
     }
@@ -315,7 +319,7 @@ CHANGE_PLAYER_SCALE_CHILD
         CallTrigger(object = $obj1, event = "CHANGE_BABY_TROLLEY_SCALE")
     }
     CallTrigger(obj1 = $obj1, event = "ADD_SVIP_BUFF", object = $obj1)
-    $obj1.selectedScale = ($obj1.selectedScale or 0 ) + 1
+    $obj1.openCardShop = false
 }
 
 FUNC_CLOSE_GPS --params: destination[, hideTip]
