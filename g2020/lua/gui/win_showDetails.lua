@@ -145,7 +145,7 @@ function M:initEvent()
         Me:sendTrigger(Me, trigger, Me, nil, {
             rtVal = getCfg("btnRtVal")
         })
-        Lib.emitEvent(Event.EVENT_SET_UI_VISIBLE, true)
+        Lib.emitEvent(Event.EVENT_SET_UI_VISIBLE)
         UI:closeWnd(self)
     end)
 end

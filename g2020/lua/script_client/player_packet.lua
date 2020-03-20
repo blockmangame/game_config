@@ -191,3 +191,7 @@ end
 function handles:ShowRewardCD(packet)
     Lib.emitEvent(Event.EVENT_SHOW_REWARD_CD, packet.time)
 end
+
+function handles:ShowStateUI(packet)
+    Lib.emitEvent(Event.EVENT_SET_UI_INVISIBLE)
+end

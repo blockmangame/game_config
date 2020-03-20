@@ -538,3 +538,7 @@ end
 function Actions.ShowRewardCD(data, params, context)
     params.player:sendPacket({pid = "ShowRewardCD", time = params.time})
 end
+
+function Actions.ShowStateUI(data, params, context)
+    params.player:sendPacket({pid = "ShowStateUI"})
+end

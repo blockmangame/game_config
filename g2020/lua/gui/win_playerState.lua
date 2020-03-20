@@ -92,7 +92,7 @@ function M:initMain()
     ui.root:SetVerticalAlignment(specs.mainVAlign)
     ui.root:SetHorizontalAlignment(specs.mainHAlign)
     self:subscribe(main.UI.root, UIEvent.EventWindowTouchUp, function()
-        self:showMain(false)
+        self:hideMain()
     end)
 end
 
@@ -104,7 +104,7 @@ function M:initClose()
     close = { UI = { root = self:child("Close") } }
     self:subscribe(close.UI.root, UIEvent.EventButtonClick, function()
         UI:closeWnd("showDetails")
-        self:showMain(true)
+        self:showMain()
     end)
 end
 
@@ -121,7 +121,6 @@ local _radioButtonTouchUpEvent = function(btn, state, stateData)
         end
     end
     Skill.Cast(skillPath..state, {targetID = otherID})
-    --Me:sendPacket({pid = "ClickPlayerState"})
 end
 
 local _toggleSelectBtn = function(isMainUIVisible)
@@ -241,11 +240,15 @@ function M:syncData(packet)
     self:dynamicCalculateStatesArea()
 end
 
-function M:showMain(visible)
-    _resetUI(self, visible)
+function M:showMain()
+    _resetUI(self, true)
     self:dynamicCalculateStatesArea()
-    ToggleMainUI(visible)
-    _toggleSelectBtn(visible)
+    ToggleMainUI(true)
+    _toggleSelectBtn(true)
+end
+
+function M:hideMain()
+    ToggleMainUI(false)
 end
 
 function M:init()
@@ -258,11 +261,17 @@ function M:init()
     Lib.subscribeEvent(Event.EVENT_SYNC_DATA, function(packet)
         self:syncData(packet)
     end)
-    Lib.subscribeEvent(Event.EVENT_SET_UI_VISIBLE, function(visible)
-        self:showMain(visible)
+    Lib.subscribeEvent(Event.EVENT_SET_UI_VISIBLE, function()
+        self:showMain()
     end)
     Lib.subscribeEvent(Event.EVENT_STATE_RELEASING_ANIMATION, function(state, isAdd)
         self:stateReleasingAnimation(state, isAdd)
+    end)
+
+    Lib.subscribeEvent(Event.EVENT_SET_UI_INVISIBLE, function()
+        _resetUI(self, false)
+        self:dynamicCalculateStatesArea()
+        _toggleSelectBtn(false)
     end)
 end
 
