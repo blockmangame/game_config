@@ -2,6 +2,8 @@ function M:init()
     WinBase.init(self, "RewardTip.json", true)
     self:initName()
     self:initButton()
+    self:initContent()
+    self.isVip = false
 end
 
 function M:initName()
@@ -13,10 +15,34 @@ function M:initButton()
     self:child("RewardTip-btn-text"):SetText(Lang:toText("gui.reward.get.money"))
 end
 
+function M:initContent()
+    self.moneyText = self:child("RewardTip-number")
+    self.dollarText = self:child("RewardTip-dollar-text")
+end
+
 function M:onOpen(info)
-    self:updateNickName()
-    if info.regId then
-        self:updateButton(info.regId)
+    local func = function(goodInfo)
+        if goodInfo[1] >= 1 then
+            self.isVip = true
+            self.dollarText:SetText("40")
+            self.moneyText:SetText("forty")
+        end
+
+        self:updateNickName()
+        if info.regId then
+            self:updateButton(info.regId)
+        end
+    end
+
+    if not self.isVip then
+        Me:sendPacket({pid = "GetGoodsInfo", indexs ={1}}, func)
+    else
+        self.dollarText:SetText("40")
+        self.moneyText:SetText("forty")
+        self:updateNickName()
+        if info.regId then
+            self:updateButton(info.regId)
+        end
     end
 end
 
