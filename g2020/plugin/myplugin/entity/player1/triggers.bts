@@ -5061,8 +5061,14 @@ START_CAMERA_MODE
         If($obj1.boundingBuff){
             RemoveEntityBuff(entity = $obj1, buff = $obj1.boundingBuff)
         }
+
+        -- 保留的窗口
         -- actionControl -> jump and move, skills -> just skill
-        $obj1.showFuncId = HideOpenedWnd(player = $obj1, excluded = {a = "actionControl",b = "skills"})
+        $obj1.showFuncId = HideOpenedWnd(player = $obj1, excluded = {
+                    a = "actionControl",b = "skills", c = "title1", 
+                    d = "title3", e = "title4", f = "title5"
+        })
+
         ForLoop(from = 1, to = ArraySize(array = $obj1.outOfCameraModeState), key = "idx")
         {
             $state = ArrayGet(array = $obj1.outOfCameraModeState, index = $idx)
@@ -6838,7 +6844,14 @@ TOGGLE_MAIN_UI  --点击状态详情时，隐藏或显示主界面UI, show为tru
         {
             Return()
         }
-        $obj1.showFuncId = HideOpenedWnd(player = $obj1, excluded = {a = "playerState",  b="Tip", c = "guide_mask", d = "whiteScreen"})    -- 保留的窗口
+
+        -- 保留的窗口
+        $obj1.showFuncId = HideOpenedWnd(player = $obj1,excluded = {
+                a = "playerState",  b="Tip", c = "guide_mask", 
+                d = "whiteScreen", e = "title1", f = "title3", 
+                g = "title4", h = "title5"
+        })
+
         OperationWindows(player = $obj1, isOpen = false, win = "main_tray_g2020")
         ShowStateUI(player = $obj1)
     }
