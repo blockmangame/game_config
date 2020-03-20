@@ -128,7 +128,7 @@ local _toggleSelectBtn = function(isMainUIVisible)
         states.selectBtn:SetSelected(false)
         states.selectBtn = nil
     elseif not isMainUIVisible then
-        local stateData = states.data and states.data[1] or {}
+        local stateData = states.data and states.data[#(states.data)] or {}
         local state = stateData.name
         local btn = state and states.UI.cell[state] and states.UI.cell[state].btn
         if btn then
