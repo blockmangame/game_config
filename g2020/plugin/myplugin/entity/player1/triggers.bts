@@ -4373,7 +4373,7 @@ GET_TASK_UI_DATA(){ --更新打工UI数据。
         resetImg = $resetImg
     )
     If($obj1.taskShowGps){
-       SetGuideTarget(entity = $obj1, pos = $obj1.gpsPos, guideSpeed = 0.05)
+        CallTrigger(object = $obj1, event = "FUNC_SET_GUIDE_TARGET", pos = $obj1.gpsPos)
     }
     UpdateUIData(player = $obj1, ui = "circleProgress", data = $taskData)
 }
@@ -4484,7 +4484,7 @@ DELETE_ITEM(){--267.0,19.0,371.0
         $obj1.npcMap = nil
         $obj1.taskIndex = nil
         If($obj1.taskShowGps){
-            SetGuideTarget(entity = $obj1)
+            CallTrigger(object = $obj1, event = "FUNC_SET_GUIDE_TARGET")
         }
         $obj1.taskShowGps = false
         CallTrigger(event = "GET_TASK_GPS", object = $obj1)
@@ -4574,7 +4574,7 @@ FINISH_TASK(debug = false){ --完成打工的对话
        Return()
     }
     If($obj1.taskShowGps){
-        SetGuideTarget(entity = $obj1)
+        CallTrigger(object = $obj1, event = "FUNC_SET_GUIDE_TARGET")
     }
     $obj1.taskShowGps = false
     $obj1.finishworkTime =  StartTimer(object = $obj1, event = "FINISH_AWARD", time = 20)
@@ -7026,7 +7026,7 @@ SHOW_GO_GIFT_GPS
             $obj1.giftGPS = @guidePos or {x = 180.782242, y = 13.006246, z = 190.036407}
         }
     }
-    SetGuideTarget(entity = $obj1, pos = $obj1.giftGPS, guideSpeed = 0.05)
+    CallTrigger(object = $obj1, event = "FUNC_SET_GUIDE_TARGET", pos = $obj1.giftGPS)
 }
 
 CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
