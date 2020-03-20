@@ -1058,7 +1058,7 @@ GIVE_STORE{
     $map = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "houseInsideMap")
     $telPos = GetEntityPosition(entity = $obj1)
     $rideOn = GetRideOn(entity = $obj1.house.owner)
-    If($rideOn and GetConfigVar(obj = $rideOn, key = "base") == "fru_base"){
+    If($rideOn and GetConfigVar(obj = $rideOn, key = "base") == "fur_base"){
         $rideOnLastSideNormal = $rideOn.lastSideNormal
         $rideOnYaw = GetEntityYaw(entity = $rideOn)
         $rideOnPitch = GetEntityPitch(entity = $rideOn)
@@ -1294,6 +1294,10 @@ SURE_LOCK_HOUSE_AND_KICK_OTHERS{
         $notCurHouseFamilyPlayer = {}
         $allPlayerInThisHouse = GetMapPlayer(map = $insideMap)
         Foreach(array = $allPlayerInThisHouse, key = "player"){
+            $obj2Ride = GetRideOn(entity = $player)
+            If($obj2Ride and GetConfigVar(obj = $obj2Ride, key = "base") == "fur_base"){
+                ClearRide(entity = $obj2Ride)
+            }
             If(GetObjectID(object = $obj1) ~= GetObjectID(object = $player) and 
                 (0 == GetEntityTeam(entity = $player) or GetEntityTeam(entity = $player) ~= GetEntityTeam(entity = $obj1))){
                 -- CastSkill(skill = "/click", from = $player, packet = {targetID = GetObjectID(object = GetObjectVar(obj = $house, key = "insideDoor"))})
