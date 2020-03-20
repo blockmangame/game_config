@@ -509,6 +509,12 @@ REMOVE_HOUSE_OUTSIDE{
 
 ENTITY_LEAVE{ 
 
+    $lastInteractionUiObjId = GetObjectVar(obj = $obj1, key = "lastInteractionUiObjId") -- 更新家具编辑位置
+    If($lastInteractionUiObjId){
+        UpdateEntityEditContainer(player = $obj1, entityId = $lastInteractionUiObjId, show = false)
+        SetObjectVar(obj = $obj1, key = "lastInteractionUiObjId", value = nil)
+    }
+
     CallTrigger(object = $obj1, event = "TAKEOFF_EQUIP_CAR")
     CallTrigger(object = $obj1, event = "DEMOUNT_BABY_TROLLEY")
 
