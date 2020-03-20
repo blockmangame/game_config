@@ -283,7 +283,7 @@
             "startAngle": 90,
             "endAngle": 450,
             "widgetFileName": "widget_button_2",
-            "radius": 150,
+            "radius": 160,
             "imageSize": {
                 "width": 200,
                 "height": 97
@@ -298,9 +298,9 @@
         },
         "aroundBtns": [
             {
-                "text": "gui.send.trade",
+                "text": "interact_trade",
                 "event": "REQ_TRADE",
-                "image": "plugin/myplugin/image/burger.png"
+                "image": "set:party_interaction_ui.json image:trade"
             },
             {
                 "text": "interact_add_friend",
@@ -308,11 +308,11 @@
                     "funcName": "checkIsFriend"
                 },
                 "event": "EVENT_FRIEND_OPERACTION_ADD_FRIEND",
-                "image": "set:party_interaction_ui.json image:interaction_add_friend"
+                "image": "set:party_interaction_ui.json image:add_friend"
             },
             {
                 "text": "interact_feed",
-                "image": "set:party_interaction_ui.json image:interaction_feed",
+                "image": "set:party_interaction_ui.json image:feed",
                 "checkCanShow": {
                     "funcName": "checkTypeHandItem",
                     "key": "base",
@@ -322,7 +322,7 @@
             },
             {
                 "text": "interact_banish",
-                "image": "set:party_interaction_ui.json image:interaction_banish",
+                "image": "set:party_interaction_ui.json image:banish",
                 "checkCanShow": {
                     "funcName": "checkInSelfParty"
                 },
@@ -334,13 +334,13 @@
                 "customCheckCanHide": {
                     "funcName": "checkCanHideInteract"
                 },
-                "image": "set:party_interaction_ui.json image:interaction_act",
+                "image": "set:party_interaction_ui.json image:act",
                 "nextCfgKey":"interaction_act_choices"
             },
             {
                 "/ps": "邀请",
                 "text": "interact_invite_family",
-                "image": "set:party_interaction_ui.json image:interaction_join_family",
+                "image": "set:party_interaction_ui.json image:invite_family",
                 "customCheckCanShow": {
                     "funcName": "checkCanShowInviteFamily"
                 },
@@ -349,54 +349,42 @@
             {
                 "/ps": "申请",
                 "text": "interact_apply_family",
-                "image": "set:party_interaction_ui.json image:interaction_join_family",
+                "image": "set:party_interaction_ui.json image:apply_family",
                 "customCheckCanShow": {
                     "funcName": "checkCanShowApplyFamily"
                 },
                 "event": "INTERACTION_APPLY_FAMILY"
             },
             {
-                "text": "",
+                "text": "interact_hand_in_hand",
                 "/ps":"拉手",
-                "image": "plugin/myplugin/image/handinhand.png",
+                "image": "set:party_interaction_ui.json image:hand_in_hand",
                 "event": "INTERACTION_HAND_IN_HAND",
                 "customCheckCanShow":{
                     "funcName":"checkCanBabyHandInHand"
-                },
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
                 }
             },
             {
-                "text": "",
+                "text": "interact_piggyback",
                 "/ps":"大背小",
-                "image": "plugin/myplugin/image/piggyback.png",
+                "image": "set:party_interaction_ui.json image:piggyback",
                 "event": "INTERACTION_PIGGYBACK",
                 "customCheckCanShow":{
                     "funcName":"checkCanAdultCarryBaby"
-                },
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
                 }
             },
             {
-                "text": "",
+                "text": "interact_pickup",
                 "/ps":"大抱小",
-                "image": "plugin/myplugin/image/pickup.png",
+                "image": "set:party_interaction_ui.json image:pickup",
                 "event": "INTERACTION_PICK",
                 "customCheckCanShow":{
                     "funcName":"checkCanAdultPickBaby"
-                },
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
                 }
             },
             {
                 "text": "interact_trolley",
-                "image": "plugin/myplugin/image/trolley.png",
+                "image": "set:party_interaction_ui.json image:trolley",
                 "event": "INTERACTION_BABY_TROLLEY",
                 "customCheckCanShow":{
                     "funcName":"checkCanAdultPutBabyIntoTrolley"
@@ -408,9 +396,9 @@
                 }
             },
             {
-                "text": "dakai_zengsong!++++++++",
+                "text": "interact_gift",
                 "event": "EVENT_OPEN_BAG_BY_GIVEAWAY",
-                "image": "set:party_interaction_ui.json image:interaction_add_friend"
+                "image": "set:party_interaction_ui.json image:gift"
             }
         ]
     },
@@ -420,7 +408,7 @@
             "startAngle": 0,
             "endAngle": 360,
             "widgetFileName": "widget_button_2",
-            "radius": 100,
+            "radius": 130,
             "imageSize": {
                 "width": 200,
                 "height": 97
