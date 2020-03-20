@@ -240,11 +240,11 @@ SHOW_SELECT_ROLE
 
 CHANGE_PLAYER_SCALE_ADULT
 {
-    If(not $obj1.doOnceGuide){
+    If(not $obj1.doOnceGuide and $obj1.selectedScale == 1){
         $obj1.doOnceGuide = true
         CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
     }
-    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep >= @NoneHouse){
+    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep >= @NoneHouse and $obj1.selectedScale == 1){
         CheckSignInShow(player = $obj1)
         $obj1.checkSignIn = true
     }
@@ -275,15 +275,16 @@ CHANGE_PLAYER_SCALE_ADULT
         CallTrigger(object = $obj1, event = "CHANGE_BABY_TROLLEY_SCALE")
     }
     CallTrigger(obj1 = $obj1, event = "ADD_SVIP_BUFF", object = $obj1)
+    $obj1.selectedScale = ($obj1.selectedScale or 0 ) + 1
 }
 
 CHANGE_PLAYER_SCALE_CHILD
 {
-    If(not $obj1.doOnceGuide){
+    If(not $obj1.doOnceGuide and $obj1.selectedScale == 1){
         $obj1.doOnceGuide = true
         CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
     }
-    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep >= @NoneHouse){
+    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep >= @NoneHouse and $obj1.selectedScale == 1){
         CheckSignInShow(player = $obj1)
         $obj1.checkSignIn = true
     }
@@ -314,6 +315,7 @@ CHANGE_PLAYER_SCALE_CHILD
         CallTrigger(object = $obj1, event = "CHANGE_BABY_TROLLEY_SCALE")
     }
     CallTrigger(obj1 = $obj1, event = "ADD_SVIP_BUFF", object = $obj1)
+    $obj1.selectedScale = ($obj1.selectedScale or 0 ) + 1
 }
 
 FUNC_CLOSE_GPS --params: destination[, hideTip]
