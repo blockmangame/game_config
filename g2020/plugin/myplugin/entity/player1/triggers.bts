@@ -3474,6 +3474,42 @@ SHOW_OPERATE_DRESS_ARCHIVE_INPUT_DIALOG
     ShowInputDialog(entity = $obj1, contents = $contents, options = $options)
 }
 
+ADD_DRESS_ARCHIVE_DIALOG
+{
+    $title = {
+        name = "ui_dress_archive_save_name"
+    }
+
+    $inputTitle = {
+        name = "ui_dress_archive_input_name"
+    }
+
+    $buttons = [
+        {
+            event = "cancel",
+            normalImage = "set:tip_dialog.json image:btn_big_blue",
+            pushedImage = "set:tip_dialog.json image:btn_big_blue",
+            name = "ui_cancel"
+        },
+        {
+            event = "ADD_DRESS_ARCHIVE",
+            normalImage = "set:tip_dialog.json image:btn_big_green",
+            pushedImage = "set:tip_dialog.json image:btn_big_green",
+            name = "ui_sure"
+        }
+    ]
+
+    $contents = {
+        title = $title,
+        inputTitle = $inputTitle,
+        buttons = $buttons,
+        text = "dress_default_name",
+        isLangText = true
+    }
+
+    ShowInputDialog(entity = $obj1, contents = $contents)
+}
+
 ADD_DRESS_ARCHIVE
 {
     If(not $obj1.dressArchive)
@@ -3501,7 +3537,7 @@ ADD_DRESS_ARCHIVE
 
         $addDressInfo = {
             vars = {
-                name = "dress_default_name",
+                name = $name or "dress_default_name",
                 data = $addDressData,
                 isSelect = false
             }

@@ -247,7 +247,7 @@ end
 
 function M:onAddArchive()
 	if (#self.itemPool - 1) < World.cfg.dressArchiveNum then
-		Me:sendTrigger(Me, "ADD_DRESS_ARCHIVE", Me)
+		Me:sendTrigger(Me, "ADD_DRESS_ARCHIVE_DIALOG", Me)
 	else
 		Client.ShowTip(2, "ui_dress_archive_can_not_add_more", 60)
 	end
