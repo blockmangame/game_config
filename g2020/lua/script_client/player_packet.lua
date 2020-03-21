@@ -195,3 +195,7 @@ end
 function handles:ShowStateUI(packet)
     Lib.emitEvent(Event.EVENT_SET_UI_INVISIBLE)
 end
+
+function handles:UseDressArchive(packet)
+    Lib.emitEvent(Event.EVENT_USE_DRESS_ARCHIVE, packet.index)
+end

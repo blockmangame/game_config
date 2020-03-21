@@ -77,6 +77,20 @@ function M:initMain()
 			end
 		end
 	end)
+
+	Lib.subscribeEvent(Event.EVENT_USE_DRESS_ARCHIVE, function(index) 
+		if not index then
+			return
+		end
+
+		local itemData = self.itemPool[index].archive
+		if self.selectArchiveIndex ~= index then
+			self:updateActorDress(itemData.data.vars)
+			self.selectArchiveIndex = index
+			self:onSelectArchive()
+			self:modPlayerSkin()
+		end
+	end)
 end
 
 function M:updateActor()
@@ -202,10 +216,7 @@ end
 function M:clickArchive(index)
 	local itemData = self.itemPool[index].archive
 	if self.selectArchiveIndex ~= index then
-		self:updateActorDress(itemData.data.vars)
-		self.selectArchiveIndex = index
-		self:onSelectArchive()
-		self:modPlayerSkin()
+		Me:sendTrigger(Me, "USE_OPERATE_DRESS_ARCHIVE_DIALOG", Me, nil, {index = index})
 	end
 end
 

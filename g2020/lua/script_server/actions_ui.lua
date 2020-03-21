@@ -259,3 +259,7 @@ end
 function Actions.ShowStateUI(data, params, context)
     params.player:sendPacket({pid = "ShowStateUI"})
 end
+
+function Actions.UseDressArchive(data, params, context)
+    params.player:sendPacket({pid = "UseDressArchive", index = params.index})
+end

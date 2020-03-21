@@ -3613,6 +3613,24 @@ RENAME_DRESS_ARCHIVE
     }
 }
 
+USE_OPERATE_DRESS_ARCHIVE_DIALOG
+{
+    $context = {
+        index = $index
+    }
+    ShowDialogTip(entity = $obj1, tipType = 2, event = "USE_OPERATE_DRESS_ARCHIVE",p1 = "gui_use_dress_archive_confirm", context = $context)
+}
+
+USE_OPERATE_DRESS_ARCHIVE
+{
+    If(not $result)
+    {
+        Return()
+    }
+
+    UseDressArchive(player = $obj1, index = $index)
+}
+
 REMOVE_BM_DRESS
 {
     If(not $obj1.dressArchive)
