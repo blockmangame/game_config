@@ -1,5 +1,10 @@
 ENTITY_ENTER
 {
+    StartTimer(object =$obj1, obj1 =$obj1, time = 2, event = "UPDATE_NAME")
+}
+
+UPDATE_NAME{
+    SetEntityName(entity = $obj1, name = GetEntityName(entity = $obj1.house.owner))
 }
 
 SHOW_PARTY_LIST{
