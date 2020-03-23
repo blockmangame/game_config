@@ -267,3 +267,16 @@ function Actions.ShowWarmPrompt(data, params, context)
         disableClose = params.disableClose
     })
 end
+
+function Actions.UpdateEntityEditContainer2(data, params, context)
+    local player = params.player
+    local entityId = params.entityId
+    if not entityId or not player then
+        return
+    end
+    player:sendPacket({
+        pid = "UpdateEntityEditContainer2",
+        objID = entityId,
+        show = params.show
+    })
+end

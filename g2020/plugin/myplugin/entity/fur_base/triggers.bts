@@ -69,8 +69,10 @@ ENTITY_TOUCH_ALL{
 
 EDIT_OBJECT_ACTION{
     If($action == "startEdit"){
+        $obj1.cantInteractTarget = false
         CallTrigger(object = $obj1, event = "START_EDIT_ENTITY", obj2 = $obj2, params = $params)
     }ElseIf($action == "stopEdit"){
+        $obj1.cantInteractTarget = true
         CallTrigger(object = $obj1, event = "STOP_EDIT_ENTITY", obj2 = $obj2, params = $params)
     }ElseIf($action == "exit"){
         CallTrigger(object = $obj1, event = "DEC_INTERACTION_EXIT_EDIT", obj2 = $obj2, params = $params)
@@ -159,14 +161,14 @@ ENTITY_CLICK{
     $lastInteractionUiObjId = GetObjectVar(obj = $obj2, key = "lastInteractionUiObjId")
     If($lastInteractionUiObjId ~= GetObjectID(object = $obj1)){
         If($lastInteractionUiObjId){
-            UpdateEntityEditContainer(player = $obj2, entityId = $lastInteractionUiObjId, show = false)
+            UpdateEntityEditContainer2(player = $obj2, entityId = $lastInteractionUiObjId, show = false)
         }
         StartTimer(rep = false, object =$obj1, obj1 =$obj1, obj2 = $obj2, time = 1, event = "SHOW_EDIT_UI")
     }
 }   
 
 SHOW_EDIT_UI{
-    UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = true)
+    UpdateEntityEditContainer2(player = $obj2, entityId = GetObjectID(object = $obj1), show = true)
 }
 
 REMOVE_END_MOVEMENT_BUFF{
@@ -305,7 +307,7 @@ DEC_INTERACTION_SALE{
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)
     ArraySet(array = $houseVars, index = $index, value = DictionaryToTable(dict = $curHousedict))
 
-    UpdateEntityEditContainer(player = $owner, entityId = GetObjectID(object = $obj1), show = false)
+    UpdateEntityEditContainer2(player = $owner, entityId = GetObjectID(object = $obj1), show = false)
     SetObjectVar(obj = $owner, key = "lastInteractionUiObjId", value = nil)
 
     CallTrigger(object = $owner, obj1 = $owner, npc = $obj1, remove = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
@@ -361,7 +363,7 @@ ROTATION_BODY_YAW{
 }
 
 DEC_INTERACTION_EXIT_EDIT{
-    -- UpdateEntityEditContainer(player = $obj2, entityId = GetObjectID(object = $obj1), show = false)
+    -- UpdateEntityEditContainer2(player = $obj2, entityId = GetObjectID(object = $obj1), show = false)
 }
 
 ADD_EDIT_BUFF{
@@ -436,7 +438,7 @@ FUR_ENTITY_RIDE_ON
     If($decEditBuff){
         $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $decEditBuff) -- 不在编辑状态下玩家不能编辑房子的家具
         If($buff){
-            UpdateEntityEditContainer(player = $me, entityId = GetObjectID(object = $obj1), show = false)
+            UpdateEntityEditContainer2(player = $me, entityId = GetObjectID(object = $obj1), show = false)
         }
     }
 }

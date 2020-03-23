@@ -199,3 +199,7 @@ end
 function handles:UseDressArchive(packet)
     Lib.emitEvent(Event.EVENT_USE_DRESS_ARCHIVE, packet.index)
 end
+
+function handles:UpdateEntityEditContainer2(packet)
+	Lib.emitEvent(Event.EVENT_UI_EDIT_UPDATE_EDIT_CONTAINER_2, packet.objID, packet.show)
+end

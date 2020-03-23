@@ -26,6 +26,7 @@ local Events = {
     "EVENT_GUIDE_GM",
     "EVENT_SHOW_REWARD_CD",
     "EVENT_USE_DRESS_ARCHIVE",
+    "EVENT_UI_EDIT_UPDATE_EDIT_CONTAINER_2"
 }
 
 for _, name in pairs(Events) do
