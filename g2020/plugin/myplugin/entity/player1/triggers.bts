@@ -4844,6 +4844,9 @@ OPEN_BUY_COIN()
 }
 --特权购买成功
 ENTITY_BUY_APPSTOP {
+    If($shopType == 2){
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteJoinFamilyBuff")
+    }
     If($itemName == "myplugin/broadcast_party_invite"){
         $addItem = false
     }

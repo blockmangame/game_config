@@ -69,12 +69,13 @@ ENTITY_TOUCH_ALL{
 
 EDIT_OBJECT_ACTION{
     If($action == "startEdit"){
-        $obj1.cantInteractTarget = false
+        $obj1.cantInteractTarget = true
         CallTrigger(object = $obj1, event = "START_EDIT_ENTITY", obj2 = $obj2, params = $params)
     }ElseIf($action == "stopEdit"){
-        $obj1.cantInteractTarget = true
+        $obj1.cantInteractTarget = false
         CallTrigger(object = $obj1, event = "STOP_EDIT_ENTITY", obj2 = $obj2, params = $params)
     }ElseIf($action == "exit"){
+        $obj1.cantInteractTarget = false
         CallTrigger(object = $obj1, event = "DEC_INTERACTION_EXIT_EDIT", obj2 = $obj2, params = $params)
     }Else{
         CallTrigger(object = $obj1, event = "EXECUTION_EDIT_ACTION", obj2 = $obj2, params = $params, action = $action)
