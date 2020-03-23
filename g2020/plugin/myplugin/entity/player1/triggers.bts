@@ -3618,7 +3618,20 @@ USE_OPERATE_DRESS_ARCHIVE_DIALOG
     $context = {
         index = $index
     }
-    ShowDialogTip(entity = $obj1, tipType = 2, event = "USE_OPERATE_DRESS_ARCHIVE",p1 = "gui_use_dress_archive_confirm", context = $context)
+
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = nil,
+        rightContent = "ui_sure"
+    }
+
+    $content = {
+        msg = "gui_use_dress_archive_confirm",
+        args = [$name]
+    }
+
+    ShowDialogTip(entity = $obj1, tipType = 5, event = "USE_OPERATE_DRESS_ARCHIVE", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $context)
 }
 
 USE_OPERATE_DRESS_ARCHIVE
@@ -3628,7 +3641,10 @@ USE_OPERATE_DRESS_ARCHIVE
         Return()
     }
 
-    UseDressArchive(player = $obj1, index = $index)
+    If($button == "right")
+    {
+        UseDressArchive(player = $obj1, index = $index)
+    }
 }
 
 REMOVE_BM_DRESS

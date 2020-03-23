@@ -216,7 +216,7 @@ end
 function M:clickArchive(index)
 	local itemData = self.itemPool[index].archive
 	if self.selectArchiveIndex ~= index then
-		Me:sendTrigger(Me, "USE_OPERATE_DRESS_ARCHIVE_DIALOG", Me, nil, {index = index})
+		Me:sendTrigger(Me, "USE_OPERATE_DRESS_ARCHIVE_DIALOG", Me, nil, {index = index, name = itemData.name})
 	end
 end
 
