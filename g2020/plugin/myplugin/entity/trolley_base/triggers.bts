@@ -10,7 +10,7 @@ ENTITY_RIDE_OFF
     $obj2.useTrolley = false
     CallTrigger(object = $obj2, event = "DEMOUNT_BABY_TROLLEY")
     CallTrigger(object = $obj1, event = "FUNC_REMOVE_KICK_KID_SKILL_BUTTON", player = $obj2)
-    CallTrigger(object = $obj1, event = "FUNC_STATE_SYNC_TO_RIDER_AND_PASSENGERS", isRideOn = false, player = $obj2)
+    ClearItemUseByKey(entity = $obj2, key = "typeIndex", valueArray = NewArray(1))
 }
 
 FUNC_STATE_SYNC_TO_RIDER_AND_PASSENGERS --params: isRideOn, player
