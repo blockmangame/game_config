@@ -16,6 +16,10 @@ ENTITY_CLICK_BY_BUY_DEC{
     }
 }
 
+CLAC_PUSHOUT_BLOCK{
+    ClacEntityPushOutBlock(player = $owner or $obj1.owner, entity = $obj1)
+}
+
 CREATE_CLEAR_GAMEBGM_REGION{
     $pos = GetEntityPosition(entity = $obj1)
     $clearGameBgmRegionAddArr = GetConfigVar(obj = $obj1, key = "clearGameBgmRegionAddArr")
@@ -93,6 +97,7 @@ START_EDIT_ENTITY{
         $obj1.firstInEdit = true
     }
     SetObjectVar(obj = $obj2, key = "lastInteractionUiObjId", value = GetObjectID(object = $obj1))
+    $obj2.lastInterFruId = $obj1.interFruId
 }
 
 EXECUTION_EDIT_ACTION{

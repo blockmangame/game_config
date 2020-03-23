@@ -1087,9 +1087,11 @@ GIVE_STORE{
             Break()
         }
     }
+    $interFruId = Concat(p1 = $cfg, p2 = GetGameTime())
+    $npc.interFruId = $interFruId
     ArrayAppend(array = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing"), value = {
         pos = GetEntityPosition(entity = $npc), yaw = GetEntityYaw(entity = $npc),cfg = $cfg,
-        furnishingId = GetObjectID(object = $npc),isOldFurnishing = false,
+        furnishingId = GetObjectID(object = $npc),isOldFurnishing = false, interFruId = $interFruId,
         sellMoney = $sellMoney, sellByDiscountMoney = $sellByDiscountMoney
     })
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
@@ -1175,6 +1177,10 @@ SAVE_FURNITURE{
             DictionarySet(dict = $fDict, key = "blackboardStr", value = GetObjectVar(obj = $npc, key = "blackboardStr"))
         }
         ArraySet(array = $furnitures, index = $fIndex, value = DictionaryToTable(dict = $fDict))
+    }
+    Test(" $obj1.lastInterFruId ", $obj1.lastInterFruId)
+    If($obj1.lastInterFruId){
+        DictionarySet(dict = $curHousedict, key = "lastInterFruId", value = $obj1.lastInterFruId)
     }
     $index = DictionaryGet(dict = $curHousedict, key = "curHouseVarsIndex")
     DictionarySet(dict = $curHousedict, key = "curHouseVarsIndex", value = nil)

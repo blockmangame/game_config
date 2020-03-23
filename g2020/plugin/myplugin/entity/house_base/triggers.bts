@@ -100,6 +100,7 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
     ------------------------------------------ 内部各个家具
     ------------------------------------------ 房子 <house------- 家具
     $furnitures = DictionaryGet(dict = $curHousedict, key = "houseInsideFurnishing") or {}
+    $lastInterFruId = DictionaryGet(dict = $curHousedict, key = "lastInterFruId")
     ForLoop(from = 1, to = ArraySize(array = $furnitures), key = "findex"){
         $fDict = NewDictionary(ArrayGet(array = $furnitures, index = $findex))
         $temp = DictionaryGet(dict = $fDict, key = "pos")
@@ -113,6 +114,11 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
             pos = $pos, ry = DictionaryGet(dict = $fDict, key = "yaw") or 0, rp = DictionaryGet(dict = $fDict, key = "pitch") or 0, owner = $obj1.owner)
         If($npc){
             SetEntityRoll(entity = $npc, rotationRoll = DictionaryGet(dict = $fDict, key = "roll") or 0)
+            $owner = GetObjectVar(obj = $obj1, key = "owner")
+            Test($lastInterFruId, DictionaryGet(dict = $fDict, key = "interFruId"))
+            If($lastInterFruId and $lastInterFruId == DictionaryGet(dict = $fDict, key = "interFruId")){
+                StartTimer(object =$npc, obj1 =$npc, owner = $owner, time = 3, event = "CLAC_PUSHOUT_BLOCK")
+            }
             $npc.lastSideNormal = DictionaryGet(dict = $fDict, key = "lastSideNormal") or Table(x = 0,y = 1,z = 0)
             -- UpdateEntityDateToClient(entity = $npc, key = "lastSideNormal", value = $npc.lastSideNormal)
             Foreach(array = DictionaryGet(dict = $fDict, key = "saveSkinList") or {}, key = "skinTb"){
@@ -121,18 +127,18 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
                     SetSkin(entity = $npc, skinName = DictionaryGet(dict = $skinDict, key = "skinName"), skinValue = DictionaryGet(dict = $skinDict, key = "skin"))
                 }
             }
+            $interFruId = Concat(p1 = DictionaryGet(dict = $fDict, key = "cfg"), p2 = GetGameTime(), p3 = $findex)
+            DictionarySet(dict = $fDict, key = "interFruId", value = $interFruId)
+            $npc.interFruId = $interFruId
             DictionarySet(dict = $fDict, key = "furnishingId", value = GetObjectID(object = $npc))
             SetObjectVar(obj = $npc, key = "house", value = $obj1)
             ArraySet(array = $furnitures, index = $findex, value = DictionaryToTable(dict = $fDict))
             SetObjectVar(obj = $npc, key = "blackboardStr", value = DictionaryGet(dict = $fDict, key = "blackboardStr"))
-            CallTrigger(object = GetObjectVar(obj = $obj1, key = "owner"), obj1 = GetObjectVar(obj = $obj1, key = "owner"), 
-                npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
+            CallTrigger(object = $owner, obj1 = $owner, npc = $npc, add = true, event = "UPDATE_PLAYER_3DUI_ENTITY")
 
-            CallTrigger(object = GetObjectVar(obj = $obj1, key = "owner"), obj1 = GetObjectVar(obj = $obj1, key = "owner"), 
-                npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
+            CallTrigger(object = $owner, obj1 = $owner, npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY")
 
-            CallTrigger(object = GetObjectVar(obj = $obj1, key = "owner"), obj1 = GetObjectVar(obj = $obj1, key = "owner"), 
-                npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")     
+            CallTrigger(object = $owner, obj1 = $owner,  npc = $npc, add = true, event = "CREATE_PLAYER_SINGLE_BLACK_BOARD_ENTITY")     
             If(GetConfigVar(obj = $npc, key = "isBgmSpeakers")) {
                 $counts = GetMapVar(map = $map, key = "SpeakersCount")
                 If(not $counts){
