@@ -5333,6 +5333,9 @@ ENTER_MAP
     }ElseIf($obj1MapOwner or ($obj1MapOwner == GetObjectVar(obj = $obj1, key = "house"))){
         CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
     }
+    If(not $obj1MapOwner){
+        SetObjectVar(obj = $obj1, key = "lastInsideRegion", value = nil)
+    }
     CallTrigger(object = $obj1, event = "PICK_HAND_ITEM", obj1 = $obj1)
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
@@ -5901,12 +5904,12 @@ GET_VISIT_TELE_POS {
                 $tp = ComputeV3(op = "add", p1 = $tp, p2 = {x = 0, y = -2, z = 0})
             }
         }Else{
-            If($obj1.curInsideRegion){
-                $regionCenter = GetRegionCenter(region = $obj1.curInsideRegion)
+            If($obj1.curInsideRegion or $obj1.lastInsideRegion){
+                $regionCenter = GetRegionCenter(region = $obj1.curInsideRegion or $obj1.lastInsideRegion)
                 $addV3 = {
-                    x = GetPosX(pos = $tp) - GetPosX(pos = $regionCenter) > 0 and -1 or 1,
+                    x = GetPosX(pos = $tp) - GetPosX(pos = $regionCenter) > 0 and -1.5 or 1.5,
                     y = 0,
-                    z = GetPosZ(pos = $tp) - GetPosZ(pos = $regionCenter) > 0 and -1 or 1
+                    z = GetPosZ(pos = $tp) - GetPosZ(pos = $regionCenter) > 0 and -1.5 or 1.5
                 }
                 $tp = ComputeV3(op = "add", p1 = $tp, p2 = $addV3)
             }
