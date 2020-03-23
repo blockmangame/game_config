@@ -1293,17 +1293,23 @@ SURE_LOCK_HOUSE_AND_KICK_OTHERS{
         $insideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
         $notCurHouseFamilyPlayer = {}
         $allPlayerInThisHouse = GetMapPlayer(map = $insideMap)
+        $selfRideOn = GetRideOn(entity = $obj1)
+        $insideDoor = GetObjectVar(obj = $house, key = "insideDoor")
         Foreach(array = $allPlayerInThisHouse, key = "player"){
-            $obj2Ride = GetRideOn(entity = $player)
-            If($obj2Ride and GetConfigVar(obj = $obj2Ride, key = "base") == "fur_base"){
-                ClearRide(entity = $obj2Ride)
-            }
             If(GetObjectID(object = $obj1) ~= GetObjectID(object = $player) and 
                 (0 == GetEntityTeam(entity = $player) or GetEntityTeam(entity = $player) ~= GetEntityTeam(entity = $obj1))){
                 -- CastSkill(skill = "/click", from = $player, packet = {targetID = GetObjectID(object = GetObjectVar(obj = $house, key = "insideDoor"))})
-                $insideDoor = GetObjectVar(obj = $house, key = "insideDoor")
-                If(GetRideOn(entity = $obj1) and GetObjectID(object = GetRideOn(entity = $obj1)) == GetObjectID(object = $player)){
-                    ClearRide(entity = $obj1)
+                $player.kickOut = true
+                If($selfRideOn and GetObjectID(object = $selfRideOn) == GetObjectID(object = $player)){
+                    -- ClearRide(entity = $obj1)
+                    CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+                }
+                $playerRideOn = GetRideOn(entity = $player)
+                If($playerRideOn and GetConfigVar(obj = $playerRideOn, key = "base") == "fur_base"){
+                    -- ClearRide(entity = $player)
+                    CallTrigger(obj1 = $player, event = "PLAYER_CLEAR_RIDE")
+                }ElseIf($playerRideOn and GetObjectID(object = $obj1) == GetObjectID(object = $playerRideOn)){
+                    CallTrigger(obj1 = $player, event = "PLAYER_CLEAR_RIDE")
                 }
                 CallTrigger(object = $insideDoor, obj1 = $insideDoor, obj2 = $player, event = "INTER_WITH_DOOR")
                 ShowTip(entity = $player, tipType = 2,textKey = "house_owner_lock_house_and_kick_you", keepTime = 40)
@@ -1751,7 +1757,7 @@ RESET_PLAYER_INNER_INSIDE_DOOR_STATUS{
 }
 
 RIDEOFF_IN_DEC{
-    If($target and $target.lastSideNormal and IsPlayer(entity = $obj1)){
+    If($target and not $obj1.kickOut and $target.lastSideNormal and IsPlayer(entity = $obj1)){
         If(GetPosY(pos = $target.lastSideNormal) == -1){
             $addPos = {
                 x = 0,
@@ -5892,7 +5898,7 @@ GET_VISIT_TELE_POS {
                 $regionCenter = GetRegionCenter(region = $obj1.curInsideRegion)
                 $addV3 = {
                     x = GetPosX(pos = $tp) - GetPosX(pos = $regionCenter) > 0 and -1 or 1,
-                    y = GetPosY(pos = $tp),
+                    y = 0,
                     z = GetPosZ(pos = $tp) - GetPosZ(pos = $regionCenter) > 0 and -1 or 1
                 }
                 $tp = ComputeV3(op = "add", p1 = $tp, p2 = $addV3)
