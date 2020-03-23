@@ -2733,7 +2733,7 @@ ENTITY_REMOVE_INTERACTION {
 }
 
 ENTITY_ADD_DINGDONG_BUFF{
-    $dingDongBuff = GetConfigVar(object = $obj1, key = $buffKey)
+    $dingDongBuff = GetConfigVar(obj = $obj1, key = $buffKey)
     If($dingDongBuff){
         AddEntityBuff(entity = $obj1, cfg = $dingDongBuff, buffTime = 200)
     }
