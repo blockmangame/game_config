@@ -3,6 +3,8 @@
     "skin": {
         "body": "1"
     },
+    "bounceHeight": 15,
+    "viewDistance": 32,
     "boundingVolume": {
         "type": "Composite",
         "params": [
@@ -22,7 +24,9 @@
             {
                 "text": "trampoline.text",
                 "image": "plugin/myplugin/image/hand_click.png",
-                "event": "CLICK_TRAMPOLINE2"
+                "event": "CLICK_TRAMPOLINE2",
+                "widgetFileName": "widget_button_image_center",
+                "enableTextBorder": true
             }
         ],
         "followParams": {

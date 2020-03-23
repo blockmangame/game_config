@@ -1,5 +1,6 @@
 {
     "actorName": "g2020_fru_chairs.actor",
+    "remark":"这是空地邮箱",
     "canClick": true,
     "skin": {
         "body": "22"
@@ -19,17 +20,24 @@
         "cfgKey": "interactionUI",
         "centerBtns": [
             {
-                "widgetFileName": "widget_button",
+               
                 "event": "SHOW_BUY_UI",
                 "image": "plugin/myplugin/image/fru_intUI/hand_click.png",
                 "imageSize": {
                     "width": "60",
                     "height": "60"
-                }
+                },
+                "widgetFileName": "widget_button_image_center",
+                "enableTextBorder": true
             }
         ],
         "followParams": {
-            "followScenePos": false
+            "followScenePos": false,
+            "offset": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+            }
         }
     }
 }
