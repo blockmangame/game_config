@@ -111,36 +111,6 @@ function Actions.SetWorksArchiveNum(data, params, context)
 	params.player:sendPacket({ pid = "SetWorksArchiveNum", num = params.num })
 end
 
-function Actions.SyncStatesData(data, params, context)
-    local player = params.player
-    local target = params.target
-    for _, v in pairs({player, target}) do
-        if not v or not v:isValid() or not v.isPlayer then
-            return
-        end
-    end
-    local states = {}
-    local isAdd = params.isAdd
-    local isWithoutCheck = params.isWithoutCheck or not params.states
-    local tmpStates = params.states or _getObjVar(target, "curStates")
-    --如果有声明isWithoutCheck为true或者为target.curStates则不需要再去检查states里的状态是否为target获得的了
-    if not isWithoutCheck and isAdd then
-        for _, v in pairs(states) do
-            if _getObjVar(target, v.."got") then
-                table.insert(states, v)
-            end
-        end
-    end
-    player:sendPacket({
-        pid = "SyncStatesData",
-        data = {
-			isAdd = isAdd,
-			states = (isWithoutCheck and {tmpStates} or {states})[1],
-			targetID = target.objID
-		},
-    })
-end
-
 local mfloor = math.floor
 local mceil = math.ceil
 local kCollision = 0.05

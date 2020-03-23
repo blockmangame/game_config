@@ -131,8 +131,22 @@ function M:getEquipItem()
     end
 end
 
+function M:getRideItem()
+	local rideEntity = Me.rideOnId and Me.world:getEntity(Me.rideOnId)
+	if rideEntity then
+		local rideItem = rideEntity:cfg().rideItem
+		if rideItem then
+			return Item.CreateItem(rideItem, 1)
+		end
+	end
+	return nil
+end
+
 function M:refreshUI()
-    local equipItem = self:getEquipItem()
+	local equipItem = self:getEquipItem()
+	if not equipItem then
+		equipItem = self:getRideItem()
+	end
 	self.equipItem = equipItem
     if equipItem then
         self.bagBtn:SetArea({-0.6, 0}, {0, 0}, {0, 80}, {0, 80})
