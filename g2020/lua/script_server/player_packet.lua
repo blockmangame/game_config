@@ -19,7 +19,7 @@ function handles:InteractWithEntity(packet)
 		return
 	end
 
-	local checkContext = {obj1 = self, canInteract = true,}
+	local checkContext = {obj1 = self, canInteract = true, interactTarget = entity}
 	Trigger.CheckTriggers(self:cfg(), "CHECK_CAN_INTERACT", checkContext)
 	if not checkContext.canInteract then
 		return

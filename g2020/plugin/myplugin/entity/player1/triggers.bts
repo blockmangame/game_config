@@ -4,6 +4,10 @@ CHECK_CAN_INTERACT(debug1 = true){
         $canInteract = false
         Return()
     }
+    If($interactTarget.cantInteractTarget){
+        $canInteract = false
+        Return()
+    }
 }
 SET_ITEM_USE {
     If($isUse)
