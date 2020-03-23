@@ -6,7 +6,6 @@ SKILL_CAST
     ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val") {
         $entity = GetObject(objID = $val)
         If($entity ~= $obj1 && IsPlayer(entity = $entity)) {
-            Test("KICK_KID__GOGOGO")
             ClearRide(entity = $entity)
         }
     }
