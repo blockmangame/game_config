@@ -28,7 +28,7 @@ FUNC_ADD_KICK_KID_SKILL_BUTTON --params: player
 {
     $owner = GetOwner(entity = $obj1)
     If(not $owner or $owner == $player) { Return() } --自己一个人推着手推车就不加这个skill
-    AddSkill(entity = $owner, name = "myplugin/trolley_kick_kid_skill")
+    AddSkill(entity = $owner, name = GetConfigVar(obj = $obj1, key = "kick_kid_skill"))
 }
 
 FUNC_REMOVE_KICK_KID_SKILL_BUTTON --params: player
@@ -36,6 +36,6 @@ FUNC_REMOVE_KICK_KID_SKILL_BUTTON --params: player
     $owner = GetOwner(entity = $obj1)
     $passengers = NewDictionary(GetPassengers(entity = $obj1))
     If($owner and DictionarySize(dict = $passengers) == 1) { --仅剩一个乘客的时候就是只剩下了手推车的主人，此时remove skill
-        RemoveSkill(entity = $owner, name = "myplugin/trolley_kick_kid_skill")
+        RemoveSkill(entity = $owner, name = GetConfigVar(obj = $obj1, key = "kick_kid_skill"))
     }
 }
