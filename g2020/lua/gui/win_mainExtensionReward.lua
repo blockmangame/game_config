@@ -2,6 +2,7 @@ function M:init()
     WinBase.init(self, "MainExtensionReward.json")
 
     self.text = self:child("MainExtensionReward-CD-text")
+    self.rewardTime = 0
 
     Lib.subscribeEvent(Event.EVENT_SHOW_REWARD_CD, function(time)
         self:showRewardCD(time)
@@ -28,11 +29,15 @@ function M:showRewardCD(time)
     end
 
     self.text:SetText(timeFormat(time))
+    self.rewardTime = os.time() * 20 + time
+    
     local function tick()
-        time = time - 20
-        if time < 0 then
-            time = 0
+        local time = self.rewardTime - os.time() * 20
+        if time <= 0 then
+            self.text:SetText(timeFormat(0))
+            return false
         end
+
         self.text:SetText(timeFormat(time))
         return true
     end
