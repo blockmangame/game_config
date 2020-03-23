@@ -1,3 +1,6 @@
+RIDE_ON_FURNITURE_BY_INDEX(){
+    CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = $ridePosIndex)
+}
 ENTITY_ENTER
 {
     AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_swimming_idle_2_idel_buff")

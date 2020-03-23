@@ -38,6 +38,22 @@ function handles:NewButton(objID, context)
     end
 end
 
+function handles:ShowSingleUI(objID, context)
+    local cfg = context.cfg
+    local followParams = cfg.followParams or {
+        followScenePos = false,
+    }
+    local object = World.CurWorld:getObject(objID)
+    local offsets = object:cfg().interactionUiFollowOffset
+    local centerBtns, aroundBtns, cfgKey = cfg.centerBtns, cfg.aroundBtns, cfg.cfgKey
+    local btnCfgs = centerBtns or aroundBtns
+    local ridePosIndex = next(btnCfgs) and btnCfgs[1].ridePosIndex
+    if ridePosIndex and offsets then
+        followParams.offset = offsets[tostring(ridePosIndex)]
+    end
+    cfg.followParams = followParams
+end
+
 function handles:ButtonSetClickAction(objID, context)
     local btnCfg, callback = context.btnCfg, context.callback
     local nextCfgKey = btnCfg.nextCfgKey
@@ -53,7 +69,7 @@ function handles:ButtonSetClickAction(objID, context)
     local clickEvent = btnCfg.event
     if clickEvent and Event[clickEvent] then
         callback = function()
-            Lib.emitEvent(Event[clickEvent], objID)
+            Lib.emitEvent(Event[clickEvent], objID, btnCfg)
         end
     end
     context.callback = callback

@@ -113,3 +113,11 @@ Lib.subscribeEvent(Event.EVENT_SHOW_REWARD_DIALOG, function(info)
     ui:root():SetAlwaysOnTop(true)
 	ui:root():SetLevel(0)
 end)
+
+Lib.subscribeEvent(Event.EVENT_CHECK_FURNITURE_CLICK_ACTION, function(objID, btnCfg)
+    Me:checkFurnitureClickAction(objID, btnCfg)
+end)
+
+Lib.subscribeEvent(Event.EVENT_RIDE_ON_FURNITURE_BY_INDEX, function(objID, btnCfg)
+    Me:sendRideOnFurnitureByIndex(objID, btnCfg.ridePosIndex, btnCfg.targetID)
+end)

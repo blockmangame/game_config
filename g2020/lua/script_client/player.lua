@@ -332,22 +332,43 @@ function Player:setInteractingPlayer(targetID, skillName)
     end
 end
 
-function Player:interactWithObject(objID, cfgKey, cfgIndex, btnType, btnIndex)
-    local object = World.CurWorld:getObject(objID)
-    if not object then--it may be deleted at previous frame
+function Player:checkFurnitureClickAction(objID, btnCfg)
+    local ridePosIndex = btnCfg.ridePosIndex
+    Me:customCheckCond({funcName = "checkCanPutBabyOnto"}, objID)
+    local targetBaby = self.targetBaby
+    if not targetBaby then
+        self:sendRideOnFurnitureByIndex(objID, ridePosIndex)
         return
     end
-    if object.isEntity then
-        self:sendPacket({
-            pid = "InteractWithEntity",
-            targetID = self.targetBaby and self.targetBaby.objID,
-            objID = objID,
-            cfgKey = cfgKey,
-            cfgIndex = cfgIndex,
-            btnType = btnType,
-            btnIndex = btnIndex,
-        })
-    end
+    local aroundBtns = {
+        {
+            text = "you",
+            event = "EVENT_RIDE_ON_FURNITURE_BY_INDEX",
+            targetID = Me.objID,
+            image = btnCfg.image,
+            ridePosIndex = ridePosIndex,
+        },
+        {
+            text = targetBaby.name,
+            event = "EVENT_RIDE_ON_FURNITURE_BY_INDEX",
+            image = btnCfg.image,
+            targetID = targetBaby.objID,
+            ridePosIndex = ridePosIndex,
+        }
+    }
+    local obj = World.CurWorld:getObject(objID)
+    local newCfg = obj:cfg().interaction_object_choices
+    newCfg.aroundBtns = aroundBtns
+    Lib.emitEvent(Event.EVENT_OBJECT_INTERACTION_SET, objID, true, newCfg)
+end
+        
+function Player:sendRideOnFurnitureByIndex(objID, ridePosIndex, targetID)
+    self:sendPacket({
+        pid = "RideOnFurnitureByIndex",
+        targetID = targetID or Me.objID,
+        objID = objID,
+        ridePosIndex = ridePosIndex,
+    })
 end
 
 function Player:updateGiveAwayStatus(status, targetObjID)

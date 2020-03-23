@@ -13,36 +13,30 @@ function handles:SetItemUse(packet)
 	self:setItemUse(tid, slot, isUse)
 end
 
-function handles:InteractWithEntity(packet)
+function handles:RideOnFurnitureByIndex(packet)
 	local entity = World.CurWorld:getEntity(packet.objID)
 	if not entity then
 		return
 	end
-
-	local checkContext = {obj1 = self, canInteract = true, interactTarget = entity}
-	Trigger.CheckTriggers(self:cfg(), "CHECK_CAN_INTERACT", checkContext)
+	local target = World.CurWorld:getEntity(packet.targetID)
+	if not target then
+		return
+	end
+	local checkContext = {
+		obj1 = target,
+		canInteract = true,
+		interactTarget = entity,
+	}
+	Trigger.CheckTriggers(target:cfg(), "CHECK_CAN_INTERACT", checkContext)
 	if not checkContext.canInteract then
 		return
 	end
-
 	local context = {
 		obj1 = entity,
-		obj2 = self,
+		obj2 = target,
+		ridePosIndex = packet.ridePosIndex,
 	}
-	local cfgKey, cfgIndex, btnType, btnIndex = packet.cfgKey, packet.cfgIndex, packet.btnType, packet.btnIndex
-	local cfg = entity:cfg()[cfgKey]
-	if cfgIndex then
-		cfg = cfg[cfgIndex]
-	end
-	local btnCfg = cfg[btnType][btnIndex]
-	if btnCfg.toOther then
-		local target = packet.targetID and World.CurWorld:getEntity(packet.targetID)
-		if not target then
-			return
-		end
-		context.obj2 = target
-	end
-	Trigger.CheckTriggers(entity:cfg(), btnCfg.event, context)
+	Trigger.CheckTriggers(entity:cfg(), "RIDE_ON_FURNITURE_BY_INDEX", context)
 end
 
 function handles:showChangeTeamName(packet)
