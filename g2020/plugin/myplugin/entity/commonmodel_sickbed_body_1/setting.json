@@ -44,10 +44,7 @@
                     "text": "sickbed.text",
                     "image": "plugin/myplugin/image/fru_intUI/sleep.png",
                     "event": "ENTITY_sickbed",
-                    "checkCanHide": {
-                        "funcName": "checkRideOnIndex",
-                        "index": 4
-                    },
+                    "ridePosIndex": 4,
                     "customCheckCanHide": {
                         "funcName": "checkCanPutBabyOnto"
                     },
@@ -75,10 +72,7 @@
                     "text": "sickbed.text",
                     "image": "plugin/myplugin/image/fru_intUI/sleep.png",
                     "nextCfgKey": "interaction_choices_sickbed",
-                    "checkCanHide": {
-                        "funcName": "checkRideOnIndex",
-                        "index": 4
-                    },
+                    "ridePosIndex": 4,
                     "customCheckCanShow": {
                         "funcName": "checkCanPutBabyOnto"
                     },

@@ -47,10 +47,7 @@
                     "text": "sleep1.text",
                     "image": "plugin/myplugin/image/fru_intUI/sleep.png",
                     "event": "ENTITY_sleep1",
-                    "checkCanHide": {
-                        "funcName": "checkRideOnIndex",
-                        "index": 35
-                    },
+                    "ridePosIndex": 35,
                     "customCheckCanHide": {
                         "funcName": "checkCanPutBabyOnto"
                     },
@@ -79,10 +76,7 @@
                     "image": "plugin/myplugin/image/fru_intUI/sleep.png",
                     "event": "ENTITY_sleep1",
                     "nextCfgKey": "interaction_choices_sleep1",
-                    "checkCanHide": {
-                        "funcName": "checkRideOnIndex",
-                        "index": 35
-                    },
+                    "ridePosIndex": 35,
                     "customCheckCanShow": {
                         "funcName": "checkCanPutBabyOnto"
                     },

@@ -34,11 +34,8 @@
                 {
                     "text": "barsit2.text",
                     "image": "plugin/myplugin/image/fru_intUI/sit1.png",
+                    "ridePosIndex": 8,
                     "event": "ENTITY_sit1_bar_2",
-                    "checkCanHide": {
-                        "funcName": "checkRideOnIndex",
-                        "index": 50
-                    },
                     "customCheckCanHide": {
                         "funcName": "checkCanPutBabyOnto"
                     },
@@ -66,10 +63,7 @@
                     "text": "barsit2.text",
                     "image": "plugin/myplugin/image/fru_intUI/sit1.png",
                     "nextCfgKey": "interaction_choices_sit1_bar_2",
-                    "checkCanHide": {
-                        "funcName": "checkRideOnIndex",
-                        "index": 50
-                    },
+                    "ridePosIndex": 50,
                     "customCheckCanShow": {
                         "funcName": "checkCanPutBabyOnto"
                     },
