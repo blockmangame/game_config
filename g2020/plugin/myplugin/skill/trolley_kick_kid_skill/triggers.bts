@@ -1,0 +1,13 @@
+SKILL_CAST
+{
+    $trolley = $obj1.createdTrolley
+    If(not $trolley) { Return() }
+    $passengers = NewDictionary(GetPassengers(entity = $trolley))
+    ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val") {
+        $entity = GetObject(objID = $val)
+        If($entity ~= $obj1 && IsPlayer(entity = $entity)) {
+            Test("KICK_KID__GOGOGO")
+            ClearRide(entity = $entity)
+        }
+    }
+}
