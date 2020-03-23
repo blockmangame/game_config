@@ -77,7 +77,7 @@ local function startTouchListener(self, objID)
     tlco.endTouchEventListener = Lib.subscribeEvent(Event.EVENT_SCENE_TOUCH_END, function(x, y)
         if IS_OPEN and bm:getHitInfo().type ~= "ENTITY" and curWorld:getTickCount() - touchTick <= 2 then
             local objID = self.localContext.objID
-            Lib.emitEvent(Event.EVENT_UI_EDIT_UPDATE_EDIT_CONTAINER, objID, false)
+            Lib.emitEvent(Event.EVENT_UI_EDIT_UPDATE_EDIT_CONTAINER_2, objID, false)
             sendEditObject(objID, "exit", {})
         end
     end)
@@ -164,7 +164,7 @@ local function clacPushOutWithBlock(self, object)
 end
 
 function M:initEvent()
-    Lib.subscribeEvent(Event.EVENT_UI_EDIT_UPDATE_EDIT_CONTAINER, function(objID, show)
+    Lib.subscribeEvent(Event.EVENT_UI_EDIT_UPDATE_EDIT_CONTAINER_2, function(objID, show)
         self.allCell[objID] = {}
         local object = curWorld:getObject(objID)
         if show then    

@@ -18,7 +18,7 @@ FUR_ENTITY_RIDE_ON
     If($decEditBuff){
         $buff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = $decEditBuff) -- 不在编辑状态下玩家不能编辑房子的家具
         If($buff){
-            UpdateEntityEditContainer(player = $me, entityId = GetObjectID(object = $obj1), show = false)
+            UpdateEntityEditContainer2(player = $me, entityId = GetObjectID(object = $obj1), show = false)
         }
     }
 }
