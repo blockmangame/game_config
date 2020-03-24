@@ -523,9 +523,9 @@ function M:registerEvent()
         self:setItemDescUI(false)
     end)
 
-	Lib.subscribeEvent(Event.EVENT_HAND_ITEM_CHANGE, function()
-		if not self.curDelStatus then
-			--self:fetchAllBagItem()
+	Lib.subscribeEvent(Event.EVENT_HAND_ITEM_CHANGE, function(must)
+		if not self.curDelStatus and must then
+			self:fetchAllBagItem()
 		end
     end)
     

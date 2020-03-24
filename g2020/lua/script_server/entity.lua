@@ -15,12 +15,13 @@ function EntityServer:checkUseItemClear()
     end
 end
 
-function EntityServer:syncItemUse(tid, slot, isUse)
+function EntityServer:syncItemUse(tid, slot, isUse, mustUpdateBag)
     local packet = {
 		pid = "SyncItemUse",
         tid = tid,
         slot = slot,
-        isUse = isUse
+		isUse = isUse,
+		mustUpdateBag = mustUpdateBag
     }
     self:sendPacket(packet)
 end
@@ -48,6 +49,7 @@ function EntityServer:clearItemUseByKey(key, valueArray)
 end
 
 function EntityServer:setItemUse(tid, slot, isUse)
+	print(tid, slot, isUse)
     if not tid or not slot then
         return
     end
@@ -74,7 +76,7 @@ function EntityServer:setItemUse(tid, slot, isUse)
     if isUse then
         Trigger.CheckTriggers(self:cfg(), "CHECK_CAN_USE_ITEM", checkContext)
 		if not checkContext.result then
-			self:syncItemUse(tid, slot, false)
+			self:syncItemUse(tid, slot, false, true)
 			return
         end
     end
@@ -97,5 +99,5 @@ function EntityServer:setItemUse(tid, slot, isUse)
             end
         end
     end
-    self:syncItemUse(tid, slot, isUse)
+	self:syncItemUse(tid, slot, isUse)	
 end

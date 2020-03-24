@@ -40,6 +40,12 @@ CHECK_CAN_USE_ITEM {
     }
     If($typeIndex == 3 and $obj1.equipCarCd){
         $result = false
+	}
+	
+    $mapName = GetEntityName(entity = GetEntityMap(entity = $obj1))
+    If($mapName ~= "map001" && $mapName ~= "map002")
+    {
+        $result = false
     }
 }
 

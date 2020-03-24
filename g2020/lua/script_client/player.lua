@@ -1,6 +1,6 @@
 local setting = require "common.setting"
 
-function Player:setItemUse(tid, slot, isUse, disSendSer)
+function Player:setItemUse(tid, slot, isUse, disSendSer, mustUpdate)
 	local function updateHandItem(self, tid, slot)
 		local handItem = self:data("main").handItem
 		if not handItem or handItem:null() then
@@ -18,7 +18,7 @@ function Player:setItemUse(tid, slot, isUse, disSendSer)
                 end
             end
         end
-		Lib.emitEvent(Event.EVENT_HAND_ITEM_CHANGE)
+		Lib.emitEvent(Event.EVENT_HAND_ITEM_CHANGE, mustUpdate)
 	end
 
     if not tid or not slot then
