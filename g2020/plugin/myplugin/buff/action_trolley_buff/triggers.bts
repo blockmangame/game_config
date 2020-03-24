@@ -1,0 +1,9 @@
+ENTITY_BUFF_REMOVE {
+    If (GetRideOn(entity = $entity) && not $entity.notToClearRide){
+        ClearRide(entity = $entity)
+    }
+    $entity.interactionObjId = nil
+    $entity.interactionBuff = nil
+    PlayAction(entity = $entity, actionName = "idle",  actionTime = 0, includeSelf = true)
+    SendInteractionEnd(player = $entity)
+}
