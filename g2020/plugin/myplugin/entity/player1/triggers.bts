@@ -5113,11 +5113,12 @@ EQUIP_BABY_TROLLEY --params: cfgPath
     {
         Return()
     }
-    If(not GetEntityOnGround(entity = $obj1))
-    {
-        ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", keepTime = 40)
-        Return()
-    }
+	-- 栋哥哥说去掉，怕以后加回去就先注释了
+    -- If(not GetEntityOnGround(entity = $obj1))
+    -- {
+    --     ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", keepTime = 40)
+    --     Return()
+    -- }
 
     If($obj1.createdTrolley)
     {
