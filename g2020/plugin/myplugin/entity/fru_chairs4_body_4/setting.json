@@ -35,39 +35,9 @@
                 {
                     "text": "crib2.text",
                     "image": "plugin/myplugin/image/fru_intUI/sleep.png",
-                    "event": "ENTITY_cirb2",
+                    "event": "EVENT_CHECK_FURNITURE_CLICK_ACTION",
                     "ridePosIndex": 46,
-                    "customCheckCanHide": {
-                        "funcName": "checkCanPutBabyOnto"
-                    },
-                    "imageSize": {
-                        "width": "60",
-                        "height": "60"
-                    },
-                    "widgetFileName": "widget_button_image_center",
-                    "enableTextBorder": true
-                }
-            ],
-            "followParams": {
-                "followScenePos": false,
-                "offset": {
-                    "x": 0,
-                    "y": 0.5,
-                    "z": 0
-                }
-            }
-        },
-        {
-            "cfgKey": "interactionUI",
-            "centerBtns": [
-                {
-                    "text": "crib2.text",
-                    "image": "plugin/myplugin/image/fru_intUI/sleep.png",
-                    "nextCfgKey": "interaction_choices_cirb2",
-                    "ridePosIndex": 46,
-                    "customCheckCanShow": {
-                        "funcName": "checkCanPutBabyOnto"
-                    },
+
                     "imageSize": {
                         "width": "60",
                         "height": "60"

@@ -35,11 +35,9 @@
                 {
                     "text": "sit1_1_1.text",
                     "image": "plugin/myplugin/image/fru_intUI/sit1.png",
-                    "event": "ENTITY_sit1_1_1",
+                    "event": "EVENT_CHECK_FURNITURE_CLICK_ACTION",
                     "ridePosIndex": 1,
-                    "customCheckCanHide": {
-                        "funcName": "checkCanPutBabyOnto"
-                    },
+
                     "imageSize": {
                         "width": "60",
                         "height": "60"
@@ -47,43 +45,7 @@
                     "widgetFileName": "widget_button_image_center",
                     "enableTextBorder": true
                 }
-            ],
-            "followParams": {
-                "followScenePos": false,
-                "offset": {
-                    "x": 0,
-                    "y": 0.5,
-                    "z": 0
-                }
-            }
-        },
-        {
-            "cfgKey": "interactionUI",
-            "centerBtns": [
-                {
-                    "text": "sit1_1_1.text",
-                    "image": "plugin/myplugin/image/fru_intUI/sit1.png",
-                    "nextCfgKey": "interaction_choices_sit1_1_1",
-                    "ridePosIndex": 1,
-                    "customCheckCanShow": {
-                        "funcName": "checkCanPutBabyOnto"
-                    },
-                    "imageSize": {
-                        "width": "60",
-                        "height": "60"
-                    },
-                    "widgetFileName": "widget_button_image_center",
-                    "enableTextBorder": true
-                }
-            ],
-            "followParams": {
-                "followScenePos": false,
-                "offset": {
-                    "x": 0,
-                    "y": 0.5,
-                    "z": 0
-                }
-            }
+            ]
         }
     ]
 }
