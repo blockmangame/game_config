@@ -49,7 +49,8 @@ function handles:ShowSingleUI(objID, context)
     local btnCfgs = centerBtns or aroundBtns
     local ridePosIndex = next(btnCfgs) and btnCfgs[1].ridePosIndex
     if ridePosIndex and offsets then
-        followParams.offset = offsets[tostring(ridePosIndex)]
+        local offset = offsets[tostring(ridePosIndex)]
+        followParams.offset = offset or {x = 0, y = 0.5, z = 0}
     end
     cfg.followParams = followParams
 end
