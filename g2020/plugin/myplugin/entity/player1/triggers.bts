@@ -5675,7 +5675,7 @@ PLAYER_BE_INVITE {
         Return()--in party
     }
     -- $obj1.visitTarget = $obj2
-    $context = {visitTargetUserId = GetObjectID(object = $obj2)}
+    $context = {visitTargetObjectId = GetObjectID(object = $obj2)}
 
     CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteFriendBuff")
     $contentDict = NewDictionary($content)
@@ -5900,7 +5900,7 @@ PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
 }
 PLAYER_ON_VISIT {--same server
     If(not $target){
-        $target = $visitTargetUserId and GetObject(objID = $visitTargetUserId) or $obj2 or $obj1.visitTarget
+        $target = $visitTargetObjectId and GetObject(objID = $visitTargetObjectId) or $obj2 or $obj1.visitTarget
     }
     If(not $target or $target.interactionObjId == GetObjectID(object = $obj1)){
         Return()
