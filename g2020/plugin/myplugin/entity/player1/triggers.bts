@@ -5736,7 +5736,8 @@ JOIN_PARTY_REFUSE(debug1 = true){
 
 JOIN_PARTY_ARGEE(debug1 = true){
     $obj1.partyInviteAgree = $obj1.partyInviteAgree + 1
-    CallTrigger(event = "PLAYER_ON_VISIT_OTHER_SERVER", object = $obj1)
+    $obj1.partyInfo = $partyInfo
+    CallTrigger(event = "PLAYER_ON_VISIT_OTHER_SERVER", object = $obj1, visitTargetUserId = $visitTargetUserId)
 }
 ---party invite ↑↑
 
@@ -5779,7 +5780,10 @@ PLAYER_BE_INVITE_OTHER_SERVER(debug = false){
             $obj1.excludedPartyId = "0"
         }
         -- $obj1.visitTargetUserId = $ownerId
-        $context = {visitTargetUserId = $ownerId}
+        $context = {
+            visitTargetUserId = $ownerId,
+            partyInfo = $partyInfo,
+        }
         -- party invite ui style
         $content = {
             msg = "gui_party_invite_notice",
