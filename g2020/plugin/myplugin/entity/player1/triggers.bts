@@ -8,6 +8,13 @@ CHECK_CAN_INTERACT(debug1 = true){
         $canInteract = false
         Return()
     }
+
+    If(GetEntityMap(entity = $obj1) ~= GetEntityMap(entity = $interactTarget))
+    {
+        $canInteract = false
+        Return()
+    }
+
 }
 SET_ITEM_USE {
     If($isUse)
