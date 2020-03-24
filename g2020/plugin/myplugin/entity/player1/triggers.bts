@@ -42,11 +42,16 @@ CHECK_CAN_USE_ITEM {
         $result = false
 	}
 	
-    $mapName = GetEntityName(entity = GetEntityMap(entity = $obj1))
-    If($mapName ~= "map001" && $mapName ~= "map002")
-    {
-        $result = false
-    }
+	If($typeIndex == 3)
+	{
+		$mapName = GetEntityMapName(entity = $obj1)
+		If($mapName ~= "map001" && $mapName ~= "map002")
+		{
+			ShowTip(entity = $obj1, tipType = 2, textKey = "disable_create_car_in_the_house", keepTime = 40)
+			$result = false
+		}
+	}
+
 }
 
 CHECK_CLEAR_HAND_ITEM{
@@ -5089,6 +5094,11 @@ TAKEOFF_EQUIP_CAR
 
 EQUIP_ITEM_IMMEDIATELY --params: item
 {
+	If(GetItemVar(item = $item, key = "equipFlag"))
+	{
+		Return()
+	}
+
 	$typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
 	If($typeIndex ~= 1 )
 	{
@@ -5097,11 +5107,7 @@ EQUIP_ITEM_IMMEDIATELY --params: item
 		{
 			Return()
 		}
-		If(not GetItemVar(item = $item, key = "equipFlag"))
-		{
-            SetItemUse(entity = $obj1, item = $item, isUse = true)
-			--EquipItem(entity = $obj1, item = $item)
-		}
+		SetItemUse(entity = $obj1, item = $item, isUse = true)
 		Return()
 	}
 	$immediately = $item and GetConfigVar(obj = $item, key = "equipImmediately")
@@ -5170,8 +5176,10 @@ CHANGE_BABY_TROLLEY_SCALE
     $useTrolley = $obj1.useTrolley
     If($trolley && (not $trolley.role || ($trolley.role && $trolley.role ~= $obj1.role)))
     {
-        $obj1.keepCreatedTrolley = true
-        ClearRide(entity = $trolley)
+		$obj1.keepCreatedTrolley = true
+		$obj1.dontClearItem = true
+		ClearRide(entity = $trolley)
+		$obj1.dontClearItem = false
         If($trolley.scaleBuff)
         {
             RemoveEntityBuff(entity = $trolley, buff = $trolley.scaleBuff)

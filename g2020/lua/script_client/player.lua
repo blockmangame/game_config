@@ -465,3 +465,9 @@ function Player:isTradeItem(item)
     end
     return temp[slot]
 end
+
+function Player:dismount()
+	Me:sendPacket({
+		pid = "Dismount",
+	})
+end
