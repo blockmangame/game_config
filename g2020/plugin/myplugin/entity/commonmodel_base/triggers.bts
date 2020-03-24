@@ -1,5 +1,8 @@
 
-
+--简化双人交互的必要bts
+RIDE_ON_FURNITURE_BY_INDEX(){
+    CallTrigger(event = "FUR_ENTITY_RIDE_ON", ctrl = false, me = $obj2, obj1 = $obj1, index = $ridePosIndex)
+}
 --上面是编辑，这里是ride
 TEST_SHOW_NEW_UI {
     UpdateObjectInteractionUI(cfgKey = "interactionUI_1", player = $obj2, target = $obj1, show = true)
