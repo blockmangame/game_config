@@ -115,7 +115,6 @@ CREATR_HOUSE_INSIDE_SUBSIDIARY{
         If($npc){
             SetEntityRoll(entity = $npc, rotationRoll = DictionaryGet(dict = $fDict, key = "roll") or 0)
             $owner = GetObjectVar(obj = $obj1, key = "owner")
-            Test($lastInterFruId, DictionaryGet(dict = $fDict, key = "interFruId"))
             If($lastInterFruId and $lastInterFruId == DictionaryGet(dict = $fDict, key = "interFruId")){
                 StartTimer(object =$npc, obj1 =$npc, owner = $owner, time = 3, event = "CLAC_PUSHOUT_BLOCK")
             }

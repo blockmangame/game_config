@@ -1178,7 +1178,6 @@ SAVE_FURNITURE{
         }
         ArraySet(array = $furnitures, index = $fIndex, value = DictionaryToTable(dict = $fDict))
     }
-    Test(" $obj1.lastInterFruId ", $obj1.lastInterFruId)
     If($obj1.lastInterFruId){
         DictionarySet(dict = $curHousedict, key = "lastInterFruId", value = $obj1.lastInterFruId)
     }
