@@ -7065,7 +7065,7 @@ STEP13_FINISH() -- 玩家点击装扮家后，None自由操作： 14
 --存档3： 指引玩家去游乐场 ，状态指引
 START_GUIDE_STEP14()--指引去游乐场 //存档3
 {
-    $uiList = ["priShop", "familyAlbum", "dressArchive", "party_list", "bag_g2020"]
+    $uiList = ["priShop", "familyAlbum", "dressArchive", "party_list", "bag_g2020", "goldShop"]
     Foreach(array = $uiList ,key = "ui"){
         OperationWindows(win = $ui, isOpen = false, player = $obj1)
     }
@@ -7193,6 +7193,12 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
     }Else{
         HideCloseGPS(player = $obj1, hide = false)
     }
+}
+--拿到礼物
+GIFT_GUIDE_OVER()
+{
+    AddItem(entity = $obj1, cfg = "myplugin/guide_gift", count = 1)
+    ShowRewardItemEffect(type = "Item", count = 1, fullName = "myplugin/guide_gift", player = $obj1)
 }
 
 --告诉玩家引导未完成
