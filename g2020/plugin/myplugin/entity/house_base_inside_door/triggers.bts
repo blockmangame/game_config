@@ -37,7 +37,6 @@ INTER_WITH_DOOR{
         Return()
     }
     
-    CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
     $house = GetMapVar(map = $map, key = "owner")
     If(not $house){
         $house = GetObjectVar(obj = $obj2, key = "house")

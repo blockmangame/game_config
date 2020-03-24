@@ -1297,32 +1297,45 @@ HOUSE_LOCK{
     }
 }
 
+FUNC_TO_KICK_PLAYER_AND_SHOW_TIP --params: insideDoor, notToClearRide
+{
+    $obj1.kickOut = true
+    If(not $notToClearRide) {
+        CallTrigger(object = $obj1, event = "PLAYER_CLEAR_RIDE")
+    }
+    CallTrigger(object = $insideDoor, obj1 = $insideDoor, obj2 = $obj1, event = "INTER_WITH_DOOR")
+    ShowTip(entity = $obj1, tipType = 2,textKey = "house_owner_lock_house_and_kick_you", keepTime = 40)
+}
+
 SURE_LOCK_HOUSE_AND_KICK_OTHERS{
     $house = GetObjectVar(obj = $obj1, key = "house")
     If($button == "right"){
         $insideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
-        $notCurHouseFamilyPlayer = {}
-        $allPlayerInThisHouse = GetMapPlayer(map = $insideMap)
-        $selfRideOn = GetRideOn(entity = $obj1)
+        $selfTeamId = GetEntityTeam(entity = $obj1)
         $insideDoor = GetObjectVar(obj = $house, key = "insideDoor")
-        Foreach(array = $allPlayerInThisHouse, key = "player"){
-            If(GetObjectID(object = $obj1) ~= GetObjectID(object = $player) and 
-                (0 == GetEntityTeam(entity = $player) or GetEntityTeam(entity = $player) ~= GetEntityTeam(entity = $obj1))){
-                -- CastSkill(skill = "/click", from = $player, packet = {targetID = GetObjectID(object = GetObjectVar(obj = $house, key = "insideDoor"))})
-                $player.kickOut = true
-                If($selfRideOn and GetObjectID(object = $selfRideOn) == GetObjectID(object = $player)){
-                    -- ClearRide(entity = $obj1)
+        If($obj1.createdTrolley) { --先踢出房主手推车上的非家人
+            $passengers = NewDictionary(GetPassengers(entity = $obj1.createdTrolley))
+            ForeachDictionary(dict = $passengers, keyName = "key", valueName = "objID") {
+                $player = GetObject(objID = $objID)
+                If($player ~= $obj1 and ($selfTeamId == 0 or GetEntityTeam(entity = $player) ~= $selfTeamId)) {
+                    CallTrigger(object = $player, event = "FUNC_TO_KICK_PLAYER_AND_SHOW_TIP", insideDoor = $insideDoor)
+                }
+            }
+        } ElseIf($obj1.useTrolley) { --再踢出房主所在手推车的主人（如果是非家人的话）
+            $trolley = GetRideOn(entity = $obj1)
+            $trolleyOwner = GetOwner(entity = $trolley)
+            If(IsPlayer(entity = $trolleyOwner) and ($selfTeamId == 0 or $selfTeamId ~= GetEntityTeam(entity = $trolleyOwner))) {
                     CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+                CallTrigger(object = $trolleyOwner, event = "FUNC_TO_KICK_PLAYER_AND_SHOW_TIP", insideDoor = $insideDoor, notToClearRide = true)
+            }
                 }
-                $playerRideOn = GetRideOn(entity = $player)
-                If($playerRideOn and GetConfigVar(obj = $playerRideOn, key = "base") == "fur_base"){
-                    -- ClearRide(entity = $player)
-                    CallTrigger(obj1 = $player, event = "PLAYER_CLEAR_RIDE")
-                }ElseIf($playerRideOn and GetObjectID(object = $obj1) == GetObjectID(object = $playerRideOn)){
-                    CallTrigger(obj1 = $player, event = "PLAYER_CLEAR_RIDE")
+        Foreach(array = GetMapPlayer(map = $insideMap), key = "player") { --再踢出推着手推车的非家人
+            If(not IsPlayer(entity = $player) or $obj1 == $player or GetEntityMap(entity = $player) ~= $insideMap or ($selfTeamId ~= 0 and $selfTeamId == GetEntityTeam(entity = $player)) or not $player.createdTrolley) { Continue() }
+            CallTrigger(object = $player, event = "FUNC_TO_KICK_PLAYER_AND_SHOW_TIP", insideDoor = $insideDoor, notToClearRide = true)
                 }
-                CallTrigger(object = $insideDoor, obj1 = $insideDoor, obj2 = $player, event = "INTER_WITH_DOOR")
-                ShowTip(entity = $player, tipType = 2,textKey = "house_owner_lock_house_and_kick_you", keepTime = 40)
+        Foreach(array = GetMapPlayer(map = $insideMap), key = "player") { --最后踢出剩余的非家人
+            If(IsPlayer(entity = $player) && $obj1 ~= $player && GetEntityMap(entity = $player) == $insideMap && ($selfTeamId == 0 || $selfTeamId ~= GetEntityTeam(entity = $player))) {
+                CallTrigger(object = $player, event = "FUNC_TO_KICK_PLAYER_AND_SHOW_TIP", insideDoor = $insideDoor)
             }
         } 
         StartTimer(object =$obj1, obj1 =$obj1, house = $house, isLock = true, textKey = "house_lock", time = 2, event = "LOCK_HOUSE_CONTENT")
