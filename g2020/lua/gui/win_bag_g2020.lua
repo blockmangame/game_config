@@ -514,6 +514,7 @@ function M:registerEvent()
 
     for index, item in pairs(self.tabItemList or {}) do
         self:subscribe(item, UIEvent.EventButtonClick, function()
+            self.itemsGrid:ResetPos()
             self:selectLeftTabItem(index)
         end)
     end
