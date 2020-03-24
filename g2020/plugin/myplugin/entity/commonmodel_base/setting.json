@@ -8,6 +8,45 @@
     "name": "",
     "canClick": true,
     "collision": true,
+    "interaction_object_choices":{
+        "aroundParams": {
+            "disableAutoHideText": true,
+            "radius": 60,
+            "startAngle": 0,
+            "endAngle": 360,
+            "enableTextBorder": true,
+            "widgetFileName": "widget_button_image_center",
+            "imageSize": {
+                "width": "60",
+                "height": "60"
+            }
+        },
+        "followParams": {
+            "resetWhenHide": true
+        }
+    },
+    "interactionUiFollowOffset":{
+        "1":{
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0
+        },
+        "2":{
+            "x": -2,
+            "y": 0.5,
+            "z": -2.5
+        },
+        "3":{
+            "x": 2,
+            "y": 0.5,
+            "z": 0
+        },
+        "4":{
+            "x": 0,
+            "y": 0.5,
+            "z": 0
+        }
+    },
     "ridePos": [
         {
             "/yaw": "index_1_camp1",
