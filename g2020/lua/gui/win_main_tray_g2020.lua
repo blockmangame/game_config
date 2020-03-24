@@ -99,7 +99,9 @@ function M:init()
 				interactionWithDriverButton(Me.objID, UIEvent.EventWindowTouchUp, "debark")
 				return
 			end
-
+            if not item or item:null() then
+                return
+            end
 			Me:setItemUse(item:tid(), item:slot(), false)
         end)
     end)

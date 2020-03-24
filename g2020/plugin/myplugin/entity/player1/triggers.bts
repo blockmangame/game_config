@@ -2059,10 +2059,17 @@ FUNC_STATE_RIDE_OPERATION --params: ride, isRideOff
     {
         Return()
     }
+    $target = nil
     If(IsPlayer(entity = $ride)) {
+        $target = $ride
         CallTrigger(object = $obj1, event = "FUNC_SYNC_STATES_TO_OTHERS", isAdd = not $isRideOff, needSyncPlayers = [$ride], excludeSelf = true)
         CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_DETAILS_TO_OTHERS", needSyncPlayers = [$ride], isRemoveTarget = $isRideOff)
         CallTrigger(object = $obj1, event = "FUNC_SYNC_STATE_PROGRESS_TO_OTHERS", target = $ride, isExecute = not $isRideOff)
+    } ElseIf(IsPlayer(entity = GetOwner(entity = $ride))) {
+        $target = GetOwner(entity = $ride)
+    }
+    If(not $isRideOff) {
+        CallTrigger(event = "FUNC_STATE_ADD_INTERACTLIST", entities = [$obj1, $target])
     }
     $event = $isRideOff and "FUNC_STATE_RELEASE_SUSPEND" or "FUNC_STATE_RELEASE"
     If($ride.cfg.releaseState)
@@ -2652,18 +2659,12 @@ INTERACTION_PICK
     }
 }
 
-INTERACTION_BABY_TROLLEY {
+INTERACTION_BABY_TROLLEY { --大人向小孩发起
     If($obj2.role == @adult && $obj1.role == @child) {
-        $trolley = $obj2.createdTrolley
-        If($trolley && ArraySize(array = GetPassengers(entity = $trolley)) < 2) {
-            CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
-            RideOn(entity = $obj1, ctrl = false, target = $obj2.createdTrolley, targetIndex = 3) --乘车人
-            CallTrigger(event = "FUNC_STATE_ADD_INTERACTLIST", entities = [$obj1, $obj2])
+        If(not $obj2.createdTrolley || ArraySize(array = GetPassengers(entity = $obj2.createdTrolley)) > 2) {
+            Return()
         }
-        ElseIf(not $trolley) {
-            $tipType = 2
-	        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "trolley_pls_equip")
-        }
+        CallTrigger(obj1 = $obj1, to = $obj2, from = $obj1, event = "USER_INTERACTION_ACTION", skillName = "myplugin/action_trolley")
     } Else {
         $tipType = 2
 	    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), tipType = $tipType, entity = $obj2, p1 = "action_role_not_matching_adult_child_and")
@@ -2741,10 +2742,9 @@ USER_INTERACTION_ACTION
     }
 
     CallTrigger(obj1 = $receiver, event = "PLAYER_CLEAR_RIDE")
-    If($promoter.interactionObjId)
-    {
+    If($promoter.interactionObjId) {
         CallTrigger(obj1 = $promoter, event = "ENTITY_REMOVE_INTERACTION")
-    } Else {
+    } ElseIf($skillName ~= "myplugin/action_trolley") { --如果是手推车的话就不解除发起方的原有交互(即：不解除发起方推着手推车)
         Dismount(entity = $promoter)
     }
 
@@ -2754,11 +2754,11 @@ USER_INTERACTION_ACTION
 ENTITY_JUMP {
     $ride = GetRideOn(entity = $obj1)
     If ($ride && not IsCameraMode(player = $obj1)){
-        CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
         If(GetOwner(entity = $ride) == $obj1 && GetConfigVar(obj = $ride, key = "driverJumpShiled"))
         {
             Return()
         }
+        CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
         Dismount(entity = $obj1)
     }
 }
@@ -2767,7 +2767,9 @@ ENTITY_REMOVE_INTERACTION {
     If($obj1.interactionObjId){
         $target = GetObject(objID = $obj1.interactionObjId)
         If($target && $target.interactionBuff) {
+            $target.notToClearRide = $target.createdTrolley and true or false --如果obj1的交互对象是推着手推车的，则取消target解除与手推车的交互
             RemoveEntityBuff(buff = $target.interactionBuff, entity = $target)
+            $target.notToClearRide = nil
         }
     }
 
@@ -5111,11 +5113,12 @@ EQUIP_BABY_TROLLEY --params: cfgPath
     {
         Return()
     }
-    If(not GetEntityOnGround(entity = $obj1))
-    {
-        ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", keepTime = 40)
-        Return()
-    }
+	-- 栋哥哥说去掉，怕以后加回去就先注释了
+    -- If(not GetEntityOnGround(entity = $obj1))
+    -- {
+    --     ShowTip(entity = $obj1, tipType = 2, textKey = "create_car_in_the_air", keepTime = 40)
+    --     Return()
+    -- }
 
     If($obj1.createdTrolley)
     {

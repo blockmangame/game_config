@@ -689,7 +689,6 @@ ENTITY_RIDE_ON {
         CallTrigger(object = $obj2, event = "FUNC_CHECK_SHOWN_DANCES_SKILL", shown = false)
         Return() 
     }
-    CallTrigger(event = "FUNC_STATE_ADD_INTERACTLIST", entities = [$obj1, $obj2])
 }
 REMOVE_ILL_BUFF
 {
