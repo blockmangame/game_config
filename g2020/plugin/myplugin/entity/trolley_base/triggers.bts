@@ -40,3 +40,14 @@ FUNC_REMOVE_KICK_KID_SKILL_BUTTON --params: player
         RemoveSkill(entity = $owner, name = GetConfigVar(obj = $obj1, key = "kick_kid_skill"))
     }
 }
+
+-- ENTITY_TOUCH_ALL{
+--     If(not $obj1.isCdTouchDoor and GetConfigVar(obj = $obj2, key = "base") == "house_base_inside_door"){
+--         CallTrigger(object = $obj2, obj1 = $obj2, obj2 = $obj1, event = "INTER_WITH_DOOR")
+--         $obj1.isCdTouchDoor = StartTimer(object =$obj1, obj1 =$obj1, isLock = false, time = 10, event = "UPDATE_TOUCH_DOOR_CD")
+--     }
+-- }
+
+-- UPDATE_TOUCH_DOOR_CD{
+--     $obj1.isCdTouchDoor = nil
+-- }

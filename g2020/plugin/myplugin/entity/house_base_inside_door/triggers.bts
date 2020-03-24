@@ -7,7 +7,7 @@ CREATE_DOOR_REGION{
     $map = GetEntityMap(entity = $obj1)
     $regionArea = Table(
         min = ArrayGet(array = $curBoundingBox, index = 2),
-        max = ComputeV3(op = "add", p1 = {x = -0.5, y = -0.5, z = -0.5}, p2 = ArrayGet(array = $curBoundingBox, index = 3))
+        max = ArrayGet(array = $curBoundingBox, index = 3)
     )
     $doorRegionCfg = GetConfigVar(obj = $obj1, key = "doorRegionCfg")
     $doorRegionKey = Concat(p1 = GetConfigVar(obj = $obj1, key = "doorRegionKey"), p2 = GetObjectID(object = $obj1))
@@ -33,7 +33,7 @@ INTER_WITH_DOOR{
         CallTrigger(object = $obj2, event = "CHECK_LEAVE_PARTY_FROM_DOOR")
         Return()
     }
-    If(not IsPlayer(entity = $obj2) or $obj2.isMoveDec) {
+    If((not IsPlayer(entity = $obj2) and not GetConfigVar(obj = $obj2, key = "base") == "trolley_base") or $obj2.isMoveDec) {
         Return()
     }
     

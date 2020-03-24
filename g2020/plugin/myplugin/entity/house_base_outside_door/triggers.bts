@@ -10,7 +10,7 @@ CREATE_DOOR_REGION{
     $map = GetEntityMap(entity = $obj1)
     $regionArea = Table(
         min = ArrayGet(array = $curBoundingBox, index = 2),
-        max = ComputeV3(op = "add", p1 = {x = -0.5, y = -0.5, z = -0.5}, p2 = ArrayGet(array = $curBoundingBox, index = 3))
+        max = ArrayGet(array = $curBoundingBox, index = 3)
     )
     $doorRegionCfg = GetConfigVar(obj = $obj1, key = "doorRegionCfg")
     $doorRegionKey = Concat(p1 = GetConfigVar(obj = $obj1, key = "doorRegionKey"), p2 = GetObjectID(object = $obj1))
@@ -46,7 +46,7 @@ ENTITY_ENTER_DOOR_REGION{
     }
     $ownerPlayer = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "owner")
     $isLock = GetObjectVar(obj = GetObjectVar(obj = $obj1, key = "house"), key = "isLock")
-    If(not IsPlayer(entity = $entity) 
+    If((not IsPlayer(entity = $entity) and not GetConfigVar(obj = $entity, key = "base") == "trolley_base")
         or ($isLock and GetObjectID(object = $ownerPlayer) ~= GetObjectID(object = $entity))
         or ($isLock and $ownerPlayer.teamId ~= $entity.teamId)){
         If(IsPlayer(entity = $entity)){
