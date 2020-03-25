@@ -114,7 +114,7 @@ function M:createCell(args, objID)
         local rate = getRate(usedTime, totalTime)
         progress.pgui:SetProgress(rate)
         _stateReleasingAnimationEvent(objID, pgName, true)
-        if rate == 1 then
+        if rate == 1 or not World.CurWorld:getEntity(objID) then
             self:removeCell(pgName, objID)
             return false
         end
