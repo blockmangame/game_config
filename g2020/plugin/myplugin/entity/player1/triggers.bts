@@ -4744,9 +4744,11 @@ FINISH_AWARD(){ --完成打工的奖励
     If(not $taskItem){
         $taskItem = SearchBagItem(entity = $obj1, key = "newTaskitem", val = true)
     }
+    $obj1.taskConsumeItem = true
     If($taskItem){
         ConsumeItem(item = $taskItem, num = 1)
     }
+    $obj1.taskConsumeItem = false
     $obj1.lastTaskKey = $obj1.taskKey
     $obj1.taskNpc = nil
     $obj1.taskKey = nil
