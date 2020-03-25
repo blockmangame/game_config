@@ -430,8 +430,8 @@ function M:canEquip(item)
 		end
 	end
 	if item:cfg().typeIndex == 3 then
-		local name = Me.map and Me.map.name
-		if name ~= "map001" or name ~= "map002" then
+        local name = Me.map and Me.map.name
+		if name ~= "map001" and name ~= "map002" then
 			return 3
 		end
 	end
