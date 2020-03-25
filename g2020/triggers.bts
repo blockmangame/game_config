@@ -278,7 +278,7 @@ CHANGE_PLAYER_SCALE_ADULT
     }
     CallTrigger(obj1 = $obj1, event = "ADD_SVIP_BUFF", object = $obj1)
     $obj1.openCardShop = false
-    CallTrigger(obj1 = $obj1, event = "UPDATE_POS_WHILE_REDEON_TRO", object = $obj1)
+    CallTrigger(obj1 = $obj1, event = "UPDATE_POS_WHILE_IN_INSIDE_REGION", object = $obj1)
 }
 
 CHANGE_PLAYER_SCALE_CHILD
@@ -319,7 +319,7 @@ CHANGE_PLAYER_SCALE_CHILD
     }
     CallTrigger(obj1 = $obj1, event = "ADD_SVIP_BUFF", object = $obj1)
     $obj1.openCardShop = false
-    CallTrigger(obj1 = $obj1, event = "UPDATE_POS_WHILE_REDEON_TRO", object = $obj1)
+    CallTrigger(obj1 = $obj1, event = "UPDATE_POS_WHILE_IN_INSIDE_REGION", object = $obj1)
 }
 
 FUNC_CLOSE_GPS --params: destination[, hideTip]

@@ -1788,15 +1788,15 @@ ROTATION_WHEN_RIDE_ON{
     SetEntityRoll(entity = $obj1, rotationYaw = GetEntityRoll(entity = $obj2))
 }
 
-UPDATE_POS_WHILE_REDEON_TRO{
+UPDATE_POS_WHILE_IN_INSIDE_REGION{
     $rideOn = GetRideOn(entity = $obj1)
-    $tp = GetEntityPosition(entity = $obj1)
-    If(($obj1.curInsideRegion or $obj1.lastInsideRegion) and $rideOn and GetConfigVar(obj = $rideOn, key = "base") == "trolley_base"){
+    $tp = GetEntityPosition(entity = $rideOn or $obj1)
+    If($obj1.curInsideRegion or $obj1.lastInsideRegion){
         $regionCenter = GetRegionCenter(region = $obj1.curInsideRegion or $obj1.lastInsideRegion)
         $addV3 = {
-            x = GetPosX(pos = $tp) - GetPosX(pos = $regionCenter) > 0 and -1 or 1,
+            x = GetPosX(pos = $tp) - GetPosX(pos = $regionCenter) > 0 and -1.5 or 1.5,
             y = 0,
-            z = GetPosZ(pos = $tp) - GetPosZ(pos = $regionCenter) > 0 and -1 or 1
+            z = GetPosZ(pos = $tp) - GetPosZ(pos = $regionCenter) > 0 and -1.5 or 1.5
         }
         $tp = ComputeV3(op = "add", p1 = $tp, p2 = $addV3)
     }

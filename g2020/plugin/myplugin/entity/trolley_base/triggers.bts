@@ -3,6 +3,7 @@ ENTITY_RIDE_ON
     $obj2.useTrolley = true
     CallTrigger(object = $obj1, event = "FUNC_ADD_KICK_KID_SKILL_BUTTON", player = $obj2)
     CallTrigger(object = $obj1, event = "FUNC_STATE_SYNC_TO_RIDER_AND_PASSENGERS", isRideOn = true, player = $obj2)
+    CallTrigger(obj1 = $obj2, event = "UPDATE_POS_WHILE_IN_INSIDE_REGION", object = $obj2)
 }
 
 ENTITY_RIDE_OFF
