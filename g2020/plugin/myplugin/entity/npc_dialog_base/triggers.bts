@@ -10,24 +10,20 @@ SHOW_CONVERSATION_UI
     }ElseIf($fullName ~= "myplugin/npc27"){
         OpenConversation(entity = $obj2, talkList = $talkList, optionList = $optionList, optionNpc = $optionNpc)
     }ElseIf($fullName == "myplugin/npc27"){
-        If($obj2.guideStep == @GuideEnd){
+        If($obj2.guideStep ~= @GuideGift){
             OpenConversation(entity = $obj2, talkList = $talkList, optionList = $optionList, optionNpc = $optionNpc)
         }Else{
-            If($obj2.guideStep == @GuideGift){
-                $obj2.guideStep = @GuideEnd
-                $obj2.guideWork = true
-                $obj2.guideParty = true
-                $obj2.goGiftGps = nil
-                HideCloseGPS(player = $obj2, show = true)
-                CallTrigger(object = $obj2, event = "FUNC_SET_GUIDE_TARGET")
-                UpdateUIData(player = $obj2, ui = "mainExtension", data = {
-                    guideEnd = $obj2.guideStep == @GuideEnd,
-                    guideWork = $obj2.guideWork,
-                    guideParty = $obj2.guideParty
-                })
-            }Else{
-                $obj2.guideDoneGift = true
-            }
+            $obj2.guideStep = @GuideEnd
+            $obj2.guideWork = true
+            $obj2.guideParty = true
+            $obj2.goGiftGps = nil
+            HideCloseGPS(player = $obj2, show = true)
+            CallTrigger(object = $obj2, event = "FUNC_SET_GUIDE_TARGET")
+            UpdateUIData(player = $obj2, ui = "mainExtension", data = {
+                guideEnd = $obj2.guideStep == @GuideEnd,
+                guideWork = $obj2.guideWork,
+                guideParty = $obj2.guideParty
+            })
             $guideTalk =  [
                 {
                     msg = "guide.I.have.a.gift.give.you",

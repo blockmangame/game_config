@@ -2195,20 +2195,7 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     }
     --游乐场指引完成
     If($obj1.guideStep == @PlayGoGround){--存档3，完成
-        $obj1.guideStep = @PlayEnd
-        If($obj1.guideDoneGift){ -- 如果已经完成了礼品
-            $obj1.guideStep = @GuideEnd
-            $obj1.guideWork = true
-            $obj1.guideParty = true
-            HideCloseGPS(player = $obj1, show = true)
-            UpdateUIData(player = $obj1, ui = "mainExtension", data = {
-                guideEnd = $obj1.guideStep == @GuideEnd,
-                guideWork = $obj1.guideWork,
-                guideParty = $obj1.guideParty
-            })
-        }Else{
-            $obj1.guideStep = @GuideGift
-        }
+        $obj1.guideStep = @GuideGift
     }
     CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
 
@@ -5871,6 +5858,10 @@ CROSS_SERVER_VISIT(debug = false){
     CrossServerVisitPlayerByUserId(targetUserId = $obj1.targetUserId, player = $obj1)
 }
 PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
+    If($obj1.guideStep ~= @GuideEnd){
+        CallTrigger(event = "TIP_GUIDE_UNDONE", object = $obj1)
+        Return()
+    }
     $targetUserId = $visitTargetUserId or $targetUserId or $obj1.visitTargetUserId
     $obj1.targetUserId = $targetUserId
     $contentDict = NewDictionary($content)
@@ -5922,6 +5913,10 @@ PLAYER_ON_VISIT_OTHER_SERVER(debug = false){
     StartTimer(time = 1, object = $obj1, obj1 = $obj1, event = "SHOW_TITLE_BAR")
 }
 PLAYER_ON_VISIT {--same server
+    If($obj1.guideStep ~= @GuideEnd){
+        CallTrigger(event = "TIP_GUIDE_UNDONE", object = $obj1)
+        Return()
+    }
     If(not $target){
         $target = $visitTargetObjectId and GetObject(objID = $visitTargetObjectId) or $obj2 or $obj1.visitTarget
     }
@@ -7081,7 +7076,11 @@ STEP13_FINISH() -- 玩家点击装扮家后，None自由操作： 14
 --存档3： 指引玩家去游乐场 ，状态指引
 START_GUIDE_STEP14()--指引去游乐场 //存档3
 {
-    $uiList = ["priShop", "familyAlbum", "dressArchive", "party_list", "bag_g2020", "goldShop"]
+    $uiList = [
+        "priShop", "familyAlbum", "dressArchive", 
+        "party_list", "bag_g2020", "goldShop", 
+        "singleTeam", "friend"
+    ]
     Foreach(array = $uiList ,key = "ui"){
         OperationWindows(win = $ui, isOpen = false, player = $obj1)
     }
@@ -7200,7 +7199,7 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
     {
         $obj1.curGoStep = 3
         CallTrigger(event = "START_GUIDE_STEP14", object = $obj1)
-    }ElseIf($step == @GuideGift and not $obj1.guideDoneGift and $obj1.curGoStep ~= 4 and not $owner){
+    }ElseIf($step == @GuideGift and $obj1.curGoStep ~= 4 and not $owner){
         $obj1.curGoStep = 4
         CallTrigger(event = "GUIDE_GIFT", object = $obj1)
     }
