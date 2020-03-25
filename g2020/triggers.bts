@@ -1095,6 +1095,11 @@ TRADE_CLOSE()
     $obj1.trading = false
     $obj2.trading = false
 }
+TRADE_CHANGE_ITEM()
+{
+    ResetTrade(tradeID = $tradeID)
+}
+
 --交易检测，
 TRADE_CONFIRM()
 {

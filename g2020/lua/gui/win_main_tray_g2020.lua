@@ -101,8 +101,12 @@ function M:init()
 			end
             if not item or item:null() then
                 return
-            end
-			Me:setItemUse(item:tid(), item:slot(), false)
+			end
+			if item._type == Define.ITEM_OBJ_TYPE_SETTLED then
+				Me:setItemUse(item:tid(), item:slot(), false)
+			else
+				Me:dismount()
+			end
         end)
     end)
 end

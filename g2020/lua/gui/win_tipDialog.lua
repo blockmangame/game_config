@@ -320,7 +320,7 @@ function M:showReward(reward, time)
         local icon_path = r.icon
         local type = r.data.type
         local fullName = r.data.name
-        local icon = icon_path or ResLoader:getIcon(type, fullName) or "set:ranch_main.json image:ranch_task_help"
+        local icon = icon_path or ResLoader:getIcon(type, fullName) or "set:other.json image:task_help"
 
         itemImage:SetArea({ 0, 0 }, { 0, 0 }, { 1, 0 }, { 1, 0 })
         itemImage:SetImage(icon)

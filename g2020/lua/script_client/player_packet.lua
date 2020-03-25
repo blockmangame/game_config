@@ -24,7 +24,7 @@ function handles:UpdateEntityDate(packet)
 end
 
 function handles:SyncItemUse(packet)
-	self:setItemUse(packet.tid, packet.slot, packet.isUse, true)
+	self:setItemUse(packet.tid, packet.slot, packet.isUse, true, packet.mustUpdateBag)
 end
 
 function handles:ShowSingleTeamUI(packet)

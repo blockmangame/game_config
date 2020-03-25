@@ -34,9 +34,7 @@ SHOW_CONVERSATION_UI
                     npc = "myplugin/npc27"
                 }
             ]
-            AddItem(entity = $obj2, cfg = "myplugin/guide_gift", count = 1)
-            ShowRewardItemEffect(type = "Item", count = 1, fullName = "myplugin/guide_gift", player = $obj2)
-            OpenConversation(entity = $obj2, talkList = $guideTalk, optionList = [], optionNpc = $optionNpc)
+            OpenConversation(entity = $obj2, talkList = $guideTalk, optionList = [{triggerName = "GIFT_GUIDE_OVER" }], optionNpc = $optionNpc)
         }
     }
 }

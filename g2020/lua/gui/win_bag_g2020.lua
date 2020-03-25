@@ -384,6 +384,9 @@ function M:fetchAllBagItem()
 						return
 					elseif canEquipStatus == 2 then
 						return
+					elseif canEquipStatus == 3 then
+						Client.ShowTip(1, Lang:toText("disable_create_car_in_the_house"), 20)
+						return
 					end
 					if self.equipUI then
 						self.equipUI:SetVisible(false)
@@ -424,6 +427,12 @@ function M:canEquip(item)
 			return 2 
 		else
 			canEquipCarTimeEnd = now + 15
+		end
+	end
+	if item:cfg().typeIndex == 3 then
+        local name = Me.map and Me.map.name
+		if name ~= "map001" and name ~= "map002" then
+			return 3
 		end
 	end
 	return 0
@@ -523,9 +532,9 @@ function M:registerEvent()
         self:setItemDescUI(false)
     end)
 
-	Lib.subscribeEvent(Event.EVENT_HAND_ITEM_CHANGE, function()
-		if not self.curDelStatus then
-			--self:fetchAllBagItem()
+	Lib.subscribeEvent(Event.EVENT_HAND_ITEM_CHANGE, function(must)
+		if not self.curDelStatus and must then
+			self:fetchAllBagItem()
 		end
     end)
     

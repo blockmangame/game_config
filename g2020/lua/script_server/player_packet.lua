@@ -105,3 +105,7 @@ end
 function handles:GMGuide(packet)
 	Trigger.CheckTriggers(nil, "GM_CLOSE_GUIDE", {obj1 = self, reset = packet.reset, close = packet.close})
 end
+
+function handles:Dismount(packet)
+    self:rideOn()
+end
