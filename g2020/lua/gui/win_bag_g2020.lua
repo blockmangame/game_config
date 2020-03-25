@@ -409,17 +409,33 @@ function M:fetchAllBagItem()
     end
 end
 
+function M:isDrive()
+	local entity = Me
+	if entity and entity.rideOnId then
+		local rideEntity = entity.world:getEntity(entity.rideOnId)
+		local rideCfg = rideEntity and rideEntity:cfg()
+		if rideCfg and rideCfg.carMove then
+			return true
+		end
+		local rideItem = rideCfg and rideCfg.rideItem
+		if rideItem then
+			local item = Item.CreateItem(rideItem, 1)
+			if item and item:cfg().typeIndex == 3 then
+				return true
+			end
+		end
+	end
+	return false
+end
+
 function M:canEquip(item)
 	local isEquip = self:isItemEquip(item)
 	if isEquip then
 		return 0
 	end
     local world = Me.world
-	if Me.rideOnId then
-		local old = world:getEntity(Me.rideOnId)
-		if old and old:cfg().carMove and item and item:cfg().typeIndex ~= 3 then
-			return 1
-		end
+	if self:isDrive() and item and item:cfg().typeIndex ~= 3 then
+		return 1
 	end
 	if item:cfg().typeIndex == 3 or item:cfg().typeIndex == 1 then
 		local now = World.Now()

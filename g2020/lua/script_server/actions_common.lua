@@ -37,9 +37,17 @@ end
 function Actions.IsDrive(data, params, context)
 	local entity = params.entity
 	if entity and entity.rideOnId then
-		local old = entity.world:getEntity(entity.rideOnId)
-		if old and old:cfg().carMove then
+		local rideEntity = entity.world:getEntity(entity.rideOnId)
+		local rideCfg = rideEntity and rideEntity:cfg()
+		if rideCfg and rideCfg.carMove then
 			return true
+		end
+		local rideItem = rideCfg and rideCfg.rideItem
+		if rideItem then
+			local item = Item.CreateItem(rideItem, 1)
+			if item and item:cfg().typeIndex == 3 then
+				return true
+			end
 		end
 	end
 	return false

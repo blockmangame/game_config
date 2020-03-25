@@ -5360,7 +5360,7 @@ TRAY_PICK_ITEM {
 	If($typeIndex ~= 3)
 	{
 		--SetHandItem(player = $obj1)
-		RemoveEntityTypeBuff(entity = $obj1, key = "type", value = "HandBuff")
+		--RemoveEntityTypeBuff(entity = $obj1, key = "type", value = "HandBuff")
 	}
 }
 
