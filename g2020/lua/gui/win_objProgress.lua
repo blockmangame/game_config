@@ -1,3 +1,4 @@
+M.NotDialogWnd = true
 local progressList = {}
 local paramsOffsetY = 1.95
 local specs = {

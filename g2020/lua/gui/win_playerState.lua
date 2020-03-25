@@ -1,3 +1,4 @@
+M.NotDialogWnd = true
 local main = {}
 local states = {}
 local close = {}

@@ -1,3 +1,4 @@
+M.NotDialogWnd = true
 local setting = require "common.setting"
 local trigger
 local cfg = {}
