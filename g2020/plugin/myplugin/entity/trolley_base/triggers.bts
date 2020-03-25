@@ -1,5 +1,6 @@
 ENTITY_RIDE_ON
 {
+    $obj1.playerOwner = $obj2
     $obj2.useTrolley = true
     CallTrigger(object = $obj1, event = "FUNC_ADD_KICK_KID_SKILL_BUTTON", player = $obj2)
     CallTrigger(object = $obj1, event = "FUNC_STATE_SYNC_TO_RIDER_AND_PASSENGERS", isRideOn = true, player = $obj2)
@@ -8,6 +9,7 @@ ENTITY_RIDE_ON
 
 ENTITY_RIDE_OFF
 {
+    $obj1.playerOwner = nil
     $obj2.useTrolley = false
     CallTrigger(object = $obj2, event = "DEMOUNT_BABY_TROLLEY")
     CallTrigger(object = $obj1, event = "FUNC_REMOVE_KICK_KID_SKILL_BUTTON", player = $obj2)
