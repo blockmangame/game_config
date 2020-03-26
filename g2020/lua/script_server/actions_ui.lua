@@ -293,3 +293,31 @@ end
 function Actions.UseDressArchive(data, params, context)
     params.player:sendPacket({pid = "UseDressArchive", index = params.index})
 end
+
+function Actions.ShowBubbleMsg(data, params, context)
+    local entity = params.entity
+    if not entity then
+        return
+    end
+
+    local hide = params.hide
+    local contents = params.contents or {}
+    local txt = contents.text or {}
+    entity:sendPacketToTracking({
+        pid = "ShowBubbleMsg",
+        objID = entity.objID,
+        hide = hide,
+        contents = {
+            text = {
+                params.textKey or txt.textKey or "",
+                params.textP1 or txt.textP1 or "",
+                params.textP2 or txt.textP2 or "",
+                params.textP3 or txt.textP3 or "",
+                params.textP4 or txt.textP4 or "",
+                params.textP5 or txt.text5P or ""
+            },
+            image1 = contents.image1 or {},
+            image2 = contents.image2 or {},
+        },
+    }, true)
+end
