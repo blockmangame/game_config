@@ -6097,6 +6097,7 @@ DATA_REPORT_NORMAL_LOGOUT(){
 
     $obj1.createPartyCountPerGame = 0
     $obj1.joinPartyCountPerGame = 0
+    $obj1.partyInviteAgree = 0
 }
 DATA_REPORT_JUMP_SERVER_SUCCESS{
     If($obj1.jumpSeverToSpecial or $obj1.jumpSeverToNormal){
