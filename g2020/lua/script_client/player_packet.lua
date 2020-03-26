@@ -203,3 +203,13 @@ end
 function handles:UpdateEntityEditContainer2(packet)
 	Lib.emitEvent(Event.EVENT_UI_EDIT_UPDATE_EDIT_CONTAINER_2, packet.objID, packet.show)
 end
+
+function handles:setGuidePosition(packet)
+    self:setGuidePosition(packet.pos)
+	Lib.emitEvent(Event.EVENT_GUIDE_POSITION_CHANGE, packet.pos)
+end
+
+function handles:setGuideTarget(packet)
+    self:setGuideTarget(packet.pos, packet.guideTexture or "guide_arrow.png", packet.guideSpeed or 1)
+    Lib.emitEvent(Event.EVENT_GUIDE_POSITION_CHANGE, packet.pos)
+end
