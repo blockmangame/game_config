@@ -53,6 +53,28 @@ function UI:hideOpenedWnd(excluded)
     end
 end
 
+function UI:closeHeadWnd(objID)
+	local key = "*head_" .. objID
+
+	local window
+	if type(key) == "string" then
+		window = self._windows[key]
+	end
+
+    if not window then
+        return
+    end
+
+	self._windows[key]:onClose()
+	self._windows[key] = nil
+    GUISystem.instance:RemoveHeadWindow(objID)
+
+    local entity = World.CurWorld:getEntity(objID)
+    if entity then
+        entity:updateFamilyIdentity()
+    end
+end
+
 Lib.subscribeEvent(Event.EVENT_OPEN_DRESS_ARCHIVE, function(isUpdateData)
     UI:openWnd("dressArchive", isUpdateData)
 end)

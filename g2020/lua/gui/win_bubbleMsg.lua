@@ -171,13 +171,14 @@ function M:setRootArea()
     self._root:SetArea(area.x, area.y, size.width, size.height)
 end
 
-function M:setAutoClose()
+function M:setAutoClose(objID)
     local usedTime = 0
     self.cdTimer = World.Timer(20, function()
         usedTime = usedTime + 20
         if usedTime >= closeTime then
             self.lines = nil
             self._root:SetVisible(false)
+            UI:closeHeadWnd(objID)
             return false
         end
         return true
@@ -206,7 +207,7 @@ function M:onOpen(packet)
     self:setMsgText(Lang:toText(msg))
     self:setImageGather(image2Gather)
     self:setRootArea()
-    self:setAutoClose()
+    self:setAutoClose(packet.objID)
 end
 
 function M:onClose()
