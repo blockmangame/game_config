@@ -49,7 +49,7 @@ RIDE_ON
         }
         Else
         {
-            CallTrigger(obj1 = $obj2, event = "PLAYER_CLEAR_RIDE")
+            ClearRide(entity = $obj2)
             RideOn(entity = $obj2, target = $obj1, targetIndex = $targetIndex)
         }
         StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "CLAC_IS_ON_BLOCK_RIDE_FILED")
@@ -66,7 +66,7 @@ ADD_TARGET_ATTACH_POINT_INDEX_BUFF{
 RIDE_ON_CAR
 {
     CallTrigger(object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "ADD_TARGET_ATTACH_POINT_INDEX_BUFF")
-    CallTrigger(obj1 = $obj2, event = "PLAYER_CLEAR_RIDE")
+    ClearRide(entity = $obj2)
     RideOn(entity = $obj2, target = $obj1, targetIndex = $targetIndex)
     StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "CLAC_IS_ON_BLOCK_RIDE_FILED")
 }

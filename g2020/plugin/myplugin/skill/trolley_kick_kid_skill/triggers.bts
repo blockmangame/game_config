@@ -6,7 +6,7 @@ SKILL_CAST
     ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val") {
         $entity = GetObject(objID = $val)
         If($entity ~= $obj1 && IsPlayer(entity = $entity)) {
-            CallTrigger(object = $entity, event = "ENTITY_REMOVE_INTERACTION")
+            ClearRide(entity = $entity)
         }
     }
 }

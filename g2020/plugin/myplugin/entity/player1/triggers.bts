@@ -251,7 +251,7 @@ GOTO_INSIDE_HOUSE{
 }
 
 ENTITY_DIE{
-	CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
+    ClearRide(entity = $obj1)
     $house = $obj1.house
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     $yaw = 0
@@ -1316,7 +1316,7 @@ FUNC_TO_KICK_PLAYER_AND_SHOW_TIP --params: insideDoor, notToClearRide
 {
     $obj1.kickOut = true
     If(not $notToClearRide) {
-        CallTrigger(object = $obj1, event = "PLAYER_CLEAR_RIDE")
+        ClearRide(entity = $obj1)
     }
     CallTrigger(object = $insideDoor, obj1 = $insideDoor, obj2 = $obj1, event = "INTER_WITH_DOOR")
     ShowTip(entity = $obj1, tipType = 2,textKey = "house_owner_lock_house_and_kick_you", keepTime = 40)
@@ -1340,7 +1340,7 @@ SURE_LOCK_HOUSE_AND_KICK_OTHERS{
             $trolley = GetRideOn(entity = $obj1)
             $trolleyOwner = GetOwner(entity = $trolley)
             If(IsPlayer(entity = $trolleyOwner) and ($selfTeamId == 0 or $selfTeamId ~= GetEntityTeam(entity = $trolleyOwner))) {
-                    CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+                    ClearRide(entity = $obj1)
                 CallTrigger(object = $trolleyOwner, event = "FUNC_TO_KICK_PLAYER_AND_SHOW_TIP", insideDoor = $insideDoor, notToClearRide = true)
             }
                 }
@@ -2752,11 +2752,9 @@ USER_INTERACTION_ACTION
         Return()
     }
 
-    CallTrigger(obj1 = $receiver, event = "PLAYER_CLEAR_RIDE")
-    If($promoter.interactionObjId) {
-        CallTrigger(obj1 = $promoter, event = "ENTITY_REMOVE_INTERACTION")
-    } ElseIf($skillName ~= "myplugin/action_trolley") { --如果是手推车的话就不解除发起方的原有交互(即：不解除发起方推着手推车)
-        Dismount(entity = $promoter)
+    ClearRide(entity = $receiver)
+    If($skillName ~= "myplugin/action_trolley") {
+        ClearRide(entity = $promoter)
     }
 
     CastSkill(skill = $skillName, from = $from, packet = {targetID = GetObjectID(object = $to)})
@@ -2769,8 +2767,7 @@ ENTITY_JUMP {
         {
             Return()
         }
-        CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
-        Dismount(entity = $obj1)
+        ClearRide(entity = $obj1)
     }
 }
 
@@ -2778,9 +2775,7 @@ ENTITY_REMOVE_INTERACTION {
     If($obj1.interactionObjId){
         $target = GetObject(objID = $obj1.interactionObjId)
         If($target && $target.interactionBuff) {
-            $target.notToClearRide = $target.createdTrolley and true or false --如果obj1的交互对象是推着手推车的，则取消target解除与手推车的交互
             RemoveEntityBuff(buff = $target.interactionBuff, entity = $target)
-            $target.notToClearRide = nil
         }
     }
 
@@ -5053,7 +5048,7 @@ EQUIP_CAR {
     {
         CallTrigger(object = $obj1, event = "TAKEOFF_EQUIP_CAR")
     }
-    CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+    ClearRide(entity = $obj1)
     $pos = GetEntityPosition(entity = $obj1)
     $newPos = ComputeV3(op = "add", p1= $pos, p2 = {x = 0, y = 2, z = 0})
     $yaw = GetEntityYaw(entity = $obj1)
@@ -5142,7 +5137,7 @@ EQUIP_BABY_TROLLEY --params: cfgPath
     If($trolley)
     {
         $trolley.role = nil
-        CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+        ClearRide(entity = $obj1)
         $obj1.trolleyBuff = AddEntityBuff(entity = $obj1, cfg = GetConfigVar(obj = $trolley, key = "attachBuff"))
         SetObjectVar(obj = $obj1, key = "createdTrolley", value = $trolley)
         CallTrigger(object = $obj1, event = "CHANGE_BABY_TROLLEY_SCALE")
@@ -5942,7 +5937,7 @@ PLAYER_ON_VISIT {--same server
         If($isInHouse and $obj1.teleMap ~= GetEntityMap(entity = $obj1)){
             ShowTitleBarPage(entity = $obj1, closeWin = true)
         }
-        CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+        ClearRide(entity = $obj1)
         SetEntityPosition(map = $obj1.teleMap, entity = $obj1, pos = $obj1.telePos)
         $obj1.teleMap = nil
         $obj1.telePos = nil
@@ -6533,7 +6528,7 @@ SHOW_PALETTE_HELP
 }
 
 PLAYER_CLEAR_RIDE
-{
+{   ----废弃中............
     CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     ClearRide(entity = $obj1)
 }
