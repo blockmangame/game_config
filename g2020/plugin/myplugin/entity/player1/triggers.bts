@@ -598,8 +598,6 @@ ENTITY_LEAVE_DATA_REPORT{
     CallTrigger(object = $obj1, event = "DATA_REPORT_ADD_FRIEND")
     -- 统计玩家下线时派对邀请相关
     CallTrigger(object = $obj1, event = "DATA_REPORT_PARTY_INVITE")
-    -- 统计玩家下线时派对操作总数相关
-    CallTrigger(object = $obj1, event = "DATA_REPORT_PARTY_ALL_GAME")
     -- 统计玩家正常下线时单个游戏相关(普通下线而不是主动跳转)
     CallTrigger(object = $obj1, event = "DATA_REPORT_NORMAL_LOGOUT")
     -- 统计玩家跨服情况 成功上报
@@ -6083,22 +6081,12 @@ LEAVE_PARTY_SUCCESS(debug = false){
         ReenterGame(player = $obj1)
     }
 }
-DATA_REPORT_PARTY_ALL_GAME{
-    -- Test(msg = "DATA_REPORT_PARTY_ALL_GAME", createPartyCount = $obj1.createPartyCount, joinPartyCount = $obj1.joinPartyCount)
-
-    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.createPartyCount, array = [0, 9, 19, 49, 99, 199,  499, 999, 1999, 4999, 9999, 10000])
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:create:sum", @rangeBoundary])
-
-    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.joinPartyCount, array = [0, 9, 19, 49, 99, 199,  499, 999, 1999, 4999, 9999, 10000])
-    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:join:sum", @rangeBoundary])
-}
 DATA_REPORT_NORMAL_LOGOUT(){
     If($obj1.jumpSeverToSpecial or $obj1.jumpSeverToNormal){
         Return()
     }
 
     --no jump server action
-    -- Test(msg = "DATA_REPORT_NORMAL_LOGOUT", createPartyCountPerGame = $obj1.createPartyCountPerGame, joinPartyCountPerGame = $obj1.joinPartyCountPerGame, partyInviteAgree = $obj1.partyInviteAgree)
 
     CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.partyInviteAgree, array = [0, 2, 5, 10, 15, 20, 21])
     GameAnalyticsCustomEvent(player = $obj1, parts = ["player:party:agree", @rangeBoundary])
@@ -6113,6 +6101,12 @@ DATA_REPORT_NORMAL_LOGOUT(){
     $obj1.createPartyCountPerGame = 0
     $obj1.joinPartyCountPerGame = 0
     $obj1.partyInviteAgree = 0
+
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.createPartyCount, array = [0, 9, 19, 49, 99, 199,  499, 999, 1999, 4999, 9999, 10000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:create:sum", @rangeBoundary])
+
+    CallTrigger(event = "SET_RANGE_BOUNDARY", num = $obj1.joinPartyCount, array = [0, 9, 19, 49, 99, 199,  499, 999, 1999, 4999, 9999, 10000])
+    GameAnalyticsCustomEvent(player = $obj1, parts = ["party:join:sum", @rangeBoundary])
 }
 DATA_REPORT_JUMP_SERVER_SUCCESS{
     If($obj1.jumpSeverToSpecial or $obj1.jumpSeverToNormal){
