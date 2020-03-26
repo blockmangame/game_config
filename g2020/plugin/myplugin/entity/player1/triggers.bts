@@ -7079,7 +7079,7 @@ START_GUIDE_STEP14()--指引去游乐场 //存档3
     $uiList = [
         "priShop", "familyAlbum", "dressArchive", 
         "party_list", "bag_g2020", "goldShop", 
-        "singleTeam", "friend"
+        "singleTeam", "friend", "dressStore"
     ]
     Foreach(array = $uiList ,key = "ui"){
         OperationWindows(win = $ui, isOpen = false, player = $obj1)
