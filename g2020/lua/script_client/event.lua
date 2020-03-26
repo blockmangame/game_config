@@ -30,6 +30,7 @@ local Events = {
     "EVENT_RIDE_ON_FURNITURE_BY_INDEX",
     "EVENT_UI_EDIT_UPDATE_EDIT_CONTAINER_2",
     "EVENT_GUIDE_POSITION_CHANGE",
+    "EVENT_SHOW_BUBBLE_MSG"
 }
 
 for _, name in pairs(Events) do

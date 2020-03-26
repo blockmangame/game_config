@@ -79,3 +79,11 @@ end)
 Lib.subscribeEvent(Event.EVENT_GUIDE_GM, function(packet)
     Me:sendPacket(packet)
 end)
+
+Lib.subscribeEvent(Event.EVENT_SHOW_BUBBLE_MSG, function(packet)
+    if packet.hide then
+        UI:closeHeadWnd(packet.objID)
+    else
+        UI:openHeadWnd(packet.objID, "bubbleMsg", 5, 5, packet)
+    end
+end)

@@ -213,3 +213,11 @@ function handles:setGuideTarget(packet)
     self:setGuideTarget(packet.pos, packet.guideTexture or "guide_arrow.png", packet.guideSpeed or 1)
     Lib.emitEvent(Event.EVENT_GUIDE_POSITION_CHANGE, packet.pos)
 end
+
+function handles:ShowBubbleMsg(packet)
+    local entity = World.CurWorld:getEntity(packet.objID)
+    if not entity then
+        return
+    end
+    Lib.emitEvent(Event.EVENT_SHOW_BUBBLE_MSG, packet)
+end
