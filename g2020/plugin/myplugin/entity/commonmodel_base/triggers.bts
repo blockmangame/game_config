@@ -10,7 +10,6 @@ TEST_SHOW_NEW_UI {
 
 FUR_ENTITY_RIDE_ON
 {
-    CallTrigger(obj1 = $me, event = "ENTITY_REMOVE_INTERACTION")
     ClearRide(entity = $me)
     $targetAttachPointIndexBuff = GetConfigVar(obj = $obj1, key = $me.role == @adult and "targetAttachPointIndexBuffByAdult" or "targetAttachPointIndexBuffByChild")
     If($targetAttachPointIndexBuff and not GetEntityTypeBuff(entity = $me, key = "fullName", value = $targetAttachPointIndexBuff)){

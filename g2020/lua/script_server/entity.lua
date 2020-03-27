@@ -32,7 +32,7 @@ function EntityServer:clearItemUseByKey(key, valueArray)
             return true
         end
         for _, value in pairs(valueArray) do
-            if useItem:cfg()[key] == value then
+			if type(_) == "number" and useItem:cfg()[key] == value then
                 return true
             end
         end
@@ -41,7 +41,7 @@ function EntityServer:clearItemUseByKey(key, valueArray)
     local useItemList = self:getUseItemList() or {}
     for tid, tidUseItemList in pairs(useItemList) do
         for slot, useItem in pairs(tidUseItemList) do
-            if cmpFunc(useItem, key, valueArray) then
+			if cmpFunc(useItem, key, valueArray) then
                 self:setItemUse(tid, slot, false)
             end 
         end
@@ -49,8 +49,7 @@ function EntityServer:clearItemUseByKey(key, valueArray)
 end
 
 function EntityServer:setItemUse(tid, slot, isUse)
-	print(tid, slot, isUse)
-    if not tid or not slot then
+	if not tid or not slot then
         return
     end
     local useItemList = self:data("main").useItemList

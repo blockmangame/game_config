@@ -1,29 +1,6 @@
 
 
 function EntityClient:updateShowName()  -- 覆盖引擎的EntityClient:updateShowName()
-
-    if self.isPlayer and self ~= Me then
-
-        local cfg = self._cfg
-        local x = cfg.familyIdentityX
-        local y = cfg.familyIdentityY
-        local sameFamilyPic = cfg.sameFamilyPic
-        local diffFamilyPic = cfg.diffFamilyPic
-
-        if self:data("headText").svrAry and self:data("headText").svrAry[y] and self:data("headText").svrAry[y][x] then
-            local teamId = self:getValue("teamId")
-            if teamId and teamId ~= 0 then
-                if teamId == Me:getValue("teamId") then
-                    self:data("headText").svrAry[y][x] = sameFamilyPic
-                else
-                    self:data("headText").svrAry[y][x] = diffFamilyPic
-                end
-            else
-                self:data("headText").svrAry[y][x] = nil
-            end
-        end
-    end
-
 	local headText = self:data("headText")
 	local clientLines = headText.ary or {}
 	local serverLines = headText.svrAry or {}
@@ -59,5 +36,22 @@ function EntityClient:updateShowName()  -- 覆盖引擎的EntityClient:updateSho
 
 	if cfg.hideSelfName and self == Me then
 		self:setShowName("\n")
+	end
+
+	self:updateFamilyIdentity()
+end
+
+function EntityClient:updateFamilyIdentity()
+	if self.isPlayer and self ~= Me then
+		local teamId = self:getValue("teamId")
+		if teamId and teamId ~= 0 then
+			if teamId == Me:getValue("teamId") then
+				UI:openHeadWnd(self.objID, "familyIdentity", 7, 7, "set:family_identity.json image:FamilySamePic", "ui_family_same_family")
+			else
+				UI:openHeadWnd(self.objID, "familyIdentity", 7, 7, "set:family_identity.json image:FamilyDiffPic", "ui_family_diff_family")
+			end
+		else
+			UI:closeHeadWnd(self.objID)
+		end
 	end
 end

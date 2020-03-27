@@ -434,9 +434,9 @@ function M:canEquip(item)
 		return 0
 	end
     local world = Me.world
-	if self:isDrive() and item and item:cfg().typeIndex ~= 3 then
-		return 1
-	end
+	-- if self:isDrive() and item and item:cfg().typeIndex ~= 3 then
+	-- 	return 1
+	-- end
 	if item:cfg().typeIndex == 3 or item:cfg().typeIndex == 1 then
 		local now = World.Now()
 		if canEquipCarTimeEnd and now < canEquipCarTimeEnd then

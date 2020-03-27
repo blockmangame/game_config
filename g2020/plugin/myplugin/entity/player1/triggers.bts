@@ -29,15 +29,15 @@ SET_ITEM_USE {
 }
 
 CHECK_CAN_USE_ITEM {
-    $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
-    If(IsDrive(entity = $obj1))
-    {
-		--正在开车不能装备任何东西
-		If($typeIndex ~= 3)
-		{
-			$result = false
-		}
-    }
+    -- $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
+    -- If(IsDrive(entity = $obj1))
+    -- {
+	-- 	--正在开车不能装备任何东西
+	-- 	If($typeIndex ~= 3)
+	-- 	{
+	-- 		$result = false
+	-- 	}
+    -- }
     If($typeIndex == 3 and $obj1.equipCarCd){
         $result = false
 	}
@@ -59,25 +59,26 @@ CHECK_CLEAR_HAND_ITEM{
 }
 
 WEAR_ITEM {
-    ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 4, 5))
     $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
     If($typeIndex == 3)
     {
 		-- on car
 		
-		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 3, 4, 5))
+		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 3))
 
         $carName = GetConfigVar(obj = $item, key = "carName")
         CallTrigger(event = "EQUIP_CAR", obj1 = $obj1, carName = $carName)
     }
     ElseIf($typeIndex == 1)
     {
-        --baby trolley
+		--baby trolley
+		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(3, 1))
     	$obj1.equipItem = $item
         $obj1.otherItem = true
         CallTrigger(event = "EQUIP_BABY_TROLLEY", object = $obj1, cfgPath = GetConfigVar(obj = $item, key = "trolleyEntity"))
 	}
     Else{
+		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(2, 4, 5))
     	$obj1.equipItem = $item
         $obj1.otherItem = true
     }
@@ -188,7 +189,6 @@ CREATE_OWNER_HOUSE{
     $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
     ------------------------------------------ 有租地特权把房子移到public区域
     $manorId = GetPlayerManorId(player = $obj1) --服务器分配的房子id, 1-2为特权
-    Test("Test Get Player ManorID::",GetPlayerUserID(player = $obj1), $manorId)
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/home_privilege") and $manorId >0 and $manorId <=2){
         $regions = GetAllRegion(map = @Map001)
         Foreach(array = $regions or {}, key = "publicRegion"){
@@ -251,7 +251,7 @@ GOTO_INSIDE_HOUSE{
 }
 
 ENTITY_DIE{
-	CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
+    ClearRide(entity = $obj1)
     $house = $obj1.house
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     $yaw = 0
@@ -1316,7 +1316,7 @@ FUNC_TO_KICK_PLAYER_AND_SHOW_TIP --params: insideDoor, notToClearRide
 {
     $obj1.kickOut = true
     If(not $notToClearRide) {
-        CallTrigger(object = $obj1, event = "PLAYER_CLEAR_RIDE")
+        ClearRide(entity = $obj1)
     }
     CallTrigger(object = $insideDoor, obj1 = $insideDoor, obj2 = $obj1, event = "INTER_WITH_DOOR")
     ShowTip(entity = $obj1, tipType = 2,textKey = "house_owner_lock_house_and_kick_you", keepTime = 40)
@@ -1340,7 +1340,7 @@ SURE_LOCK_HOUSE_AND_KICK_OTHERS{
             $trolley = GetRideOn(entity = $obj1)
             $trolleyOwner = GetOwner(entity = $trolley)
             If(IsPlayer(entity = $trolleyOwner) and ($selfTeamId == 0 or $selfTeamId ~= GetEntityTeam(entity = $trolleyOwner))) {
-                    CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+                    ClearRide(entity = $obj1)
                 CallTrigger(object = $trolleyOwner, event = "FUNC_TO_KICK_PLAYER_AND_SHOW_TIP", insideDoor = $insideDoor, notToClearRide = true)
             }
                 }
@@ -1839,6 +1839,11 @@ RIDEOFF_IN_DEC{
             z = GetPosZ(pos = $tp) - GetPosZ(pos = $regionCenter) > 0 and -1 or 1
         }
         $tp = ComputeV3(op = "add", p1 = $tp, p2 = $addV3)
+        If($target and $target.lastSideNormal){
+            If(GetPosY(pos = $target.lastSideNormal) == -1){
+                $tp = ComputeV3(op = "add", p1 = $tp, p2 = {x = 0, y = -1, z = 0})
+            }
+        }
         $ride = GetRideOn(entity = $obj1)
         If(not $ride)
         {
@@ -2752,11 +2757,9 @@ USER_INTERACTION_ACTION
         Return()
     }
 
-    CallTrigger(obj1 = $receiver, event = "PLAYER_CLEAR_RIDE")
-    If($promoter.interactionObjId) {
-        CallTrigger(obj1 = $promoter, event = "ENTITY_REMOVE_INTERACTION")
-    } ElseIf($skillName ~= "myplugin/action_trolley") { --如果是手推车的话就不解除发起方的原有交互(即：不解除发起方推着手推车)
-        Dismount(entity = $promoter)
+    ClearRide(entity = $receiver)
+    If($skillName ~= "myplugin/action_trolley") {
+        ClearRide(entity = $promoter)
     }
 
     CastSkill(skill = $skillName, from = $from, packet = {targetID = GetObjectID(object = $to)})
@@ -2765,12 +2768,11 @@ USER_INTERACTION_ACTION
 ENTITY_JUMP {
     $ride = GetRideOn(entity = $obj1)
     If ($ride && not IsCameraMode(player = $obj1)){
-        If(GetOwner(entity = $ride) == $obj1 && GetConfigVar(obj = $ride, key = "driverJumpShiled"))
+        If(GetConfigVar(obj = $ride, key = "driverJumpShiled"))
         {
             Return()
         }
-        CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
-        Dismount(entity = $obj1)
+        ClearRide(entity = $obj1)
     }
 }
 
@@ -2778,9 +2780,7 @@ ENTITY_REMOVE_INTERACTION {
     If($obj1.interactionObjId){
         $target = GetObject(objID = $obj1.interactionObjId)
         If($target && $target.interactionBuff) {
-            $target.notToClearRide = $target.createdTrolley and true or false --如果obj1的交互对象是推着手推车的，则取消target解除与手推车的交互
             RemoveEntityBuff(buff = $target.interactionBuff, entity = $target)
-            $target.notToClearRide = nil
         }
     }
 
@@ -2798,9 +2798,7 @@ ENTITY_ADD_DINGDONG_BUFF{
 
 UPDATE_FAMILY_IDENTITY()
 {
-    $x = GetConfigVar(obj = $obj1, key = "familyIdentityX")
-    $y = GetConfigVar(obj = $obj1, key = "familyIdentityY")
-    SetHeadText(entity = $obj1, x = $x, y = $y, headText = "")
+    SetHeadText(entity = $obj1, x = -2, y = -1, headText = "")
 }
 
 CREATE_FAMILY
@@ -5053,7 +5051,7 @@ EQUIP_CAR {
     {
         CallTrigger(object = $obj1, event = "TAKEOFF_EQUIP_CAR")
     }
-    CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+    ClearRide(entity = $obj1)
     $pos = GetEntityPosition(entity = $obj1)
     $newPos = ComputeV3(op = "add", p1= $pos, p2 = {x = 0, y = 2, z = 0})
     $yaw = GetEntityYaw(entity = $obj1)
@@ -5142,7 +5140,7 @@ EQUIP_BABY_TROLLEY --params: cfgPath
     If($trolley)
     {
         $trolley.role = nil
-        CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+        ClearRide(entity = $obj1)
         $obj1.trolleyBuff = AddEntityBuff(entity = $obj1, cfg = GetConfigVar(obj = $trolley, key = "attachBuff"))
         SetObjectVar(obj = $obj1, key = "createdTrolley", value = $trolley)
         CallTrigger(object = $obj1, event = "CHANGE_BABY_TROLLEY_SCALE")
@@ -5942,7 +5940,7 @@ PLAYER_ON_VISIT {--same server
         If($isInHouse and $obj1.teleMap ~= GetEntityMap(entity = $obj1)){
             ShowTitleBarPage(entity = $obj1, closeWin = true)
         }
-        CallTrigger(obj1 = $obj1, event = "PLAYER_CLEAR_RIDE")
+        ClearRide(entity = $obj1)
         SetEntityPosition(map = $obj1.teleMap, entity = $obj1, pos = $obj1.telePos)
         $obj1.teleMap = nil
         $obj1.telePos = nil
@@ -6533,7 +6531,7 @@ SHOW_PALETTE_HELP
 }
 
 PLAYER_CLEAR_RIDE
-{
+{   ----废弃中............
     CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
     ClearRide(entity = $obj1)
 }
@@ -7037,6 +7035,14 @@ GUIDE_STEP10()--第一次进来，选择体格后进行谈话：10
 }
 OPEN_MAIN_EXTENSION()--打开导航ui，让玩家点击 装备ui: 11
 {
+    $uiList = [
+        "priShop", "familyAlbum", "dressArchive", 
+        "party_list", "bag_g2020", "goldShop", 
+        "singleTeam", "friend", "dressStore", "tipDialog","newSignIn"
+    ]
+    Foreach(array = $uiList ,key = "ui"){
+        OperationWindows(win = $ui, isOpen = false, player = $obj1)
+    }
     OpenMainExtension(player = $obj1)
     $obj1.guideStep = 11
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
@@ -7074,6 +7080,14 @@ GUIDE_HOUSE(){
 }
 GUIDE_CLICK_DRESS_HOUSE() --让玩家点击 装扮房子： 13
 {
+    $uiList = [
+        "priShop", "familyAlbum", "dressArchive", 
+        "party_list", "bag_g2020", "goldShop", 
+        "singleTeam", "friend", "dressStore", "tipDialog","newSignIn"
+    ]
+    Foreach(array = $uiList ,key = "ui"){
+        OperationWindows(win = $ui, isOpen = false, player = $obj1)
+    }
     $obj1.guideStep = @DressHouse
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
@@ -7089,7 +7103,7 @@ START_GUIDE_STEP14()--指引去游乐场 //存档3
     $uiList = [
         "priShop", "familyAlbum", "dressArchive", 
         "party_list", "bag_g2020", "goldShop", 
-        "singleTeam", "friend", "dressStore"
+        "singleTeam", "friend", "dressStore", "tipDialog","newSignIn"
     ]
     Foreach(array = $uiList ,key = "ui"){
         OperationWindows(win = $ui, isOpen = false, player = $obj1)
@@ -7202,7 +7216,7 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
     If($step>=@FirstInto and $step<@DressDialog and $obj1.curGoStep ~= 1){ --存档1：未完
         $obj1.curGoStep = 1
         CallTrigger(event = "GUIDE_STEP10", object = $obj1)
-    }ElseIf($step>=@DressDialog and $step<@NoneHouse and $obj1.curGoStep ~= 2){ --存档2：未完
+    }ElseIf($step>=@DressDialog and $step<@NoneHouse and $obj1.curGoStep ~= 2 and $owner){ --存档2：未完
         $obj1.curGoStep = 2
         CallTrigger(event = "GUIDE_HOUSE", object = $obj1)
     }ElseIf($step >= @NoneHouse and $step < @PlayEnd and $obj1.curGoStep ~= 3 and not $owner) -- 存档3：未完
