@@ -352,7 +352,11 @@ function M:fetchAllBagItem()
 				end
 				-- 3-5 begin giveAway 
 				local giveAwayStatusTable = Me.giveAwayStatusTable
-				if giveAwayStatusTable and giveAwayStatusTable.status then
+                if giveAwayStatusTable and giveAwayStatusTable.status then
+                    if item:cfg().isPrivate then
+						Client.ShowTip(1, Lang:toText("cant_give_away_task_item"), 20)
+						return
+					end
 					if item:cfg().typeIndex and BAG_TRAY_TYPE[item:cfg().typeIndex] == Define.TRAY_TYPE.EXTEND_BAG_5 then
 						Client.ShowTip(1, Lang:toText("cant_give_away_task_item"), 20)
 						return
