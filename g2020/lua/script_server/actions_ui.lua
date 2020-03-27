@@ -176,7 +176,7 @@ function Actions.SyncStatesData(data, params, context)
     local tmpStates = params.states or _getObjVar(target, "curStates")
     --如果有声明isWithoutCheck为true或者为target.curStates则不需要再去检查states里的状态是否为target获得的了
     if not isWithoutCheck and isAdd then
-        for _, v in pairs(states) do
+        for _, v in pairs(tmpStates) do
             if _getObjVar(target, v.."got") then
                 table.insert(states, v)
             end
