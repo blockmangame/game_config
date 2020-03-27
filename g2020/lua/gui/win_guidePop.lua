@@ -35,4 +35,6 @@ function M:onOpen(showArg, callBack)
 	self:update()
 end
 
+M.NotDialogWnd = true
+
 return M

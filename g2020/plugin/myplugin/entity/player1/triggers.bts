@@ -7136,6 +7136,14 @@ OPEN_PLAYGROUND_BUFF()--开起游乐场buff，
 }
 STEP15_FINISH()
 {
+    $uiList = [
+        "priShop", "familyAlbum", "dressArchive", 
+        "party_list", "bag_g2020", "goldShop", 
+        "singleTeam", "friend", "dressStore", "tipDialog","newSignIn"
+    ]
+    Foreach(array = $uiList ,key = "ui"){
+        OperationWindows(win = $ui, isOpen = false, player = $obj1)
+    }
     $obj1.guideStep = 16
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
