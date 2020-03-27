@@ -1839,6 +1839,11 @@ RIDEOFF_IN_DEC{
             z = GetPosZ(pos = $tp) - GetPosZ(pos = $regionCenter) > 0 and -1 or 1
         }
         $tp = ComputeV3(op = "add", p1 = $tp, p2 = $addV3)
+        If($target and $target.lastSideNormal){
+            If(GetPosY(pos = $target.lastSideNormal) == -1){
+                $tp = ComputeV3(op = "add", p1 = $tp, p2 = {x = 0, y = -1, z = 0})
+            }
+        }
         $ride = GetRideOn(entity = $obj1)
         If(not $ride)
         {
