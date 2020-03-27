@@ -44,7 +44,7 @@ RIDE_ON
         If($obj2.otherItem){
             --ClearRide(entity = $obj2.createdTrolley)
 			--EquipItem(entity = $obj2, item = $obj2.equipItem)
-            ClearItemUseByKey(entity = $obj2, key = "typeIndex", valueArray = NewArray(1, 2, 4, 5))
+            ClearItemUseByKey(entity = $obj2, key = "typeIndex", valueArray = NewArray(1))
             StartTimer(rep = false, time = 1, object = $obj1, obj1 = $obj1, obj2 = $obj2, event = "RIDE_ON_CAR", targetIndex = $targetIndex)
         }
         Else

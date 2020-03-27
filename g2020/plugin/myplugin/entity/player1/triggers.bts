@@ -29,15 +29,15 @@ SET_ITEM_USE {
 }
 
 CHECK_CAN_USE_ITEM {
-    $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
-    If(IsDrive(entity = $obj1))
-    {
-		--正在开车不能装备任何东西
-		If($typeIndex ~= 3)
-		{
-			$result = false
-		}
-    }
+    -- $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
+    -- If(IsDrive(entity = $obj1))
+    -- {
+	-- 	--正在开车不能装备任何东西
+	-- 	If($typeIndex ~= 3)
+	-- 	{
+	-- 		$result = false
+	-- 	}
+    -- }
     If($typeIndex == 3 and $obj1.equipCarCd){
         $result = false
 	}
@@ -59,25 +59,26 @@ CHECK_CLEAR_HAND_ITEM{
 }
 
 WEAR_ITEM {
-    ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 4, 5))
     $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
     If($typeIndex == 3)
     {
 		-- on car
 		
-		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 2, 3, 4, 5))
+		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1))
 
         $carName = GetConfigVar(obj = $item, key = "carName")
         CallTrigger(event = "EQUIP_CAR", obj1 = $obj1, carName = $carName)
     }
     ElseIf($typeIndex == 1)
     {
-        --baby trolley
+		--baby trolley
+		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(3))
     	$obj1.equipItem = $item
         $obj1.otherItem = true
         CallTrigger(event = "EQUIP_BABY_TROLLEY", object = $obj1, cfgPath = GetConfigVar(obj = $item, key = "trolleyEntity"))
 	}
     Else{
+		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(2, 4, 5))
     	$obj1.equipItem = $item
         $obj1.otherItem = true
     }

@@ -113,28 +113,36 @@ end
 
 function M:getEquipItem()
     local trayArray = Me:tray():query_trays(EQUIP_TRAY_TYPE)
+	local result = {}
     for _, element in pairs(trayArray) do
         local tray = element.tray
         local items = tray and tray:query_items(function(item)
 			return true
         end)
-		local result = {}
 		for _, item in pairs(items or {}) do
 			if Me:isItemUse(item) then
 				result[#result + 1] = item
 			end
 		end
-        for _, item in pairs(result) do
-			if item:cfg().typeIndex == 3 then
-				local rideEntity = Me.rideOnId and Me.world:getEntity(Me.rideOnId)
-				if rideEntity and item:cfg().carName == rideEntity:cfg().fullName then
-					return item
-				end
-			else
+	end
+	
+	table.sort(result, function(item1, item2)
+		local typeIndex = item1:cfg().typeIndex
+		if typeIndex == 2 or typeIndex == 4 or typeIndex == 5 then
+			return true
+		end
+		return false
+	end)
+	for _, item in pairs(result) do
+		if item:cfg().typeIndex == 3 then
+			local rideEntity = Me.rideOnId and Me.world:getEntity(Me.rideOnId)
+			if rideEntity and item:cfg().carName == rideEntity:cfg().fullName then
 				return item
 			end
-        end
-    end
+		else
+			return item
+		end
+	end
 end
 
 function M:getRideItem()
