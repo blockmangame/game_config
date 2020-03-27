@@ -2768,7 +2768,7 @@ USER_INTERACTION_ACTION
 ENTITY_JUMP {
     $ride = GetRideOn(entity = $obj1)
     If ($ride && not IsCameraMode(player = $obj1)){
-        If(GetOwner(entity = $ride) == $obj1 && GetConfigVar(obj = $ride, key = "driverJumpShiled"))
+        If(GetConfigVar(obj = $ride, key = "driverJumpShiled"))
         {
             Return()
         }
