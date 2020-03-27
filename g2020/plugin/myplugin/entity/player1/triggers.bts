@@ -242,6 +242,10 @@ CREATE_OWNER_HOUSE{
     }
     $houseInsideMap = GetObjectVar(obj = $house, key = "houseInsideMap")
     CallTrigger(object = $obj1, obj1 = $obj1, yaw = $yaw, houseInsideMap = $houseInsideMap, event = "GOTO_INSIDE_HOUSE")
+    If($obj1.guideStep <= @NoneHouse){
+        $house.isLock = true
+        CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+    }
 }
 
 GOTO_INSIDE_HOUSE{
@@ -6967,7 +6971,7 @@ SURE_TRADE_RISK()
 {
     $trayType =  [21, 22, 23, 24 ]
 	$itemFilters = {
-		
+		cantTrade = true
     }
     --RequestTrade(player = $obj2, target = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
     CreateTrade(player1 = $obj2, player2 = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
@@ -7229,6 +7233,11 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
         CallTrigger(event = "GUIDE_HOUSE", object = $obj1)
     }ElseIf($step >= @NoneHouse and $step < @PlayEnd and $obj1.curGoStep ~= 3 and not $owner) -- 存档3：未完
     {
+        $house = $obj1.house
+        If($house){
+            $house.isLock = false
+            CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+        }
         $obj1.curGoStep = 3
         CallTrigger(event = "START_GUIDE_STEP14", object = $obj1)
     }ElseIf($step == @GuideGift and $obj1.curGoStep ~= 4 and not $owner){
@@ -7244,6 +7253,17 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
 --拿到礼物
 GIFT_GUIDE_OVER()
 {
+    $obj1.guideStep = @GuideEnd
+    $obj1.guideWork = true
+    $obj1.guideParty = true
+    $obj1.goGiftGps = nil
+    HideCloseGPS(player = $obj1, show = true)
+    CallTrigger(object = $obj1, event = "FUNC_SET_GUIDE_TARGET")
+    UpdateUIData(player = $obj1, ui = "mainExtension", data = {
+        guideEnd = $obj1.guideStep == @GuideEnd,
+        guideWork = $obj1.guideWork,
+        guideParty = $obj1.guideParty
+    })
     AddItem(entity = $obj1, cfg = "myplugin/guide_gift", count = 1)
     ShowRewardItemEffect(type = "Item", count = 1, fullName = "myplugin/guide_gift", player = $obj1)
 }
