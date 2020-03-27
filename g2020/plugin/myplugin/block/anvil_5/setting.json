@@ -1,7 +1,20 @@
 {
     "blockObjectOnCollision": false,
     "breakTime": 20,
-    "collisionBoxes": [],
+    "collisionBoxes": [
+        {
+            "max": {
+                "z": 1,
+                "x": 1,
+                "y": 1
+            },
+            "min": {
+                "z": 0,
+                "x": 0,
+                "y": 0
+            }
+        }
+    ],
     "lightOpacity": 0,
     "isOpaqueFullCube": false,
     "quads": [
@@ -28,7 +41,7 @@
                     "y": 0
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
@@ -53,7 +66,7 @@
                     "y": 0.3
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
@@ -78,7 +91,7 @@
                     "y": 0.4
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
@@ -103,7 +116,7 @@
                     "y": 0.6
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
@@ -128,8 +141,9 @@
                     "y": 1
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
+		
         {
             "pos": [
                 {
@@ -153,7 +167,7 @@
                     "y": 0.6
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
@@ -178,7 +192,7 @@
                     "y": 0.6
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
@@ -189,21 +203,21 @@
                 },
                 {
                     "x": 1,
-                    "z": 0,
-                    "y": 0.6
-                },
-                {
-                    "x": 1,
-                    "z": 0,
-                    "y": 0.6
-                },
-                {
-                    "x": 1,
                     "z": 1,
+                    "y": 0.6
+                },
+                {
+                    "x": 1,
+                    "z": 0,
+                    "y": 0.6
+                },
+                {
+                    "x": 1,
+                    "z": 0,
                     "y": 1
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
@@ -214,321 +228,324 @@
                 },
                 {
                     "x": 0,
+                    "z": 1,
+                    "y": 0.6
+                },
+                {
+                    "x": 0,
+                    "z": 1,
+                    "y": 1
+                },
+                {
+                    "x": 0,
                     "z": 0,
                     "y": 1
-                },
-                {
-                    "x": 1,
-                    "x": 1,
-                    "y": 1
-                },
-                {
-                    "x": 1,
-                    "x": 1,
-                    "y": 0.6
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
+		
         {
             "pos": [
                 {
-                    "z": 1,
+                    "z": 0.6,
                     "x": 0.6,
                     "y": 0.6
                 },
                 {
-                    "z": 1,
+                    "z": 0.6,
                     "x": 0.4,
                     "y": 0.6
                 },
                 {
-                    "z": 1,
+                    "z": 0.6,
                     "x": 0.4,
                     "y": 0.4
                 },
                 {
-                    "z": 1,
+                    "z": 0.6,
                     "x": 0.6,
                     "y": 0.4
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
                 {
-                    "z": 0,
+                    "z": 0.4,
                     "x": 0.4,
                     "y": 0.4
                 },
                 {
-                    "z": 0,
+                    "z": 0.4,
                     "x": 0.4,
                     "y": 0.6
                 },
                 {
-                    "z": 0,
+                    "z": 0.4,
                     "x": 0.6,
                     "y": 0.6
                 },
                 {
-                    "z": 0,
+                    "z": 0.4,
                     "x": 0.6,
                     "y": 0.4
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
                 {
-                    "x": 1,
+                    "x": 0.6,
                     "z": 0.6,
                     "y": 0.6
                 },
                 {
-                    "x": 1,
+                    "x": 0.6,
                     "z": 0.4,
                     "y": 0.4
                 },
                 {
-                    "x": 1,
+                    "x": 0.6,
                     "z": 0.4,
                     "y": 0.4
                 },
                 {
-                    "x": 1,
+                    "x": 0.6,
                     "z": 0.6,
                     "y": 0.6
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
                 {
-                    "x": 0,
+                    "x": 0.4,
                     "z": 0.4,
                     "y": 0.4
                 },
                 {
-                    "x": 0,
+                    "x": 0.4,
                     "z": 0.4,
                     "y": 0.6
                 },
                 {
-                    "x": 0,
+                    "x": 0.4,
                     "z": 0.6,
                     "y": 0.6
                 },
                 {
-                    "x": 0,
+                    "x": 0.4,
                     "z": 0.6,
                     "y": 0.4
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
+		
         {
             "pos": [
                 {
-                    "z": 1,
+                    "z": 0.7,
                     "x": 0.7,
                     "y": 0.4
                 },
                 {
-                    "z": 1,
+                    "z": 0.7,
                     "x": 0.3,
                     "y": 0.4
                 },
                 {
-                    "z": 1,
+                    "z": 0.7,
                     "x": 0.3,
                     "y": 0.3
                 },
                 {
-                    "z": 1,
+                    "z": 0.7,
                     "x": 0.7,
                     "y": 0.3
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
                 {
-                    "z": 0,
+                    "z": 0.3,
                     "x": 0.3,
                     "y": 0.3
                 },
                 {
-                    "z": 0,
+                    "z": 0.3,
                     "x": 0.3,
                     "y": 0.4
                 },
                 {
-                    "z": 0,
+                    "z": 0.3,
                     "x": 0.7,
                     "y": 0.4
                 },
                 {
-                    "z": 0,
+                    "z": 0.3,
                     "x": 0.7,
                     "y": 0.3
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
                 {
-                    "x": 1,
+                    "x": 0.7,
                     "z": 0.7,
                     "y": 0.4
                 },
                 {
-                    "x": 1,
-                    "z": 0.3,
-                    "y": 0.3
-                },
-                {
-                    "x": 1,
-                    "z": 0.3,
-                    "y": 0.3
-                },
-                {
-                    "x": 1,
+                    "x": 0.7,
                     "z": 0.7,
+                    "y": 0.3
+                },
+                {
+                    "x": 0.7,
+                    "z": 0.3,
+                    "y": 0.3
+                },
+                {
+                    "x": 0.7,
+                    "z": 0.3,
                     "y": 0.4
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
                 {
-                    "x": 0,
+                    "x": 0.3,
                     "z": 0.3,
                     "y": 0.3
                 },
                 {
-                    "x": 0,
+                    "x": 0.3,
                     "z": 0.3,
                     "y": 0.4
                 },
                 {
-                    "x": 0,
+                    "x": 0.3,
                     "z": 0.7,
                     "y": 0.4
                 },
                 {
-                    "x": 0,
+                    "x": 0.3,
                     "z": 0.7,
                     "y": 0.3
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
+		
         {
             "pos": [
                 {
-                    "z": 1,
+                    "z": 0.8,
                     "x": 0.8,
                     "y": 0.3
                 },
                 {
-                    "z": 1,
+                    "z": 0.8,
                     "x": 0.2,
                     "y": 0.3
                 },
                 {
-                    "z": 1,
+                    "z": 0.8,
                     "x": 0.2,
                     "y": 0
                 },
                 {
-                    "z": 1,
+                    "z": 0.8,
                     "x": 0.8,
                     "y": 0
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
                 {
-                    "z": 0,
+                    "z": 0.2,
                     "x": 0.2,
                     "y": 0
                 },
                 {
-                    "z": 0,
+                    "z": 0.2,
                     "x": 0.2,
                     "y": 0.3
                 },
                 {
-                    "z": 0,
+                    "z": 0.2,
                     "x": 0.8,
                     "y": 0.3
                 },
                 {
-                    "z": 0,
+                    "z": 0.2,
                     "x": 0.8,
                     "y": 0
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
                 {
-                    "x": 1,
+                    "x": 0.8,
                     "z": 0.8,
                     "y": 0.3
                 },
                 {
-                    "x": 1,
-                    "z": 0.2,
-                    "y": 0
-                },
-                {
-                    "x": 1,
-                    "z": 0.2,
-                    "y": 0
-                },
-                {
-                    "x": 1,
+                    "x": 0.8,
                     "z": 0.8,
+                    "y": 0
+                },
+                {
+                    "x": 0.8,
+                    "z": 0.2,
+                    "y": 0
+                },
+                {
+                    "x": 0.8,
+                    "z": 0.2,
                     "y": 0.3
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         },
         {
             "pos": [
                 {
-                    "x": 0,
+                    "x": 0.2,
                     "z": 0.2,
                     "y": 0
                 },
                 {
-                    "x": 0,
+                    "x": 0.2,
                     "z": 0.2,
                     "y": 0.3
                 },
                 {
-                    "x": 0,
+                    "x": 0.2,
                     "z": 0.8,
                     "y": 0.3
                 },
                 {
-                    "x": 0,
+                    "x": 0.2,
                     "z": 0.8,
                     "y": 0
                 }
             ],
-            "texture": "/block_texture/anvil_top_damaged_0.png"
+            "texture": "/block_texture/anvil_base.png"
         }
     ],
     "lightOpacityS": 0
