@@ -6971,7 +6971,7 @@ SURE_TRADE_RISK()
 {
     $trayType =  [21, 22, 23, 24 ]
 	$itemFilters = {
-		cantTrade = true
+		canTrade = true
     }
     --RequestTrade(player = $obj2, target = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
     CreateTrade(player1 = $obj2, player2 = $obj1, itemTrayType = $trayType, itemFilters = $itemFilters)
