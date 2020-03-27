@@ -6,9 +6,9 @@
     "waterline": 0.8,
     "canBoat": true,
     "collisionCamp": 1,
-	"nameBorder": true,
-	"disableShadow": true,
-	"posSyncDelay": 2,
+    "nameBorder": true,
+    "disableShadow": true,
+    "posSyncDelay": 2,
     "hideSelfName": true,
     "climbType": 1,
     "maxHouseVarsSize": 8,
@@ -18,7 +18,7 @@
     "hideDeep": 0,
     "joinPartyGiveMoney": 2,
     "familyIdentityOffsetX": 0,
-    "familyIdentityOffsetY": -40,
+    "familyIdentityOffsetY": -50,
     "inviteJoinFamilyBuff": "myplugin/test_buff",
     "applyJoinFamilyBuff": "myplugin/test_buff",
     "inviteFriendBuff": "myplugin/test_buff",
@@ -277,7 +277,7 @@
     "interaction_choices": {
         "cfgKey": "interaction_choices",
         "aroundParams": {
-            "disableAutoHideText":true,
+            "disableAutoHideText": true,
             "startAngle": 90,
             "endAngle": 450,
             "widgetFileName": "widget_button_2",
@@ -328,12 +328,12 @@
             },
             {
                 "text": "interact_act",
-                "/ps":"交互菜单",
+                "/ps": "交互菜单",
                 "customCheckCanHide": {
                     "funcName": "checkCanHideInteract"
                 },
                 "image": "set:party_interaction_ui.json image:act",
-                "nextCfgKey":"interaction_act_choices"
+                "nextCfgKey": "interaction_act_choices"
             },
             {
                 "/ps": "邀请",
@@ -355,37 +355,37 @@
             },
             {
                 "text": "interact_hand_in_hand",
-                "/ps":"拉手",
+                "/ps": "拉手",
                 "image": "set:party_interaction_ui.json image:hand_in_hand",
                 "event": "INTERACTION_HAND_IN_HAND",
-                "customCheckCanShow":{
-                    "funcName":"checkCanBabyHandInHand"
+                "customCheckCanShow": {
+                    "funcName": "checkCanBabyHandInHand"
                 }
             },
             {
                 "text": "interact_piggyback",
-                "/ps":"大背小",
+                "/ps": "大背小",
                 "image": "set:party_interaction_ui.json image:piggyback",
                 "event": "INTERACTION_PIGGYBACK",
-                "customCheckCanShow":{
-                    "funcName":"checkCanAdultCarryBaby"
+                "customCheckCanShow": {
+                    "funcName": "checkCanAdultCarryBaby"
                 }
             },
             {
                 "text": "interact_pickup",
-                "/ps":"大抱小",
+                "/ps": "大抱小",
                 "image": "set:party_interaction_ui.json image:pickup",
                 "event": "INTERACTION_PICK",
-                "customCheckCanShow":{
-                    "funcName":"checkCanAdultPickBaby"
+                "customCheckCanShow": {
+                    "funcName": "checkCanAdultPickBaby"
                 }
             },
             {
                 "text": "interact_trolley",
                 "image": "set:party_interaction_ui.json image:trolley",
                 "event": "INTERACTION_BABY_TROLLEY",
-                "customCheckCanShow":{
-                    "funcName":"checkCanAdultPutBabyIntoTrolley"
+                "customCheckCanShow": {
+                    "funcName": "checkCanAdultPutBabyIntoTrolley"
                 },
                 "checkCanShow": {
                     "funcName": "checkProp",
@@ -423,7 +423,7 @@
             {
                 "text": "",
                 "image": "plugin/myplugin/image/back.png",
-                "nextCfgKey":"interaction_choices",
+                "nextCfgKey": "interaction_choices",
                 "imageSize": {
                     "width": 96,
                     "height": 96
@@ -433,8 +433,8 @@
                 "text": "",
                 "image": "plugin/myplugin/image/clap.png",
                 "event": "INTERACTION_CLAP",
-                "customCheckCanShow":{
-                    "funcName":"checkCanClap"
+                "customCheckCanShow": {
+                    "funcName": "checkCanClap"
                 },
                 "imageSize": {
                     "width": 96,
@@ -445,8 +445,8 @@
                 "text": "",
                 "image": "plugin/myplugin/image/hug.png",
                 "event": "INTERACTION_HUG",
-                "customCheckCanHide":{
-                    "funcName":"checkCanHideHug"
+                "customCheckCanHide": {
+                    "funcName": "checkCanHideHug"
                 },
                 "imageSize": {
                     "width": 96,
@@ -466,8 +466,8 @@
                 "text": "",
                 "image": "plugin/myplugin/image/handshake.png",
                 "event": "INTERACTION_HANDSHAKE",
-                "customCheckCanShow":{
-                    "funcName":"checkCanShakeHand"
+                "customCheckCanShow": {
+                    "funcName": "checkCanShakeHand"
                 },
                 "imageSize": {
                     "width": 96,
@@ -478,8 +478,8 @@
                 "text": "",
                 "image": "plugin/myplugin/image/raiseheight.png",
                 "event": "INTERACTION_RAISE_HEIGHT",
-                "customCheckCanShow":{
-                    "funcName":"checkCanAdultRaiseBaby"
+                "customCheckCanShow": {
+                    "funcName": "checkCanAdultRaiseBaby"
                 },
                 "imageSize": {
                     "width": 96,
@@ -490,8 +490,8 @@
                 "text": "",
                 "image": "plugin/myplugin/image/coax.png",
                 "event": "INTERACTION_COAX",
-                "customCheckCanShow":{
-                    "funcName":"checkCanTouchHead"
+                "customCheckCanShow": {
+                    "funcName": "checkCanTouchHead"
                 },
                 "imageSize": {
                     "width": 96,
@@ -502,8 +502,8 @@
                 "text": "",
                 "image": "plugin/myplugin/image/rideon.png",
                 "event": "INTERACTION_RIDE",
-                "customCheckCanShow":{
-                    "funcName":"checkCanBabyRideAdult"
+                "customCheckCanShow": {
+                    "funcName": "checkCanBabyRideAdult"
                 },
                 "imageSize": {
                     "width": 96,
@@ -977,14 +977,14 @@
             "alignWorldYAxis": false,
             "matchActorOrientation": false
         }
-	],
-	"boundingVolume": {
-		"type": "VerticalBox",
-		"params": [
-			0.7,
-			3.8,
-			0.7
-		]
+    ],
+    "boundingVolume": {
+        "type": "VerticalBox",
+        "params": [
+            0.7,
+            3.8,
+            0.7
+        ]
     },
     "cameraCtrBody": true,
     "moveStateSwithSkillCfgs": [
