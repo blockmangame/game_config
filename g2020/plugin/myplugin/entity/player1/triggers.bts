@@ -64,7 +64,7 @@ WEAR_ITEM {
     {
 		-- on car
 		
-		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1))
+		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(1, 3))
 
         $carName = GetConfigVar(obj = $item, key = "carName")
         CallTrigger(event = "EQUIP_CAR", obj1 = $obj1, carName = $carName)
@@ -72,7 +72,7 @@ WEAR_ITEM {
     ElseIf($typeIndex == 1)
     {
 		--baby trolley
-		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(3))
+		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(3, 1))
     	$obj1.equipItem = $item
         $obj1.otherItem = true
         CallTrigger(event = "EQUIP_BABY_TROLLEY", object = $obj1, cfgPath = GetConfigVar(obj = $item, key = "trolleyEntity"))
