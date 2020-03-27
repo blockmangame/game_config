@@ -4,11 +4,13 @@ REGION_ENTER {
     If($index ~= 1 and IsPlayer(entity = $obj1) and $obj1.gameBgmBuff){
         RemoveEntityBuff(entity = $obj1, buff = $obj1.gameBgmBuff)
         $obj1.gameBgmBuff = nil
-	}
+    }
+    $obj1.inClearBgmRegion = ($obj1.inClearBgmRegion or 0) + 1
 }
 
 REGION_LEAVE {
-    If(IsPlayer(entity = $obj1) and not $obj1.gameBgmBuff and $obj1.gameBgmBuffCfg){
+    $obj1.inClearBgmRegion = ($obj1.inClearBgmRegion or 0) - 1
+    If(IsPlayer(entity = $obj1) and $obj1.inClearBgmRegion <= 0 and not $obj1.gameBgmBuff and $obj1.gameBgmBuffCfg){
         $obj1.gameBgmBuff = AddEntityBuff(entity = $obj1, cfg = $obj1.gameBgmBuffCfg)
     }
 }
