@@ -188,7 +188,6 @@ CREATE_OWNER_HOUSE{
     $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
     ------------------------------------------ 有租地特权把房子移到public区域
     $manorId = GetPlayerManorId(player = $obj1) --服务器分配的房子id, 1-2为特权
-    Test("Test Get Player ManorID::",GetPlayerUserID(player = $obj1), $manorId)
     If(ArrayFind(array = $obj1.privilege, value = "myplugin/home_privilege") and $manorId >0 and $manorId <=2){
         $regions = GetAllRegion(map = @Map001)
         Foreach(array = $regions or {}, key = "publicRegion"){
@@ -7035,6 +7034,14 @@ GUIDE_STEP10()--第一次进来，选择体格后进行谈话：10
 }
 OPEN_MAIN_EXTENSION()--打开导航ui，让玩家点击 装备ui: 11
 {
+    $uiList = [
+        "priShop", "familyAlbum", "dressArchive", 
+        "party_list", "bag_g2020", "goldShop", 
+        "singleTeam", "friend", "dressStore", "tipDialog","newSignIn"
+    ]
+    Foreach(array = $uiList ,key = "ui"){
+        OperationWindows(win = $ui, isOpen = false, player = $obj1)
+    }
     OpenMainExtension(player = $obj1)
     $obj1.guideStep = 11
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
@@ -7072,6 +7079,14 @@ GUIDE_HOUSE(){
 }
 GUIDE_CLICK_DRESS_HOUSE() --让玩家点击 装扮房子： 13
 {
+    $uiList = [
+        "priShop", "familyAlbum", "dressArchive", 
+        "party_list", "bag_g2020", "goldShop", 
+        "singleTeam", "friend", "dressStore", "tipDialog","newSignIn"
+    ]
+    Foreach(array = $uiList ,key = "ui"){
+        OperationWindows(win = $ui, isOpen = false, player = $obj1)
+    }
     $obj1.guideStep = @DressHouse
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
@@ -7087,7 +7102,7 @@ START_GUIDE_STEP14()--指引去游乐场 //存档3
     $uiList = [
         "priShop", "familyAlbum", "dressArchive", 
         "party_list", "bag_g2020", "goldShop", 
-        "singleTeam", "friend", "dressStore"
+        "singleTeam", "friend", "dressStore", "tipDialog","newSignIn"
     ]
     Foreach(array = $uiList ,key = "ui"){
         OperationWindows(win = $ui, isOpen = false, player = $obj1)
@@ -7200,7 +7215,7 @@ CONTINUE_GUIDESTEP()--判断玩家在那个阶段，继续进行指引
     If($step>=@FirstInto and $step<@DressDialog and $obj1.curGoStep ~= 1){ --存档1：未完
         $obj1.curGoStep = 1
         CallTrigger(event = "GUIDE_STEP10", object = $obj1)
-    }ElseIf($step>=@DressDialog and $step<@NoneHouse and $obj1.curGoStep ~= 2){ --存档2：未完
+    }ElseIf($step>=@DressDialog and $step<@NoneHouse and $obj1.curGoStep ~= 2 and $owner){ --存档2：未完
         $obj1.curGoStep = 2
         CallTrigger(event = "GUIDE_HOUSE", object = $obj1)
     }ElseIf($step >= @NoneHouse and $step < @PlayEnd and $obj1.curGoStep ~= 3 and not $owner) -- 存档3：未完
