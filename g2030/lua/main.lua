@@ -9,6 +9,7 @@ else
     require "script_server.event"
 end
 
+require "script_common.util.logutil"
 require "common.gm"
 require "script_common.event_define"
 require "script_common.lib"
