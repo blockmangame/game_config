@@ -1,0 +1,13 @@
+ENTITY_ENTER {
+	$pos = GetEntityPosition(entity = $obj1)
+	$map = GetEntityMap(entity = $obj1)
+	$regionCfg = GetConfigVar(obj = $obj1, key = "regionCfg")
+	$min = GetConfigVar(obj = $obj1, key = "min")
+	$max = GetConfigVar(obj = $obj1, key = "max")
+	$key = GetConfigVar(obj = $obj1, key = "key")
+	$region = Table(
+				min = ComputeV3(op = "sub", p1 = $pos, p2 = $min),
+				max = ComputeV3(op = "add", p1 = $pos, p2 = $max)
+			)
+	AddRegion(map = $map, key = $key, region = $region, regionCfg = $regionCfg)
+}

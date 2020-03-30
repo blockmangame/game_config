@@ -1,0 +1,45 @@
+{
+	"tasks": [
+		{
+			"key": "s001",
+			"icon": "set:new_task.json image:icon_3.png",
+			"times": "once",
+			"fromList": false,
+			"fromNpc": "myplugin/s_test1",
+			"needTask": null,
+			"needVar": null,
+			"reward": "myplugin/reward2",
+			"targets": [
+				{
+					"type": "KillNpc",
+					"cfgName": "nil",
+					"count": 1
+				},
+				{
+					"type": "KillNpc",
+					"cfgName": "myplugin/wildBoar",
+					"count": 1
+				}
+			]
+		},
+		{
+			"key": "s002",
+			"icon": "icon_2.png",
+			"times": "once",
+			"fromList": false,
+			"fromNpc": "myplugin/s_test1",
+			"needTask": null,
+			"needVar": null,
+			"reward": "myplugin/reward3",
+			"targets": [
+				{
+					"type": "Level",
+					"count": 10
+				}
+			]
+		}
+	],
+	"sequenced": false,
+	"showOrder": 2,
+	"showIcon": ""
+}

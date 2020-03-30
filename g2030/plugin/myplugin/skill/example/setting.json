@@ -1,0 +1,53 @@
+{
+  "icon": "true",
+  "iconPath": "set:gun.json image:RightShoot",
+  "castAction":"pistol_idle",
+  "type": "Ray",
+  "rayLenth":100,
+  "containerName": "gun_test",
+  "container": {},
+  "frontSight":"myplugin/frontsight_1",
+  "hitEntitySkill":"myplugin/ray_skill_1",
+  "hitEntityHeadSkill":"myplugin/hit_entityhead",
+  "iconArea": {
+    "VA": -140,
+    "HA": -180,
+    "W": 120,
+    "H": 120
+  },
+  "castSound":
+  {
+    "volume": 1,
+    "selfOnly": false,
+    "loop": false,
+    "sound": "missile.mp3"
+  },
+  "diffuseVal":100,
+  "recoil":15,
+  "autoRecoverRecoil":
+  {
+	"time":0,
+	"value":1
+  },
+  "isHitPointRandom":false,
+  "hitEffect":"effect_gun_be_shot.effect",
+  "trajectoryEffect":"bulleteff.effect",
+  "castEffect": {
+        "yaw": 0,
+        "pos": {
+            "z": 1.2,
+            "y": 1.2,
+            "x": 0
+        },
+        "effect": "effect_gun_default_flame.effect"
+    },
+	"snipe":
+	{
+		"distance":15,
+		"iconPos":{"x":0.8,"y":0.55},
+		"showImage":"snipe_show.png",
+		"openIcon":"open.png",
+		"closeIcon":"close.png"
+	},
+	"castInterval":0
+}

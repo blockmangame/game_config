@@ -1,0 +1,30 @@
+[
+	{
+		"type": "List",
+		"array": [
+			{
+				"type": "Exp",
+				"weight": 1,
+				"count": 100
+			},
+			{
+				"type": "Coin",
+				"name": "green_currency",
+				"weight": 2,
+				"countRange":{"min":1,"max":2}
+			},
+			{
+				"type":"Item",
+				"name":"myplugin/example",
+				"weight": 4,
+				"count": 10
+			},
+			{
+				"type":"Block",
+				"countRange":{"min":1,"max":2},
+				"weight": 7,
+				"name":"myplugin/stone_brick_stairs10"
+			}
+		]
+	}
+]

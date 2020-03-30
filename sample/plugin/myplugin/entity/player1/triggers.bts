@@ -1,0 +1,144 @@
+ENTITY_ENTER{
+    AddItem(entity = $obj1, cfg = "myplugin/gun_test")
+    AddItem(entity = $obj1, cfg = "myplugin/example", count = 2)
+    AddBlockItem(entity = $obj1, block = "myplugin/beacon", count = 200)
+    AddBlockItem(entity = $obj1, block = "myplugin/bedrock", count = 100)
+    CreateNpc(cfgName = "myplugin/village", name = "sandBoxVillage", pos = {x = 1650, y = 13, z = -550})
+}
+
+INIT_HOME_UI {
+    $content = [
+        {
+            name = "home.model.level.1",
+            icon = "plugin/myplugin/image/icon_2.png",
+            unlock = $obj1.homeLevel >= 1,
+            event = "CLICK_HOME_MODEL",
+            context = {level = 1},
+            desc = $obj1.homeLevel < 1 and "lock.need.level.1" or ""
+        },
+         {
+            name = "home.model.level.2",
+            icon = "plugin/myplugin/image/icon_2.png",
+            unlock = $obj1.homeLevel >= 2,
+            event = "CLICK_HOME_MODEL",
+            context = {level = 2},
+            desc = $obj1.homeLevel < 2 and "lock.need.level.2" or ""
+        },
+        {
+            name = "home.model.level.3",
+            icon = "plugin/myplugin/image/icon_2.png",
+            unlock = $obj1.homeLevel >= 3,
+            event = "CLICK_HOME_MODEL",
+            context = {level = 3},
+            desc = $obj1.homeLevel < 3 and "lock.need.level.3" or ""
+        },
+        {
+            name = "home.model.level.4",
+            icon = "plugin/myplugin/image/icon_2.png",          
+            unlock = $obj1.homeLevel >= 4,
+            event = "CLICK_HOME_MODEL",
+            context = {level = 4},
+            desc = $obj1.homeLevel < 4 and "lock.need.level.4" or ""
+        },
+        {
+            name = "home.model.level.5",
+            icon = "plugin/myplugin/image/icon_2.png",          
+            unlock = $obj1.homeLevel >= 5,
+            event = "CLICK_HOME_MODEL",
+            context = {level = 5},
+            desc = $obj1.homeLevel < 5 and "lock.need.level.5" or ""
+        }
+    ]
+    $buttons = [
+        {
+            name = "gui.go.home",
+            event = "ENTITY_GO_HOME",
+            buttonImage = "set:gui_composition.json image:yellow_btn.png"
+        },
+        {
+            name = "gui.home.upgrade",
+            event = "EVENT_UPGRADE_HOME",
+            buttonImage = "set:new_gui_task.json image:yellow_btn.png"
+        }
+    ]
+    ShowHome(entity = $obj1, playerInfo = "infoValuesByHome", homeInfo = "homeInfoValues",content = $content, buttons = $buttons, titleName = Concat(p1 = "home.title.name.level", p2 = $obj1.homeLevel))
+}
+
+EVENT_UPGRADE_HOME {
+    If($obj1.homeLevel < GetConfigVar(obj = $obj1,key = "homeMaxLevel")){
+        SubmitRecipe(
+            entity = $obj1, 
+            class = "myplugin/home_upgrade", 
+            name = Concat(p1 = "home_level_", p2 = ToString(text = $obj1.homeLevel)),
+            info = ArrayGet(index = $obj1.homeLevel, array = GetConfigVar(obj = $obj1, key = "levelHomeInfo"))
+        )
+    }
+}
+
+CLICK_HOME_MODEL {
+    Sequence{
+        BinaryOper(op = "<=", right = $obj1.homeLevel, left = $level)
+        SubmitRecipe(class = "myplugin/submit", name = Concat(p1 = "home_model_", p2 = ToString(text = $level)), entity = $obj1)
+    }
+}
+
+HOME_UPGRAGE {
+    $obj1.homeLevel = $obj1.homeLevel + 1
+    $obj1[Concat(p1 = "homeDesc_", p2 = $obj1.homeLevel)] = ""
+    ShowDialogTip(entity = $obj1)
+    CallTrigger(event = "INIT_HOME_UI", obj1 = $obj1)
+}
+
+SHOW_CARDOPTIONS {
+	$bgImage = {name = "set:card_options.json image:content_bg.png", stretchType = "LeftRight", stretchOffset = "6 6 0 0"}
+	$qualityImage = {name = "set:new_gui_treasurebox.json image:green_fram_bg.png", stretchType = "NineGrid", stretchOffset = "15 15 15 15"}
+	$itemBgImage = {name = "set:skill_system_pop_ups.json image:pop_ups_sure_btn_1.png", stretchType = "NineGrid", stretchOffset = "25 25 40 40"}
+	$eventBtn = {image = {name = "set:new_gui_treasurebox.json image:green_btn_bg.png", stretchType = "LeftRight", stretchOffset = "80 80 0 0"}, title = "Ñ¡Ôñ", titleFontSize = "HT20", area = [[0, 0], [0, -10], [0, 140], [0, 60]]}
+	$options = [
+		{
+			title = "changjie",
+			detail = "hello, lihai, how old are you?",
+			qualityImage = $qualityImage,
+			image = "image/1.png",
+			pushImage = "image/1.png",
+			event = "TEST",
+			eventBtn = $eventBtn,
+		},
+		{
+			title = "changjie",
+			detail = "what the fuck! get out!",
+			qualityImage = $qualityImage,
+			image = "image/4.png",
+			pushImage = "image/4.png",
+			event = "TEST",
+			eventBtn = $eventBtn,
+		},
+		{
+			title = "changjie",
+			detail = "so butiful the girl is, you girl frien?",
+			qualityImage = $qualityImage,
+			image = "image/5.png",
+			pushImage = "image/5.png",
+			event = "TEST",
+			eventBtn = $eventBtn,
+		},
+		{
+			title = "changjie",
+			detail = "are you ready? so come on.",
+			qualityImage = $qualityImage,
+			image = "image/6.png",
+			pushImage = "image/6.png",
+			event = "TEST",
+			eventBtn = $eventBtn,
+		}
+	]
+	ShowCardOptionsView(entity = $obj1, title = "The title of some", detail = "what? what the fuck? what the fuck you doing? I try my best! go go go ...",
+	options = $options, showMask = true, showClose = true, itemSpace = 20, itemSize = [200, 360], pageSize = 3, 
+		contentArea = [[0, 0], [0, 0], [0, 800], [0, 550]], itemImageSize = [150, 150], closeBtnImage = "set:card_options.json image:close.png",
+		lastBtnImage = "set:card_options.json image:left.png", nextBtnImage = "set:card_options.json image:right.png", bgImage = $bgImage, itemBgImage = $itemBgImage)
+}
+
+TEST {
+	Test("---------------------------")
+	Test($title)
+}

@@ -1,0 +1,22 @@
+{
+  "icon": "true",
+  "iconPath": "set:gun.json image:RightShoot",
+  "type": "Missile",
+  "handleTarget": "CameraYaw",
+  "missileCfg": "myplugin/ball",
+  "containerName": "gun_test",
+  "container": {
+    "takeNum": 3,
+    "autoReloadSkill": "myplugin/skill_container_test"
+  },
+  "consumeItem": {
+    "consumeName": "/block",
+    "consumeBlock": "myplugin/beacon"
+  },
+  "iconArea": {
+    "VA": -300,
+    "HA": 16,
+    "W": 80,
+    "H": 80
+  }
+}

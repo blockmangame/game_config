@@ -1,0 +1,8 @@
+---@param cfg table
+---@param name string
+---@param context table
+--function Trigger.CheckTriggers(cfg, name, context)
+--	Trigger.CheckTriggers_impl(cfg, name, context)
+--	Lib.emitEvent(Event.EVENT_CHECK_TRIGGERS, cfg, name, context)
+--	Lib.log("Trigger.CheckTriggers " .. name)
+--end

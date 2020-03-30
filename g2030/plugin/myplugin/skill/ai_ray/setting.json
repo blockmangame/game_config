@@ -1,0 +1,26 @@
+{
+  "type": "Ray",
+  "rayLenth":100,
+  "hitEntitySkill":"myplugin/ray_skill_1",
+  "hitEntityHeadSkill":"myplugin/hit_entityhead",
+  "castSound":
+  {
+    "volume": 1,
+    "selfOnly": false,
+    "loop": false,
+    "sound": "missile.mp3"
+  },
+  "hitEffect":"effect_gun_be_shot.effect",
+  "trajectoryEffect":"bulleteff.effect",
+  "castEffect": 
+    {
+        "yaw": 0,
+        "pos":
+		{
+            "z": 1.2,
+            "y": 1.2,
+            "x": 0
+        },
+        "effect": "effect_gun_default_flame.effect"
+    }
+}

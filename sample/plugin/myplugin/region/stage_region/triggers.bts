@@ -1,0 +1,8 @@
+REGION_ENTER {
+	Sequence {
+		--Compare(co = "!=", p1 = "map001", p2 = GetTableVar(table = $map, key = "name"))
+		--CreateNpc(map = GetEntityMap(entity = $obj1), cfgName = "myplugin/endPoint", name = "endPoint", pos = {x = 1650, y = 13, z = -555})
+		ShowStageSettlement(entity = $obj1, winName = "win_plumber_settlement")
+	}
+	
+}

@@ -1,0 +1,69 @@
+{
+    "composites": [
+        {
+            "recipes": [
+                {
+                    "name": "formula_2_name",
+                    "desc": "formula_2_des",
+                    "access": "Study",
+                    "unlockLevel": 1,
+                    "materials": [
+                        {
+                            "type": "Item",
+                            "name": "myplugin/example",
+                            "count": 2
+                        },
+                        {
+                            "type": "Block",
+                            "name": "myplugin/beacon",
+                            "count": 2
+                        },
+                        {
+                            "type": "Coin",
+                            "name": "green_currency",
+                            "count": 100
+                        }
+                    ],
+                    "composition": [
+                        {
+                            "type": "Block",
+                            "name": "myplugin/bedrock"
+                        }
+                    ]
+                },
+                {
+                    "name": "formula_3_name",
+                    "desc": "formula_3_des",
+                    "access": "Study",
+                    "needLevel": 2,
+                    "materials": [
+                        {
+                            "type": "Block",
+                            "name": "myplugin/wool_14",
+                            "count": 2
+                        },
+                        {
+                            "type": "Item",
+                            "name": "myplugin/example",
+                            "count": 1
+                        },
+                        {
+                            "type": "Coin",
+                            "name": "green_currency",
+                            "count": 100
+                        }
+                    ],
+                    "composition": [
+                        {
+                            "type": "Item",
+                            "name": "/block",
+                            "name": "myplugin/yellow_flower"
+                        }
+                    ]
+                }
+            ],
+            "group": "Melee",
+            "groupName": "group.Melee"
+        }
+    ]
+}

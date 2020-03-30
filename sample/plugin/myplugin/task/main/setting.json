@@ -1,0 +1,140 @@
+{
+	"tasks": [
+		{
+			"key": "m001",
+			"icon": "set:new_task.json image:icon_3.png",
+			"times": "once",
+			"fromList": false,
+			"fromNpc": "myplugin/test1",
+			"needTask": null,
+			"needVar": null,
+			"reward": "myplugin/reward1",
+			"targets": [
+				{
+					"type": "KillNpc",
+					"cfgName": "myplugin/village",
+					"count": 2
+				}
+			]
+		},
+		{
+			"key": "m002",
+			"icon": "icon_2.png",
+			"times": "once",
+			"fromList": false,
+			"fromNpc": "myplugin/test1",
+			"needTask": null,
+			"needVar": null,
+			"reward": "myplugin/recipe1",			
+			"targets": [
+				{
+					"type": "Level",
+					"count": 10
+				}
+			]
+		},
+		{
+			"key": "m003",
+			"icon": "/image/icon_2.png",
+			"times": "once",
+			"fromList": false,
+			"fromNpc": "myplugin/test1",
+			"needTask": null,
+			"needVar": null,
+			"reward": [
+				{
+					"type": "List",
+					"count": 3,
+					"icon": "flag_fisherman.png",
+					"array": [
+						{
+							"type": "Exp",
+							"weight": 1,
+							"count": 100
+						},
+						{
+							"type": "Coin",
+							"name": "green_currency",
+							"weight": 1,
+							"count": 1000
+						}
+					]
+				}
+			],
+			"targets": [
+				{
+					"type": "Level",
+					"count": 10
+				}
+			]
+		},
+		{
+			"key": "m004",
+			"icon": "icon_2.png",
+			"times": "once",
+			"fromList": false,
+			"fromNpc": "myplugin/test1",
+			"show": false,
+			"needTask": null,
+			"needVar": null,
+			"reward": "myplugin/reward1",			
+			"targets": [
+				{
+					"type": "FindRegion",
+					"cfgName":"myplugin/task_region"
+				}
+			],
+			"trace": {
+				"pos": {
+					"x": 1675,
+					"y": 13.5, 
+					"z": -531 
+				}
+			}
+		},
+		{
+			"key": "m005",
+			"icon": "icon_2.png",
+			"times": "loop",
+			"fromList": false,
+			"fromNpc": "myplugin/test1",
+			"needTask": null,
+			"needVar": null,
+			"reward": "myplugin/reward1",			
+			"targets": [
+				{
+					"type": "GatherItems",
+					"cfgName":"myplugin/gun_test",
+					"count":5
+				}
+			]
+		},
+		{
+			"key": "m006",
+			"icon": "icon_2.png",
+			"times": "once",
+			"fromList": false,
+			"fromNpc": "myplugin/test1",
+			"needTask": null,
+			"needVar": null,
+			"reward": "1setting",
+			"targets": [
+				{
+					"type": "FindObject",
+					"cfgName":"myplugin/village"
+				}
+			],
+			"trace": {
+				"pos": {
+					"x": 1650, 
+					"y": 13,
+					"z": -550
+				},
+				"range":5
+			}
+		}
+	],
+	"sequenced": false,
+	"showOrder": 5,
+	"showIcon": ""
+}

@@ -1,0 +1,34 @@
+{
+    "test1":
+    {
+        "plugin": "myplugin",
+        "mod": "skill",
+        "fields":
+        [
+            ["类型", "type"],
+            ["命中特效", "castEffect.*"],
+            ["起始角度", "startYaw[]"],
+            ["起始等待1", "startWait[1]"],
+            ["起始等待2", "startWait[2]"],
+            ["子弹配置", "missileCfg"],
+            ["子弹生命周期", "missileCfg:missile.lifeTime"],
+            ["子弹方块贴图", "missileCfg:missile.modelBlock:block.texture[1]"]
+        ],
+        "filter":
+        {
+            "_name": "^.*_.*$"
+        }
+    },
+	"buff":
+    {
+        "plugin": "myplugin",
+        "mod": "buff",
+        "fields":
+        [
+            ["appendTime", "appendTime"],
+			["damage", "damage"],
+			["maxHp", "maxHp"],
+			["headStar", "headStar"]
+        ]
+    }
+}

@@ -1,0 +1,6 @@
+REGION_ENTER {
+    Sequence{
+        IsPlayer(entity = $obj1)
+        FinishTask(name = "myplugin/main/m004", player = $obj1)
+    }
+}

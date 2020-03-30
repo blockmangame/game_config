@@ -1,0 +1,25 @@
+{
+  "stack_count_max": 1,
+  "icon": "angel_wings.png",
+  "skill": [
+    "myplugin/example",
+    "myplugin/example_3",
+    "myplugin/skill_container_test"
+  ],
+  "mesh": "gun_01.mesh",
+  "candrop": true,
+  "dropitem": "myplugin/example",
+  "container": {
+    "initCapacity": 0,
+    "maxCapacity": 10,
+    "loadType": "Block",
+    "loadName": "myplugin/beacon"
+  },
+  "syncVars":{
+	"currentCapacity":true
+  },
+  "syncGameData":{
+	"currentCapacity":true,
+	"extCapacity":true
+}
+}
