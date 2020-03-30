@@ -3,6 +3,12 @@
 --- Created by bell.
 --- DateTime: 2020/3/20 22:52
 ---
+if World.isClient then
+    --TODO
+else
+    require "script_server.event"
+end
+
 require "common.gm"
 require "script_common.event_define"
 require "script_common.lib"

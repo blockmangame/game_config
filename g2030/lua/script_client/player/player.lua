@@ -6,5 +6,6 @@
 function Player:initPlayer()
     Lib.log("Player:initPlayer")
 
-    self:initPlayer_impl()
+    self:initData()
+    Blockman.Instance():setLockVisionState(World.cfg.lockVision and World.cfg.lockVision.open or false)
 end

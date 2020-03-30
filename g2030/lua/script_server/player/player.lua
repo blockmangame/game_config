@@ -4,5 +4,19 @@
 --- DateTime: 2020/3/23 10:35
 ---
 function Player:initPlayer()
-    self:initPlayer_impl()
+    local attrInfo = self:getPlayerAttrInfo()
+    if not self:cfg().ignorePlayerSkin then
+        self:changeSkin(attrInfo.skin)
+    end
+    self:setData("mainInfo", attrInfo.mainInfo)
+
+    local mainData = self:data("main")
+    mainData.sex = attrInfo.sex==2 and 2 or 1
+    mainData.team = attrInfo.team
+    if mainData.sex==2 then
+        mainData.actorName = "girl.actor"
+    else
+        mainData.actorName = "boy.actor"
+    end
+    self:initCurrency()
 end
