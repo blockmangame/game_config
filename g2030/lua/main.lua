@@ -3,19 +3,14 @@
 --- Created by bell.
 --- DateTime: 2020/3/20 22:52
 ---
-if World.isClient then
-    --TODO
-else
-    require "script_server.event"
-end
-
+inspect = require "script_common.util.inspect"
 require "script_common.util.logutil"
-require "common.gm"
 require "script_common.event_define"
 require "script_common.lib"
 require "script_common.ninjalegends_define"
 require "script_common.trigger"
 require "script_common.entity"
+require "common.gm"
 
 if World.isClient then
     require "script_client.main"
