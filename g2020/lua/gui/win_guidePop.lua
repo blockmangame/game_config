@@ -14,7 +14,10 @@ end
 
 function M:update()
 	if self.index == self.count then
-		UI:closeWnd(self)
+		self.closeTimer = World.Timer(14, function()
+			UI:closeWnd(self)
+			self.closeTimer = nil
+		end)
 		if self.callBack then
 			self.callBack(true)
 			self.callBack = nil
@@ -27,6 +30,9 @@ function M:update()
 end
 
 function M:onOpen(showArg, callBack)
+	if self.closeTimer then
+		self.closeTimer()
+	end
 	self.callBack = callBack
 	self.index = 0
 	self.texts = showArg.texts or {}

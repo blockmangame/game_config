@@ -7134,7 +7134,7 @@ CALL_GO_TO_PLAYGROUND()-- 开始引导玩家去游乐场对话
 }
 OPEN_PLAYGROUND_BUFF()--开起游乐场buff，
 {
-    CallTrigger(object = $obj1, event = "FUNC_STATE_GENERATE", stateBase = "region", col = 1, skill = "myplugin/skill_state_region")
+    CallTrigger(object = $obj1, event = "FUNC_STATE_GENERATE", stateBase = "region", col = 3, skill = "myplugin/skill_state_region")
     $obj1.guideStep = 15
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
