@@ -18,8 +18,7 @@ function main:init()
 end
 
 function main:initLog()
-    local isPcPlatform = (CGame.instance:getPlatformId() == 1)
-    Lib.setDebugLog(isPcPlatform)
+    Lib.setDebugLog(EngineVersionSetting:canUseCmd())
 end
 
 main:init()
