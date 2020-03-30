@@ -36,6 +36,8 @@ local function checkJump(control, player)
             pet = player.world:getEntity(id)
             canJump = pet.onGround or pet:isSwimming()
         end
+        local jumpCount = player:getJumpCount()
+        canJump = canJump or (jumpCount > 0)
         if canJump then
             jumpBeginTime = nowTime
             jumpEndTime = nowTime + (playerCfg.maxPressJumpTime or 0)
@@ -55,6 +57,7 @@ local function checkJump(control, player)
         end
 
         control:jump()
+        player:decJumpCount()
     else
         if worldCfg.jumpProgressIcon then
             Lib.emitEvent(Event.EVENT_UPDATE_JUMP_PROGRESS, {jumpStop = true})
