@@ -3,7 +3,7 @@ function M:init()
 	self.itemPool = {}
     self.appSkin = nil
     self.playerInfo = nil
-	self.curActorSkin = nil
+	self.curActorSkin = {}
 	self.selectArchiveIndex = nil
 	self.dressStoreIds = World.cfg.dressStoreIds or nil
 	self.actorScale = UI:getRemoterData("win_dressArchiveScale") or 1
