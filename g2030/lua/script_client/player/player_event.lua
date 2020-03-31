@@ -9,3 +9,11 @@ function player_event(player, event, ...)
         func(player, ...)
     end
 end
+
+function events:onGroundChanged(lastOnGround, onGround)
+    --Lib.log(string.format("onGroundChanged %s->%s", tostring(lastOnGround), tostring(onGround)))
+
+    if lastOnGround == false and onGround == true then
+        self:setValue("jumpCount", self:getMaxJumpCount())
+    end
+end
