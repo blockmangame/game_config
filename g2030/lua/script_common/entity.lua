@@ -2,6 +2,11 @@
 local ValueDef		= T(Entity, "ValueDef")
 -- key				= {isCpp,	client,	toSelf,	toOther,	init,	saveDB}
 ValueDef.jumpCount	= {false,	true,	false,	false,      1,		false}
+ValueDef.curExp		= {false,	false,	true,	true,       0,		true}--当前锻炼值
+ValueDef.curLevel	= {false,	false,	true,	true,       1,		true}--当前阶数
+ValueDef.curHp		= {false,	false,	true,	true,       1,		false}--当前血量
+ValueDef.WeaponId   = {false,	false,	true,	true,       1,		true}--当前武器id
+ValueDef.SashId     = {false,	false,	true,	true,       10,		true}--当前腰带id
 
 ---获得跳跃次数
 function Entity:getJumpCount()
@@ -20,4 +25,38 @@ end
 function Entity:getMaxJumpCount()
     --TODO
     return 6
+end
+
+---获取每次锻炼增幅
+function Entity:getPerExpPlus()
+    ---TODO exp up calc func
+    return 1*self:getValue("WeaponId")
+end
+---获取当前锻炼值
+function Entity:getCurExp()
+    return self:getValue("curExp")
+end
+---设置当前锻炼值上限
+function Entity:getMaxExp()
+    ---TODO exp limit calc func
+    return 1*self:getValue("SashId")
+end
+
+
+---
+---
+---当前血量上限
+function Entity:getMaxHp()
+    ---TODO hp limit calc func
+    return 100+self:getCurExp()*5
+end
+---
+---当前血量
+function Entity:getCurHp()
+    ---TODO hp limit calc func
+    return self:getValue("curHp")
+end
+function Entity:getCurDamage()
+    ---TODO hp limit calc func
+    return 1+self:getCurExp()*5
 end

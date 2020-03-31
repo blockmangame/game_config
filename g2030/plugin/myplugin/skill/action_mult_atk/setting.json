@@ -1,0 +1,26 @@
+{
+  "icon": "/image/ctr_atk.png",
+  "?pushImage": "/image/ctr_atk.png",
+  "type": "MultiStage",
+  "jack": "B",
+  "castAction": "",
+  "castInterval": 1,
+  "stages": [
+    {
+      "skill": "myplugin/weapon_1_comboattack1",
+      "castTime": 11,
+      "waitTime": 20
+    },
+    {
+      "skill": "myplugin/weapon_1_comboattack2",
+      "castTime": 20,
+      "waitTime": 20
+    },
+    {
+      "skill": "myplugin/weapon_1_comboattack3",
+      "castTime": 25,
+      "waitTime": 20
+    }
+  ],
+  "cdTime": 25
+}

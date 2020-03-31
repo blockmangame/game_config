@@ -1,0 +1,32 @@
+{
+    "followTarget": true,
+    "followTargetRotationOffset": {
+        "z": 1.5,
+        "x": 0,
+        "y": 0
+    },
+    "collideBlock": 0,
+    "hitInterval": 20,
+    "rotateSpeed": 0,
+    "boundingVolume": {
+        "params": [
+            4,
+            4,
+            4
+        ],
+        "type": "Box"
+    },
+    "hitSound": {
+        "loop": false,
+        "volume": 4,
+        "sound": "/sound/player_attack_hit.mp3",
+        "selfOnly": false
+    },
+    "lifeTime": 4,
+    "gravity": 0,
+    "moveSpeed": 0,
+    "hitEntitySkill": "myplugin/comboattack1_hit",
+    "moveAcc": 0,
+    "collideEntity": 1,
+    "canHitRider": true
+}

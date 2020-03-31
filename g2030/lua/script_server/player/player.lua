@@ -20,3 +20,31 @@ function Player:initPlayer()
     end
     self:initCurrency()
 end
+
+local function castSetSkill(self,val)
+    local packet = {}
+    packet.pid = "CastSkill"
+    packet.fromID = self and self.objID
+    packet.name = "myplugin/action_add_exp"
+    packet.val = val
+    Skill.Cast(packet.name, packet, self)
+end
+---增加一次锻炼值
+function Player:addExp()
+    print("in addExp")
+    local newExp = self:getPerExpPlus()+self:getCurExp()
+    local maxExp = self:getMaxExp()
+    if newExp>maxExp then
+        newExp = maxExp
+    end
+    -- self:setCurExp(newExp)
+    castSetSkill(self,newExp)
+end
+function Player:resetExp()
+    castSetSkill(self,0)
+end
+
+function Player:setCurExp(val)
+    self:setValue("curExp", val)
+
+end

@@ -4,15 +4,139 @@
   "initPos": {
     "x": 1651,
     "y": 18,
-    "z": -561
+    "z": -560
   },
-  "saveMapPos": false,
+  "?do1": "基础游戏规则设置",
   "waitPlayerTime": 0,
   "waitStartTime": 0,
   "waitGoTime": 0,
   "playTime": -1,
-  "maxPlayers": 30,
+  "replay": true,
+  "damage": 100,
+  "reportTime": 30,
   "minPlayers": 1,
+  "maxPlayers": 30,
   "canJoinMidway": true,
-  "initSkillSlot": true
+  "clickScreenUse": false,
+  "initSkillSlot": true,
+  "?do": "屏蔽引擎main界面的一些无用交互",
+  "needPlayerCheckin":false,
+  "hideTeamStatusBar": true,
+  "needShowTargetInfo": false,
+  "personalShop": false,
+  "hideItemBar": true,
+  "hidePerSpec": true,
+  "disableBreakBlockProgress": true,
+  "playerInfoUI": {
+    "isShowHp": false,
+    "isShowFood": false,
+    "isShowExp": false
+  },
+  "?do1": "添加业务特有界面，初始化引擎主界面",
+  "mainUiList": [
+    "ninjaMain"
+  ],
+  "toolBarSetting": {
+    "hideBg": true,
+    "coinBarCfg": {
+      "coinBgImg":"set:ninja_main.json image:material_bg",
+      "coinAddImg": "set:ninja_main.json image:tool_add",
+      "gap": 10
+
+    },
+
+    "addBtnList": [
+      "setBox",
+      "chatBox",
+      "perspective"
+    ],
+    "buttonCfg": {
+      "setBox": {
+        "icon":"set:ninja_main.json image:tool_setting",
+        "size": {
+          "w": 50,
+          "h": 52
+        }
+      },
+      "chatBox": {
+        "icon":"set:ninja_main.json image:tool_msg",
+        "size": {
+          "w": 50,
+          "h": 52
+        }
+      },
+      "perspective": {
+        "icon":"set:ninja_main.json image:tool_camera1",
+        "size": {
+          "w": 50,
+          "h": 52
+        }
+      },
+      "info": {
+        "icon":"set:ninja_main.json image:tool_action",
+        "show": true,
+        "serverEvent": "GET_TOOLBAR_INFO",
+        "size": {
+          "w": 50,
+          "h": 52
+        }
+      }
+    }
+  },
+  "isDragControl": true,
+  "dragAreaSize": 200,
+  "dragNormalImage": "plugin/myplugin/image/ctr_move_bg.png",
+  "dragPushImage": "plugin/myplugin/image/ctr_move_bg.png",
+
+  "skillJack": {
+    "sectorSkills": [
+      {
+        "jackNum": 4,
+        "radius": 300,
+        "jackSize": 128,
+        "startAngle": 280,
+        "deltaAngle": 25,
+        "holderImage": "plugin/myplugin/image/ctr_skill_solt.png"
+      }
+    ],
+    "AJackIcon": "plugin/myplugin/image/ctr_jump_s.png",
+    "BJackIcon": "plugin/myplugin/image/ctr_atk.png",
+    "BJackArea": [
+      [
+        0,
+        -105
+      ],
+      [
+        0,
+        -95
+      ],
+      [
+        0,
+        189
+      ],
+      [
+        0,
+        189
+      ]
+    ],
+    "AJackArea": [
+      [
+        0,
+        -41
+      ],
+      [
+        0,
+        -34
+      ],
+      [
+        0,
+        100
+      ],
+      [
+        0,
+        100
+      ]
+    ]
+  }
 }
+
