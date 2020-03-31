@@ -2139,8 +2139,9 @@ FUNC_STATE_CHECK_REGION --params: state
 
 FUNC_REGION_STATE_OPERATION --parmas: isLeave, state
 {
-    If($obj1.guideStep == @PlayGoGround and $state == "playground" and not $isLeave) --如果是指引
+    If($obj1.guideStep == @PlayGoGround and $state == "playground" and not $isLeave and not $obj1.hadRegionguide) --如果是指引
     {
+        $obj1.hadRegionguide = true
         $Context = {
             obj1 = $obj1,
             isLeave = $isLeave,
@@ -2218,9 +2219,8 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     --游乐场指引完成
     If($obj1.guideStep == @PlayGoGround){--存档3，完成
         $obj1.guideStep = @GuideGift
+        CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
     }
-    CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
-
     $interactList = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"))
     If(GetSkillVar(fullName = $skill, key = "hadReward"))
     {

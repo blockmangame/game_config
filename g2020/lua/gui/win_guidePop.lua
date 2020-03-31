@@ -1,9 +1,8 @@
 function M:init()
-    WinBase.init(self, "tradeRiskHint.json", false)
+    WinBase.init(self, "guidePop.json", false)
 	
-	self.sureButton = self:child("tradeRiskHint-sureBtn")
-	self.context = self:child("tradeRiskHint-hintText")
-	self:child("tradeRiskHint-close"):SetVisible(false)
+	self.sureButton = self:child("guidePop-sureBtn")
+	self.context = self:child("guidePop-hintText")
 	self.context:SetFontSize("HT20")
 	self.callBack = nil
 
@@ -14,7 +13,8 @@ end
 
 function M:update()
 	if self.index == self.count then
-		self.closeTimer = World.Timer(14, function()
+		self:child("guidePop-context"):SetVisible(false)
+		self.closeTimer = World.Timer(20, function()
 			UI:closeWnd(self)
 			self.closeTimer = nil
 		end)
@@ -33,6 +33,7 @@ function M:onOpen(showArg, callBack)
 	if self.closeTimer then
 		self.closeTimer()
 	end
+	self:child("guidePop-context"):SetVisible(true)
 	self.callBack = callBack
 	self.index = 0
 	self.texts = showArg.texts or {}
