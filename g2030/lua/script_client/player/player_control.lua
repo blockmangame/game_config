@@ -5,6 +5,7 @@ local nextJumpTime = 0
 local jumpBeginTime = 0
 local jumpEndTime = 0
 local onGround = true
+local lockKeyJump = false
 ---@param control PlayerControl
 ---@param player EntityClientMainPlayer
 local function checkJump(control, player)
@@ -28,7 +29,10 @@ local function checkJump(control, player)
         bm:setVerticalSlide(0)
         slideJumpFlag = true
     end
-    if bm:isKeyPressing("key.jump") or slideJumpFlag then
+    if not bm:isKeyPressing("key.jump") then
+        lockKeyJump = false
+    end
+    if not lockKeyJump and (bm:isKeyPressing("key.jump") or slideJumpFlag) then
         local canJump = player.onGround or player:isSwimming()
         local id = player.rideOnId
         local pet
@@ -58,6 +62,7 @@ local function checkJump(control, player)
 
         control:jump()
         player:decJumpCount()
+        lockKeyJump = true
     else
         if worldCfg.jumpProgressIcon then
             Lib.emitEvent(Event.EVENT_UPDATE_JUMP_PROGRESS, {jumpStop = true})
