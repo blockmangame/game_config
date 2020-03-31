@@ -1792,6 +1792,11 @@ ROTATION_WHEN_RIDE_ON{
 
 UPDATE_POS_WHILE_IN_INSIDE_REGION{
     $rideOn = GetRideOn(entity = $obj1)
+    If($rideOn){
+        If(GetConfigVar(obj = $rideOn, key = "base") == "fur_base"){
+            Return()
+        }
+    }
     $tp = GetEntityPosition(entity = $rideOn or $obj1)
     If($obj1.curInsideRegion or $obj1.lastInsideRegion){
         $regionCenter = GetRegionCenter(region = $obj1.curInsideRegion or $obj1.lastInsideRegion)
