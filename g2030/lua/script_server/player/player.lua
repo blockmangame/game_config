@@ -16,7 +16,7 @@ function Player:initPlayer()
     if mainData.sex==2 then
         mainData.actorName = "girl.actor"
     else
-        mainData.actorName = "boy.actor"
+        mainData.actorName = "ninja_boy.actor"
     end
     self:initCurrency()
 end
