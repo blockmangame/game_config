@@ -8,6 +8,8 @@ require "script_server.player.player_event"
 require "script_server.trigger_handlers"
 require "script_server.skill.skill_normal_atk"
 require "script_server.skill.skill_addExp"
+require "script_server.skill.multistage"
+require "script_server.skill.timeLine"
 
 local main = {}
 
