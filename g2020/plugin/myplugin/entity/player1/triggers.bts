@@ -6539,11 +6539,6 @@ SHOW_PALETTE_HELP
     ShowLongTextTip(player = $obj1, text = "palette_help_msg", title = "palette_help_title")
 }
 
-PLAYER_CLEAR_RIDE
-{   ----废弃中............
-    CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
-    ClearRide(entity = $obj1)
-}
 ADD_SVIP_BUFF{
     If(not ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege")){
         Return()
