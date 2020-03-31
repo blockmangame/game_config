@@ -21,6 +21,9 @@ function Player:initPlayer()
     self:initCurrency()
 end
 
+---
+---内部方法，释放一次增加锻炼值的技能
+---后期可能推广位增加其他属性
 local function castSetSkill(self,val)
     local packet = {}
     packet.pid = "CastSkill"
@@ -40,6 +43,8 @@ function Player:addExp()
     -- self:setCurExp(newExp)
     castSetSkill(self,newExp)
 end
+---
+---重置锻炼值
 function Player:resetExp()
     castSetSkill(self,0)
 end
