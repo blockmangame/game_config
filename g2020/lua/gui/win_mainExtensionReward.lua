@@ -10,6 +10,7 @@ function M:init()
 
     self:subscribe(self:child("MainExtensionReward-CD"), UIEvent.EventWindowClick , function()
         Lib.emitEvent(Event.EVENT_SHOW_GOLD_SHOP, true)
+        SoundSystem.instance:playEffectByType(0)
     end)
 
 end
