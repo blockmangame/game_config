@@ -382,7 +382,7 @@ ENTITY_ENTER
 
         $obj1.isReadyReward = false
 
-        CallTrigger(event = "ADD_MONEY", object = $obj1)
+        StartTimer(object = $obj1, event = "ADD_MONEY", time = 100)
         If($obj1.inPartyOwnerId == 0)   -- not in party
         {
             $obj1.role = @adult
