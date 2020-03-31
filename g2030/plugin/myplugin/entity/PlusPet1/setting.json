@@ -1,0 +1,37 @@
+{
+    "actorName": "g2021_pet_1_1_1.actor",
+    "attackNpc": true,
+    "autoAttack": false,
+    "enableAI": true,
+    "canClick": false,
+    "collision": false,
+    "canMove": true,
+    "chaseDistance": 20,
+    "chaseInterval": 1,
+    "unassailable": 1,
+    "undamageable": 1,
+    "hateWay": 1,
+    "idleTime": [
+        5,
+        10
+    ],
+    "skillList": [
+        {
+            "prioity": 1,
+            "hpRateMax": 1,
+            "hpRateMin": 0,
+            "attackDis": 2,
+            "fullName": "myplugin/pet_1_1_1_attack",
+            "followEntityDistanceWhenHasTarget" : 20,
+            "followEntityDistanceWhenNotTarget" : 2
+        }
+    ],
+    "maxVisualAngle": 360,
+    "patrolDistance": 20,
+    "aiTickInterval": 1,
+    "meetCollisionEmptyRun": true,
+    "followEntityDistance": 10,
+    "bodyTurnMax": 180,
+    "bodyTurnMin": 0,
+    "nextChaseInterval": 3
+}

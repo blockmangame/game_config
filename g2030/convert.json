@@ -27,5 +27,63 @@
 			["maxHp", "maxHp"],
 			["headStar", "headStar"]
         ]
+    },
+    "LuckyDraw":
+    {
+        "plugin": "myplugin",
+        "mod": "entity",
+        "fields":
+        [
+            ["内含式神", "rewardList"],
+            ["出现位置", "pos"],
+            ["模型名称", "actorName"]
+        ],
+        "filter":
+        {
+            "_name": "^LuckyDraw.*"
+        }
+    },
+    "PlusPet":
+    {
+        "plugin": "myplugin",
+        "mod": "entity",
+        "fields":
+        [
+            ["多语言名称", "multiLang"],
+            ["模型名称", "actorName"],
+            ["技能名字", "skill"],
+            ["顺序值", "orderWeight"],
+            ["出现权重", "probability"],
+            ["攻击倍率", "atkBuffNum"],
+            ["减伤倍率", "reductionInjury"],
+            ["强化权重", "intensifyValue"],
+            ["强化攻击倍率", "intensifyATK"]
+
+        ],
+        "filter":
+        {
+            "_name": "^PlusPet.*"
+        }
+    },
+    "Pet":
+    {
+        "plugin": "myplugin",
+        "mod": "entity",
+        "fields":
+        [
+            ["多语言名称", "multiLang"],
+            ["模型名称", "actorName"],
+            ["出现权重", "probability"],
+            ["顺序值", "orderWeight"],
+            ["金币强化区间", "coinIntensifyRange"],
+            ["气强化区间", "kiIntensifyRange"],
+            ["锻炼效率倍率", "exerciseRatio"],
+            ["金币转化倍率", "coinTransRatio"],
+            ["气转化倍率", "kiTransRatio"]
+        ],
+        "filter":
+        {
+            "_name": "^Pet.*"
+        }
     }
 }
