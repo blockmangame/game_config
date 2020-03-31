@@ -657,7 +657,6 @@ FUNC_LOAD_WORKS_WALL_TOP_RESPONSE {
 
 ENTITY_RIDE_OFF {
     If(not IsPlayer(entity = $obj2)){ Return() }
-    PlayAction( entity = $obj1, includeSelf = true, actionName = "jump", actionTime = -1 )
     $targetAttachPointIndexBuff = GetConfigVar(obj = $obj1, key = $obj2.role == @adult and "targetAttachPointIndexBuffByAdult" or "targetAttachPointIndexBuffByChild")
     If($targetAttachPointIndexBuff and GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff)){
         RemoveEntityBuff(entity = $obj2, buff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff))
@@ -667,6 +666,7 @@ ENTITY_RIDE_OFF {
     CallTrigger(object = $obj2, event = "ENTITY_REMOVE_INTERACTION")
     StartTimer(rep = false, object = $obj2, target = $obj1, time = 1, event = "RIDEOFF_IN_DEC")
     If(not IsPlayer(entity = $obj1)){
+        PlayAction( entity = $obj1, includeSelf = true, actionName = "jump", actionTime = -1 )
         If(not GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/dec_jump2_2_idle_buff") and not GetRideOn(entity = $obj1))
         {
             AddEntityBuff(entity = $obj1, cfg = "myplugin/dec_jump2_2_idle_buff")
