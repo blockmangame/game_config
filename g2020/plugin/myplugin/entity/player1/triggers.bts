@@ -5030,6 +5030,9 @@ GIVE_AWAY{
             ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
     }
     AddItem(entity = $obj1, cfg = $cfg, count = $count or 1)
+    $textP1 = GetEntityName(entity = $obj2)
+    $textP2 = GetItemCfg(fullName = $cfg, key = "itemname")
+    ShowTip(entity = $obj1, tipType = 1, textKey = "giveaway.warmPropmpt.tip", textP1 = $textP1, textP2 = $textP2, keepTime = 40)
 }
 
 CLEAR_EQUIP_CAR_CD{
