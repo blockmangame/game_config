@@ -91,6 +91,7 @@ EDIT_OBJECT_ACTION{
 
 START_EDIT_ENTITY{
     CallTrigger(object = $obj1, event = "ADD_EDIT_BUFF")
+    ClearPassengers(entity = $obj1)
     If(not $obj1.firstInEdit){
         SetEntityPosition(entity = $obj1, map = GetEntityMap(entity = $obj1), pos = GetEntityPosition(entity = $obj1))
         SetBodyYaw(entity = $obj1, yaw = $yaw or GetEntityYaw(entity = $obj1))

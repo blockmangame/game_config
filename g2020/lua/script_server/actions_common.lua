@@ -288,3 +288,12 @@ function Actions.UpdateEntityEditContainer2(data, params, context)
         show = params.show
     })
 end
+
+function Actions.ClearPassengers(data, params, context)
+    for idx, objID in pairs(params.entity:data("passengers")) do
+        local entity = params.entity.world:getEntity(objID)
+        if entity then
+            entity:clearRide()
+        end
+    end
+end
