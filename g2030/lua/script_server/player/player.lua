@@ -53,3 +53,8 @@ function Player:setCurExp(val)
     self:setValue("curExp", val)
 
 end
+
+---设置阵营
+function Player:setTeam(id)
+    Game.TryJoinTeam(self, id)
+end

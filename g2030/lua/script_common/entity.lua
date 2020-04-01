@@ -7,6 +7,7 @@ ValueDef.curLevel	= {false,	false,	true,	true,       1,		true}--当前阶数
 ValueDef.curHp		= {false,	false,	true,	true,       1,		false}--当前血量
 ValueDef.WeaponId   = {false,	false,	true,	true,       1,		true}--当前武器id
 ValueDef.SashId     = {false,	false,	true,	true,       10,		true}--当前腰带id
+ValueDef.teamId		= {false,	true,	true,	true,       0,		true}--阵营Id
 
 ---获得跳跃次数
 function Entity:getJumpCount()
@@ -59,4 +60,14 @@ end
 function Entity:getCurDamage()
     ---TODO hp limit calc func
     return 1+self:getCurExp()*5
+end
+
+---获取阵营Id
+function Entity:getTeamId()
+    return self:getValue("teamId") or 0
+end
+
+---设置阵营Id
+function Entity:setTeamId(id)
+    self:setValue("teamId", id)
 end
