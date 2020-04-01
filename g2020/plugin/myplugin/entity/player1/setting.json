@@ -977,6 +977,24 @@
             "propagateScaling": true,
             "alignWorldYAxis": false,
             "matchActorOrientation": false
+        },
+        {
+            "name": "sitPoint_3",
+            "bone": "b_pelvis",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "rotation": {
+                "x": 0,
+                "y": 180,
+                "z": 90
+            },
+            "scale": 10,
+            "propagateScaling": true,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
         }
     ],
     "boundingVolume": {
@@ -1013,17 +1031,5 @@
         "sound": "sound_drum.mp3",
         "path": "plugin/myplugin/sound/sound_drum.mp3"
     },
-    "runBuff": [
-        "myplugin/player_run_buff"
-    ],
-    "jumpBuff": [
-        "myplugin/player_jump_buff"
-    ],
-    "swimmingIdleBuff": [
-        
-    ],
-    "swimmingBuff": [
-        "myplugin/player_swimmingIdle_buff"
-    ]
-    
+    "runBuff": []
 }
