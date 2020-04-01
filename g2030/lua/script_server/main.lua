@@ -5,6 +5,7 @@
 ---
 require "script_server.player.player"
 require "script_server.player.player_event"
+require "script_server.player.player_packet"
 require "script_server.trigger_handlers"
 require "script_server.skill.skill_normal_atk"
 require "script_server.skill.skill_addExp"
