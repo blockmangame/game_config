@@ -5,6 +5,7 @@
 ---
 local Events = {
     "EVENT_EXP_CHANGE",
+    "EVENT_HP_CHANGE",
     "EVENT_CHECK_TRIGGERS"
 }
 

@@ -19,8 +19,20 @@ function Player:initPlayer()
         mainData.actorName = "ninja_boy.actor"
     end
     self:initCurrency()
-end
+    self:tickLifeSteal()
 
+end
+function Player:tickLifeSteal()
+    if Game.GetState() == "GAME_EXIT" then
+        return
+    end
+    if Game.GetState() == "GAME_GO" then
+        self:deltaHp(0.05)
+    end
+    World.Timer(10, function ()
+        self:tickLifeSteal()
+    end   )
+end
 ---
 ---内部方法，释放一次增加锻炼值的技能
 ---后期可能推广位增加其他属性
@@ -34,7 +46,6 @@ local function castSetSkill(self,val)
 end
 ---增加一次锻炼值
 function Player:addExp()
-    print("in addExp")
     local newExp = self:getPerExpPlus()+self:getCurExp()
     local maxExp = self:getMaxExp()
     if newExp>maxExp then
@@ -47,6 +58,25 @@ end
 ---重置锻炼值
 function Player:resetExp()
     castSetSkill(self,0)
+end
+
+---
+---操作血量变化
+---当deltaVal绝对值大于1是认为是自然数
+---当deltaVal绝对值小于1是认为是倍数，将乘以最大血量以计算
+---负数代表扣血
+---正数代表回血
+---
+function Player:deltaHp(deltaVal)
+    if deltaVal>0 and deltaVal<1 or deltaVal<0 and deltaVal>-1 then
+        deltaVal = math.floor(self:getMaxHp()*deltaVal)
+    end
+    local curVal = math.min(math.max(self:getCurHp()+deltaVal,0),self:getMaxHp())
+    self:setValue("curHp", curVal)
+    if curVal <=0  then
+        self.curHp = 0
+    end
+    return curVal
 end
 
 function Player:setCurExp(val)
