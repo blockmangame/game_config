@@ -137,6 +137,41 @@
         100
       ]
     ]
+  },
+  "team": [
+    {
+      "id": 1,
+      "vars": {
+        "nameHeadText": "中立",
+        "color":"red"
+      },
+      "teamBuff": [],
+      "level": 1
+    },
+    {
+      "id": 2,
+      "vars": {
+        "nameHeadText": "黑忍者",
+        "color":"black"
+      },
+      "teamBuff": ["myplugin/buff_suckBlood", "myplugin/buff_attackMulti"],
+      "level": 1
+    },
+    {
+      "id": 3,
+      "vars": {
+        "nameHeadText": "白忍者",
+        "color":"white"
+      },
+      "teamBuff": ["myplugin/buff_cd", "myplugin/buff_skillMulti"],
+      "level": 1
+    }
+  ],
+  "customProp": {
+    "suckBlood": 0,
+    "skillMulti": 0,
+    "attackMulti": 0,
+    "cd": 0
   }
 }
 

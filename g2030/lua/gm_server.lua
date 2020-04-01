@@ -4,7 +4,7 @@ GMItem["g2030/回主城"] = function(self)
     local targetMap = World.CurWorld:staticMap("map001")
     self:setMapPos(targetMap, targetMap.cfg.initPos)
 end
-GMItem["test/清空当前修炼值"] = function(self)
+GMItem["g2030/清空当前修炼值"] = function(self)
     self:resetExp()
 end
 GMItem["g2030/addBuff"] = function(self)
@@ -34,4 +34,18 @@ GMItem["sample/释放宠物技能"] = function(self)
     Skill.Cast("myplugin/pet_1_1_1_attack", {targetID=self.objID}, Entity)
 end
 -----------------------------------Pet Model Test End-------------------------------
+
+---阵营
+GMItem["g2030/setTeam_1"] = function(self)
+    self:setTeam(1)
+end
+
+GMItem["g2030/setTeam_2"] = function(self)
+    self:setTeam(2)
+end
+
+GMItem["g2030/setTeam_3"] = function(self)
+    self:setTeam(3)
+end
+
 return GMItem
