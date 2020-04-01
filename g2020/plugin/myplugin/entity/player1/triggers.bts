@@ -382,7 +382,7 @@ ENTITY_ENTER
 
         $obj1.isReadyReward = false
 
-        CallTrigger(event = "ADD_MONEY", object = $obj1)
+        StartTimer(object = $obj1, event = "ADD_MONEY", time = 100)
         If($obj1.inPartyOwnerId == 0)   -- not in party
         {
             $obj1.role = @adult
@@ -1792,6 +1792,11 @@ ROTATION_WHEN_RIDE_ON{
 
 UPDATE_POS_WHILE_IN_INSIDE_REGION{
     $rideOn = GetRideOn(entity = $obj1)
+    If($rideOn){
+        If(GetConfigVar(obj = $rideOn, key = "base") == "fur_base"){
+            Return()
+        }
+    }
     $tp = GetEntityPosition(entity = $rideOn or $obj1)
     If($obj1.curInsideRegion or $obj1.lastInsideRegion){
         $regionCenter = GetRegionCenter(region = $obj1.curInsideRegion or $obj1.lastInsideRegion)
@@ -2139,8 +2144,9 @@ FUNC_STATE_CHECK_REGION --params: state
 
 FUNC_REGION_STATE_OPERATION --parmas: isLeave, state
 {
-    If($obj1.guideStep == @PlayGoGround and $state == "playground" and not $isLeave) --如果是指引
+    If($obj1.guideStep == @PlayGoGround and $state == "playground" and not $isLeave and not $obj1.hadRegionguide) --如果是指引
     {
+        $obj1.hadRegionguide = true
         $Context = {
             obj1 = $obj1,
             isLeave = $isLeave,
@@ -2218,9 +2224,8 @@ FUNC_STATE_REWARD --state [, stateBase, skill]
     --游乐场指引完成
     If($obj1.guideStep == @PlayGoGround){--存档3，完成
         $obj1.guideStep = @GuideGift
+        CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
     }
-    CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
-
     $interactList = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "InteractList"))
     If(GetSkillVar(fullName = $skill, key = "hadReward"))
     {
@@ -5030,6 +5035,9 @@ GIVE_AWAY{
             ,dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
     }
     AddItem(entity = $obj1, cfg = $cfg, count = $count or 1)
+    $textP1 = GetEntityName(entity = $obj2)
+    $textP2 = GetItemCfg(fullName = $cfg, key = "itemname")
+    ShowTip(entity = $obj1, tipType = 1, textKey = "giveaway.warmPropmpt.tip", textP1 = $textP1, textP2 = $textP2, keepTime = 40)
 }
 
 CLEAR_EQUIP_CAR_CD{
@@ -6539,11 +6547,6 @@ SHOW_PALETTE_HELP
     ShowLongTextTip(player = $obj1, text = "palette_help_msg", title = "palette_help_title")
 }
 
-PLAYER_CLEAR_RIDE
-{   ----废弃中............
-    CallTrigger(obj1 = $obj1, event = "ENTITY_REMOVE_INTERACTION")
-    ClearRide(entity = $obj1)
-}
 ADD_SVIP_BUFF{
     If(not ArrayFind(array = $obj1.privilege, value = "myplugin/svip_privilege")){
         Return()
@@ -7143,7 +7146,7 @@ OPEN_PLAYGROUND_BUFF()--开起游乐场buff，
     $obj1.guideStep = 15
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
-STEP15_FINISH()
+STEP15_FINISH()--//废弃，客户端直接转下一步
 {
     $uiList = [
         "priShop", "familyAlbum", "dressArchive", 
@@ -7158,7 +7161,7 @@ STEP15_FINISH()
 }
 STEP16_FINISH()--点击开始GPS:指引去游乐场
 {
-    If($obj1.guideStep == 16){
+    If($obj1.guideStep == 15){
         $obj1.guideStep = @PlayGoGround
         SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
     }

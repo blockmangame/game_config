@@ -3,4 +3,7 @@ ENTITY_BUFF_REMOVE {
     $entity.interactionBuff = nil
     PlayAction(entity = $entity, actionName = "idle",  actionTime = 0, includeSelf = true)
     SendInteractionEnd(player = $entity)
+    If(GetRideOn(entity = $entity)) {
+        ClearRide(entity = $entity)
+    }
 }
