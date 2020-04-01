@@ -10,5 +10,5 @@ function Handlers.GAME_REWAIT(context)
 end
 
 function Handlers.SKILL_CAST(context)
-    print("Handlers.SKILL_CAST " .. Lib.inspect(context, { depth = 1 }))
+    --print("Handlers.SKILL_CAST " .. Lib.inspect(context, { depth = 1 }))
 end

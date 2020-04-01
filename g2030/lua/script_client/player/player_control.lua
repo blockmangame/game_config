@@ -8,6 +8,8 @@ local onGround = true
 local lockKeyJump = false
 
 local function jump_impl(control, player)
+    local playerCfg = player:cfg()
+    Skill.Cast(playerCfg.jumpSkill)
     control:jump()
     player:decJumpCount()
 end
