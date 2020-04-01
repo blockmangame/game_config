@@ -60,3 +60,9 @@ function Entity:getCurDamage()
     ---TODO hp limit calc func
     return 1+self:getCurExp()*5
 end
+---
+---当前伤害减免
+function Entity:getDefFactor()
+    ---TODO hp limit calc func
+    return 1+self:getCurExp()*5
+end

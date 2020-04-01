@@ -3,6 +3,7 @@
 --- Created by bell.
 --- DateTime: 2020/3/21 22:39
 ---
+require "script_server.entity.entity"
 require "script_server.player.player"
 require "script_server.player.player_event"
 require "script_server.player.player_packet"
