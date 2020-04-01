@@ -1,3 +1,20 @@
 {
-  "type": ""
+  "type": "MultiStage",
+  "stages": [
+    {
+      "skill": "myplugin/jump_skill1",
+      "castTime": 11,
+      "waitTime": 20
+    },
+    {
+      "skill": "myplugin/jump_skill2",
+      "castTime": 20,
+      "waitTime": 20
+    },
+    {
+      "skill": "myplugin/jump_skill3",
+      "castTime": 25,
+      "waitTime": 20
+    }
+  ]
 }
