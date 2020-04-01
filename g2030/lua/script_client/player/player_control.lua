@@ -6,6 +6,12 @@ local jumpBeginTime = 0
 local jumpEndTime = 0
 local onGround = true
 local lockKeyJump = false
+
+local function jump_impl(control, player)
+    control:jump()
+    player:decJumpCount()
+end
+
 ---@param control PlayerControl
 ---@param player EntityClientMainPlayer
 local function checkJump(control, player)
@@ -60,8 +66,7 @@ local function checkJump(control, player)
             return
         end
 
-        control:jump()
-        player:decJumpCount()
+        jump_impl(control, player)
         lockKeyJump = true
     else
         if worldCfg.jumpProgressIcon then
