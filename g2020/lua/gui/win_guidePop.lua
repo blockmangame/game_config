@@ -14,7 +14,7 @@ end
 function M:update()
 	if self.index == self.count then
 		self:child("guidePop-context"):SetVisible(false)
-		self.closeTimer = World.Timer(20, function()
+		self.closeTimer = World.Timer(30, function()
 			UI:closeWnd(self)
 			self.closeTimer = nil
 		end)

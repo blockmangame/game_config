@@ -7146,7 +7146,7 @@ OPEN_PLAYGROUND_BUFF()--开起游乐场buff，
     $obj1.guideStep = 15
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
-STEP15_FINISH()
+STEP15_FINISH()--//废弃，客户端直接转下一步
 {
     $uiList = [
         "priShop", "familyAlbum", "dressArchive", 
@@ -7161,7 +7161,7 @@ STEP15_FINISH()
 }
 STEP16_FINISH()--点击开始GPS:指引去游乐场
 {
-    If($obj1.guideStep == 16){
+    If($obj1.guideStep == 15){
         $obj1.guideStep = @PlayGoGround
         SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
     }
