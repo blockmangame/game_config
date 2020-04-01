@@ -34,10 +34,10 @@ function M:initViewByType(type,pos,root)
     elseif type == 1 then
         self:initView("set:ninja_main.json image:bar_hp_icon",
                 "set:ninja_main.json image:bar_hp",
-                Event.EVENT_EXP_CHANGE,
+                    Event.EVENT_HP_CHANGE,
                 function ()
-                    self.txtVal:SetText(Me:getCurHp().."/"..Me:getMaxHp())
-                    self.pgsVal:SetProgress(Me:getCurHp() / Me:getMaxHp())
+                        self.txtVal:SetText(Me:getCurHp().."/"..Me:getMaxHp())
+                        self.pgsVal:SetProgress(Me:getCurHp() / Me:getMaxHp())
                 end,
                 Me:getCurHp(),
                 Me:getMaxHp())
