@@ -194,7 +194,9 @@ function M:dynamicCalculateStatesArea()
         UI:closeWnd(self)
         return
     end
-
+    
+    UI:closeWnd("main_tray_g2020")
+    UI:closeWnd("bag_g2020")
     if main.visible then
         UI:closeWnd("showDetails")
         main.UI.txt:SetText(main.totalUsersCount)
