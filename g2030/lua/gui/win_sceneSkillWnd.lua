@@ -40,12 +40,6 @@ local function initChildUIEvent(self)
 		UI:closeWnd(self)
 	end)
 
-	self:subscribe(self.touchCell, UIEvent.EventWindowTouchDown, function()
-		self.touchInTouchCellUI = true
-	end)
-	self:subscribe(self.touchCell, UIEvent.EventMotionRelease, function()
-		self.touchInTouchCellUI = false
-	end)
 	self:subscribe(self.touchCell, UIEvent.EventWindowTouchUp, function()
 		castSceneSkill(self)
 		UI:closeWnd(self)
@@ -66,7 +60,6 @@ local function resetProperty(self)
 	self.curSkillCfg = nil
 
 	self.curTouchCellBaseRealPos = {x = 0, y = 0}
-	self.touchInTouchCellUI = false
 	self.isTouchPointMove = false
 	self.slipSensitivityArea = STATIC_SLIP_SENSITIVITY_AREA
 	self.touchBgArea = STATIC_BASE_AREA
@@ -103,7 +96,6 @@ end
 
 ------------------------------------------------------------------
 local function updatePlayerTouch(self)
-	self.touchInTouchCellUI = true
 	local realNormalizeSizeX = {x = 0, y = 0, z = self.touchCell:GetPixelSize().x / 2}
 	local sceneRatio = self.curSkillCfg.sceneSkillSceneRatio or 1
 	
@@ -127,12 +119,13 @@ local function updatePlayerTouch(self)
 		end
 		-- todo ex
 		self:updateTouchPointBasePosition(touchPos)
-		if self.touchInTouchCellUI then
+		local imcPos = {x = touchPos.x - ccbrpX,y = 0, z = touchPos.y - ccbrpY}
+		if (imcPos.x * imcPos.x + imcPos.z * imcPos.z) <= realNormalizeSizeX.z * realNormalizeSizeX.z then
+			imcNormalizeV3.x = imcPos.x
+			imcNormalizeV3.z = imcPos.z
 			self:updateShowPointBasePosition(touchPos)
-			imcNormalizeV3.x = touchPos.x - ccbrpX
-			imcNormalizeV3.z = touchPos.y - ccbrpY
 		else
-			local imcYaw = Lv3AngleXZ({x = touchPos.x - ccbrpX, z = touchPos.y - ccbrpY})
+			local imcYaw = Lv3AngleXZ(imcPos)
 			local tempV3 = LposAroundYaw(realNormalizeSizeX, imcYaw)
 			imcNormalizeV3.x = tempV3.x
 			imcNormalizeV3.z = tempV3.z
