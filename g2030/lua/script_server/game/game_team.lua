@@ -18,7 +18,7 @@ function TeamBase:joinEntity(entity)
 		buff.addList[objID] = entity:addBuff(buff.name)
 	end
 	if entity.isPlayer then
-		entity:setHeadText(-1, 1, self.vars["nameHeadText"])
+		entity:setHeadText(0, -1, self.vars["nameHeadText"])
 		WorldServer.BroadcastPacket({
 			pid = "SetPlayerTeam",
 			objId = entity.objID,
