@@ -48,4 +48,16 @@ GMItem["g2030/setTeam_3"] = function(self)
     self:setTeam(3)
 end
 
+GMItem["g2030/getTeamInfo_1"] = function(self)
+    Game.getTeamInfo(1)
+end
+
+GMItem["g2030/getTeamInfo_2"] = function(self)
+    Game.getTeamInfo(2)
+end
+
+GMItem["g2030/getTeamInfo_3"] = function(self)
+    Game.getTeamInfo(3)
+end
+
 return GMItem

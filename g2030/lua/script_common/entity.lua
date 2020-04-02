@@ -8,6 +8,7 @@ ValueDef.curHp		= {false,	false,	true,	true,       1,		false}--当前血量
 ValueDef.WeaponId   = {false,	false,	true,	true,       1,		true}--当前武器id
 ValueDef.SashId     = {false,	false,	true,	true,       10,		true}--当前腰带id
 ValueDef.teamId		= {false,	true,	true,	true,       0,		true}--阵营Id
+ValueDef.teamKills		= {false,	false,	false,	false,       0,		false}--个人阵营击杀数
 
 ---获得跳跃次数
 function Entity:getJumpCount()
@@ -76,4 +77,24 @@ end
 ---设置阵营Id
 function Entity:setTeamId(id)
     self:setValue("teamId", id)
+end
+
+---获取个人阵营击杀数
+function Entity:getTeamKills()
+    return self:getValue("teamKills") or 0
+end
+
+---增加个人阵营击杀数
+function Entity:addTeamKills(num)
+    local old = self:getTeamKills()
+    self:setValue("teamKills", old + (num or 1))
+    local team = self:getTeam()
+    if team then
+        team:addTeamKills(15)
+    end
+end
+
+---清空个人阵营击杀数（切换阵营时清空）
+function Entity:clearTeamKills()
+    self:setValue("teamKills", 0)
 end

@@ -1,4 +1,5 @@
 local TeamBase = T(Game, "TeamBase")
+local TeamCfg = L("TeamCfg", {})
 
 function TeamBase:joinEntity(entity)
     local time = World.Now()
@@ -78,4 +79,52 @@ function TeamBase:initBuff()
     for _, name in ipairs(self.teamBuff) do
         self:addBuff(name, 100000)
     end
+end
+
+function TeamBase:addLevelCfg(cfg)
+	if cfg.level then
+		TeamCfg[tonumber(cfg.level)] = cfg
+	end
+end
+
+function TeamBase:getLevelCfg(level, key)
+	if TeamCfg[tonumber(level)] then
+		return TeamCfg[tonumber(level)][key]
+	end
+end
+
+function TeamBase:addTeamKills(num)
+	if not self.kills then
+		return
+	end
+	self.kills = self.kills + num
+	self:updateLevel()
+end
+
+function TeamBase:updateLevel()
+	if not self.kills then
+		self.level = 1
+		return
+	end
+
+	local kills = self.kills
+	local old = self.level
+	self.level = #TeamCfg
+	for i = old, #TeamCfg do
+		if TeamCfg[i] and tonumber(TeamCfg[i].nextKills) > kills then
+			self.level = i
+			break
+		end
+	end
+	if old ~= self.level then
+		self:onTeamUpgrade()
+	end
+end
+
+function TeamBase:getLevel()
+	return self.level
+end
+
+function TeamBase:onTeamUpgrade()
+
 end

@@ -19,6 +19,7 @@
   "canJoinMidway": true,
   "clickScreenUse": false,
   "initSkillSlot": true,
+  "teammateHurt": true,
   "?do": "屏蔽引擎main界面的一些无用交互",
   "needPlayerCheckin":false,
   "hideTeamStatusBar": true,
@@ -146,7 +147,8 @@
         "color":"red"
       },
       "teamBuff": [],
-      "level": 1
+      "level": 1,
+      "kills": 0
     },
     {
       "id": 2,
@@ -154,8 +156,9 @@
         "nameHeadText": "黑忍者",
         "color":"black"
       },
-      "teamBuff": ["myplugin/buff_suckBlood", "myplugin/buff_attackMulti"],
-      "level": 1
+      "teamBuff": ["myplugin/buff_reduceDamage", "myplugin/buff_addRecover"],
+      "level": 1,
+      "kills": 0
     },
     {
       "id": 3,
@@ -163,15 +166,11 @@
         "nameHeadText": "白忍者",
         "color":"white"
       },
-      "teamBuff": ["myplugin/buff_cd", "myplugin/buff_skillMulti"],
-      "level": 1
+      "teamBuff": ["myplugin/buff_reduceDamage", "myplugin/buff_addRecover"],
+      "level": 1,
+      "kills": 0
     }
   ],
-  "customProp": {
-    "suckBlood": 0,
-    "skillMulti": 0,
-    "attackMulti": 0,
-    "cd": 0
-  }
+  "campMaterialReward": 1
 }
 
