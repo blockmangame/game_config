@@ -55,6 +55,42 @@
             }
         }
     ],
+	"attachPoints": [
+        {
+            "name": "ride1",
+            "bone": "s_car02_l",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": 1,
+            "propagateScaling": true,
+            "matchActorOrientation": true
+        },
+        {
+            "name": "ride2",
+            "bone": "s_car02_r",
+            "rotation": {
+                "x": 0,
+                "y": 90,
+                "z": 90
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": 1,
+            "propagateScaling": true,
+            "matchActorOrientation": true
+        }
+    ],
     "boundingVolume": {
         "type": "Composite",
         "params": [
@@ -143,6 +179,8 @@
     },
     "carForwardMovementBuff": "myplugin/car_run_car_buff",
     "carBackMovementBuff": "myplugin/car_run_car_buff_1",
+    "targetAttachPointIndexBuffByChild": "myplugin/attach_point_index_3_buff",
+    "targetAttachPointIndexBuffByAdult": "myplugin/attach_point_index_3_buff",
     "rideItem": "myplugin/car_item_old_03",
     "loadSectionMaxInterval": 7000,
     "disableShadow": true
