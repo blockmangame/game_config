@@ -22,7 +22,7 @@ Lib.subscribeEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE, function(params)
         -- Test Code ↓
         sceneIndicator:setPosition(targetPos) -- TODO DEL when commit
         -- Test Code ↑
-        
+
     end
 
 end)
@@ -31,7 +31,7 @@ Lib.subscribeEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE_END, function()
     if sceneIndicator then
 
         -- Test Code ↓
-        sceneIndicator:kill()
+        sceneIndicator:destroy()
         -- Test Code ↑
 
     end
