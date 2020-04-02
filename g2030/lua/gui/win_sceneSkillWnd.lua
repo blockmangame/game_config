@@ -116,8 +116,7 @@ local function updatePlayerTouch(self)
 
 	local touch = ti:getTouch(ti:getActiveTouch())
 	local meMap = Me.map
-	local entity = EntityClient.CreateClientEntity({cfgName = "myplugin/player1"}) -- TODO DEL when commit --此人物用于展示用，接入场景指示器后删除
-	Entity.setHeadText(entity, 0, 0, "此人物用于展示场景指示器用，接入场景指示器后删除相关代码") -- TODO DEL when commit
+	local lastPos = {x = 0, y = 0, z = 0}
 	self.touchMoveTimer = World.Timer(1,function()
 		local touchPos = touch:getTouchPoint()
 		if not touchPos or not ISOPEN then
@@ -181,10 +180,11 @@ local function updatePlayerTouch(self)
 			end
 			targetPos = Lv3cut(mePos, {x = endCount * imcV3X, y = cV3Y, z = endCount * imcV3Z})
 		end
-		-- TODO 调用接口 场景绘制,此处触发event,具体event会做什么则由event决定。此处仅传指定位置。
-		entity:setPosition(targetPos) -- TODO DEL when commit
-		self.targetPos = targetPos
-		Lib.emitEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE, {targetPos = targetPos, isTouchCancle = touchCellRedMask:IsVisible()})
+		if lastPos.x ~= targetPos.x or lastPos.y ~= targetPos.y or lastPos.z ~= targetPos.z then
+			lastPos = targetPos
+			self.targetPos = targetPos
+			Lib.emitEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE, {targetPos = targetPos, isTouchCancle = touchCellRedMask:IsVisible()})
+		end
 		return true
 	end)
 end
@@ -228,12 +228,14 @@ function M:onOpen(args)
 	updateProp(self, skillName, skillUnclippedOuterRect)
 
 	updatePlayerTouch(self)
+	Lib.emitEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE_BEGIN, {skillCfg = self.curSkillCfg})
 end
 
 function M:onClose(args)
 	ISOPEN = false
 	resetTouchTimer(self)
 	resetProperty(self)
+	Lib.emitEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE_END)
 end
 
 ------------------------------------------------------------------ 
