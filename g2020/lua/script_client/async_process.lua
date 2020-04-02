@@ -45,7 +45,7 @@ function AsyncProcess.GetWorksInfo(worksId, callback)
 end
 
 function AsyncProcess.LoadUsersInfo(userIds)
-    local url = strfmt("%s/gameaide/api/v1/party/users/info/list", self.ClientHttpHost)
+    local url = string.format("%s/gameaide/api/v1/party/users/info/list", self.ClientHttpHost)
     local params = {
         {"userIds", table.concat(userIds, ",")},
         {"userId", tostring(Me.platformUserId)},
