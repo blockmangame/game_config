@@ -2527,16 +2527,6 @@ FUNC_GPS_RECALCULATE --params: mapStart, mapEnd, gpsDict
     CallTrigger(object = $obj1, event = "FUNC_OPEN_GPS", gps = $gps, gpsDict = $gpsDict)
 }
 
-FUNC_UPDATE_STATE_SKILL_JACK_AREA --params: up
-{
-    If($up == nil)
-    {
-        $map = GetEntityMap(entity = $obj1)
-        $up = $map.owner ~= $obj1.house and true or false
-    }
-    UpdateSkillJackArea(entity = $obj1, info = {pos = 1, yOff = $up and @skillJackUp or @skillJackDown})
-}
-
 FUNC_STATE_RESET_DATA --params: state
 {
     $index = ArrayFind(array = $obj1.stateProgress, value = $state)
@@ -5435,7 +5425,6 @@ RENDER_CUR_HOUSE_INSIDE_COLOR{
 ENTER_MAP
 {
     StartTimer(time = 5,object = $obj1, event = "RENDER_CUR_HOUSE_INSIDE_COLOR")
-    CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA")
     $obj1Map = GetEntityMap(entity = $obj1)
     $obj1MapOwner = GetMapVar(map = $obj1Map, key = "owner")
     If(not $obj1MapOwner or ($obj1MapOwner ~= GetObjectVar(obj = $obj1, key = "house"))){
@@ -5466,7 +5455,6 @@ ENTER_MAP
 
 LEAVE_MAP
 {
-    CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA")
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
         WorksWallsOperation(player = $obj1, isOpen = false)
