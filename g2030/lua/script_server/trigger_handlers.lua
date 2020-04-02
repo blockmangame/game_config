@@ -12,3 +12,6 @@ end
 function Handlers.SKILL_CAST(context)
     --print("Handlers.SKILL_CAST " .. Lib.inspect(context, { depth = 1 }))
 end
+function Handlers.ENTITY_REBIRTH(context)
+    context.obj1:resetHp()
+end

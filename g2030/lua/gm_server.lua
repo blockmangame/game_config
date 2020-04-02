@@ -10,6 +10,19 @@ end
 GMItem["g2030/addBuff"] = function(self)
     self:addBuff("myplugin/example", -1)
 end
+GMItem["g2030/添加回血buff"] = function(self)
+    self:addBuff("myplugin/healing_s",40)
+end
+GMItem["g2030/添加回血加成buff"] = function(self)
+    self:addBuff("myplugin/healing_plus",40)
+end
+GMItem["g2030/添加减伤buff"] = function(self)
+    self:addBuff("myplugin/hurtSub_s")
+end
+GMItem["g2030/濒死"] = function(self)
+    self:setValue("curHp", 1)
+end
+
 -----------------------------------Pet Model Test----------------------------------
 local Entity
 GMItem["sample/创建一个跟随宠物"] = function(self)
