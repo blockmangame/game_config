@@ -5,6 +5,7 @@
 ---
 Event.register("EVENT_EXP_CHANGE")
 Event.register("EVENT_HP_CHANGE")
+Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE")
 
 if World.isClient then
     Event.register("EVENT_NEW_GUIDE")
