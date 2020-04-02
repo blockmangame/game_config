@@ -5,11 +5,14 @@
 ---
 require "script_client.player.player"
 require "script_client.entity.entity"
+require "script_client.other.scene_indicator"
 require "script_client.player.player_event"
 require "script_server.player.player_packet"
 require "script_client.player.player_control"
 require "script_client.skill.skill_normal_atk"
 require "script_client.skill.skill_addExp"
+require "script_client.skill.scene_skill"
+
 local main = {}
 
 function main:init()
