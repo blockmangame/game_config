@@ -90,7 +90,7 @@ function Entity:addTeamKills(num)
     self:setValue("teamKills", old + (num or 1))
     local team = self:getTeam()
     if team then
-        team:addTeamKills(15)
+        team:addTeamKills(num or 1)
     end
 end
 
