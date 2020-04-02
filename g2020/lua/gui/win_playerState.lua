@@ -93,6 +93,8 @@ function M:initMain()
     ui.root:SetVerticalAlignment(specs.mainVAlign)
     ui.root:SetHorizontalAlignment(specs.mainHAlign)
     self:subscribe(main.UI.root, UIEvent.EventWindowTouchUp, function()
+        UI:closeWnd("main_tray_g2020")
+        UI:closeWnd("bag_g2020")
         self:hideMain()
     end)
 end
@@ -195,8 +197,6 @@ function M:dynamicCalculateStatesArea()
         return
     end
     
-    UI:closeWnd("main_tray_g2020")
-    UI:closeWnd("bag_g2020")
     if main.visible then
         UI:closeWnd("showDetails")
         main.UI.txt:SetText(main.totalUsersCount)
