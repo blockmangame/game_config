@@ -1,0 +1,12 @@
+{
+  "healingPct":{
+    "?pct": "比例：每次恢复总血量的多少倍",
+    "pct": 0.03,
+    "?spd": "速率：每隔多少s恢复一次血量",
+    "spd": 0.5
+  },
+  "?avoidBuff":"忽略buff表，即，当前buff被add时，如果已有表中buff正在生效中，则当前buff add失败",
+  "avoidBuff":["myplugin/healing_s"],
+  "?removeBuff":"移除buff表，即，当前buff被add时，如果已有表中buff正在生效中，则remove表中的buff，再add当前buff",
+  "removeBuff": []
+}

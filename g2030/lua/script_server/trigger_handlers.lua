@@ -29,3 +29,7 @@ function Handlers.ENTITY_DIE(context)
         --上报阵营击杀、阵营材料奖励
     end
 end
+
+function Handlers.ENTITY_REBIRTH(context)
+    context.obj1:resetHp()
+end
