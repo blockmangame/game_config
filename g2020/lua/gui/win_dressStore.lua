@@ -79,7 +79,10 @@ end
 
 function M:updateActor()
 	self.actor:UpdateSelf(1)
-	self.actor:SetActor1(self.playerInfo.actor, "idle")
+	if self.playerInfo then
+		self.actor:SetActor1(self.playerInfo.actor, "idle")
+	end
+	
 	for k, v in pairs(self.curActorSkin) do
 		if k ~= "gun" then
 			self.actor:UseBodyPart(k, tostring(v))
