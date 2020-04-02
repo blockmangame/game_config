@@ -202,7 +202,7 @@ function M:itemUpdate(view, info)
         x = y * self.rows / self.columns
     end
 
-    panelWnd:SetArea( { 0, 0 }, { 0, 4 }, { 0, x }, { 0, y})
+    panelWnd:SetArea( { 0, 0 }, { 0, 9 }, { 0, x }, { 0, y})
 
     self:subscribe(view:child("WorksItem-Like"), UIEvent.EventCheckStateChanged, function(itemView)
         itemView:SetEnabled(false)
