@@ -1750,8 +1750,11 @@ SET_REGION_COLOR{
     -- Foreach(array = $childRegionArr, key = "cRegion"){
         -- CallTrigger(object = $house, event = "CHANGE_HOUSE_REGION_COLOR", map = $insideMap, region = $cRegion, destBlock = $destBlock)
     -- }
-    CallTrigger(object = $house, event = "CHANGE_HOUSE_REGION_COLOR_BY_ALL_REGION", map = $insideMap, 
-        childRegionKey = $childRegionKey, childRegionArr = $childRegionArr, destBlock = $destBlock)
+    $allPlayers = GetMapPlayer(map = $insideMap) -- 当前地图的所有玩家，那么客户端处理的时候只需要判断当前玩家所在的地图，注，需要判断不是公共地图(判断地图主人？)，传个mapID，判断当前
+                                        -- 玩家的当前地图是否是传过来的mapID对应的地图
+    Foreach(array = $allPlayers, key = "player"){
+        RenderBlock(player = $player,mapID = GetMapID(map = $insideMap), childRegionKey = $childRegionKey, childRegionArr = $childRegionArr, destBlock = $destBlock)
+    }
 
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
@@ -5392,8 +5395,57 @@ ENTER_EQUIPMEN {
     CallTrigger(object = $obj1, event = "EQUIP_ITEM_IMMEDIATELY", item = $item)
 }
 
+RENDER_CUR_HOUSE_INSIDE_COLOR{
+    $map = GetEntityMap(entity = $obj1)
+    $house = GetMapVar(map = $map, key = "owner") -- house
+    If(not $house){
+        Return()
+    }
+    $houseVars = GetObjectVar(obj = GetObjectVar(obj = $house, key = "owner"), key = "houseVars")
+    ForLoop(from = 1, to = ArraySize(array = $houseVars), key = "index"){
+        $dict = NewDictionary(ArrayGet(array = $houseVars, index = $index))
+        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
+            $curHousedict = $dict
+            Break()
+        }
+    }
+    $allRegion = GetAllRegion(map = $map)
+    $regionColor = DictionaryGet(dict = $curHousedict, key = "houseInsideRegionColors") or {}
+    Foreach(array = $allRegion, key = "region"){
+        $hadRegion = false
+        $regionkey = GetRegionConfig(region = $region, key = "regionkey")
+        $childRegionKeyArr = GetRegionConfig(region = $region, key = "childRegionKey") or {}
+        $defaultChildRegionBlock = GetRegionConfig(region = $region, key = "defaultChildRegionBlock") or {}
+        Foreach(array = $regionColor, key = "regionColorTb"){
+            If(ArrayGet(array = $regionColorTb, index = 1) == $regionkey){
+                $hadRegion = true
+                $childRegionColorArr = ArrayGet(array = $regionColorTb, index = 2) or {}
+                ForLoop(from = 1, to = ArraySize(array = $childRegionKeyArr), key = "index"){
+                    $childRegionArr = GetRegionConfig(region = $region, key = ArrayGet(array = $childRegionKeyArr, index = $index)) or {}
+                    $destBlock = ArrayGet(array = $childRegionColorArr, index = $index) or 
+                                ArrayGet(array = $defaultChildRegionBlock, index = $index) or 
+                                GetRegionConfig(region = $region, key = "defaultBlock")
+                    -- Test("----------------------1111111111----------", $destBlock, ArrayGet(array = $childRegionKeyArr, index = $index),$childRegionArr)
+                    RenderBlock(player = $obj1, mapID = GetMapID(map = $map), childRegionKey = ArrayGet(array = $childRegionKeyArr, index = $index),
+                        childRegionArr = $childRegionArr, destBlock = $destBlock)
+                }
+            }
+        }
+        If(not $hadRegion){
+            Foreach(array = $childRegionKeyArr, key = "key"){
+                $childRegionArr = GetRegionConfig(region = $region, key = $key) or {}
+                $destBlock = GetRegionConfig(region = $region, key = "defaultBlock")
+                -- Test("-------------------2222222222-------------", $destBlock)
+                RenderBlock(player = $obj1,mapID = GetMapID(map = $map), childRegionKey = $key,
+                        childRegionArr = $childRegionArr, destBlock = $destBlock)
+            }
+        }
+    }
+}
+
 ENTER_MAP
 {
+    StartTimer(time = 5,object = $obj1, event = "RENDER_CUR_HOUSE_INSIDE_COLOR")
     CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA")
     $obj1Map = GetEntityMap(entity = $obj1)
     $obj1MapOwner = GetMapVar(map = $obj1Map, key = "owner")

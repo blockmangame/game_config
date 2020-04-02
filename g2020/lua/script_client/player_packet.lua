@@ -225,3 +225,229 @@ end
 function handles:ToggleBloom(packet)
     Blockman.instance.gameSettings:setEnableBloom(packet.bloomOpen)
 end
+
+local function isSamePos(p1, p2)
+    return p1.x == p2.x and p1.y == p2.y and p1.z == p2.z
+end
+
+local function renderWall(map, childRegionKey, childRegionArr, destBlock)
+    if not destBlock or destBlock == "" then
+        return
+    end
+    if #childRegionArr == 0 then
+        return
+    end
+    local regions = childRegionArr
+    local regionArea = 99
+    local min, max, x,y,z
+    for _, region in ipairs(regions) do
+        min = region.min
+        max = region.max
+        x = max.x - min.x
+        y = max.y - min.y
+        z = max.z - min.z
+        regionArea = regionArea + (x * x + y * y + z * z) * 2
+    end
+    local replaceTb = Block.GetNameCfg(destBlock).destBlockMatrix or {}
+    if not replaceTb or #replaceTb == 0 then
+        replaceTb[1] = {destBlock}
+    end
+    local filter = Block.GetNameCfg(destBlock).filter or {}
+    local firstRegion = regions[1]
+    if not firstRegion then
+        return
+    end
+
+    local firstRegionMin = firstRegion.min
+    local firstRegionMax = firstRegion.max
+    local maxHeight = firstRegionMax.y
+
+    local matrixWidth = #(replaceTb[1])
+    local matrixHeight = #replaceTb
+    local widthCount = 0
+    local heightCount = 0
+
+    local directionMap = {
+        {x = 1, y = 0, z = 0},
+        {x = 0, y = 0, z = 1},
+        {x = -1, y = 0, z = 0},
+        {x = 0, y = 0, z = -1}
+    }
+    local directionIndex = 1
+
+    local firstBlockPos = firstRegionMin
+    local curBlockPos = firstRegionMin
+    local lastBlockPos = firstRegionMin
+
+    -- if true then ------------- TODO DEL
+    --     return
+    -- end
+
+    for index = 1,firstRegionMax.x - firstRegionMin.x + firstRegionMax.z - firstRegionMin.z do
+        local firstSourceBlockCfg = map:getBlock(firstBlockPos)
+        local firstNeedReplace = true
+        for i,v in pairs(filter) do
+            if not firstSourceBlockCfg[i] or firstSourceBlockCfg[i] ~= v then
+                firstNeedReplace = false
+                break
+            end
+        end
+        if firstNeedReplace then
+            curBlockPos = firstBlockPos
+            lastBlockPos = firstBlockPos
+            break
+        end
+        firstBlockPos = Lib.v3add(directionMap[directionIndex], firstBlockPos)
+    end
+
+    for index = 1, regionArea do
+        local sourceBlockCfg = map:getBlock(curBlockPos)
+        local needReplace = true
+        for i,v in pairs(filter) do
+            if not sourceBlockCfg[i] or sourceBlockCfg[i] ~= v then
+                needReplace = false
+                break
+            end
+        end
+        if needReplace then
+            local destBlockCfg = replaceTb[heightCount % matrixHeight + 1][widthCount % matrixWidth + 1]
+            map:removeBlock(curBlockPos)
+            map:createBlock(curBlockPos, destBlockCfg)
+        end
+
+        local nextBlockPos = nil
+        for tindex = 1, 4 do
+            local imcV3 = directionMap[tindex]
+            local tempPos = Lib.v3add(curBlockPos, imcV3)
+            local tempPosInRegion = false
+            for _, re in ipairs(regions) do
+                if Lib.isPosInRegion(re, tempPos) then
+                    tempPosInRegion = true
+                    break
+                end
+            end
+            if tempPosInRegion then
+                local tempPosBlockCfg = map:getBlock(tempPos)
+                local tempPosNeedReplace = true
+                if not isSamePos(tempPos, lastBlockPos) then
+                    for i,v in pairs(filter) do
+                        if not tempPosBlockCfg[i] or tempPosBlockCfg[i] ~= v then
+                            tempPosNeedReplace = false
+                            break
+                        end
+                    end
+                    if tempPosNeedReplace then
+                        nextBlockPos = tempPos
+                        directionIndex = tindex
+                        break
+                    end
+                end
+            end
+        end
+        if not nextBlockPos then
+            nextBlockPos = Lib.v3add(directionMap[directionIndex], curBlockPos)
+            local nextBlockPosInRegion = false
+            for _,re in ipairs(regions) do
+                if Lib.isPosInRegion(re, nextBlockPos) then
+                    nextBlockPosInRegion = true
+                    break
+                end
+            end
+            if not nextBlockPosInRegion then
+                for tindex = 1, 4 do
+                    local imcV3 = directionMap[tindex]
+                    local tempPos = Lib.v3add(curBlockPos, imcV3)
+                    local tempPosInRegion = false
+                    for _,re in ipairs(regions) do
+                        if Lib.isPosInRegion(re, tempPos) then
+                            tempPosInRegion = true
+                            break
+                        end
+                    end
+                    if tempPosInRegion then
+                        if not isSamePos(tempPos, lastBlockPos) then
+                            nextBlockPos = tempPos
+                            directionIndex = tindex
+                            break
+                        end
+                    end
+                end
+            end
+        end
+        if isSamePos(nextBlockPos, firstBlockPos) then
+            local tempPos = Lib.v3add(firstBlockPos, {x = 0, y = 1, z = 0})
+            if tempPos.y > maxHeight then
+                break
+            end
+            heightCount = heightCount + 1
+            widthCount = 0
+            firstBlockPos = Lib.copy(tempPos)
+            curBlockPos = Lib.copy(tempPos)
+            lastBlockPos = Lib.copy(tempPos)
+        else
+            lastBlockPos = Lib.copy(curBlockPos)
+            curBlockPos = Lib.copy(nextBlockPos)
+            widthCount = widthCount + 1
+        end
+    end
+end
+
+local function renderFloor(map, childRegionKey, childRegionArr, destBlock)
+    if not destBlock or destBlock == "" then
+        return
+    end
+    if #childRegionArr == 0 then
+        return
+    end
+    local regions = childRegionArr
+    local replaceTb = Block.GetNameCfg(destBlock).destBlockMatrix or {}
+    if not replaceTb or #replaceTb == 0 then
+        replaceTb[1] = {destBlock}
+    end
+    local filter = Block.GetNameCfg(destBlock).filter or {}
+    local lastRegion = nil
+    local matrixWidth = #(replaceTb[1])
+    local matrixHeight = #replaceTb
+    local widthCount = 0
+    local heightCount = 0
+    for _, region in ipairs(regions) do
+        local min = region.min
+        local max = region.max
+        local minX, minY, minZ, maxX, maxY, maxZ = min.x, min.y, min.z, max.x, max.y, max.z
+        if lastRegion and minX == lastRegion.min.x then
+            heightCount = (lastRegion.max.z - lastRegion.min.z) % matrixHeight
+        elseif lastRegion and minZ == lastRegion.min.z then
+            widthCount = (lastRegion.max.x - lastRegion.min.x) % matrixWidth
+        end
+        for i = minX, maxX do
+            for j = minZ, maxZ do
+                local destBlockCfg = replaceTb[matrixHeight - (j - minZ + heightCount) % matrixHeight][(i - minX + widthCount) % matrixWidth + 1]
+                local pos = {x = i, y = minY, z = j}
+                local tempBlock = map:getBlock(pos)
+                for i,v in pairs(filter) do
+                    if not tempBlock[i] or tempBlock[i] ~= v then
+                        goto CONTINUE
+                    end
+                end
+                map:removeBlock(pos)
+                map:createBlock(pos, destBlockCfg)
+                ::CONTINUE::
+            end
+        end
+    end
+end
+
+function handles:RenderBlock(packet)
+    local mapID = packet.mapID
+    local childRegionKey = packet.childRegionKey
+    local childRegionArr = packet.childRegionArr
+    local destBlock = packet.destBlock
+    if Me.map.id ~= mapID then
+        return
+    end
+    if childRegionKey == "wallRegion" then
+        renderWall(Me.map, childRegionKey, childRegionArr, destBlock)
+    elseif childRegionKey == "floorRegion" then
+        renderFloor(Me.map, childRegionKey, childRegionArr, destBlock)
+    end
+end

@@ -298,6 +298,20 @@ function Actions.ClearPassengers(data, params, context)
     end
 end
 
+function Actions.GetMapID(data, params, context)
+    return params.map.id
+end
+
+function Actions.RenderBlock(data, params, context)
+    params.player:sendPacket({
+        pid = "RenderBlock",
+        mapID = params.mapID,
+        childRegionKey = params.childRegionKey,
+        childRegionArr = params.childRegionArr,
+        destBlock = params.destBlock
+    })
+end
+
 function Actions.ToggleBloom(data, params, context)
     local player = params.player
     if not player then
