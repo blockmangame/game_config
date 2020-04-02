@@ -23,7 +23,6 @@ function UI:setViewTexture(key, view)
         texture:loadColorInfoFromUrl(key)
         _worksTextures[key] = texture
     end
-    view:setMaterial(5)
     view:SetImage(texture:getTextureName())
 end
 

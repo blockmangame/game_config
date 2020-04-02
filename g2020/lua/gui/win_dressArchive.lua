@@ -143,7 +143,10 @@ function M:initDressParts()
 				for key, value in pairs(self.curActorSkin) do
 					actorSkin[key] = value
 				end
-				Lib.emitEvent(Event.EVENT_SHOW_DRESS_STORE, id, self.playerInfo, actorSkin, self.appSkin)
+				
+				if self.playerInfo then
+					Lib.emitEvent(Event.EVENT_SHOW_DRESS_STORE, id, self.playerInfo, actorSkin, self.appSkin)
+				end
 			end)
 		else
 			break
