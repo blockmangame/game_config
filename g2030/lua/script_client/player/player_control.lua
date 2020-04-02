@@ -9,7 +9,9 @@ local lockKeyJump = false
 
 local function jump_impl(control, player)
     local playerCfg = player:cfg()
-    Skill.Cast(playerCfg.jumpSkill)
+    local packet = {}
+    packet.reset = (player:getJumpCount() == player:getMaxJumpCount())
+    Skill.Cast(playerCfg.jumpSkill, packet)
     control:jump()
     player:decJumpCount()
 end

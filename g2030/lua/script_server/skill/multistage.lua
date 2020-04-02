@@ -26,6 +26,11 @@ function MultiStageSkill:cast(packet, from)
 	if not self:canCast(packet, from) then
 		return
 	end
+
+	if packet.reset then
+		from:data("skill").multiStageData = nil
+	end
+
 	packet.needPre = true
 	SkillBase.cast(self, packet, from)
 	local cfg, index = getStageCfg(self, from)
