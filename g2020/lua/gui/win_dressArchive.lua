@@ -51,33 +51,26 @@ function M:initMain()
     end)
 
 	Lib.subscribeEvent(Event.EVENT_UPDATE_UI_DATA, function(UIName)
-    	if UI:isOpen(self) and UIName == "win_dressArchive" then
-    		self:updateDressArchive()
-    	end
-    end)
-
-	Lib.subscribeEvent(Event.EVENT_UPDATE_UI_DATA, function(UIName)
-		if UI:isOpen(self) and UIName == "win_dressArchiveRename" then
-			self:updateDressArchiveItemName()
-		end
-	end)
-
-	Lib.subscribeEvent(Event.EVENT_UPDATE_UI_DATA, function(UIName)
-		if UI:isOpen(self) and UIName == "win_dressArchivePlayerName" then
-			local name = UI:getRemoterData("win_dressArchivePlayerName") or {}
-			self:child("DressArchive-Player-Name-Text"):SetText(name)
-		end
-	end)
-
-	Lib.subscribeEvent(Event.EVENT_UPDATE_UI_DATA, function(UIName)
 		if UIName == "win_dressArchiveScale" then
 			self.actorScale = UI:getRemoterData("win_dressArchiveScale") or 1
 			if UI:isOpen(self) then
 				self:updateActorScale()
+				return
+			end
+		end
+
+		if UI:isOpen(self) then
+			if UIName == "win_dressArchive" then
+				self:updateDressArchive()
+			elseif UIName == "win_dressArchiveRename" then
+				self:updateDressArchiveItemName()
+			elseif UIName == "win_dressArchivePlayerName" then
+				local name = UI:getRemoterData("win_dressArchivePlayerName") or {}
+				self:child("DressArchive-Player-Name-Text"):SetText(name)
 			end
 		end
 	end)
-
+	
 	Lib.subscribeEvent(Event.EVENT_USE_DRESS_ARCHIVE, function(index) 
 		if not index then
 			return
@@ -143,7 +136,7 @@ function M:initDressParts()
 				for key, value in pairs(self.curActorSkin) do
 					actorSkin[key] = value
 				end
-				
+
 				if self.playerInfo then
 					Lib.emitEvent(Event.EVENT_SHOW_DRESS_STORE, id, self.playerInfo, actorSkin, self.appSkin)
 				end
