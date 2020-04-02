@@ -297,3 +297,18 @@ function Actions.ClearPassengers(data, params, context)
         end
     end
 end
+
+function Actions.ToggleBloom(data, params, context)
+    local player = params.player
+    if not player then
+        return
+    end
+    player:sendPacket({
+        pid = "ToggleBloom",
+        bloomOpen = params.bloomOpen
+    })
+end
+
+function Actions.GetWorldTime(data, params, context)
+    return World.CurWorld:getWorldTime()
+end

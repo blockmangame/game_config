@@ -221,3 +221,7 @@ function handles:ShowBubbleMsg(packet)
     end
     Lib.emitEvent(Event.EVENT_SHOW_BUBBLE_MSG, packet)
 end
+
+function handles:ToggleBloom(packet)
+    Blockman.instance.gameSettings:setEnableBloom(packet.bloomOpen)
+end

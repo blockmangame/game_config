@@ -348,6 +348,7 @@ MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建�
 
 ENTITY_ENTER
 {
+    ToggleBloom(player = $obj1, bloomOpen = @bloomOpen)
     UpdateUIData(player = $obj1, ui = "mainExtension", data = {
         guideEnd = $obj1.guideStep == @GuideEnd,
         guideWork = $obj1.guideWork,

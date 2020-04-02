@@ -1,5 +1,6 @@
 GAME_INIT 
 {
+    CallTrigger(event = "FUNC_BLOOM_TIMER")
     @BGMConfigs = ReadGameCsv(path = "bgm.csv")
     @CDReward = ReadGameCsv(path = "cd_reward.csv")
     @Generate_State_List = ["hunger", "thirsty", "dirty", "fatigue", "ill", "region"]
@@ -160,6 +161,36 @@ INIT_WORK_TASK_DATA(){    --打工配置表的读取
         $mdict = NewDictionary($redict)
         DictionarySet(dict = @worlkMoeny, key = DictionaryGet(dict = $mdict, key = "index"), value = $mdict)
     }
+}
+
+FUNC_BLOOM_TIMER
+{
+    $timeArr = []
+    Foreach(array = @dayTimeIn24Hours, key = "hour"){
+        $time = $hour / 2  --因为24h = 12min
+        ArrayAppend(array = $timeArr, value = ($time * 1200) // 1)
+    }
+    $timeSpeed = GetWorldVar(key = "worldTimeSpeed")
+    CallTrigger(event = "FUNC_BROADCAST_BLOOM_OPT", bloomOpt = @bloomOpen, timeArr = $timeArr, col = 0, timeArrSize = ArraySize(array = $timeArr))
+}
+
+FUNC_BROADCAST_BLOOM_OPT
+{
+    @bloomOpen = $bloomOpt
+    Foreach(array = GetAllPlayers(), key = "player") {
+        ToggleBloom(player = $player, bloomOpen = $bloomOpt)
+    }
+    $curTime = ArrayGet(array = $timeArr, index = $col) or GetWorldTime()
+    $col = $col + 1
+    If($col > $timeArrSize) {
+        $col = 1
+    }
+    $endTime = ArrayGet(array = $timeArr, index = $col)
+    $cdTime = $endTime - $curTime
+    If($cdTime <= 0) {
+        $cdTime = 14400 - $cdTime ------14400 = 12min * 60sec * 20ticks
+    }
+    StartTimer(rep = false, event = "FUNC_BROADCAST_BLOOM_OPT", bloomOpt = not $bloomOpt, time = $cdTime // 1, timeArr = $timeArr, col = $col, timeArrSize = $timeArrSize)
 }
 
 FUNC_STATE_STARTTIMER
