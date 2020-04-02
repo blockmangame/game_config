@@ -19,6 +19,9 @@ local STATIC_SLIP_SENSITIVITY_AREA = {min = {x = 0, y = 0}, max = {x = 0, y = 0}
 local STATIC_BASE_AREA = {min = {x = 0, y = 0}, max = {x = 0, y = 0}}
 
 local function castSceneSkill(self)
+	if not self.isTouchPointMove then
+		return
+	end
 	Skill.Cast(self.curSkillCfg.fullName, {isTouchPointMove = self.isTouchPointMove, targetPos = self.targetPos})
 end
 
@@ -47,9 +50,13 @@ local function initChildUIEvent(self)
 
 	self:subscribe(self.cancle, UIEvent.EventWindowTouchDown, function()
 		self.touchCellRedMask:SetVisible(true)
+		self.cancleRedMask:SetVisible(true)
+		self.showPointRedMask:SetVisible(true)
 	end)
 	self:subscribe(self.cancle, UIEvent.EventMotionRelease, function()
 		self.touchCellRedMask:SetVisible(false)
+		self.cancleRedMask:SetVisible(false)
+		self.showPointRedMask:SetVisible(false)
 	end)
 	self:subscribe(self.cancle, UIEvent.EventWindowTouchUp, function()
 		UI:closeWnd(self)
@@ -84,11 +91,14 @@ function M:init()
 	self.touchCell = self:child("widget_scene_skill_cell-touch_cell")
 	self.touchCellRedMask = self:child("widget_scene_skill_cell-red_mask")
 	self.cancle = self:child("widget_scene_skill_cell-cancle")
+	self.cancleRedMask = self:child("widget_scene_skill_cell-cancle_red_mask")
+	self.cancleText = self:child("widget_scene_skill_cell-cancle_text")
 
 	self.touchPointBase = self:child("widget_scene_skill_cell-touch_point_base")
 	self.touchPoint = self:child("widget_scene_skill_cell-touch_point")
 	self.showPointBase = self:child("widget_scene_skill_cell-show_point_base")
 	self.showPoint = self:child("widget_scene_skill_cell-show_point")
+	self.showPointRedMask = self:child("widget_scene_skill_cell-show_point_red_mask")
 
 	resetProperty(self)
 	initChildUIEvent(self)
@@ -218,6 +228,9 @@ function M:onOpen(args)
 	resetProperty(self)
 	resetTouchTimer(self)
 	self.touchCellRedMask:SetVisible(false)
+	self.cancleRedMask:SetVisible(false)
+	self.showPointRedMask:SetVisible(false)
+	self.cancleText:SetText(Lang:toText("cancle_cast_skill"))
 	updateProp(self, skillName, skillUnclippedOuterRect)
 
 	updatePlayerTouch(self)
