@@ -109,3 +109,7 @@ end
 function handles:Dismount(packet)
     self:rideOn()
 end
+
+function handles:ModSkin(packet)
+	self:changeSkin(packet.skin)
+end
