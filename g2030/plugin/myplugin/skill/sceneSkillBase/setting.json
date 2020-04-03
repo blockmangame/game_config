@@ -1,6 +1,6 @@
 {
     "cdTime": 100,
-    "icon": "equip_attack.png",
+    "icon": "sceneSkillBase.png",
 
     "enableCdMask": true,
 
@@ -15,11 +15,11 @@
     "_sceneSkillSceneRatio2": "以玩家为圆心，point点的角度为角度，xz的增量*比例进行场景渲染。",
 
     "sceneSkillMap": {
-        "touchStaticSkill": "myplugin/testSkill_static",
-        "touchMoveSkill": "myplugin/testSkill_move"
+        "touchStaticSkill": "myplugin/sceneSkillBase_static",
+        "touchMoveSkill": "myplugin/sceneSkillBase_move"
     },
     "_sceneSkillMap": {
-        "touchStaticSkill": "未触发移动时使用的技能",
+        "touchStaticSkill": "未触发移动时使用的技能 / 4.2更新，该属性暂时弃用",
         "touchMoveSkill": "触发移动时使用的技能"
     },
 
