@@ -1,7 +1,7 @@
 -- 自动同步属性定义
 local ValueDef		= T(Entity, "ValueDef")
 -- key				= {isCpp,	client,	toSelf,	toOther,	init,	saveDB}
-ValueDef.jumpCount	= {false,	true,	false,	false,      1,		false}
+ValueDef.jumpCount	= {false,	true,	false,	true,      1,		false}
 ValueDef.curExp		= {false,	false,	true,	true,       0,		true}--当前锻炼值
 ValueDef.perExpPlu	= {false,	false,	true,	true,       1,		false}--锻炼值加成加成比例（付费特权。双倍）
 ValueDef.curLevel	= {false,	false,	true,	true,       1,		true}--当前阶数
