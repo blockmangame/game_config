@@ -7,6 +7,7 @@ local jumpEndTime = 0
 local onGround = true
 local lockKeyJump = false
 
+---@param player EntityClientMainPlayer
 local function jump_impl(control, player)
     local playerCfg = player:cfg()
     local packet = {}

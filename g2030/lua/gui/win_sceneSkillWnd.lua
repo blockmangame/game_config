@@ -19,6 +19,9 @@ local STATIC_SLIP_SENSITIVITY_AREA = {min = {x = 0, y = 0}, max = {x = 0, y = 0}
 local STATIC_BASE_AREA = {min = {x = 0, y = 0}, max = {x = 0, y = 0}}
 
 local function castSceneSkill(self)
+	if not self.isTouchPointMove then
+		return
+	end
 	Skill.Cast(self.curSkillCfg.fullName, {isTouchPointMove = self.isTouchPointMove, targetPos = self.targetPos})
 end
 
@@ -40,12 +43,6 @@ local function initChildUIEvent(self)
 		UI:closeWnd(self)
 	end)
 
-	self:subscribe(self.touchCell, UIEvent.EventWindowTouchDown, function()
-		self.touchInTouchCellUI = true
-	end)
-	self:subscribe(self.touchCell, UIEvent.EventMotionRelease, function()
-		self.touchInTouchCellUI = false
-	end)
 	self:subscribe(self.touchCell, UIEvent.EventWindowTouchUp, function()
 		castSceneSkill(self)
 		UI:closeWnd(self)
@@ -53,9 +50,13 @@ local function initChildUIEvent(self)
 
 	self:subscribe(self.cancle, UIEvent.EventWindowTouchDown, function()
 		self.touchCellRedMask:SetVisible(true)
+		self.cancleRedMask:SetVisible(true)
+		self.showPointRedMask:SetVisible(true)
 	end)
 	self:subscribe(self.cancle, UIEvent.EventMotionRelease, function()
 		self.touchCellRedMask:SetVisible(false)
+		self.cancleRedMask:SetVisible(false)
+		self.showPointRedMask:SetVisible(false)
 	end)
 	self:subscribe(self.cancle, UIEvent.EventWindowTouchUp, function()
 		UI:closeWnd(self)
@@ -66,7 +67,6 @@ local function resetProperty(self)
 	self.curSkillCfg = nil
 
 	self.curTouchCellBaseRealPos = {x = 0, y = 0}
-	self.touchInTouchCellUI = false
 	self.isTouchPointMove = false
 	self.slipSensitivityArea = STATIC_SLIP_SENSITIVITY_AREA
 	self.touchBgArea = STATIC_BASE_AREA
@@ -91,11 +91,14 @@ function M:init()
 	self.touchCell = self:child("widget_scene_skill_cell-touch_cell")
 	self.touchCellRedMask = self:child("widget_scene_skill_cell-red_mask")
 	self.cancle = self:child("widget_scene_skill_cell-cancle")
+	self.cancleRedMask = self:child("widget_scene_skill_cell-cancle_red_mask")
+	self.cancleText = self:child("widget_scene_skill_cell-cancle_text")
 
 	self.touchPointBase = self:child("widget_scene_skill_cell-touch_point_base")
 	self.touchPoint = self:child("widget_scene_skill_cell-touch_point")
 	self.showPointBase = self:child("widget_scene_skill_cell-show_point_base")
 	self.showPoint = self:child("widget_scene_skill_cell-show_point")
+	self.showPointRedMask = self:child("widget_scene_skill_cell-show_point_red_mask")
 
 	resetProperty(self)
 	initChildUIEvent(self)
@@ -103,7 +106,6 @@ end
 
 ------------------------------------------------------------------
 local function updatePlayerTouch(self)
-	self.touchInTouchCellUI = true
 	local realNormalizeSizeX = {x = 0, y = 0, z = self.touchCell:GetPixelSize().x / 2}
 	local sceneRatio = self.curSkillCfg.sceneSkillSceneRatio or 1
 	
@@ -127,12 +129,13 @@ local function updatePlayerTouch(self)
 		end
 		-- todo ex
 		self:updateTouchPointBasePosition(touchPos)
-		if self.touchInTouchCellUI then
+		local imcPos = {x = touchPos.x - ccbrpX,y = 0, z = touchPos.y - ccbrpY}
+		if (imcPos.x * imcPos.x + imcPos.z * imcPos.z) <= realNormalizeSizeX.z * realNormalizeSizeX.z then
+			imcNormalizeV3.x = imcPos.x
+			imcNormalizeV3.z = imcPos.z
 			self:updateShowPointBasePosition(touchPos)
-			imcNormalizeV3.x = touchPos.x - ccbrpX
-			imcNormalizeV3.z = touchPos.y - ccbrpY
 		else
-			local imcYaw = Lv3AngleXZ({x = touchPos.x - ccbrpX, z = touchPos.y - ccbrpY})
+			local imcYaw = Lv3AngleXZ(imcPos)
 			local tempV3 = LposAroundYaw(realNormalizeSizeX, imcYaw)
 			imcNormalizeV3.x = tempV3.x
 			imcNormalizeV3.z = tempV3.z
@@ -225,6 +228,9 @@ function M:onOpen(args)
 	resetProperty(self)
 	resetTouchTimer(self)
 	self.touchCellRedMask:SetVisible(false)
+	self.cancleRedMask:SetVisible(false)
+	self.showPointRedMask:SetVisible(false)
+	self.cancleText:SetText(Lang:toText("cancle_cast_skill"))
 	updateProp(self, skillName, skillUnclippedOuterRect)
 
 	updatePlayerTouch(self)
