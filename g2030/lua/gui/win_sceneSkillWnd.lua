@@ -186,7 +186,7 @@ local function updatePlayerTouch(self)
 		if lastPos.x ~= targetPos.x or lastPos.y ~= targetPos.y or lastPos.z ~= targetPos.z then
 			lastPos = targetPos
 			self.targetPos = targetPos
-			Lib.emitEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE, {targetPos = targetPos, isTouchCancle = touchCellRedMask:IsVisible()})
+			Lib.emitEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE, {targetPos = targetPos, isTouchPointMove = self.isTouchPointMove, isTouchCancle = touchCellRedMask:IsVisible()})
 		end
 		return true
 	end)
