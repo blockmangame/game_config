@@ -100,9 +100,10 @@ function M:setMsgText(msg)
     local s = 1
     local str = ""
     local lineData = self.lines[dynamicLayout.lines]
-    while s <= #msg do
+    while s < #msg do
         if lineData.words + 1 > layout.lineWords then
             self:SetStaticText(str, lineData)
+            self:createNewLineLayout()
             lineData = self.lines[dynamicLayout.lines]
             str = ""
         end
@@ -153,10 +154,7 @@ function M:SetStaticText(str, lineData)
         dynamicLayout.maxWidth = lineData.width
     end
 
-    if lineData.words >= layout.lineWords then
-        self:SetOldLineLayout()
-        self:createNewLineLayout()
-    end
+    self:SetOldLineLayout()
 end
 
 function M:setRootArea()
