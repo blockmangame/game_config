@@ -8,6 +8,7 @@
   },
   "?do1": "基础游戏规则设置",
   "waitPlayerTime": 0,
+  "needSave": true,
   "waitStartTime": 0,
   "waitGoTime": 0,
   "playTime": -1,
@@ -25,7 +26,7 @@
   "needShowTargetInfo": false,
   "personalShop": false,
   "hideItemBar": true,
-  "hidePerSpec": true,
+  "hidePerSpec": false,
   "disableBreakBlockProgress": true,
   "playerInfoUI": {
     "isShowHp": false,
@@ -36,55 +37,8 @@
   "mainUiList": [
     "ninjaMain"
   ],
-  "toolBarSetting": {
-    "hideBg": true,
-    "coinBarCfg": {
-      "coinBgImg":"set:ninja_main.json image:material_bg",
-      "coinAddImg": "set:ninja_main.json image:tool_add",
-      "gap": 10
-
-    },
-
-    "addBtnList": [
-      "setBox",
-      "chatBox",
-      "perspective"
-    ],
-    "buttonCfg": {
-      "setBox": {
-        "icon":"set:ninja_main.json image:tool_setting",
-        "size": {
-          "w": 50,
-          "h": 52
-        }
-      },
-      "chatBox": {
-        "icon":"set:ninja_main.json image:tool_msg",
-        "size": {
-          "w": 50,
-          "h": 52
-        }
-      },
-      "perspective": {
-        "icon":"set:ninja_main.json image:tool_camera1",
-        "size": {
-          "w": 50,
-          "h": 52
-        }
-      },
-      "info": {
-        "icon":"set:ninja_main.json image:tool_action",
-        "show": true,
-        "serverEvent": "GET_TOOLBAR_INFO",
-        "size": {
-          "w": 50,
-          "h": 52
-        }
-      }
-    }
-  },
   "isDragControl": true,
-  "dragAreaSize": 200,
+  "dragAreaSize": 246,
   "dragNormalImage": "plugin/myplugin/image/ctr_move_bg.png",
   "dragPushImage": "plugin/myplugin/image/ctr_move_bg.png",
 
@@ -92,49 +46,49 @@
     "sectorSkills": [
       {
         "jackNum": 4,
-        "radius": 300,
+        "radius": 180,
         "jackSize": 128,
-        "startAngle": 280,
-        "deltaAngle": 25,
+        "startAngle": 230,
+        "deltaAngle": 37,
         "holderImage": "plugin/myplugin/image/ctr_skill_solt.png"
       }
     ],
-    "AJackIcon": "plugin/myplugin/image/ctr_jump_s.png",
-    "BJackIcon": "plugin/myplugin/image/ctr_atk.png",
-    "BJackArea": [
-      [
-        0,
-        -105
-      ],
-      [
-        0,
-        -95
-      ],
-      [
-        0,
-        189
-      ],
-      [
-        0,
-        189
-      ]
-    ],
+    "AJackIcon": "plugin/myplugin/image/ctr_atk.png",
+    "BJackIcon": "plugin/myplugin/image/ctr_jump_s.png",
     "AJackArea": [
       [
         0,
-        -41
+        -72
       ],
       [
         0,
-        -34
+        -73
       ],
       [
         0,
-        100
+        168
       ],
       [
         0,
-        100
+        168
+      ]
+    ],
+    "BJackArea": [
+      [
+        0,
+        -21
+      ],
+      [
+        0,
+        -266
+      ],
+      [
+        0,
+        128
+      ],
+      [
+        0,
+        128
       ]
     ]
   },
