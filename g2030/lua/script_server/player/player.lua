@@ -99,3 +99,8 @@ end
 function Player:setTeam(id)
     Game.TryJoinTeam(self, id)
 end
+
+---获取阵营
+function Player:getTeam()
+    return Game.GetTeam(self:getTeamId())
+end

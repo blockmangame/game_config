@@ -61,4 +61,14 @@ GMItem["g2030/setTeam_3"] = function(self)
     self:setTeam(3)
 end
 
+GMItem["g2030/upgradeTeam_2"] = function(self)
+    local team = Game.GetTeam(2)
+    team:addTeamKills(30)
+end
+
+GMItem["g2030/upgradeTeam_3"] = function(self)
+    local team = Game.GetTeam(3)
+    team:addTeamKills(30)
+end
+
 return GMItem

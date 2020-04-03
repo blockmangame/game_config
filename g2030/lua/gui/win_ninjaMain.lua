@@ -3,8 +3,8 @@
 ---包含底部功能入口，操控切换键，式神技能键，血量，锻炼值，阵营货币，蓝量
 ---zhuyayi 20200325
 ---
-local EXP_VAL = 0
-local HP_VAL =1
+local EXP_VAL,SKILL_VAL = 0,0
+local HP_VAL, TEAM_VAL=1,1
 local A_Btn
 local B_Btn
 local exchangeMac = true
@@ -22,8 +22,10 @@ function M:initWnd()
     self.btnExchangeCtr = self:child("NinjaMain-Exchange")
 
     self:initEvent()
-    UIMgr:new_widget("topValBar"):invoke("initViewByType", EXP_VAL,{0,75},self._root)
-    UIMgr:new_widget("topValBar"):invoke("initViewByType", HP_VAL,{0,150},self._root)
+    UIMgr:new_widget("topValBar"):invoke("initViewByType",HP_VAL ,{11,53},self._root)
+    UIMgr:new_widget("topValBar"):invoke("initViewByType", EXP_VAL,{11,93},self._root)
+    UIMgr:new_widget("TopSpVal"):invoke("initViewByType",SKILL_VAL ,{15,149},self._root)
+    UIMgr:new_widget("TopSpVal"):invoke("initViewByType", TEAM_VAL,{151,149},self._root)
 end
 function M:initEvent()
     self:subscribe(self.btnExchangeCtr, UIEvent.EventButtonClick, function()
@@ -44,13 +46,13 @@ function M:exchangeABBtn()
     if exchangeMac then
         print("-------------in")
         exchangeMac = false
-        A_Btn:SetImage("plugin/myplugin/image/ctr_jump.png")
-        B_Btn:SetImage("plugin/myplugin/image/ctr_atk_s.png")
+        A_Btn:SetImage("set:ninja_main.json image:btn_atk_s")
+        B_Btn:SetImage("set:ninja_main.json image:btn_jump")
     else
         print("-------------out")
         exchangeMac = true
-        A_Btn:SetImage("plugin/myplugin/image/ctr_jump_s.png")
-        B_Btn:SetImage("plugin/myplugin/image/ctr_atk.png")
+        A_Btn:SetImage("set:ninja_main.json image:btn_atk")
+        B_Btn:SetImage("set:ninja_main.json image:btn_jump_s")
 
     end
 

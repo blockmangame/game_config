@@ -16,8 +16,26 @@ function Handlers.ENTITY_BUFF_ADD(context)
 end
 
 function Handlers.SKILL_CAST(context)
-    --print("Handlers.SKILL_CAST " .. Lib.inspect(context, { depth = 1 }))
+    print("Handlers.SKILL_CAST " .. Lib.inspect(context, { depth = 1 }))
 end
+
+function Handlers.ENTITY_DIE(context)
+    local target = context.obj1
+    local from = context.obj2
+    if not target or not from then
+        return
+    end
+    if not target.isPlayer or not from.isPlayer then
+        return
+    end
+    if target:getTeamId() ~= from:getTeamId() and
+            target:getTeamId() > Define.Team.Neutrality and
+            from:getTeamId() > Define.Team.Neutrality then
+        from:addTeamKills()
+        --上报阵营击杀、阵营材料奖励
+    end
+end
+
 function Handlers.ENTITY_REBIRTH(context)
     context.obj1:resetHp()
 end
