@@ -16,6 +16,7 @@ end)
 Lib.subscribeEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE, function(params)
     local targetPos = params.targetPos
     local isTouchCancle = params.isTouchCancle
+    local isTouchPointMove = params.isTouchPointMove -- 如果没有移动，则不进行弹出场景UI计算
     
     if sceneIndicator then
 

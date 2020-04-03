@@ -76,10 +76,10 @@ end
 
 local function initStaticBaseArea(self)
 	local touchBgArea = self.touchBg:GetUnclippedOuterRect()
-	STATIC_BASE_AREA.min.x = touchBgArea[1]
-	STATIC_BASE_AREA.min.y = touchBgArea[2]
-	STATIC_BASE_AREA.max.x = touchBgArea[3]
-	STATIC_BASE_AREA.max.y = touchBgArea[4]
+	STATIC_BASE_AREA.min.x = touchBgArea[1] + 5
+	STATIC_BASE_AREA.min.y = touchBgArea[2] + 5
+	STATIC_BASE_AREA.max.x = touchBgArea[3] - 5
+	STATIC_BASE_AREA.max.y = touchBgArea[4] - 5
 end
 
 function M:init()
@@ -186,7 +186,7 @@ local function updatePlayerTouch(self)
 		if lastPos.x ~= targetPos.x or lastPos.y ~= targetPos.y or lastPos.z ~= targetPos.z then
 			lastPos = targetPos
 			self.targetPos = targetPos
-			Lib.emitEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE, {targetPos = targetPos, isTouchCancle = touchCellRedMask:IsVisible()})
+			Lib.emitEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE, {targetPos = targetPos, isTouchPointMove = self.isTouchPointMove, isTouchCancle = touchCellRedMask:IsVisible()})
 		end
 		return true
 	end)

@@ -9,6 +9,12 @@ function Handlers.GAME_REWAIT(context)
     --TODO
 end
 
+function Handlers.ENTITY_BUFF_ADD(context)
+    --{entity = self, cfg = buff.cfg}
+    --Lib.log("Handlers.ENTITY_BUFF_ADD " .. Lib.inspect(context.cfg, { depth = 1 }))
+    --Lib.log(Lib.inspect(context.entity.EntityProp, { depth = 1 }))
+end
+
 function Handlers.SKILL_CAST(context)
     print("Handlers.SKILL_CAST " .. Lib.inspect(context, { depth = 1 }))
 end
@@ -32,32 +38,4 @@ end
 
 function Handlers.ENTITY_REBIRTH(context)
     context.obj1:resetHp()
-end
-
-function Handlers.ENTITY_ADD_TEAM_BUFF(context)
-    local entity = context.entity
-    local prop = context.cfg.var
-    if not entity or not prop then
-        return
-    end
-    local team = entity:getTeam()
-    if not team then
-        return
-    end
-    local value = tonumber(team:getLevelCfg(0, prop))
-    entity.EntityProp[prop](entity, value, true)
-end
-
-function Handlers.ENTITY_REMOVE_TEAM_BUFF(context)
-    local entity = context.entity
-    local prop = context.cfg.var
-    if not entity or not prop then
-        return
-    end
-    local team = entity:getTeam()
-    if not team then
-        return
-    end
-    local value = tonumber(team:getLevelCfg(0, prop))
-    entity.EntityProp[prop](entity, value, false)
 end
