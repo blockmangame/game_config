@@ -156,10 +156,6 @@ function Entity:deltaHurtSub(val)
     end
     self:setValue("hurtSub",self:getValue("hurtSub")-val)
 end
----获取阵营Id
-function Entity:getTeamId()
-    return self:getValue("teamId") or 0
-end
 
 ---设置阵营Id
 function Entity:setTeamId(id)
