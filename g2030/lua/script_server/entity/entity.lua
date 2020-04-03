@@ -207,4 +207,24 @@ function Entity.EntityProp:hurtSubPct(value, add, buff)
     local val = add and value or -value
     self:deltaHurtSub(val)
 end
+---
+---阵营buff
+---阵营对配置属性的加成
+---
+function Entity.EntityProp:teamProp(value, add, buff)
+    local team = Game.GetTeam(value.teamId)
+    local lv = 0
+    if not team then
+        return
+    end
+    if add then
+        lv = team:getLevel()
+    end
+    for _, prop in ipairs(value.props) do
+        local var = team:getLevelCfg(lv, prop)
+        if var then
+            self.EntityProp[prop](self, tonumber(var), add)
+        end
+    end
+end
 
