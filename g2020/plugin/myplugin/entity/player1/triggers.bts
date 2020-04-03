@@ -2768,16 +2768,28 @@ ENTITY_JUMP {
     }
 }
 
+FUNC_ENTITY_REMOVE_INTERACTION_INFO
+{
+    $obj1.cancelToExecuteClearRide = true    ----为了不在ENTITY_BUFF_REMOVE中再一次执行ClearRide
+    RemoveEntityBuff(buff = $obj1.interactionBuff, entity = $obj1)
+    $obj1.cancelToExecuteClearRide = nil
+
+    $obj1.interactionObjId = nil
+    $obj1.interactionBuff = nil
+    PlayAction(entity = $obj1, actionName = "idle",  actionTime = 0, includeSelf = true)
+    SendInteractionEnd(player = $obj1)
+}
+
 ENTITY_REMOVE_INTERACTION {
     If($obj1.interactionObjId){
         $target = GetObject(objID = $obj1.interactionObjId)
         If($target && $target.interactionBuff) {
-            RemoveEntityBuff(buff = $target.interactionBuff, entity = $target)
+            CallTrigger(object = $target, event = "FUNC_ENTITY_REMOVE_INTERACTION_INFO")
         }
     }
 
     If($obj1.interactionBuff){
-        RemoveEntityBuff(buff = $obj1.interactionBuff, entity = $obj1)
+        CallTrigger(object = $obj1, event = "FUNC_ENTITY_REMOVE_INTERACTION_INFO")
     }
 }
 
