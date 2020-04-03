@@ -16,25 +16,23 @@ function M:initWnd()
 end
 ---
 ---desc：根据type类型初始化进度条值
----type = 0：肌肉值
----type = 1：血量
+---type = 0：阵营货币
+---type = 1：待定
 function M:initViewByType(type,pos,root)
     if type == 0 then
         self:initView("set:ninja_main.json image:material_skill",
                 Event.EVENT_CHANGE_CURRENCY,
                 function ()
-                    local coinCfg = Coin:GetCoinCfg()
-                    self.txtVal:SetText(Coin:countByCoinName(Me, coinCfg[4].coinName))
+                   self.txtVal:SetText(Coin:countByCoinName(Me, Coin:GetCoinCfg()[4].coinName))
                 end,
-                Me:getTeamStone())
+                Coin:countByCoinName(Me, Coin:GetCoinCfg()[4].coinName))
     elseif type == 1 then
         self:initView("set:ninja_main.json image:material_"..self:getIconSrc(),
                 Event.EVENT_CHANGE_CURRENCY,
                 function ()
-                    local coinCfg = Coin:GetCoinCfg()
-                    self.txtVal:SetText(Coin:countByCoinName(Me, coinCfg[4].coinName))
+                    self.txtVal:SetText(Coin:countByCoinName(Me, Coin:GetCoinCfg()[4].coinName))
                 end,
-                Me:getTeamStone())
+                Coin:countByCoinName(Me, Coin:GetCoinCfg()[4].coinName))
     end
     self._root:SetXPosition({0,pos[1]})
     self._root:SetYPosition({0,pos[2]})
