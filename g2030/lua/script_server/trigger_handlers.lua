@@ -16,7 +16,7 @@ function Handlers.ENTITY_BUFF_ADD(context)
 end
 
 function Handlers.SKILL_CAST(context)
-    print("Handlers.SKILL_CAST " .. Lib.inspect(context, { depth = 1 }))
+    --print("Handlers.SKILL_CAST " .. Lib.inspect(context, { depth = 1 }))
 end
 
 function Handlers.ENTITY_DIE(context)
