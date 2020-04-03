@@ -11,7 +11,8 @@ end
 
 function Handlers.ENTITY_BUFF_ADD(context)
     --{entity = self, cfg = buff.cfg}
-    Lib.log("Handlers.ENTITY_BUFF_ADD " .. Lib.inspect(context.cfg, { depth = 1 }))
+    --Lib.log("Handlers.ENTITY_BUFF_ADD " .. Lib.inspect(context.cfg, { depth = 1 }))
+    --Lib.log(Lib.inspect(context.entity.EntityProp, { depth = 1 }))
 end
 
 function Handlers.SKILL_CAST(context)
