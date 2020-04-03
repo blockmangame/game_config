@@ -2316,23 +2316,19 @@ FUNC_STATESKILL_REMOVE --params: state, skill
 
 FUNC_STATE_RELEASE --params: state[, duration]
 {
-    If(not $state)
-    {
+    If(not $state) {
         Return()
     }
     $skill = Concat(p1 = @skillPath, p2 = $state)
     $stateBase = GetSkillVar(fullName = $skill, key = "stateBase") or $state
     $hadState = Concat(p1 = "had", p2 = $stateBase)
     $releasingState = Concat(p1 = "releasing", p2 = $state)
-    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state)
-    If(GetObjectVar(obj = $obj1, key = $hadState) && not GetObjectVar(obj = $obj1, key = $releasingState))
-    {
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state, toShowTip = true)
+    If(GetObjectVar(obj = $obj1, key = $hadState) && not GetObjectVar(obj = $obj1, key = $releasingState)) {
         $subdivided = GetSkillVar(fullName = $skill, key = "subdivided")
-        If(ArraySize(array = $subdivided or []) > 0)
-        {
+        If(ArraySize(array = $subdivided or []) > 0) {
             $kind = ArrayGet(array = $subdivided, index = GetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "Idx")))
-            If($kind ~= $state)
-            {
+            If($kind ~= $state) {
                 Return()
             }
         }
@@ -2340,12 +2336,9 @@ FUNC_STATE_RELEASE --params: state[, duration]
         CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "AUTOVANISH_TIMER"))
         SetObjectVar(obj = $obj1, key = Concat(p1 = $stateBase, p2 = "TriggerRelease"), value = true)
         $duration = $duration or GetSkillVar(fullName = $skill, key = "duration")
-        If($duration && $duration > 0)
-        {
+        If($duration && $duration > 0) {
             CallTrigger(object = $obj1, event = "FUNC_STATE_START_PROGRESS", state = $state, stateBase = $stateBase, duration = $duration)
-        }
-        Else
-        {
+        } Else {
             CallTrigger(object = $obj1, event = "FUNC_STATE_REWARD", state = $state, stateBase = $stateBase, skill = $skill)
         }
     }
@@ -2437,8 +2430,7 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
     {
         If($type == "selfHouse" && $owner == $obj1.house)
         {
-            ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
-            CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+            CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", toShowTip = true)
             Return()
         }
         $door = $owner.insideDoor
@@ -2448,8 +2440,7 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
     {
         If($type == "map")
         {
-            ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
-            CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+            CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", toShowTip = true)
             Return()
         }
         ElseIf($type == "region")
@@ -2462,8 +2453,7 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
                 $tmpReg = {min = $min, max = $max + V3(1, 1, 1)}
                 If(IfEntityInArea(entity = $obj1, region = $tmpReg))
                 {
-                    ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
-                    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+                    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", toShowTip = true)
                     Return()
                 }
                 $center = GetRegionCenter(region = $region)
@@ -2476,8 +2466,7 @@ FUNC_GPS_SET_OR_SYNC --params: gpsDict
             $ride = GetRideOn(entity = $obj1)
             If($ride and $ride.cfg.releaseState == $destination)
             {
-                ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
-                CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS")
+                CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", toShowTip = true)
                 Return()
             }
             $gps = DictionaryGet(dict = $gpsDict, key = "pos")
@@ -2538,17 +2527,7 @@ FUNC_GPS_RECALCULATE --params: mapStart, mapEnd, gpsDict
     CallTrigger(object = $obj1, event = "FUNC_OPEN_GPS", gps = $gps, gpsDict = $gpsDict)
 }
 
-FUNC_UPDATE_STATE_SKILL_JACK_AREA --params: up
-{
-    If($up == nil)
-    {
-        $map = GetEntityMap(entity = $obj1)
-        $up = $map.owner ~= $obj1.house and true or false
-    }
-    UpdateSkillJackArea(entity = $obj1, info = {pos = 1, yOff = $up and @skillJackUp or @skillJackDown})
-}
-
-FUNC_STATE_RESET_DATA --params: state[, hideTip]
+FUNC_STATE_RESET_DATA --params: state
 {
     $index = ArrayFind(array = $obj1.stateProgress, value = $state)
     If($index) { ArrayRemove(array = $obj1.stateProgress, index = $index) }
@@ -2557,7 +2536,7 @@ FUNC_STATE_RESET_DATA --params: state[, hideTip]
     SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "STime"), value = nil)
     SetObjectVar(obj = $obj1, key = Concat(p1 = $state, p2 = "UsedTime"), value = nil)
     SetObjectVar(obj = $obj1, key = Concat(p1 = "releasing", p2 = $state), value = nil)
-    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state, hideTip = $hideTip)
+    CallTrigger(object = $obj1, event = "FUNC_CLOSE_GPS", destination = $state)
     CallTrigger(object = $obj1, event = "FUNC_REMOVE_BUFF", buffStr = Concat(p1 = $state, p2 = "Effect"))
     CallTrigger(object = $obj1, event = "FUNC_STOP_TIMER", timerStr = Concat(p1 = $state, p2 = "AFFECT_TIMER"))
 }
@@ -5446,7 +5425,6 @@ RENDER_CUR_HOUSE_INSIDE_COLOR{
 ENTER_MAP
 {
     StartTimer(time = 5,object = $obj1, event = "RENDER_CUR_HOUSE_INSIDE_COLOR")
-    CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA")
     $obj1Map = GetEntityMap(entity = $obj1)
     $obj1MapOwner = GetMapVar(map = $obj1Map, key = "owner")
     If(not $obj1MapOwner or ($obj1MapOwner ~= GetObjectVar(obj = $obj1, key = "house"))){
@@ -5477,7 +5455,6 @@ ENTER_MAP
 
 LEAVE_MAP
 {
-    CallTrigger(object = $obj1, event = "FUNC_UPDATE_STATE_SKILL_JACK_AREA")
     If(GetEntityMapName(entity = $obj1) == "map001") 
     {
         WorksWallsOperation(player = $obj1, isOpen = false)

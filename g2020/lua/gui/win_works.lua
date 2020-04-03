@@ -127,17 +127,21 @@ end
 
 function M:initItems()
     self.gvList = self:child("Works-Items")
-    self.gvList:InitConfig(24, 3, 3)
+
     self.gvList:RemoveAllItems()
     self.gvList:SetAutoColumnCount(false)
 
     local itemX = (self.gvList:GetPixelSize().x - 24 * 2) / 3
-    local itemY = (203 * itemX) / 271
+    local itemY = (200 * itemX) / 279
+
+    local h = self.gvList:GetPixelSize().y - itemY * 2
 
     local data = self.viewData[self.curTabView] or {}
 
     local itemX2 = itemX / self.gvList:GetPixelSize().x
     local itemY2 = itemY / self.gvList:GetPixelSize().y
+
+    self.gvList:InitConfig(24, math.max(h, 10), 3)
 
     for _, v in ipairs(data) do
         local itemView = GUIWindowManager.instance:LoadWindowFromJSON("WorksItem.json")
@@ -202,7 +206,7 @@ function M:itemUpdate(view, info)
         x = y * self.rows / self.columns
     end
 
-    panelWnd:SetArea( { 0, 0 }, { 0, 4 }, { 0, x }, { 0, y})
+    panelWnd:SetArea( { 0, 0 }, { 0, 9 }, { 0, x }, { 0, y})
 
     self:subscribe(view:child("WorksItem-Like"), UIEvent.EventCheckStateChanged, function(itemView)
         itemView:SetEnabled(false)

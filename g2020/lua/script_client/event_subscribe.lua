@@ -1,4 +1,8 @@
 
+Lib.subscribeEvent(Event.EVENT_PLAYER_BEGIN, function()
+    FriendManager.LoadFriendData()
+end)
+
 Lib.subscribeEvent(Event.EVENT_SHOW_PRI_SHOP, function(show)
 	if show then
 		Me:uiBehaviorLog("priShop",string.format("%s open privateShop", Me.name), "")

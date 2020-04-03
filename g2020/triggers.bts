@@ -353,21 +353,17 @@ CHANGE_PLAYER_SCALE_CHILD
     CallTrigger(obj1 = $obj1, event = "UPDATE_POS_WHILE_IN_INSIDE_REGION", object = $obj1)
 }
 
-FUNC_CLOSE_GPS --params: destination[, hideTip]
+FUNC_CLOSE_GPS --params: destination
 {
-    $gpsDict = GetObjectVar(obj = $obj1, key = "gpsDict")
-    If($destination and $gpsDict)
-    {
-        $dictDestination = DictionaryGet(dict = $gpsDict, key = "destination")
+    If($destination and $obj1.gpsDict) {
+        $dictDestination = DictionaryGet(dict = $obj1.gpsDict, key = "destination")
     }
-    If(not $destination || $destination == $dictDestination)
-    {
-        If(not $hideTip and $destination)
-        {
+    If(not $destination || $destination == $dictDestination) {
+        If($toShowTip) {
             ShowTip(entity = $obj1, tipType = 3, textKey = "you_came")
         }
         CallTrigger(object = $obj1, event = "FUNC_SET_GUIDE_TARGET")
-        SetObjectVar(obj = $obj1, key = "gpsDict", value = nil)
+        $obj1.gpsDict = nil
     }
 }
 

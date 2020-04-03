@@ -43,3 +43,20 @@ function AsyncProcess.GetWorksInfo(worksId, callback)
     local args = {{"gameId", gameName}, {"userId", CGame.instance:getPlatformUserId()}, {"graffitiId", worksId}}
     self.HttpRequest("GET", url, args, callback)
 end
+
+function AsyncProcess.LoadUsersInfo(userIds)
+    local url = string.format("%s/gameaide/api/v1/party/users/info/list", self.ClientHttpHost)
+    local params = {
+        {"userIds", table.concat(userIds, ",")},
+        {"userId", tostring(Me.platformUserId)},
+        {"gameId", World.GameName},
+    }
+    self.HttpRequest("GET", url, params, function (response, isSuccess)
+        if not isSuccess then
+            print("AsyncProcess.LoadUsersInfo response error", cjson.encode(params), cjson.encode(response))
+            return
+        end
+        -- print("AsyncProcess.LoadUsersInfo>>>", cjson.encode(response))
+        UserInfoCache.UpdateUserInfos(response.data)
+    end)
+end
