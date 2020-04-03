@@ -124,7 +124,7 @@ end
 
 function Actions.ShowDetails(data, params, content)
     local player = params.player
-    if not player or not player:isValid() or not player.isPlayer then
+    if not player then
         return
     end
     local detailsUI = _getObjVar(player, "detailsUI")
@@ -140,11 +140,11 @@ function Actions.ShowDetails(data, params, content)
     }
     local shouldSyncPlayers = {player}
     local target = params.target
-    if target and not params.isRemoveTarget then
+    if target and not params.rejectTarget then
         table.insert(shouldSyncPlayers, target)
     end
     local subtitle = {}
-    for _, v in pairs(shouldSyncPlayers) do
+    for _, v in pairs(shouldSyncPlayers) do ----目前仅有双人交互。以后出了n(n > 2)人再改。
         local usedTime, isReleasing = _getStateReleaseData(v, state)
         if usedTime ~= nil then
             packet.isOpen = true
@@ -165,10 +165,8 @@ end
 function Actions.SyncStatesData(data, params, context)
     local player = params.player
     local target = params.target
-    for _, v in pairs({player, target}) do
-        if not v or not v:isValid() or not v.isPlayer then
-            return
-        end
+    if not target or not player then
+        return
     end
     local states = {}
     local isAdd = params.isAdd
