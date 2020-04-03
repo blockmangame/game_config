@@ -9,6 +9,11 @@ function Handlers.GAME_REWAIT(context)
     --TODO
 end
 
+function Handlers.ENTITY_BUFF_ADD(context)
+    --{entity = self, cfg = buff.cfg}
+    Lib.log("Handlers.ENTITY_BUFF_ADD " .. Lib.inspect(context.cfg, { depth = 1 }))
+end
+
 function Handlers.SKILL_CAST(context)
     --print("Handlers.SKILL_CAST " .. Lib.inspect(context, { depth = 1 }))
 end
