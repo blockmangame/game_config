@@ -254,6 +254,11 @@ local function renderWall(map, childRegionKey, childRegionArr, destBlock)
     end
     local filter = Block.GetNameCfg(destBlock).filter or {}
     local firstRegion = regions[1]
+    for _,re in ipairs(regions) do -- 解决菠萝房区域选择问题
+        if firstRegion.min.x >= re.min.x and firstRegion.min.y >= re.min.y and firstRegion.min.z >= re.min.z then
+            firstRegion = re
+        end
+    end
     if not firstRegion then
         return
     end
