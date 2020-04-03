@@ -41,8 +41,62 @@ end
 
 function handles:showChangeTeamName(packet)
     local name = packet.name
+	local title = {
+        name = "ui_edit_title_name"
+    }
 
-    Trigger.CheckTriggers(self:cfg(), "SHOW_EDIT_FAMILY_NAME_UI", {obj1 = self, name = name})
+    local inputTitle = {
+        name = "ui_edit_input_name"
+    }
+
+    local buttons = {
+		{
+            event = "cancel",
+            normalImage = "set:tip_dialog.json image:btn_big_blue",
+            pushedImage = "set:tip_dialog.json image:btn_big_blue",
+            name = "ui_cancel"
+		},
+		{
+            event = "EDIT_TEAM_NAME_BUTTON_SURE",
+            normalImage = "set:tip_dialog.json image:btn_big_green",
+            pushedImage = "set:tip_dialog.json image:btn_big_green",
+            name = "ui_sure"
+        }
+	}
+
+    local contents = {
+        title = title,
+        inputTitle = inputTitle,
+        buttons = buttons,
+        text = name,
+        textLength = 15
+	}
+
+	local options = {}
+
+
+	local entity = self
+    local contents = contents
+
+    if not entity.isPlayer or not contents then
+        return
+    end
+
+    local eventMap = {}
+    for _, v in pairs(contents.buttons or {}) do
+        eventMap[v.event] = v.event
+    end
+
+    local callBackModName = "InputDialogCallBack"
+    local regId = entity:regCallBack(callBackModName, eventMap, false, true, options)
+
+    entity:sendPacket({
+        pid = "ShowInputDialog",
+        regId = regId,
+        callBackModName = callBackModName,
+        contents = contents,
+    })
+
 end
 
 function handles:GiveAwayToTarget(packet)
