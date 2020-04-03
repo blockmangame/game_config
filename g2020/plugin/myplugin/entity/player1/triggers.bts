@@ -6877,42 +6877,6 @@ STORE_BUY_GOODS_SUCCESSFUL
     GameAnalyticsCustomEvent(player = $obj1, parts = ["buy:goods:store", ToString($storeId), ToString($index)])
 }
 
-SHOW_EDIT_FAMILY_NAME_UI
-{
-    $title = {
-        name = "ui_edit_title_name"
-    }
-
-    $inputTitle = {
-        name = "ui_edit_input_name"
-    }
-
-    $buttons = [
-        {
-            event = "cancel",
-            normalImage = "set:tip_dialog.json image:btn_big_blue",
-            pushedImage = "set:tip_dialog.json image:btn_big_blue",
-            name = "ui_cancel"
-        },
-        {
-            event = "EDIT_TEAM_NAME_BUTTON_SURE",
-            normalImage = "set:tip_dialog.json image:btn_big_green",
-            pushedImage = "set:tip_dialog.json image:btn_big_green",
-            name = "ui_sure"
-        }
-    ]
-
-    $contents = {
-        title = $title,
-        inputTitle = $inputTitle,
-        buttons = $buttons,
-        text = $name,
-        textLength = 15
-    }
-
-    ShowInputDialog(entity = $obj1, contents = $contents)
-}
-
 EDIT_TEAM_NAME_BUTTON_SURE
 {
     If(not IsPlayer(entity = $obj1))
