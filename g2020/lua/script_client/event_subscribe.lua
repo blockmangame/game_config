@@ -43,7 +43,7 @@ Lib.subscribeEvent(Event.EVENT_SHOW_PROGRESS_FOLLOW_OBJ, function(packet)
 end)
 
 Lib.subscribeEvent(Event.EVENT_SHOW_DETAILS, function(packet)
-    if packet.isOpen then
+    if packet.isOpen and UI:isOpen("playerState") then
         UI:openWnd("showDetails")
         Lib.emitEvent(Event.EVENT_SET_DETAILS, packet)
     else
