@@ -33,3 +33,31 @@ end
 function Handlers.ENTITY_REBIRTH(context)
     context.obj1:resetHp()
 end
+
+function Handlers.ENTITY_ADD_TEAM_BUFF(context)
+    local entity = context.entity
+    local prop = context.cfg.var
+    if not entity or not prop then
+        return
+    end
+    local team = entity:getTeam()
+    if not team then
+        return
+    end
+    local value = tonumber(team:getLevelCfg(0, prop))
+    entity.EntityProp[prop](entity, value, true)
+end
+
+function Handlers.ENTITY_REMOVE_TEAM_BUFF(context)
+    local entity = context.entity
+    local prop = context.cfg.var
+    if not entity or not prop then
+        return
+    end
+    local team = entity:getTeam()
+    if not team then
+        return
+    end
+    local value = tonumber(team:getLevelCfg(0, prop))
+    entity.EntityProp[prop](entity, value, false)
+end

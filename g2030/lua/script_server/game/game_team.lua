@@ -6,7 +6,7 @@ function TeamBase:joinEntity(entity)
     entity:setValue("joinTeamTime", time)
 	if entity.isPlayer then
 		for _, pet in pairs(entity:data("pet")) do
-			pet:setValue("teamId", 0)	-- Ç¿ÖÆ¿Í»§¶ËË¢ÐÂÑªÌõÑÕÉ«, ³èÎïteamIdÓÀÔ¶Îª0
+			pet:setValue("teamId", 0)	-- å¼ºåˆ¶å®¢æˆ·ç«¯åˆ·æ–°è¡€æ¡é¢œè‰², å® ç‰©teamIdæ°¸è¿œä¸º0
 		end
         self.leaderId = self.leaderId or entity.objID
 		self.playerCount = self.playerCount + 1
@@ -37,6 +37,14 @@ function TeamBase:leaveEntity(entity, canLeave)
 		return
 	end
 
+	for id, buff in pairs(self.buffList) do
+		local eb = buff.addList[objID]
+		if eb then
+			entity:removeBuff(eb)
+			buff.addList[objID] = nil
+		end
+	end
+
 	local oldTeamId = entity:getValue("teamId")
 	assert(oldTeamId==self.id, tostring(oldTeamId))
 	entity:setValue("teamId", 0)
@@ -44,19 +52,12 @@ function TeamBase:leaveEntity(entity, canLeave)
 	self.entityList[objID] = nil
 	if entity.isPlayer then
 		for _, pet in pairs(entity:data("pet")) do
-			pet:setValue("teamId", 0)	-- Ç¿ÖÆ¿Í»§¶ËË¢ÐÂÑªÌõÑÕÉ«, ³èÎïteamIdÓÀÔ¶Îª0
+			pet:setValue("teamId", 0)	-- å¼ºåˆ¶å®¢æˆ·ç«¯åˆ·æ–°è¡€æ¡é¢œè‰², å® ç‰©teamIdæ°¸è¿œä¸º0
 		end
 		self.playerCount = self.playerCount - 1
 		if self.leaderId == entity.objID then
 			local firstPlayer = self:getFirstPlayer()
 			self.leaderId = firstPlayer and firstPlayer.objID or nil
-		end
-	end
-	for id, buff in pairs(self.buffList) do
-		local eb = buff.addList[objID]
-		if eb then
-			entity:removeBuff(eb)
-			buff.addList[objID] = nil
 		end
 	end
 
@@ -76,8 +77,14 @@ end
 
 function TeamBase:initBuff()
     for _, name in ipairs(self.teamBuff) do
-        self:addBuff(name, 100000)
+        self:addBuff(name)
     end
+end
+
+function TeamBase:removeAllBuff()
+	for id, buff in pairs(self.buffList) do
+		self:removeBuff(buff)
+	end
 end
 
 function TeamBase:addLevelCfg(cfg)
@@ -93,8 +100,12 @@ function TeamBase:getLevelCfg(level, key)
 	if not key then
 		return self.levelCfg[tonumber(level)]
 	end
-	if self.levelCfg[tonumber(level)] then
-		return self.levelCfg[tonumber(level)][key]
+	local lv = level
+	if level == 0 then
+		lv = self.level
+	end
+	if self.levelCfg[tonumber(lv)] then
+		return self.levelCfg[tonumber(lv)][key]
 	end
 end
 
@@ -114,15 +125,15 @@ function TeamBase:updateLevel()
 
 	local kills = self.kills
 	local old = self.level
-	self.level = #self.levelCfg
-	for i = old, #self.levelCfg do
+	local level = #self.levelCfg
+	for i = old, level do
 		if self.levelCfg[i] and tonumber(self.levelCfg[i].upgradeKills) > kills then
-			self.level = i
+			level = i
 			break
 		end
 	end
-	if old ~= self.level then
-		self:onTeamUpgrade()
+	if old < level then
+		self:onTeamUpgrade(level)
 	end
 end
 
@@ -130,6 +141,8 @@ function TeamBase:getLevel()
 	return self.level
 end
 
-function TeamBase:onTeamUpgrade()
-	--¸üÐÂbuff
+function TeamBase:onTeamUpgrade(level)
+	self:removeAllBuff()
+	self.level = level
+	self:initBuff()
 end

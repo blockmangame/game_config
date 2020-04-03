@@ -67,25 +67,14 @@ function Game.TryJoinTeam(player, id)
     return true
 end
 
---Test
-function Game.getTeamInfo(id)
-    local team = Game.GetTeam(id)
-    if not team then
-        return
-    end
-    print("vars--------" .. Lib.inspect(team.vars, { depth = 2 }))
-    print("level-------" .. tostring(team.level))
-    print("kills-------" .. tostring(team.kills))
-end
-
 local function initTeamConfig()
     local temp = Lib.readGameCsv("config/camp_level.csv") or {}
 
     for _, cfg in pairs(temp) do
         for _, info in ipairs(World.cfg.team) do
+            local team = Game.GetTeam(info.id, true)
             if info.id ~= Define.Team.Neutrality and
                     (tonumber(cfg.teamId) == 0 or info.id == tonumber(cfg.teamId)) then
-                local team = Game.GetTeam(info.id)
                 team:addLevelCfg(cfg)
             end
         end
@@ -97,12 +86,14 @@ local function initTeam()
     if not worldCfg.team then
         return
     end
-    for _, info in ipairs(worldCfg.team) do
-        local team = Game.CreateTeam(info.id)
-        team:initBuff()
-    end
     initTeamConfig()
-    --获取阵营等级和击杀
+    for _, info in ipairs(World.cfg.team) do
+        local team = Game.GetTeam(info.id)
+        if team then
+            team:initBuff()
+            --获取阵营总击杀，初始化等级
+        end
+    end
 end
 
 initTeam()

@@ -1,0 +1,13 @@
+ENTITY_BUFF_ADD{
+    If(not IsPlayer(entity = $entity)){
+    		Return()
+    	}
+    	CallTrigger(event = "ENTITY_ADD_TEAM_BUFF", entity = $entity, cfg = $cfg)
+}
+
+ENTITY_BUFF_REMOVE{
+    If(not IsPlayer(entity = $entity)){
+    		Return()
+    	}
+    	CallTrigger(event = "ENTITY_REMOVE_TEAM_BUFF", entity = $entity, cfg = $cfg)
+}
