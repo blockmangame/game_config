@@ -26,6 +26,24 @@ function UI:setViewTexture(key, view)
     view:SetImage(texture:getTextureName())
 end
 
+function UI:openHeadWnd(objID, name, width, height, ...)
+    local window = assert(UIMgr:new_wnd(name))
+	if not window then
+		return nil
+	end
+	local key = "*head_" .. objID
+    local wnd = self._windows[key]
+	if wnd then
+		self:closeHeadWnd(objID)
+	end
+    self._windows[key] = window
+    self._windows[key].identityName = name
+	GUISystem.instance:CreateHeadWindow(objID,window:root(), width, height)
+    window:show()
+    window:onOpen(...)
+    return window
+end
+
 function UI:hideOpenedWnd(excluded)
     local wnds = {}
     excluded = excluded or ""
@@ -39,7 +57,7 @@ function UI:hideOpenedWnd(excluded)
     for name, wnd in pairs(UI._windows) do
         if not excludedMap[name] and wnd:isvisible() then
             wnd:hide()
-            if not string.match(name, "*head_") then
+            if wnd.identityName ~= "bubbleMsg" then
                 wnds[#wnds + 1] = wnd
             end
         end
