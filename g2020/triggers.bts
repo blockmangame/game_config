@@ -411,29 +411,38 @@ FUNC_REMOVE_BUFF --params: buffStr
     SetObjectVar(obj = $obj1, key = $buffStr, value = nil)
 }
 
+FUNC_ADD_SINGLE_STATE_TO_INTERACTLIST --params: entities, stateBase or state
+{
+    $stateBase = $stateBase or ($state and GetSkillVar(fullName = Concat(p1 = @skillPath, p2 = $state), key = "stateBase")) or $state
+    If(not $stateBase) {
+        Return()
+    }
+    $listName = Concat(p1 = $stateBase, p2 = "InteractList")
+    Foreach(array = $entities, key = "entity")
+    {
+        If(not IsPlayer(entity = $entity) || not GetObjectVar(obj = $entity, key = Concat(p1 = "had", p2 = $stateBase)))
+        {
+            Continue()
+        }
+        $interactList = GetObjectVar(obj = $entity, key = $listName) or []
+        Foreach(array = $entities, key = "cp")
+        {
+            $cpID = GetObjectID(object = $cp)
+            If($cp == $entity || not IsPlayer(entity = $cp) || ArrayFind(array = $interactList, value = $cpID))
+            {
+                Continue()
+            }
+            ArrayAppend(array = $interactList, value = $cpID)
+        }
+        SetObjectVar(obj = $entity, key = $listName, value = $interactList)
+    }
+}
+
 FUNC_STATE_ADD_INTERACTLIST --params: entities
 {
     Foreach(array = @Generate_State_List, key = "stateBase")
     {
-        $listName = Concat(p1 = $stateBase, p2 = "InteractList")
-        Foreach(array = $entities, key = "entity")
-        {
-            If(not IsPlayer(entity = $entity) || not GetObjectVar(obj = $entity, key = Concat(p1 = "had", p2 = $stateBase)))
-            {
-                Continue()
-            }
-            $interactList = GetObjectVar(obj = $entity, key = $listName) or []
-            Foreach(array = $entities, key = "cp")
-            {
-                $cpID = GetObjectID(object = $cp)
-                If($cp == $entity || not IsPlayer(entity = $cp) || ArrayFind(array = $interactList, value = $cpID))
-                {
-                    Continue()
-                }
-                ArrayAppend(array = $interactList, value = $cpID)
-            }
-            SetObjectVar(obj = $entity, key = $listName, value = $interactList)
-        }
+        CallTrigger(event = "FUNC_ADD_SINGLE_STATE_TO_INTERACTLIST", entities = $entities, stateBase = $stateBase)
     }
 }
 
@@ -688,7 +697,7 @@ ENTITY_RIDE_OFF {
     If($targetAttachPointIndexBuff and GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff)){
         RemoveEntityBuff(entity = $obj2, buff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = $targetAttachPointIndexBuff))
     }
-    CallTrigger(object = $obj2, event = "FUNC_STATE_RIDE_OPERATION", ride = $obj1, isRideOff = true)
+    CallTrigger(object = $obj2, event = "FUNC_STATE_RIDE_OPERATION", ride = $obj1, isRideOff = true, toExecuteSync = true)
     CallTrigger(object = $obj2, event = "FUNC_CHECK_SHOWN_DANCES_SKILL", shown = true)
     CallTrigger(object = $obj2, event = "ENTITY_REMOVE_INTERACTION")
     StartTimer(rep = false, object = $obj2, target = $obj1, time = 1, event = "RIDEOFF_IN_DEC")
@@ -703,13 +712,14 @@ ENTITY_RIDE_OFF {
 }
 ENTITY_RIDE_ON {
     If(not IsPlayer(entity = $obj2)){ Return() }
-    CallTrigger(object = $obj2, event = "FUNC_STATE_RIDE_OPERATION", ride = $obj1, isRideOff = false)
+    CallTrigger(object = $obj2, event = "FUNC_STATE_RIDE_OPERATION", ride = $obj1, isRideOff = false, toExecuteSync = true)
 
     If(not IsPlayer(entity = $obj1))
     { 
         CallTrigger(object = $obj2, event = "FUNC_CHECK_SHOWN_DANCES_SKILL", shown = false)
         Return() 
     }
+    CallTrigger(event = "FUNC_STATE_ADD_INTERACTLIST", entities = [$obj1, $obj2])
 }
 REMOVE_ILL_BUFF
 {
