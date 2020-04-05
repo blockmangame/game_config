@@ -9,11 +9,17 @@ local lockKeyJump = false
 
 ---@param player EntityClientMainPlayer
 local function jump_impl(control, player)
+    --player:setEntityProp("jumpSpeed", tostring(1.0))
+    --player:setEntityProp("gravity", tostring(0.04))
+    --player:setEntityProp("moveSpeed", tostring(0.0))
+
     local playerCfg = player:cfg()
     local packet = {}
     packet.reset = (player:getJumpCount() == player:getMaxJumpCount())
     Skill.Cast(playerCfg.jumpSkill, packet)
+
     control:jump()
+
     player:decJumpCount()
 end
 
