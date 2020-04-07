@@ -186,7 +186,7 @@ local function updatePlayerTouch(self)
 		if lastPos.x ~= targetPos.x or lastPos.y ~= targetPos.y or lastPos.z ~= targetPos.z then
 			lastPos = targetPos
 			self.targetPos = targetPos
-			Lib.emitEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE, {targetPos = targetPos, isTouchPointMove = self.isTouchPointMove, isTouchCancle = touchCellRedMask:IsVisible()})
+			Lib.emitEvent(Event.EVENT_SCENE_SKILL_TOUCH_MOVE, {targetPos = targetPos, isReclacTargetPos = self.isTouchPointMove, isActivion = touchCellRedMask:IsVisible()})
 		end
 		return true
 	end)
@@ -319,7 +319,7 @@ end
 
 function M:updateTouchBgSize(size)
 	if size then
-		self.touchBg:SetSize(size)
+		self.touchBg:SetArea(self.touchBg:GetXPosition(), self.touchBg:GetYPosition(), {0, size.x}, {0, size.y})
 		self.touchBgArea = resetTouchBgArea(self)
 	end
 end
@@ -338,7 +338,7 @@ end
 
 function M:updateTouchCellSize(size)
 	if size then
-		self.touchCell:SetSize(size)
+		self.touchCell:SetArea(self.touchCell:GetXPosition(), self.touchCell:GetYPosition(), {0, size.x}, {0, size.y})
 	end
 end
 
@@ -350,7 +350,7 @@ end
 
 function M:updateCancleCellSize(size)
 	if size then
-		self.cancle:SetSize(size)
+		self.cancle:SetArea(self.cancle:GetXPosition(), self.cancle:GetYPosition(), {0, size.x}, {0, size.y})
 	end
 end
 
@@ -362,7 +362,7 @@ end
 
 function M:updateTouchPointSize(size)
 	if size then
-		self.touchPoint:SetSize(size)
+		self.touchPoint:SetArea(self.touchPoint:GetXPosition(), self.touchPoint:GetYPosition(), {0, size.x}, {0, size.y})
 	end
 end
 
@@ -374,7 +374,7 @@ end
 
 function M:updateShowPointSize(size)
 	if size then
-		self.showPoint:SetSize(size)
+		self.showPoint:SetArea(self.showPoint:GetXPosition(), self.showPoint:GetYPosition(), {0, size.x}, {0, size.y})
 	end
 end
 
