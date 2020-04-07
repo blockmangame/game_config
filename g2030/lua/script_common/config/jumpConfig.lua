@@ -11,6 +11,7 @@ function jumpConfig:init(config)
         data.moveSpeed = tonumber(vConfig.n_moveSpeed) or 0 --移动速度
         table.insert(settings, data)
     end
+    Lib.log("jumpConfig:init " .. Lib.v2s(settings))
 end
 
 function jumpConfig:getJumpConfig(id)
