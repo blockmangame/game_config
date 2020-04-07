@@ -3,3 +3,8 @@
 --- Created by wangpq.
 --- DateTime: 2020/3/23 10:30
 ---
+
+Define.petType = {
+    pet = 1,        --宠物
+    plusPet = 2     --式神
+}
