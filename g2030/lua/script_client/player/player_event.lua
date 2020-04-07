@@ -23,5 +23,5 @@ function events:onGroundChanged(lastOnGround, onGround)
 end
 
 function events:jumpMoveEnd()
-    print("jumpMoveEnd")
+    self:setEntityProp("moveSpeed", tostring(0.0))
 end
