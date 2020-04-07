@@ -16,6 +16,8 @@ function player_event(player, event, ...)
 end
 
 function events:sendSpawn(id)
-    --local entity = World.CurWorld:getEntity(id)
-    --Trigger.CheckTriggers(self:cfg(), "ENTITY_SPAWN_FOR_PLAYER", {obj1 = self, })
+    local entity = World.CurWorld:getEntity(id)
+    if entity and entity:cfg().autoChangeSkin then
+        --self:sendPacket({ pid = "EntityAutoChangeSkin", objID = entity.objID })
+    end
 end

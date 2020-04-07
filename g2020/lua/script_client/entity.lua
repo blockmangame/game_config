@@ -55,3 +55,32 @@ function EntityClient:updateFamilyIdentity()
 		end
 	end
 end
+
+
+function EntityClient:startAutoChangeSkin()
+	Me.autoChangeCount = (Me.autoChangeCount or 0) + 1
+	local skins = {}
+	for i = 1, 16 do
+		skins[ "a" .. tostring(i)] = tostring(1)
+	end
+
+	self:applySkin(skins)
+
+	World.Timer(20 , function()
+		local skin = self:cfg().skin
+		local skinColors = self:cfg().skinColor
+		if not skinColors or #skinColors <= 0 or not skin then
+			return
+		end
+		for k, v in pairs(skin) do
+			local key = tostring(k) .. "." .. tostring(v)
+			local index = math.random(1, #skinColors)
+			local color = skinColors[index]
+			local bloom =  math.random() >= 0.5
+			self:updateBodyPartsColor(key, {color[1] / 255.0 , color[2] / 255.0 , color[3] / 255.0 , 1.0})
+			self:updateBodyPartsBloom(key, false)
+		end
+
+		return true
+	end)
+end
