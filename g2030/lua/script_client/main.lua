@@ -28,7 +28,8 @@ function main:initLog()
 end
 
 function main:loadConfig()
-    --TODO
+    local jumpConfig = T(Config, "jumpConfig")
+    jumpConfig:init(Lib.readGameCsv("config/jump.csv"))
 end
 
 main:init()
