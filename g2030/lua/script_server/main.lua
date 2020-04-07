@@ -28,6 +28,9 @@ end
 
 function main:initLog()
     Lib.setDebugLog(EngineVersionSetting:canUseCmd())
+
+    local teamShopConfig = T(Config, "teamShopConfig")
+    teamShopConfig:initConfig()
 end
 
 main:init()

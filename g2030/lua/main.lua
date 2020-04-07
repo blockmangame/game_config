@@ -12,6 +12,7 @@ require "script_common.entity"
 require "script_common.config.jumpConfig"
 require "common.gm"
 require "script_common.shop.ItemShop"
+require "script_common.config.teamShopConfig"
 
 if World.isClient then
     require "script_client.main"
