@@ -7,10 +7,19 @@ local jumpEndTime = 0
 local onGround = true
 local lockKeyJump = false
 
+local function doJumpStateChange(control, player)
+    --TODO
+end
+
 ---@param player EntityClientMainPlayer
 local function jump_impl(control, player)
     local jumpCount = player:getJumpCount()
     local maxJumpCount = player:getMaxJumpCount()
+
+    if jumpCount <= 0 then
+        doJumpStateChange(control, player)
+        return
+    end
 
     ---@type jumpConfig
     local jumpConfig = T(Config, "jumpConfig")
@@ -66,7 +75,7 @@ local function checkJump(control, player)
             canJump = pet.onGround or pet:isSwimming()
         end
         local jumpCount = player:getJumpCount()
-        canJump = canJump or (jumpCount > 0)
+        canJump = canJump or true
         if canJump then
             jumpBeginTime = nowTime
             jumpEndTime = nowTime + (playerCfg.maxPressJumpTime or 0)
