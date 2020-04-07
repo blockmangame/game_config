@@ -23,7 +23,8 @@ function Player:initPlayer()
 
     self:initCurrency()
     self:tickLifeSteal()
-
+    --self:initData()
+    self:initItemShop()
 end
 ---
 ---角色固有设定，定时回血
@@ -103,4 +104,8 @@ end
 ---获取阵营
 function Player:getTeam()
     return Game.GetTeam(self:getTeamId())
+end
+
+function Player:initItemShop()
+    Store.ItemShop:initAllItem(self)
 end

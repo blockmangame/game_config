@@ -15,7 +15,7 @@ require "script_server.skill.timeLine"
 require "script_server.skill.scene_skill"
 require "script_server.game.game_team"
 require "script_server.game.game"
-
+require "script_server.shop.ItemShop"
 local main = {}
 
 function main:init()
