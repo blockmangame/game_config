@@ -23,18 +23,20 @@ ValueDef.belt       = {false,	false,	true,	false,      {},		true}--道具商店�
 ValueDef.islandLv   = {false,	false,	true,	false,       1,		true}--当前岛屿等级（商店临时解锁用）
 
 --====================宠物、式神相关数据================
-ValueDef.PetEquippedList= {false,   false,  true,   true,       nil,    true}--当前角色宠物装备表
+ValueDef.PetEquippedList= {false,   false,  true,   true,       {},    true}--当前角色宠物装备表
 ValueDef.PlusPetEquippedIndex={false,false, true,   true,       0,      true}--当前角色式神装备表
-ValueDef.AllPetAttr     = {false,   false,  true,   true,       nil,    true}--宠物、式神相关数据
+ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,      true}--当前角色获取过的宠物实体总数（不会减少）
+ValueDef.AllPetAttr     = {false,   false,  true,   true,       {},    true}--宠物、式神相关数据
 --[[
 宠物、式神相关数据存储索引说明：索引为createPet后返回的index，通过索引插入的AllPetAttr，该表不为序列，期间可能会出现nil
 即强化（消耗）后相关索引项将置为nil
 --]]
 --[[相关数据(AllPetAttr)内容：
-{petType = {},         --是宠物还是式神
- petCoinTransRage = {},--该宠物Entity当前的金币增益
- petChiTransRate = {}, --该宠物Entity当前的气增益
- plusPetATKRate = {}}, --该式神Entity当前的攻击倍率增益
+{id = 0,               --宠物or式神的pluginID
+ petType = 0,         --是宠物还是式神
+ petCoinTransRage = 0,--该宠物Entity当前的金币增益
+ petChiTransRate = 0, --该宠物Entity当前的气增益
+ plusPetATKRate = 0}, --该式神Entity当前的攻击倍率增益
 --]]
 --========================END========================
 

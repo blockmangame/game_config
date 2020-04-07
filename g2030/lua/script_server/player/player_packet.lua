@@ -3,13 +3,27 @@
 --- Created by KH5C.
 --- DateTime: 2020/4/1 10:10
 ---
+
 -- 调用具体看  handle_packet@player.player_packet
 -- 此处packet使用只需要在sendPacket的pid字段传入想要调用的函数名即可，方法内的self是发包的player。
 
 local handles = T(Player, "PackageHandlers")
 
-function handles:createPetEntity(packet)
+--[[        目前弃用、不打算给予客户端任何创建一个宠物的机会。（防止作弊）
+function handles:getNewPet(packet)
+    self:getNewPet(packet.ID, packet.coinTransRatio, packet.chiTransRatio);
+end
 
+function handles:getNewPlusPet(packet)
+    self:getNewPlusPet(packet.ID, packet.plusPetATKRate);
+end
+--]]
+function handles:callPet(packet)
+    self:callPet(packet.index, packet.ridePoint);
+end
+
+function handles:recallPet(packet)
+    self:recallPet(packet.index);
 end
 
 function handles:SyncItemShopOperation(packet)

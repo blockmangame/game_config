@@ -44,3 +44,12 @@ function handles:updateItemShopDataByTab(packet)
     end
 end
 
+function handles:PetList(packet)
+    local list = {};
+    self.equipPetList = {}
+    for index, IDAndAttachPoint in pairs(packet.list) do
+        list[index] = IDAndAttachPoint.objID;
+        self.equipPetList[index] = IDAndAttachPoint.petIndex;
+    end
+    self:setData("pet", list)
+end

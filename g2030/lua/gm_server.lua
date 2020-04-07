@@ -25,24 +25,18 @@ end
 
 -----------------------------------Pet Model Test----------------------------------
 local Entity
-GMItem["sample/创建一个跟随宠物"] = function(self)
-    local entity = EntityServer.Create({cfgName = "myplugin/pet_1_1_1", pos = self:getPosition()})
-    --table.insert(EntityList, entity)
-    Entity = entity
-    local control = entity:getAIControl()
-    control:setFollowTarget(self)
-end
+GMItem["g2030/发放一个宠物（不创建）"] = function(self)
 
-GMItem["sample/一个抽奖点"] = function(self)
-    local entity = EntityServer.Create({cfgName = "myplugin/roller1", pos = self:getPosition()})
-    table.insert(EntityList, entity)
 end
+GMItem["g2030/发放一个式神（不创建）"] = function(self)
 
-GMItem["sample/删除上一个宠物"] = function(self)
-    Entity:destroy()
-    --table.remove(EntityList,#EntityList)
 end
+GMItem["g2030/装备一个宠物"] = function(self)
 
+end
+GMItem["g2030/装备一个式神"] = function(self)
+
+end
 GMItem["sample/释放宠物技能"] = function(self)
     Skill.Cast("myplugin/pet_1_1_1_attack", {targetID=self.objID}, Entity)
 end

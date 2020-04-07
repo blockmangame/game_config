@@ -4,10 +4,12 @@
 --- DateTime: 2020/4/1 11:52
 ---
 
-function Player:callPet(petIndex)
+Player.equipPetList = {};
+
+function Player:callPet(index)
 
 end
 
-function Player:recallPet(petIndex)
+function Player:recallPet(index)
 
 end
