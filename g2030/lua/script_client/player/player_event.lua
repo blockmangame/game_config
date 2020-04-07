@@ -21,3 +21,7 @@ function events:onGroundChanged(lastOnGround, onGround)
         --TODO
     end
 end
+
+function events:jumpMoveEnd()
+    print("jumpMoveEnd")
+end
