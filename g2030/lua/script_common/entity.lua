@@ -18,6 +18,9 @@ ValueDef.WeaponId   = {false,	false,	true,	true,       1,		true}--当前武器id
 ValueDef.SashId     = {false,	false,	true,	true,       10,		true}--当前腰带id
 ValueDef.teamId		= {false,	true,	true,	true,       0,		true}--阵营Id
 ValueDef.teamKills	= {false,	false,	false,	false,       0,		false}--个人阵营击杀数
+ValueDef.equip      = {false,	false,	true,	false,      {},		true}--道具商店购买的装备列表
+ValueDef.belt       = {false,	false,	true,	false,      {},		true}--道具商店购买的腰带列表
+ValueDef.islandLv   = {false,	false,	true,	false,       1,		true}--当前岛屿等级（商店临时解锁用）
 
 ---获得跳跃次数
 function Entity:getJumpCount()
@@ -57,6 +60,17 @@ end
 ---战斗属性相关
 ---
 ---
+
+---获取当前阶数
+function Entity:getCurLevel()
+    return self:getValue("curLevel")
+end
+
+---设置当前阶数
+function Entity:setCurLevel()
+    return self:setValue("curLevel")
+end
+
 ---当前血量上限
 function Entity:getMaxHp()
     ---TODO hp limit calc func
@@ -185,4 +199,34 @@ end
 ---清空个人阵营击杀数（切换阵营时清空）
 function Entity:clearTeamKills()
     self:setValue("teamKills", 0)
+end
+
+---获取购买装备列表
+function Entity:getEquip()
+    return self:getValue("equip")
+end
+
+---设置购买装备列表
+function Entity:setEquip(data)
+    self:setValue("equip", data)
+end
+
+---获取购买腰带列表
+function Entity:getBelt()
+    return self:getValue("belt")
+end
+
+---设置购买腰带列表
+function Entity:setBelt(data)
+    self:setValue("belt", data)
+end
+
+---获取已解锁岛屿等级
+function Entity:getIslandLv()
+    return self:getValue("islandLv")
+end
+
+---设置已解锁岛屿等级
+function Entity:setIslandLv(lv)
+    self:setValue("islandLv", lv)
 end
