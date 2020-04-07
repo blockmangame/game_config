@@ -3,6 +3,9 @@ local ClientBuffId = L("ClientBuffId", 0)
 function Entity.ValueFunc:curHp(value)
     Lib.emitEvent(Event.EVENT_HP_CHANGE)
 end
+function Entity.ValueFunc:curExp(value)
+    Lib.emitEvent(Event.EVENT_EXP_CHANGE)
+end
 
 function Entity.ValueFunc:jumpCount(value)
     print("Entity.ValueFunc:jumpCount " .. value)

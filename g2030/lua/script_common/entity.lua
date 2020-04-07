@@ -58,6 +58,10 @@ end
 function Entity:getCurExpToCoin()
     return self:getValue("curExp")*10
 end
+function Entity:isExpFull()
+    return self:getCurExp()>=self:getMaxExp()
+end
+
 
 
 
