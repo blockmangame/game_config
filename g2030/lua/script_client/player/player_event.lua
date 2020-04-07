@@ -21,3 +21,7 @@ function events:onGroundChanged(lastOnGround, onGround)
         --TODO
     end
 end
+
+function events:jumpMoveEnd()
+    self:setEntityProp("moveSpeed", tostring(0.0))
+end
