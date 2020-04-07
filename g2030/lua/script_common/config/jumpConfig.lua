@@ -1,3 +1,4 @@
+---@class jumpConfig
 local jumpConfig = T(Config, "jumpConfig")
 
 local settings = {}
