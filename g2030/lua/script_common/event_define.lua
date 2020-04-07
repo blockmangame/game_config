@@ -3,15 +3,12 @@
 --- Created by bell.
 --- DateTime: 2020/3/25 22:21
 ---
-local Events = {
-    "EVENT_EXP_CHANGE",
-    "EVENT_HP_CHANGE",
-    "EVENT_CHECK_TRIGGERS"
-}
+Event.register("EVENT_EXP_CHANGE")
+Event.register("EVENT_HP_CHANGE")
+Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE_BEGIN")
+Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE")
+Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE_END")
 
-for _, name in pairs(Events) do
-    Event.register(name)
-end
 if World.isClient then
     Event.register("EVENT_NEW_GUIDE")
 else

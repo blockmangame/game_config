@@ -10,9 +10,9 @@ function EntityServer:getDamageProps(info)
         __index = function(t, name)
             if name == "damage" then
                 local value = self:getCurDamage()
-                return value + (skill and skill[name] or 0)
-            elseif name == "dmgFactor" then
-                return 1
+                return value-- + (skill and skill[name] or 0)
+            --elseif name == "dmgFactor" then
+            --    return 1
             end
         end,
         __newindex = function(...) error("not allowed set prop value") end
@@ -20,8 +20,8 @@ function EntityServer:getDamageProps(info)
     local target = assert(info.target, "need target")
     local defenseProps = setmetatable({}, {
         __index = function(t, name)
-            if name == "defFactor" then
-                return 1
+            if name == "hurtSub" then
+                return target:getHurtSub()
             else
                 return 1
             end
@@ -31,10 +31,9 @@ function EntityServer:getDamageProps(info)
     return attackProps,defenseProps
 end
 function EntityServer:doAttack(info)
-    print("===================doAttack==========",info)
     local attackProps,defenseProps = self:getDamageProps(info)
-   -- local damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
-    local damage = math.max(attackProps.damage * attackProps.dmgFactor, 0)*defenseProps.defFactor
+   --ocal damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
+    local damage = math.floor(math.max(attackProps.damage, 0)*defenseProps.hurtSub)
     info.target:doDamage({
         from = self,
         damage = damage,
@@ -43,16 +42,36 @@ function EntityServer:doAttack(info)
         cause = info.cause or "NORMAL_ATTACK",
     })
 end
+---
+---治疗方法
+---当玩家add了回血buff->HealingSpd变为正数->调用doHealing()->立即进行一次治疗->判断HealingSpd是否为0->开启计时器->loop
+---当玩家remove了回血
+---
+function EntityServer:doHealing()
 
+    local healVal =math.floor(self:getMaxHp() *self:getHealingVal()* self:getHealingPlu())
+    print("=========doHealing==========",healVal)
+    print("=========doHealing=spd=========",self:getHealingSpd())
+
+    if healVal <=0 then
+        return
+    end
+    if self:deltaHp(healVal) then
+        self:ShowFlyNum(healVal)
+    end
+
+
+    local nextTime = self:getHealingSpd() *20;
+    if nextTime>=0 then
+        self:timer(nextTime, function ()
+            self:doHealing()
+        end   )
+    end
+end
 function EntityServer:doDamage(info)
     local damage, from, isRebound = info.damage, info.from, info.isRebound
     local damageCause = assert(info.cause, "must have a cause of doDamage")
 
-    --if self:prop("undamageable")>0 then
-    --    return
-    --else
-    print("===================damage==========",damage)
-    print("===================curHp==========",self.curHp)
     if damage <= 0 then
         return
     elseif self.curHp <= 0 then
@@ -69,6 +88,11 @@ function EntityServer:doDamage(info)
     end
 
     self:deltaHp(-damage)
+
+    self:ShowFlyNum(-damage)
+    --function Actions.ShowNumberUIOnEntity(data, params, context)
+    --
+    --end
     --self.curHp = 0
 
 
@@ -98,7 +122,6 @@ function EntityServer:doDamage(info)
     end
 
     if self.curHp <= 0 then
-        print("====================go die=====================")
         self:onDead({
             from = from,
             skillName = info.skillName,
@@ -106,3 +129,102 @@ function EntityServer:doDamage(info)
         })
     end
 end
+
+---
+---显示伤害飘字(全服广播)
+---@TODO 后续可优化为视域范围内广播
+---
+function EntityServer:ShowFlyNum(deltaHp)
+    if self and self.isPlayer then
+        WorldServer.BroadcastPacket({
+            pid = "ShowNumberUIOnEntity",
+            beginOffsetPos =Lib.v3(0, 1, 0),
+            FollowObjID = self.objID,
+            number = deltaHp,
+            distance = 2,
+            imgset = deltaHp<0 and "red_numbers" or "green_numbers",
+            imageWidth = 40,
+            imageHeight = 40
+        })
+    end
+end
+
+
+---
+---以下为添加EntityProp function类成员
+---
+
+---
+---回复血量buff
+---每隔rHpPct.time秒恢复总血量的rHpPct.pct倍
+---
+function Entity.EntityProp:healingPct(value, add, buff)
+    print(value, add)
+    if self.curHp <= 0 then
+        return
+    end
+    local useVal = {}
+    useVal.pct =  (add and value.pct or -value.pct)--(rHpPct.pct or 0) + (add and value or -value)
+    useVal.spd =  (add and value.spd or 0)
+    self:setHealing(useVal.pct,useVal.spd)
+    if add then
+        self:doHealing()
+    end
+
+end
+---
+---回复血量buff
+---
+function Entity.EntityProp:healingPlusPct(value, add, buff)
+    print(value, add)
+    if self.curHp <= 0 then
+        return
+    end
+    local val = add and value or -value
+    self:deltaHealingPlu(val)
+end
+
+---
+---吸血buff
+---
+function Entity.EntityProp:suckHpPct(value, add, buff)
+    print(value, add)
+    if self.curHp <= 0 then
+        return
+    end
+    local val = add and value or -value
+    self:deltaSuckBlood(val)
+end
+---
+---减伤buff
+---收到他人伤害时，该伤害变为原来的（1-hSubPct）倍
+---
+function Entity.EntityProp:hurtSubPct(value, add, buff)
+    print(value, add)
+    if self.curHp <= 0 then
+        return
+    end
+    local val = add and value or -value
+    self:deltaHurtSub(val)
+end
+---
+---阵营buff
+---阵营对配置属性的加成
+---
+function Entity.EntityProp:teamProp(value, add, buff)
+    local team = Game.GetTeam(value.teamId)
+    local lv = 0
+    if not team then
+        return
+    end
+    if add then
+        lv = team:getLevel()
+    end
+    for _, prop in ipairs(value.props) do
+        local var = team:getLevelCfg(lv, prop)
+        if var then
+            self.EntityProp[prop](self, tonumber(var), add)
+        end
+    end
+end
+

@@ -1,12 +1,12 @@
 ---@param name string
 ---@param func fun(param:cfg, param:context):nil
-function Lib.registerTriggerHandler(name, func)
-	Lib.subscribeEvent(Event.EVENT_CHECK_TRIGGERS, function(cfg, event_name, context)
-		if event_name == name then
-			func(cfg, context)
-		end
-	end)
-end
+--function Lib.registerTriggerHandler(name, func)
+--	Lib.subscribeEvent(Event.EVENT_CHECK_TRIGGERS, function(cfg, event_name, context)
+--		if event_name == name then
+--			func(cfg, context)
+--		end
+--	end)
+--end
 
 ---@param root any
 ---@param options table

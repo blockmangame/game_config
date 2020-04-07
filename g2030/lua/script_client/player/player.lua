@@ -9,3 +9,9 @@ function Player:initPlayer()
     self:initData()
     Blockman.Instance():setLockVisionState(World.cfg.lockVision and World.cfg.lockVision.open or false)
 end
+
+function Player:recoverJumpProp()
+    self:setEntityProp("jumpSpeed", tostring(0.5))
+    self:setEntityProp("gravity", tostring(0.08))
+    self:setEntityProp("moveSpeed", tostring(0.2))
+end

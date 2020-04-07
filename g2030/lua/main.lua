@@ -9,7 +9,9 @@ require "script_common.lib"
 require "script_common.ninjalegends_define"
 require "script_common.trigger"
 require "script_common.entity"
+require "script_common.config.jumpConfig"
 require "common.gm"
+require "script_common.shop.ItemShop"
 
 if World.isClient then
     require "script_client.main"

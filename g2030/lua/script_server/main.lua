@@ -13,6 +13,10 @@ require "script_server.skill.skill_normal_atk"
 require "script_server.skill.skill_addExp"
 require "script_server.skill.multistage"
 require "script_server.skill.timeLine"
+require "script_server.skill.scene_skill"
+require "script_server.game.game_team"
+require "script_server.game.game"
+require "script_server.shop.ItemShop"
 
 require "script_server.trigger_handlers"
 

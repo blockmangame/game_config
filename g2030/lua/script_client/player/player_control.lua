@@ -6,6 +6,40 @@ local jumpBeginTime = 0
 local jumpEndTime = 0
 local onGround = true
 local lockKeyJump = false
+
+local function doJumpStateChange(control, player)
+    --TODO
+end
+
+---@param player EntityClientMainPlayer
+local function jump_impl(control, player)
+    local jumpCount = player:getJumpCount()
+    local maxJumpCount = player:getMaxJumpCount()
+
+    if jumpCount <= 0 then
+        doJumpStateChange(control, player)
+        return
+    end
+
+    ---@type jumpConfig
+    local jumpConfig = T(Config, "jumpConfig")
+    local config = jumpConfig:getJumpConfig(maxJumpCount - jumpCount + 1)
+    if config then
+        player:setEntityProp("jumpSpeed", tostring(config.jumpSpeed))
+        player:setEntityProp("gravity", tostring(config.gravity))
+        player:setEntityProp("moveSpeed", tostring(config.moveSpeed))
+    end
+
+    local playerCfg = player:cfg()
+    local packet = {}
+    packet.reset = (jumpCount == maxJumpCount)
+    Skill.Cast(playerCfg.jumpSkill, packet)
+
+    control:jump()
+
+    player:decJumpCount()
+end
+
 ---@param control PlayerControl
 ---@param player EntityClientMainPlayer
 local function checkJump(control, player)
@@ -41,7 +75,7 @@ local function checkJump(control, player)
             canJump = pet.onGround or pet:isSwimming()
         end
         local jumpCount = player:getJumpCount()
-        canJump = canJump or (jumpCount > 0)
+        canJump = canJump or true
         if canJump then
             jumpBeginTime = nowTime
             jumpEndTime = nowTime + (playerCfg.maxPressJumpTime or 0)
@@ -60,8 +94,7 @@ local function checkJump(control, player)
             return
         end
 
-        control:jump()
-        player:decJumpCount()
+        jump_impl(control, player)
         lockKeyJump = true
     else
         if worldCfg.jumpProgressIcon then

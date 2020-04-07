@@ -4,6 +4,12 @@
 --- DateTime: 2020/3/23 10:30
 ---
 
+Define.Team = {
+    Neutrality = 1,
+    Black = 2,
+    White = 3
+}
+
 Define.petType = {
     pet = 1,        --宠物
     plusPet = 2     --式神
