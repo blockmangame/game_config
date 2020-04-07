@@ -20,3 +20,9 @@ function handles:SellExp(packet)
     self:sellExp()
 end
 
+function handles:teamShopBuyItem(packet)
+    local teamShop = require "script_server.shop.teamShop"
+    local itemId = packet.itemId
+    local status = packet.status
+    teamShop:onButtonClick(self, itemId, status)
+end
