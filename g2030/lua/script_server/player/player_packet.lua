@@ -30,3 +30,13 @@ function handles:SyncItemShopOperation(packet)
     print(string.format("<events:SyncItemShopOperation(packet):> TypeId: %s  ItemId: %s", tostring(packet.tabId), tostring(packet.itemId)))
     Store.ItemShop:operationByType(self, packet.tabId, packet.itemId)
 end
+function handles:SellExp(packet)
+    self:sellExp()
+end
+
+function handles:teamShopBuyItem(packet)
+    local teamShop = require "script_server.shop.teamShop"
+    local itemId = packet.itemId
+    local status = packet.status
+    teamShop:onButtonClick(self, itemId, status)
+end

@@ -53,3 +53,10 @@ function handles:PetList(packet)
     end
     self:setData("pet", list)
 end
+
+function handles:teamShopBuyItemSuccess(packet)
+    local teamShop = UI:getWnd("teamShop")
+    if teamShop then
+        teamShop:upDateItem(packet)
+    end
+end

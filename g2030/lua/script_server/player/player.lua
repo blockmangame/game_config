@@ -58,13 +58,18 @@ function Player:addExp()
     if newExp>maxExp then
         newExp = maxExp
     end
-    -- self:setCurExp(newExp)
-    castSetSkill(self,newExp)
+    self:setCurExp(newExp)
+   -- castSetSkill(self,newExp)
 end
 ---
 ---重置锻炼值
 function Player:resetExp()
-    castSetSkill(self,0)
+    --castSetSkill(self,0)
+    self:setCurExp( 0)
+end
+function Player:sellExp()
+    self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
+    self:resetExp()
 end
 
 ---

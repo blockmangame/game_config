@@ -1,0 +1,800 @@
+{
+    "Dialog": {
+        "Window": {
+            "Type": "Layout",
+            "Name": "CampStore",
+            "Property": [
+                {
+                    "Name": "Area",
+                    "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                },
+                {
+                    "Name": "HorizontalAlignment",
+                    "Value": "Right"
+                },
+                {
+                    "Name": "WndOpenSound",
+                    "Value": "0"
+                },
+                {
+                    "Name": "WndCloseSound",
+                    "Value": "0"
+                },
+                {
+                    "Name": "StretchType",
+                    "Value": "NineGrid"
+                },
+                {
+                    "Name": "OutputLuaVariable",
+                    "Value": "true"
+                }
+            ],
+            "Window": [
+                {
+                    "Type": "StaticImage",
+                    "Name": "CampStore-Store-Bg",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                        },
+                        {
+                            "Name": "VerticalAlignment",
+                            "Value": "Bottom"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "OutputLuaVariable",
+                            "Value": "true"
+                        },
+                        {
+                            "Name": "ImageName",
+                            "Value": "set:camp_store.json image:camp_bg"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        }
+                    ]
+                },
+                {
+                    "Type": "Button",
+                    "Name": "CampStore-Close-Button",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0.105556,0},{0.0796875,0},{0.190278,0}}"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "OutputLuaVariable",
+                            "Value": "true"
+                        },
+                        {
+                            "Name": "NormalImage",
+                            "Value": "set:camp_store.json image:return"
+                        },
+                        {
+                            "Name": "PushedImage",
+                            "Value": "set:camp_store.json image:return"
+                        },
+                        {
+                            "Name": "SoundName",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        }
+                    ]
+                },
+                {
+                    "Type": "Layout",
+                    "Name": "CampStore-Store-Content",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0,0},{0.853906,0},{0.670833,0}}"
+                        },
+                        {
+                            "Name": "VerticalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "OutputLuaVariable",
+                            "Value": "true"
+                        }
+                    ],
+                    "Window": [
+                        {
+                            "Type": "Layout",
+                            "Name": "CampStore-Underframe",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "StaticImage",
+                                    "Name": "CampStore-underframe2",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0.0164684,0},{0,0},{1.01647,0},{0.0455487,0}}"
+                                        },
+                                        {
+                                            "Name": "VerticalAlignment",
+                                            "Value": "Bottom"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "ImageName",
+                                            "Value": "set:camp_store.json image:color_lump2"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Type": "StaticImage",
+                                    "Name": "CampStore-underframe1",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{-0.0347667,0},{0,0},{0.744739,0},{0.0455487,0}}"
+                                        },
+                                        {
+                                            "Name": "HorizontalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "ImageName",
+                                            "Value": "set:camp_store.json image:color_lump2"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
+                                        }
+                                    ],
+                                    "Window": [
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "CampStore-underframe4",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0.0586854,0},{20,0},{0.084507,0},{40,0}}"
+                                                },
+                                                {
+                                                    "Name": "VerticalAlignment",
+                                                    "Value": "Bottom"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "OutputLuaVariable",
+                                                    "Value": "true"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:camp_store.json image:color_lump2"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "CampStore-underframe5",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{-0.0352113,0},{20,0},{-0.0093897,0},{40,0}}"
+                                                },
+                                                {
+                                                    "Name": "VerticalAlignment",
+                                                    "Value": "Bottom"
+                                                },
+                                                {
+                                                    "Name": "HorizontalAlignment",
+                                                    "Value": "Right"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "OutputLuaVariable",
+                                                    "Value": "true"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:camp_store.json image:color_lump2"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Type": "StaticText",
+                                    "Name": "CampStore-Title",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,0},{-0.0414079,0},{1,0},{0.0414078,0}}"
+                                        },
+                                        {
+                                            "Name": "HorizontalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "Text",
+                                            "Value": "White Store"
+                                        },
+                                        {
+                                            "Name": "Font",
+                                            "Value": "HT32"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "TextColor",
+                                            "Value": "1 0.945098 0.47451 1"
+                                        },
+                                        {
+                                            "Name": "TextHorzAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextVertAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextLineExtraSpace",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextAutoOmission",
+                                            "Value": "false"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "StaticImage",
+                            "Name": "CampStore-Tag",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{0.0455487,0},{0.129918,0},{0.960663,0}}"
+                                },
+                                {
+                                    "Name": "Touchable",
+                                    "Value": "false"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "ImageName",
+                                    "Value": "set:camp_store.json image:tag_right"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "List",
+                                    "Name": "CampStore-tab-list",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0.0352113,0},{0.0787279,0},{0.647887,0},{0.69663,0}}"
+                                        },
+                                        {
+                                            "Name": "ClipChild",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "StaticImage",
+                            "Name": "CampStore-Platform",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0.0118939,0},{0,0},{0.224154,0},{0.267081,0}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Bottom"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Right"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "ImageName",
+                                    "Value": "set:camp_store.json image:platform"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "StaticImage",
+                                    "Name": "CampStore-person",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,0},{-0.953488,0},{0.818965,0},{1.83721,0}}"
+                                        },
+                                        {
+                                            "Name": "VerticalAlignment",
+                                            "Value": "Bottom"
+                                        },
+                                        {
+                                            "Name": "HorizontalAlignment",
+                                            "Value": "Right"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "ImageName",
+                                            "Value": "set:camp_store.json image:person_black"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "StaticImage",
+                            "Name": "CampStore-Content-Bg",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0.140897,0},{0.0455487,0},{0.810613,0},{0.954452,0}}"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "GridView",
+                                    "Name": "CampStore-Content-Skill",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{-0.00136612,0},{0,0},{0.998634,0},{1,0}}"
+                                        },
+                                        {
+                                            "Name": "ClipChild",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "ItemAlignment",
+                                            "Value": "Left"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Type": "GridView",
+                                    "Name": "CampStore-Content",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{-0.00136799,0},{0.0501139,0},{1,0},{1,0}}"
+                                        },
+                                        {
+                                            "Name": "ClipChild",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "ItemAlignment",
+                                            "Value": "Left"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

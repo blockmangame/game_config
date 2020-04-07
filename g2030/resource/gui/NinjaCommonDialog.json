@@ -1,0 +1,388 @@
+{
+    "Dialog": {
+        "Window": {
+            "Type": "Layout",
+            "Name": "NinjaCommonDialog",
+            "Property": [
+                {
+                    "Name": "Area",
+                    "Value": "{{0,0},{0,0},{0,596},{0,363}}"
+                },
+                {
+                    "Name": "VerticalAlignment",
+                    "Value": "Centre"
+                },
+                {
+                    "Name": "HorizontalAlignment",
+                    "Value": "Centre"
+                },
+                {
+                    "Name": "WndOpenSound",
+                    "Value": "0"
+                },
+                {
+                    "Name": "WndCloseSound",
+                    "Value": "0"
+                },
+                {
+                    "Name": "StretchType",
+                    "Value": "NineGrid"
+                },
+                {
+                    "Name": "StretchOffset",
+                    "Value": "10 10 45 45"
+                },
+                {
+                    "Name": "LayoutBackImage",
+                    "Value": "set:ninja_main.json image:common_bg"
+                }
+            ],
+            "Window": [
+                {
+                    "Type": "Button",
+                    "Name": "NinjaCommonDialog-Close",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,604},{0,-54},{0,655.75},{0,1.125}}"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "NormalImage",
+                            "Value": "set:ninja_main.json image:btn_close"
+                        },
+                        {
+                            "Name": "PushedImage",
+                            "Value": "set:ninja_main.json image:btn_close"
+                        },
+                        {
+                            "Name": "SoundName",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        }
+                    ]
+                },
+                {
+                    "Type": "StaticText",
+                    "Name": "NinjaCommonDialog-TextTitle",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0,0},{1,0},{0,50}}"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "Text",
+                            "Value": "一个标题"
+                        },
+                        {
+                            "Name": "Font",
+                            "Value": "HT30"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "TextHorzAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "TextVertAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "TextLineExtraSpace",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "TextAutoOmission",
+                            "Value": "false"
+                        }
+                    ]
+                },
+                {
+                    "Type": "StaticImage",
+                    "Name": "NinjaCommonDialog-ImgTitle",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0,0},{0.1,0},{0.166667,0}}"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "AutoSize",
+                            "Value": "true"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        }
+                    ]
+                },
+                {
+                    "Type": "StaticText",
+                    "Name": "NinjaCommonDialog-Content",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0,-15},{0,510},{0,173}}"
+                        },
+                        {
+                            "Name": "VerticalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "Text",
+                            "Value": "这里是一个内容"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "TextLineExtraSpace",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "TextAutoOmission",
+                            "Value": "false"
+                        }
+                    ]
+                },
+                {
+                    "Type": "Button",
+                    "Name": "NinjaCommonDialog-Left",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,-140},{0,-22},{0,70},{0,35}}"
+                        },
+                        {
+                            "Name": "VerticalAlignment",
+                            "Value": "Bottom"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "Text",
+                            "Value": "NO"
+                        },
+                        {
+                            "Name": "Font",
+                            "Value": "HT22"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "StretchType",
+                            "Value": "NineGrid"
+                        },
+                        {
+                            "Name": "StretchOffset",
+                            "Value": "30 10 20 10"
+                        },
+                        {
+                            "Name": "NormalImage",
+                            "Value": "set:ninja_main.json image:btn_blue"
+                        },
+                        {
+                            "Name": "PushedImage",
+                            "Value": "set:ninja_main.json image:btn_blue"
+                        },
+                        {
+                            "Name": "SoundName",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        }
+                    ]
+                },
+                {
+                    "Type": "Button",
+                    "Name": "NinjaCommonDialog-Right",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,140},{0,-22},{0,350},{0,35}}"
+                        },
+                        {
+                            "Name": "VerticalAlignment",
+                            "Value": "Bottom"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "Text",
+                            "Value": "YES"
+                        },
+                        {
+                            "Name": "Font",
+                            "Value": "HT22"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "StretchType",
+                            "Value": "NineGrid"
+                        },
+                        {
+                            "Name": "StretchOffset",
+                            "Value": "30 10 20 10"
+                        },
+                        {
+                            "Name": "NormalImage",
+                            "Value": "set:ninja_main.json image:btn_yellow"
+                        },
+                        {
+                            "Name": "PushedImage",
+                            "Value": "set:ninja_main.json image:btn_yellow"
+                        },
+                        {
+                            "Name": "SoundName",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

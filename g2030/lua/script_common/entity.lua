@@ -21,6 +21,8 @@ ValueDef.teamKills	= {false,	false,	false,	false,       0,		false}--个人阵营
 ValueDef.equip      = {false,	false,	true,	false,      {},		true}--道具商店购买的装备列表
 ValueDef.belt       = {false,	false,	true,	false,      {},		true}--道具商店购买的腰带列表
 ValueDef.islandLv   = {false,	false,	true,	false,       1,		true}--当前岛屿等级（商店临时解锁用）
+ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},     true }--已拥有的阵营皮肤
+ValueDef.teamSkinId = {false,   true,    true,  false,       0,     true }--已装备的阵营皮肤id
 
 --====================宠物、式神相关数据================
 ValueDef.PetEquippedList= {false,   false,  true,   true,       {},    true}--当前角色宠物装备表
@@ -73,6 +75,14 @@ function Entity:getMaxExp()
     ---TODO exp limit calc func
     return 1*self:getValue("SashId")*self:getValue("perExpPlu")
 end
+function Entity:getCurExpToCoin()
+    return self:getValue("curExp")*10
+end
+function Entity:isExpFull()
+    return self:getCurExp()>=self:getMaxExp()
+end
+
+
 
 
 ---战斗属性相关
@@ -247,4 +257,24 @@ end
 ---设置已解锁岛屿等级
 function Entity:setIslandLv(lv)
     self:setValue("islandLv", lv)
+end
+
+---获取已拥有的阵营皮肤
+function Entity:getOwnTeamSkin()
+    return self:getValue("ownTeamSkin") or {}
+end
+
+---设置已拥有的阵营皮肤
+function Entity:setOwnTeamSkin(data)
+    self:setValue("ownTeamSkin", data)
+end
+
+---获取已装备的阵营皮肤id
+function Entity:getTeamSkinId()
+    return self:getValue("teamSkinId") or 0
+end
+
+---设置已装备的阵营皮肤id
+function Entity:setTeamSkinId(id)
+    self:setValue("teamSkinId", id)
 end
