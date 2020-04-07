@@ -8,7 +8,7 @@
     "isSceneSkill": true,
 
     "sceneSkillSlipSensitivity": 20,
-    "_sceneSkillSlipSensitivity": "判定是否滑动的敏感(范围)值",
+    "_sceneSkillSlipSensitivity": "判定是否滑动的敏感(范围)值(单位px)",
 
     "sceneSkillSceneRatio": 0.2,
     "_sceneSkillSceneRatio":  "该属性控制的是像素与场景pos的比例，比如我移动技能point时，此时，移动了多少像素，x像素和z像素增加/减少了多少，此时会根据这比例映射到场景中" ,
@@ -34,5 +34,28 @@
         "touchPointProp": {"_log": "该属性控制的是手指长按的位置的那个小图标/ 大拇指当前滑动的位置"},
         "showPointProp": {"_log": "该属性控制的是范围圈上的技能指示器的那个小图标/ 技能可释放的最远距离指示器"}
     },
-    "_sceneSkillWndProp": "可以通过此处配置长按的UI组件的一些显示/或者直接挪用UI文件到自定义脚本里面修改（可有可无，没有则是默认"
+    "_sceneSkillWndProp": "可以通过此处配置长按的UI组件的一些显示/或者直接挪用UI文件到自定义脚本里面修改（可有可无，没有则是默认",
+
+    "sceneIndicatorProp": {
+        "range": {
+            "indicatorRange": 5,
+            "indicatorPointRange": 1
+        },
+        "_range": "场景指示器的范围/大小(半径) 和 指示点的范围/大小(半径)",
+        "cfg": {
+            "indicatorEntityCfg": "myplugin/indicatorEntity",
+            "_indicatorEntityCfg": "指示器的entity",
+            "indicatorPointEntityCfg": "myplugin/indicatorEntity",
+            "_indicatorPointEntityCfg": "指示器的落点entity，不配则没有指示器落点"
+        },
+        "_cfg": "场景指示器是 entity 带上场景指示器特效做成的。entity一般是用一个透明actor的entity即可。",
+        "effect": {
+            "indicatorEffect_normal": "myplugin/sceneIndicator_blue_base_buff",
+            "indicatorPointEffect_normal": "myplugin/sceneIndicatorPoint_blue_base_buff",
+            "indicatorEffect_activation": "myplugin/sceneIndicator_red_base_buff",
+            "indicatorPointEffect_activation": "myplugin/sceneIndicatorPoint_red_base_buff"
+        },
+        "_effect": "场景指示器特效，包括正常状态下的指示器和落点以及特殊(激活)状态下的指示器和落点四个特效"
+    },
+    "_sceneIndicatorProp": "场景指示器的相关属性"
 }

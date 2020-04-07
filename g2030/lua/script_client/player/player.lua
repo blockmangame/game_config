@@ -10,6 +10,14 @@ function Player:initPlayer()
     Blockman.Instance():setLockVisionState(World.cfg.lockVision and World.cfg.lockVision.open or false)
 end
 
+function Player:sellExp()
+    local packet = {
+        pid = "SellExp",
+        objID = self.objID,
+    }
+    self:sendPacket(packet)
+    --print(string.format("Player:setValue %s %s", tostring(key), Lib.v2s(value, 1)))
+end
 --function Player:saveJumpProp()
 --    --TODO
 --end

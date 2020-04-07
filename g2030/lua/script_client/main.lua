@@ -4,6 +4,7 @@
 --- DateTime: 2020/3/21 22:39
 ---
 require "script_client.player.player"
+require "script_client.ui.ui_schedule"
 require "script_client.entity.entity"
 require "script_client.other.scene_indicator"
 require "script_client.player.player_event"
