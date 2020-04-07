@@ -35,6 +35,9 @@ function M:initExtraWnd()
 end
 
 function M:initEvent()
+    self:subscribe(self.btnSell, UIEvent.EventButtonClick, function()
+        Me:sellExp()
+    end)
     self:subscribe(self.btnExchangeCtr, UIEvent.EventButtonClick, function()
         self:exchangeABBtn()
     end)

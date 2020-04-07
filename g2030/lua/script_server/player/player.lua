@@ -66,6 +66,10 @@ end
 function Player:resetExp()
     castSetSkill(self,0)
 end
+function Player:sellExp()
+    self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
+    self:resetExp()
+end
 
 ---
 ---操作血量变化

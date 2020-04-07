@@ -55,6 +55,10 @@ function Entity:getMaxExp()
     ---TODO exp limit calc func
     return 1*self:getValue("SashId")*self:getValue("perExpPlu")
 end
+function Entity:getCurExpToCoin()
+    return self:getValue("curExp")*10
+end
+
 
 
 ---战斗属性相关
