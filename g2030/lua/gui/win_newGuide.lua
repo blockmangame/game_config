@@ -40,14 +40,6 @@ function M:init()
         self:onClickNextButton()
     end)
 
-    Lib.subscribeEvent(Event.EVENT_NEW_GUIDE, function(show)
-        print("!!!!!sacacac132a1c23a1ca321c")
-        if show then
-            self.index = 1
-            self:show(true)
-            self:onShowDetail()
-        end
-    end)
 end
 
 function M:onClickNextButton()
@@ -141,7 +133,8 @@ end
 function M:intConfig()
     print("readGameCsv..new_guide intConfig")
     self.Guides = {}
-    local temp = Lib.readGameCsv("new_guide.csv") or {}
+    --local temp = Lib.readGameCsv("new_guide.csv") or {}
+    local temp = Lib.read_csv_file(Root.Instance():getGamePath() .. "config/newGuide.csv", 3)
     for _, Value in pairs(temp) do
         local data = {
             Id = tonumber(Value.n_id) or 1,
@@ -204,6 +197,19 @@ end
 
 function M:onOpen(showArg)
     self:onShowDetail()
+end
+
+
+function M:onShow(show)
+    if show then
+        UI:openWnd("newGuide",true)
+        self.index = 1
+        self:show(true)
+        self:onShowDetail()
+    else
+        self:hide()
+        UI:closeWnd("newGuide")
+    end
 end
 
 function M:onClose()
