@@ -20,11 +20,15 @@ function main:init()
 
     Lib.log("main:init")
 
-    --TODO
+    self:loadConfig()
 end
 
 function main:initLog()
     Lib.setDebugLog(EngineVersionSetting:canUseCmd())
+end
+
+function main:loadConfig()
+    --TODO
 end
 
 main:init()
