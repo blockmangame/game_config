@@ -23,6 +23,9 @@ function SkillBase:preCast(packet, from)
 	if self.cdTime and from then
 		from:setCD("net_delay", 20)
 	end
+	if self.enableRadialBlur ~= nil then
+		Blockman.instance.gameSettings:setEnableRadialBlur(self.enableRadialBlur)
+	end
 	playAction(from, self.castAction, self.castActionTime, self.isResetAction)
 	playEffect(from, self, self.castEffect)
     playSound(from, self, self:getSoundCfg(packet,"castSound",from))
