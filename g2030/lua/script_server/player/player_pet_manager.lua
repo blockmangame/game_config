@@ -56,7 +56,9 @@ function Player:getNewPet(ID, coinTransRatio, chiTransRatio)
         otherAttributes.chiTransRatio = chiTransRatio;
     end
     self:setValue("AllPetAttr", self:getValue("AllPetAttr"));
-    return;
+    do
+        return;
+    end
     ::init::
     otherAttributes.petCoinTransRage = cfg.coinTransRatio;
     otherAttributes.petChiTransRate = cfg.chiTransRatio;
