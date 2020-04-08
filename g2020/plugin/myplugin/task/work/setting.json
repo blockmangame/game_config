@@ -1,8 +1,8 @@
 {
 	"indentPos": {
-		"x": 209.5,
-		"y": 13.01,
-		"z": 195.5
+		"x": 205.5,
+		"y": 15.51,
+		"z": 202.5
 	},
 	"disableHint": true,
 	"circleNum": 10,
@@ -93,6 +93,38 @@
 			]
 		},
 		{
+			"key": "key_6",
+			"times": "loop",
+			"reward": "myplugin/work_reward",
+			"succeedMsg": "pizza_dialog",
+			"weight": 5,
+			"targets": [
+				{
+					"type": "Interaction",
+					"targetBuff": "myplugin/task_npc_buff",
+					"name": "main_task01_targets",
+					"cfgName": "myplugin/npc_indent6"
+				}
+			]
+		},
+
+		{
+			"key": "key_7",
+			"times": "loop",
+			"reward": "myplugin/work_reward",
+			"succeedMsg": "pizza_dialog",
+			"weight": 5,
+			"targets": [
+				{
+					"type": "Interaction",
+					"targetBuff": "myplugin/task_npc_buff",
+					"name": "main_task01_targets",
+					"cfgName": "myplugin/npc_indent7"
+				}
+			]
+		},
+
+		{
 			"key": "key_8",
 			"times": "loop",
 			"reward": "myplugin/work_reward",
@@ -180,36 +212,6 @@
 					"targetBuff": "myplugin/task_npc_buff",
 					"name": "main_task01_targets",
 					"cfgName": "myplugin/npc_indent13"
-				}
-			]
-		},
-		{
-			"key": "key_14",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 40,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc_indent14"
-				}
-			]
-		},
-		{
-			"key": "key_15",
-			"times": "loop",
-			"reward": "myplugin/work_reward",
-			"succeedMsg": "pizza_dialog",
-			"weight": 40,
-			"targets": [
-				{
-					"type": "Interaction",
-					"targetBuff": "myplugin/task_npc_buff",
-					"name": "main_task01_targets",
-					"cfgName": "myplugin/npc_indent15"
 				}
 			]
 		}
