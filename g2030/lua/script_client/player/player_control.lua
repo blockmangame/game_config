@@ -30,7 +30,8 @@ local function doJumpStateChange(control, player)
         local motionX = -(math.sin(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD))
         local motionZ = math.cos(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD)
         local motionY = -(math.sin(rotationPitch * DEG2RAD))
-        player.motion = Lib.v3(motionX, motionY, motionZ)
+        player.motion = Lib.v3(motionX * config.glidingSpeed,
+                motionY * config.glidingSpeed, motionZ * config.glidingSpeed)
         print("player.motion ", motionX, motionY, motionZ)
 
         player:setEntityProp("moveSpeed", tostring(1.0))
