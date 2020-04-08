@@ -9,8 +9,15 @@ local lockKeyJump = false
 
 local function doJumpStateChange(control, player)
     if player.isGliding then
+        player:setEntityProp("antiGravity", tostring(player.EntityProp.antiGravity))
+        player.motion = Lib.v3(0, 0, 0)
         Skill.Cast(Me:cfg().freeFallSkill)
     else
+        ---@type JumpConfig
+        local JumpConfig = T(Config, "JumpConfig")
+        local config = JumpConfig:getGlidingConfig()
+        player:setEntityProp("antiGravity", tostring(player.EntityProp.gravity))
+        player.motion = Lib.v3(0.1, config.motionVertical, 0.1)
         Skill.Cast(Me:cfg().glidingSkill)
     end
     player.isGliding = (not player.isGliding)
