@@ -1,6 +1,6 @@
 {
     "skyBox": [
-		{
+        {
             "texture": [
                 "myplugin/sky/night_right.png",
                 "myplugin/sky/night_left.png",
@@ -22,6 +22,18 @@
                 "myplugin/sky/Sky03_front.png"
             ],
             "time": 6,
+            "transition": 0.5
+        },
+        {
+            "texture": [
+                "myplugin/sky/dusk_right.png",
+                "myplugin/sky/dusk_left.png",
+                "myplugin/sky/dusk_top.png",
+                "myplugin/sky/dusk_bottom.png",
+                "myplugin/sky/dusk_back.png",
+                "myplugin/sky/dusk_front.png"
+            ],
+            "time": 18,
             "transition": 0.5
         },
         {
@@ -54,6 +66,15 @@
                 "z": 0.55
             },
             "time": 6,
+            "transition": 0.5
+        },
+        {
+            "brightness": {
+                "x": 0.4,
+                "y": 0.4,
+                "z": 0.4
+            },
+            "time": 18,
             "transition": 0.5
         },
         {
