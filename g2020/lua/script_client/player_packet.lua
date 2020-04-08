@@ -456,3 +456,17 @@ function handles:RenderBlock(packet)
         renderFloor(Me.map, childRegionKey, childRegionArr, destBlock)
     end
 end
+
+function handles:EntityAutoChangeSkin(packet)
+    local entity = World.CurWorld:getEntity(packet.objID)
+    if entity then
+        if not Me.carpetActor then
+            Me.carpetActor = GUIWindowManager.instance:CreateGUIWindow1("ActorWindow", "CarpetActor")
+            Me.carpetActor:SetActor1(entity:cfg().actorName, "idle")
+            for i = 1, 20 do
+                Me.carpetActor:UseBodyPart("a" .. tostring(i) , tostring(i))
+            end
+        end
+        entity:startAutoChangeSkin()
+    end
+end
