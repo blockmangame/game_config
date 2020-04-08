@@ -22,6 +22,10 @@ function events:onGroundChanged(lastOnGround, onGround)
     end
 end
 
+function events:fall(fallDistance)
+    print("fall " .. fallDistance)
+end
+
 function events:jumpMoveEnd()
     self:setEntityProp("moveSpeed", tostring(0.0))
 end
