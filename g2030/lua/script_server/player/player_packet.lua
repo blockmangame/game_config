@@ -40,3 +40,8 @@ function handles:teamShopBuyItem(packet)
     local status = packet.status
     teamShop:onButtonClick(self, itemId, status)
 end
+
+function handles:SyncItemShopBuyAll(packet)
+    print(string.format("<events:SyncItemShopOperation(packet):> TypeId: %s  ItemId: %s", tostring(packet.tabId), tostring(packet.itemId)))
+    Store.ItemShop:BuyAll(self, packet.tabId, packet.itemId)
+end

@@ -95,8 +95,8 @@ function Entity:getCurLevel()
 end
 
 ---设置当前阶数
-function Entity:setCurLevel()
-    return self:setValue("curLevel")
+function Entity:setCurLevel(lv)
+    return self:setValue("curLevel", lv)
 end
 
 ---当前血量上限

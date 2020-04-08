@@ -58,7 +58,7 @@ local function loadPayConfig(configPath)
         data.efficiencyFixDes  = vConfig.s_efficiencyFixDes or "" --锻炼肌肉量固定值描述
         data.efficiencyFixHuge = tonumber(vConfig.n_efficiencyFixHuge) or 0 --无限肌肉锻炼肌肉量固定值
         data.efficiencyFixHugeDes = vConfig.s_efficiencyFixHugeDes or "" --无限肌肉锻炼肌肉量固定值描述
-        settings[data.id] = data
+        settings[tostring(data.id)] = data
     end
     table.sort(settings, function(a, b)
         return a.id < b.id
