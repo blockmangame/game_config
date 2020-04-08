@@ -1,12 +1,57 @@
 {
-    "skyBox": {
-        "texture": "myplugin/sky/Sky03",
-        "rotate": {
-            "x": 0,
-            "y": 30,
-            "z": 0
+    "skyBox": [
+        {
+            "texture": [
+                "myplugin/sky/night_right.png",
+                "myplugin/sky/night_left.png",
+                "myplugin/sky/night_top.png",
+                "myplugin/sky/night_bottom.png",
+                "myplugin/sky/night_back.png",
+                "myplugin/sky/night_front.png"
+            ],
+            "time": 0,
+            "transition": 0,
+            "heightOffset": 0.5
+        },
+        {
+            "texture": [
+                "myplugin/sky/Sky03_right.png",
+                "myplugin/sky/Sky03_left.png",
+                "myplugin/sky/Sky03_top.png",
+                "myplugin/sky/Sky03_bottom.png",
+                "myplugin/sky/Sky03_back.png",
+                "myplugin/sky/Sky03_front.png"
+            ],
+            "time": 6,
+            "transition": 0.5
+        },
+        {
+            "texture": [
+                "myplugin/sky/dusk_right.png",
+                "myplugin/sky/dusk_left.png",
+                "myplugin/sky/dusk_top.png",
+                "myplugin/sky/dusk_bottom.png",
+                "myplugin/sky/dusk_back.png",
+                "myplugin/sky/dusk_front.png"
+            ],
+            "time": 18,
+            "transition": 0.5,
+            "heightOffset": 0.8
+        },
+        {
+            "texture": [
+                "myplugin/sky/night_right.png",
+                "myplugin/sky/night_left.png",
+                "myplugin/sky/night_top.png",
+                "myplugin/sky/night_bottom.png",
+                "myplugin/sky/night_back.png",
+                "myplugin/sky/night_front.png"
+            ],
+            "time": 20,
+            "transition": 0.5,
+            "heightOffset": 0.5
         }
-    },
+    ],
     "region": [],
     "entity": [
         {
@@ -519,5 +564,43 @@
     },
     "actorReceiveBlockLight": false,
     "minOpacityValue": 4,
-    "maxLightMode": false
+    "maxLightMode": false,
+    "dynamicBrightness": [
+        {
+            "brightness": {
+                "x": 0.2,
+                "y": 0.2,
+                "z": 0.2
+            },
+            "time": 0,
+            "transition": 0
+        },
+        {
+            "brightness": {
+                "x": 0.55,
+                "y": 0.55,
+                "z": 0.55
+            },
+            "time": 6,
+            "transition": 0.5
+        },
+        {
+            "brightness": {
+                "x": 0.4,
+                "y": 0.4,
+                "z": 0.4
+            },
+            "time": 18,
+            "transition": 0.5
+        },
+        {
+            "brightness": {
+                "x": 0.2,
+                "y": 0.2,
+                "z": 0.2
+            },
+            "time": 20,
+            "transition": 0.5
+        }
+    ]
 }
