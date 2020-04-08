@@ -460,13 +460,23 @@ end
 function handles:EntityAutoChangeSkin(packet)
     local entity = World.CurWorld:getEntity(packet.objID)
     if entity then
-        if not Me.carpetActor then
-            Me.carpetActor = GUIWindowManager.instance:CreateGUIWindow1("ActorWindow", "CarpetActor")
-            Me.carpetActor:SetActor1(entity:cfg().actorName, "idle")
-            for i = 1, 20 do
-                Me.carpetActor:UseBodyPart("a" .. tostring(i) , tostring(i))
-            end
+        if not Me.autoChangeSkinEntity then
+            Me.autoChangeSkinEntity = {}
         end
-        entity:startAutoChangeSkin()
+        Me.autoChangeSkinEntity[packet.objID] = Me.map.name
+    end
+
+    if not Me.autoChangeSkinTimer then
+        Me.autoChangeSkinTimer =   World.Timer(World.cfg.autoChangSkinTime or 30 , function()
+            for k, v in pairs(Me.autoChangeSkinEntity or {}) do
+                if v == Me.map.name then
+                    local needChangeEntity = World.CurWorld:getEntity(k)
+                    if needChangeEntity then
+                        needChangeEntity:startAutoChangeSkin()
+                    end
+                end
+            end
+            return true
+        end)
     end
 end
