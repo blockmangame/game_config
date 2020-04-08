@@ -27,5 +27,7 @@ function events:fall(fallDistance)
 end
 
 function events:jumpMoveEnd()
+    print("jumpMoveEnd")
+
     self:setEntityProp("moveSpeed", tostring(0.0))
 end
