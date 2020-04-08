@@ -71,7 +71,7 @@ function M:setItemStatus()
         self.stItemMoneyNum:SetVisible(false)
         self.siItemMoneyIcon:SetVisible(false)
         self.siItemSelectIcon:SetVisible(false)
-        self.stItemUsedText:SetVisible(true)
+        self.stItemUsedText:SetVisible(false)
         self.siItemLockIcon:SetVisible(true)
     end
     if self.itemStatus == BuyStatus.Unlock then

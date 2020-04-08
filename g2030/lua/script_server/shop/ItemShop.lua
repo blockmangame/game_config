@@ -14,6 +14,17 @@ function ItemShop:operationByType(player, tabId, itemId)
     end
 end
 
+function ItemShop:BuyAll(player, tabId, itemId)
+    print(string.format("<ItemShop:operationByType> TypeId: %s  ItemId: %s", tostring(tabId), tostring(itemId)))
+    if tabId == ItemShop.TabType.Equip then
+        Equip:BuyAll(player, itemId)
+    elseif tabId == ItemShop.TabType.Belt then
+        Belt:BuyAll(player, itemId)
+    elseif tabId == ItemShop.TabType.Advance then
+        Advance:BuyAll(player, itemId)
+    end
+end
+
 function ItemShop:initAllItem(player)
     print("ItemShop:initAllItem(player)" )
     Equip:initItem(player)
@@ -81,6 +92,24 @@ function ItemShop:sendChangeItemByTab(player, tabType, changeInfo)
         tabId = tabType,
         itemDate = data
     }
-    --Lib.log_1(data,"sendChangeItemByTab" )
+    ----Lib.log_1(data,"sendChangeItemByTab" )
     player:sendPacket(packet)
+end
+
+function ItemShop:checkMoney(player, moneyType, price)
+    local checkMoney = false
+    if "gDiamonds" == Coin:coinNameByCoinId(moneyType) then
+        player:consumeDiamonds("gDiamonds", price, function(ret)
+            if ret then
+                checkMoney = true
+                print("consumeDiamonds 1"..tostring(ret))
+                --return  true
+            else
+                print("consumeDiamonds 2"..tostring(ret))
+            end
+        end)
+    else
+        checkMoney = player:payCurrency(Coin:coinNameByCoinId(moneyType), price, false, false, "ItemShop")
+    end
+    return checkMoney
 end

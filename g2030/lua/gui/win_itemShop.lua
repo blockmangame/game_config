@@ -8,7 +8,7 @@ local AdvanceConfig = ItemShop.AdvanceConfig
 --local M = {}
 function M:init()
     print("M:init() 999999999999999999999999")
-    --Lib.log_1(ItemShop.EquipConfig)
+    ----Lib.log_1(ItemShop.EquipConfig)
     WinBase.init(self, "NinjaLegendsItemShop.json",false)
     self.isInitData = false
     self:onLoad()
@@ -138,9 +138,9 @@ end
 function M:addViewByConfig(Config, isResetPos)
     local clickItemId = 0
     for i, Value in pairs(Config) do
-        local ItemIcon = "set:LiftingSimulatorShop1.json image:equipOrSkillBg"
-        print("<addViewByConfig:> kind "..tostring(self.selectTab))
-        print("<addViewByConfig:> Value.Icon "..tostring(Value.icon))
+        --local ItemIcon = "set:LiftingSimulatorShop1.json image:equipOrSkillBg"
+        --print("<addViewByConfig:> kind "..tostring(self.selectTab))
+        --print("<addViewByConfig:> Value.Icon "..tostring(Value.icon))
         local shopItem = UIMgr:new_widget("itemShopItem")
         local contentWidth = self.gvItemsGridView:GetWidth()[2]
         local contentHeight = self.gvItemsGridView:GetHeight()[2]
@@ -205,7 +205,7 @@ function M:onClickEquipItem(itemId)
         self:showItemDetail()
     end
     local strItemPropertyNum1 = item.value1
-    local payFitnessEquip = PayEquipConfig[itemId]
+    local payFitnessEquip = PayEquipConfig[tostring(itemId)]
     local strDetailDescribe = Lang:toText(item.desc)
     if "gDiamonds" == Coin:coinNameByCoinId(item.moneyType) and payFitnessEquip then
         if item.status == BuyStatus.Buy or item.Status == BuyStatus.Used then
@@ -231,17 +231,17 @@ function M:onClickEquipItem(itemId)
             end
         end
     else
-        strItemPropertyNum1 = tostring(item.Efficiency)
+        strItemPropertyNum1 = Lang:toText(item.value1)
         strDetailDescribe = string.format(strDetailDescribe,strItemPropertyNum1)
     end
     self.stDetailTitle:SetText(Lang:toText(tostring(item.name)))
     self.siDetailItemIcon:SetImage(item.icon)
     self.stDetailValueText[1]:SetText(Lang:toText(tostring("ValueText1")))
-    self.stDetailValueNum[1]:SetText(tonumber(strItemPropertyNum1))
+    self.stDetailValueNum[1]:SetText(tostring(strItemPropertyNum1))
     self.stDetailValueText[2]:SetText(Lang:toText(tostring("ValueText2")))
-    self.stDetailValueNum[2]:SetText(tonumber(item.value2))
+    self.stDetailValueNum[2]:SetText(tostring(item.value2))
     self.stDetailValueText[3]:SetText(Lang:toText(tostring("ValueText3")))
-    self.stDetailValueNum[3]:SetText(tonumber(item.value3))
+    self.stDetailValueNum[3]:SetText(tostring(item.value3))
     self.siDetailValue[2]:SetVisible(false)
     self.siDetailValue[3]:SetVisible(false)
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 224 }, { 0, 258}, { 0, 152})
@@ -412,6 +412,12 @@ function M:onShow(isShow)
     end
 end
 
+function M:onOpen()
+    local toolBar = UI:getWnd("toolbar")
+    toolBar:root():SetAlwaysOnTop(true)
+    toolBar:root():SetLevel(2)
+end
+
 function M:onDetailButton()
     print("<onDetailButton:> self.selectTab "..tostring(self.selectTab))
     print("<onDetailButton:> self.selectItemId "..tostring(self.selectItemId))
@@ -421,7 +427,17 @@ end
 function M:onBuyAll()
     print("<onBuyAll:> self.selectTab "..tostring(self.selectTab))
     print("<onBuyAll:> self.selectItemId "..tostring(self.selectItemId))
-    --self:senderDetailButtonClick()
+    self:senderBuyAll()
+end
+
+function M:senderBuyAll()
+    M:checkItemStatus(true)
+    local packet = {
+        pid = "SyncItemShopBuyAll",
+        tabId = self.selectTab,
+        itemId = self.selectItemId
+    }
+    Me:sendPacket(packet)
 end
 
 function M:senderDetailButtonClick()
@@ -437,19 +453,23 @@ function M:senderDetailButtonClick()
     Me:sendPacket(packet)
 end
 
-function M:checkItemStatus()
+function M:checkItemStatus(isOnlyPrice)
+    local isflag = isOnlyPrice or false
+    local itemConfig = {}
     if self.selectTab == TabType.Equip then
-        if(EquipConfig[self.selectItemId].status == BuyStatus.Used) then
-            return false
-        end
+        itemConfig = EquipConfig
     elseif self.selectTab == TabType.Belt then
-        if(BeltConfig[self.selectItemId].status == BuyStatus.Used) then
-            return false
-        end
+        itemConfig = BeltConfig
     elseif self.selectTab == TabType.Advance then
-        if(AdvanceConfig[self.selectItemId].status == BuyStatus.Used) then
-            return false
-        end
+        itemConfig = AdvanceConfig
+    end
+    local item = itemConfig[self.selectItemId]
+    if isflag then--or item.price < Me:getCurrency(Coin:coinNameByCoinId(item.moneyType)).count then
+        return false
+    elseif item.status == BuyStatus.Used then
+        return false
+    else
+        print("金币不够 Coin:coinNameByCoinId(item.moneyType : "..tostring(Coin:coinNameByCoinId(item.moneyType)).." item.price: "..tostring(item.price))
     end
     return true
 end
@@ -466,6 +486,9 @@ function M:initItemShop(data)
             end
         end
     end
+    self.selectTab = TabType.Equip
+    self:addItemsGridView(false)
+    self:onClickEquipItem(1)
     self.isInitData = true
 end
 
@@ -484,13 +507,16 @@ end
 
 function M:updateItem(configTable, itemDate)
     print(string.format("updateItem:> TypeId: %s", tostring(self.selectTab)))
-    local nextId = self:getNextId(EquipConfig)
     for id, status in pairs(itemDate) do
-        if configTable[id] then
-            configTable[id].status = status
-            --nextId = id
+        for i, v in pairs(configTable) do
+            if id == i then
+                configTable[i].status = status
+            else
+                --configTable[i].status = BuyStatus.Lock
+            end
         end
     end
+    local nextId = self:getNextId()
     if self.selectTab == TabType.Equip then
         self:addItemsGridView(false)
         self:onClickEquipItem(nextId)
@@ -504,20 +530,26 @@ function M:updateItem(configTable, itemDate)
 end
 
 function M:getNextId(itemConfig)
-    --if EquipConfig[self.selectItemId].status ~= BuyStatus.Unlock then
-    --    return self.selectItemId
-    --end
+    local itemConfig = {}
+    if self.selectTab == TabType.Equip then
+        itemConfig = EquipConfig
+    elseif self.selectTab == TabType.Belt then
+        itemConfig = BeltConfig
+    elseif self.selectTab == TabType.Advance then
+        --return self.selectItemId
+        itemConfig = AdvanceConfig
+    end
     local curId = self.selectItemId
-    --local key = #itemConfig
-    --if curId == key then
-    --    return curId
-    --end
-    --for i = curId + 1, key do
-    --    if itemConfig[curId].moneyType == itemConfig[i].moneyType then
-    --        return itemConfig[i].id
-    --    end
-    --end
-    return curId + 1
+    for i=1, #itemConfig do
+        if itemConfig[i].status == BuyStatus.Used then
+            if itemConfig[i + 1] and itemConfig[i + 1].status == BuyStatus.Lock then
+                curId = itemConfig[i].id
+            else
+                curId = itemConfig[i].id + 1
+            end
+        end
+    end
+    return curId
 end
 
 function M:choseUseDetailUi(moneyType)
