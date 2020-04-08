@@ -8,7 +8,12 @@ local onGround = true
 local lockKeyJump = false
 
 local function doJumpStateChange(control, player)
-    --TODO
+    if player.isGliding then
+        Skill.Cast(Me:cfg().freeFallSkill)
+    else
+        Skill.Cast(Me:cfg().glidingSkill)
+    end
+    player.isGliding = (not player.isGliding)
 end
 
 ---@param player EntityClientMainPlayer
