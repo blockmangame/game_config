@@ -1,4 +1,7 @@
 
+function Entity.EntityProp:hideActor(value, add, cfg, id)
+	self:setActorHide(add)
+end
 
 function EntityClient:updateShowName()  -- 覆盖引擎的EntityClient:updateShowName()
 	local headText = self:data("headText")
