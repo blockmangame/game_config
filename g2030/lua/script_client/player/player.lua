@@ -18,6 +18,15 @@ function Player:sellExp()
     self:sendPacket(packet)
     --print(string.format("Player:setValue %s %s", tostring(key), Lib.v2s(value, 1)))
 end
+function Player:exchangeEquip(fullname)
+    local packet = {
+        pid = "ExchangeEquip",
+        objID = self.objID,
+        fullname = fullname,
+    }
+    self:sendPacket(packet)
+end
+
 --function Player:saveJumpProp()
 --    --TODO
 --end

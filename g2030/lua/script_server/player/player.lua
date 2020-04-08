@@ -71,7 +71,15 @@ function Player:sellExp()
     self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
     self:resetExp()
 end
+---
+---更换装备
+---
+function Player:exchangeEquip(fullName)
+    self:addItem(fullName,1,"exchange")
+    local item1 =  self:searchItem("fullName",fullName)
+    self:saveHandItem(item1,false)
 
+end
 ---
 ---操作血量变化
 ---当deltaVal绝对值大于1是认为是自然数
