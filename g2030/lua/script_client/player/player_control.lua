@@ -22,8 +22,8 @@ local function doJumpStateChange(control, player)
         local rotationPitch = config.rotationPitch
         local DEG2RAD = 0.01745329
         local motionX = -(math.sin(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD))
-        local motionY = math.cos(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD)
-        local motionZ = -(math.sin(rotationPitch * DEG2RAD))
+        local motionZ = math.cos(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD)
+        local motionY = -(math.sin(rotationPitch * DEG2RAD))
         player.motion = Lib.v3(motionX, motionY, motionZ)
         print("player.motion ", motionX, motionY, motionZ)
 
