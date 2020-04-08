@@ -66,34 +66,3 @@ function Game.TryJoinTeam(player, id)
     team:joinEntity(player)
     return true
 end
-
-local function initTeamConfig()
-    local temp = Lib.readGameCsv("config/camp_level.csv") or {}
-
-    for _, cfg in pairs(temp) do
-        for _, info in ipairs(World.cfg.team) do
-            local team = Game.GetTeam(info.id, true)
-            if info.id ~= Define.Team.Neutrality and
-                    (tonumber(cfg.teamId) == 0 or info.id == tonumber(cfg.teamId)) then
-                team:addLevelCfg(cfg)
-            end
-        end
-    end
-end
-
-local function initTeam()
-    local worldCfg = World.cfg
-    if not worldCfg.team then
-        return
-    end
-    initTeamConfig()
-    for _, info in ipairs(World.cfg.team) do
-        local team = Game.GetTeam(info.id)
-        if team then
-            team:initBuff()
-            --获取阵营总击杀，初始化等级
-        end
-    end
-end
-
-initTeam()
