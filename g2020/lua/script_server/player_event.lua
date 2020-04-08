@@ -16,8 +16,15 @@ function player_event(player, event, ...)
 end
 
 function events:sendSpawn(id)
-    local entity = World.CurWorld:getEntity(id)
+    local entity = self.world:getEntity(id)
     if entity and entity:cfg().autoChangeSkin then
-        self:sendPacket({ pid = "EntityAutoChangeSkin", objID = entity.objID })
+        self:sendPacket({ pid = "AddEntityAutoChangeSkin", objID = entity.objID })
+    end
+end
+
+function events:sendRemove(id)
+    local entity = self.world:getEntity(id)
+    if entity and entity:cfg().autoChangeSkin then
+        self:sendPacket({ pid = "RemoveEntityAutoChangeSkin", objID = entity.objID })
     end
 end

@@ -457,7 +457,7 @@ function handles:RenderBlock(packet)
     end
 end
 
-function handles:EntityAutoChangeSkin(packet)
+function handles:AddEntityAutoChangeSkin(packet)
     local entity = World.CurWorld:getEntity(packet.objID)
     if entity then
         if not Me.autoChangeSkinEntity then
@@ -467,7 +467,7 @@ function handles:EntityAutoChangeSkin(packet)
     end
 
     if not Me.autoChangeSkinTimer then
-        Me.autoChangeSkinTimer =   World.Timer(World.cfg.autoChangSkinTime or 30 , function()
+        Me.autoChangeSkinTimer = World.Timer(World.cfg.autoChangSkinTime or 30 , function()
             for k, v in pairs(Me.autoChangeSkinEntity or {}) do
                 if v == Me.map.name then
                     local needChangeEntity = World.CurWorld:getEntity(k)
@@ -478,5 +478,17 @@ function handles:EntityAutoChangeSkin(packet)
             end
             return true
         end)
+    end
+end
+
+function handles:RemoveEntityAutoChangeSkin(packet)
+    if Me.autoChangeSkinEntity then
+        Me.autoChangeSkinEntity[packet.objID] = nil
+        if not next(Me.autoChangeSkinEntity) then
+            if Me.autoChangeSkinTimer then
+                Me.autoChangeSkinTimer()
+                Me.autoChangeSkinTimer = nil
+            end
+        end
     end
 end
