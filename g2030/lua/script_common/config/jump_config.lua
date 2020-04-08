@@ -1,9 +1,9 @@
----@class jumpConfig
-local jumpConfig = T(Config, "jumpConfig")
+---@class JumpConfig
+local JumpConfig = T(Config, "JumpConfig")
 
 local settings = {}
 
-function jumpConfig:init(config)
+function JumpConfig:init(config)
     for _, vConfig in pairs(config) do
         local data = {}
         data.id = tonumber(vConfig.n_id) or 0 --id
@@ -12,10 +12,10 @@ function jumpConfig:init(config)
         data.moveSpeed = tonumber(vConfig.n_moveSpeed) or 0 --移动速度
         table.insert(settings, data)
     end
-    Lib.log("jumpConfig:init " .. Lib.v2s(settings))
+    Lib.log("JumpConfig:init " .. Lib.v2s(settings))
 end
 
-function jumpConfig:getJumpConfig(id)
+function JumpConfig:getJumpConfig(id)
     for _, setting in pairs(settings) do
         if setting.id == id then
             return setting
@@ -24,4 +24,4 @@ function jumpConfig:getJumpConfig(id)
     return nil
 end
 
-return jumpConfig
+return JumpConfig

@@ -21,9 +21,9 @@ local function jump_impl(control, player)
         return
     end
 
-    ---@type jumpConfig
-    local jumpConfig = T(Config, "jumpConfig")
-    local config = jumpConfig:getJumpConfig(maxJumpCount - jumpCount + 1)
+    ---@type JumpConfig
+    local JumpConfig = T(Config, "JumpConfig")
+    local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount + 1)
     if config then
         player:setEntityProp("jumpSpeed", tostring(config.jumpSpeed))
         player:setEntityProp("gravity", tostring(config.gravity))
