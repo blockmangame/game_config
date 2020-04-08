@@ -13,11 +13,19 @@ local function doJumpStateChange(control, player)
         player.motion = Lib.v3(0, 0, 0)
         Skill.Cast(Me:cfg().freeFallSkill)
     else
+        player:setEntityProp("antiGravity", tostring(player.EntityProp.gravity))
+
         ---@type JumpConfig
         local JumpConfig = T(Config, "JumpConfig")
         local config = JumpConfig:getGlidingConfig()
-        player:setEntityProp("antiGravity", tostring(player.EntityProp.gravity))
-        player.motion = Lib.v3(0.1, config.motionVertical, 0.1)
+        local rotationYaw = player:getRotationYaw()
+        local rotationPitch = config.rotationPitch
+        local DEG2RAD = 0.01745329
+        local motionX = -(math.sin(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD))
+        local motionY = math.cos(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD)
+        local motionZ = -(math.sin(rotationPitch * DEG2RAD))
+        player.motion = Lib.v3(motionX, motionY, motionZ)
+
         Skill.Cast(Me:cfg().glidingSkill)
     end
     player.isGliding = (not player.isGliding)

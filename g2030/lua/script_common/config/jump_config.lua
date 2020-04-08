@@ -10,8 +10,7 @@ function JumpConfig:init(config)
         data.jumpSpeed = tonumber(vConfig.n_jumpSpeed) or 0 --跳跃速度
         data.gravity = tonumber(vConfig.n_gravity) or 0 --重力
         data.moveSpeed = tonumber(vConfig.n_moveSpeed) or 0 --移动速度
-        data.motionVertical = tonumber(vConfig.n_motionVertical) or 0
-        data.motionHorizontal = tonumber(vConfig.n_motionHorizontal) or 0
+        data.rotationPitch = tonumber(vConfig.n_rotationPitch) or 0
         table.insert(settings, data)
     end
     Lib.log("JumpConfig:init " .. Lib.v2s(settings))
