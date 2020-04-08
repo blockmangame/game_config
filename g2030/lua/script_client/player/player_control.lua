@@ -32,9 +32,9 @@ local function doJumpStateChange(control, player)
         local motionY = -(math.sin(rotationPitch * DEG2RAD))
         player.motion = Lib.v3(motionX * config.glidingSpeed,
                 motionY * config.glidingSpeed, motionZ * config.glidingSpeed)
-        print("player.motion ", motionX, motionY, motionZ)
+        --print("player.motion ", motionX, motionY, motionZ)
 
-        player:setEntityProp("moveSpeed", tostring(1.0))
+        player:setEntityProp("moveSpeed", tostring(999999.0))
         Skill.Cast(Me:cfg().glidingSkill)
     end
     player.isGliding = (not player.isGliding)
