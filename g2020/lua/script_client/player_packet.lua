@@ -492,3 +492,7 @@ function handles:RemoveEntityAutoChangeSkin(packet)
         end
     end
 end
+
+function handles:SyncWorldTime(packet)
+    World.CurWorld:setWorldTime(packet.worldTime)
+end
