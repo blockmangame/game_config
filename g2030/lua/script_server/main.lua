@@ -14,6 +14,8 @@ require "script_server.skill.multistage"
 require "script_server.skill.timeLine"
 require "script_server.skill.scene_skill"
 require "script_server.game.game_team"
+require "script_server.process.process_base"
+require "script_server.process.process_team"
 require "script_server.game.game"
 
 local main = {}
