@@ -12,3 +12,23 @@ function Player:showDialogTip(tipType, event, args, context, dialogContinuedTime
 		dialogContinuedTime = dialogContinuedTime
 	})
 end
+
+function Player:sendTip(tipType, textKey, keepTime, vars, event, ...)
+	if textKey == "game.init" then
+		return
+	end
+
+	local regId
+	if event then
+		regId = self:regCallBack("SendTip"..tipType, {key = event}, 1, true)
+	end
+    self:sendPacket( {
+        pid = "ShowTip",
+        tipType = tipType,
+		keepTime = keepTime,
+        textKey = textKey,
+		vars = vars,
+		regId = regId,
+        textArgs = {...},
+    })
+end

@@ -326,3 +326,11 @@ end
 function Actions.GetWorldTime(data, params, context)
     return World.CurWorld:getWorldTime()
 end
+
+function Actions.SyncWorldTime(data, params, context)
+    local worldTime = World.CurWorld:getWorldTime()
+    params.player:sendPacket({
+        pid = "SyncWorldTime",
+        worldTime = worldTime
+    })
+end

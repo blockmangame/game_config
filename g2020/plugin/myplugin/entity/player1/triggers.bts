@@ -5432,6 +5432,7 @@ ENTER_MAP
     CallTrigger(event = "SHOW_GO_GIFT_GPS", object = $obj1)
     ShowWhiteScreen(player = $obj1)
     AddEntityBuff(entity = $obj1, cfg = "myplugin/freeze_buff", buffTime = 80)
+    SyncWorldTime(player = $obj1)
 }
 
 LEAVE_MAP
