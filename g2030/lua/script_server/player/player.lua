@@ -23,7 +23,8 @@ function Player:initPlayer()
 
     self:initCurrency()
     self:tickLifeSteal()
-
+    --self:initData()
+    self:initItemShop()
 end
 ---
 ---角色固有设定，定时回血
@@ -57,13 +58,18 @@ function Player:addExp()
     if newExp>maxExp then
         newExp = maxExp
     end
-    -- self:setCurExp(newExp)
-    castSetSkill(self,newExp)
+    self:setCurExp(newExp)
+   -- castSetSkill(self,newExp)
 end
 ---
 ---重置锻炼值
 function Player:resetExp()
-    castSetSkill(self,0)
+    --castSetSkill(self,0)
+    self:setCurExp( 0)
+end
+function Player:sellExp()
+    self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
+    self:resetExp()
 end
 
 ---
@@ -103,4 +109,8 @@ end
 ---获取阵营
 function Player:getTeam()
     return Game.GetTeam(self:getTeamId())
+end
+
+function Player:initItemShop()
+    Store.ItemShop:initAllItem(self)
 end

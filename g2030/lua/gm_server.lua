@@ -25,50 +25,54 @@ end
 
 -----------------------------------Pet Model Test----------------------------------
 local Entity
-GMItem["sample/创建一个跟随宠物"] = function(self)
-    local entity = EntityServer.Create({cfgName = "myplugin/pet_1_1_1", pos = self:getPosition()})
-    --table.insert(EntityList, entity)
-    Entity = entity
-    local control = entity:getAIControl()
-    control:setFollowTarget(self)
-end
+GMItem["g2030/发放一个宠物（不创建）"] = function(self)
 
-GMItem["sample/一个抽奖点"] = function(self)
-    local entity = EntityServer.Create({cfgName = "myplugin/roller1", pos = self:getPosition()})
-    table.insert(EntityList, entity)
 end
+GMItem["g2030/发放一个式神（不创建）"] = function(self)
 
-GMItem["sample/删除上一个宠物"] = function(self)
-    Entity:destroy()
-    --table.remove(EntityList,#EntityList)
 end
+GMItem["g2030/装备一个宠物"] = function(self)
 
+end
+GMItem["g2030/装备一个式神"] = function(self)
+
+end
 GMItem["sample/释放宠物技能"] = function(self)
     Skill.Cast("myplugin/pet_1_1_1_attack", {targetID=self.objID}, Entity)
 end
 -----------------------------------Pet Model Test End-------------------------------
 
 ---阵营
-GMItem["g2030/setTeam_1"] = function(self)
+GMItem["g2030/加入Team_1"] = function(self)
     self:setTeam(1)
 end
 
-GMItem["g2030/setTeam_2"] = function(self)
+GMItem["g2030/加入Team_2"] = function(self)
     self:setTeam(2)
 end
 
-GMItem["g2030/setTeam_3"] = function(self)
+GMItem["g2030/加入Team_3"] = function(self)
     self:setTeam(3)
 end
 
-GMItem["g2030/upgradeTeam_2"] = function(self)
+GMItem["g2030/升级Team_2"] = function(self)
     local team = Game.GetTeam(2)
-    team:addTeamKills(30)
+    team:addTeamKills(10)
+    print("阵营等级：" .. team:getLevel())
 end
 
-GMItem["g2030/upgradeTeam_3"] = function(self)
+GMItem["g2030/升级Team_3"] = function(self)
     local team = Game.GetTeam(3)
-    team:addTeamKills(30)
+    team:addTeamKills(10)
+    print("阵营等级：" .. team:getLevel())
+end
+
+GMItem["g2030/玩家伤害减免"] = function(self)
+    print("伤害减免：" .. self:getHurtSub())
+end
+
+GMItem["g2030/玩家治疗加成"] = function(self)
+    print("治疗加成：" .. self:getHealingPlu())
 end
 
 return GMItem

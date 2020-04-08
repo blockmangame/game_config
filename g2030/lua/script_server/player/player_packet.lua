@@ -9,6 +9,39 @@
 
 local handles = T(Player, "PackageHandlers")
 
-function handles:createPetEntity(packet)
+--[[        目前弃用、不打算给予客户端任何创建一个宠物的机会。（防止作弊）
+function handles:getNewPet(packet)
+    self:getNewPet(packet.ID, packet.coinTransRatio, packet.chiTransRatio);
+end
 
+function handles:getNewPlusPet(packet)
+    self:getNewPlusPet(packet.ID, packet.plusPetATKRate);
+end
+--]]
+function handles:callPet(packet)
+    self:callPet(packet.index, packet.ridePoint);
+end
+
+function handles:recallPet(packet)
+    self:recallPet(packet.index);
+end
+
+function handles:SyncItemShopOperation(packet)
+    print(string.format("<events:SyncItemShopOperation(packet):> TypeId: %s  ItemId: %s", tostring(packet.tabId), tostring(packet.itemId)))
+    Store.ItemShop:operationByType(self, packet.tabId, packet.itemId)
+end
+function handles:SellExp(packet)
+    self:sellExp()
+end
+
+function handles:teamShopBuyItem(packet)
+    local teamShop = require "script_server.shop.teamShop"
+    local itemId = packet.itemId
+    local status = packet.status
+    teamShop:onButtonClick(self, itemId, status)
+end
+
+function handles:SyncItemShopBuyAll(packet)
+    print(string.format("<events:SyncItemShopOperation(packet):> TypeId: %s  ItemId: %s", tostring(packet.tabId), tostring(packet.itemId)))
+    Store.ItemShop:BuyAll(self, packet.tabId, packet.itemId)
 end

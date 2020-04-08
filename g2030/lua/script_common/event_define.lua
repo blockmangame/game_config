@@ -10,7 +10,7 @@ Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE")
 Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE_END")
 
 if World.isClient then
-    Event.register("EVENT_NEW_GUIDE")
+
 else
     --TODO
 end

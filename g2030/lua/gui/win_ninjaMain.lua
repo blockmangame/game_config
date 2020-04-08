@@ -26,12 +26,26 @@ function M:initWnd()
     UIMgr:new_widget("topValBar"):invoke("initViewByType", EXP_VAL,{11,93},self._root)
     UIMgr:new_widget("TopSpVal"):invoke("initViewByType",SKILL_VAL ,{15,149},self._root)
     UIMgr:new_widget("TopSpVal"):invoke("initViewByType", TEAM_VAL,{151,149},self._root)
+    self:initExtraWnd()
 end
+
+--预加载界面，用于在显示之前初始化数据
+function M:initExtraWnd()
+    UI:getWnd("itemShop")
+end
+
 function M:initEvent()
+    self:subscribe(self.btnSell, UIEvent.EventButtonClick, function()
+        Me:sellExp()
+    end)
     self:subscribe(self.btnExchangeCtr, UIEvent.EventButtonClick, function()
         self:exchangeABBtn()
     end)
+    self:subscribe(self.btnVip, UIEvent.EventButtonClick, function()
+        self:openPayShop()
+    end)
 end
+
 ---右侧技能按钮排版切换
 function M:exchangeABBtn()
     local controlView = UI:getWnd("skills")
@@ -57,5 +71,11 @@ function M:exchangeABBtn()
     end
 
 end
+
+---右侧技能按钮排版切换
+function M:openPayShop()
+    local itemShop = UI:getWnd("itemShop"):onShow(true)
+end
+
 function M:onOpen()
 end

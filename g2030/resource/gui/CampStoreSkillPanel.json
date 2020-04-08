@@ -1,0 +1,800 @@
+{
+    "Dialog": {
+        "Window": {
+            "Type": "Layout",
+            "Name": "CampStoreSkillPanel",
+            "Property": [
+                {
+                    "Name": "Area",
+                    "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                },
+                {
+                    "Name": "WndOpenSound",
+                    "Value": "0"
+                },
+                {
+                    "Name": "WndCloseSound",
+                    "Value": "0"
+                },
+                {
+                    "Name": "OutputLuaVariable",
+                    "Value": "true"
+                }
+            ],
+            "Window": [
+                {
+                    "Type": "StaticImage",
+                    "Name": "CampStoreSkillPanel-Bg",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0,0},{0,731},{0,439}}"
+                        },
+                        {
+                            "Name": "VerticalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "BackgroundColor",
+                            "Value": "0.0901961 0.0901961 0.0901961 0.980392"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "StretchType",
+                            "Value": "NineGrid"
+                        },
+                        {
+                            "Name": "StretchOffset",
+                            "Value": "60 60 50 50"
+                        },
+                        {
+                            "Name": "OutputLuaVariable",
+                            "Value": "true"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        }
+                    ],
+                    "Window": [
+                        {
+                            "Type": "StaticImage",
+                            "Name": "CampStoreSkillPanel-law",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{0,0},{0.534884,0},{0.790433,0}}"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "ImageName",
+                                    "Value": "set:camp_store.json image:law_position"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "StaticImage",
+                                    "Name": "CampStoreSkillPanel-Skill-Icon",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,0},{0,0},{0.255754,0},{0.288184,0}}"
+                                        },
+                                        {
+                                            "Name": "VerticalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "HorizontalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "ImageName",
+                                            "Value": "set:bird_atlas.json image:eggs_8"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Type": "StaticText",
+                                    "Name": "CampStoreSkillPanel-Skill-Name",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,0},{-0.18732,0},{0.255754,0},{-0.100865,0}}"
+                                        },
+                                        {
+                                            "Name": "VerticalAlignment",
+                                            "Value": "Bottom"
+                                        },
+                                        {
+                                            "Name": "HorizontalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "Text",
+                                            "Value": "Skill Name"
+                                        },
+                                        {
+                                            "Name": "Font",
+                                            "Value": "HT22"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "TextHorzAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextVertAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextLineExtraSpace",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextAutoOmission",
+                                            "Value": "false"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "StaticImage",
+                            "Name": "CampStoreSkillPanel-Corner",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0.0273598,0},{0.022779,0},{0.97264,0},{0.774487,0}}"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
+                                    "Name": "StretchOffset",
+                                    "Value": "46 46 51 51"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "ImageName",
+                                    "Value": "set:camp_store.json image:corner"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Layout",
+                            "Name": "CampStoreSkillPanel-Info",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{-0.022779,0},{0.97264,0},{0.175399,0}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Bottom"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "BackgroundColor",
+                                    "Value": "0 0 0 0.980392"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "StaticImage",
+                                    "Name": "CampStoreSkillPanel-Attack-Icon",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0.0703235,0},{0,0},{0.122363,0},{0.436782,0}}"
+                                        },
+                                        {
+                                            "Name": "VerticalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "ImageName",
+                                            "Value": "set:camp_store.json image:attack_icon"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
+                                        }
+                                    ],
+                                    "Window": [
+                                        {
+                                            "Type": "StaticText",
+                                            "Name": "CampStoreSkillPanel-Attack-Text",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{1.21622,0},{0,0},{2.56757,0},{1.31579,0}}"
+                                                },
+                                                {
+                                                    "Name": "VerticalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "Text",
+                                                    "Value": "text +30"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "OutputLuaVariable",
+                                                    "Value": "true"
+                                                },
+                                                {
+                                                    "Name": "TextVertAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "TextLineExtraSpace",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "TextAutoOmission",
+                                                    "Value": "false"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Type": "StaticImage",
+                                    "Name": "CampStoreSkillPanel-Blood-Icon",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0.0703235,0},{0,0},{0.122363,0},{0.436782,0}}"
+                                        },
+                                        {
+                                            "Name": "VerticalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "HorizontalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "ImageName",
+                                            "Value": "set:camp_store.json image:blood_icon"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
+                                        }
+                                    ],
+                                    "Window": [
+                                        {
+                                            "Type": "StaticText",
+                                            "Name": "CampStoreSkillPanel-Blood-Text",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{1.21622,0},{0,0},{2.56757,0},{1.31579,0}}"
+                                                },
+                                                {
+                                                    "Name": "VerticalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "Text",
+                                                    "Value": "text +30"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "OutputLuaVariable",
+                                                    "Value": "true"
+                                                },
+                                                {
+                                                    "Name": "TextVertAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "TextLineExtraSpace",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "TextAutoOmission",
+                                                    "Value": "false"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "ProgressBar",
+                            "Name": "CampStoreSkillPanel-Lv-Value_c",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{0.70615,0},{0.69357,0},{0.74943,0}}"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "ProgressImage",
+                                    "Value": "set:camp_store.json image:color_lump2"
+                                },
+                                {
+                                    "Name": "ProgressIsVertical",
+                                    "Value": "false"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "StaticText",
+                                    "Name": "CampStoreSkillPanel-Right-Lv",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{-0.157791,0},{0,0},{-0.0591717,0},{1,0}}"
+                                        },
+                                        {
+                                            "Name": "Text",
+                                            "Value": "Lv.3"
+                                        },
+                                        {
+                                            "Name": "Font",
+                                            "Value": "HT22"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "TextHorzAlignment",
+                                            "Value": "Right"
+                                        },
+                                        {
+                                            "Name": "TextVertAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextLineExtraSpace",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextAutoOmission",
+                                            "Value": "false"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Type": "StaticText",
+                                    "Name": "CampStoreSkillPanel-Left-Lv",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0.157791,0},{0,0},{0.25641,0},{1,0}}"
+                                        },
+                                        {
+                                            "Name": "VerticalAlignment",
+                                            "Value": "Bottom"
+                                        },
+                                        {
+                                            "Name": "HorizontalAlignment",
+                                            "Value": "Right"
+                                        },
+                                        {
+                                            "Name": "Text",
+                                            "Value": "Lv.4"
+                                        },
+                                        {
+                                            "Name": "Font",
+                                            "Value": "HT22"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "TextHorzAlignment",
+                                            "Value": "Right"
+                                        },
+                                        {
+                                            "Name": "TextVertAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextLineExtraSpace",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextAutoOmission",
+                                            "Value": "false"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "ProgressBar",
+                            "Name": "CampStoreSkillPanel-Lv-Value",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{0.710706,0},{0.69357,0},{0.744874,0}}"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "Progress",
+                                    "Value": "0.5"
+                                },
+                                {
+                                    "Name": "ProgressImage",
+                                    "Value": "set:camp_store.json image:color_lump4"
+                                },
+                                {
+                                    "Name": "ProgressIsVertical",
+                                    "Value": "false"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "StaticText",
+                                    "Name": "CampStoreSkillPanel-Value-Text",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,0},{0,0},{0.0986193,0},{2.63158,0}}"
+                                        },
+                                        {
+                                            "Name": "VerticalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "HorizontalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "Text",
+                                            "Value": "100 / 500 k"
+                                        },
+                                        {
+                                            "Name": "Font",
+                                            "Value": "HT24"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "OutputLuaVariable",
+                                            "Value": "true"
+                                        },
+                                        {
+                                            "Name": "TextHorzAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextVertAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "TextLineExtraSpace",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "TextAutoOmission",
+                                            "Value": "false"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

@@ -10,6 +10,11 @@ Define.Team = {
     White = 3
 }
 
+Define.petType = {
+    pet = 1,        --宠物
+    plusPet = 2     --式神
+}
+
 Define.ProcessState = {
     Init = 0,
     Waiting = 1,

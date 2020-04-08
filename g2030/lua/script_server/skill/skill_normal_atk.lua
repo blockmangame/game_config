@@ -1,15 +1,6 @@
 local SkillMissile = Skill.GetType("Missile")--Base
 local NormalAtk = Skill.GetType("NormalAtk")
 NormalAtk.targetType = "Any"
---[[
-    @desc: 执行锻炼
-    author:zhuyayi
-    time:2020-03-21 21:08:09
-    @return:
-]]
-local function doExp(from)
-    from:addExp()
-end
 function NormalAtk:getStartPos(from)
     return SkillMissile:getStartPos(from)
 end

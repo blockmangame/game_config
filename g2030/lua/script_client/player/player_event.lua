@@ -15,5 +15,13 @@ function events:onGroundChanged(lastOnGround, onGround)
 
     if lastOnGround == false and onGround == true then
         self:setValue("jumpCount", self:getMaxJumpCount())
+        self:recoverJumpProp()
+        Blockman.instance.gameSettings:setEnableRadialBlur(false)
+    elseif lastOnGround == true and onGround == false then
+        --TODO
     end
+end
+
+function events:jumpMoveEnd()
+    self:setEntityProp("moveSpeed", tostring(0.0))
 end

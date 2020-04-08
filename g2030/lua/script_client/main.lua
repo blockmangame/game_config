@@ -4,11 +4,18 @@
 --- DateTime: 2020/3/21 22:39
 ---
 require "script_client.player.player"
+require "script_client.ui.ui_schedule"
 require "script_client.entity.entity"
+
 require "script_client.other.scene_indicator"
+
+require "script_client.player.player"
 require "script_client.player.player_event"
-require "script_server.player.player_packet"
+require "script_client.player.player_packet"
 require "script_client.player.player_control"
+require "script_client.player.player_pet_manager"
+
+require "script_client.skill.base"
 require "script_client.skill.skill_normal_atk"
 require "script_client.skill.skill_addExp"
 require "script_client.skill.scene_skill"
@@ -20,11 +27,19 @@ function main:init()
 
     Lib.log("main:init")
 
-    --TODO
+    self:loadConfig()
 end
 
 function main:initLog()
     Lib.setDebugLog(EngineVersionSetting:canUseCmd())
+end
+
+function main:loadConfig()
+    local jumpConfig = T(Config, "jumpConfig")
+    jumpConfig:init(Lib.readGameCsv("config/jump.csv"))
+
+    local teamShopConfig = T(Config, "teamShopConfig")
+    teamShopConfig:initConfig()
 end
 
 main:init()

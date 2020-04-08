@@ -4,19 +4,27 @@
 --- DateTime: 2020/3/21 22:39
 ---
 require "script_server.entity.entity"
+
+require "script_server.game.game"
+require "script_server.game.game_team"
+
 require "script_server.player.player"
 require "script_server.player.player_event"
 require "script_server.player.player_packet"
-require "script_server.trigger_handlers"
+require "script_server.player.player_pet_manager"
+
+require "script_server.shop.ItemShop"
+
 require "script_server.skill.skill_normal_atk"
 require "script_server.skill.skill_addExp"
 require "script_server.skill.multistage"
 require "script_server.skill.timeLine"
 require "script_server.skill.scene_skill"
-require "script_server.game.game_team"
+
+require "script_server.trigger_handlers"
+
 require "script_server.process.process_base"
 require "script_server.process.process_team"
-require "script_server.game.game"
 
 local main = {}
 
@@ -30,6 +38,9 @@ end
 
 function main:initLog()
     Lib.setDebugLog(EngineVersionSetting:canUseCmd())
+
+    local teamShopConfig = T(Config, "teamShopConfig")
+    teamShopConfig:initConfig()
 end
 
 main:init()
