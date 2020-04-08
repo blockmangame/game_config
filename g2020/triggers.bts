@@ -188,7 +188,7 @@ FUNC_BROADCAST_BLOOM_OPT
     $endTime = ArrayGet(array = $timeArr, index = $col)
     $cdTime = $endTime - $curTime
     If($cdTime <= 0) {
-        $cdTime = 14400 + $cdTime ------14400 = 12min * 60sec * 20ticks
+        $cdTime = @ticksInOneDay + $cdTime ------将一天的ticks开出来，由策划去配置。14400 = 12min * 60sec * 20ticks
     }
     StartTimer(rep = false, event = "FUNC_BROADCAST_BLOOM_OPT", bloomOpt = not $bloomOpt, time = $cdTime // 1, timeArr = $timeArr, col = $col, timeArrSize = $timeArrSize)
 }
