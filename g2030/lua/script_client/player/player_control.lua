@@ -8,7 +8,33 @@ local onGround = true
 local lockKeyJump = false
 
 local function doJumpStateChange(control, player)
-    --TODO
+    if player.isGliding then
+        player:setEntityProp("antiGravity", tostring(player.EntityProp.antiGravity))
+        player.motion = Lib.v3(0, 0, 0)
+
+        if player.isJumpMoveEnd then
+            player:setEntityProp("moveSpeed", tostring(0.0))
+        end
+        Skill.Cast(Me:cfg().freeFallSkill)
+    else
+        player:setEntityProp("antiGravity", tostring(player.EntityProp.gravity))
+
+        ---@type JumpConfig
+        local JumpConfig = T(Config, "JumpConfig")
+        local config = JumpConfig:getGlidingConfig()
+        local rotationYaw = player:getRotationYaw()
+        local rotationPitch = config.rotationPitch
+        local DEG2RAD = 0.01745329
+        local motionX = -(math.sin(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD))
+        local motionZ = math.cos(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD)
+        local motionY = -(math.sin(rotationPitch * DEG2RAD))
+        player.motion = Lib.v3(motionX, motionY, motionZ)
+        print("player.motion ", motionX, motionY, motionZ)
+
+        player:setEntityProp("moveSpeed", tostring(1.0))
+        Skill.Cast(Me:cfg().glidingSkill)
+    end
+    player.isGliding = (not player.isGliding)
 end
 
 ---@param player EntityClientMainPlayer
