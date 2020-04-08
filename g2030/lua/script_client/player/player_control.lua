@@ -25,6 +25,7 @@ local function doJumpStateChange(control, player)
         local motionY = math.cos(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD)
         local motionZ = -(math.sin(rotationPitch * DEG2RAD))
         player.motion = Lib.v3(motionX, motionY, motionZ)
+        print("player.motion ", motionX, motionY, motionZ)
 
         Skill.Cast(Me:cfg().glidingSkill)
     end

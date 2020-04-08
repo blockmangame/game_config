@@ -25,5 +25,6 @@ end
 function Player:recoverJumpProp()
     self:setEntityProp("jumpSpeed", tostring(self.EntityProp.jumpSpeed))
     self:setEntityProp("gravity", tostring(self.EntityProp.gravity))
+    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
     self:setEntityProp("moveSpeed", tostring(self.EntityProp.moveSpeed))
 end
