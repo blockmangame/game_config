@@ -8,11 +8,22 @@
         "type": "Composite",
         "params": [
             {
-                "type": "Box",
+                "type": "VerticalBox",
                 "params": [
                     0.2,
-                    0.2,
-                    0.21
+                    5,
+                    0.4
+                ]
+            },
+            {
+                "type": "VerticalBox",
+                "params": [
+                    1.5,
+                    4.8,
+                    0.4,
+                    -1.5,
+                    3.8,
+                    -0.4
                 ]
             }
         ]
@@ -20,5 +31,6 @@
     "disableShadow": true,
     "name": "",
     "brightnessScale":2.0,
+    "autoRotateColliderBox": true,
     "actorName": "g2020_roadlight.actor"
 }
