@@ -293,7 +293,7 @@ CHANGE_PLAYER_SCALE_ADULT
         $obj1.boundingBuff = nil
     }
 
-    If($obj1.interactionBuff ~= nil && $obj1.role ~= @adult)
+    If($obj1.interactionBuff ~= nil && $obj1.role ~= @adult && not $obj1.useTrolley) --因为已将手推车的交互加入了USER_INTERACTION_ACTION，所以需要在这里对手推车进行特殊处理，解决在进行手推车交互的两个玩家，当推着手推车的玩家切换体格后，会把手推车给回收了的问题。
     {
         ClearRide(entity = $obj1)
     }
@@ -334,7 +334,7 @@ CHANGE_PLAYER_SCALE_CHILD
          $obj1.boundingBuff = nil
     }
 
-    If($obj1.interactionBuff ~= nil && $obj1.role ~= @child)
+    If($obj1.interactionBuff ~= nil && $obj1.role ~= @child && not $obj1.useTrolley) --因为已将手推车的交互加入了USER_INTERACTION_ACTION，所以需要在这里对手推车进行特殊处理，解决在进行手推车交互的两个玩家，当推着手推车的玩家切换体格后，会把手推车给回收了的问题。
     {
         ClearRide(entity = $obj1)
     }
