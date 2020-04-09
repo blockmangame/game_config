@@ -19,9 +19,9 @@ local Tipdata = {
 
 function M:init()
 	WinBase.init(self, "partyTradeUI.json")
-	self:child("partyTradeUI-titleName"):SetText("gui.trade")
-	self:child("partyTradeUI-ruleBtn"):SetText("gui.trade.rule")
-	self:child("partyTradeUI-leftButton"):SetText("gui.trade.refuse")
+	self:child("partyTradeUI-titleName"):SetText(Lang:toText("gui.trade"))
+	self:child("partyTradeUI-ruleBtn"):SetText(Lang:toText("gui.trade.rule"))
+	self:child("partyTradeUI-leftButton"):SetText(Lang:toText("gui.trade.refuse"))
 
 	self.leftGrid = self:child("partyTradeUI-leftGridView")
 	self.rightGrid = self:child("partyTradeUI-rightGridView")
