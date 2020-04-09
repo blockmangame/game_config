@@ -20,6 +20,8 @@ function M:initWnd()
     self.btnSell = self:child("NinjaMain-SellBtn")
     self.btnPet = self:child("NinjaMain-PetBtn")
     self.btnExchangeCtr = self:child("NinjaMain-Exchange")
+    self.textBottomMessage = self:child("NinjaMain-BottomMessage")
+    self.textBottomMessage:SetText("")
 
     self:initEvent()
     UIMgr:new_widget("topValBar"):invoke("initViewByType",HP_VAL ,{11,53},self._root)
