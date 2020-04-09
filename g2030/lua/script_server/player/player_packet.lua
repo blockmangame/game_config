@@ -33,6 +33,9 @@ end
 function handles:SellExp(packet)
     self:sellExp()
 end
+function handles:ExchangeEquip(packet)
+    self:exchangeEquip(packet.fullName)
+end
 
 function handles:teamShopBuyItem(packet)
     local teamShop = require "script_server.shop.teamShop"

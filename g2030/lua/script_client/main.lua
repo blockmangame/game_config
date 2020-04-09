@@ -35,8 +35,8 @@ function main:initLog()
 end
 
 function main:loadConfig()
-    local jumpConfig = T(Config, "jumpConfig")
-    jumpConfig:init(Lib.readGameCsv("config/jump.csv"))
+    local JumpConfig = T(Config, "JumpConfig")
+    JumpConfig:init(Lib.readGameCsv("config/jump.csv"))
 
     local teamShopConfig = T(Config, "teamShopConfig")
     teamShopConfig:initConfig()

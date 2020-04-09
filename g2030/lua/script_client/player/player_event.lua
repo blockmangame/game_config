@@ -22,6 +22,26 @@ function events:onGroundChanged(lastOnGround, onGround)
     end
 end
 
+function events:fall(fallDistance)
+    print("fall " .. fallDistance)
+
+    local playerCfg = Me:cfg()
+    local fallAnimHeight = World.cfg.fallAnimHeight or 0
+    if fallDistance >= fallAnimHeight then
+        Skill.Cast(playerCfg.fallSkill1)
+    else
+        Skill.Cast(playerCfg.fallSkill2)
+    end
+end
+
 function events:jumpMoveEnd()
+    print("jumpMoveEnd")
+    self.isJumpMoveEnd = true
+
+    if self.isGliding then
+        return
+    end
+
     self:setEntityProp("moveSpeed", tostring(0.0))
+    Skill.Cast(Me:cfg().freeFallSkill)
 end

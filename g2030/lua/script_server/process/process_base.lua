@@ -80,18 +80,28 @@ end
 
 function ProcessBase:entityJoin(entity)
     local objID = entity.objID
+    self.entityList[objID] = entity
     if entity.isPlayer then
         self.playerCount = self.playerCount + 1
-        self.entityList[objID] = entity
     end
 end
 
 function ProcessBase:entityOut(entity)
-
+    local objID = entity.objID
+    if self.entityList[objID] == nil then
+        return
+    end
+    self.entityList[objID] = nil
+    if entity.isPlayer then
+        self.playerCount = self.playerCount - 1
+    end
 end
 
-function ProcessBase:isEntityInProcess()
-
+function ProcessBase:isEntityInProcess(objID)
+    if self.entityList[objID] == nil then
+        return false
+    end
+    return false
 end
 
 function ProcessBase:doJudge()

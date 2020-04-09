@@ -148,7 +148,7 @@ function TeamBase:onTeamUpgrade(level)
 end
 
 local function initTeamConfig()
-	local temp = Lib.readGameCsv("config/team_level.csv") or {}
+	local temp = Lib.readGameCsv("config/camp_level.csv") or {}
 
 	for _, cfg in pairs(temp) do
 		for _, info in ipairs(World.cfg.team) do

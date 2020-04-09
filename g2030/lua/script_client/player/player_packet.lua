@@ -18,7 +18,9 @@ function handles:itemShopRegion(packet)
         itemShop:onShow(packet.isShow)
     end
 end
-
+function handles:exchangeWeapon(packet)
+    self:setHandItem(packet.weapon)
+end
 function handles:initItemShopData(packet)
     print(string.format("handles:initItemShopData(packet)"))
     print("packet.packet is : ")

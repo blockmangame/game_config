@@ -13,5 +13,56 @@
   "skills": [
     "myplugin/action_mult_atk"
   ],
-  "jumpSkill": "myplugin/jump_skill"
+  "jumpSkill": "myplugin/jump_skill",
+  "ridePos": [
+    {
+        "attachPoint": "petAttachPoint1",
+        "ctrl": false,
+        "view": true
+    },
+    {
+        "attachPoint": "petAttachPoint2",
+        "ctrl": false,
+        "view": true
+    },
+    {
+        "attachPoint": "plusPetAttachPoint",
+        "ctrl": false,
+        "view": true
+    }
+  ],
+  "?attachPoints": "要添加新的挂点直接往后添加，不要从中间插入",
+  "attachPoints": [
+    {
+      "name": "petAttachPoint1",
+      "position": {"x": 1, "y": 0, "z": -0.5},
+      "rotation": {"x": 0, "y": 0, "z": 0},
+      "scale": 1,
+      "propagateScaling": true,
+      "alignWorldYAxis": false,
+      "matchActorOrientation": false
+    },
+    {
+      "name": "petAttachPoint2",
+      "position": {"x": -1, "y": 0, "z": -0.5},
+      "rotation": {"x": 0, "y": 0, "z": 0},
+      "scale": 1,
+      "propagateScaling": false,
+      "alignWorldYAxis": false,
+      "matchActorOrientation": false
+    },
+    {
+      "name": "plusPetAttachPoint",
+      "position": {"x":0, "y":0, "z":-0.5},
+      "rotation": {"x":0, "y":0, "z":0},
+      "scale": 1.1,
+      "propagateScaling": true,
+      "alignWorldYAxis": false,
+      "matchActorOrientation": false
+    }
+  ],
+  "fallSkill1": "myplugin/fall_skill1",
+  "fallSkill2": "myplugin/fall_skill2",
+  "freeFallSkill": "myplugin/freefall_skill",
+  "glidingSkill": "myplugin/gliding_skill"
 }
