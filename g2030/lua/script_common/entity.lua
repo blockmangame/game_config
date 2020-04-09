@@ -3,6 +3,8 @@ local ValueDef		= T(Entity, "ValueDef")
 -- key				= {isCpp,	client,	toSelf,	toOther,	init,	saveDB}
 ValueDef.jumpCount	= {false,	true,	false,	true,      1,		false}
 ValueDef.curExp		= {false,	false,	true,	true,       0,		true}--当前锻炼值
+ValueDef.maxExp		= {false,	false,	true,	true,       100,	true}--最大锻炼值
+ValueDef.perExp 	= {false,	false,	true,	true,       1,		false}--每次攻击锻炼值增加
 ValueDef.perExpPlu	= {false,	false,	true,	true,       1,		false}--锻炼值加成加成比例（付费特权。双倍）
 ValueDef.curLevel	= {false,	false,	true,	true,       1,		true}--当前阶数
 ValueDef.curHp		= {false,	false,	true,	true,       1,		false}--当前血量
@@ -64,7 +66,12 @@ end
 ---获取每次锻炼增幅
 function Entity:getPerExpPlus()
     ---TODO exp up calc func
-    return 1*self:getValue("WeaponId")
+    return self:getValue("perExp")*self:getValue("perExpPlu")
+end
+---设置每次攻击锻炼增幅值变化
+function Entity:deltaPerExpPlus(val)
+    assert(tonumber(val), "invalid input:" .. val .. "is not a number")
+    self:setValue("perExp",self:getValue("perExp")+val)
 end
 ---获取当前锻炼值
 function Entity:getCurExp()
@@ -72,12 +79,18 @@ function Entity:getCurExp()
 end
 ---设置当前锻炼值上限
 function Entity:getMaxExp()
-    ---TODO exp limit calc func
-    return 1*self:getValue("SashId")*self:getValue("perExpPlu")
+    return self:getValue("maxExp")
 end
+---当前锻炼值可兑换货币
 function Entity:getCurExpToCoin()
     return self:getValue("curExp")*10
 end
+---设置最大锻炼值变化
+function Entity:deltaExpMaxPlus(val)
+    assert(tonumber(val), "invalid input:" .. val .. "is not a number")
+    self:setValue("maxExp",self:getValue("maxExp")+val)
+end
+---锻炼值是否已满
 function Entity:isExpFull()
     return self:getCurExp()>=self:getMaxExp()
 end
