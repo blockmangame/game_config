@@ -75,7 +75,7 @@ end
 ---更换装备
 ---
 function Player:exchangeEquip(fullName)
-    self:addItem(fullName,1,"exchange")
+    self:addItem(fullName,1,nil,"exchange")
     local item1 =  self:searchItem("fullName",fullName)
     self:saveHandItem(item1,false)
 

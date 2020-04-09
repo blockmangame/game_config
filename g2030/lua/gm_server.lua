@@ -17,7 +17,7 @@ GMItem["g2030/掙錢！"] = function(self)
     self:addCurrency("chi", 1, "test")
 end
 GMItem["g2030/装备武器！"] = function(self)
-    self:addItem("myplugin/weapon_simple",1,"test")
+    self:addItem("myplugin/weapon_simple",1,nil,"test")
     local item1 =  self:searchItem("fullName","myplugin/weapon_simple")
     self:saveHandItem(item1,false)
 end
