@@ -119,7 +119,7 @@ function Equip:exchangeItem(player, itemName)
 end
 
 function Equip:initItem(player)
-    Lib.log_1(player:getEquip(), "Equip:initItem(player, itemId) 000000000000000000000" )
+    --Lib.log_1(player:getEquip(), "Equip:initItem(player, itemId) 000000000000000000000" )
     local buyInfo = player:getEquip()
     if not next(buyInfo) then
         print(" if not next(buyInfo) then")
@@ -140,7 +140,7 @@ function Equip:initItem(player)
         end
     end
     self:islandAndAdvanceToUnlockPay(player)
-    Lib.log_1(player:getEquip(), "Equip:initItem(player, itemId) 111111111111111111111" )
+    --Lib.log_1(player:getEquip(), "Equip:initItem(player, itemId) 111111111111111111111" )
 end
 
 function Equip:islandAndAdvanceToUnlockPay(player)

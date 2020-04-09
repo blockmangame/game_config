@@ -23,3 +23,20 @@ Lib.subscribeEvent(Event.EVENT_EXP_CHANGE, function()
     }
     )
     end)
+
+Lib.subscribeEvent(Event.EVENT_NOT_ENOUGH_MONEY, function()
+    print("EVENT_NOT_ENOUGH_MONEY")
+    UI:openWnd("ninjaCommonDialog"):initView(
+            {
+                content = Lang:toText("gui_not_enough_money_notice"),
+                contentCenter = true,
+                txtTitle = Lang:toText("gui_tip"),
+                hideClose = false,
+                leftTxt = Lang:toText("gui_sure"),
+                rightTxt = Lang:toText("gui_cancel"),
+                leftCb = function() end,
+                rightCb = function() end
+
+            }
+    )
+end)

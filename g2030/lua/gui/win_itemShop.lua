@@ -476,7 +476,10 @@ function M:onBuyAll()
 end
 
 function M:senderBuyAll()
-    M:checkItemStatus(true)
+    print(string.format("<M:senderBuyAll:> TypeId: %s  ItemId: %s", tostring(self.selectTab), tostring(self.selectItemId)))
+    if not self:checkCanSend(true) then
+        return
+    end
     local packet = {
         pid = "SyncItemShopBuyAll",
         tabId = self.selectTab,
@@ -486,7 +489,7 @@ end
 
 function M:senderDetailButtonClick()
     print(string.format("<M:senderDetailButtonClick:> TypeId: %s  ItemId: %s", tostring(self.selectTab), tostring(self.selectItemId)))
-    if not self:checkItemStatus() then
+    if not self:checkCanSend(false) then
         return
     end
     local packet = {
@@ -497,8 +500,8 @@ function M:senderDetailButtonClick()
     Me:sendPacket(packet)
 end
 
-function M:checkItemStatus(isOnlyPrice)
-    local isflag = isOnlyPrice or false
+function M:checkCanSend(notStatus)
+    local isFlag = notStatus or false
     local itemConfig = {}
     if self.selectTab == TabType.Equip then
         itemConfig = EquipConfig
@@ -508,14 +511,34 @@ function M:checkItemStatus(isOnlyPrice)
         itemConfig = AdvanceConfig
     end
     local item = itemConfig[self.selectItemId]
-    if isflag then--or item.price < Me:getCurrency(Coin:coinNameByCoinId(item.moneyType)).count then
-        return false
-    elseif item.status == BuyStatus.Used then
-        return false
-    else
-        print("金币不够 Coin:coinNameByCoinId(item.moneyType : "..tostring(Coin:coinNameByCoinId(item.moneyType)).." item.price: "..tostring(item.price))
+    if not item then
+        return
     end
-    return true
+    if not isFlag then
+        if item.status == BuyStatus.Used then
+            return false
+        end
+    end
+    print("金币不够 Coin:coinNameByCoinId(item.moneyType : "..tostring(Coin:coinNameByCoinId(item.moneyType)).." item.price: "..tostring(item.price))
+    return self:checkItemMoney(item)
+end
+
+function M:checkItemMoney(item)
+    if item.isPay then
+        local wallet = Me:data("wallet")
+        if wallet["gDiamonds"] then
+            if wallet["gDiamonds"].count > item.price then
+                return true
+            end
+        end
+    else
+        if Coin:countByCoinName(Me, Coin:coinNameByCoinId(item.moneyType)) > item.price then
+            --return Me:getCurrency(Coin:coinNameByCoinId(item.moneyType)).count > item.price
+            return true
+        end
+    end
+    Lib.emitEvent(Event.EVENT_NOT_ENOUGH_MONEY)
+    return false
 end
 
 function M:initItemShop(data)
