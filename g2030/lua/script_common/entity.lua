@@ -25,10 +25,10 @@ ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},     true }--已�
 ValueDef.teamSkinId = {false,   true,    true,  false,       0,     true }--已装备的阵营皮肤id
 
 --====================宠物、式神相关数据================
-ValueDef.PetEquippedList= {false,   false,  true,   true,       {},    true}--当前角色宠物装备表
-ValueDef.PlusPetEquippedIndex={false,false, true,   true,       0,      true}--当前角色式神装备表
+ValueDef.petEquippedList= {false,   false,  true,   true,       {},    true}--当前角色宠物装备表
+ValueDef.plusPetEquippedIndex={false,false, true,   true,       0,      true}--当前角色式神装备表
 ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,      true}--当前角色获取过的宠物实体总数（不会减少）
-ValueDef.AllPetAttr     = {false,   false,  true,   true,       {},    true}--宠物、式神相关数据
+ValueDef.allPetAttr     = {false,   false,  true,   true,       {},    true}--宠物、式神相关数据
 --[[
 宠物、式神相关数据存储索引说明：索引为createPet后返回的index，通过索引插入的AllPetAttr，该表不为序列，期间可能会出现nil
 即强化（消耗）后相关索引项将置为nil
