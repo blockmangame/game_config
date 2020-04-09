@@ -11,7 +11,7 @@ Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE_END")
 Event.register("EVENT_NOT_ENOUGH_MONEY")
 
 if World.isClient then
-
+    Event.register("EVENT_SHOW_BOTTOM_MESSAGE")
 else
     --TODO
 end

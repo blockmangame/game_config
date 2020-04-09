@@ -7,6 +7,11 @@ local jumpEndTime = 0
 local onGround = true
 local lockKeyJump = false
 
+local function showJumpCountMessage(jumpCount, maxJumpCount)
+    local message = string.format(Lang:toText("gui_jump_count_message"), jumpCount, maxJumpCount)
+    Lib.emitEvent("EVENT_SHOW_BOTTOM_MESSAGE", message)
+end
+
 local function doJumpStateChange(control, player)
     if player.isGliding then
         player:setEntityProp("antiGravity", tostring(player.EntityProp.antiGravity))
@@ -44,6 +49,8 @@ end
 local function jump_impl(control, player)
     local jumpCount = player:getJumpCount()
     local maxJumpCount = player:getMaxJumpCount()
+
+    showJumpCountMessage(jumpCount, maxJumpCount)
 
     if jumpCount <= 0 then
         doJumpStateChange(control, player)

@@ -46,6 +46,10 @@ function M:initEvent()
     self:subscribe(self.btnVip, UIEvent.EventButtonClick, function()
         self:openPayShop()
     end)
+
+    Lib.subscribeEvent("EVENT_SHOW_BOTTOM_MESSAGE", function(message)
+        self.textBottomMessage:SetText(message)
+    end)
 end
 
 ---右侧技能按钮排版切换
