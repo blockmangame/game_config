@@ -334,3 +334,8 @@ function Actions.SyncWorldTime(data, params, context)
         worldTime = worldTime
     })
 end
+
+function Actions.IsClimbing(data, params, context)
+    local pos = Lib.tov3(params.entity:isClimbing())
+    return not pos:isZero()
+end
