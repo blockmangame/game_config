@@ -5347,7 +5347,8 @@ ENTER_EQUIPMEN {
     {
         Return()
 	}
-    If(IsDrive(entity = $obj1))
+    $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
+    If(IsDrive(entity = $obj1) and $typeIndex == 1)
     {
         Return()
     }
