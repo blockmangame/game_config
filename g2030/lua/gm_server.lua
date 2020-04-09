@@ -10,6 +10,19 @@ end
 GMItem["g2030/addBuff"] = function(self)
     self:addBuff("myplugin/example", -1)
 end
+GMItem["g2030/花钱！"] = function(self)
+    self:payCurrency("chi", 1,false,false, "test")
+end
+GMItem["g2030/掙錢！"] = function(self)
+    self:addCurrency("chi", 1, "test")
+end
+GMItem["g2030/装备武器！"] = function(self)
+    self:addItem("myplugin/weapon_simple",1,nil,"test")
+    local item1 =  self:searchItem("fullName","myplugin/weapon_simple")
+    self:saveHandItem(item1,false)
+end
+
+
 GMItem["g2030/添加回血buff"] = function(self)
     self:addBuff("myplugin/healing_s",40)
 end

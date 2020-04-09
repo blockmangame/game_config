@@ -18,6 +18,15 @@ function Player:sellExp()
     self:sendPacket(packet)
     --print(string.format("Player:setValue %s %s", tostring(key), Lib.v2s(value, 1)))
 end
+function Player:exchangeEquip(fullname)
+    local packet = {
+        pid = "ExchangeEquip",
+        objID = self.objID,
+        fullname = fullname,
+    }
+    self:sendPacket(packet)
+end
+
 --function Player:saveJumpProp()
 --    --TODO
 --end
@@ -27,6 +36,7 @@ function Player:recoverJumpProp()
     self:setEntityProp("gravity", tostring(self.EntityProp.gravity))
     self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
     self:setEntityProp("moveSpeed", tostring(self.EntityProp.moveSpeed))
+    self:setEntityProp("moveAcc", tostring(self.EntityProp.moveAcc))
 
     self.isGliding = false
     self.isJumpMoveEnd = false

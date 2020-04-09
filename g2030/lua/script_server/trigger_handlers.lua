@@ -39,3 +39,4 @@ end
 function Handlers.ENTITY_REBIRTH(context)
     context.obj1:resetHp()
 end
+

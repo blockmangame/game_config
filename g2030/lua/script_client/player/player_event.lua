@@ -26,7 +26,8 @@ function events:fall(fallDistance)
     print("fall " .. fallDistance)
 
     local playerCfg = Me:cfg()
-    if fallDistance >= World.cfg.fallAnimHeight then
+    local fallAnimHeight = World.cfg.fallAnimHeight or 0
+    if fallDistance >= fallAnimHeight then
         Skill.Cast(playerCfg.fallSkill1)
     else
         Skill.Cast(playerCfg.fallSkill2)
