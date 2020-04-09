@@ -25,20 +25,20 @@ end
 
 -----------------------------------Pet Model Test----------------------------------
 local Entity
-GMItem["g2030/发放一个宠物（不创建）"] = function(self)
-
+GMItem["g2030Pet/发放宠物（不创建）"] = function(self)
+    self:getNewPet(1);
 end
-GMItem["g2030/发放一个式神（不创建）"] = function(self)
-
+GMItem["g2030Pet/发放式神（不创建）"] = function(self)
+    self:getNewPlusPet(1);
 end
-GMItem["g2030/装备一个宠物"] = function(self)
-
+GMItem["g2030Pet/装备宠物"] = function(self)
+    self:callPet(1, 1);
 end
-GMItem["g2030/装备一个式神"] = function(self)
-
+GMItem["g2030Pet/装备式神"] = function(self)
+    self:callPet(2, 3);
 end
-GMItem["sample/释放宠物技能"] = function(self)
-    Skill.Cast("myplugin/pet_1_1_1_attack", {targetID=self.objID}, Entity)
+GMItem["g2030Pet/clear"] = function(self)
+    self:reSetAll();
 end
 -----------------------------------Pet Model Test End-------------------------------
 
