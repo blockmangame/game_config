@@ -1,6 +1,6 @@
 {
     "canClick": true,
-    "carMove": true,
+    "carMove": false,
     "carConfig": {
         "traction": 16000,
         "reverseTraction": 10000,
@@ -35,7 +35,7 @@
             "passengerAction": {
                 "base": "riding"
             },
-			"attachPoint": "ride1"
+            "attachPoint": "ride1"
         },
         {
             "yaw": 0,
@@ -54,7 +54,7 @@
             "passengerAction": {
                 "base": "riding"
             },
-			"attachPoint": "ride2"
+            "attachPoint": "ride2"
         }
     ],
     "attachPoints": [
@@ -186,5 +186,6 @@
     "rideItem": "myplugin/car_item_old_04",
     "loadSectionMaxInterval": 7000,
     "disableShadow": true,
-    "stepHeight": 0.4
+    "stepHeight": 0.4,
+    "moveSpeed": 0.4
 }
