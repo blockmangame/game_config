@@ -14,3 +14,16 @@ Define.petType = {
     pet = 1,        --宠物
     plusPet = 2     --式神
 }
+
+Define.TabType = {
+    Equip = 1,
+    Belt = 2,
+    Advance = 3,
+}
+
+Define.BuyStatus = {
+    Lock = 1, --未解锁
+    Unlock = 2, --解锁
+    Buy = 3, --购买
+    Used = 4, --使用
+}

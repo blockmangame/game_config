@@ -1,26 +1,27 @@
-local ItemShop = Store.ItemShop
+local ItemShop = T(Store, "ItemShop")
 local Equip =  require "script_server.shop.Equip"
 local Belt =  require "script_server.shop.Belt"
 local Advance =  require "script_server.shop.Advance"
+local TabType = T(Define, "TabType")
 
 function ItemShop:operationByType(player, tabId, itemId)
     print(string.format("<ItemShop:operationByType> TypeId: %s  ItemId: %s", tostring(tabId), tostring(itemId)))
-    if tabId == ItemShop.TabType.Equip then
+    if tabId == TabType.Equip then
         Equip:operation(player, itemId)
-    elseif tabId == ItemShop.TabType.Belt then
+    elseif tabId == TabType.Belt then
         Belt:operation(player, itemId)
-    elseif tabId == ItemShop.TabType.Advance then
+    elseif tabId == TabType.Advance then
         Advance:operation(player, itemId)
     end
 end
 
 function ItemShop:BuyAll(player, tabId, itemId)
-    print(string.format("<ItemShop:operationByType> TypeId: %s  ItemId: %s", tostring(tabId), tostring(itemId)))
-    if tabId == ItemShop.TabType.Equip then
+    print(string.format("<ItemShop:operationByType> TypeId: %s", tostring(tabId)))
+    if tabId == TabType.Equip then
         Equip:BuyAll(player, itemId)
-    elseif tabId == ItemShop.TabType.Belt then
+    elseif tabId == TabType.Belt then
         Belt:BuyAll(player, itemId)
-    elseif tabId == ItemShop.TabType.Advance then
+    elseif tabId == TabType.Advance then
         Advance:BuyAll(player, itemId)
     end
 end
@@ -43,12 +44,12 @@ end
 
 function ItemShop:sendInitAllItem(player)
     local buyInfo = {}
-    for _, tabType in pairs(ItemShop.TabType) do
-        if tabType == ItemShop.TabType.Equip then
+    for _, tabType in pairs(TabType) do
+        if tabType == TabType.Equip then
             buyInfo[tabType] = player:getEquip()
-        elseif tabType == ItemShop.TabType.Belt then
+        elseif tabType == TabType.Belt then
             buyInfo[tabType] = player:getBelt()
-        elseif tabType == ItemShop.TabType.Advance then
+        elseif tabType == TabType.Advance then
             --buyInfo[tabType] = {player:getCurLevel()}
         end
     end
@@ -96,20 +97,7 @@ function ItemShop:sendChangeItemByTab(player, tabType, changeInfo)
     player:sendPacket(packet)
 end
 
-function ItemShop:checkMoney(player, moneyType, price)
-    local checkMoney = false
-    if "gDiamonds" == Coin:coinNameByCoinId(moneyType) then
-        player:consumeDiamonds("gDiamonds", price, function(ret)
-            if ret then
-                checkMoney = true
-                print("consumeDiamonds 1"..tostring(ret))
-                --return  true
-            else
-                print("consumeDiamonds 2"..tostring(ret))
-            end
-        end)
-    else
-        checkMoney = player:payCurrency(Coin:coinNameByCoinId(moneyType), price, false, false, "ItemShop")
-    end
-    return checkMoney
+function ItemShop:initAdvanceItem(player)
+    Equip:initAdvanceItem(player)
+    Belt:initAdvanceItem(player)
 end

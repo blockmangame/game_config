@@ -1,28 +1,28 @@
-local ItemShop = Store.ItemShop
+local ItemShop = T(Store, "ItemShop")
+local itemConfig = T(Config, "BeltConfig"):getSettings()
+local BuyStatus = T(Define, "BuyStatus")
 local Belt = {}
-local itemConfig = ItemShop.BeltConfig
+Belt.tabType = T(Define, "TabType").Belt
 function Belt:operation(player, itemId)
     print(string.format("<Belt:operation> ItemId: %s status: %s", tostring(itemId), tostring(itemConfig[itemId].status)))
     for id, value in pairs((itemConfig)) do
         if id == itemId then
-            if value.status == ItemShop.BuyStatus.Unlock then
+            if value.status == BuyStatus.Unlock then
                 self:onBuy(player, itemId)
-            elseif value.status == ItemShop.BuyStatus.Buy then
+            elseif value.status == BuyStatus.Buy then
                 self:onUsed(player, itemId)
-            elseif value.status == ItemShop.BuyStatus.Used then
-                self:onUnload(player, itemId)
             end
         end
     end
 end
 
-function Belt:BuyAll(player, itemId)
-    print(string.format("<Advance:BuyAll> ItemId: %s status: %s", tostring(itemId), tostring(itemConfig[itemId].status)))
+function Belt:BuyAll(player)
+    print(string.format("<Advance:BuyAll> "))
     for id, value in pairs((itemConfig)) do
-        if value.status == ItemShop.BuyStatus.Lock or value.status == ItemShop.BuyStatus.Unlock then
-            if  "gDiamonds" ~= Coin:coinNameByCoinId(value.moneyType) then
+        if value.status == BuyStatus.Lock or value.status == BuyStatus.Unlock then
+            if  not value.isPay then
                 if not self:onBuy(player, id) then
-                    break
+                    return
                 end
             end
         end
@@ -33,7 +33,7 @@ function Belt:onBuy(player, itemId)
     print("Belt:onBuy(player, itemId)"..tostring(itemId))
     local item = itemConfig[itemId]
     local checkMoney = false
-    if "gDiamonds" == Coin:coinNameByCoinId(item.moneyType) then
+    if item.isPay then
         player:consumeDiamonds("gDiamonds", item.price, function(ret)
             if ret then
                 self:onBuySuccess(player, itemId)
@@ -44,7 +44,9 @@ function Belt:onBuy(player, itemId)
             end
         end)
     else
-        checkMoney = player:payCurrency(Coin:coinNameByCoinId(item.moneyType), item.price, false, false, "ItemShop")
+        if player:getIslandLv() >= item.islandLv then
+            checkMoney = player:payCurrency(Coin:coinNameByCoinId(item.moneyType), item.price, false, false, "ItemShop")
+        end
     end
     if checkMoney then
         self:onBuySuccess(player, itemId)
@@ -62,26 +64,29 @@ function Belt:onBuySuccess(player, itemId)
     --to Used
     if itemConfig[itemId] then
         for i, v in pairs(buyInfo) do
-            if v == ItemShop.BuyStatus.Used then
-                buyInfo[i] = ItemShop.BuyStatus.Buy
-                itemConfig[tonumber(i)].status = ItemShop.BuyStatus.Buy
-                changeInfo[tonumber(i)] = ItemShop.BuyStatus.Buy
+            if v == BuyStatus.Used then
+                buyInfo[i] = BuyStatus.Buy
+                itemConfig[tonumber(i)].status = BuyStatus.Buy
+                changeInfo[tonumber(i)] = BuyStatus.Buy
             end
         end
-        buyInfo[tostring(itemId)] = ItemShop.BuyStatus.Used
-        itemConfig[itemId].status = ItemShop.BuyStatus.Used
-        changeInfo[itemId] = ItemShop.BuyStatus.Used
+        buyInfo[tostring(itemId)] = BuyStatus.Used
+        itemConfig[itemId].status = BuyStatus.Used
+        changeInfo[itemId] = BuyStatus.Used
+        self:exchangeItem(player, itemConfig[itemId].beltName)
     end
     --Lock to Unlock
-    if "gDiamonds" ~= Coin:coinNameByCoinId(itemConfig[itemId].moneyType) then
+    if not itemConfig[itemId].isPay then
         local nextId = self:getNextNotPayId(itemId)
-        if nextId > itemId and itemConfig[nextId] then
-            buyInfo[tostring(nextId)] = ItemShop.BuyStatus.Unlock
-            itemConfig[nextId].status = ItemShop.BuyStatus.Unlock
-            changeInfo[nextId] = ItemShop.BuyStatus.Unlock
+        if nextId > itemId and itemConfig[nextId] and itemConfig[nextId].status ~= BuyStatus.Unlock then
+            if player:getIslandLv() >= itemConfig[nextId].islandLv then
+                buyInfo[tostring(nextId)] = BuyStatus.Unlock
+                itemConfig[nextId].status = BuyStatus.Unlock
+                changeInfo[nextId] = BuyStatus.Unlock
+            end
         end
     end
-    ItemShop:sendChangeItemByTab(player, ItemShop.TabType.Belt, changeInfo)
+    ItemShop:sendChangeItemByTab(player, self.tabType, changeInfo)
 end
 
 function Belt:onUsed(player, itemId)
@@ -89,22 +94,25 @@ function Belt:onUsed(player, itemId)
         local buyInfo = player:getBelt()
         local changeInfo = {}
         for i, v in pairs(buyInfo) do
-            if v == ItemShop.BuyStatus.Used then
-                buyInfo[i] = ItemShop.BuyStatus.Buy
-                itemConfig[tonumber(i)].status = ItemShop.BuyStatus.Buy
-                changeInfo[tonumber(i)] = ItemShop.BuyStatus.Buy
+            if v == BuyStatus.Used then
+                buyInfo[i] = BuyStatus.Buy
+                itemConfig[tonumber(i)].status = BuyStatus.Buy
+                changeInfo[tonumber(i)] = BuyStatus.Buy
             end
         end
-        buyInfo[tostring(itemId)] = ItemShop.BuyStatus.Used
-        itemConfig[itemId].status = ItemShop.BuyStatus.Used
-        changeInfo[itemId] = ItemShop.BuyStatus.Used
+        buyInfo[tostring(itemId)] = BuyStatus.Used
+        itemConfig[itemId].status = BuyStatus.Used
+        self:exchangeItem(player, itemConfig[itemId].beltName)
+        changeInfo[itemId] = BuyStatus.Used
         --Lib.log_1(player:getBelt(), "onUsed 2")
-        ItemShop:sendChangeItemByTab(player, ItemShop.TabType.Belt, changeInfo)
+        ItemShop:sendChangeItemByTab(player, self.tabType, changeInfo)
     end
 end
 
-function Belt:onUnload(player, itemId)
-    print("Equip:onUnload(player, itemId)"..tostring(itemId))
+function Belt:exchangeItem(player, itemName)
+    local fullName = string.format("myplugin/%s", itemName)
+    print("Belt:exchangeEquip : "..tostring(fullName))
+    player:exchangeEquip(fullName)
 end
 
 function Belt:initItem(player)
@@ -113,16 +121,18 @@ function Belt:initItem(player)
     if not next(buyInfo) then
         print(" if not next(buyInfo) then")
         if itemConfig[1] then
-            itemConfig[1].status = ItemShop.BuyStatus.Unlock
-            buyInfo[tostring(itemConfig[1].id)] = ItemShop.BuyStatus.Unlock
+            itemConfig[1].status = BuyStatus.Unlock
+            buyInfo[tostring(itemConfig[1].id)] = BuyStatus.Unlock
         end
-        player:setBelt(buyInfo)
     end
 
     for i, status in pairs(buyInfo) do
         for id, value in pairs((itemConfig)) do
             if tonumber(i) == id then
                 value.status = status
+                if status == BuyStatus.Used then
+                    self:exchangeItem(player, itemConfig[tonumber(i)].beltName)
+                end
             end
         end
     end
@@ -134,20 +144,20 @@ function Belt:islandAndAdvanceToUnlockPay(player)
     local changeInfo = {}
     local buyInfo = player:getBelt()
     for id, value in pairs((itemConfig)) do
-        if "gDiamonds" == Coin:coinNameByCoinId(value.moneyType) then
+        if value.isPay then
             if player:getIslandLv() >= value.islandLv then
                 --if player:getCurLevel() >= ItemShop.PayEquipConfig[value.id].unlockAdvancedLevel then
-                    if value.status == ItemShop.BuyStatus.Lock then
-                        value.status = ItemShop.BuyStatus.Unlock
-                        buyInfo[tostring(value.id)] = ItemShop.BuyStatus.Unlock
-                        itemConfig[value.id].status = ItemShop.BuyStatus.Unlock
-                        changeInfo[value.id] = ItemShop.BuyStatus.Unlock
+                    if value.status == BuyStatus.Lock then
+                        value.status = BuyStatus.Unlock
+                        buyInfo[tostring(value.id)] = BuyStatus.Unlock
+                        itemConfig[value.id].status = BuyStatus.Unlock
+                        changeInfo[value.id] = BuyStatus.Unlock
                     end
                 --end
             end
         end
     end
-    ItemShop:sendChangeItemByTab(player, ItemShop.TabType.Belt, changeInfo)
+    ItemShop:sendChangeItemByTab(player, self.tabType, changeInfo)
 end
 
 function Belt:getNextNotPayId(curId)
@@ -156,7 +166,7 @@ function Belt:getNextNotPayId(curId)
         return curId
     end
     for i = curId + 1, key do
-        if  "gDiamonds" ~= Coin:coinNameByCoinId(itemConfig[i].moneyType) then
+        if  not itemConfig[i].isPay then
             return itemConfig[i].id
         end
     end
@@ -168,40 +178,41 @@ function Belt:initAdvanceItem(player)
     local buyInfo = player:getBelt()
     local isUsePay = false
     for id, item in pairs(itemConfig) do
-        if "gDiamonds" == Coin:coinNameByCoinId(itemConfig[tonumber(id)].moneyType) then
-            if item.status == ItemShop.BuyStatus.Used then
+        if itemConfig[tonumber(id)].isPay then
+            if item.status == BuyStatus.Used then
                 isUsePay = true
             end
         end
     end
     for id, item in pairs(itemConfig) do
-        if "gDiamonds" ~= Coin:coinNameByCoinId(itemConfig[tonumber(id)].moneyType) then
+        if not itemConfig[tonumber(id)].isPay then
             if tonumber(id) == 1 then
-                local status = ItemShop.BuyStatus.Buy
+                local status = BuyStatus.Buy
                 if not isUsePay then
-                    status = ItemShop.BuyStatus.Used
+                    status = BuyStatus.Used
+                    self:exchangeItem(player, itemConfig[tonumber(id)].beltName)
                 end
                 buyInfo[tostring(id)] = status
                 itemConfig[tonumber(id)].status = status
                 changeInfo[tonumber(id)] = status
             elseif tonumber(id) == 2 then
-                local status = ItemShop.BuyStatus.Unlock
+                local status = BuyStatus.Unlock
                 --if not isUsePay then
-                --    status = ItemShop.BuyStatus.Unlock
-                    buyInfo[tostring(id)] = ItemShop.BuyStatus.Unlock
+                --    status = BuyStatus.Unlock
+                    buyInfo[tostring(id)] = BuyStatus.Unlock
                 --else
                 --    buyInfo[tostring(id)] = nil
                 --end
                 itemConfig[tonumber(id)].status = status
                 changeInfo[tonumber(id)] = status
             else
-                itemConfig[tonumber(id)].status = ItemShop.BuyStatus.Lock
-                changeInfo[tonumber(id)] = ItemShop.BuyStatus.Lock
+                itemConfig[tonumber(id)].status = BuyStatus.Lock
+                changeInfo[tonumber(id)] = BuyStatus.Lock
                 buyInfo[tostring(id)] = nil
             end
         end
     end
-    ItemShop:sendChangeItemByTab(player, ItemShop.TabType.Belt, changeInfo)
+    ItemShop:sendChangeItemByTab(player, self.tabType, changeInfo)
     self:islandAndAdvanceToUnlockPay(player)
 end
 

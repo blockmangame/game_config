@@ -11,7 +11,11 @@ require "script_common.trigger"
 require "script_common.entity"
 require "script_common.config.jump_config"
 require "common.gm"
-require "script_common.shop.ItemShop"
+
+require "script_common.config.equip_config"
+require "script_common.config.payequip_config"
+require "script_common.config.belt_config"
+require "script_common.config.advance_config"
 require "script_common.config.teamShopConfig"
 
 if World.isClient then
