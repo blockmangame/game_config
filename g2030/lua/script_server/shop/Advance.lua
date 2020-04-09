@@ -1,18 +1,18 @@
-local ItemShop = Store.ItemShop
-local Equip =  require "script_server.shop.Equip"
-local Belt =  require "script_server.shop.Belt"
-local itemConfig = ItemShop.AdvanceConfig
+local ItemShop = T(Store, "ItemShop")
+local itemConfig = T(Config, "AdvanceConfig"):getSettings()
+local BuyStatus = T(Define, "BuyStatus")
 local Advance = {}
+Advance.tabType = T(Define, "TabType").Advance
 
 function Advance:operation(player, itemId)
     print(string.format("<Equip:operation> ItemId: %s status: %s", tostring(itemId), tostring(itemConfig[itemId].status)))
     for id, value in pairs((itemConfig)) do
         if id == itemId then
-            if value.status == ItemShop.BuyStatus.Unlock then
+            if value.status == BuyStatus.Unlock then
                 self:onBuy(player, itemId)
-            elseif value.status == ItemShop.BuyStatus.Buy then
+            elseif value.status == BuyStatus.Buy then
                 self:onUsed(player, itemId)
-            elseif value.status == ItemShop.BuyStatus.Used then
+            elseif value.status == BuyStatus.Used then
                 self:onUnload(player, itemId)
             end
         end
@@ -20,12 +20,12 @@ function Advance:operation(player, itemId)
 end
 
 function Advance:BuyAll(player, itemId)
-    print(string.format("<Advance:BuyAll> ItemId: %s status: %s", tostring(itemId), tostring(itemConfig[itemId].status)))
+    print(string.format("<Advance:BuyAll> "))
     for id, value in pairs((itemConfig)) do
-        if value.status == ItemShop.BuyStatus.Lock or value.status == ItemShop.BuyStatus.Unlock then
-            if  "gDiamonds" ~= Coin:coinNameByCoinId(value.moneyType) then
+        if value.status == BuyStatus.Lock or value.status == BuyStatus.Unlock then
+            if  not value.isPay then
                 if not self:onBuy(player, id) then
-                    break
+                    return
                 end
             end
         end
@@ -36,7 +36,7 @@ function Advance:onBuy(player, itemId)
     print("Equip:onBuy(player, itemId)"..tostring(itemId))
     local item = itemConfig[itemId]
     local checkMoney = false
-    if "gDiamonds" == Coin:coinNameByCoinId(item.moneyType) then
+    if item.isPay then
         player:consumeDiamonds("gDiamonds", item.price, function(ret)
             if ret then
                 self:onBuySuccess(player, itemId)
@@ -59,31 +59,32 @@ function Advance:onBuy(player, itemId)
 end
 
 function Advance:onBuySuccess(player, itemId)
-    print("Equip:onBuySuccess(player, itemId)"..tostring(itemId))
+    print("Advance:onBuySuccess(player, itemId)"..tostring(itemId))
+    print("Advance:onBuySuccess(player:getCurLevel(1))"..tostring(player:getCurLevel()))
+
     local changeInfo = {}
+    local curLevel = player:getCurLevel()
     --to Used
     if itemConfig[itemId] then
-        local buyInfo ={}
-        --Lib.log_1(player:getEquip(), "onBuySuccess 1")
-        buyInfo[tostring(itemId)] = ItemShop.BuyStatus.Used
-        itemConfig[itemId].status = ItemShop.BuyStatus.Used
-        changeInfo[itemId] = ItemShop.BuyStatus.Used
-        --player:setEquip(buyInfo)
-        --Lib.log_1(player:getEquip(), "onBuySuccess 2")
+        itemConfig[itemId].status = BuyStatus.Used
+        changeInfo[itemId] = BuyStatus.Used
+        player:setCurLevel(itemConfig[itemId].level)
+        player:setIslandLv(itemConfig[itemId].level)
+        print("Advance:onBuySuccess(player:setIslandLv(2))"..tostring(player:getIslandLv()))
+        print("Advance:onBuySuccess(player:getCurLevel(2))"..tostring(player:getCurLevel()))
+        --Lock to Unlock
+        if not itemConfig[itemId].isPay then
+            local nextId = self:getNextNotPayId(itemId)
+            if nextId > itemId and itemConfig[nextId] and itemConfig[nextId].status ~= BuyStatus.Unlock then
+                if player:getIslandLv() >= itemConfig[nextId].islandLv then
+                    itemConfig[nextId].status = BuyStatus.Unlock
+                    changeInfo[nextId] = BuyStatus.Unlock
+                end
+            end
+        end
+        ItemShop:sendChangeItemByTab(player, self.tabType, changeInfo)
+        self:onFinishAdvanced(player)
     end
-    --Lock to Unlock
-    local nextId = self:getNextNotPayId(itemId)
-    if nextId > itemId and itemConfig[nextId] then
-        local buyInfo = {}
-        --Lib.log_1(player:getEquip(), "onBuySuccess 3")
-        buyInfo[tostring(nextId)] = ItemShop.BuyStatus.Unlock
-        itemConfig[nextId].status = ItemShop.BuyStatus.Unlock
-        changeInfo[nextId] = ItemShop.BuyStatus.Unlock
-        --player:setEquip(buyInfo)
-        --Lib.log_1(player:getEquip(), "onBuySuccess 4")
-    end
-    ItemShop:sendChangeItemByTab(player, ItemShop.TabType.Advance, changeInfo)
-    self:onFinishAdvanced(player)
 end
 
 function Advance:onUsed(player, itemId)
@@ -101,31 +102,40 @@ function Advance:initItem(player)
     local buyInfo = {}
     local unlockId = 0
     for id, value in pairs((itemConfig)) do
-        if curLevel >= value.value1 then
-            buyInfo[tostring(id)] = ItemShop.BuyStatus.Used
-            value.status = ItemShop.BuyStatus.Used
-            changeInfo[id] = ItemShop.BuyStatus.Used
+        if id == 1 or curLevel >= value.level then
+            buyInfo[tostring(id)] = BuyStatus.Used
+            value.status = BuyStatus.Used
+            changeInfo[id] = BuyStatus.Used
             unlockId = id + 1
-            player:setCurLevel(id)
+            curLevel = value.level
         end
     end
     if unlockId > 1 and itemConfig[unlockId] then
-        buyInfo[tostring(unlockId)] = ItemShop.BuyStatus.Unlock
-        itemConfig[unlockId].status = ItemShop.BuyStatus.Unlock
-        changeInfo[unlockId] = ItemShop.BuyStatus.Unlock
+        player:setCurLevel(curLevel)
+        buyInfo[tostring(unlockId)] = BuyStatus.Unlock
+        itemConfig[unlockId].status = BuyStatus.Unlock
+        changeInfo[unlockId] = BuyStatus.Unlock
     end
-    ItemShop:sendChangeItemByTab(player, ItemShop.TabType.Advance, changeInfo)
+    ItemShop:sendChangeItemByTab(player, self.tabType, changeInfo)
     --self:onFinishAdvanced(player)
     --Lib.log_1(changeInfo, "Equip:initItem(player, itemId) 111111111111111111111" )
 end
 
 function Advance:getNextNotPayId(curId)
-    return curId + 1
+    local key = #itemConfig
+    if curId == key then
+        return curId
+    end
+    for i = curId + 1, key do
+        if  not itemConfig[i].isPay then
+            return itemConfig[i].id
+        end
+    end
+    return curId
 end
 
 function Advance:onFinishAdvanced(player)
-    Equip:initAdvanceItem(player)
-    Belt:initAdvanceItem(player)
+    ItemShop:initAdvanceItem(player)
 end
 
 return Advance

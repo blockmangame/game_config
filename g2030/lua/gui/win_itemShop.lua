@@ -1,11 +1,18 @@
-local ItemShop = Store.ItemShop
-local TabType = Store.ItemShop.TabType
-local BuyStatus = Store.ItemShop.BuyStatus
-local EquipConfig = ItemShop.EquipConfig
-local PayEquipConfig = ItemShop.PayEquipConfig
-local BeltConfig = ItemShop.BeltConfig
-local AdvanceConfig = ItemShop.AdvanceConfig
+local EquipConfig = T(Config, "EquipConfig"):getSettings()
+local PayEquipConfig = T(Config, "PayEquipConfig"):getSettings()
+local BeltConfig = T(Config, "BeltConfig"):getSettings()
+local AdvanceConfig = T(Config, "AdvanceConfig"):getSettings()
+
+local TabType = Define.TabType
+local BuyStatus = Define.BuyStatus
+
+local function getMoneyIconByMoneyType(moneyType)
+    local coinName = Coin:coinNameByCoinId(moneyType)
+    assert(coinName, "Coin:coinNameByCoinId(moneyType) ：" .. tostring(moneyType).. " is not a exit")
+    return Coin:iconByCoinName(coinName)
+end
 --local M = {}
+
 function M:init()
     print("M:init() 999999999999999999999999")
     ----Lib.log_1(ItemShop.EquipConfig)
@@ -19,6 +26,7 @@ function M:onLoad()
     self.selectTab = TabType.Equip--选中的tab类型
     self.selectItemId = 0 --选中的商品的Id
     self.itemsGridView = {}--商品列表
+    self.islandLockId = -1
 
     self.siDetailValue = {}
     self.siDetailValueIcon = {}
@@ -126,6 +134,7 @@ function M:addItemsGridView(isResetPos)
     print("flag ： "..tostring(isResetPos))
     self.gvItemsGridView:RemoveAllItems()
     if self.selectTab == TabType.Equip then
+        --Lib.log_1(EquipConfig, "addItemsGridView")
         self:addViewByConfig(EquipConfig, isResetPos)
     elseif self.selectTab == TabType.Belt then
         self:addViewByConfig(BeltConfig, isResetPos)
@@ -137,6 +146,7 @@ end
 
 function M:addViewByConfig(Config, isResetPos)
     local clickItemId = 0
+    self.islandLockId = self:onFindIslandLockId(Config)
     for i, Value in pairs(Config) do
         --local ItemIcon = "set:LiftingSimulatorShop1.json image:equipOrSkillBg"
         --print("<addViewByConfig:> kind "..tostring(self.selectTab))
@@ -150,11 +160,13 @@ function M:addViewByConfig(Config, isResetPos)
         local itemHeight = (contentHeight - 0.1) / 3
         local area = {x = { 0, 0 }, y = { 0, 0 }, w = { itemWidth, 0 }, h = { itemWidth, 0 }}
         --Lib.log_1 (area)
-        shopItem:invoke("initItem",self.selectTab, Value, area)
+        shopItem:invoke("initItem",self.selectTab, Value, area, self.islandLockId)
         --self.gvContentItemsGridView:AddItem1(shopItem, 0, index)
-        self:subscribe(shopItem, UIEvent.EventWindowClick, function()
-            self:onClickItem(Value.id)
-        end)
+        if self.islandLockId == Value.id or Value.status ~= BuyStatus.Lock then
+            self:subscribe(shopItem, UIEvent.EventWindowClick, function()
+                self:onClickItem(Value.id, Value.status)
+            end)
+        end
         self.gvItemsGridView:AddItem(shopItem)
         self.itemsGridView[i] = shopItem
         if i == 1 then
@@ -170,7 +182,31 @@ function M:addViewByConfig(Config, isResetPos)
     end
 end
 
-function M:onClickItem(itemId)
+function M:onFindIslandLockId(itemConfig)
+    print(" --- Me:getIslandLv() --- : "..tostring(Me:getIslandLv()))
+    local key ={}
+    for i,v in pairs(itemConfig) do
+        if not v.isPay then
+            table.insert(key,i)
+        end
+    end
+    table.sort(key,function(a,b)return (tonumber(a) <  tonumber(b)) end)
+    for i=#key, 1, -1 do
+        if itemConfig[key[i]].status ~= BuyStatus.Lock and itemConfig[key[i]].status ~= BuyStatus.Unlock then
+            if key[i+1] then
+                if itemConfig[key[i+1]] and itemConfig[key[i+1]].status == BuyStatus.Lock then
+                    if itemConfig[key[i+1]].islandLv > Me:getIslandLv() then
+                        print(" --- M:onFindIslandLockId(itemConfig) --- : "..tostring(itemConfig[key[i+1]].id))
+                        return itemConfig[key[i+1]].id
+                    end
+                end
+            end
+        end
+    end
+    return -1
+end
+
+function M:onClickItem(itemId, status)
     print("M:onClickItem() self.itemId "..tostring(itemId).." self.selectTab : "..tostring(self.selectTab))
     if self.selectTab == TabType.Equip then
         self:onClickEquipItem(itemId)
@@ -189,59 +225,58 @@ end
 
 function M:onClickEquipItem(itemId)
     local item = EquipConfig[itemId]
+    --Lib.log_1(item, "onClickEquipItem")
     if not item then
-        print("M:onClickEquipItem(itemId) : is not exit :"..tonumber(itemId))
+        print("M:onClickEquipItem(itemId) : is not exit :"..tostring(itemId))
         return
     end
     self.selectItemId = itemId
     print("<onClickEquipItem:> itemId "..tostring(itemId))
-    print("<onClickEquipItem:> equip.Status "..tostring(item.Status))
     self:changeAllItemClickStatus(itemId)
-    self:choseUseDetailUi(item.moneyType)
-    if item.status == BuyStatus.Lock then
-        self:lockItemDetail()
+    self:choseUseDetailUi(item.isPay)
+    if self.islandLockId == itemId then
+        print("<onClickEquipItem:> islandLock "..tostring(itemId))
+        self:lockItemDetail(true, item.islandIcon)
         return
+    end
+    if item.status == BuyStatus.Lock then
     else
         self:showItemDetail()
     end
     local strItemPropertyNum1 = item.value1
-    local payFitnessEquip = PayEquipConfig[tostring(itemId)]
+    local payEquip = PayEquipConfig[tostring(itemId)]
     local strDetailDescribe = Lang:toText(item.desc)
-    if "gDiamonds" == Coin:coinNameByCoinId(item.moneyType) and payFitnessEquip then
-        if item.status == BuyStatus.Buy or item.Status == BuyStatus.Used then
-            strDetailDescribe = Lang:toText(payFitnessEquip.efficiencyFixHugeDes)
-            local specialNum = string.format("%.0f", payFitnessEquip.efficiencyFixHuge)
-            strItemPropertyNum1 =  tostring(payFitnessEquip.efficiencyFixHuge)
+    if item.isPay and payEquip then
+        if item.status == BuyStatus.Buy or item.status == BuyStatus.Used then
+            strDetailDescribe = Lang:toText(payEquip.efficiencyFixHugeDes)
+            local specialNum = string.format("%.0f", payEquip.efficiencyFixHuge)
+            strItemPropertyNum1 =  tostring(payEquip.efficiencyFixHuge)
             strDetailDescribe = string.format(strDetailDescribe,specialNum)
-        elseif tonumber(Me:getCurLevel()) <= payFitnessEquip.unlockAdvancedLevel  then
-            strDetailDescribe = Lang:toText(item.Desc)
-            local specialStr = "+"..payFitnessEquip.efficiencyPercentage.."%"
-            strItemPropertyNum1 = payFitnessEquip.efficiencyPercentage.."%"
+        elseif tonumber(Me:getCurLevel()) <= payEquip.unlockAdvancedLevel  then
+            strDetailDescribe = Lang:toText(item.desc)
+            local specialStr = "+"..payEquip.efficiencyPercentage.."%"
+            strItemPropertyNum1 = payEquip.efficiencyPercentage.."%"
             strDetailDescribe = string.format(strDetailDescribe,specialStr)
-        elseif tonumber(Me:getCurLevel()) > payFitnessEquip.unlockAdvancedLevel then
-            strDetailDescribe = Lang:toText(payFitnessEquip.efficiencyFixDes)
-            if Me:getCurLevel() >= payFitnessEquip.invailedAdvancedLevel then
-                local specialNum = string.format("%.0f", payFitnessEquip.efficiencyFix)
-                strItemPropertyNum1 = tostring(payFitnessEquip.efficiencyFix)
+        elseif tonumber(Me:getCurLevel()) > payEquip.unlockAdvancedLevel then
+            strDetailDescribe = Lang:toText(payEquip.efficiencyFixDes)
+            if Me:getCurLevel() >= payEquip.invailedAdvancedLevel then
+                local specialNum = string.format("%.0f", payEquip.efficiencyFix)
+                strItemPropertyNum1 = tostring(payEquip.efficiencyFix)
                 strDetailDescribe = string.format(strDetailDescribe,specialNum)
             else
-                local specialStr = "+"..payFitnessEquip.efficiencyPercentage.."%"
-                strItemPropertyNum1 = payFitnessEquip.efficiencyPercentage.."%"
+                local specialStr = "+"..payEquip.efficiencyPercentage.."%"
+                strItemPropertyNum1 = payEquip.efficiencyPercentage.."%"
                 strDetailDescribe = string.format(strDetailDescribe,specialStr)
             end
         end
     else
-        strItemPropertyNum1 = Lang:toText(item.value1)
+        strItemPropertyNum1 = Lang:toText(item.efficiency)
         strDetailDescribe = string.format(strDetailDescribe,strItemPropertyNum1)
     end
     self.stDetailTitle:SetText(Lang:toText(tostring(item.name)))
     self.siDetailItemIcon:SetImage(item.icon)
     self.stDetailValueText[1]:SetText(Lang:toText(tostring("ValueText1")))
     self.stDetailValueNum[1]:SetText(tostring(strItemPropertyNum1))
-    self.stDetailValueText[2]:SetText(Lang:toText(tostring("ValueText2")))
-    self.stDetailValueNum[2]:SetText(tostring(item.value2))
-    self.stDetailValueText[3]:SetText(Lang:toText(tostring("ValueText3")))
-    self.stDetailValueNum[3]:SetText(tostring(item.value3))
     self.siDetailValue[2]:SetVisible(false)
     self.siDetailValue[3]:SetVisible(false)
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 224 }, { 0, 258}, { 0, 152})
@@ -249,7 +284,7 @@ function M:onClickEquipItem(itemId)
     if item.status == BuyStatus.Unlock then
         self.stDetailText:SetArea({ 0, 70 }, { 0, 0 }, { 0, 110}, { 0, 50})
         self.stDetailText:SetTextColor({1, 1, 1, 1})
-        local strMoneyIcon = ItemShop:getMoneyIconByMoneyType(item.moneyType)
+        local strMoneyIcon = getMoneyIconByMoneyType(item.moneyType)
         self.siDetailGold:SetImage(strMoneyIcon)
         self.stDetailText:SetText(tostring(item.price))
     end
@@ -277,9 +312,14 @@ function M:onClickBeltItem(itemId)
     end
     self.selectItemId = itemId
     print("<onClickEquipItem:> itemId "..tostring(itemId))
-    print("<onClickEquipItem:> equip.Status "..tostring(item.Status))
+    print("<onClickEquipItem:> equip.status "..tostring(item.status))
     self:changeAllItemClickStatus(itemId)
-    self:choseUseDetailUi(item.moneyType)
+    self:choseUseDetailUi(item.isPay)
+    if self.islandLockId == itemId then
+        print("<onClickBeltItem:> islandLock "..tostring(itemId))
+        self:lockItemDetail(true, item.islandIcon)
+        return
+    end
     if item.status == BuyStatus.Lock then
         self:lockItemDetail()
         return
@@ -289,17 +329,13 @@ function M:onClickBeltItem(itemId)
     self.stDetailTitle:SetText(Lang:toText(tostring(item.name)))
     self.siDetailItemIcon:SetImage(item.icon)
     self.stDetailValueText[1]:SetText(Lang:toText(tostring("ValueText1")))
-    self.stDetailValueNum[1]:SetText(tonumber(item.value1))
-    self.stDetailValueText[2]:SetText(Lang:toText(tostring("ValueText2")))
-    self.stDetailValueNum[2]:SetText(tonumber(item.value2))
-    self.stDetailValueText[3]:SetText(Lang:toText(tostring("ValueText3")))
-    self.stDetailValueNum[3]:SetText(tonumber(item.value3))
+    self.stDetailValueNum[1]:SetText(tonumber(item.workoutUp))
     self.siDetailValue[2]:SetVisible(false)
     self.siDetailValue[3]:SetVisible(false)
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 224 }, { 0, 258}, { 0, 152})
     self.stDetailDescribe:SetText(Lang:toText(item.desc))
     if item.status == BuyStatus.Unlock then
-        local strMoneyIcon = ItemShop:getMoneyIconByMoneyType(item.moneyType)
+        local strMoneyIcon = getMoneyIconByMoneyType(item.moneyType)
         self.siDetailGold:SetImage(strMoneyIcon)
         self.stDetailText:SetText(tostring(item.price))
     end
@@ -327,9 +363,14 @@ function M:onClickAdvancelItem(itemId)
     end
     self.selectItemId = itemId
     print("<onClickEquipItem:> itemId "..tostring(itemId))
-    print("<onClickEquipItem:> equip.Status "..tostring(item.Status))
+    print("<onClickEquipItem:> equip.status "..tostring(item.status))
     self:changeAllItemClickStatus(itemId)
-    self:choseUseDetailUi(item.moneyType)
+    self:choseUseDetailUi(item.isPay)
+    if self.islandLockId == itemId then
+        print("<onClickEquipItem:> islandLock "..tostring(itemId))
+        self:lockItemDetail(true, item.islandIcon)
+        return
+    end
     if item.status == BuyStatus.Lock then
         self:lockItemDetail()
         return
@@ -339,17 +380,17 @@ function M:onClickAdvancelItem(itemId)
     self.stDetailTitle:SetText(Lang:toText(tostring(item.name)))
     self.siDetailItemIcon:SetImage(item.icon)
     self.stDetailValueText[1]:SetText(Lang:toText(tostring("ValueText1")))
-    self.stDetailValueNum[1]:SetText(tonumber(item.value1))
+    self.stDetailValueNum[1]:SetText(tonumber(item.attack))
     self.stDetailValueText[2]:SetText(Lang:toText(tostring("ValueText2")))
-    self.stDetailValueNum[2]:SetText(tonumber(item.value2))
+    self.stDetailValueNum[2]:SetText(tonumber(item.speed))
     self.stDetailValueText[3]:SetText(Lang:toText(tostring("ValueText3")))
-    self.stDetailValueNum[3]:SetText(tonumber(item.value3))
+    self.stDetailValueNum[3]:SetText(tonumber(item.workout))
     --self.siDetailValue[2]:SetVisible(false)
     --self.siDetailValue[3]:SetVisible(false)
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 305 }, { 0, 258}, { 0, 71})
     self.stDetailDescribe:SetText(Lang:toText(item.desc))
     if item.status == BuyStatus.Unlock then
-        local strMoneyIcon = ItemShop:getMoneyIconByMoneyType(item.moneyType)
+        local strMoneyIcon = getMoneyIconByMoneyType(item.moneyType)
         self.siDetailGold:SetImage(strMoneyIcon)
         self.stDetailText:SetText(tostring(item.price))
     end
@@ -376,12 +417,20 @@ function M:onClickAdvancelItem(itemId)
     self.selectItemId = itemId
 end
 
-function M:lockItemDetail()
-    --self.siDetailItemLock:SetVisible(true)
-    --self.stDetailDescribe:SetVisible(false)
-    --for i = 1, 3 do
-    --    self.siDetailValue[i]:SetVisible(false)
-    --end
+function M:lockItemDetail(islandLock, islandIcon)
+    self.siDetailItemLock:SetVisible(false)
+    if islandLock then
+        self.stDetailTitle:SetVisible(false)
+        self.siDetailItemIcon:SetImage(islandIcon)
+        self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 224 }, { 0, 258}, { 0, 152})
+        self.stDetailDescribe:SetText(Lang:toText("need_next_islands_unlocks"))
+        self.stDetailDescribe:SetVisible(true)
+    else
+        self.stDetailDescribe:SetVisible(false)
+    end
+    for i = 1, 3 do
+        self.siDetailValue[i]:SetVisible(false)
+    end
     self.btnDetail:SetVisible(false)
     self.stDetailText:SetVisible(false)
     self.siDetailGold:SetVisible(false)
@@ -419,30 +468,28 @@ function M:onOpen()
 end
 
 function M:onDetailButton()
-    print("<onDetailButton:> self.selectTab "..tostring(self.selectTab))
-    print("<onDetailButton:> self.selectItemId "..tostring(self.selectItemId))
     self:senderDetailButtonClick()
 end
 
 function M:onBuyAll()
-    print("<onBuyAll:> self.selectTab "..tostring(self.selectTab))
-    print("<onBuyAll:> self.selectItemId "..tostring(self.selectItemId))
     self:senderBuyAll()
 end
 
 function M:senderBuyAll()
-    M:checkItemStatus(true)
+    print(string.format("<M:senderBuyAll:> TypeId: %s  ItemId: %s", tostring(self.selectTab), tostring(self.selectItemId)))
+    if not self:checkCanSend(true) then
+        return
+    end
     local packet = {
         pid = "SyncItemShopBuyAll",
         tabId = self.selectTab,
-        itemId = self.selectItemId
     }
     Me:sendPacket(packet)
 end
 
 function M:senderDetailButtonClick()
     print(string.format("<M:senderDetailButtonClick:> TypeId: %s  ItemId: %s", tostring(self.selectTab), tostring(self.selectItemId)))
-    if not self:checkItemStatus() then
+    if not self:checkCanSend(false) then
         return
     end
     local packet = {
@@ -453,8 +500,8 @@ function M:senderDetailButtonClick()
     Me:sendPacket(packet)
 end
 
-function M:checkItemStatus(isOnlyPrice)
-    local isflag = isOnlyPrice or false
+function M:checkCanSend(notStatus)
+    local isFlag = notStatus or false
     local itemConfig = {}
     if self.selectTab == TabType.Equip then
         itemConfig = EquipConfig
@@ -464,14 +511,34 @@ function M:checkItemStatus(isOnlyPrice)
         itemConfig = AdvanceConfig
     end
     local item = itemConfig[self.selectItemId]
-    if isflag then--or item.price < Me:getCurrency(Coin:coinNameByCoinId(item.moneyType)).count then
-        return false
-    elseif item.status == BuyStatus.Used then
-        return false
-    else
-        print("金币不够 Coin:coinNameByCoinId(item.moneyType : "..tostring(Coin:coinNameByCoinId(item.moneyType)).." item.price: "..tostring(item.price))
+    if not item then
+        return
     end
-    return true
+    if not isFlag then
+        if item.status == BuyStatus.Used then
+            return false
+        end
+    end
+    print("金币不够 Coin:coinNameByCoinId(item.moneyType : "..tostring(Coin:coinNameByCoinId(item.moneyType)).." item.price: "..tostring(item.price))
+    return self:checkItemMoney(item)
+end
+
+function M:checkItemMoney(item)
+    if item.isPay then
+        local wallet = Me:data("wallet")
+        if wallet["gDiamonds"] then
+            if wallet["gDiamonds"].count > item.price then
+                return true
+            end
+        end
+    else
+        if Coin:countByCoinName(Me, Coin:coinNameByCoinId(item.moneyType)) > item.price then
+            --return Me:getCurrency(Coin:coinNameByCoinId(item.moneyType)).count > item.price
+            return true
+        end
+    end
+    Lib.emitEvent(Event.EVENT_NOT_ENOUGH_MONEY)
+    return false
 end
 
 function M:initItemShop(data)
@@ -529,31 +596,30 @@ function M:updateItem(configTable, itemDate)
     end
 end
 
-function M:getNextId(itemConfig)
+function M:getNextId()
     local itemConfig = {}
     if self.selectTab == TabType.Equip then
         itemConfig = EquipConfig
     elseif self.selectTab == TabType.Belt then
         itemConfig = BeltConfig
     elseif self.selectTab == TabType.Advance then
-        --return self.selectItemId
         itemConfig = AdvanceConfig
     end
     local curId = self.selectItemId
     for i=1, #itemConfig do
         if itemConfig[i].status == BuyStatus.Used then
-            if itemConfig[i + 1] and itemConfig[i + 1].status == BuyStatus.Lock then
-                curId = itemConfig[i].id
-            else
-                curId = itemConfig[i].id + 1
+            if itemConfig[i + 1] and itemConfig[i + 1].status ~= BuyStatus.Lock then
+                curId = itemConfig[i + 1].id
+            --else
+            --    curId = itemConfig[i].id + 1
             end
         end
     end
     return curId
 end
 
-function M:choseUseDetailUi(moneyType)
-    if "gDiamonds" == Coin:coinNameByCoinId(moneyType) then
+function M:choseUseDetailUi(isPay)
+    if isPay then
         self:useCostDetailUi()
         return
     end
