@@ -2,11 +2,13 @@
     "canClick": true,
     "actorName": "boy.actor",
     "canMove": true,
+    "maxHp": 15,
     "waterline": 0.8,
     "canBoat": true,
     "collisionCamp": 1,
-	"nameBorder": true,
+    "nameBorder": true,
     "disableShadow": true,
+    "posSyncDelay": 2,
     "hideSelfName": true,
     "climbType": 1,
     "maxHouseVarsSize": 8,
@@ -15,15 +17,13 @@
     "canTurnHead": false,
     "hideDeep": 0,
     "joinPartyGiveMoney": 2,
-    "familyIdentityX": -2,
-    "familyIdentityY": -1,
-    "sameFamilyPic": "[P=plugin/myplugin/image/home.png]",
-    "diffFamilyPic": "[P=plugin/myplugin/image/door1.png]",
+    "familyIdentityOffsetX": 0,
+    "familyIdentityOffsetY": 5,
     "inviteJoinFamilyBuff": "myplugin/test_buff",
     "applyJoinFamilyBuff": "myplugin/test_buff",
     "inviteFriendBuff": "myplugin/test_buff",
     "invitePartyBuff": "myplugin/test_buff",
-    "getMoneyTipSoundBuff": "myplugin/test_buff",
+    "getMoneyTipSoundBuff": "myplugin/test_momey_buff",
     "saveVars": {
         "houseVars": []
     },
@@ -262,6 +262,7 @@
         "centerBtns": [
             {
                 "showName": true,
+                "enableTextBorder": true,
                 "image": "plugin/myplugin/image/hand_click.png",
                 "nextCfgKey": "interaction_choices",
                 "imageSize": {
@@ -277,11 +278,11 @@
     "interaction_choices": {
         "cfgKey": "interaction_choices",
         "aroundParams": {
-            "disableAutoHideText":true,
+            "disableAutoHideText": true,
             "startAngle": 90,
             "endAngle": 450,
             "widgetFileName": "widget_button_2",
-            "radius": 150,
+            "radius": 160,
             "imageSize": {
                 "width": 200,
                 "height": 97
@@ -296,9 +297,9 @@
         },
         "aroundBtns": [
             {
-                "text": "gui.send.trade",
+                "text": "interact_trade",
                 "event": "REQ_TRADE",
-                "image": "plugin/myplugin/image/burger.png"
+                "image": "set:party_interaction_ui.json image:trade"
             },
             {
                 "text": "interact_add_friend",
@@ -306,11 +307,11 @@
                     "funcName": "checkIsFriend"
                 },
                 "event": "EVENT_FRIEND_OPERACTION_ADD_FRIEND",
-                "image": "set:party_interaction_ui.json image:interaction_add_friend"
+                "image": "set:party_interaction_ui.json image:add_friend"
             },
             {
                 "text": "interact_feed",
-                "image": "set:party_interaction_ui.json image:interaction_feed",
+                "image": "set:party_interaction_ui.json image:feed",
                 "checkCanShow": {
                     "funcName": "checkTypeHandItem",
                     "key": "base",
@@ -320,7 +321,7 @@
             },
             {
                 "text": "interact_banish",
-                "image": "set:party_interaction_ui.json image:interaction_banish",
+                "image": "set:party_interaction_ui.json image:banish",
                 "checkCanShow": {
                     "funcName": "checkInSelfParty"
                 },
@@ -328,17 +329,17 @@
             },
             {
                 "text": "interact_act",
-                "/ps":"交互菜单",
+                "/ps": "交互菜单",
                 "customCheckCanHide": {
                     "funcName": "checkCanHideInteract"
                 },
-                "image": "set:party_interaction_ui.json image:interaction_act",
-                "nextCfgKey":"interaction_act_choices"
+                "image": "set:party_interaction_ui.json image:act",
+                "nextCfgKey": "interaction_act_choices"
             },
             {
                 "/ps": "邀请",
                 "text": "interact_invite_family",
-                "image": "set:party_interaction_ui.json image:interaction_join_family",
+                "image": "set:party_interaction_ui.json image:invite_family",
                 "customCheckCanShow": {
                     "funcName": "checkCanShowInviteFamily"
                 },
@@ -347,57 +348,45 @@
             {
                 "/ps": "申请",
                 "text": "interact_apply_family",
-                "image": "set:party_interaction_ui.json image:interaction_join_family",
+                "image": "set:party_interaction_ui.json image:apply_family",
                 "customCheckCanShow": {
                     "funcName": "checkCanShowApplyFamily"
                 },
                 "event": "INTERACTION_APPLY_FAMILY"
             },
             {
-                "text": "",
-                "/ps":"拉手",
-                "image": "plugin/myplugin/image/handinhand.png",
+                "text": "interact_hand_in_hand",
+                "/ps": "拉手",
+                "image": "set:party_interaction_ui.json image:hand_in_hand",
                 "event": "INTERACTION_HAND_IN_HAND",
-                "customCheckCanShow":{
-                    "funcName":"checkCanBabyHandInHand"
-                },
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
+                "customCheckCanShow": {
+                    "funcName": "checkCanBabyHandInHand"
                 }
             },
             {
-                "text": "",
-                "/ps":"大背小",
-                "image": "plugin/myplugin/image/piggyback.png",
+                "text": "interact_piggyback",
+                "/ps": "大背小",
+                "image": "set:party_interaction_ui.json image:piggyback",
                 "event": "INTERACTION_PIGGYBACK",
-                "customCheckCanShow":{
-                    "funcName":"checkCanAdultCarryBaby"
-                },
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
+                "customCheckCanShow": {
+                    "funcName": "checkCanAdultCarryBaby"
                 }
             },
             {
-                "text": "",
-                "/ps":"大抱小",
-                "image": "plugin/myplugin/image/pickup.png",
+                "text": "interact_pickup",
+                "/ps": "大抱小",
+                "image": "set:party_interaction_ui.json image:pickup",
                 "event": "INTERACTION_PICK",
-                "customCheckCanShow":{
-                    "funcName":"checkCanAdultPickBaby"
-                },
-                "imageSize": {
-                    "width": 96,
-                    "height": 96
+                "customCheckCanShow": {
+                    "funcName": "checkCanAdultPickBaby"
                 }
             },
             {
                 "text": "interact_trolley",
-                "image": "plugin/myplugin/image/trolley.png",
+                "image": "set:party_interaction_ui.json image:trolley",
                 "event": "INTERACTION_BABY_TROLLEY",
-                "customCheckCanShow":{
-                    "funcName":"checkCanAdultPutBabyIntoTrolley"
+                "customCheckCanShow": {
+                    "funcName": "checkCanAdultPutBabyIntoTrolley"
                 },
                 "checkCanShow": {
                     "funcName": "checkProp",
@@ -406,9 +395,9 @@
                 }
             },
             {
-                "text": "dakai_zengsong!++++++++",
+                "text": "interact_gift",
                 "event": "EVENT_OPEN_BAG_BY_GIVEAWAY",
-                "image": "set:party_interaction_ui.json image:interaction_add_friend"
+                "image": "set:party_interaction_ui.json image:gift"
             }
         ]
     },
@@ -418,7 +407,7 @@
             "startAngle": 0,
             "endAngle": 360,
             "widgetFileName": "widget_button_2",
-            "radius": 100,
+            "radius": 130,
             "imageSize": {
                 "width": 200,
                 "height": 97
@@ -435,7 +424,7 @@
             {
                 "text": "",
                 "image": "plugin/myplugin/image/back.png",
-                "nextCfgKey":"interaction_choices",
+                "nextCfgKey": "interaction_choices",
                 "imageSize": {
                     "width": 96,
                     "height": 96
@@ -445,8 +434,8 @@
                 "text": "",
                 "image": "plugin/myplugin/image/clap.png",
                 "event": "INTERACTION_CLAP",
-                "customCheckCanShow":{
-                    "funcName":"checkCanClap"
+                "customCheckCanShow": {
+                    "funcName": "checkCanClap"
                 },
                 "imageSize": {
                     "width": 96,
@@ -457,8 +446,8 @@
                 "text": "",
                 "image": "plugin/myplugin/image/hug.png",
                 "event": "INTERACTION_HUG",
-                "customCheckCanHide":{
-                    "funcName":"checkCanHideHug"
+                "customCheckCanHide": {
+                    "funcName": "checkCanHideHug"
                 },
                 "imageSize": {
                     "width": 96,
@@ -478,8 +467,8 @@
                 "text": "",
                 "image": "plugin/myplugin/image/handshake.png",
                 "event": "INTERACTION_HANDSHAKE",
-                "customCheckCanShow":{
-                    "funcName":"checkCanShakeHand"
+                "customCheckCanShow": {
+                    "funcName": "checkCanShakeHand"
                 },
                 "imageSize": {
                     "width": 96,
@@ -490,8 +479,8 @@
                 "text": "",
                 "image": "plugin/myplugin/image/raiseheight.png",
                 "event": "INTERACTION_RAISE_HEIGHT",
-                "customCheckCanShow":{
-                    "funcName":"checkCanAdultRaiseBaby"
+                "customCheckCanShow": {
+                    "funcName": "checkCanAdultRaiseBaby"
                 },
                 "imageSize": {
                     "width": 96,
@@ -502,8 +491,8 @@
                 "text": "",
                 "image": "plugin/myplugin/image/coax.png",
                 "event": "INTERACTION_COAX",
-                "customCheckCanShow":{
-                    "funcName":"checkCanTouchHead"
+                "customCheckCanShow": {
+                    "funcName": "checkCanTouchHead"
                 },
                 "imageSize": {
                     "width": 96,
@@ -514,8 +503,8 @@
                 "text": "",
                 "image": "plugin/myplugin/image/rideon.png",
                 "event": "INTERACTION_RIDE",
-                "customCheckCanShow":{
-                    "funcName":"checkCanBabyRideAdult"
+                "customCheckCanShow": {
+                    "funcName": "checkCanBabyRideAdult"
                 },
                 "imageSize": {
                     "width": 96,
@@ -528,8 +517,8 @@
         "radius": 3,
         "offset": {
             "x": 0,
-            "y": -1,
-            "z": 2
+            "y": 0,
+            "z": 0
         }
     },
     "uiEvents": {
@@ -590,7 +579,7 @@
             "nextCfgKey": "partyStore",
             "titleKey": "allDec",
             "text": "ui_decStoreList_partyStore",
-            "image": "set:Edit_1.json image:Edit_Kitchen_Icon.png",
+            "image": "set:Edit_2.json image:Edit_Patry_Icon.png",
             "event": "SHOW_DEC_STORE_LIST"
         },
         {
@@ -625,7 +614,7 @@
             "nextCfgKey": "courtyardStore",
             "titleKey": "allDec",
             "text": "ui_decStoreList_courtyardStore",
-            "image": "set:Edit_1.json image:Edit_Toilet_Icon.png",
+            "image": "set:Edit_2.json image:Edit_Courtyard_Icon.png",
             "event": "SHOW_DEC_STORE_LIST"
         },
         {
@@ -988,8 +977,34 @@
             "propagateScaling": true,
             "alignWorldYAxis": false,
             "matchActorOrientation": false
+        },
+        {
+            "name": "sitPoint_3",
+            "bone": "b_pelvis",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "rotation": {
+                "x": 0,
+                "y": 180,
+                "z": 90
+            },
+            "scale": 10,
+            "propagateScaling": true,
+            "alignWorldYAxis": false,
+            "matchActorOrientation": false
         }
     ],
+    "boundingVolume": {
+        "type": "VerticalBox",
+        "params": [
+            0.7,
+            3.8,
+            0.7
+        ]
+    },
     "cameraCtrBody": true,
     "moveStateSwithSkillCfgs": [
         {
