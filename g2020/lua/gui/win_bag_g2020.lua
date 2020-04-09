@@ -391,6 +391,9 @@ function M:fetchAllBagItem()
 					elseif canEquipStatus == 3 then
 						Client.ShowTip(1, Lang:toText("disable_create_car_in_the_house"), 20)
 						return
+                    elseif canEquipStatus == 4 then
+						Client.ShowTip(1, Lang:toText("disable_create_baby_trolley_in_the_climbing"), 20)
+						return
 					end
 					if self.equipUI then
 						self.equipUI:SetVisible(false)
@@ -455,6 +458,13 @@ function M:canEquip(item)
 			return 3
 		end
 	end
+
+    if item:cfg().typeIndex == 1 then
+        local pos = Lib.tov3(Me:isClimbing())
+        if not pos:isZero() then
+            return 4
+        end
+    end
 	return 0
 end
 

@@ -72,6 +72,12 @@ WEAR_ITEM {
     ElseIf($typeIndex == 1)
     {
 		--baby trolley
+
+        If(IsClimbing(entity = $obj1))
+        {
+            Return()
+        }
+
 		ClearItemUseByKey(entity = $obj1, key = "typeIndex", valueArray = NewArray(3, 1))
     	$obj1.equipItem = $item
         $obj1.otherItem = true
@@ -5101,6 +5107,12 @@ EQUIP_BABY_TROLLEY --params: cfgPath
     {
         Return()
     }
+
+    If(IsClimbing(entity = $obj1))
+    {
+        Return()
+    }
+
 	-- 栋哥哥说去掉，怕以后加回去就先注释了
     -- If(not GetEntityOnGround(entity = $obj1))
     -- {
