@@ -297,61 +297,6 @@ CHRONIC_KILL_SELF_BY_DAMAGE{
     Damage(entity = $obj1, damage = $damage)
 }
 
-MOVE_HOME_FROM_PROTECT_TO_PUBLIC(){ --把房子移到公共区域/重新创建房子/这个逻辑作废，购买特权重新分配服务器
-    If(not ArrayFind(array = $obj1.privilege, value = "myplugin/home_privilege")){
-        Return()
-    }
-    $curMapName = GetEntityMapName(entity = $obj1)
-    $holdPos = true
-    ForLoop(from = 1, to = 15, key = "index"){
-        $tmp = Concat(p1 = "house", p2 = $index, p3 = "_map")
-        If($tmp == $curMapName){
-            $holdPos = false
-        }
-    }
-    $curSelectHouse = {}
-    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
-    $dict = {}
-    Foreach(array = $houseVars, key = "house"){
-        $dict = NewDictionary($house)
-        If(DictionaryGet(dict = $dict, key = "isCurEquip") == "enable"){
-            Break()
-        }
-    }
-    $obj1.curHouseCfg = DictionaryGet(dict = $dict, key = "houseCfg")
-    $regions = GetAllRegion(map = @Map001)
-    Foreach(array = $regions or {}, key = "publicRegion"){
-        If(not GetRegionOwner(region = $publicRegion) and GetRegionConfig(region = $publicRegion, key = "isHouseRegion")){
-            $house = GetObjectVar(obj = $obj1, key = "house")
-            KillEntity(entity = $house)
-            CallTrigger(
-                object = $obj1, 
-                event = "CREATE_HOUSE_OUTSIDE",
-                region = $publicRegion, 
-                houseCfg = DictionaryGet(dict = $dict, key = "houseCfg"),
-                houseColor = DictionaryGet(dict = $dict, key = "houseSelectColor"),
-                houseMap = @Map001,
-                housePos = GetRegionCenter(region = $publicRegion)
-            )
-            @HOME_SUM = @HOME_SUM + 1
-            Break()
-        }
-    }
-    If($holdPos){ --If player in home then move home to public with playerr Else player dont move 
-        Return()
-    }
-    $newHouse = GetObjectVar(obj = $obj1, key = "house")
-    $houseInsideMap = GetObjectVar(obj = $newHouse, key = "houseInsideMap")
-    $yaw = 0
-    If($obj1.curHouseCfg){
-        $yaw = GetEntityCfg(fullName = $obj1.curHouseCfg, key = "insideMapRotationYaw")
-    }
-    SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
-      pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-    CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
-}
------------------------------------------------------------------------------------------------------------------------------- 分割线
-
 ENTITY_ENTER
 {
     ToggleBloom(player = $obj1, bloomOpen = @bloomOpen)
