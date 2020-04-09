@@ -47,8 +47,15 @@ function M:initEvent()
         self:openPayShop()
     end)
 
+    local LuaTimer = T(Lib, "LuaTimer") ---@type LuaTimer
     Lib.subscribeEvent("EVENT_SHOW_BOTTOM_MESSAGE", function(message)
+        self.textBottomMessage:SetVisible(true)
         self.textBottomMessage:SetText(message)
+
+        LuaTimer:cancel(self.hideBottomMessageTimer)
+        self.hideBottomMessageTimer = LuaTimer:scheduleTimer(function()
+            self.textBottomMessage:SetVisible(false)
+        end, 2000, 1)
     end)
 end
 
