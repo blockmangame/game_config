@@ -1,0 +1,22 @@
+{
+    "base": "spring_board_base",
+    "actorName": "object_jumppad.actor",
+    "name": "跳台1",
+    "clickDistance": 4,
+    "bounceHeight": 32,
+    "collision": true,
+    "canClick": true,
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    1,
+                    0.5,
+                    1
+                ]
+            }
+        ]
+    }
+}
