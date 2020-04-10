@@ -3,6 +3,8 @@ local ValueDef		= T(Entity, "ValueDef")
 -- key				= {isCpp,	client,	toSelf,	toOther,	init,	saveDB}
 ValueDef.jumpCount	= {false,	true,	false,	true,      1,		false}
 ValueDef.curExp		= {false,	false,	true,	true,       0,		true}--当前锻炼值
+ValueDef.maxExp		= {false,	false,	true,	true,       100,	true}--最大锻炼值
+ValueDef.perExp 	= {false,	false,	true,	true,       1,		false}--每次攻击锻炼值增加
 ValueDef.perExpPlu	= {false,	false,	true,	true,       1,		false}--锻炼值加成加成比例（付费特权。双倍）
 ValueDef.curLevel	= {false,	false,	true,	true,       1,		true}--当前阶数
 ValueDef.curHp		= {false,	false,	true,	true,       1,		false}--当前血量
@@ -25,10 +27,10 @@ ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},     true }--已�
 ValueDef.teamSkinId = {false,   true,    true,  false,       0,     true }--已装备的阵营皮肤id
 
 --====================宠物、式神相关数据================
-ValueDef.PetEquippedList= {false,   false,  true,   true,       {},    true}--当前角色宠物装备表
-ValueDef.PlusPetEquippedIndex={false,false, true,   true,       0,      true}--当前角色式神装备表
+ValueDef.petEquippedList= {false,   false,  true,   true,       {},    true}--当前角色宠物装备表
+ValueDef.plusPetEquippedIndex={false,false, true,   true,       0,      true}--当前角色式神装备表
 ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,      true}--当前角色获取过的宠物实体总数（不会减少）
-ValueDef.AllPetAttr     = {false,   false,  true,   true,       {},    true}--宠物、式神相关数据
+ValueDef.allPetAttr     = {false,   false,  true,   true,       {},    true}--宠物、式神相关数据
 --[[
 宠物、式神相关数据存储索引说明：索引为createPet后返回的index，通过索引插入的AllPetAttr，该表不为序列，期间可能会出现nil
 即强化（消耗）后相关索引项将置为nil
@@ -64,7 +66,12 @@ end
 ---获取每次锻炼增幅
 function Entity:getPerExpPlus()
     ---TODO exp up calc func
-    return 1*self:getValue("WeaponId")
+    return self:getValue("perExp")*self:getValue("perExpPlu")
+end
+---设置每次攻击锻炼增幅值变化
+function Entity:deltaPerExpPlus(val)
+    assert(tonumber(val), "invalid input:" .. val .. "is not a number")
+    self:setValue("perExp",self:getValue("perExp")+val)
 end
 ---获取当前锻炼值
 function Entity:getCurExp()
@@ -72,12 +79,18 @@ function Entity:getCurExp()
 end
 ---设置当前锻炼值上限
 function Entity:getMaxExp()
-    ---TODO exp limit calc func
-    return 1*self:getValue("SashId")*self:getValue("perExpPlu")
+    return self:getValue("maxExp")
 end
+---当前锻炼值可兑换货币
 function Entity:getCurExpToCoin()
     return self:getValue("curExp")*10
 end
+---设置最大锻炼值变化
+function Entity:deltaExpMaxPlus(val)
+    assert(tonumber(val), "invalid input:" .. val .. "is not a number")
+    self:setValue("maxExp",self:getValue("maxExp")+val)
+end
+---锻炼值是否已满
 function Entity:isExpFull()
     return self:getCurExp()>=self:getMaxExp()
 end

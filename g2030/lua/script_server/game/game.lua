@@ -66,3 +66,11 @@ function Game.TryJoinTeam(player, id)
     team:joinEntity(player)
     return true
 end
+
+local oldPlayerLogin = Game.OnPlayerLogin;
+
+function Game.OnPlayerLogin(player)
+    oldPlayerLogin(player);
+
+    player:initPetInfo();
+end

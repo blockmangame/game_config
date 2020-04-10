@@ -6,6 +6,9 @@ end
 function Entity.ValueFunc:curExp(value)
     Lib.emitEvent(Event.EVENT_EXP_CHANGE)
 end
+function Entity.ValueFunc:maxExp(value)
+    Lib.emitEvent(Event.EVENT_EXP_CHANGE)
+end
 
 function Entity.ValueFunc:jumpCount(value)
     print("Entity.ValueFunc:jumpCount " .. value)
