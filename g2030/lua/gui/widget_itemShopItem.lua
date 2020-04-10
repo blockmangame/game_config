@@ -1,12 +1,17 @@
 local widget_base = require "ui.widget.widget_base"
 local M = Lib.derive(widget_base)
-local ItemShop = Store.ItemShop
-local BuyStatus = Store.ItemShop.BuyStatus
+local BuyStatus = T(Define, "BuyStatus")
 
 local SelectStatus = {
     NotSelect = 1,
     Select = 2,
 }
+
+local function getMoneyIconByMoneyType(moneyType)
+    local coinName = Coin:coinNameByCoinId(moneyType)
+    assert(coinName, "Coin:coinNameByCoinId(moneyType) ：" .. tostring(moneyType).. " is not a exit")
+    return Coin:iconByCoinName(coinName)
+end
 
 function M:init()
     widget_base.init(self, "NinjaLegendsItemShopItem.json")
@@ -30,27 +35,35 @@ function M:initWnd()
     self.siItemLockIcon:SetVisible(false)
 end
 
-function M:initItem(tabKind, Value, area)
+function M:initItem(tabKind, Value, area, islandLockId)
     self.kind = tabKind --不同类型大小等处理
     self.itemId = Value.id
     self.stItemTitle:SetText(Lang:toText(Value.name))
     self.stItemMoneyNum:SetText(Value.price)
-    local moneyIcon = ItemShop:getMoneyIconByMoneyType(Value.moneyType)
+    local moneyIcon = getMoneyIconByMoneyType(Value.moneyType)
     self.siItemMoneyIcon:SetImage(moneyIcon)
     self.siItemIcon:SetImage(Value.icon)
     self.itemStatus = Value.status
+    self.islandLock = islandLockId == self.itemId
     self:setItemStatus()
+    self:onCheckIslandLock(Value.islandIcon)
     --self.siItemMoneyIcon:SetArea({ 0, 0 }, { 0, 27 }, { 0, 110}, { 0, 90})
     --Lib.log_1 (area)
     --self._root:SetArea(area.x,area.y,area.w,area.h)
     --self._root:SetArea({ 0, 0 }, { 0, 27 }, { 0, 110}, { 0, 90})
-    if "gDiamonds" == Coin:coinNameByCoinId(Value.moneyType) then
+    if Value.isPay then
         self._root:SetBackImage("set:ninja_legends_itemshop.json image:item_cost")
     end
 end
 
+function M:onCheckIslandLock(islandIcon)
+    if self.islandLock and self.itemStatus == BuyStatus.Lock then
+        self.siItemIcon:SetImage(islandIcon)
+    end
+end
+
 function M:onCheckClick(itemId)
-    if self.itemId == itemId then
+    if self.itemId == itemId and (self.islandLock or self.itemStatus ~= BuyStatus.Lock) then
         self.selectStatus = SelectStatus.Select
     else
         self.selectStatus = SelectStatus.NotSelect
@@ -72,7 +85,8 @@ function M:setItemStatus()
         self.siItemMoneyIcon:SetVisible(false)
         self.siItemSelectIcon:SetVisible(false)
         self.stItemUsedText:SetVisible(false)
-        self.siItemLockIcon:SetVisible(true)
+        self.siItemLockIcon:SetVisible(not self.islandLock)
+        self.stItemTitle:SetVisible(not self.islandLock)
     end
     if self.itemStatus == BuyStatus.Unlock then
         self.stItemMoneyNum:SetVisible(true)

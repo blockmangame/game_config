@@ -38,20 +38,35 @@ end
 
 -----------------------------------Pet Model Test----------------------------------
 local Entity
-GMItem["g2030/发放一个宠物（不创建）"] = function(self)
-
+GMItem["g2030Pet/发放宠物"] = function(self)
+    self:getNewPet(1);
 end
-GMItem["g2030/发放一个式神（不创建）"] = function(self)
-
+GMItem["g2030Pet/发放式神"] = function(self)
+    self:getNewPlusPet(1);
 end
-GMItem["g2030/装备一个宠物"] = function(self)
-
+GMItem["g2030Pet/装备宠物"] = function(self)
+    self:callPet(1, 1);
 end
-GMItem["g2030/装备一个式神"] = function(self)
-
+GMItem["g2030Pet/装备式神"] = function(self)
+    self:callPet(2, 3);
 end
-GMItem["sample/释放宠物技能"] = function(self)
-    Skill.Cast("myplugin/pet_1_1_1_attack", {targetID=self.objID}, Entity)
+GMItem["g2030Pet/clear"] = function(self)
+    self:setValue("petEquippedList", {});
+    self:setValue("plusPetEquippedIndex", 0);
+    self:setValue("hadEntityNum", 0);
+    self:setValue("allPetAttr", {});
+end
+GMItem["g2030Pet/移除"] = function(self)
+    self:recallPet(1);
+end
+GMItem["g2030Pet/查看当前角色宠物数据"] = function(self)
+    print(self);
+    print("开始打印宠物数据")
+    print("当前所获取过的宠物数量", self:getValue("hadEntityNum"))
+    print("当前背包内所有宠物式神信息：", Lib.v2s(self:getValue("allPetAttr")))
+    print("当前装备的宠物信息：", Lib.v2s(self:getValue("petEquippedList")))
+    print("当前装备的式神信息：", self:getValue(("plusPetEquippedIndex")))
+    print("===End===")
 end
 -----------------------------------Pet Model Test End-------------------------------
 

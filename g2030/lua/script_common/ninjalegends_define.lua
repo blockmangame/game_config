@@ -15,6 +15,19 @@ Define.petType = {
     plusPet = 2     --式神
 }
 
+Define.TabType = {
+    Equip = 1,
+    Belt = 2,
+    Advance = 3,
+}
+
+Define.BuyStatus = {
+    Lock = 1, --未解锁
+    Unlock = 2, --解锁
+    Buy = 3, --购买
+    Used = 4, --使用
+}
+
 Define.ProcessState = {
     Init = 0,
     Waiting = 1,

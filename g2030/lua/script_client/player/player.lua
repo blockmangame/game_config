@@ -22,7 +22,7 @@ function Player:exchangeEquip(fullname)
     local packet = {
         pid = "ExchangeEquip",
         objID = self.objID,
-        fullname = fullname,
+        fullName = fullname,
     }
     self:sendPacket(packet)
 end

@@ -5,7 +5,7 @@ local SelectStatus = {
     NotSelect = 1,
     Select = 2,
 }
-local TabType = Store.ItemShop.TabType
+local TabType = T(Define, "TabType")
 
 function M:init()
     widget_base.init(self, "NinjaLegendsItemShopTab.json")

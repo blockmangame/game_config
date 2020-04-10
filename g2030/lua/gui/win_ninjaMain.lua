@@ -20,6 +20,8 @@ function M:initWnd()
     self.btnSell = self:child("NinjaMain-SellBtn")
     self.btnPet = self:child("NinjaMain-PetBtn")
     self.btnExchangeCtr = self:child("NinjaMain-Exchange")
+    self.textBottomMessage = self:child("NinjaMain-BottomMessage")
+    self.textBottomMessage:SetText("")
 
     self:initEvent()
     UIMgr:new_widget("topValBar"):invoke("initViewByType",HP_VAL ,{11,53},self._root)
@@ -43,6 +45,17 @@ function M:initEvent()
     end)
     self:subscribe(self.btnVip, UIEvent.EventButtonClick, function()
         self:openPayShop()
+    end)
+
+    local LuaTimer = T(Lib, "LuaTimer") ---@type LuaTimer
+    Lib.subscribeEvent("EVENT_SHOW_BOTTOM_MESSAGE", function(message)
+        self.textBottomMessage:SetVisible(true)
+        self.textBottomMessage:SetText(message)
+
+        LuaTimer:cancel(self.hideBottomMessageTimer)
+        self.hideBottomMessageTimer = LuaTimer:scheduleTimer(function()
+            self.textBottomMessage:SetVisible(false)
+        end, 2000, 1)
     end)
 end
 

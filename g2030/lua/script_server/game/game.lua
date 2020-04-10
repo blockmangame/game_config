@@ -65,8 +65,15 @@ function Game.TryJoinTeam(player, id)
         oldTeam:leaveEntity(player, true)
     end
     team:joinEntity(player)
-
     return true
+end
+
+local oldPlayerLogin = Game.OnPlayerLogin;
+
+function Game.OnPlayerLogin(player)
+    oldPlayerLogin(player);
+
+    player:initPetInfo();
 end
 
 function Game.CreateProcess(key, type, config)
