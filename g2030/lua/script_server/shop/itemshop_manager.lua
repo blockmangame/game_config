@@ -18,7 +18,6 @@ function M:init()
     Advance:init()
 end
 
-
 function ItemShop:operationByType(player, tabId, itemId)
     print(string.format("<ItemShop:operationByType> TypeId: %s  ItemId: %s", tostring(tabId), tostring(itemId)))
     if tabId == TabType.Equip then
@@ -30,14 +29,14 @@ function ItemShop:operationByType(player, tabId, itemId)
     end
 end
 
-function ItemShop:BuyAll(player, tabId, itemId)
+function ItemShop:BuyAll(player, tabId)
     print(string.format("<ItemShop:operationByType> TypeId: %s", tostring(tabId)))
     if tabId == TabType.Equip then
-        Equip:BuyAll(player, itemId)
+        Equip:BuyAll(player)
     elseif tabId == TabType.Belt then
-        Belt:BuyAll(player, itemId)
+        Belt:BuyAll(player)
     elseif tabId == TabType.Advance then
-        Advance:BuyAll(player, itemId)
+        Advance:BuyAll(player)
     end
 end
 
@@ -45,27 +44,28 @@ function ItemShop:initAllItem(player)
     print("ItemShop:initAllItem(player)" )
     Equip:initItem(player)
     Belt:initItem(player)
-    --Advance:initItem(player)
+    Advance:initItem(player)
     self:sendAllItemData(player)
 end
 
-function ItemShop:showOrHide(isShow)
+function ItemShop:showOrHide(player, isShow)
     print(string.format("showOrHide:> isShow: %s", tostring(isShow)))
     local packet = {
         pid = "itemShopRegion",
         isShow = isShow,
     }
+    player:sendPacket(packet)
 end
 
 function ItemShop:sendAllItemData(player)
     local buyInfo = {}
     for _, tabType in pairs(TabType) do
         if tabType == TabType.Equip then
-            buyInfo[tabType] = player:getEquip()
+            buyInfo[tabType] = Equip:getPlayerBuyInfo(player)
         elseif tabType == TabType.Belt then
-            buyInfo[tabType] = player:getBelt()
+            buyInfo[tabType] = Belt:getPlayerBuyInfo(player)
         elseif tabType == TabType.Advance then
-            buyInfo[tabType] = Advance:initItem(player)
+            buyInfo[tabType] = Advance:getPlayerBuyInfo(player)
         end
     end
     local data = {}

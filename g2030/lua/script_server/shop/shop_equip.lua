@@ -8,8 +8,9 @@ function M:init()
     shopbase.init(self, Define.TabType.Equip, config1, config2)
 end
 
-function M:initBuy(player)
-    self.buyInfo = player:getEquip()
+function M:getPlayerBuyInfo(player)
+    local buyInfo = player:getEquip()
+    return buyInfo
 end
 
 return M

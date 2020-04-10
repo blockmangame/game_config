@@ -7,8 +7,9 @@ function M:init()
     shopbase.init(self, Define.TabType.Belt, config1)
 end
 
-function M:initBuy(player)
-    self.buyInfo = player:getBelt()
+function M:getPlayerBuyInfo(player)
+    local buyInfo = player:getBelt()
+    return buyInfo
 end
 
 return M

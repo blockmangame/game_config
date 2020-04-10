@@ -6,11 +6,14 @@ function M:init(type, config, extraConfig)
     self.type = type
     self.config = config
     self.extraConfig = extraConfig or nil
+    self.buyInfo = {}
 end
 
 function M:operation(player, itemId)
     --print(string.format("<Equip:operation> ItemId: %s status: %s", tostring(itemId), tostring(itemConfig[itemId].status)))
     --local buyInfo = self.buyInfo
+    self.buyInfo = self:getPlayerBuyInfo(player)
+    --Lib.log_1(self.buyInfo, "operation self.type :"..tostring(self.type))
     for ids, status in pairs(self.buyInfo) do
         if ids == tostring(itemId) then
             if status == BuyStatus.Unlock then
@@ -25,6 +28,7 @@ function M:operation(player, itemId)
 end
 
 function M:BuyAll(player)
+    self.buyInfo = self:getPlayerBuyInfo(player)
     print(string.format("<Equip:BuyAll> "))
     for idn, item in pairs((self.config)) do
         if  not item.isPay then
@@ -71,31 +75,31 @@ function M:onBuy(player, itemId)
     return false
 end
 
-function M:onExtraBuySuccess(player)
+function M:onExtraBuySuccess(player, item)
 
 end
 
 function M:onBuySuccess(player, item)
-    --print("Equip:onBuySuccess(player, itemId)"..tostring(item.id))
-    --Lib.log_1( self.buyInfo,"购买前 1 " )
+    self.buyInfo = self:getPlayerBuyInfo(player)
     local changeInfo = {}
-    local buyInfo = self.buyInfo
+    print("Equip:onBuySuccess(player, itemId)"..tostring(item.id))
+    --Lib.log_1( self.buyInfo,"购买前 1 " )
     --to Used
-    for ids, status in pairs(buyInfo) do
+    for ids, status in pairs(self.buyInfo) do
         if status == BuyStatus.Used then
-            buyInfo[ids] = BuyStatus.Buy
+            self.buyInfo[ids] = BuyStatus.Buy
             changeInfo[tonumber(ids)] = BuyStatus.Buy
         end
     end
-    buyInfo[tostring(item.id)] = BuyStatus.Used
+    self.buyInfo[tostring(item.id)] = BuyStatus.Used
     changeInfo[item.id] = BuyStatus.Used
-    self:exchangeItem(player, item.itemName)
+    self:onPlayerUseItem(player, item)
     --Lock to Unlock
     if not item.isPay then
         local nextId = self:getNextNotPayId(item.id)
         if nextId > item.id and self.config[nextId] then
             if player:getIslandLv() >= self.config[nextId].islandLv then
-                buyInfo[tostring(nextId)] = BuyStatus.Unlock
+                self.buyInfo[tostring(nextId)] = BuyStatus.Unlock
                 changeInfo[nextId] = BuyStatus.Unlock
             end
         end
@@ -103,65 +107,64 @@ function M:onBuySuccess(player, item)
     ItemShop:sendChangeItemByTab(player, self.type, changeInfo)
     print("self.objID : "..tostring(player.objID))
     --Lib.log_1( self.buyInfo,"购买后 2 " )
-    self:onExtraBuySuccess(player)
+    self:onExtraBuySuccess(player, item)
 end
 
 function M:onUsed(player, itemId)
     local item = self.config[itemId]
-    local buyInfo = self.buyInfo
+    self.buyInfo = self:getPlayerBuyInfo(player)
     local changeInfo = {}
-    for ids, status in pairs(buyInfo) do
+    for ids, status in pairs(self.buyInfo) do
         if status == BuyStatus.Used then
-            buyInfo[ids] = BuyStatus.Buy
-            self:exchangeItem(player, item.itemName)
+            self.buyInfo[ids] = BuyStatus.Buy
+            self:onPlayerUseItem(player, item)
             changeInfo[tonumber(ids)] = BuyStatus.Buy
         end
     end
-    buyInfo[tostring(item.id)] = BuyStatus.Used
+    self.buyInfo[tostring(item.id)] = BuyStatus.Used
     changeInfo[item.id] = BuyStatus.Used
     --Lib.log_1(self.buyInfo, "onUsed 2")
     ItemShop:sendChangeItemByTab(player, self.type, changeInfo)
-    self:onExtraBuySuccess(player)
 end
 
 function M:onUnload(player, itemId)
-    print("Equip:onUnload(player, itemId)"..tostring(itemId))
+    print("M:onUnload(player, itemId)"..tostring(itemId))
 end
 
-function M:exchangeItem(player, itemName)
-    local fullName = string.format("myplugin/%s", itemName)
-    print("player.objID : "..tostring(player.objID).." Equip:exchangeItem : "..tostring(fullName))
+function M:onPlayerUseItem(player, item)
+    local fullName = string.format("myplugin/%s",  item.itemName)
+    --print("player.userId : "..tostring(player.userId).." Equip:playerUseItem : "..tostring(fullName))
+    print("player.name : "..tostring(player.name).." Equip:playerUseItem : "..tostring(fullName))
+    --print("player.objID : "..tostring(player.objID).." Equip:playerUseItem : "..tostring(fullName))
     player:exchangeEquip(fullName)
 end
 
-function M:initBuy(player)
+function M:getPlayerBuyInfo(player)
 
 end
 
 function M:initItem(player)
-    self:initBuy(player)
     --Lib.log_1(self.buyInfo, "Equip:initItem(player, itemId) 000000000000000000000" )
-    local buyInfo = self.buyInfo
-    if not next(buyInfo) then
+    self.buyInfo = self:getPlayerBuyInfo(player)
+    if not next(self.buyInfo) then
         print(" if not next(buyInfo) then")
         if self.config[1] then
-            buyInfo[tostring(self.config[1].id)] = BuyStatus.Unlock
+            self.buyInfo[tostring(self.config[1].id)] = BuyStatus.Unlock
         end
     end
     local isDefault = true
-    for ids, status in pairs(buyInfo) do
+    for ids, status in pairs(self.buyInfo) do
         if status == BuyStatus.Used then
             isDefault = false
-            self:exchangeItem(player, self.config[tonumber(ids)].itemName)
+            self:onPlayerUseItem(player, self.config[tonumber(ids)])
         end
     end
-    print("1111111111")
     self:islandAndAdvanceToUnlockPay(player)
 end
 
 function M:islandAndAdvanceToUnlockPay(player)
     local changeInfo = {}
-    local buyInfo = self.buyInfo
+    self.buyInfo = self:getPlayerBuyInfo(player)
     for idn, item in pairs((self.config)) do
         if item.isPay then
             if player:getIslandLv() >= item.islandLv then
@@ -170,8 +173,8 @@ function M:islandAndAdvanceToUnlockPay(player)
                     isUnLock = player:getCurLevel() >= self.extraConfig[tostring(item.id)].unlockAdvancedLevel
                 end
                 if isUnLock then
-                    if not buyInfo[tostring(item.id)] then
-                        buyInfo[tostring(item.id)] = BuyStatus.Unlock
+                    if not self.buyInfo[tostring(item.id)] then
+                        self.buyInfo[tostring(item.id)] = BuyStatus.Unlock
                         changeInfo[item.id] = BuyStatus.Unlock
                     end
                 end
@@ -196,13 +199,12 @@ function M:getNextNotPayId(curId)
 end
 
 function M:initAdvanceItem(player)
+    self.buyInfo = self:getPlayerBuyInfo(player)
     local changeInfo = {}
-    local buyInfo = self.buyInfo
     local isUsePay = false
     --Lib.log_1(buyInfo, "1 self.type "..tostring(buyInfo))
-    for ids, status in pairs(buyInfo) do
+    for ids, status in pairs(self.buyInfo) do
         if self.config[tonumber(ids)].isPay then
-            print("ids "..tostring(ids))
             if status == BuyStatus.Used then
                 isUsePay = true
             end
@@ -214,17 +216,17 @@ function M:initAdvanceItem(player)
                 local status = BuyStatus.Buy
                 if not isUsePay then
                     status = BuyStatus.Used
-                    self:exchangeItem(player, item.itemName)
+                    self:onPlayerUseItem(player, item)
                 end
-                buyInfo[tostring(id)] = status
+                self.buyInfo[tostring(id)] = status
                 changeInfo[tonumber(id)] = status
             elseif tonumber(id) == 2 then
                 local status = BuyStatus.Unlock
-                buyInfo[tostring(id)] = BuyStatus.Unlock
+                self.buyInfo[tostring(id)] = BuyStatus.Unlock
                 changeInfo[tonumber(id)] = status
             else
                 changeInfo[tonumber(id)] = BuyStatus.Lock
-                buyInfo[tostring(id)] = nil
+                self.buyInfo[tostring(id)] = nil
             end
         end
     end
