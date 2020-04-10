@@ -8,6 +8,7 @@ require "script_client.ui.ui_schedule"
 require "script_client.entity.entity"
 
 require "script_client.other.scene_indicator"
+require "script_client.other.recharge_cells_mgr"
 
 require "script_client.player.player"
 require "script_client.player.player_event"
@@ -19,6 +20,7 @@ require "script_client.skill.base"
 require "script_client.skill.skill_normal_atk"
 require "script_client.skill.skill_addExp"
 require "script_client.skill.scene_skill"
+require "script_client.skill.recharge_skill"
 
 local main = {}
 

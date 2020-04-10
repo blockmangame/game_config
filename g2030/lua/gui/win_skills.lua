@@ -98,12 +98,18 @@ function M:init()
                 end
                 GUIWindowManager.instance:DestroyGUIWindow(tb.image)
                 table.remove(self.skillList, i)
+                Lib.emitEvent(Event.EVENT_RECHARGE_SKILL_REMOVE, fullName)
             end
         end
         if show then
             local skillName = skill.fullName
             local area = skillJack.defaultArea or {{ 0, -50 }, { 0, -280 }, { 0, 70 }, { 0, 70 }}
-            local image = self:fetchImageCell("Skill_" .. skillName,area,nil,skill:getIcon(),true,true,false,"skill:" .. skill.fullName)
+            local image
+            if skill.isRechargeSkill then
+                image = self:fetchRechargeCell("Skill_" .. skillName,area,nil,skill:getIcon(),true,true,false,"skill:" .. skill.fullName, skill.fullName)
+            else
+                image = self:fetchImageCell("Skill_" .. skillName,area,nil,skill:getIcon(),true,true,false,"skill:" .. skill.fullName)
+            end
             local skillMask = self:fetchImageCell("Mask".. skillName,{{0,0},{0,0},{1,0},{1,0}},nil,Skill.Cfg(skillName).maskIcon or "set:main_page.json image:skill_bg.png",false,false,true,nil)
             skillMask:SetVisible(false)
             image:AddChildWindow(skillMask)
@@ -371,6 +377,7 @@ function M:init()
             end
             image = image or self.sectorHolders[i]
             if sectorJacks[i] then
+                print(" sectorJacks[i] , sectorJacks[i]", Lib.v2s(sectorJacks[i]))
                 image:SetArea(table.unpack(sectorJacks[i]))
             end
             self._root:AddChildWindow(image)
@@ -457,23 +464,38 @@ function M:updateMask(beginTime, endTime, iconCell, skillName, showInEnd)
     self.maskTimer[skillName] = World.Timer(1, tick)
 end
 
+local function updateSkillCellProp(cell, areaTable, level, visable, enableLongTouch, alwaysOnTop, name)
+    cell:SetVerticalAlignment(2)
+    cell:SetHorizontalAlignment(2)
+    cell:SetArea(areaTable[1], areaTable[2], areaTable[3], areaTable[4])
+    if level then
+        cell:SetLevel(level)
+    end
+    cell:SetVisible(visable or false)
+    cell:setEnableLongTouch(enableLongTouch or false)
+    cell:SetAlwaysOnTop(alwaysOnTop or false)
+    if name then
+        cell:SetName(name)
+    end
+    return cell
+end
+
 function M:fetchImageCell(imageName, areaTable, level, imagePath, visable, enableLongTouch, alwaysOnTop, name)
     local image = GUIWindowManager.instance:CreateGUIWindow1("StaticImage", imageName)
-    image:SetVerticalAlignment(2)
-    image:SetHorizontalAlignment(2)
-    image:SetArea(areaTable[1], areaTable[2], areaTable[3], areaTable[4])
-    if level then
-        image:SetLevel(level)
-    end
     image:SetImage(imagePath or "")
-    image:SetVisible(visable or false)
-    image:setEnableLongTouch(enableLongTouch or false)
-    image:SetAlwaysOnTop(alwaysOnTop or false)
-    if name then
-        image:SetName(name)
-    end
+    updateSkillCellProp(image, areaTable, level, visable, enableLongTouch, alwaysOnTop, name)
     return image
 end
+
+function M:fetchRechargeCell(imageName, areaTable, level, imagePath, visable, enableLongTouch, alwaysOnTop, name, fullName)
+    local image = UIMgr:new_widget("rechargeCell")
+    image:invoke("IMAGE", imagePath)
+    print("areaTable----------------------------", Lib.v2s(areaTable))
+    updateSkillCellProp(image, areaTable, level, visable, enableLongTouch, alwaysOnTop, name)
+    Lib.emitEvent(Event.EVENT_RECHARGE_SKILL_UPDATE, fullName, image)
+    return image
+end
+
 function M:getBtnA()
     return self.btn_A or A_Btn
 end
