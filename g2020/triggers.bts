@@ -174,14 +174,14 @@ FUNC_BLOOM_TIMER
         $time = ($hour * $dayTimeInGame) / 24  --因为24h = 10min
         ArrayAppend(array = $timeArr, value = ($time * 1200) // 1)
     }
-    CallTrigger(event = "FUNC_BROADCAST_BLOOM_OPT", bloomOpt = @bloomOpen, timeArr = $timeArr, col = 0, timeArrSize = ArraySize(array = $timeArr))
+    CallTrigger(event = "FUNC_BROADCAST_BLOOM_ANDEMISSIONCOLOR_OPT", bloomOpt = @bloomOpen, timeArr = $timeArr, col = 0, timeArrSize = ArraySize(array = $timeArr))
 }
 
-FUNC_BROADCAST_BLOOM_OPT
+FUNC_BROADCAST_BLOOM_ANDEMISSIONCOLOR_OPT
 {
     @bloomOpen = $bloomOpt
     Foreach(array = GetAllPlayers(), key = "player") {
-        ToggleBloom(player = $player, bloomOpen = $bloomOpt)
+        CallTrigger(object = $player, event = "FUNC_TOGGLE_BLOOM_AND_EMISSSION_COLOR_STRENGTH")
     }
     $curTime = ArrayGet(array = $timeArr, index = $col) or GetWorldTime()
     $col = $col + 1
@@ -193,7 +193,7 @@ FUNC_BROADCAST_BLOOM_OPT
     If($cdTime <= 0) {
         $cdTime = @ticksInOneDay + $cdTime
     }
-    StartTimer(rep = false, event = "FUNC_BROADCAST_BLOOM_OPT", bloomOpt = not $bloomOpt, time = $cdTime // 1, timeArr = $timeArr, col = $col, timeArrSize = $timeArrSize)
+    StartTimer(rep = false, event = "FUNC_BROADCAST_BLOOM_ANDEMISSIONCOLOR_OPT", bloomOpt = not $bloomOpt, time = $cdTime // 1, timeArr = $timeArr, col = $col, timeArrSize = $timeArrSize)
 }
 
 FUNC_STATE_STARTTIMER
