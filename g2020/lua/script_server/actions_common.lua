@@ -323,6 +323,17 @@ function Actions.ToggleBloom(data, params, context)
     })
 end
 
+function Actions.SetBlockEmissionColorStrength(data, params, context)
+    local player = params.player
+    if not player then
+        return
+    end
+    player:sendPacket({
+        pid = "SetBlockEmissionColorStrength",
+        strength = params.strength
+    })
+end
+
 function Actions.GetWorldTime(data, params, context)
     return World.CurWorld:getWorldTime()
 end

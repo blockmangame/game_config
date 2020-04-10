@@ -297,9 +297,15 @@ CHRONIC_KILL_SELF_BY_DAMAGE{
     Damage(entity = $obj1, damage = $damage)
 }
 
-ENTITY_ENTER
+FUNC_TOGGLE_BLOOM_AND_EMISSSION_COLOR_STRENGTH
 {
     ToggleBloom(player = $obj1, bloomOpen = @bloomOpen)
+    SetBlockEmissionColorStrength(player = $obj1, strength = @bloomOpen and @nightEmissionColorStrength or @dayEmissionColorStrength)
+}
+
+ENTITY_ENTER
+{
+    CallTrigger(object = $obj1, event = "FUNC_TOGGLE_BLOOM_AND_EMISSSION_COLOR_STRENGTH")
     UpdateUIData(player = $obj1, ui = "mainExtension", data = {
         guideEnd = $obj1.guideStep == @GuideEnd,
         guideWork = $obj1.guideWork,
