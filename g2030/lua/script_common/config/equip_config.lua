@@ -15,7 +15,7 @@ function EquipConfig:init()
         data.desc = vConfig.s_desc or "" --s_desc
         data.islandLv = tonumber(vConfig.n_islandLv) or 0 --n_islandLv
         data.islandIcon = vConfig.s_islandIcon or "" --s_islandIcon
-        data.equipName = vConfig.s_equipName or "" --s_equipName
+        data.itemName = vConfig.s_itemName or "" --s_itemName
         data.efficiency = tonumber(vConfig.n_efficiency) or 0 --n_value1
         data.status = 1
         if data.moneyType == 0 then
