@@ -11,8 +11,8 @@ function EntityServer:getDamageProps(info)
             if name == "damage" then
                 local value = self:getCurDamage()
                 return value-- + (skill and skill[name] or 0)
-            --elseif name == "dmgFactor" then
-            --    return 1
+                --elseif name == "dmgFactor" then
+                --    return 1
             end
         end,
         __newindex = function(...) error("not allowed set prop value") end
@@ -32,7 +32,7 @@ function EntityServer:getDamageProps(info)
 end
 function EntityServer:doAttack(info)
     local attackProps,defenseProps = self:getDamageProps(info)
-   --ocal damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
+    --ocal damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
     local damage = math.floor(math.max(attackProps.damage, 0)*defenseProps.hurtSub)
     info.target:doDamage({
         from = self,
@@ -227,4 +227,37 @@ function Entity.EntityProp:teamProp(value, add, buff)
         end
     end
 end
+---
+---最大锻炼值加成buff，自然数
+---
+function Entity.EntityProp:expMax(value, add, buff)
+    print(value, add)
+    if self.curHp <= 0 then
+        return
+    end
+    local useVal = {}
+    useVal.val =  (add and value.val or -value.val)--(rHpPct.pct or 0) + (add and value or -value)
+    useVal.bit =  value.bit or 0
+    for i = 0,useVal.bit do
+        useVal.val = useVal.val*10
+    end
+    self:deltaExpMaxPlus(useVal.val)--TODO big number
+end
+---
+---最大锻炼值加成buff，自然数
+---
+function Entity.EntityProp:perExp(value, add, buff)
+    print(value, add)
+    if self.curHp <= 0 then
+        return
+    end
+    local useVal = {}
+    useVal.val =  (add and value.val or -value.val)--(rHpPct.pct or 0) + (add and value or -value)
+    useVal.bit =  value.bit or 0
+    for i = 0,useVal.bit do
+        useVal.val = useVal.val*10
+    end
+    self:deltaPerExpPlus(useVal.val)--TODO big number
+end
+
 

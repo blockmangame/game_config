@@ -62,3 +62,7 @@ function handles:teamShopBuyItemSuccess(packet)
         teamShop:upDateItem(packet)
     end
 end
+
+function handles:ResetEntityRechargeSkill(packet)
+    Lib.emitEvent(Event.EVENT_ALL_RECHARGE_SKILL_RESET)
+end

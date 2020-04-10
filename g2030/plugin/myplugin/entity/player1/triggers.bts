@@ -1,5 +1,9 @@
 ENTITY_ENTER{
     
 	AddSkill(entity = $obj1, name = "myplugin/sceneSkillBase")
+	AddSkill(entity = $obj1, name = "myplugin/rechargeSkillBase")
+}
 
+ENTITY_DIE{
+	ResetEntityRechargeSkill(entity = $obj1)
 }

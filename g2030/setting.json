@@ -3,7 +3,7 @@
   "defaultMap": "map001",
   "initPos": {
     "x": 192,
-    "y": 80,
+    "y": 100,
     "z": 143
   },
   "fallAnimHeight": 10,
@@ -55,7 +55,7 @@
         "holderImage": "plugin/myplugin/image/ctr_skill_solt.png"
       }
     ],
-    "AJackIcon": "plugin/myplugin/image/ctr_atkctr_jump.png",
+    "AJackIcon": "plugin/myplugin/image/ctr_jump.png",
     "BJackIcon": "plugin/myplugin/image/ctr_atk_s.png",
     "AJackArea": [
       [
@@ -68,11 +68,11 @@
       ],
       [
         0,
-        168
+        128
       ],
       [
         0,
-        168
+        128
       ]
     ],
     "BJackArea": [
@@ -129,6 +129,26 @@
       "levelCfg": {}
     }
   ],
+  "cameraCfg": {
+		"viewModeConfig":[
+			{
+				"enable": false
+			},
+			{
+				"enable": false
+			},
+			{
+				"enable": false
+			},
+			{
+				"enable": true,
+				"distance": 6,
+				"lockBodyRotation": false
+			}
+		],
+		"defaultView": 3
+    },
+	"hidePerSpec": true,
   "campMaterialReward": 1
 }
 
