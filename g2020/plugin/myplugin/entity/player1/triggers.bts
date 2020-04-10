@@ -255,9 +255,11 @@ CREATE_OWNER_HOUSE{
 }
 
 GOTO_INSIDE_HOUSE{
-    SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
-	  pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-    CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+    --SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
+	--  pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
+    --CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+
+    SetEntityPosition(entity = $obj1, map = "map001", pos = { x = 203.0, y = 22.0, z = 62.0 })
 }
 
 ENTITY_DIE{
@@ -297,9 +299,15 @@ CHRONIC_KILL_SELF_BY_DAMAGE{
     Damage(entity = $obj1, damage = $damage)
 }
 
-ENTITY_ENTER
+FUNC_TOGGLE_BLOOM_AND_EMISSSION_COLOR_STRENGTH
 {
     ToggleBloom(player = $obj1, bloomOpen = @bloomOpen)
+    SetBlockEmissionColorStrength(player = $obj1, strength = @bloomOpen and @nightEmissionColorStrength or @dayEmissionColorStrength)
+}
+
+ENTITY_ENTER
+{
+    CallTrigger(object = $obj1, event = "FUNC_TOGGLE_BLOOM_AND_EMISSSION_COLOR_STRENGTH")
     UpdateUIData(player = $obj1, ui = "mainExtension", data = {
         guideEnd = $obj1.guideStep == @GuideEnd,
         guideWork = $obj1.guideWork,
@@ -5306,6 +5314,11 @@ ENTER_EQUIPMEN {
 	}
     $typeIndex = GetConfigVar(obj = $item, key = "typeIndex")
     If(IsDrive(entity = $obj1) and $typeIndex == 1)
+    {
+        Return()
+    }
+
+    If(IsClimbing(entity = $obj1) and $typeIndex == 1)
     {
         Return()
     }

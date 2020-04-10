@@ -226,6 +226,10 @@ function handles:ToggleBloom(packet)
     Blockman.instance.gameSettings:setEnableBloom(packet.bloomOpen)
 end
 
+function handles:SetBlockEmissionColorStrength(packet)
+    Blockman.instance.gameSettings:setEmissionColorStrength(packet.strength or 0.0)
+end
+
 local function isSamePos(p1, p2)
     return p1.x == p2.x and p1.y == p2.y and p1.z == p2.z
 end
