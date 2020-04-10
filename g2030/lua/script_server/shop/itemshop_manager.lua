@@ -1,8 +1,22 @@
 local ItemShop = T(Store, "ItemShop")
-local Equip =  require "script_server.shop.Equip"
-local Belt =  require "script_server.shop.Belt"
-local Advance =  require "script_server.shop.Advance"
+local equip =  require "script_server.shop.shop_equip"
+local belt =  require "script_server.shop.shop_belt"
+local advance =  require "script_server.shop.shop_advance"
 local TabType = T(Define, "TabType")
+local M = {}
+
+local Equip = nil
+local Belt = nil
+local Advance = nil
+
+function M:init()
+    Equip = Lib.derive(equip)
+    Equip:init()
+    Belt = Lib.derive(belt)
+    Belt:init()
+    Advance = Lib.derive(advance)
+    Advance:init()
+end
 
 function ItemShop:operationByType(player, tabId, itemId)
     print(string.format("<ItemShop:operationByType> TypeId: %s  ItemId: %s", tostring(tabId), tostring(itemId)))
@@ -15,14 +29,14 @@ function ItemShop:operationByType(player, tabId, itemId)
     end
 end
 
-function ItemShop:BuyAll(player, tabId, itemId)
+function ItemShop:BuyAll(player, tabId)
     print(string.format("<ItemShop:operationByType> TypeId: %s", tostring(tabId)))
     if tabId == TabType.Equip then
-        Equip:BuyAll(player, itemId)
+        Equip:BuyAll(player)
     elseif tabId == TabType.Belt then
-        Belt:BuyAll(player, itemId)
+        Belt:BuyAll(player)
     elseif tabId == TabType.Advance then
-        Advance:BuyAll(player, itemId)
+        Advance:BuyAll(player)
     end
 end
 
@@ -31,26 +45,27 @@ function ItemShop:initAllItem(player)
     Equip:initItem(player)
     Belt:initItem(player)
     Advance:initItem(player)
-    self:sendInitAllItem(player)
+    self:sendAllItemData(player)
 end
 
-function ItemShop:showOrHide(isShow)
+function ItemShop:showOrHide(player, isShow)
     print(string.format("showOrHide:> isShow: %s", tostring(isShow)))
     local packet = {
         pid = "itemShopRegion",
         isShow = isShow,
     }
+    player:sendPacket(packet)
 end
 
-function ItemShop:sendInitAllItem(player)
+function ItemShop:sendAllItemData(player)
     local buyInfo = {}
     for _, tabType in pairs(TabType) do
         if tabType == TabType.Equip then
-            buyInfo[tabType] = player:getEquip()
+            buyInfo[tabType] = Equip:getPlayerBuyInfo(player)
         elseif tabType == TabType.Belt then
-            buyInfo[tabType] = player:getBelt()
+            buyInfo[tabType] = Belt:getPlayerBuyInfo(player)
         elseif tabType == TabType.Advance then
-            --buyInfo[tabType] = {player:getCurLevel()}
+            buyInfo[tabType] = Advance:getPlayerBuyInfo(player)
         end
     end
     local data = {}
@@ -101,3 +116,7 @@ function ItemShop:initAdvanceItem(player)
     Equip:initAdvanceItem(player)
     Belt:initAdvanceItem(player)
 end
+
+M:init()
+
+return M

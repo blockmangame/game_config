@@ -15,7 +15,7 @@ function BeltConfig:init()
         data.desc = vConfig.s_desc or "" --s_desc
         data.islandLv = tonumber(vConfig.n_islandLv) or 0 --n_islandLv
         data.islandIcon = vConfig.s_islandIcon or "" --s_islandIcon
-        data.beltName = vConfig.s_beltName or "" --s_beltName
+        data.itemName = vConfig.s_itemName or "" --s_itemName
         data.workoutUp = tonumber(vConfig.n_workoutUp) or 0 --n_workoutUp
         data.status = 1
         if data.moneyType == 0 then
