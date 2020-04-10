@@ -5315,6 +5315,11 @@ ENTER_EQUIPMEN {
     {
         Return()
     }
+
+    If(IsClimbing(entity = $obj1) and $typeIndex == 1)
+    {
+        Return()
+    }
 	--EquipItem(entity = $obj1, item = $item)
     CallTrigger(object = $obj1, event = "EQUIP_ITEM_IMMEDIATELY", item = $item)
 }
