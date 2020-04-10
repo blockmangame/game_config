@@ -111,4 +111,54 @@ GMItem["g2020/导出坐标"] = function()
     dumpCSV(path2, items)
 end
 
+
+local function dumpCSV2(fileName, data)
+    local misc = require "misc"
+    local csv_encode = misc.csv_encode
+    local header = { "id", "areaId", "x", "y", "z", "blockId"}
+    local list = { csv_encode(header) }
+    for k , item in pairs(data) do
+        table.insert(list, csv_encode({k, item.areaId, item.x, item.y, item.z, item.id }))
+    end
+    return misc.write_utf16(fileName, table.concat(list, "\n"))
+end
+
+GMItem["g2020/导出方块ID"] = function()
+
+    local config = {}
+    local files = Lib.readGameCsv("export_block_config.csv") or {}
+    for _ , item in ipairs(files) do
+        local newItem = {}
+        newItem.min = {x = tonumber(item.minX), y = tonumber(item.minY), z = tonumber(item.minZ) }
+        newItem.max = {x = tonumber(item.maxX), y = tonumber(item.maxY), z = tonumber(item.maxZ) }
+        newItem.areaId = item.areaId
+        table.insert(config, newItem)
+    end
+
+    local items = {}
+
+    for _, v in pairs(config) do
+        local min = v.min
+        local max = v.max
+        if v.mapName == Me.map.name or not v.mapName then
+            for x = min.x, max.x do
+                for y = min.y, max.y do
+                    for z = min.z, max.z do
+                        local block = {}
+                        block.id = Me.map:getBlockConfigId({x = x, y = y, z = z})
+                        block.x = x
+                        block.y = y
+                        block.z = z
+                        block.areaId = v.areaId
+                        table.insert(items, block)
+                    end
+                end
+            end
+
+        end
+    end
+    local path2 = Root.Instance():getGamePath() .. Me.map.name .. "_export_block_id.csv"
+    dumpCSV2(path2, items)
+end
+
 return GMItem
