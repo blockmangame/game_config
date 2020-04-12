@@ -147,6 +147,7 @@ end
 function M:addViewByConfig(Config, isResetPos)
     local clickItemId = 0
     self.islandLockId = self:onFindIslandLockId(Config)
+    print("islandLockId "..tostring(self.islandLockId))
     for i, Value in pairs(Config) do
         --local ItemIcon = "set:LiftingSimulatorShop1.json image:equipOrSkillBg"
         --print("<addViewByConfig:> kind "..tostring(self.selectTab))
@@ -311,17 +312,15 @@ function M:onClickBeltItem(itemId)
         return
     end
     self.selectItemId = itemId
-    print("<onClickEquipItem:> itemId "..tostring(itemId))
-    print("<onClickEquipItem:> equip.status "..tostring(item.status))
+    print("<onClickBeltItem:> itemId "..tostring(itemId))
+    print("<onClickBeltItem:> equip.status "..tostring(item.status))
     self:changeAllItemClickStatus(itemId)
     self:choseUseDetailUi(item.isPay)
-    if self.islandLockId == itemId then
-        print("<onClickBeltItem:> islandLock "..tostring(itemId))
-        self:lockItemDetail(true, item.islandIcon)
-        return
-    end
     if item.status == BuyStatus.Lock then
-        self:lockItemDetail()
+        if self.islandLockId == itemId then
+            print("<onClickBeltItem:> islandLock "..tostring(itemId))
+            self:lockItemDetail(true, item.islandIcon)
+        end
         return
     else
         self:showItemDetail()
@@ -362,17 +361,15 @@ function M:onClickAdvancelItem(itemId)
         return
     end
     self.selectItemId = itemId
-    print("<onClickEquipItem:> itemId "..tostring(itemId))
-    print("<onClickEquipItem:> equip.status "..tostring(item.status))
+    print("<onClickAdvancelItem:> itemId "..tostring(itemId))
+    print("<onClickAdvancelItem:> equip.status "..tostring(item.status))
     self:changeAllItemClickStatus(itemId)
     self:choseUseDetailUi(item.isPay)
-    if self.islandLockId == itemId then
-        print("<onClickEquipItem:> islandLock "..tostring(itemId))
-        self:lockItemDetail(true, item.islandIcon)
-        return
-    end
     if item.status == BuyStatus.Lock then
-        self:lockItemDetail()
+        if self.islandLockId == itemId then
+            print("<onClickAdvancelItem:> islandLock "..tostring(itemId))
+            self:lockItemDetail(true, item.islandIcon)
+        end
         return
     else
         self:showItemDetail()
@@ -398,7 +395,6 @@ function M:onClickAdvancelItem(itemId)
         self.stDetailText:SetArea({ 0, 36 }, { 0, 0 }, { 0, 110}, { 0, 50})
         self.stDetailText:SetTextColor({213/255, 205/255, 47/255, 1})
         self.stDetailText:SetText(Lang:toText("gui_using"))
-        self.siDetailGold:SetVisible(false)
         self.stDetailText:SetVisible(true)
         self.btnDetail:SetVisible(false)
         self.stDetailText:SetVisible(false)
@@ -408,10 +404,9 @@ function M:onClickAdvancelItem(itemId)
         self.stDetailText:SetArea({ 0, 36 }, { 0, 0 }, { 0, 110}, { 0, 50})
         self.stDetailText:SetTextColor({213/255, 205/255, 47/255, 1})
         self.stDetailText:SetText(Lang:toText("gui_using"))
-        self.siDetailGold:SetVisible(false)
         self.stDetailText:SetVisible(true)
-        self.btnDetail:SetVisible(true)
-        self.stDetailText:SetVisible(true)
+        self.btnDetail:SetVisible(false)
+        self.stDetailText:SetVisible(false)
         self.siDetailGold:SetVisible(false)
     end
     self.selectItemId = itemId
@@ -437,6 +432,7 @@ function M:lockItemDetail(islandLock, islandIcon)
 end
 
 function M:showItemDetail()
+    self.stDetailTitle:SetVisible(true)
     self.siDetailItemLock:SetVisible(false)
     self.stDetailDescribe:SetVisible(true)
     for i = 1, 3 do
@@ -553,14 +549,14 @@ function M:initItemShop(data)
             end
         end
     end
-    self.selectTab = TabType.Equip
     self:addItemsGridView(false)
+    self.selectTab = TabType.Equip
     self:onClickEquipItem(1)
     self.isInitData = true
 end
 
 function M:updateItemShopByTab(tabId, itemDate)
-    print(string.format("M:updateItemShopByTab(tabId, itemDate):> TypeId: %s", tostring(tabId)))
+    print("updateItemShopByTab tabId : "..tostring(tabId).." :", Lib.v2s(itemDate, 3))
     if tabId == TabType.Equip then
         self:updateItem(EquipConfig, itemDate)
     elseif tabId == TabType.Belt then

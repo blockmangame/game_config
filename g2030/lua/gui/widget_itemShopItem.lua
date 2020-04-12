@@ -102,7 +102,12 @@ function M:setItemStatus()
         self.stItemUsedText:SetVisible(true)
         self.siItemLockIcon:SetVisible(false)
         self.stItemUsedText:SetTextColor({53/255, 177/255, 42/255, 1})
-        self.stItemUsedText:SetText(Lang:toText("gui_have"))
+        if self.kind == Define.TabType.Advance then
+            self.stItemUsedText:SetTextColor({213/255, 205/255, 47/255, 1})
+            self.stItemUsedText:SetText(Lang:toText("gui_has_advancd"))
+        else
+            self.stItemUsedText:SetText(Lang:toText("gui_have"))
+        end
     end
     if self.itemStatus == BuyStatus.Used then
         self.stItemMoneyNum:SetVisible(false)
