@@ -27,7 +27,6 @@ function handles:recallPet(packet)
 end
 
 function handles:SyncItemShopOperation(packet)
-    print(string.format("<events:SyncItemShopOperation(packet):> TypeId: %s  ItemId: %s", tostring(packet.tabId), tostring(packet.itemId)))
     Store.ItemShop:operationByType(self, packet.tabId, packet.itemId)
 end
 function handles:SellExp(packet)
@@ -45,6 +44,5 @@ function handles:teamShopBuyItem(packet)
 end
 
 function handles:SyncItemShopBuyAll(packet)
-    print(string.format("<events:SyncItemShopOperation(packet):> TypeId: %s  ItemId: %s", tostring(packet.tabId), tostring(packet.itemId)))
     Store.ItemShop:BuyAll(self, packet.tabId)
 end
