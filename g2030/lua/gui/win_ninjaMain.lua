@@ -73,13 +73,13 @@ function M:exchangeABBtn()
     if exchangeMac then
         print("-------------in")
         exchangeMac = false
-        A_Btn:SetImage("set:ninja_main.json image:btn_atk_s")
-        B_Btn:SetImage("set:ninja_main.json image:btn_jump")
+        A_Btn:SetImage("set:ninja_main.json image:btn_jump_s")
+        B_Btn:SetImage("set:ninja_main.json image:btn_atk")
     else
         print("-------------out")
         exchangeMac = true
-        A_Btn:SetImage("set:ninja_main.json image:btn_atk")
-        B_Btn:SetImage("set:ninja_main.json image:btn_jump_s")
+        A_Btn:SetImage("set:ninja_main.json image:btn_jump")
+        B_Btn:SetImage("set:ninja_main.json image:btn_atk_s")
 
     end
 

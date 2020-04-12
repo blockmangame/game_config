@@ -9,6 +9,11 @@ Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE_BEGIN")
 Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE")
 Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE_END")
 Event.register("EVENT_NOT_ENOUGH_MONEY")
+Event.register("EVENT_RECHARGE_SKILL_UPDATE")
+Event.register("EVENT_RECHARGE_SKILL_REMOVE")
+Event.register("EVENT_RECHARGE_SKILL_CAST")
+Event.register("EVENT_RECHARGE_SKILL_RESET")
+Event.register("EVENT_ALL_RECHARGE_SKILL_RESET")
 
 if World.isClient then
     Event.register("EVENT_SHOW_BOTTOM_MESSAGE")
