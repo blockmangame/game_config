@@ -19,7 +19,7 @@ function AdvanceConfig:init()
         data.attack = tonumber(vConfig.n_attack) or 0 --n_attack
         data.speed = tonumber(vConfig.n_speed) or 0 --n_speed
         data.workout = tonumber(vConfig.n_workout) or 0 --n_workout
-        data.status = 1
+        data.status = Define.BuyStatus.Lock
         if data.moneyType == 0 then
             data.isPay = true
         else
@@ -31,7 +31,55 @@ function AdvanceConfig:init()
         return a.id < b.id
     end)
     --Lib.log_1(settings, "AdvanceConfig:init")
-    --Lib.log("jumpConfig:init " .. Lib.v2s(settings))
+end
+
+function AdvanceConfig:getItemById(id)
+    if settings[id] then
+        return settings[id]
+    end
+    return nil
+end
+
+function AdvanceConfig:getItemBySort(sort)
+    if settings[sort] then
+        return settings[sort]
+    end
+    return nil
+end
+
+function AdvanceConfig:getAllItemByPay(isPay)
+    local items1 ={}
+    local items2 ={}
+    for _,v in pairs(settings) do
+        if not v.isPay then
+            table.insert(items1,v)
+        else
+            table.insert(items2,v)
+        end
+    end
+    if isPay then
+        table.sort(items2, function(a, b)
+            return a.id < b.id
+        end)
+        return items2
+    end
+    table.sort(items1, function(a, b)
+        return a.id < b.id
+    end)
+    return items1
+end
+
+function AdvanceConfig:getNextItemByPay(curId, isPay)
+    local items = self:getAllItemByPay(false)
+    for i=#items, 1, -1 do
+        if items[i].id == curId then
+            if i==#items then
+                return nil
+            end
+            return items[i+1]
+        end
+    end
+    return nil
 end
 
 function AdvanceConfig:getSettings()
