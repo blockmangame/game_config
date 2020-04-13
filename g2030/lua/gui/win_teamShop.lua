@@ -53,35 +53,29 @@ function M:init()
         self:hide()
     end)
 
+    Lib.subscribeEvent(Event.EVENT_TEAM_SHOP_REFRESH, function()
+        self:upDateItem()
+    end)
+
 end
 
-function M:upDateItem(packet)
-    local Data
-    if packet == nil then
-
-        local TeamSkin = Me:getOwnTeamSkin()
-        print("---TeamSkin---" .. Lib.v2s(TeamSkin))
-        if TeamSkin ~= nil then
-            for _, value in pairs(TeamSkin) do
-                self.Skins[value.id].status = ItemStatus.Used
-            end
-        end
-
-        local EquipTeamSkin = Me:getTeamSkinId()
-        print("---EquipTeamSkin---" .. Lib.v2s(EquipTeamSkin))
-        if EquipTeamSkin ~= nil then
-            for _, value in pairs(EquipTeamSkin) do
+function M:upDateItem()
+    print("!!!!!upDateItem")
+    local TeamSkin = Lib.copy(Me:getOwnTeamSkin())
+    local EquipTeamSkin = Lib.copy(Me:getTeamSkinId())
+    print("---TeamSkin---" .. Lib.v2s(TeamSkin))
+    print("---EquipTeamSkinId---" .. Lib.v2s(EquipTeamSkin))
+    if TeamSkin ~= nil then
+        for _, value in pairs(TeamSkin) do
+            self.Skins[value.id].status = ItemStatus.Used
+            if value.id == EquipTeamSkin then
                 self.Skins[value.id].status = ItemStatus.Using
             end
         end
-    else
-        Data = packet.Data
-        for i, Value in pairs(Data) do
-            self.Skins[Value.id].status = Value.status
-        end
     end
-
-    self:addItemsSkinPanel()
+    if self.selectTab == TabTeamKind.TeamSkin then
+        self:addItemsSkinPanel()
+    end
 end
 
 function M:initBlackUI()
@@ -173,7 +167,8 @@ function M:addItemsSkillPanel()
 end
 
 function M:initItemConfig()
-    self.Skins = teamShopConfig:getItems()
+    self.Skins = Lib.copy(teamShopConfig:getItems())
+    self:upDateItem()
 end
 
 function M:initTabsConfig()
