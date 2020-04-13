@@ -25,6 +25,7 @@ require "script_server.skill.recharge_skill"
 require "script_server.trigger_handlers"
 
 require "script_server.actions_custom"
+require "script_server.actions_common"
 
 local main = {}
 

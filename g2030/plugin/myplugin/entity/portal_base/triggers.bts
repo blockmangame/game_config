@@ -1,0 +1,13 @@
+ENTITY_CLICK
+{
+Test("1111111111")
+}
+
+ENTITY_TOUCH_ALL{
+
+    If(IsPlayer(entity = $obj2))
+    {
+    $targetPos = GetConfigVar(obj = $obj1,key="toPos")
+    PortalUIData(player = $obj2, pos=$targetPos)
+    }
+}

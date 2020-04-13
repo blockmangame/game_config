@@ -149,6 +149,16 @@
 		"defaultView": 3
     },
 	"hidePerSpec": true,
-  "campMaterialReward": 1
+  "campMaterialReward": 1,
+  "teleportProps":[
+    {
+      "teleportType": "center",
+      "_teleportType": "过渡效果类型，目前仅做了渐进缩到中间然后又渐变开来，如果需要其他特殊效果需要开发。",
+      "teleportTime": 20,
+      "teleportImage": "teleport.png",
+      "teleportColor": [0,0,0,1]
+    }
+  ],
+  "_teleportProps": "传送的一些属性。可以不写有默认值。这里开出配置是满足一些特殊需求比如不同岛屿的传送时间和背景或者传送效果(比如不想要中心扩散要其他效果)可能会不同之类的。"
 }
 

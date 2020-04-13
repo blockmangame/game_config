@@ -6,4 +6,12 @@ ENTITY_ENTER{
 
 ENTITY_DIE{
 	ResetEntityRechargeSkill(entity = $obj1)
+	TeleportBegin(entity = $obj1) -- Test code
+}
+
+TELEPORT_BEGIN_FINSH{
+	TeleportEnd(entity = $obj1) -- Test code
+}
+TELEPORT_END_FINSH{
+
 }
