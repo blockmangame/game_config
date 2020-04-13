@@ -22,7 +22,7 @@ local function doJumpStateChange(control, player)
         player:setEntityProp("antiGravity", tostring(player.EntityProp.antiGravity))
         player:setEntityProp("moveAcc", tostring(player.EntityProp.moveAcc))
         player.motion = Lib.v3(0, 0, 0)
-        player:setValue("isKeepAhead", false)
+        --player:setValue("isKeepAhead", false)
 
         if player.isJumpMoveEnd then
             player:setEntityProp("moveSpeed", tostring(0.0))
@@ -30,7 +30,7 @@ local function doJumpStateChange(control, player)
         Skill.Cast(Me:cfg().freeFallSkill)
     else
         player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
-        --player:setEntityProp("moveAcc", tostring(0.0))
+        player:setEntityProp("moveAcc", tostring(0.0))
 
         ---@type JumpConfig
         local JumpConfig = T(Config, "JumpConfig")
@@ -44,7 +44,7 @@ local function doJumpStateChange(control, player)
         player.motion = Lib.v3(motionX * config.glidingSpeed,
                 motionY * config.glidingSpeed, motionZ * config.glidingSpeed)
         --print("player.motion ", motionX, motionY, motionZ)
-        player:setValue("isKeepAhead", true)
+        --player:setValue("isKeepAhead", true)
 
         player:setEntityProp("moveSpeed", tostring(999999.0))
         Skill.Cast(Me:cfg().glidingSkill)

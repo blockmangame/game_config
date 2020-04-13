@@ -38,7 +38,7 @@ function Player:recoverJumpProp()
     self:setEntityProp("moveSpeed", tostring(self.EntityProp.moveSpeed))
     self:setEntityProp("moveAcc", tostring(self.EntityProp.moveAcc))
 
-    self:setValue("isKeepAhead", false)
+    --self:setValue("isKeepAhead", false)
 
     self.isGliding = false
     self.isJumpMoveEnd = false
