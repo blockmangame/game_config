@@ -255,11 +255,11 @@ CREATE_OWNER_HOUSE{
 }
 
 GOTO_INSIDE_HOUSE{
-    --SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
-	--  pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
-    --CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
+    SetEntityPosition(map = $houseInsideMap, entity = $obj1, ry = $yaw,
+	 pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
+    CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
 
-    SetEntityPosition(entity = $obj1, map = "map001", pos = { x = 203.0, y = 22.0, z = 62.0 })
+    -- SetEntityPosition(entity = $obj1, map = "map001", pos = { x = 203.0, y = 22.0, z = 62.0 })
 }
 
 ENTITY_DIE{
