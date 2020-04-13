@@ -29,7 +29,7 @@ local function doJumpStateChange(control, player)
         Skill.Cast(Me:cfg().freeFallSkill)
     else
         player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
-        player:setEntityProp("moveAcc", tostring(0.0))
+        --player:setEntityProp("moveAcc", tostring(0.0))
 
         ---@type JumpConfig
         local JumpConfig = T(Config, "JumpConfig")
