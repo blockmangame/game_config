@@ -44,26 +44,27 @@ function teamShop:onTeamShopItemBuy(player, id, status)
     if not player then
         return
     end
-    local config = teamShopConfig:getItemByItemId(id)
-    if not config then
+    local item = teamShopConfig:getItemByItemId(id)
+    if not item then
         return
     end
     --todo 扣钱操作
-    self:onBuyItemSuccess(player, id, status)
+    player:consumeDiamonds("gDiamonds", item.price, function(ret)
+        if ret then
+            self:onBuyItemSuccess(player, id, status)
+            return true
+        end
+    end)
 end
 
 function teamShop:onBuyItemSuccess(player, id, status)
-    local config = teamShopConfig:getItemByItemId(id)
-    if not config then
-        return
-    end
     --TODO 装备外观
     self:updateTeamShopItem(player, id, status)
 end
 
 function teamShop:updateTeamShopItem(player, id, status)
     if status == ItemStatus.Buy then
-        local info = player:getOwnTeamSkin() or {}
+        local info = Lib.copy(player:getOwnTeamSkin())
         for i, value in pairs(teamShopConfig:getItems()) do
             if value.id == id then
                 table.insert(info, { id = id })
@@ -71,7 +72,7 @@ function teamShop:updateTeamShopItem(player, id, status)
         end
         player:setOwnTeamSkin(info)
     elseif status == ItemStatus.Used then
-        local ownTeamSkin = player:getOwnTeamSkin()
+        local ownTeamSkin = Lib.copy(player:getOwnTeamSkin())
         for i, value in pairs(ownTeamSkin) do
             if value.id == id then
                 player:setTeamSkinId(value.id)
@@ -81,28 +82,7 @@ function teamShop:updateTeamShopItem(player, id, status)
         local equipInfo = 0
         player:setTeamSkinId(equipInfo)
     end
-    self:syncTeamShopData(player)
-end
 
-function teamShop:syncTeamShopData(player)
-    self.Skins = teamShopConfig:getItems()
-    local items = player:getOwnTeamSkin()
-    print("---items---" .. Lib.v2s(items))
-    print("---player:getTeamSkinId()---" .. Lib.v2s(player:getTeamSkinId()))
-    if items == nil then
-        return
-    end
-    for _, value in pairs(items) do
-        self.Skins[value.id].status = ItemStatus.Used
-        if value.id == player:getTeamSkinId() then
-            self.Skins[value.id].status = ItemStatus.Using
-        end
-    end
-
-    player:sendPacket({
-        pid = "teamShopBuyItemSuccess",
-        Data = self.Skins,
-    })
 end
 
 return teamShop

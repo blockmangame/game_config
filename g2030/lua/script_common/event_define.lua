@@ -17,6 +17,7 @@ Event.register("EVENT_ALL_RECHARGE_SKILL_RESET")
 
 if World.isClient then
     Event.register("EVENT_SHOW_BOTTOM_MESSAGE")
+    Event.register("EVENT_TEAM_SHOP_REFRESH")
 else
     --TODO
 end

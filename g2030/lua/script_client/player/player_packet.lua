@@ -56,12 +56,6 @@ function handles:PetList(packet)
     self:setData("pet", list)
 end
 
-function handles:teamShopBuyItemSuccess(packet)
-    local teamShop = UI:getWnd("teamShop")
-    if teamShop then
-        teamShop:upDateItem(packet)
-    end
-end
 
 function handles:ResetEntityRechargeSkill(packet)
     Lib.emitEvent(Event.EVENT_ALL_RECHARGE_SKILL_RESET)
