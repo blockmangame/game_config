@@ -56,7 +56,25 @@ function handles:PetList(packet)
     self:setData("pet", list)
 end
 
-
 function handles:ResetEntityRechargeSkill(packet)
     Lib.emitEvent(Event.EVENT_ALL_RECHARGE_SKILL_RESET)
+end
+
+function handles:PortalUIData(packet)
+    local pos = packet.pos
+    UI:openWnd("ninjaCommonDialog"):initView(
+            {
+                content = Lang:toText("gui_go_island_notice"),
+                contentCenter = true,
+                txtTitle = Lang:toText("gui_tip"),
+                hideClose = false,
+                leftTxt = Lang:toText("gui_cancel"),
+                rightTxt = Lang:toText("gui_sure"),
+                leftCb = function()
+                end,
+                rightCb = function()
+                    Me:setPosition(pos)
+                end
+            }
+    )
 end
