@@ -14,9 +14,13 @@ Event.register("EVENT_RECHARGE_SKILL_REMOVE")
 Event.register("EVENT_RECHARGE_SKILL_CAST")
 Event.register("EVENT_RECHARGE_SKILL_RESET")
 Event.register("EVENT_ALL_RECHARGE_SKILL_RESET")
+Event.register("EVENT_TELEPORT_SHADER_ENABLE")
+Event.register("EVENT_TELEPORT_SHADER_DISABLE")
 
 if World.isClient then
     Event.register("EVENT_SHOW_BOTTOM_MESSAGE")
+    Event.register("EVENT_TEAM_SHOP_REFRESH")
+    Event.register("EVENT_ITEM_SHOP_UPDATE")
 else
     --TODO
 end

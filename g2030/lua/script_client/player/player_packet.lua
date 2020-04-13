@@ -7,43 +7,15 @@
 local handles = T(Player, "PackageHandlers")
 
 function handles:itemShopRegion(packet)
-    print(string.format("itemShopRegion:> TypeId: %s", tostring(packet.isShow)))
-    --print("packet.itemDate is : ")
-    --print(type(packet.itemDate))
-    --Lib.log_1(packet.itemDate)
-    ----Store.ItemShop:updateItemShopByTab(packet.tabId, packet.itemDate)
-    ----Lib.emitEvent(Event.EVENT_UPDATE_ITEMSHOP, packet.tabId, packet.itemDate)
     local itemShop = UI:getWnd("itemShop")
     if itemShop then
+        itemShop:isInitItemData()
         itemShop:onShow(packet.isShow)
     end
 end
+
 function handles:exchangeWeapon(packet)
     self:setHandItem(packet.weapon)
-end
-function handles:initItemShopData(packet)
-    print(string.format("handles:initItemShopData(packet)"))
-    print("packet.packet is : ")
-    --Lib.log_1(packet)
-    --Store.ItemShop:updateItemShopByTab(packet.tabId, packet.itemDate)
-    --Lib.emitEvent(Event.EVENT_UPDATE_ITEMSHOP, packet.tabId, packet.itemDate)
-    local itemShop = UI:getWnd("itemShop")
-    if itemShop then
-        itemShop:initItemShop(packet.data)
-    end
-end
-
-function handles:updateItemShopDataByTab(packet)
-    print(string.format("handles:updateItemShopDataByTab(packet):> TypeId: %s", tostring(packet.tabId)))
-    print("packet.itemDate is : ")
-    print(type(packet.itemDate))
-    --Lib.log_1(packet.itemDate)
-    --Store.ItemShop:updateItemShopByTab(packet.tabId, packet.itemDate)
-    --Lib.emitEvent(Event.EVENT_UPDATE_ITEMSHOP, packet.tabId, packet.itemDate)
-    local itemShop = UI:getWnd("itemShop")
-    if itemShop then
-        itemShop:updateItemShopByTab(packet.tabId, packet.itemDate)
-    end
 end
 
 function handles:PetList(packet)
@@ -56,13 +28,33 @@ function handles:PetList(packet)
     self:setData("pet", list)
 end
 
-function handles:teamShopBuyItemSuccess(packet)
-    local teamShop = UI:getWnd("teamShop")
-    if teamShop then
-        teamShop:upDateItem(packet)
-    end
-end
-
 function handles:ResetEntityRechargeSkill(packet)
     Lib.emitEvent(Event.EVENT_ALL_RECHARGE_SKILL_RESET)
+end
+
+function handles:PortalUIData(packet)
+    local pos = packet.pos
+    UI:openWnd("ninjaCommonDialog"):initView(
+            {
+                content = Lang:toText("gui_go_island_notice"),
+                contentCenter = true,
+                txtTitle = Lang:toText("gui_tip"),
+                hideClose = false,
+                leftTxt = Lang:toText("gui_cancel"),
+                rightTxt = Lang:toText("gui_sure"),
+                leftCb = function()
+                end,
+                rightCb = function()
+                    Me:setPosition(pos)
+                end
+            }
+    )
+end
+
+function handles:TeleportBegin(packet)
+    Lib.emitEvent(Event.EVENT_TELEPORT_SHADER_ENABLE, packet.type)
+end
+
+function handles:TeleportEnd(packet)
+    Lib.emitEvent(Event.EVENT_TELEPORT_SHADER_DISABLE, packet.type)
 end

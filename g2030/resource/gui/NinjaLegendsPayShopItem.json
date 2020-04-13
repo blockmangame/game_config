@@ -1,0 +1,434 @@
+{
+    "Dialog": {
+        "Window": {
+            "Type": "Layout",
+            "Name": "NinjaLegendsPayShopItem",
+            "Property": [
+                {
+                    "Name": "Area",
+                    "Value": "{{0,0},{0,0},{0,140},{0,181}}"
+                },
+                {
+                    "Name": "Touchable",
+                    "Value": "false"
+                },
+                {
+                    "Name": "WndOpenSound",
+                    "Value": "0"
+                },
+                {
+                    "Name": "WndCloseSound",
+                    "Value": "0"
+                },
+                {
+                    "Name": "StretchOffset",
+                    "Value": "8 8 28 8"
+                },
+                {
+                    "Name": "OutputLuaVariable",
+                    "Value": "true"
+                },
+                {
+                    "Name": "LayoutBackImage",
+                    "Value": "set:ninja_legends_payshop.json image:item_bg"
+                }
+            ],
+            "Window": [
+                {
+                    "Type": "StaticImage",
+                    "Name": "NinjaLegendsPayShopItem-Item-Bg",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "OutputLuaVariable",
+                            "Value": "true"
+                        },
+                        {
+                            "Name": "ImageName",
+                            "Value": "set:ninja_legends_payshop.json image:item_bg"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        }
+                    ],
+                    "Window": [
+                        {
+                            "Type": "StaticImage",
+                            "Name": "NinjaLegendsPayShop-Item-Select",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{-0.02,0},{1.05,0},{1.05,0}}"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "StretchType",
+                                    "Value": "NineGrid"
+                                },
+                                {
+                                    "Name": "StretchOffset",
+                                    "Value": "20 20 20 20"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "ImageName",
+                                    "Value": "set:ninja_legends_payshop.json image:item_select"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "StaticImage",
+                            "Name": "NinjaLegendsPayShopItem-Item-Icon",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{0,0},{0,136},{0,177}}"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "StaticText",
+                            "Name": "NinjaLegendsPayShopItem-Item-Title",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{0,0},{1,0},{0.1875,0}}"
+                                },
+                                {
+                                    "Name": "Text",
+                                    "Value": "道具名称"
+                                },
+                                {
+                                    "Name": "Font",
+                                    "Value": "HT14"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "TextHorzAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextVertAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextBorder",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "TextLineExtraSpace",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "TextAutoOmission",
+                                    "Value": "false"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Type": "Button",
+                    "Name": "NinjaLegendsPayShopItem-Item-Btn",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,-2},{0,-9},{0,101},{0,27.375}}"
+                        },
+                        {
+                            "Name": "VerticalAlignment",
+                            "Value": "Bottom"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "StretchType",
+                            "Value": "NineGrid"
+                        },
+                        {
+                            "Name": "StretchOffset",
+                            "Value": "15 15 15 15"
+                        },
+                        {
+                            "Name": "OutputLuaVariable",
+                            "Value": "true"
+                        },
+                        {
+                            "Name": "NormalImage",
+                            "Value": "set:ninja_legends_payshop.json image:btn_blue"
+                        },
+                        {
+                            "Name": "PushedImage",
+                            "Value": "set:ninja_legends_payshop.json image:btn_blue"
+                        },
+                        {
+                            "Name": "SoundName",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "TextRenderOffset",
+                            "Value": "20 0"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        }
+                    ],
+                    "Window": [
+                        {
+                            "Type": "StaticText",
+                            "Name": "NinjaLegendsPayShopItem-Item-Btn-Text",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0.0705128,6},{-0.025974,0},{0.724359,0},{0.649351,0}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "Text",
+                                    "Value": "500"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "TextHorzAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextVertAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "TextLineExtraSpace",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "TextAutoOmission",
+                                    "Value": "false"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "StaticImage",
+                            "Name": "NinjaLegendsPayShopItem-Item-Btn-Gold",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0.135922,0},{0.194444,0},{0.330097,0},{0.75,0}}"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "OutputLuaVariable",
+                                    "Value": "true"
+                                },
+                                {
+                                    "Name": "ImageName",
+                                    "Value": "set:ninja_legends_payshop.json image:tab_privilege_2"
+                                },
+                                {
+                                    "Name": "HexgonTopImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonTopColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonSideImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonSideColor",
+                                    "Value": "1 1 1 1"
+                                },
+                                {
+                                    "Name": "HexgonOverlayerImage",
+                                    "Value": ""
+                                },
+                                {
+                                    "Name": "HexgonOverlayerColor",
+                                    "Value": "1 1 1 1"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

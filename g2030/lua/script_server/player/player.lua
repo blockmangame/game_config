@@ -23,8 +23,6 @@ function Player:initPlayer()
 
     self:initCurrency()
     self:tickLifeSteal()
-    --self:initData()
-    self:initItemShop()
 end
 ---
 ---角色固有设定，定时回血
@@ -109,6 +107,19 @@ function Player:setCurExp(val)
     self:setValue("curExp", val)
 
 end
+function Player:addLevel()
+
+--锻炼器材
+--当前肌肉值、肌肉最大值
+--连跳等级
+--传送门状态
+    self:setCurLevel(self:getCurLevel()+1)
+     --   所持金币数
+    self:payCurrency("gold", 0,true,false, "level_up")
+    
+    self:resetExp()
+    
+end
 ---设置阵营
 function Player:setTeam(id)
     Game.TryJoinTeam(self, id)
@@ -117,8 +128,4 @@ end
 ---获取阵营
 function Player:getTeam()
     return Game.GetTeam(self:getTeamId())
-end
-
-function Player:initItemShop()
-    Store.ItemShop:initAllItem(self)
 end
