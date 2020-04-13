@@ -21,8 +21,9 @@ GMItem["g2030/装备武器！"] = function(self)
     local item1 =  self:searchItem("fullName","myplugin/weapon_simple")
     self:saveHandItem(item1,false)
 end
-
-
+GMItem["g2030/添加ExpMaxbuff"] = function(self)
+    self:addBuff("myplugin/sash_buff_simple",200)
+end
 GMItem["g2030/添加回血buff"] = function(self)
     self:addBuff("myplugin/healing_s",40)
 end

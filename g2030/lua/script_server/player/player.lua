@@ -69,6 +69,16 @@ function Player:sellExp()
     self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
     self:resetExp()
 end
+function Player:openGold2Plus()
+    self:setValue("gold2Plus",playerCfg.goldExchangePlus)
+end
+function Player:openPerExpPlus()
+    self:setValue("perExpPlu",playerCfg.perExpPlus)
+end
+function Player:openHpMaxPlus()
+    self:setValue("hpMaxPlus",playerCfg.hpMaxPlus)
+end
+
 ---
 ---更换装备
 ---
@@ -87,7 +97,7 @@ end
 ---
 function Player:deltaHp(deltaVal)
     if deltaVal>0 and deltaVal<1 or deltaVal<0 and deltaVal>-1 then
-        deltaVal = math.floor(self:getMaxHp()*deltaVal)
+        deltaVal =self:getMaxHp()*deltaVal
     end
 
     local curVal = math.min(math.max(self:getCurHp()+deltaVal,0),self:getMaxHp())
@@ -105,6 +115,9 @@ function Player:resetHp()
 end
 function Player:setCurExp(val)
     self:setValue("curExp", val)
+    if self:getCurHp()>self:getMaxHp() then--改变锻炼值造成血量上限低于当前血量时直接强制重置血量（无血壳）
+        self:resetHp()
+    end
 
 end
 function Player:addLevel()
