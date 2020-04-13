@@ -4830,9 +4830,6 @@ OPEN_BUY_COIN()
 }
 --特权购买成功
 ENTITY_BUY_APPSTOP {
-    If($shopType == 2){
-        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "inviteJoinFamilyBuff")
-    }
     If($itemName == "myplugin/broadcast_party_invite"){
         $addItem = false
     }
@@ -4841,6 +4838,11 @@ ENTITY_BUY_APPSTOP {
     $itemIndex = DictionaryGet(dict = $dict, key = "index")
     $index = ArrayFind(array = $obj1.privilege, value = $itemName)
     GameAnalyticsCustomEvent(player = $obj1, parts = ["shop:buy", $shopType, $itemIndex])
+
+    If($shopType == "2"){
+        CallTrigger(event = "ENTITY_ADD_DINGDONG_BUFF", object = $obj1, buffKey = "getMoneyTipSoundBuff")
+    }
+
     If($shopType == "1" && not $index and $limit ~= -1){
         $addItem = false
         $goodsDict = NewDictionary($obj1.goodsInfo)
