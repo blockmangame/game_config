@@ -259,6 +259,7 @@ GOTO_INSIDE_HOUSE{
 	 pos = GetMapInitPos(map = $houseInsideMap) or GetEntityPosition(entity = $obj1))
     CallTrigger(object = $obj1, event = "SHOW_TITLE_BAR")
 
+    -- 测试用的代码， 开启后玩家刚进游戏时会传送到map001
     -- SetEntityPosition(entity = $obj1, map = "map001", pos = { x = 203.0, y = 22.0, z = 62.0 })
 }
 
