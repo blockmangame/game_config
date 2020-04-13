@@ -5,20 +5,18 @@ local advance =  require "script_server.shop.shop_advance"
 local TabType = T(Define, "TabType")
 local M = {}
 
-local Equip = nil
-local Belt = nil
-local Advance = nil
+local Equip = {}
+local Belt = {}
+local Advance = {}
 
 function M:init()
     Equip = Lib.derive(equip)
-    Equip:init()
     Belt = Lib.derive(belt)
-    Belt:init()
     Advance = Lib.derive(advance)
-    Advance:init()
 end
 
 function ItemShop:operationByType(player, tabId, itemId)
+    print(self.player == player)
     print(string.format("<ItemShop:operationByType> TypeId: %s  ItemId: %s", tostring(tabId), tostring(itemId)))
     if tabId == TabType.Equip then
         Equip:operation(player, itemId)
@@ -41,15 +39,23 @@ function ItemShop:BuyAll(player, tabId)
 end
 
 function ItemShop:initAllItem(player)
-    print("ItemShop:initAllItem(player)" )
     Equip:initItem(player)
     Belt:initItem(player)
     Advance:initItem(player)
     self:sendAllItemData(player)
 end
 
-function ItemShop:showOrHide(player, isShow)
-    print(string.format("showOrHide:> isShow: %s", tostring(isShow)))
+function ItemShop:upgradeIslandToUnlock(player)
+    Equip:islandAndAdvanceToUnlockPay(player)
+    Belt:islandAndAdvanceToUnlockPay(player)
+    Advance:islandAndAdvanceToUnlockPay(player)
+    Equip:islandToUnlockNotPay(player)
+    Belt:islandToUnlockNotPay(player)
+    Advance:islandToUnlockNotPay(player)
+end
+
+function ItemShop:itemShopRegion(player, isShow)
+    print(string.format("itemShopRegion:> isShow: %s", tostring(isShow)))
     local packet = {
         pid = "itemShopRegion",
         isShow = isShow,
@@ -89,26 +95,17 @@ function ItemShop:sendAllItemData(player)
         pid = "initItemShopData",
         data = data,
     }
-    --Lib.log_1(data, "sendInitAllItem")
+    print("sendChangeItemByTab changeInfo: ", Lib.v2s(data, 3))
     player:sendPacket(packet)
 end
 
 function ItemShop:sendChangeItemByTab(player, tabType, changeInfo)
-    local data = {}
-    local key ={}
-    for i in pairs(changeInfo) do
-        table.insert(key,i)
-    end
-    table.sort(key,function(a,b)return (tonumber(a) <  tonumber(b)) end)
-    for _, v in pairs(key) do
-        data[v]= changeInfo[v]
-    end
     local packet = {
         pid = "updateItemShopDataByTab",
         tabId = tabType,
-        itemDate = data
+        itemDate = changeInfo
     }
-    ----Lib.log_1(data,"sendChangeItemByTab" )
+    print("sendChangeItemByTab changeInfo: ", Lib.v2s(changeInfo, 3))
     player:sendPacket(packet)
 end
 

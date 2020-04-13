@@ -21,6 +21,17 @@ function PayEquipConfig:init()
     --Lib.log("jumpConfig:init " .. Lib.v2s(settings))
 end
 
+function PayEquipConfig:getItemById(id)
+    --print("type(id) : "..type(id))
+    --print("islandAndAdvanceToUnlockPay id : "..tostring(id).." buyInfo  1:", Lib.v2s(settings, 3))
+    for ids, setting in pairs(settings) do
+        if ids == tostring(id) then
+            return setting
+        end
+    end
+    return nil
+end
+
 function PayEquipConfig:getSettings()
     return settings
 end

@@ -73,4 +73,5 @@ function Game.OnPlayerLogin(player)
     oldPlayerLogin(player);
 
     player:initPetInfo();
+    Store.ItemShop:initAllItem(player)
 end

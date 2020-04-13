@@ -103,4 +103,10 @@ GMItem["g2030/玩家治疗加成"] = function(self)
     print("治疗加成：" .. self:getHealingPlu())
 end
 
+GMItem["g2030/升级岛屿1"] = function(self)
+    self:setValue("islandLv", self:getValue("islandLv") + 1);
+    print("岛屿升级到：" .. self:getValue("islandLv"))
+    Store.ItemShop:upgradeIslandToUnlock(self)
+end
+
 return GMItem
