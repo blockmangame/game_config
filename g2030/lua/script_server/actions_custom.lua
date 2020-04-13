@@ -13,3 +13,10 @@ function Actions.ResetEntityRechargeSkill(data, params, context)
     params.entity:sendPacket({pid = "ResetEntityRechargeSkill"})
 end
 
+function Actions.TeleportBegin(data, params, context)
+    params.entity:sendPacket({pid = "TeleportBegin", type = params.type or 1})
+end
+
+function Actions.TeleportEnd(data, params, context)
+    params.entity:sendPacket({pid = "TeleportEnd", type = params.type or 1})
+end

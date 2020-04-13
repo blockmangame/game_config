@@ -46,3 +46,19 @@ end
 function handles:SyncItemShopBuyAll(packet)
     Store.ItemShop:BuyAll(self, packet.tabId)
 end
+
+function handles:TeleportBeginFinsh(packet)
+    local entity = World.CurWorld:getObject(packet.objId)
+    if not entity then
+        return
+    end
+    Trigger.CheckTriggers(entity:cfg(), "TELEPORT_BEGIN_FINSH", {obj1=entity})
+end
+
+function handles:TeleportEndFinsh(packet)
+    local entity = World.CurWorld:getObject(packet.objId)
+    if not entity then
+        return
+    end
+    Trigger.CheckTriggers(entity:cfg(), "TELEPORT_END_FINSH", {obj1=entity})
+end

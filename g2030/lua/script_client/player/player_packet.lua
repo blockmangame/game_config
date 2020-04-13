@@ -78,3 +78,11 @@ function handles:PortalUIData(packet)
             }
     )
 end
+
+function handles:TeleportBegin(packet)
+    Lib.emitEvent(Event.EVENT_TELEPORT_SHADER_ENABLE, packet.type)
+end
+
+function handles:TeleportEnd(packet)
+    Lib.emitEvent(Event.EVENT_TELEPORT_SHADER_DISABLE, packet.type)
+end
