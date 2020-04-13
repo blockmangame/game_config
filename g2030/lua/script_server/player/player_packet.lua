@@ -46,3 +46,7 @@ end
 function handles:SyncItemShopBuyAll(packet)
     Store.ItemShop:BuyAll(self, packet.tabId)
 end
+
+function handles:SyncItemShopInit(packet)
+    Store.ItemShop:initAllItem(self)
+end

@@ -8,7 +8,7 @@ function M:init()
 end
 
 function M:getPlayerBuyInfo(player)
-    return Lib.copyTable1(player:getBelt())
+    return player:getBelt()
 end
 
 function M:setPlayerBuyInfo(player, buyInfo)

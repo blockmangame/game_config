@@ -4,10 +4,11 @@ local EquipConfig = T(Config, "EquipConfig")
 local settings = {}
 
 function EquipConfig:init()
-    local config = Lib.read_csv_file(Root.Instance():getGamePath() .. "config/Equip.csv", 1)
+    local config = Lib.read_csv_file(Root.Instance():getGamePath() .. "config/Equip.csv", 3)
     for _, vConfig in pairs(config) do
         local data = {}
         data.id = tonumber(vConfig.n_id) or 0 --n_id
+        data.sortId = tonumber(vConfig.n_sortId) or 0 --n_sortId
         data.name = vConfig.s_name or "" --s_name
         data.icon = vConfig.s_icon or "" --s_icon
         data.moneyType = tonumber(vConfig.n_moneyType) or 0 --n_moneyType
@@ -23,17 +24,19 @@ function EquipConfig:init()
         else
             data.isPay = false
         end
-        settings[data.id] = data
+        table.insert(settings, data)
     end
     table.sort(settings, function(a, b)
-        return a.id < b.id
+        return a.sortId < b.sortId
     end)
     --Lib.log_1(settings, "EquipConfig:init")
 end
 
 function EquipConfig:getItemById(id)
-    if settings[id] then
-        return settings[id]
+    for _, setting in pairs(settings) do
+        if setting.id == id then
+            return setting
+        end
     end
     return nil
 end
@@ -57,18 +60,18 @@ function EquipConfig:getAllItemByPay(isPay)
     end
     if isPay then
         table.sort(items2, function(a, b)
-            return a.id < b.id
+            return a.sortId < b.sortId
         end)
         return items2
     end
     table.sort(items1, function(a, b)
-        return a.id < b.id
+        return a.sortId < b.sortId
     end)
     return items1
 end
 
 function EquipConfig:getNextItemByPay(curId, isPay)
-    local items = self:getAllItemByPay(false)
+    local items = self:getAllItemByPay(isPay)
     for i=#items, 1, -1 do
         if items[i].id == curId then
             if i==#items then

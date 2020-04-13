@@ -241,7 +241,7 @@ end
 
 ---获取购买装备列表
 function Entity:getEquip()
-    return self:getValue("equip")
+    return Lib.copy(self:getValue("equip"))
 end
 
 ---设置购买装备列表
@@ -251,7 +251,7 @@ end
 
 ---获取购买腰带列表
 function Entity:getBelt()
-    return self:getValue("belt")
+    return Lib.copy(self:getValue("belt"))
 end
 
 ---设置购买腰带列表

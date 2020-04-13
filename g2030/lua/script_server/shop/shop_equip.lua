@@ -9,7 +9,7 @@ function M:init()
 end
 
 function M:getPlayerBuyInfo(player)
-    return Lib.copyTable1(player:getEquip())
+    return player:getEquip()
 end
 
 function M:setPlayerBuyInfo(player, buyInfo)

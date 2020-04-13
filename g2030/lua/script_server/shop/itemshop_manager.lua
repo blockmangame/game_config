@@ -42,7 +42,7 @@ function ItemShop:initAllItem(player)
     Equip:initItem(player)
     Belt:initItem(player)
     Advance:initItem(player)
-    self:sendAllItemData(player)
+    self:itemShopRegion(player, true)
 end
 
 function ItemShop:upgradeIslandToUnlock(player)
@@ -60,52 +60,6 @@ function ItemShop:itemShopRegion(player, isShow)
         pid = "itemShopRegion",
         isShow = isShow,
     }
-    player:sendPacket(packet)
-end
-
-function ItemShop:sendAllItemData(player)
-    local buyInfo = {}
-    for _, tabType in pairs(TabType) do
-        if tabType == TabType.Equip then
-            buyInfo[tabType] = Equip:getPlayerBuyInfo(player)
-        elseif tabType == TabType.Belt then
-            buyInfo[tabType] = Belt:getPlayerBuyInfo(player)
-        elseif tabType == TabType.Advance then
-            buyInfo[tabType] = Advance:getPlayerBuyInfo(player)
-        end
-    end
-    local data = {}
-    for tabId, info in pairs(buyInfo) do
-        data[tabId] = {}
-        for i, v in pairs(info) do
-            data[tabId][tonumber(i)] = v
-        end
-        local key ={}
-        for i in pairs(data[tabId]) do
-            table.insert(key,i)
-        end
-        table.sort(key,function(a,b)return (tonumber(a) <  tonumber(b)) end)
-        local result = {}
-        for _, v in pairs(key) do
-            result[v]= data[tabId][v]
-        end
-        data[tabId] = result
-    end
-    local packet = {
-        pid = "initItemShopData",
-        data = data,
-    }
-    print("sendChangeItemByTab changeInfo: ", Lib.v2s(data, 3))
-    player:sendPacket(packet)
-end
-
-function ItemShop:sendChangeItemByTab(player, tabType, changeInfo)
-    local packet = {
-        pid = "updateItemShopDataByTab",
-        tabId = tabType,
-        itemDate = changeInfo
-    }
-    print("sendChangeItemByTab changeInfo: ", Lib.v2s(changeInfo, 3))
     player:sendPacket(packet)
 end
 

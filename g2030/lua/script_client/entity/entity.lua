@@ -22,6 +22,18 @@ function Entity.ValueFunc:teamSkinId()
     Lib.emitEvent(Event.EVENT_TEAM_SHOP_REFRESH)
 end
 
+function Entity.ValueFunc:curLevel(value)
+    Lib.emitEvent(Event.EVENT_ITEM_SHOP_UPDATE)
+end
+
+function Entity.ValueFunc:equip(value)
+    Lib.emitEvent(Event.EVENT_ITEM_SHOP_UPDATE)
+end
+
+function Entity.ValueFunc:belt(value)
+    Lib.emitEvent(Event.EVENT_ITEM_SHOP_UPDATE)
+end
+
 function EntityClient:addClientBuff(name, id, time)
     if not id then
         id = ClientBuffId - 1

@@ -4,7 +4,7 @@ local PayEquipConfig = T(Config, "PayEquipConfig")
 local settings = {}
 
 function PayEquipConfig:init()
-    local config = Lib.read_csv_file(Root.Instance():getGamePath() .. "config/PayEquip.csv", 1)
+    local config = Lib.read_csv_file(Root.Instance():getGamePath() .. "config/PayEquip.csv", 3)
     for _, vConfig in pairs(config) do
         local data = {}
         data.id = tonumber(vConfig.n_id) or 0 --id
@@ -15,20 +15,17 @@ function PayEquipConfig:init()
         data.efficiencyFixDes  = vConfig.s_efficiencyFixDes or "" --锻炼肌肉量固定值描述
         data.efficiencyFixHuge = tonumber(vConfig.n_efficiencyFixHuge) or 0 --无限肌肉锻炼肌肉量固定值
         data.efficiencyFixHugeDes = vConfig.s_efficiencyFixHugeDes or "" --无限肌肉锻炼肌肉量固定值描述
-        settings[tostring(data.id)] = data
+        table.insert(settings, data)
     end
-    --Lib.log_1(settings, "PayEquipConfig:init")
-    --Lib.log("jumpConfig:init " .. Lib.v2s(settings))
 end
 
 function PayEquipConfig:getItemById(id)
-    --print("type(id) : "..type(id))
-    --print("islandAndAdvanceToUnlockPay id : "..tostring(id).." buyInfo  1:", Lib.v2s(settings, 3))
-    for ids, setting in pairs(settings) do
-        if ids == tostring(id) then
+    for _, setting in pairs(settings) do
+        if setting.id == id then
             return setting
         end
     end
+    --assert(false, "PayEquipConfig:getItemById(id) ：" .. tostring(id).. " is not a exit")
     return nil
 end
 
