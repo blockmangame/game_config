@@ -41,3 +41,11 @@ function events:jumpMoveEnd()
     self:setEntityProp("moveSpeed", tostring(0.0))
     Skill.Cast(Me:cfg().freeFallSkill)
 end
+
+function events:dead(dead)
+    if dead then
+        self:setValue("jumpCount", self:getMaxJumpCount())
+        self:recoverJumpProp()
+        Blockman.instance.gameSettings:setEnableRadialBlur(false)
+    end
+end
