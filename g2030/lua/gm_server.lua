@@ -1,9 +1,14 @@
 local GMItem = GM:createGMItem()
 
-GMItem["g2030/回主城"] = function(self)
-    local targetMap = World.CurWorld:staticMap("map001")
-    self:setMapPos(targetMap, targetMap.cfg.initPos)
+GMItem["g2030/增加跳跃次数"] = function(self)
+    self:setValue("maxJumpCount", self:getValue("maxJumpCount") + 1);
+    self:setValue("jumpCount", self:getValue("maxJumpCount") + 1);
 end
+GMItem["g2030/减少跳跃次数"] = function(self)
+    self:setValue("maxJumpCount", self:getValue("maxJumpCount") - 1);
+    self:setValue("jumpCount", self:getValue("maxJumpCount") - 1);
+end
+
 GMItem["g2030/清空当前修炼值"] = function(self)
     self:resetExp()
 end
@@ -11,18 +16,21 @@ GMItem["g2030/addBuff"] = function(self)
     self:addBuff("myplugin/example", -1)
 end
 GMItem["g2030/花钱！"] = function(self)
-    self:payCurrency("chi", 1,false,false, "test")
+    self:payCurrency("gold",  BigInteger.Create(6,9),false,false, "test")
+    self:payCurrency("chi",  3,false,false, "test")
 end
 GMItem["g2030/掙錢！"] = function(self)
-    self:addCurrency("chi", 1, "test")
+    self:addCurrency("gold", BigInteger.Create(23,10), "test")
+    self:addCurrency("chi",  3, "test")
 end
 GMItem["g2030/装备武器！"] = function(self)
     self:addItem("myplugin/weapon_simple",1,nil,"test")
     local item1 =  self:searchItem("fullName","myplugin/weapon_simple")
     self:saveHandItem(item1,false)
 end
-
-
+GMItem["g2030/添加ExpMaxbuff"] = function(self)
+    self:addBuff("myplugin/sash_buff_simple",200)
+end
 GMItem["g2030/添加回血buff"] = function(self)
     self:addBuff("myplugin/healing_s",40)
 end
@@ -101,6 +109,12 @@ end
 
 GMItem["g2030/玩家治疗加成"] = function(self)
     print("治疗加成：" .. self:getHealingPlu())
+end
+
+GMItem["g2030/升级岛屿1"] = function(self)
+    self:setValue("islandLv", self:getValue("islandLv") + 1);
+    print("岛屿升级到：" .. self:getValue("islandLv"))
+    Store.ItemShop:upgradeIslandToUnlock(self)
 end
 
 return GMItem

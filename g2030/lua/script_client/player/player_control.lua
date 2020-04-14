@@ -8,13 +8,9 @@ local onGround = true
 local lockKeyJump = false
 
 local function showJumpCountMessage(jumpCount, maxJumpCount)
-    local message = string.format(Lang:toText("gui_jump_count_message"), jumpCount, maxJumpCount)
-    if jumpCount <= 0 then
-        message = "▢FFFF0000" .. message
-    else
-        message = "▢FFFFFFFF" .. message
-    end
-    Lib.emitEvent("EVENT_SHOW_BOTTOM_MESSAGE", message)
+    local message = string.format(Lang:toText("gui_jump_count_message"),
+            jumpCount > 0 and jumpCount or 0, maxJumpCount)
+    Lib.emitEvent("EVENT_SHOW_BOTTOM_MESSAGE", message, { jumpCount = jumpCount })
 end
 
 local function doJumpStateChange(control, player)
@@ -22,13 +18,14 @@ local function doJumpStateChange(control, player)
         player:setEntityProp("antiGravity", tostring(player.EntityProp.antiGravity))
         player:setEntityProp("moveAcc", tostring(player.EntityProp.moveAcc))
         player.motion = Lib.v3(0, 0, 0)
+        --player:setValue("isKeepAhead", false)
 
         if player.isJumpMoveEnd then
             player:setEntityProp("moveSpeed", tostring(0.0))
         end
         Skill.Cast(Me:cfg().freeFallSkill)
     else
-        player:setEntityProp("antiGravity", tostring(player.EntityProp.gravity))
+        player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
         player:setEntityProp("moveAcc", tostring(0.0))
 
         ---@type JumpConfig
@@ -43,6 +40,7 @@ local function doJumpStateChange(control, player)
         player.motion = Lib.v3(motionX * config.glidingSpeed,
                 motionY * config.glidingSpeed, motionZ * config.glidingSpeed)
         --print("player.motion ", motionX, motionY, motionZ)
+        --player:setValue("isKeepAhead", true)
 
         player:setEntityProp("moveSpeed", tostring(999999.0))
         Skill.Cast(Me:cfg().glidingSkill)
@@ -55,7 +53,7 @@ local function jump_impl(control, player)
     local jumpCount = player:getJumpCount()
     local maxJumpCount = player:getMaxJumpCount()
 
-    showJumpCountMessage(math.max(jumpCount - 1, 0), maxJumpCount)
+    showJumpCountMessage(jumpCount - 1, maxJumpCount)
 
     if jumpCount <= 0 then
         doJumpStateChange(control, player)

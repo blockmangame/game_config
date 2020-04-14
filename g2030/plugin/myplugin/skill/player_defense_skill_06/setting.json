@@ -1,26 +1,16 @@
 {
-    "cdTime": 10,
-    "type": "Missile",
-    "castAction": "defense_06",
-    "castActionTime": 10,  
-    "target": "self",
-	"missileCfg": "myplugin/weapon_1_comboattack1_missile",
-    "missileCount": 1,
-    "startWait": [
-        6
-    ],
-	"startPos": [
-        {
-            "z": 6,
-            "x": 0,
-            "y": -1.5
-        }
-    ],
-    "castSound": {
-        "volume": 1.5,
-        "selfOnly": false,
-        "loop": false,
-        "sound": "/sound/attack1.mp3"
-    },
-    "targetType": "Self"
+  "type": "Buff",
+  "buffCfg": "myplugin/player_defense_skill_buff_06",
+  "buffTime": 220,
+  "cdTime": 300,
+  "target": "self",
+  "castAction": "action_06",
+  "castActionTime": 220,
+  "range": 15,
+  "startSound": {
+    "volume": 4,
+    "loop": false,
+    "selfOnly": false,
+    "sound": "/sound/dungeon_houjia.mp3"
+  }
 }

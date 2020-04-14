@@ -22,6 +22,25 @@
   "clickScreenUse": false,
   "initSkillSlot": true,
   "teammateHurt": true,
+  "?do3":"策划配置数值系数",
+  "?perExpPlus":"锻炼增幅额外加成系数（vip付费特权）",
+  "perExpPlus":2,
+  "?goldExchangePlus":"金币转换率额外加成系数（vip付费特权）",
+  "goldExchangePlus":2,
+  "?hpMaxPlus":"生命值上限额外加成（vip付费特权）",
+  "hpMaxPlus":2,
+  "?baseExp2GoldVal":"锻炼值到金币的基础转换效率",
+  "baseExp2GoldVal": 10,
+  "?baseHp":"基础生命上线",
+  "baseHp":100,
+  "?baseAtk":"基础攻击力",
+  "baseAtk":5,
+  "?normalAtkRat":"普攻伤害系数",
+  "normalAtkRat":0.8,
+  "?baseExp2Hp":"基础锻炼值到生命上限转换率",
+  "baseExp2Hp":5,
+  "?baseExp2Atk":"基础锻炼值到攻击力转换率",
+  "baseExp2Atk":5,
   "?do": "屏蔽引擎main界面的一些无用交互",
   "needPlayerCheckin":false,
   "hideTeamStatusBar": true,
@@ -35,7 +54,7 @@
     "isShowFood": false,
     "isShowExp": false
   },
-  "?do1": "添加业务特有界面，初始化引擎主界面",
+  "?do2": "添加业务特有界面，初始化引擎主界面",
   "mainUiList": [
     "ninjaMain"
   ],
@@ -68,11 +87,11 @@
       ],
       [
         0,
-        168
+        128
       ],
       [
         0,
-        168
+        128
       ]
     ],
     "BJackArea": [
@@ -129,6 +148,37 @@
       "levelCfg": {}
     }
   ],
+  "cameraCfg": {
+		"viewModeConfig":[
+			{
+				"enable": false
+			},
+			{
+				"enable": false
+			},
+			{
+				"enable": false
+			},
+			{
+				"enable": true,
+				"distance": 6,
+				"lockBodyRotation": false
+			}
+		],
+		"defaultView": 3
+    },
+	"hidePerSpec": true,
+  "campMaterialReward": 1,
+  "teleportProps":[
+    {
+      "teleportType": "center",
+      "_teleportType": "过渡效果类型，目前仅做了渐进缩到中间然后又渐变开来，如果需要其他特殊效果需要开发。",
+      "teleportTime": 20,
+      "teleportImage": "teleport.png",
+      "teleportColor": [0,0,0,1]
+    }
+  ],
+  "_teleportProps": "传送的一些属性。可以不写有默认值。这里开出配置是满足一些特殊需求比如不同岛屿的传送时间和背景或者传送效果(比如不想要中心扩散要其他效果)可能会不同之类的。",
   "teamMaterialReward": 1
 }
 

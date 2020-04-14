@@ -8,11 +8,17 @@ function EntityServer:getDamageProps(info)
 
     local attackProps = setmetatable({}, {
         __index = function(t, name)
-            if name == "damage" then
+            if name == "atk" then
                 local value = self:getCurDamage()
                 return value-- + (skill and skill[name] or 0)
-                --elseif name == "dmgFactor" then
-                --    return 1
+            elseif name == "dmgFactor" then
+                return self:getDmgPlu()
+            elseif name == "dmgRealPlu" then
+                return self:getDmgRealPlu()
+            elseif name == "dmgBaseRat" then
+                return (skill and skill["dmgRat"] or World.cfg.normalAtkRat)
+            elseif name == "dmgBase" then
+                return (skill and skill["dmgBase"] or 0)
             end
         end,
         __newindex = function(...) error("not allowed set prop value") end
@@ -33,7 +39,7 @@ end
 function EntityServer:doAttack(info)
     local attackProps,defenseProps = self:getDamageProps(info)
     --ocal damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
-    local damage = math.floor(math.max(attackProps.damage, 0)*defenseProps.hurtSub)
+    local damage = math.floor(math.max(attackProps.dmgBase* attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1))
     info.target:doDamage({
         from = self,
         damage = damage,
@@ -50,8 +56,8 @@ end
 function EntityServer:doHealing()
 
     local healVal =math.floor(self:getMaxHp() *self:getHealingVal()* self:getHealingPlu())
-    print("=========doHealing==========",healVal)
-    print("=========doHealing=spd=========",self:getHealingSpd())
+    -- print("=========doHealing==========",healVal)
+    -- print("=========doHealing=spd=========",self:getHealingSpd())
 
     if healVal <=0 then
         return
@@ -239,9 +245,12 @@ function Entity.EntityProp:expMax(value, add, buff)
     useVal.val =  (add and value.val or -value.val)--(rHpPct.pct or 0) + (add and value or -value)
     useVal.bit =  value.bit or 0
     for i = 0,useVal.bit do
-        useVal.val = useVal.val*10
+        useVal.val = useVal.val.."0"
     end
-    self:deltaExpMaxPlus(useVal.val)--TODO big number
+    
+    local bigOne = BigInteger.Create(useVal.val)
+    print("-----------------big num----:",tostring(bigOne))
+    self:deltaExpMaxPlus(bigOne)--TODO big number
 end
 ---
 ---最大锻炼值加成buff，自然数

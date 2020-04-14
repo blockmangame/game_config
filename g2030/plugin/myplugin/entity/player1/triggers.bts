@@ -1,5 +1,17 @@
 ENTITY_ENTER{
     
 	AddSkill(entity = $obj1, name = "myplugin/sceneSkillBase")
+	AddSkill(entity = $obj1, name = "myplugin/rechargeSkillBase")
+}
+
+ENTITY_DIE{
+	ResetEntityRechargeSkill(entity = $obj1)
+	TeleportBegin(entity = $obj1) -- Test code
+}
+
+TELEPORT_BEGIN_FINSH{
+	TeleportEnd(entity = $obj1) -- Test code
+}
+TELEPORT_END_FINSH{
 
 }

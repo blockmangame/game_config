@@ -10,28 +10,24 @@ function player_event(player, event, ...)
     end
 end
 
-function events:onGroundChanged(lastOnGround, onGround)
-    --Lib.log(string.format("onGroundChanged %s->%s", tostring(lastOnGround), tostring(onGround)))
-
-    if lastOnGround == false and onGround == true then
-        self:setValue("jumpCount", self:getMaxJumpCount())
-        self:recoverJumpProp()
-        Blockman.instance.gameSettings:setEnableRadialBlur(false)
-    elseif lastOnGround == true and onGround == false then
-        --TODO
-    end
+function events:leaveGround()
+    --TODO
 end
 
-function events:fall(fallDistance)
+function events:fallGround(fallDistance)
     print("fall " .. fallDistance)
 
     local playerCfg = Me:cfg()
     local fallAnimHeight = World.cfg.fallAnimHeight or 0
-    if fallDistance >= fallAnimHeight then
+    if fallDistance >= fallAnimHeight and not self.isGliding then
         Skill.Cast(playerCfg.fallSkill1)
     else
         Skill.Cast(playerCfg.fallSkill2)
     end
+
+    self:setValue("jumpCount", self:getMaxJumpCount())
+    self:recoverJumpProp()
+    Blockman.instance.gameSettings:setEnableRadialBlur(false)
 end
 
 function events:jumpMoveEnd()

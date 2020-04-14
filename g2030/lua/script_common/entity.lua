@@ -1,13 +1,18 @@
 -- 自动同步属性定义
 local ValueDef		= T(Entity, "ValueDef")
+local playerCfg = World.cfg
+print("======BigInteger==========:",Lib.v2s(BigInteger,3))
 -- key				= {isCpp,	client,	toSelf,	toOther,	init,	saveDB}
-ValueDef.jumpCount	= {false,	true,	false,	true,      1,		false}
-ValueDef.curExp		= {false,	false,	true,	true,       0,		true}--当前锻炼值
-ValueDef.maxExp		= {false,	false,	true,	true,       100,	true}--最大锻炼值
-ValueDef.perExp 	= {false,	false,	true,	true,       1,		false}--每次攻击锻炼值增加
+ValueDef.jumpCount	= {false,	true,	false,	false,      1,		false}
+ValueDef.maxJumpCount={false,	false,	true,	false,      1,		false}
+ValueDef.curExp		= {false,	false,	true,	true,       BigInteger.Create(0),		true}--当前锻炼值
+ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1,8),	true}--最大锻炼值
+ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1,5),		false}--每次攻击锻炼值增加
 ValueDef.perExpPlu	= {false,	false,	true,	true,       1,		false}--锻炼值加成加成比例（付费特权。双倍）
 ValueDef.curLevel	= {false,	false,	true,	true,       1,		true}--当前阶数
-ValueDef.curHp		= {false,	false,	true,	true,       1,		false}--当前血量
+ValueDef.curHp		= {false,	false,	true,	true,       BigInteger.Create(playerCfg.baseHp),		false}--当前血量
+ValueDef.gold2Plus	= {false,	false,	true,	true,       1,		true}--额外金币转换加成系数（付费特权）
+ValueDef.hpMaxPlus	= {false,	false,	true,	true,       1,		true}--生命上限加成系数（付费特权）
 ValueDef.suckBlood	= {false,	false,	true,	true,       0,		false}--吸血比例
 ValueDef.CDSub	    = {false,	false,	true,	true,       1,		false}--技能CD缩短比例
 ValueDef.hurtSub	= {false,	false,	true,	true,       1,		false}    --受伤减免比例
@@ -60,17 +65,17 @@ end
 ---获得最大跳跃次数
 function Entity:getMaxJumpCount()
     --TODO
-    return 6
+    return self:getValue("maxJumpCount") or 1
 end
 
 ---获取每次锻炼增幅
 function Entity:getPerExpPlus()
     ---TODO exp up calc func
-    return self:getValue("perExp")*self:getValue("perExpPlu")
+    return self:getValue("perExp")*(self:getCurLevel())*self:getValue("perExpPlu")--TODO 宠物加成
 end
 ---设置每次攻击锻炼增幅值变化
 function Entity:deltaPerExpPlus(val)
-    assert(tonumber(val), "invalid input:" .. val .. "is not a number")
+    --assert(tonumber(val), "invalid input:" .. val .. "is not a number")
     self:setValue("perExp",self:getValue("perExp")+val)
 end
 ---获取当前锻炼值
@@ -83,18 +88,25 @@ function Entity:getMaxExp()
 end
 ---当前锻炼值可兑换货币
 function Entity:getCurExpToCoin()
-    return self:getValue("curExp")*10
+    return self:getCurExp()*playerCfg.baseExp2GoldVal*(1)*self:getValue("gold2Plus")--TODO 宠物加成
 end
 ---设置最大锻炼值变化
 function Entity:deltaExpMaxPlus(val)
-    assert(tonumber(val), "invalid input:" .. val .. "is not a number")
+  --  assert(tonumber(val), "invalid input:" .. val .. "is not a number")
     self:setValue("maxExp",self:getValue("maxExp")+val)
 end
 ---锻炼值是否已满
 function Entity:isExpFull()
-    return self:getCurExp()>=self:getMaxExp()
+    return false--self:getCurExp()>=self:getMaxExp()
 end
-
+---获取当前阶数
+function Entity:getCurLevel()
+    return self:getValue("curLevel")
+end
+---设置当前阶数
+function Entity:setCurLevel(lv)
+    return self:setValue("curLevel", lv)
+end
 
 
 
@@ -102,20 +114,10 @@ end
 ---
 ---
 
----获取当前阶数
-function Entity:getCurLevel()
-    return self:getValue("curLevel")
-end
-
----设置当前阶数
-function Entity:setCurLevel(lv)
-    return self:setValue("curLevel", lv)
-end
-
 ---当前血量上限
 function Entity:getMaxHp()
     ---TODO hp limit calc func
-    return 100+self:getCurExp()*5
+    return (playerCfg.baseHp+self:getCurExp()*playerCfg.baseExp2Hp)*self:getValue("hpMaxPlus")
 end
 ---
 ---当前血量
@@ -124,7 +126,8 @@ function Entity:getCurHp()
     return self:getValue("curHp")
 end
 function Entity:getCurDamage()
-    return 1+self:getCurExp()*5*self:getDmgPlu()*self:getDmgRealPlu()
+  --  return 1+self:getCurExp()*5*self:getDmgPlu()*self:getDmgRealPlu()
+    return playerCfg.baseAtk+self:getCurExp()*playerCfg.baseExp2Atk
 end
 ---
 ---获取伤害加成系数
@@ -193,8 +196,6 @@ function Entity:setHealing(val,time)
 
     self:setValue("healingVal",self:getValue("healingVal")+val)
     self:setValue("healingSpd",time)
-    print("========setHealing=======",self:getValue("healingVal"))
-    print("========setHealing=======",self:getValue("healingSpd"))
 
 end
 ---
@@ -244,7 +245,7 @@ end
 
 ---获取购买装备列表
 function Entity:getEquip()
-    return self:getValue("equip")
+    return Lib.copy(self:getValue("equip"))
 end
 
 ---设置购买装备列表
@@ -254,7 +255,7 @@ end
 
 ---获取购买腰带列表
 function Entity:getBelt()
-    return self:getValue("belt")
+    return Lib.copy(self:getValue("belt"))
 end
 
 ---设置购买腰带列表

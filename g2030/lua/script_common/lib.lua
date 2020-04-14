@@ -8,14 +8,6 @@
 --	end)
 --end
 
----@param root any
----@param options table
----@return string
-function Lib.inspect(root, options)
-	local inspect = require "script_common.util.inspect"
-	return inspect.inspect(root, options)
-end
-
 ---@param str string
 ---@param reps string
 ---@param keep_blank boolean

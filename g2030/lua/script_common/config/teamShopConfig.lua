@@ -26,7 +26,7 @@ function teamShopConfig:initConfig()
         }
         table.insert(Items, data)
     end
-    print("--!!!!teamShopConfig--initConfig " .. Lib.v2s(Items))
+    --print("--!!!!teamShopConfig--initConfig " .. Lib.v2s(Items))
 end
 
 function teamShopConfig:getItemByItemId(itemId)

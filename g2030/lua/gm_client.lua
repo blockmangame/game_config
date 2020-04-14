@@ -38,4 +38,65 @@ GMItem["g2030/释放宠物技能"] = function(self)
     Skill.Cast("myplugin/pet_1_1_1_attack", {targetID=self.objID}, Entity)
 end
 -----------------------------------Pet Model Test End-------------------------------
+
+GMItem["g2030技能/1号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_triple_attack")
+end
+GMItem["g2030技能/2号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_triple_attack")
+end
+GMItem["g2030技能/3号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_triple_attack")
+end
+GMItem["g2030技能/4号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_triple_attack")
+end
+GMItem["g2030技能/5号技能"] = function(self)
+    Skill.Cast("myplugin/player_defense_skill_05")
+end
+GMItem["g2030技能/6号技能"] = function(self)
+    Skill.Cast("myplugin/player_defense_skill_06")
+end
+GMItem["g2030技能/7号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_triple_attack")
+end
+GMItem["g2030技能/8号技能"] = function(self)
+    Skill.Cast("myplugin/player_remote_skill_shuriken_08")
+end
+GMItem["g2030技能/9号技能"] = function(self)
+    Skill.Cast("myplugin/palyer_range_skill_bomb_09")
+end
+GMItem["g2030技能/10号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_triple_attack")
+end
+GMItem["g2030技能/11号技能"] = function(self)
+    Skill.Cast("myplugin/palyer_range_skill_thunderclap_11")
+end
+GMItem["g2030技能/12号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_triple_attack")
+end
+GMItem["g2030技能/13号技能"] = function(self)
+    Skill.Cast("myplugin/player_range_skill_magic_circle_13")
+end
+GMItem["g2030技能/14号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_triple_attack")
+end
+GMItem["g2030技能/15号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_triple_attack")
+end
+GMItem["g2030技能/16号技能"] = function(self)
+    Skill.Cast("myplugin/player_control_skill_16")
+end
+GMItem["g2030技能/17号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_triple_attack")
+end
+GMItem["g2030技能/18号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_self_recover_18")
+end
+GMItem["g2030技能/19号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_team_recover_19")
+end
+GMItem["g2030技能/20号技能"] = function(self)
+    Skill.Cast("myplugin/player_skill_team_recover_20")
+end
 return GMItem

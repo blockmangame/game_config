@@ -23,8 +23,6 @@ function Player:initPlayer()
 
     self:initCurrency()
     self:tickLifeSteal()
-    --self:initData()
-    self:initItemShop()
 end
 ---
 ---角色固有设定，定时回血
@@ -71,6 +69,19 @@ function Player:sellExp()
     self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
     self:resetExp()
 end
+---开启锻炼值贩卖加成特权
+function Player:openGold2Plus()
+    self:setValue("gold2Plus",playerCfg.goldExchangePlus)
+end
+---开启锻炼值增幅额外加成特权
+function Player:openPerExpPlus()
+    self:setValue("perExpPlu",playerCfg.perExpPlus)
+end
+---开启最大血量加成特权
+function Player:openHpMaxPlus()
+    self:setValue("hpMaxPlus",playerCfg.hpMaxPlus)
+end
+
 ---
 ---更换装备
 ---
@@ -89,7 +100,7 @@ end
 ---
 function Player:deltaHp(deltaVal)
     if deltaVal>0 and deltaVal<1 or deltaVal<0 and deltaVal>-1 then
-        deltaVal = math.floor(self:getMaxHp()*deltaVal)
+        deltaVal =self:getMaxHp()*deltaVal
     end
 
     local curVal = math.min(math.max(self:getCurHp()+deltaVal,0),self:getMaxHp())
@@ -107,7 +118,23 @@ function Player:resetHp()
 end
 function Player:setCurExp(val)
     self:setValue("curExp", val)
+    if self:getCurHp()>self:getMaxHp() then--改变锻炼值造成血量上限低于当前血量时直接强制重置血量（无血壳）
+        self:resetHp()
+    end
 
+end
+function Player:addLevel()
+
+--锻炼器材
+--当前肌肉值、肌肉最大值
+--连跳等级
+--传送门状态
+    self:setCurLevel(self:getCurLevel()+1)
+     --   所持金币数
+    self:payCurrency("gold", 0,true,false, "level_up")
+    
+    self:resetExp()
+    
 end
 ---设置阵营
 function Player:setTeam(id)
@@ -117,8 +144,4 @@ end
 ---获取阵营
 function Player:getTeam()
     return Game.GetTeam(self:getTeamId())
-end
-
-function Player:initItemShop()
-    Store.ItemShop:initAllItem(self)
 end
