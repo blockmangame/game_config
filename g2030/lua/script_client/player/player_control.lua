@@ -8,13 +8,9 @@ local onGround = true
 local lockKeyJump = false
 
 local function showJumpCountMessage(jumpCount, maxJumpCount)
-    local message = string.format(Lang:toText("gui_jump_count_message"), jumpCount, maxJumpCount)
-    if jumpCount <= 0 then
-        message = "▢FFFF0000" .. message
-    else
-        message = "▢FFFFFFFF" .. message
-    end
-    Lib.emitEvent("EVENT_SHOW_BOTTOM_MESSAGE", message)
+    local message = string.format(Lang:toText("gui_jump_count_message"),
+            jumpCount > 0 and jumpCount or 0, maxJumpCount)
+    Lib.emitEvent("EVENT_SHOW_BOTTOM_MESSAGE", message, { jumpCount = jumpCount })
 end
 
 local function doJumpStateChange(control, player)
@@ -57,7 +53,7 @@ local function jump_impl(control, player)
     local jumpCount = player:getJumpCount()
     local maxJumpCount = player:getMaxJumpCount()
 
-    showJumpCountMessage(math.max(jumpCount - 1, 0), maxJumpCount)
+    showJumpCountMessage(jumpCount - 1, maxJumpCount)
 
     if jumpCount <= 0 then
         doJumpStateChange(control, player)
