@@ -14,7 +14,7 @@ function JumpConfig:init(config)
         data.glidingSpeed = tonumber(vConfig.n_glidingSpeed) or 0
         table.insert(settings, data)
     end
-    Lib.log("JumpConfig:init " .. Lib.v2s(settings))
+    --Lib.log("JumpConfig:init " .. Lib.v2s(settings))
 end
 
 function JumpConfig:getJumpConfig(id)
