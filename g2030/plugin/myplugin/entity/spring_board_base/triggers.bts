@@ -27,8 +27,9 @@ ENTITY_TOUCH_ALL{
     $pitch = GetEntityPitch(entity = $obj2)
     $map = GetEntityMap(entity = $obj1)
     $pos = GetEntityPosition(entity = $obj1)
+    $y = GetConfigVar(obj = $obj1,key="bounceHeight")
 
-    $targetPos = ComputeV3(op = "add", p1 = {x = 0, y = 1 , z = 0}, p2 = $pos)
+    $targetPos = ComputeV3(op = "add", p1 = {x = 0, y = $y , z = 0}, p2 = $pos)
     SetEntityPosition(entity = $obj2, map = $map, pos = $targetPos, ry = $yaw , rp = $pitch)
 
 
