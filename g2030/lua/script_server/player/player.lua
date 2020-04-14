@@ -69,12 +69,15 @@ function Player:sellExp()
     self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
     self:resetExp()
 end
+---开启锻炼值贩卖加成特权
 function Player:openGold2Plus()
     self:setValue("gold2Plus",playerCfg.goldExchangePlus)
 end
+---开启锻炼值增幅额外加成特权
 function Player:openPerExpPlus()
     self:setValue("perExpPlu",playerCfg.perExpPlus)
 end
+---开启最大血量加成特权
 function Player:openHpMaxPlus()
     self:setValue("hpMaxPlus",playerCfg.hpMaxPlus)
 end

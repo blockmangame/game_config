@@ -117,7 +117,6 @@ end
 ---当前血量上限
 function Entity:getMaxHp()
     ---TODO hp limit calc func
-    print("-------------getMaxHp------------------",(playerCfg.baseHp+self:getCurExp()*playerCfg.baseExp2Hp)*self:getValue("hpMaxPlus"))
     return (playerCfg.baseHp+self:getCurExp()*playerCfg.baseExp2Hp)*self:getValue("hpMaxPlus")
 end
 ---
