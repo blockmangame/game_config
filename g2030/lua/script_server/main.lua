@@ -7,6 +7,7 @@ require "script_server.entity.entity"
 
 require "script_server.game.game"
 require "script_server.game.game_team"
+require "script_server.game.process_manager"
 
 require "script_server.player.player"
 require "script_server.player.player_event"
@@ -26,6 +27,9 @@ require "script_server.trigger_handlers"
 
 require "script_server.actions_custom"
 require "script_server.actions_common"
+
+require "script_server.process.process_base"
+require "script_server.process.process_team"
 
 local main = {}
 

@@ -27,3 +27,17 @@ Define.BuyStatus = {
     Buy = 3, --购买
     Used = 4, --使用
 }
+
+Define.ProcessState = {
+    Init = 0,
+    Waiting = 1,
+    Prepare = 2,
+    ProcessStart = 3,
+    ProcessOver = 4,
+    WaitClose = 5
+}
+
+Define.ProcessType = {
+    Base = "ProcessBase",
+    Team = "ProcessTeam"
+}
