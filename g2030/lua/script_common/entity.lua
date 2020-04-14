@@ -3,7 +3,8 @@ local ValueDef		= T(Entity, "ValueDef")
 local playerCfg = World.cfg
 print("======BigInteger==========:",Lib.v2s(BigInteger,3))
 -- key				= {isCpp,	client,	toSelf,	toOther,	init,	saveDB}
-ValueDef.jumpCount	= {false,	true,	false,	true,      1,		false}
+ValueDef.jumpCount	= {false,	true,	false,	false,      1,		false}
+ValueDef.maxJumpCount={false,	false,	true,	false,      1,		false}
 ValueDef.curExp		= {false,	false,	true,	true,       BigInteger.Create(0),		true}--当前锻炼值
 ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1,8),	true}--最大锻炼值
 ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1,5),		false}--每次攻击锻炼值增加
@@ -64,7 +65,7 @@ end
 ---获得最大跳跃次数
 function Entity:getMaxJumpCount()
     --TODO
-    return 6
+    return self:getValue("maxJumpCount") or 1
 end
 
 ---获取每次锻炼增幅

@@ -1,9 +1,12 @@
 local GMItem = GM:createGMItem()
 
-GMItem["g2030/回主城"] = function(self)
-    local targetMap = World.CurWorld:staticMap("map001")
-    self:setMapPos(targetMap, targetMap.cfg.initPos)
+GMItem["g2030/增加跳跃次数"] = function(self)
+    self:setValue("maxJumpCount", self:getValue("maxJumpCount") + 1);
 end
+GMItem["g2030/减少跳跃次数"] = function(self)
+    self:setValue("maxJumpCount", self:getValue("maxJumpCount") - 1);
+end
+
 GMItem["g2030/清空当前修炼值"] = function(self)
     self:resetExp()
 end
