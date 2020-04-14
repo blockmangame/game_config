@@ -7,7 +7,7 @@ require "script_server.entity.entity"
 
 require "script_server.game.game"
 require "script_server.game.game_team"
-require "script_server.game.game_process"
+require "script_server.game.process_manager"
 
 require "script_server.player.player"
 require "script_server.player.player_event"
