@@ -32,8 +32,8 @@ Define.ProcessState = {
     Init = 0,
     Waiting = 1,
     Prepare = 2,
-    GameStart = 3,
-    GameOver = 4,
+    ProcessStart = 3,
+    ProcessOver = 4,
     WaitClose = 5
 }
 

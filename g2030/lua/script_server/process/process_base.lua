@@ -5,17 +5,31 @@
 ---
 local ProcessBase = T(Game, "ProcessBase")
 ProcessBase.__index = ProcessBase
+ProcessBase.entityList = {}
+ProcessBase.playerCount = 0
+ProcessBase.curState = Define.ProcessState.Init
 
-function ProcessBase:setStateAndTimer(state, time, func)
-    if self.curState ~= state then
-        self:setState(state)
+function ProcessBase:onTick()
+    self.curTick = (self.curTick or 0) + 1
+
+    if self.curState == Define.ProcessState.Waiting then
+        self:waitPlayerOnTick()
     end
-    if self.stateTimer then
-        self.stateTimer()
-        self.stateTimer = nil
+
+    if self.curState == Define.ProcessState.Prepare then
+        self:prepareOnTick()
     end
-    if func and time >= 0 then
-        self.stateTimer = World.Timer(time, func)
+
+    if self.curState == Define.ProcessState.ProcessStart then
+        self:processOnTick()
+    end
+
+    if self.curState == Define.ProcessState.ProcessOver then
+        self:processOverOnTick()
+    end
+
+    if self.curState == Define.ProcessState.WaitClose then
+        self:waitCloseOnTick()
     end
 end
 
@@ -32,58 +46,128 @@ function ProcessBase:getPlayersInProcess()
 end
 
 function ProcessBase:onWaiting()
-    self:setStateAndTimer(Define.ProcessState.Waiting, self.waitPlayerTime, self:waitPlayerOnTick())
+    self:initProcess()
+    self:setState(Define.ProcessState.Waiting)
+end
+
+function ProcessBase:initProcess()
+
 end
 
 function ProcessBase:waitPlayerOnTick()
-    if self.playersCount < self.startPlayers then
-        self:onWaiting()
-    else
+    local seconds = (self.waitPlayerTime - self.curTick) % self.waitPlayerTime
+    if seconds <= 0 or self:needKeepWaiting() then
         self:waitingEnd()
+        return
     end
 end
 
+function ProcessBase:needKeepWaiting()
+    return false
+end
+
 function ProcessBase:waitingEnd()
-    self:prepareOnTick()
-    self:setStateAndTimer(Define.ProcessState.Prepare, self.prepareTime, self:prepareEnd())
+    self.waitingEndTick = self.curTick
+    self:setState(Define.ProcessState.Prepare)
+    self:onWaitingEnd()
+end
+
+function ProcessBase:onWaitingEnd()
+
 end
 
 function ProcessBase:prepareOnTick()
-
+    local seconds = self.prepareTime - (self.curTick - self.waitingEndTick)
+    if seconds <= 0 then
+        self:prepareEnd()
+    end
 end
 
 function ProcessBase:prepareEnd()
+    self.prepareEndTick = self.curTick
+    self:setState(Define.ProcessState.ProcessStart)
     self:onStart()
-    self:setStateAndTimer(Define.ProcessState.GameStart, self.gameTime, self:processOver())
 end
 
 function ProcessBase:onStart()
 
 end
 
+function ProcessBase:processOnTick()
+    local seconds = self.gameTime - (self.curTick - self.prepareEndTick)
+    if seconds <= 0 then
+        self:processOver()
+    else
+        self:doJudge()
+    end
+end
+
 function ProcessBase:processOver()
+    self.processOverTick = self.curTick
+    self:setState(Define.ProcessState.ProcessOver)
     self:onProcessOver()
-    self:setStateAndTimer(Define.ProcessState.GameOver, self.gameOverTime, self:closeServer())
 end
 
 function ProcessBase:onProcessOver()
 
 end
 
-function ProcessBase:closeServer()
-    if not self.needCloseServer then
-        --destroy
-        return
+function ProcessBase:processOverOnTick()
+    local seconds = self.gameOverTime - (self.curTick - self.processOverTick)
+    if seconds <= 0 then
+        self:closeServer()
     end
-    self:setStateAndTimer(Define.ProcessState.WaitClose, self.waitCloseTime, Game.StopServer())
+end
+
+function ProcessBase:closeServer()
+    self.processOverEndTick = self.curTick
+    if self.needCloseServer then
+        self:setState(Define.ProcessState.WaitClose)
+    else
+        self:removeProcess()
+    end
+    self:onProcessOverEnd()
+end
+
+function ProcessBase:onProcessOverEnd()
+
+end
+
+function ProcessBase:waitCloseOnTick()
+    local seconds = self.waitCloseTime - (self.curTick - self.processOverEndTick)
+    if seconds <= 0 then
+        self:removeProcess()
+        Game.StopServer()
+    end
+end
+
+function ProcessBase:removeProcess()
+    Game.Game.RemoveProcess(self.key)
+end
+
+function ProcessBase:canJoin()
+    if self.curState < Define.ProcessState.ProcessStart then
+        return self.playerCount < self.maxPlayers
+    else
+        return self.alwaysCanJoin
+    end
 end
 
 function ProcessBase:entityJoin(entity)
+    if not self:canJoin() then
+        return false
+    end
     local objID = entity.objID
     self.entityList[objID] = entity
     if entity.isPlayer then
         self.playerCount = self.playerCount + 1
     end
+    self:onEntityJoin(objID)
+    return true
+end
+
+function ProcessBase:onEntityJoin(objID)
+
 end
 
 function ProcessBase:entityOut(entity)
@@ -95,6 +179,11 @@ function ProcessBase:entityOut(entity)
     if entity.isPlayer then
         self.playerCount = self.playerCount - 1
     end
+    self:onEntityOut(objID)
+end
+
+function ProcessBase:onEntityOut(objID)
+
 end
 
 function ProcessBase:isEntityInProcess(objID)

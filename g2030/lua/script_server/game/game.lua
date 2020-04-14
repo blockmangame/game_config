@@ -1,5 +1,3 @@
-local ProcessList = T(Game, "ProcessList")
-
 local function canJoinTeam(id, oldId)
     --初始化情况
     if id == Define.Team.Neutrality or oldId == 0 then
@@ -65,6 +63,7 @@ function Game.TryJoinTeam(player, id)
         oldTeam:leaveEntity(player, true)
     end
     team:joinEntity(player)
+
     return true
 end
 
@@ -74,42 +73,4 @@ function Game.OnPlayerLogin(player)
     oldPlayerLogin(player);
 
     player:initPetInfo();
-end
-
-function Game.CreateProcess(key, type, config)
-    if ProcessList[key] or not Game[type] then
-        return
-    end
-
-    local time = World.Now()
-    local process = {
-        curState = 0,
-
-        waitPlayerTime = 30,
-        prepareTime = 30,
-        gameTime = 200,
-        gameOverTime = 10,
-        waitCloseTime = 10,
-
-        startPlayers = 1,
-        maxPlayers = -1,
-
-        needCloseServer = false,
-
-        stateTimer = nil,
-
-        createTime = time,
-        EntityList = {},
-        playerCount = 0,
-    }
-
-    if config then
-        for k, v in pairs(config) do
-            process[k] = v
-        end
-    end
-
-    ProcessList[key] = setmetatable(process, Game[type])
-    process:onWaiting()
-    return process
 end
