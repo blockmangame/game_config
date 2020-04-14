@@ -17,6 +17,8 @@ function EntityServer:getDamageProps(info)
                 return self:getDmgRealPlu()
             elseif name == "dmgBaseRat" then
                 return (skill and skill["dmgRat"] or World.cfg.normalAtkRat)
+            elseif name == "dmgBase" then
+                return (skill and skill["dmgBase"] or 0)
             end
         end,
         __newindex = function(...) error("not allowed set prop value") end
@@ -37,7 +39,7 @@ end
 function EntityServer:doAttack(info)
     local attackProps,defenseProps = self:getDamageProps(info)
     --ocal damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
-    local damage = math.floor(math.max(attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1))
+    local damage = math.floor(math.max(attackProps.dmgBase* attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1))
     info.target:doDamage({
         from = self,
         damage = damage,
