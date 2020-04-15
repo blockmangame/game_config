@@ -38,8 +38,11 @@ function Player:recoverJumpProp()
     self:setEntityProp("moveSpeed", tostring(self.EntityProp.moveSpeed))
     self:setEntityProp("moveAcc", tostring(self.EntityProp.moveAcc))
 
-    --self:setValue("isKeepAhead", false)
+    self:setValue("jumpCount", self:getMaxJumpCount())
 
     self.isGliding = false
     self.isJumpMoveEnd = false
+
+    Lib.emitEvent("EVENT_PLAY_GLIDING_EFFECT", self.isGliding)
+    Blockman.instance.gameSettings:setEnableRadialBlur(false)
 end

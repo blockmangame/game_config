@@ -23,7 +23,7 @@ function SkillBase:preCast(packet, from)
 	if self.cdTime and from then
 		from:setCD("net_delay", 20)
 	end
-	if self.enableRadialBlur ~= nil then
+	if self.enableRadialBlur ~= nil and (from and from.objID == Me.objID) then
 		Blockman.instance.gameSettings:setEnableRadialBlur(self.enableRadialBlur)
 	end
 	playAction(from, self.castAction, self.castActionTime, self.isResetAction)

@@ -15,6 +15,20 @@ Define.petType = {
     plusPet = 2     --式神
 }
 
+Define.petQuality = {   --Todo质量支持为可配置的
+    SSR = 1,
+    SR = 2,
+    R = 3,
+    N = 4
+}
+
+Define.plusPetQuality = {
+    SSR = 1,
+    SR = 2,
+    R = 3,
+    N = 4
+}
+
 Define.TabType = {
     Equip = 1,
     Belt = 2,
