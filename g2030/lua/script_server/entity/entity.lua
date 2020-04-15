@@ -265,4 +265,8 @@ function Entity.EntityProp:perExp(value, add, buff)
     self:deltaPerExpPlus(BigInteger.Create(useVal.val,useVal.bit))--TODO big number
 end
 
+function Entity.ValueFunc:curLevel(value)
+    Lib.emitEvent(Event.EVENT_LEVEL_CHANGE)
+end
+
 

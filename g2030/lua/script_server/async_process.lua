@@ -10,7 +10,7 @@ function AsyncProcess.GetArenaRank(pageNo,callback)
 end
 
 --上报玩家阶数
-function AsyncProcess.ReportCurLevel(worksId, callback)
+function AsyncProcess.ReportCurLevel(callback)
     local url = string.format("%s/gameaide/api/v1/inner/segment/stage/report", self.ClientHttpHost)
     
     local args = {{"gameId", gameName}, {"userId", CGame.instance:getPlatformUserId()}}

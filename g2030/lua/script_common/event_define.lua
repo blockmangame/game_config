@@ -5,6 +5,7 @@
 ---
 Event.register("EVENT_EXP_CHANGE")
 Event.register("EVENT_HP_CHANGE")
+Event.register("EVENT_LEVEL_CHANGE")
 Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE_BEGIN")
 Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE")
 Event.register("EVENT_SCENE_SKILL_TOUCH_MOVE_END")
