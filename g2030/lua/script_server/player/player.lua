@@ -86,9 +86,24 @@ end
 ---更换装备
 ---
 function Player:exchangeEquip(fullName)
-    self:addItem(fullName,1,nil,"exchange")
+    
     local item1 =  self:searchItem("fullName",fullName)
-    self:saveHandItem(item1,false)
+    if not item1 then
+        self:addItem(fullName,1,nil,"exchange")
+        item1 =  self:searchItem("fullName",fullName)
+    end
+    local tb = self:tray():query_trays(item1:cfg().tray)[1]
+    local tray_2 = {}
+    if tb then
+        tray_2 = tb.tray 
+    end
+    local slot_1 = item1:slot()
+	local tray_1 = self:tray():fetch_tray(item1:tid())
+	if not Tray:check_switch(tray_1, slot_1, tray_2, slot_2) then
+		return false
+	end
+    Tray:switch(tray_1, slot_1, tray_2, 1)
+ --   self:switchItem(item1:tid(), item1:slot(),Define.TRAY_TYPE.EQUIP_1,1)
 
 end
 ---
@@ -134,6 +149,7 @@ function Player:addLevel()
     self:payCurrency("gold", 0,true,false, "level_up")
     
     self:resetExp()
+    AsyncProcess.ReportCurLevel()
     
 end
 ---设置阵营

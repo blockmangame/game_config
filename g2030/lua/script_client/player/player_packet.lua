@@ -58,3 +58,14 @@ end
 function handles:TeleportEnd(packet)
     Lib.emitEvent(Event.EVENT_TELEPORT_SHADER_DISABLE, packet.type)
 end
+
+function handles:ShowGauntlet(packet)
+    if Me:getTeamId() == Define.Team.Neutrality then
+        return
+    end
+    if packet.isShow then
+        UI:openWnd("gauntlet", packet.key)
+    else
+        UI:closeWnd("gauntlet")
+    end
+end

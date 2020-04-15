@@ -20,6 +20,7 @@ function M:initWnd()
     self.btnSell = self:child("NinjaMain-SellBtn")
     self.btnPet = self:child("NinjaMain-PetBtn")
     self.btnExchangeCtr = self:child("NinjaMain-Exchange")
+    self.effect = self:child("NinjaMain-Effect")
     self.textBottomMessage = self:child("NinjaMain-BottomMessage")
     self.textBottomMessage:SetText("")
 
@@ -71,6 +72,10 @@ function M:initEvent()
         self.hideBottomMessageTimer = LuaTimer:scheduleTimer(function()
             self.textBottomMessage:SetVisible(false)
         end, 2000, 1)
+    end)
+
+    Lib.subscribeEvent("EVENT_PLAY_GLIDING_EFFECT", function(isPlay)
+        self.effect:SetVisible(isPlay)
     end)
 end
 

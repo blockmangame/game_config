@@ -244,13 +244,7 @@ function Entity.EntityProp:expMax(value, add, buff)
     local useVal = {}
     useVal.val =  (add and value.val or -value.val)--(rHpPct.pct or 0) + (add and value or -value)
     useVal.bit =  value.bit or 0
-    for i = 0,useVal.bit do
-        useVal.val = useVal.val.."0"
-    end
-    
-    local bigOne = BigInteger.Create(useVal.val)
-    print("-----------------big num----:",tostring(bigOne))
-    self:deltaExpMaxPlus(bigOne)--TODO big number
+    self:deltaExpMaxPlus(BigInteger.Create(useVal.val,useVal.bit))
 end
 ---
 ---最大锻炼值加成buff，自然数
@@ -263,10 +257,11 @@ function Entity.EntityProp:perExp(value, add, buff)
     local useVal = {}
     useVal.val =  (add and value.val or -value.val)--(rHpPct.pct or 0) + (add and value or -value)
     useVal.bit =  value.bit or 0
-    for i = 0,useVal.bit do
-        useVal.val = useVal.val*10
-    end
-    self:deltaPerExpPlus(useVal.val)--TODO big number
+    self:deltaPerExpPlus(BigInteger.Create(useVal.val,useVal.bit))
+end
+
+function Entity.ValueFunc:curLevel(value)
+   -- Lib.emitEvent(Event.EVENT_LEVEL_CHANGE)
 end
 
 

@@ -9,8 +9,14 @@ GMItem["g2030/CAST_SKILL"] = function()
     local playerCfg = player:cfg()
     Skill.Cast(playerCfg.twiceJumpSkill)
 end
-GMItem["g2030/替换装备"] = function(self)
+GMItem["g2030/上腰带"] = function(self)
     self:exchangeEquip("myplugin/sash_simple")
+end
+GMItem["g2030/上腰带2"] = function(self)
+    self:exchangeEquip("myplugin/sash_simple1")
+end
+GMItem["g2030/上武器"] = function(self)
+    self:exchangeEquip("myplugin/weapon_simple")
 end
 
 -----------------------------------Pet Model Test----------------------------------
@@ -88,7 +94,7 @@ GMItem["g2030技能/16号技能"] = function(self)
     Skill.Cast("myplugin/player_control_skill_16")
 end
 GMItem["g2030技能/17号技能"] = function(self)
-    Skill.Cast("myplugin/player_skill_triple_attack")
+    Skill.Cast("myplugin/player_control_skill_17")
 end
 GMItem["g2030技能/18号技能"] = function(self)
     Skill.Cast("myplugin/player_skill_self_recover_18")
@@ -98,5 +104,8 @@ GMItem["g2030技能/19号技能"] = function(self)
 end
 GMItem["g2030技能/20号技能"] = function(self)
     Skill.Cast("myplugin/player_skill_team_recover_20")
+end
+GMItem["g2030技能/眩晕技能"] = function(self)
+    Skill.Cast("myplugin/player_dizziness_skill")
 end
 return GMItem

@@ -3,11 +3,20 @@
 --- Created by Administrator.
 --- DateTime: 2020/4/7 12:30
 ---
-local ProcessBase = T(Game, "ProcessBase")
-ProcessBase.__index = ProcessBase
+local class = require"common.class"
+local ProcessBase = class()
 ProcessBase.entityList = {}
 ProcessBase.playerCount = 0
 ProcessBase.curState = Define.ProcessState.Init
+
+function ProcessBase:ctor(config)
+    if config then
+        for k, v in pairs(config) do
+            self[k] = v
+        end
+    end
+    return self
+end
 
 function ProcessBase:onTick()
     self.curTick = (self.curTick or 0) + 1
@@ -142,12 +151,12 @@ function ProcessBase:waitCloseOnTick()
 end
 
 function ProcessBase:removeProcess()
-    Game.Game.RemoveProcess(self.key)
+    Game.RemoveProcess(self.key)
 end
 
 function ProcessBase:canJoin()
     if self.curState < Define.ProcessState.ProcessStart then
-        return self.playerCount < self.maxPlayers
+        return self.playerCount < self.maxPlayers or self.maxPlayers < 0
     else
         return self.alwaysCanJoin
     end
@@ -196,3 +205,5 @@ end
 function ProcessBase:doJudge()
 
 end
+
+return ProcessBase
