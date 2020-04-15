@@ -19,6 +19,14 @@ function Handlers.SKILL_CAST(context)
     --print("Handlers.SKILL_CAST " .. Lib.inspect(context, { depth = 1 }))
 end
 
+function Handlers.REGION_ENTER(context)
+    --{obj1=entity, region=self, map=self.map, inRegionKey = self.key}
+end
+
+function Handlers.REGION_LEAVE(context)
+    --{obj1=entity, region=self, map=self.map, inRegionKey = self.key}
+end
+
 function Handlers.ENTITY_DIE(context)
     local target = context.obj1
     local from = context.obj2
