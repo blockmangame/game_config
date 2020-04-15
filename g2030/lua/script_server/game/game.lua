@@ -1,4 +1,3 @@
-
 local function canJoinTeam(id, oldId)
     --初始化情况
     if id == Define.Team.Neutrality or oldId == 0 then
@@ -64,6 +63,7 @@ function Game.TryJoinTeam(player, id)
         oldTeam:leaveEntity(player, true)
     end
     team:joinEntity(player)
+
     return true
 end
 

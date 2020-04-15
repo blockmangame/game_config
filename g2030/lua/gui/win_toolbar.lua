@@ -308,7 +308,6 @@ function M:getCurrencyWindow(window, coinName, cfg, index)
     return wnd
 end
 function M:changeCurrency()
-    print("----------changeCurrency--------")
     local wallet = Me:data("wallet")
     local coinCfg = Coin:GetCoinCfg()
     if not World.cfg.noShowCoin then
@@ -322,7 +321,7 @@ function M:changeCurrency()
                 local addBtn = cfg.addButton
                 local iconWnd = self:getCurrencyWindow(addBtn and self.goldDiamond or self.currency, coinName, cfg, index)
                 local count = Coin:countByCoinName(Me, coinName)
-                iconWnd:GetChildByIndex(1):SetText(count or 0)
+                iconWnd:GetChildByIndex(1):SetText(tostring(count) or 0)
                 index = index + 1
             end
         end

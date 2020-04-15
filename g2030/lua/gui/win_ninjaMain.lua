@@ -52,9 +52,20 @@ function M:initEvent()
     end)
 
     local LuaTimer = T(Lib, "LuaTimer") ---@type LuaTimer
-    Lib.subscribeEvent("EVENT_SHOW_BOTTOM_MESSAGE", function(message)
+    Lib.subscribeEvent("EVENT_SHOW_BOTTOM_MESSAGE", function(message, param)
         self.textBottomMessage:SetVisible(true)
         self.textBottomMessage:SetText(message)
+
+        if param and param.jumpCount then
+            if param.jumpCount < 0 then
+                local UIAnimationManager = T(UILib, "UIAnimationManager") ---@type UIAnimationManager
+                UIAnimationManager:play(self.textBottomMessage, "TextColorFlicker")
+            elseif param.jumpCount == 0 then
+                self.textBottomMessage:SetTextColor({ 1.0,0.0,0.0,1.0 })
+            else
+                self.textBottomMessage:SetTextColor({ 1.0,1.0,1.0,1.0 })
+            end
+        end
 
         LuaTimer:cancel(self.hideBottomMessageTimer)
         self.hideBottomMessageTimer = LuaTimer:scheduleTimer(function()
