@@ -9,8 +9,11 @@ GMItem["g2030/CAST_SKILL"] = function()
     local playerCfg = player:cfg()
     Skill.Cast(playerCfg.twiceJumpSkill)
 end
-GMItem["g2030/替换装备"] = function(self)
+GMItem["g2030/上腰带"] = function(self)
     self:exchangeEquip("myplugin/sash_simple")
+end
+GMItem["g2030/上武器"] = function(self)
+    self:exchangeEquip("myplugin/weapon_simple")
 end
 
 -----------------------------------Pet Model Test----------------------------------

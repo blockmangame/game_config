@@ -244,12 +244,8 @@ function Entity.EntityProp:expMax(value, add, buff)
     local useVal = {}
     useVal.val =  (add and value.val or -value.val)--(rHpPct.pct or 0) + (add and value or -value)
     useVal.bit =  value.bit or 0
-    for i = 0,useVal.bit do
-        useVal.val = useVal.val.."0"
-    end
-    
-    local bigOne = BigInteger.Create(useVal.val)
-    print("-----------------big num----:",tostring(bigOne))
+    local bigOne = BigInteger.Create(useVal.val,useVal.bit)
+    print("-----------------big num----:",bigOne)
     self:deltaExpMaxPlus(bigOne)--TODO big number
 end
 ---
@@ -266,7 +262,7 @@ function Entity.EntityProp:perExp(value, add, buff)
     for i = 0,useVal.bit do
         useVal.val = useVal.val*10
     end
-    self:deltaPerExpPlus(useVal.val)--TODO big number
+    self:deltaPerExpPlus(BigInteger.Create(useVal.val,useVal.bit))--TODO big number
 end
 
 

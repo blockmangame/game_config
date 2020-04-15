@@ -88,7 +88,9 @@ end
 function Player:exchangeEquip(fullName)
     self:addItem(fullName,1,nil,"exchange")
     local item1 =  self:searchItem("fullName",fullName)
-    self:saveHandItem(item1,false)
+    --self:saveHandItem(item1,false)
+    print("---------------------------",Lib.v2s(item1,2))
+    self:switchItem(item1:tid(), item1:slot(),1,1)
 
 end
 ---
