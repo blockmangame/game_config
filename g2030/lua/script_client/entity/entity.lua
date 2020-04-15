@@ -34,6 +34,26 @@ function Entity.ValueFunc:belt(value)
     Lib.emitEvent(Event.EVENT_ITEM_SHOP_UPDATE)
 end
 
+function Entity.ValueFunc:prop(value)
+    Lib.emitEvent(Event.EVENT_PAY_SHOP_UPDATE, Define.TabType.Prop)
+    print(" === Event.EVENT_PAY_SHOP_UPDATE == prop")
+end
+
+function Entity.ValueFunc:resource(value)
+    Lib.emitEvent(Event.EVENT_PAY_SHOP_UPDATE, Define.TabType.Resource)
+    print(" === Event.EVENT_PAY_SHOP_UPDATE == resource")
+end
+
+function Entity.ValueFunc:skin(value)
+    print(" === Event.EVENT_PAY_SHOP_UPDATE == skin")
+    Lib.emitEvent(Event.EVENT_PAY_SHOP_UPDATE, Define.TabType.Skin)
+end
+
+function Entity.ValueFunc:privilege(value)
+    print(" === Event.EVENT_PAY_SHOP_UPDATE == privilege")
+    Lib.emitEvent(Event.EVENT_PAY_SHOP_UPDATE, Define.TabType.Privilege)
+end
+
 function EntityClient:addClientBuff(name, id, time)
     if not id then
         id = ClientBuffId - 1

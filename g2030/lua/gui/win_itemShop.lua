@@ -110,6 +110,9 @@ function M:initTabList()
         if i == 1 then
             tab = tabType
         end
+        if i == 3 then
+            break
+        end
     end
     self:onClickTab(tab)
 end
@@ -130,6 +133,7 @@ end
 function M:addItemsGridView(isResetPos)
     print("<addItemsGridView:> isResetPos "..tostring(isResetPos))
     self.gvItemsGridView:RemoveAllItems()
+    self.itemsGridView = {}
     if self.selectTab == TabType.Equip then
         self:addViewByConfig(EquipConfig, isResetPos)
     elseif self.selectTab == TabType.Belt then
@@ -441,11 +445,8 @@ function M:checkCanShow()
         return false
     end
     if not self.isInitData then
-        local packet = {
-            pid = "SyncItemShopInit"
-        }
-        Me:sendPacket(packet)
-        return false
+        self:initData()
+        return true
     end
     return true
 end
@@ -545,15 +546,16 @@ function M:updateItems(isReset)
     local buyInfo = {}
     if self.selectTab == TabType.Equip then
         buyInfo = Me:getEquip()
-        print("updateItems self.type : "..tostring(self.type).." getEquip  1:", Lib.v2s(buyInfo, 3))
+        print("updateItems self.selectTab : "..tostring(self.selectTab).." getEquip  1:", Lib.v2s(buyInfo, 3))
         itemConfig = EquipConfig
     elseif self.selectTab == TabType.Belt then
         buyInfo = Me:getBelt()
-        print("updateItems self.type : "..tostring(self.type).." getBelt  1:", Lib.v2s(buyInfo, 3))
+        print("updateItems self.selectTab : "..tostring(self.selectTab).." getBelt  1:", Lib.v2s(buyInfo, 3))
         itemConfig = BeltConfig
     elseif self.selectTab == TabType.Advance then
         itemConfig = AdvanceConfig
         buyInfo = self:getAdvanceInfo()
+        print("updateItems self.selectTab : "..tostring(self.selectTab).." getAdvanceInfo  1:", Lib.v2s(buyInfo, 3))
     end
     for _, item in pairs(itemConfig:getSettings()) do
         item.status = buyInfo[tostring(item.id)]  or BuyStatus.Lock
@@ -574,7 +576,7 @@ function M:onClickNextItem(itemConfig)
             else
                 self:onClickItem(curItem.id)
             end
-            print(string.format("<updateDate:> TypeId: %s  ItemId: %s self.selectItemId : %s", tostring(self.selectTab), tostring(self.selectItemId),tostring(nextItem.id)))
+            print(string.format("<onClickNextItem:> TypeId: %s  ItemId: %s self.selectItemId : %s", tostring(self.selectTab), tostring(self.selectItemId),tostring(nextItem.id)))
         end
     end
 end
@@ -582,6 +584,7 @@ end
 function M:getAdvanceInfo()
     local buyInfo = {}
     local curLevel = Me:getCurLevel()
+    print("getAdvanceInfo Me:getCurLevel() : "..tostring(Me:getCurLevel()))
     local curId = -1
     for _, value in ipairs((AdvanceConfig:getSettings())) do
         if curLevel >= value.level then
@@ -599,7 +602,6 @@ function M:getAdvanceInfo()
             end
         --end
     end
-    print("getAdvanceInfo self.type : "..tostring(self.type).." getBelt  1:", Lib.v2s(buyInfo, 3))
     return buyInfo
 end
 
@@ -631,6 +633,10 @@ function M:useCostDetailUi()
     self.btnDetail:SetPushedImage("set:ninja_legends_itemshop.json image:btn_red")
 end
 
-function M:isInitItemData()
-   self.isInitData = true
+function M:initData()
+    local packet = {
+        pid = "SyncItemShopInit"
+    }
+    Me:sendPacket(packet)
+    self.isInitData = true
 end

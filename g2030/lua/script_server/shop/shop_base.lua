@@ -194,7 +194,7 @@ function M:initItem(player)
     --Lib.log_1(buyInfo, "Equip:initItem(player, itemId) 000000000000000000000" )
     local buyInfo = self:getPlayerBuyInfo(player)
     if not next(buyInfo) then
-        print(" if not next(buyInfo) then")
+         print(" if not next(buyInfo) then self.type : "..tostring(self.type))
         local item = self.config:getItemBySort(1)
         if self.config:getItemBySort(1) then
             buyInfo[tostring(item.id)] = BuyStatus.Unlock

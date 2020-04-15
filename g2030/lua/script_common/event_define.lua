@@ -22,6 +22,7 @@ if World.isClient then
     Event.register("EVENT_SHOW_BOTTOM_MESSAGE")
     Event.register("EVENT_TEAM_SHOP_REFRESH")
     Event.register("EVENT_ITEM_SHOP_UPDATE")
+    Event.register("EVENT_PAY_SHOP_UPDATE")
     Event.register("EVENT_PLAY_GLIDING_EFFECT")
 else
     --TODO

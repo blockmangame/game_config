@@ -27,6 +27,10 @@ ValueDef.teamId		= {false,	true,	true,	true,       0,		true}--阵营Id
 ValueDef.teamKills	= {false,	false,	false,	false,       0,		false}--个人阵营击杀数
 ValueDef.equip      = {false,	false,	true,	false,      {},		true}--道具商店购买的装备列表
 ValueDef.belt       = {false,	false,	true,	false,      {},		true}--道具商店购买的腰带列表
+ValueDef.prop       = {false,	false,	true,	false,      {},		true}--付费商店购买的道具列表
+ValueDef.resource   = {false,	false,	true,	false,      {},		true}--付费商店购买的资源列表
+ValueDef.skin       = {false,	false,	true,	false,      {},		true}--付费商店购买的皮肤列表
+ValueDef.privilege  = {false,	false,	true,	false,      {},		true}--付费商店购买的特权列表
 ValueDef.islandLv   = {false,	false,	true,	false,       1,		true}--当前岛屿等级（商店临时解锁用）
 ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},     true }--已拥有的阵营皮肤
 ValueDef.teamSkinId = {false,   true,    true,  false,       0,     true }--已装备的阵营皮肤id
@@ -246,7 +250,7 @@ end
 
 ---获取购买装备列表
 function Entity:getEquip()
-    return Lib.copy(self:getValue("equip"))
+    return self:getValue("equip")
 end
 
 ---设置购买装备列表
@@ -256,12 +260,52 @@ end
 
 ---获取购买腰带列表
 function Entity:getBelt()
-    return Lib.copy(self:getValue("belt"))
+    return self:getValue("belt")
 end
 
 ---设置购买腰带列表
 function Entity:setBelt(data)
     self:setValue("belt", data)
+end
+
+---获取购买付费道具列表
+function Entity:getProp()
+    return self:getValue("prop")
+end
+
+---设置购买付费道具列表
+function Entity:setProp(data)
+    self:setValue("prop", data)
+end
+
+---获取购买付费资源列表
+function Entity:getResource()
+    return self:getValue("resource")
+end
+
+---设置购买付费资源列表
+function Entity:setResource(data)
+    self:setValue("resource", data)
+end
+
+---获取购买付费皮肤列表
+function Entity:getSkin()
+    return self:getValue("skin")
+end
+
+---设置购买付费皮肤列表
+function Entity:setSkin(data)
+    self:setValue("skin", data)
+end
+
+---获取购买付费特权列表
+function Entity:getPrivilege()
+    return self:getValue("privilege")
+end
+
+---设置购买付费特权列表
+function Entity:setPrivilege(data)
+    self:setValue("privilege", data)
 end
 
 ---获取已解锁岛屿等级

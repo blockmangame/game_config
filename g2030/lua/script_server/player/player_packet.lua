@@ -67,6 +67,14 @@ function handles:SyncItemShopInit(packet)
     Store.ItemShop:initAllItem(self)
 end
 
+function handles:SyncPayShopInit(packet)
+    Store.PayShop:initAllItem(self)
+end
+
+function handles:SyncPayShopOperation(packet)
+    Store.PayShop:operationByType(self, packet.tabId, packet.itemId)
+end
+
 function handles:ConfirmGauntlet(packet)
     local entity = World.CurWorld:getObject(packet.objId)
     if not entity then
