@@ -2,6 +2,8 @@ ENTITY_ENTER{
     
 	AddSkill(entity = $obj1, name = "myplugin/sceneSkillBase")
 	AddSkill(entity = $obj1, name = "myplugin/rechargeSkillBase")
+
+	-- AddEntityBuff(entity = $obj1, cfg = "myplugin/silence_buff")
 }
 
 ENTITY_DIE{
