@@ -48,7 +48,7 @@ function M:initEvent()
     end)
 
     self:subscribe(self.btnPet, UIEvent.EventButtonClick, function()
-        UI:getWnd("petPackage"):onShow(true)
+        UI:getWnd("petPackage"):openPetPackage()
     end)
 
     local LuaTimer = T(Lib, "LuaTimer") ---@type LuaTimer

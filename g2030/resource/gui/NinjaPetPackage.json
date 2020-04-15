@@ -28,7 +28,7 @@
                     "Property": [
                         {
                             "Name": "Area",
-                            "Value": "{{0,0},{0,0},{0.840625,0},{0.736111,0}}"
+                            "Value": "{{0,0},{0,20},{0.840625,0},{0.736111,20}}"
                         },
                         {
                             "Name": "VerticalAlignment",
@@ -60,7 +60,7 @@
                         },
                         {
                             "Name": "ImageName",
-                            "Value": "set:ninja_pet_packege.json image:bottom"
+                            "Value": "set:ninja_pet_package.json image:bottom"
                         },
                         {
                             "Name": "HexgonTopImage",
@@ -94,7 +94,7 @@
                     "Property": [
                         {
                             "Name": "Area",
-                            "Value": "{{0.01,0},{-0.025,0},{0.810781,0},{0.716667,0}}"
+                            "Value": "{{0.0101562,0},{0.00277778,0},{0.810937,0},{0.744445,0}}"
                         },
                         {
                             "Name": "VerticalAlignment",
@@ -148,7 +148,7 @@
                                 },
                                 {
                                     "Name": "ImageName",
-                                    "Value": "set:ninja_pet_packege.json image:bottom-bg"
+                                    "Value": "set:ninja_pet_package.json image:bottom-bg"
                                 },
                                 {
                                     "Name": "HexgonTopImage",
@@ -326,7 +326,7 @@
                                                 },
                                                 {
                                                     "Name": "ImageName",
-                                                    "Value": "set:ninja_pet_packege.json image:res-coin"
+                                                    "Value": "set:ninja_pet_package.json image:res-coin"
                                                 },
                                                 {
                                                     "Name": "HexgonTopImage",
@@ -424,7 +424,7 @@
                                                 },
                                                 {
                                                     "Name": "ImageName",
-                                                    "Value": "set:ninja_pet_packege.json image:res-fu"
+                                                    "Value": "set:ninja_pet_package.json image:res-fu"
                                                 },
                                                 {
                                                     "Name": "HexgonTopImage",
@@ -454,7 +454,7 @@
                                             "Window": [
                                                 {
                                                     "Type": "StaticText",
-                                                    "Name": "NinjaPetPackage-PetAddInfoCoinText_c",
+                                                    "Name": "NinjaPetPackage-PetAddInfoFuText",
                                                     "Property": [
                                                         {
                                                             "Name": "Area",
@@ -522,7 +522,7 @@
                                                 },
                                                 {
                                                     "Name": "ImageName",
-                                                    "Value": "set:ninja_pet_packege.json image:res-chi"
+                                                    "Value": "set:ninja_pet_package.json image:res-chi"
                                                 },
                                                 {
                                                     "Name": "HexgonTopImage",
@@ -552,7 +552,7 @@
                                             "Window": [
                                                 {
                                                     "Type": "StaticText",
-                                                    "Name": "NinjaPetPackage-PetAddInfoFuText",
+                                                    "Name": "NinjaPetPackage-PetAddInfoChiText",
                                                     "Property": [
                                                         {
                                                             "Name": "Area",
@@ -624,7 +624,7 @@
                                 },
                                 {
                                     "Name": "ImageName",
-                                    "Value": "set:ninja_pet_packege.json image:bottom-bg"
+                                    "Value": "set:ninja_pet_package.json image:bottom-bg"
                                 },
                                 {
                                     "Name": "HexgonTopImage",
@@ -819,6 +819,582 @@
                                             ]
                                         },
                                         {
+                                            "Type": "Layout",
+                                            "Name": "NinjaPetPackage-PetPageViewBG",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,0},{0,0},{1,0},{0.8,0}}"
+                                                },
+                                                {
+                                                    "Name": "VerticalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                }
+                                            ],
+                                            "Window": [
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PetViewItemBG",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{0.22,0},{0.298913,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:grid-bg"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PetViewItemBG_c",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0.26,0},{0,0},{0.48,0},{0.298913,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:grid-bg"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PetViewItemBG_c_c",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,260},{0,0},{0.22,260},{0.298913,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:grid-bg"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PetViewItemBG_c_c_c",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,390},{0,0},{0.22,390},{0.298913,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:grid-bg"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PetViewItemBG_c_c_c_c",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,130},{0.22,0},{0.298913,130}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:grid-bg"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PetViewItemBG_c_c_c_c_c",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0.26,0},{0,130},{0.48,0},{0.298913,130}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:grid-bg"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PetViewItemBG_c_c_c_c_c_c",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,260},{0,130},{0.22,260},{0.298913,130}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:grid-bg"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PetViewItemBG_c_c_c_c_c_c_c",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,390},{0,130},{0.22,390},{0.298913,130}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:grid-bg"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PetViewItemBG_c_c_c_c_c_c_c_c",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,260},{0.22,0},{0.298913,260}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:grid-bg"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PetViewItemBG_c_c_c_c_c_c_c_c_c",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0.26,0},{0,260},{0.48,0},{0.298913,260}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:grid-bg"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PetViewItemBG_c_c_c_c_c_c_c_c_c_c",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,260},{0,260},{0.22,260},{0.298913,260}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:grid-bg"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PetViewItemBG_c_c_c_c_c_c_c_c_c_c_c",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,390},{0,260},{0.22,390},{0.298913,260}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:grid-bg"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
                                             "Type": "GridView",
                                             "Name": "NinjaPetPackage-PetPageMainView",
                                             "Property": [
@@ -833,6 +1409,10 @@
                                                 {
                                                     "Name": "HorizontalAlignment",
                                                     "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "Touchable",
+                                                    "Value": "false"
                                                 },
                                                 {
                                                     "Name": "ClipChild",
@@ -966,11 +1546,11 @@
                                                         },
                                                         {
                                                             "Name": "NormalImage",
-                                                            "Value": "set:ninja_pet_packege.json image:front-page"
+                                                            "Value": "set:ninja_pet_package.json image:front-page"
                                                         },
                                                         {
                                                             "Name": "PushedImage",
-                                                            "Value": "set:ninja_pet_packege.json image:front-page"
+                                                            "Value": "set:ninja_pet_package.json image:front-page"
                                                         },
                                                         {
                                                             "Name": "SoundName",
@@ -1024,11 +1604,11 @@
                                                         },
                                                         {
                                                             "Name": "NormalImage",
-                                                            "Value": "set:ninja_pet_packege.json image:next-page"
+                                                            "Value": "set:ninja_pet_package.json image:next-page"
                                                         },
                                                         {
                                                             "Name": "PushedImage",
-                                                            "Value": "set:ninja_pet_packege.json image:next-page"
+                                                            "Value": "set:ninja_pet_package.json image:next-page"
                                                         },
                                                         {
                                                             "Name": "SoundName",
@@ -1112,11 +1692,11 @@
                                                                 },
                                                                 {
                                                                     "Name": "NormalImage",
-                                                                    "Value": "set:ninja_pet_packege.json image:plus"
+                                                                    "Value": "set:ninja_pet_package.json image:plus"
                                                                 },
                                                                 {
                                                                     "Name": "PushedImage",
-                                                                    "Value": "set:ninja_pet_packege.json image:plus"
+                                                                    "Value": "set:ninja_pet_package.json image:plus"
                                                                 },
                                                                 {
                                                                     "Name": "SoundName",
@@ -1220,7 +1800,7 @@
                                 },
                                 {
                                     "Name": "ImageName",
-                                    "Value": "set:ninja_pet_packege.json image:bottom-bg"
+                                    "Value": "set:ninja_pet_package.json image:bottom-bg"
                                 },
                                 {
                                     "Name": "HexgonTopImage",
@@ -1292,7 +1872,7 @@
                                                 },
                                                 {
                                                     "Name": "ImageName",
-                                                    "Value": "set:ninja_pet_packege.json image:info-bg"
+                                                    "Value": "set:ninja_pet_package.json image:info-bg"
                                                 },
                                                 {
                                                     "Name": "HexgonTopImage",
@@ -1657,306 +2237,6 @@
                                                                 {
                                                                     "Name": "HexgonOverlayerColor",
                                                                     "Value": "1 1 1 1"
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "Type": "StaticImage",
-                                            "Name": "NinjaPetPackage-PetDetailInfo",
-                                            "Property": [
-                                                {
-                                                    "Name": "Area",
-                                                    "Value": "{{0,-15},{0,-10},{0.7,-15},{0,33}}"
-                                                },
-                                                {
-                                                    "Name": "WndOpenSound",
-                                                    "Value": "0"
-                                                },
-                                                {
-                                                    "Name": "WndCloseSound",
-                                                    "Value": "0"
-                                                },
-                                                {
-                                                    "Name": "StretchType",
-                                                    "Value": "NineGrid"
-                                                },
-                                                {
-                                                    "Name": "StretchOffset",
-                                                    "Value": "0 10 5 5"
-                                                },
-                                                {
-                                                    "Name": "ImageName",
-                                                    "Value": "set:ninja_pet_packege.json image:info"
-                                                },
-                                                {
-                                                    "Name": "HexgonTopImage",
-                                                    "Value": ""
-                                                },
-                                                {
-                                                    "Name": "HexgonTopColor",
-                                                    "Value": "1 1 1 1"
-                                                },
-                                                {
-                                                    "Name": "HexgonSideImage",
-                                                    "Value": ""
-                                                },
-                                                {
-                                                    "Name": "HexgonSideColor",
-                                                    "Value": "1 1 1 1"
-                                                },
-                                                {
-                                                    "Name": "HexgonOverlayerImage",
-                                                    "Value": ""
-                                                },
-                                                {
-                                                    "Name": "HexgonOverlayerColor",
-                                                    "Value": "1 1 1 1"
-                                                }
-                                            ],
-                                            "Window": [
-                                                {
-                                                    "Type": "StaticText",
-                                                    "Name": "NinjaPetPackage-PetDetailLevel",
-                                                    "Property": [
-                                                        {
-                                                            "Name": "Area",
-                                                            "Value": "{{0,0},{0,0},{0.222798,0},{1,0}}"
-                                                        },
-                                                        {
-                                                            "Name": "Text",
-                                                            "Value": "text"
-                                                        },
-                                                        {
-                                                            "Name": "ClipChild",
-                                                            "Value": "true"
-                                                        },
-                                                        {
-                                                            "Name": "WndOpenSound",
-                                                            "Value": "0"
-                                                        },
-                                                        {
-                                                            "Name": "WndCloseSound",
-                                                            "Value": "0"
-                                                        },
-                                                        {
-                                                            "Name": "TextHorzAlignment",
-                                                            "Value": "Centre"
-                                                        },
-                                                        {
-                                                            "Name": "TextVertAlignment",
-                                                            "Value": "Centre"
-                                                        },
-                                                        {
-                                                            "Name": "TextLineExtraSpace",
-                                                            "Value": "0"
-                                                        },
-                                                        {
-                                                            "Name": "TextAutoOmission",
-                                                            "Value": "false"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "Type": "StaticText",
-                                                    "Name": "NinjaPetPackage-PetDetailName",
-                                                    "Property": [
-                                                        {
-                                                            "Name": "Area",
-                                                            "Value": "{{0,0},{0,0},{0.75,0},{0.7,0}}"
-                                                        },
-                                                        {
-                                                            "Name": "HorizontalAlignment",
-                                                            "Value": "Right"
-                                                        },
-                                                        {
-                                                            "Name": "Text",
-                                                            "Value": "text"
-                                                        },
-                                                        {
-                                                            "Name": "WndOpenSound",
-                                                            "Value": "0"
-                                                        },
-                                                        {
-                                                            "Name": "WndCloseSound",
-                                                            "Value": "0"
-                                                        },
-                                                        {
-                                                            "Name": "TextVertAlignment",
-                                                            "Value": "Centre"
-                                                        },
-                                                        {
-                                                            "Name": "TextLineExtraSpace",
-                                                            "Value": "0"
-                                                        },
-                                                        {
-                                                            "Name": "TextAutoOmission",
-                                                            "Value": "false"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "Type": "StaticImage",
-                                                    "Name": "NinjaPetPackage-PetDetailExpBG",
-                                                    "Property": [
-                                                        {
-                                                            "Name": "Area",
-                                                            "Value": "{{0.196891,0},{-0.116279,0},{0.725388,0},{0.093023,0}}"
-                                                        },
-                                                        {
-                                                            "Name": "VerticalAlignment",
-                                                            "Value": "Bottom"
-                                                        },
-                                                        {
-                                                            "Name": "WndOpenSound",
-                                                            "Value": "0"
-                                                        },
-                                                        {
-                                                            "Name": "WndCloseSound",
-                                                            "Value": "0"
-                                                        },
-                                                        {
-                                                            "Name": "StretchType",
-                                                            "Value": "NineGrid"
-                                                        },
-                                                        {
-                                                            "Name": "StretchOffset",
-                                                            "Value": "0 15 0 0"
-                                                        },
-                                                        {
-                                                            "Name": "ImageName",
-                                                            "Value": "set:ninja_pet_packege.json image:processbar-bg"
-                                                        },
-                                                        {
-                                                            "Name": "HexgonTopImage",
-                                                            "Value": ""
-                                                        },
-                                                        {
-                                                            "Name": "HexgonTopColor",
-                                                            "Value": "1 1 1 1"
-                                                        },
-                                                        {
-                                                            "Name": "HexgonSideImage",
-                                                            "Value": ""
-                                                        },
-                                                        {
-                                                            "Name": "HexgonSideColor",
-                                                            "Value": "1 1 1 1"
-                                                        },
-                                                        {
-                                                            "Name": "HexgonOverlayerImage",
-                                                            "Value": ""
-                                                        },
-                                                        {
-                                                            "Name": "HexgonOverlayerColor",
-                                                            "Value": "1 1 1 1"
-                                                        }
-                                                    ],
-                                                    "Window": [
-                                                        {
-                                                            "Type": "StaticImage",
-                                                            "Name": "NinjaPetPackage-PetDetailCurExp",
-                                                            "Property": [
-                                                                {
-                                                                    "Name": "Area",
-                                                                    "Value": "{{0,0},{0,0},{0.5,0},{1,0}}"
-                                                                },
-                                                                {
-                                                                    "Name": "WndOpenSound",
-                                                                    "Value": "0"
-                                                                },
-                                                                {
-                                                                    "Name": "WndCloseSound",
-                                                                    "Value": "0"
-                                                                },
-                                                                {
-                                                                    "Name": "StretchType",
-                                                                    "Value": "NineGrid"
-                                                                },
-                                                                {
-                                                                    "Name": "StretchOffset",
-                                                                    "Value": "0 15 0 0"
-                                                                },
-                                                                {
-                                                                    "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:processbar-cur"
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonTopImage",
-                                                                    "Value": ""
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonTopColor",
-                                                                    "Value": "1 1 1 1"
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonSideImage",
-                                                                    "Value": ""
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonSideColor",
-                                                                    "Value": "1 1 1 1"
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonOverlayerImage",
-                                                                    "Value": ""
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonOverlayerColor",
-                                                                    "Value": "1 1 1 1"
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "Type": "StaticText",
-                                                            "Name": "NinjaPetPackage-PetDetailCurExpText",
-                                                            "Property": [
-                                                                {
-                                                                    "Name": "Area",
-                                                                    "Value": "{{0,0},{-0.222222,0},{1,0},{0.777778,0}}"
-                                                                },
-                                                                {
-                                                                    "Name": "VerticalAlignment",
-                                                                    "Value": "Bottom"
-                                                                },
-                                                                {
-                                                                    "Name": "HorizontalAlignment",
-                                                                    "Value": "Centre"
-                                                                },
-                                                                {
-                                                                    "Name": "Text",
-                                                                    "Value": "text"
-                                                                },
-                                                                {
-                                                                    "Name": "Font",
-                                                                    "Value": "HT12"
-                                                                },
-                                                                {
-                                                                    "Name": "WndOpenSound",
-                                                                    "Value": "0"
-                                                                },
-                                                                {
-                                                                    "Name": "WndCloseSound",
-                                                                    "Value": "0"
-                                                                },
-                                                                {
-                                                                    "Name": "TextHorzAlignment",
-                                                                    "Value": "Centre"
-                                                                },
-                                                                {
-                                                                    "Name": "TextVertAlignment",
-                                                                    "Value": "Centre"
-                                                                },
-                                                                {
-                                                                    "Name": "TextLineExtraSpace",
-                                                                    "Value": "0"
-                                                                },
-                                                                {
-                                                                    "Name": "TextAutoOmission",
-                                                                    "Value": "false"
                                                                 }
                                                             ]
                                                         }
@@ -2332,7 +2612,11 @@
                                                     "Property": [
                                                         {
                                                             "Name": "Area",
-                                                            "Value": "{{0,0},{0,0},{0,39.375},{0,38.25}}"
+                                                            "Value": "{{0,0},{0,0},{0.145833,0},{0.980769,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "VerticalAlignment",
+                                                            "Value": "Centre"
                                                         },
                                                         {
                                                             "Name": "WndOpenSound",
@@ -2344,7 +2628,7 @@
                                                         },
                                                         {
                                                             "Name": "ImageName",
-                                                            "Value": "set:ninja_main.json image:tool_gold"
+                                                            "Value": "set:ninja_pet_package.json image:chi"
                                                         },
                                                         {
                                                             "Name": "HexgonTopImage",
@@ -2567,6 +2851,248 @@
                                                     ]
                                                 }
                                             ]
+                                        },
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "NinjaPetPackage-PetNameBg",
+                                            "Property": [
+                                                {
+                                                    "Name": "DrawColor",
+                                                    "Value": "1 1 1 0.8"
+                                                },
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,0},{-0.16129,0},{0.7,0},{-0.129032,0}}"
+                                                },
+                                                {
+                                                    "Name": "VerticalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "HorizontalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "Alpha",
+                                                    "Value": "0.8"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:ninja_main.json image:material_bg"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ],
+                                            "Window": [
+                                                {
+                                                    "Type": "StaticText",
+                                                    "Name": "NinjaPetPackage-PetDetailName",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{0.75,0},{1,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "HorizontalAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "Text",
+                                                            "Value": "text"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "TextHorzAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "TextVertAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "TextLineExtraSpace",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "TextAutoOmission",
+                                                            "Value": "false"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "NinjaPetPackage-PetDetailLevelBg",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,0},{0,0},{0,69.75},{0,28.125}}"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:ninja_pet_package.json image:level-ug"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ],
+                                            "Window": [
+                                                {
+                                                    "Type": "StaticText",
+                                                    "Name": "NinjaPetPackage-PetDetailLevel",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "Text",
+                                                            "Value": "text"
+                                                        },
+                                                        {
+                                                            "Name": "ClipChild",
+                                                            "Value": "true"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "TextHorzAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "TextVertAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "TextLineExtraSpace",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "TextAutoOmission",
+                                                            "Value": "false"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "NinjaPetPackage-PetDetailQuality",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,0},{0,0},{0,80},{0,50}}"
+                                                },
+                                                {
+                                                    "Name": "HorizontalAlignment",
+                                                    "Value": "Right"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ]
                                         }
                                     ]
                                 }
@@ -2612,7 +3138,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:rol-line"
+                                            "Value": "set:ninja_pet_package.json image:rol-line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -2666,7 +3192,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:line"
+                                            "Value": "set:ninja_pet_package.json image:line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -2720,7 +3246,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:rol-line"
+                                            "Value": "set:ninja_pet_package.json image:rol-line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -2774,7 +3300,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:line"
+                                            "Value": "set:ninja_pet_package.json image:line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -2832,7 +3358,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:line"
+                                            "Value": "set:ninja_pet_package.json image:line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -2906,7 +3432,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:rol-line"
+                                            "Value": "set:ninja_pet_package.json image:rol-line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -2960,7 +3486,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:line"
+                                            "Value": "set:ninja_pet_package.json image:line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -3014,7 +3540,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:rol-line"
+                                            "Value": "set:ninja_pet_package.json image:rol-line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -3068,7 +3594,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:line"
+                                            "Value": "set:ninja_pet_package.json image:line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -3126,7 +3652,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:line"
+                                            "Value": "set:ninja_pet_package.json image:line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -3164,7 +3690,7 @@
                     "Property": [
                         {
                             "Name": "Area",
-                            "Value": "{{0.01,0},{-0.025,0},{0.01,1025},{-0.025,534}}"
+                            "Value": "{{0.0101562,0},{0.00277778,0},{0.810937,0},{0.744445,0}}"
                         },
                         {
                             "Name": "VerticalAlignment",
@@ -3210,7 +3736,7 @@
                                 },
                                 {
                                     "Name": "ImageName",
-                                    "Value": "set:ninja_pet_packege.json image:bottom-bg"
+                                    "Value": "set:ninja_pet_package.json image:bottom-bg"
                                 },
                                 {
                                     "Name": "HexgonTopImage",
@@ -3339,10 +3865,6 @@
                                                     "Value": "Centre"
                                                 },
                                                 {
-                                                    "Name": "Visible",
-                                                    "Value": "false"
-                                                },
-                                                {
                                                     "Name": "WndOpenSound",
                                                     "Value": "0"
                                                 },
@@ -3360,7 +3882,7 @@
                                                 },
                                                 {
                                                     "Name": "ImageName",
-                                                    "Value": "set:ninja_pet_packege.json image:sel-unflod"
+                                                    "Value": "set:ninja_pet_package.json image:sel-unflod"
                                                 },
                                                 {
                                                     "Name": "HexgonTopImage",
@@ -3436,7 +3958,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:sel-flod-sel"
+                                                                    "Value": "set:ninja_pet_package.json image:sel-flod-sel"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -3494,7 +4016,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:sel-flod-unsel"
+                                                                    "Value": "set:ninja_pet_package.json image:sel-flod-unsel"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -3668,7 +4190,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:sel-flod-sel"
+                                                                    "Value": "set:ninja_pet_package.json image:sel-flod-sel"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -3722,7 +4244,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:sel-flod-unsel"
+                                                                    "Value": "set:ninja_pet_package.json image:sel-flod-unsel"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -3896,7 +4418,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:sel-flod-sel"
+                                                                    "Value": "set:ninja_pet_package.json image:sel-flod-sel"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -3950,7 +4472,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:sel-flod-unsel"
+                                                                    "Value": "set:ninja_pet_package.json image:sel-flod-unsel"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -4124,7 +4646,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:sel-flod-sel"
+                                                                    "Value": "set:ninja_pet_package.json image:sel-flod-sel"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -4178,7 +4700,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:sel-flod-unsel"
+                                                                    "Value": "set:ninja_pet_package.json image:sel-flod-unsel"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -4332,7 +4854,7 @@
                                                 },
                                                 {
                                                     "Name": "ImageName",
-                                                    "Value": "set:ninja_pet_packege.json image:sel-botton"
+                                                    "Value": "set:ninja_pet_package.json image:sel-botton"
                                                 },
                                                 {
                                                     "Name": "HexgonTopImage",
@@ -4366,14 +4888,10 @@
                                                     "Property": [
                                                         {
                                                             "Name": "Area",
-                                                            "Value": "{{0,0},{0,0},{0,50},{0,50}}"
+                                                            "Value": "{{0,0},{0,0},{0.8,0},{1,0}}"
                                                         },
                                                         {
                                                             "Name": "VerticalAlignment",
-                                                            "Value": "Centre"
-                                                        },
-                                                        {
-                                                            "Name": "HorizontalAlignment",
                                                             "Value": "Centre"
                                                         },
                                                         {
@@ -4403,6 +4921,160 @@
                                                         {
                                                             "Name": "TextAutoOmission",
                                                             "Value": "false"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PlusPetFoldBtnDown",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{0.2,0},{1,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "HorizontalAlignment",
+                                                            "Value": "Right"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:sel-down"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PlusPetFoldBtnUp",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{0.2,0},{1,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "HorizontalAlignment",
+                                                            "Value": "Right"
+                                                        },
+                                                        {
+                                                            "Name": "Visible",
+                                                            "Value": "false"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:sel-up"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "Button",
+                                                    "Name": "NinjaPetPackage-PlusPetFoldBtn",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{0.2,0},{1,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "HorizontalAlignment",
+                                                            "Value": "Right"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "SoundName",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
                                                         }
                                                     ]
                                                 }
@@ -4446,7 +5118,7 @@
                                 },
                                 {
                                     "Name": "ImageName",
-                                    "Value": "set:ninja_pet_packege.json image:bottom-bg"
+                                    "Value": "set:ninja_pet_package.json image:bottom-bg"
                                 },
                                 {
                                     "Name": "HexgonTopImage",
@@ -4504,7 +5176,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:bg"
+                                            "Value": "set:ninja_pet_package.json image:bg"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -4640,7 +5312,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:skill-atk"
+                                                                    "Value": "set:ninja_pet_package.json image:skill-atk"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -4698,7 +5370,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:skill-def"
+                                                                    "Value": "set:ninja_pet_package.json image:skill-def"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -4756,7 +5428,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:skill-add"
+                                                                    "Value": "set:ninja_pet_package.json image:skill-add"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -4810,7 +5482,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:quiality-bg"
+                                                                    "Value": "set:ninja_pet_package.json image:quiality-bg"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -4882,11 +5554,11 @@
                                                         },
                                                         {
                                                             "Type": "StaticImage",
-                                                            "Name": "NinjaPetPackage-PlusPetQuaSSR",
+                                                            "Name": "NinjaPetPackage-PlusPetQuaImage",
                                                             "Property": [
                                                                 {
                                                                     "Name": "Area",
-                                                                    "Value": "{{-0.037037,0},{-0.0909091,0},{0.400463,0},{0.369318,0}}"
+                                                                    "Value": "{{-0.0740741,0},{-0.0909091,0},{0.222222,0},{0.363636,0}}"
                                                                 },
                                                                 {
                                                                     "Name": "VerticalAlignment",
@@ -4903,184 +5575,6 @@
                                                                 {
                                                                     "Name": "WndCloseSound",
                                                                     "Value": "0"
-                                                                },
-                                                                {
-                                                                    "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:SSR"
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonTopImage",
-                                                                    "Value": ""
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonTopColor",
-                                                                    "Value": "1 1 1 1"
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonSideImage",
-                                                                    "Value": ""
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonSideColor",
-                                                                    "Value": "1 1 1 1"
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonOverlayerImage",
-                                                                    "Value": ""
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonOverlayerColor",
-                                                                    "Value": "1 1 1 1"
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "Type": "StaticImage",
-                                                            "Name": "NinjaPetPackage-PlusPetQuaSR",
-                                                            "Property": [
-                                                                {
-                                                                    "Name": "Area",
-                                                                    "Value": "{{-0.0555556,0},{-0.0909091,0},{0.248611,0},{0.369318,0}}"
-                                                                },
-                                                                {
-                                                                    "Name": "VerticalAlignment",
-                                                                    "Value": "Bottom"
-                                                                },
-                                                                {
-                                                                    "Name": "HorizontalAlignment",
-                                                                    "Value": "Right"
-                                                                },
-                                                                {
-                                                                    "Name": "Visible",
-                                                                    "Value": "false"
-                                                                },
-                                                                {
-                                                                    "Name": "WndOpenSound",
-                                                                    "Value": "0"
-                                                                },
-                                                                {
-                                                                    "Name": "WndCloseSound",
-                                                                    "Value": "0"
-                                                                },
-                                                                {
-                                                                    "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:SR"
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonTopImage",
-                                                                    "Value": ""
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonTopColor",
-                                                                    "Value": "1 1 1 1"
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonSideImage",
-                                                                    "Value": ""
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonSideColor",
-                                                                    "Value": "1 1 1 1"
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonOverlayerImage",
-                                                                    "Value": ""
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonOverlayerColor",
-                                                                    "Value": "1 1 1 1"
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "Type": "StaticImage",
-                                                            "Name": "NinjaPetPackage-PlusPetQuaR",
-                                                            "Property": [
-                                                                {
-                                                                    "Name": "Area",
-                                                                    "Value": "{{-0.0925926,0},{-0.0909091,0},{0.0657404,0},{0.369318,0}}"
-                                                                },
-                                                                {
-                                                                    "Name": "VerticalAlignment",
-                                                                    "Value": "Bottom"
-                                                                },
-                                                                {
-                                                                    "Name": "HorizontalAlignment",
-                                                                    "Value": "Right"
-                                                                },
-                                                                {
-                                                                    "Name": "Visible",
-                                                                    "Value": "false"
-                                                                },
-                                                                {
-                                                                    "Name": "WndOpenSound",
-                                                                    "Value": "0"
-                                                                },
-                                                                {
-                                                                    "Name": "WndCloseSound",
-                                                                    "Value": "0"
-                                                                },
-                                                                {
-                                                                    "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:R"
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonTopImage",
-                                                                    "Value": ""
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonTopColor",
-                                                                    "Value": "1 1 1 1"
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonSideImage",
-                                                                    "Value": ""
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonSideColor",
-                                                                    "Value": "1 1 1 1"
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonOverlayerImage",
-                                                                    "Value": ""
-                                                                },
-                                                                {
-                                                                    "Name": "HexgonOverlayerColor",
-                                                                    "Value": "1 1 1 1"
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "Type": "StaticImage",
-                                                            "Name": "NinjaPetPackage-PlusPetQuaN",
-                                                            "Property": [
-                                                                {
-                                                                    "Name": "Area",
-                                                                    "Value": "{{-0.0925926,0},{-0.0909091,0},{0.0907404,0},{0.359091,0}}"
-                                                                },
-                                                                {
-                                                                    "Name": "VerticalAlignment",
-                                                                    "Value": "Bottom"
-                                                                },
-                                                                {
-                                                                    "Name": "HorizontalAlignment",
-                                                                    "Value": "Right"
-                                                                },
-                                                                {
-                                                                    "Name": "Visible",
-                                                                    "Value": "false"
-                                                                },
-                                                                {
-                                                                    "Name": "WndOpenSound",
-                                                                    "Value": "0"
-                                                                },
-                                                                {
-                                                                    "Name": "WndCloseSound",
-                                                                    "Value": "0"
-                                                                },
-                                                                {
-                                                                    "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:N"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -5158,7 +5652,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:aggr.bg"
+                                                                    "Value": "set:ninja_pet_package.json image:aggr.bg"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -5208,7 +5702,7 @@
                                                                         },
                                                                         {
                                                                             "Name": "ImageName",
-                                                                            "Value": "set:ninja_pet_packege.json image:l-str"
+                                                                            "Value": "set:ninja_pet_package.json image:l-str"
                                                                         },
                                                                         {
                                                                             "Name": "HexgonTopImage",
@@ -5340,7 +5834,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:aggr.bg"
+                                                                    "Value": "set:ninja_pet_package.json image:aggr.bg"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -5390,7 +5884,7 @@
                                                                         },
                                                                         {
                                                                             "Name": "ImageName",
-                                                                            "Value": "set:ninja_pet_packege.json image:l-atk"
+                                                                            "Value": "set:ninja_pet_package.json image:l-atk"
                                                                         },
                                                                         {
                                                                             "Name": "HexgonTopImage",
@@ -5522,7 +6016,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:aggr.bg"
+                                                                    "Value": "set:ninja_pet_package.json image:aggr.bg"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -5572,7 +6066,7 @@
                                                                         },
                                                                         {
                                                                             "Name": "ImageName",
-                                                                            "Value": "set:ninja_pet_packege.json image:l-def"
+                                                                            "Value": "set:ninja_pet_package.json image:l-def"
                                                                         },
                                                                         {
                                                                             "Name": "HexgonTopImage",
@@ -5720,7 +6214,7 @@
                                                                 },
                                                                 {
                                                                     "Name": "ImageName",
-                                                                    "Value": "set:ninja_pet_packege.json image:skill-info-bg"
+                                                                    "Value": "set:ninja_pet_package.json image:skill-info-bg"
                                                                 },
                                                                 {
                                                                     "Name": "HexgonTopImage",
@@ -6226,7 +6720,7 @@
                                                         },
                                                         {
                                                             "Name": "ImageName",
-                                                            "Value": "set:ninja_pet_packege.json image:get-pet-bg"
+                                                            "Value": "set:ninja_pet_package.json image:get-pet-bg"
                                                         },
                                                         {
                                                             "Name": "HexgonTopImage",
@@ -6284,7 +6778,7 @@
                                                         },
                                                         {
                                                             "Name": "ImageName",
-                                                            "Value": "set:ninja_pet_packege.json image:get-pet"
+                                                            "Value": "set:ninja_pet_package.json image:get-pet"
                                                         },
                                                         {
                                                             "Name": "HexgonTopImage",
@@ -6444,7 +6938,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:rol-line"
+                                            "Value": "set:ninja_pet_package.json image:rol-line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -6498,7 +6992,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:line"
+                                            "Value": "set:ninja_pet_package.json image:line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -6532,7 +7026,7 @@
                                     "Property": [
                                         {
                                             "Name": "Area",
-                                            "Value": "{{0,218},{0,0},{0.785,218},{1,0}}"
+                                            "Value": "{{0.212683,0},{0,0},{0.997683,0},{1,0}}"
                                         },
                                         {
                                             "Name": "WndOpenSound",
@@ -6552,7 +7046,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:line"
+                                            "Value": "set:ninja_pet_package.json image:line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -6626,7 +7120,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:rol-line"
+                                            "Value": "set:ninja_pet_package.json image:rol-line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -6680,7 +7174,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:line"
+                                            "Value": "set:ninja_pet_package.json image:line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -6734,7 +7228,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:line"
+                                            "Value": "set:ninja_pet_package.json image:line"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -6772,7 +7266,7 @@
                     "Property": [
                         {
                             "Name": "Area",
-                            "Value": "{{0,63},{0,150},{0,143},{0,270}}"
+                            "Value": "{{0,63},{0,150},{0,143},{0,290}}"
                         },
                         {
                             "Name": "Touchable",
@@ -6794,7 +7288,7 @@
                             "Property": [
                                 {
                                     "Name": "Area",
-                                    "Value": "{{0,0},{0,0},{1,0},{0,50}}"
+                                    "Value": "{{0,0},{0,0},{1,0},{0.416667,0}}"
                                 },
                                 {
                                     "Name": "WndOpenSound",
@@ -6832,7 +7326,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:pet-not-select-label"
+                                            "Value": "set:ninja_pet_package.json image:pet-not-select-label"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -6914,7 +7408,7 @@
                                     "Property": [
                                         {
                                             "Name": "Area",
-                                            "Value": "{{0,0},{0,0},{0,109},{0,50}}"
+                                            "Value": "{{0,0},{0,0},{1.3625,0},{1,0}}"
                                         },
                                         {
                                             "Name": "VerticalAlignment",
@@ -6923,10 +7417,6 @@
                                         {
                                             "Name": "HorizontalAlignment",
                                             "Value": "Centre"
-                                        },
-                                        {
-                                            "Name": "Visible",
-                                            "Value": "false"
                                         },
                                         {
                                             "Name": "WndOpenSound",
@@ -6946,7 +7436,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:pet-select-label"
+                                            "Value": "set:ninja_pet_package.json image:pet-select-label"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -7021,6 +7511,52 @@
                                             ]
                                         }
                                     ]
+                                },
+                                {
+                                    "Type": "Button",
+                                    "Name": "NinjaPetPackage-PetSelBtn",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "SoundName",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
+                                        }
+                                    ]
                                 }
                             ]
                         },
@@ -7030,7 +7566,7 @@
                             "Property": [
                                 {
                                     "Name": "Area",
-                                    "Value": "{{0,0},{0,0},{1,0},{0,50}}"
+                                    "Value": "{{0,0},{0,0},{1,0},{0.416667,0}}"
                                 },
                                 {
                                     "Name": "VerticalAlignment",
@@ -7068,7 +7604,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:pluspet-not-select-label"
+                                            "Value": "set:ninja_pet_package.json image:pluspet-not-select-label"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -7150,7 +7686,7 @@
                                     "Property": [
                                         {
                                             "Name": "Area",
-                                            "Value": "{{0,0},{0,0},{0,109},{0,50}}"
+                                            "Value": "{{0,0},{0,0},{1.3625,0},{1,0}}"
                                         },
                                         {
                                             "Name": "VerticalAlignment",
@@ -7159,6 +7695,10 @@
                                         {
                                             "Name": "HorizontalAlignment",
                                             "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "Visible",
+                                            "Value": "false"
                                         },
                                         {
                                             "Name": "WndOpenSound",
@@ -7178,7 +7718,7 @@
                                         },
                                         {
                                             "Name": "ImageName",
-                                            "Value": "set:ninja_pet_packege.json image:pluspet-select-label"
+                                            "Value": "set:ninja_pet_package.json image:pluspet-select-label"
                                         },
                                         {
                                             "Name": "HexgonTopImage",
@@ -7251,6 +7791,52 @@
                                                     "Value": "false"
                                                 }
                                             ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Type": "Button",
+                                    "Name": "NinjaPetPackage-PPetSelBtn",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "SoundName",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
                                         }
                                     ]
                                 }
