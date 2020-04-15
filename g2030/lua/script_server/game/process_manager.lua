@@ -4,12 +4,12 @@ local ProcessTimer = nil
 local ProcessList = T(Game, "ProcessList")
 
 function Game.CreateProcess(key, type, config)
-    if ProcessList[key] or not Game[type] then
+    if ProcessList[key] or not Define.ProcessType[type] then
         return false
     end
 
     local time = World.Now()
-    local process = {
+    local setting = {
         key = key,
 
         waitPlayerTime = 10,
@@ -29,12 +29,13 @@ function Game.CreateProcess(key, type, config)
 
     if config then
         for k, v in pairs(config) do
-            process[k] = v
+            setting[k] = v
         end
     end
 
-    ProcessList[key] = setmetatable(process, Game[type])
-    process:onWaiting()
+    local process = Define.ProcessType[type]
+    ProcessList[key] = process.new(setting)
+    ProcessList[key]:onWaiting()
     return true
 end
 

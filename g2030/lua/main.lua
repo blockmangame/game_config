@@ -16,6 +16,7 @@ require "script_common.config.payequip_config"
 require "script_common.config.belt_config"
 require "script_common.config.advance_config"
 require "script_common.config.teamShopConfig"
+require "script_common.config.activity_config"
 
 if World.isClient then
     require "script_client.main"
