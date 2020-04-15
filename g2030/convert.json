@@ -50,9 +50,13 @@
         "fields":
         [
             ["式神ID", "ID"],
+            ["稀有度", "rank"],
             ["多语言名称", "multiLang"],
+            ["式神图片ID", "imageNum"],
             ["模型名称", "actorName"],
-            ["技能名字", "skill"],
+            ["技能类型", "skillType"],
+            ["技能名字", "skillName"],
+            ["技能说明多语言", "skillInfo"],
             ["顺序值", "orderWeight"],
             ["出现权重", "probability"],
             ["攻击倍率", "atkBuffNum"],
@@ -73,7 +77,9 @@
         "fields":
         [
             ["宠物ID", "ID"],
+            ["稀有度", "rank"],
             ["多语言名称", "multiLang"],
+            ["宠物图片ID", "imageNum"],
             ["模型名称", "actorName"],
             ["出现权重", "probability"],
             ["顺序值", "orderWeight"],

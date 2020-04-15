@@ -57,6 +57,10 @@ function M:setPlayerBuyInfo(player, buyInfo)
     --Lib.log_1(buyInfo, "setPlayerBuyInfo Advance 1 :"..tostring(player.name))
 end
 
+function M:onPlayerUseDefaultItem(player)
+
+end
+
 function M:onPlayerUseItem(player, item)
     if item.level and item.level > 1 then
         print("玩家 : "..tostring(player.name).." 进阶到 lv ："..tostring(item.level))

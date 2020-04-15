@@ -6,31 +6,13 @@
 
 local petType = T(Define, "petType");
 
-Player.equipPetList = {}; --该表是存储创建的pet的entityIndex，在装备的情况下，可以通过宠物自身的index和创建的entityIndex进行互换
-
-local function getPlusPetPluginFromID(id)
-    return "myplugin/PlusPet1";
-end
-
-local function getPetPluginFromID(id)
-    return "myplugin/Pet1";
-end
-
-local function turnID2Plugin(type, id)
-    if type == petType.pet then
-        return getPetPluginFromID(id);
-    elseif type == petType.pulsPet then
-        return getPlusPetPluginFromID(id);
-    end
-    print("=======Wrong pet type :" .. type .. "\nand id :" .. id .. "=======");
-end
-
 --[[相关数据(AllPetAttr)内容：
-{id = 0,               --宠物or式神的pluginID
+{ID = 0,               --宠物or式神的pluginID
  petType = 0,         --是宠物还是式神
- petCoinTransRage = 0,--该宠物Entity当前的金币增益
- petChiTransRate = 0, --该宠物Entity当前的气增益
- plusPetATKRate = 0}, --该式神Entity当前的攻击倍率增益
+ level = 1,           --当前强化等级
+ petCoinTransRage = 1,--该宠物Entity当前的金币增益
+ petChiTransRate = 1, --该宠物Entity当前的气增益
+ plusPetATKRate = 1}, --该式神Entity当前的攻击倍率增益
 --]]
 local function getPet(player, type, petID)
     local allEntityNum = player:getValue("hadEntityNum") + 1;
@@ -38,51 +20,42 @@ local function getPet(player, type, petID)
     local AllPetAttr = player:getValue("allPetAttr");
     AllPetAttr[allEntityNum] = {
         ID = petID,
-        petType = type
+        petType = type,
+        level = 1
     };
-    return AllPetAttr[allEntityNum];
+    return AllPetAttr, allEntityNum;
 end
 
 function Player:getNewPet(ID, coinTransRatio, chiTransRatio)
-    local otherAttributes = getPet(self, petType.pet, ID);
-    local cfg = Entity.GetCfg(turnID2Plugin(petType.pet, ID));
-    if not coinTransRatio and not chiTransRatio then
-        goto init;
-    end
+    local allAttribs, index = getPet(self, petType.pet, ID);
+    local cfg = Entity.GetCfg(Player.turnID2Plugin(petType.pet, ID));
     if coinTransRatio then
-        otherAttributes.petCoinTransRage  = coinTransRatio;
+        allAttribs[index].petCoinTransRage  = coinTransRatio;
     else
-        otherAttributes.petCoinTransRage = 1;
+        allAttribs[index].petCoinTransRage = cfg.coinTransRatio;
     end
     if chiTransRatio then
-        otherAttributes.chiTransRatio = chiTransRatio;
+        allAttribs[index].chiTransRatio = chiTransRatio;
     else
-        otherAttributes.chiTransRatio = 1;
+        allAttribs[index].chiTransRatio = cfg.chiTransRatio;
     end
-    self:setValue("allPetAttr", self:getValue("allPetAttr"));
-    do
-        return;
-    end
-    ::init::
-    otherAttributes.petCoinTransRage = cfg.coinTransRatio;
-    otherAttributes.petChiTransRate = cfg.chiTransRatio;
-    self:setValue("allPetAttr", self:getValue("allPetAttr"));
+    self:setValue("allPetAttr", allAttribs);
 end
 
 function Player:getNewPlusPet(ID, plusPetATKRate)
-    local otherAttributes = getPet(self, petType.plusPet, ID);
-    local cfg = Entity.GetCfg(turnID2Plugin(petType.plusPet, ID));
+    local allAttribs, index = getPet(self, petType.plusPet, ID);
+    local cfg = Entity.GetCfg(Player.turnID2Plugin(petType.plusPet, ID));
     if plusPetATKRate then
-        otherAttributes.plusPetATKRate = plusPetATKRate;
+        allAttribs[index].plusPetATKRate = plusPetATKRate;
     else
-        otherAttributes.plusPetATKRate = cfg.atkBuffNum;
+        allAttribs[index].plusPetATKRate = cfg.atkBuffNum;
     end
-    self:setValue("allPetAttr", self:getValue("allPetAttr"));
+    self:setValue("allPetAttr", allAttribs);
 end
 
 function Player:callPet(index, rideIndex)
     local petSetting = self:getValue("allPetAttr")[index];
-    local plugin = turnID2Plugin(petSetting.petType, petSetting.ID);
+    local plugin = Player.turnID2Plugin(petSetting.petType, petSetting.ID);
     local createIndex = self:createPet(plugin, true);
     if rideIndex > 2 or rideIndex < 1 then
         print("=======Wrong pet rideIndex :" .. rideIndex .. "=======");
@@ -107,15 +80,23 @@ function Player:initPetInfo()
     end
 end
 
---Lib.subscribeEvent(Event.EVENT_PLAYER_LOGIN, function(player) Player.initPetInfo(player) end);
-
+function Player:addPet(entity, index)
+    assert(entity:getValue("ownerId")==0, entity.objID)
+    local data = self:data("pet")
+    index = index or #data + 1
+    data[index] = entity
+    entity:setValue("ownerId", self.objID)
+    entity:setValue("petIndex", index)
+    self:syncPet()
+    return index
+end
 function Player:syncPet()
     local list = {}
     local packet = {
         pid = "PetList",
         list = list,
     }
-    for index, entity in pairs(self:data("pet")) do
+    for index, entity in pairs(self.equipPetList) do
         list[index] = { objID = entity.objID, petIndex = self.equipPetList[index] };
     end
     self:sendPacket(packet)

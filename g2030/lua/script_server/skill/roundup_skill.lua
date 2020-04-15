@@ -18,12 +18,17 @@ local function roundUp(self, packet, from)
     if entityIndex > 0 then
         local pTarget = nearbyEntities[entityIndex]
         if pTarget then
+            if self.dizzinessBuff ~= nil then
+                pTarget:addBuff(self.dizzinessBuff.buffCfg, self.dizzinessBuff.buffTime)
+            end
+
             local d = Lib.tov3(pTarget:getPosition()) - Lib.tov3(from:getPosition())
             local yaw = math.atan(d.z, d.x)
             pTarget:setRotationYaw(math.deg(yaw) - 90)
-            pTarget.forceTargetPos = from:getPosition()
-            pTarget.forceTime = 5
 
+            local pos = from:getPosition()
+            pTarget.forceTargetPos = Lib.tov3({x = pos.x + 0.5, y = pos.y, z = pos.z - 0.5})
+            pTarget.forceTime = 5
             local RoundUpAttackData = {
                 nearbyEntities = nearbyEntities,
                 entityIndex = entityIndex - 1,
@@ -57,7 +62,6 @@ function RoundUpSkill:cast(packet, from)
         nearbyEntities = ret,
         entityIndex = #ret,
     }
-
     from:data("main").RoundUpAttackData = RoundUpAttackData
     RoundUpSkill.timer = from:timer(1, roundUp, self, packet, from)
     SkillBase.cast(self, packet, from)

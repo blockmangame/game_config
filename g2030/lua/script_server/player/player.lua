@@ -99,7 +99,7 @@ function Player:exchangeEquip(fullName)
     end
     local slot_1 = item1:slot()
 	local tray_1 = self:tray():fetch_tray(item1:tid())
-	if not Tray:check_switch(tray_1, slot_1, tray_2, slot_2) then
+	if not Tray:check_switch(tray_1, slot_1, tray_2, 1) then
 		return false
 	end
     Tray:switch(tray_1, slot_1, tray_2, 1)
