@@ -40,11 +40,12 @@ ValueDef.allPetAttr     = {false,   false,  true,   true,       {},    true}--�
 即强化（消耗）后相关索引项将置为nil
 --]]
 --[[相关数据(AllPetAttr)内容：
-{id = 0,               --宠物or式神的pluginID
+{ID = 0,               --宠物or式神的pluginID
  petType = 0,         --是宠物还是式神
- petCoinTransRage = 0,--该宠物Entity当前的金币增益
- petChiTransRate = 0, --该宠物Entity当前的气增益
- plusPetATKRate = 0}, --该式神Entity当前的攻击倍率增益
+ level = 1,           --当前强化等级
+ petCoinTransRage = 1,--该宠物Entity当前的金币增益
+ petChiTransRate = 1, --该宠物Entity当前的气增益
+ plusPetATKRate = 1}, --该式神Entity当前的攻击倍率增益
 --]]
 --========================END========================
 

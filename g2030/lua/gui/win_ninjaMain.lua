@@ -47,6 +47,10 @@ function M:initEvent()
         self:openPayShop()
     end)
 
+    self:subscribe(self.btnPet, UIEvent.EventButtonClick, function()
+        UI:getWnd("petPackage"):onShow(true)
+    end)
+
     local LuaTimer = T(Lib, "LuaTimer") ---@type LuaTimer
     Lib.subscribeEvent("EVENT_SHOW_BOTTOM_MESSAGE", function(message)
         self.textBottomMessage:SetVisible(true)
