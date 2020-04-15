@@ -23,6 +23,7 @@ require "script_client.skill.skill_addExp"
 require "script_client.skill.scene_skill"
 require "script_client.skill.recharge_skill"
 require "script_client.skill.roundup_skill"
+require "script_client.skill.control_skill"
 
 local main = {}
 
