@@ -126,3 +126,12 @@ Lib.subscribeEvent(Event.EVENT_SHOW_BUBBLE_MSG, function(packet)
         UI:openHeadWnd(packet.objID, "bubbleMsg", 5, 5, packet)
     end
 end)
+
+
+Lib.subscribeEvent(Event.EVENT_ANTI_ADDICTION_SYSTEM_EXIT, function()
+    local window = UI:openWnd("gameTipDialog")
+    local showFunc = UI:hideOpenedWnd("gameTipDialog")
+    if window then
+        window:refreshUi(showFunc, 2)
+    end
+end)
