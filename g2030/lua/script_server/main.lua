@@ -25,6 +25,7 @@ require "script_server.skill.timeLine"
 require "script_server.skill.scene_skill"
 require "script_server.skill.recharge_skill"
 require "script_server.skill.roundup_skill"
+require "script_server.skill.control_skill"
 require "script_server.trigger_handlers"
 
 require "script_server.actions_custom"
