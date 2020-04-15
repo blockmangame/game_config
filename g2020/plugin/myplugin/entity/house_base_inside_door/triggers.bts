@@ -22,6 +22,15 @@ ENTITY_inside_door{
 }
 
 INTER_WITH_DOOR{
+    If($obj2.playerOwner){
+        $obj2 = $obj2.playerOwner
+    }
+
+    If(not IsPlayer(entity = $obj2) or $obj2.isMoveDec)
+    {
+        Return()
+    }
+
     $lastInteractionUiObjId = $obj2.lastInteractionUiObjId
     If($lastInteractionUiObjId){
         $fru = GetObject(objID = $lastInteractionUiObjId)
@@ -29,14 +38,9 @@ INTER_WITH_DOOR{
     }
     $obj2.isInnerInsideDoor = true
     StartTimer(rep = false, object = $obj2, obj1 = $obj2, time = 3, event = "RESET_PLAYER_INNER_INSIDE_DOOR_STATUS")
+
     If($obj2.inPartyOwnerId ~= 0){
         CallTrigger(object = $obj2, event = "CHECK_LEAVE_PARTY_FROM_DOOR")
-        Return()
-    }
-    If($obj2.playerOwner){
-        $obj2 = $obj2.playerOwner
-    }
-    If(not IsPlayer(entity = $obj2) or $obj2.isMoveDec) {
         Return()
     }
     
