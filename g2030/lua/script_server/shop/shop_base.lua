@@ -161,6 +161,10 @@ function M:setPlayerBuyInfo(player)
 
 end
 
+function M:onPlayerUseDefaultItem(player)
+
+end
+
 function M:onPlayerUseItem(player, item)
 
 end
@@ -200,11 +204,10 @@ function M:initItem(player)
     for ids, status in pairs(buyInfo) do
         if status == BuyStatus.Used then
             isDefault = false
-            local item = self.config:getItemById(tonumber(ids))
-            if item then
-                self:onPlayerUseItem(player, item.id)
-            end
         end
+    end
+    if isDefault then
+        self:onPlayerUseDefaultItem(player)
     end
     self:setPlayerBuyInfo(player, buyInfo)
     self:islandAndAdvanceToUnlockPay(player)

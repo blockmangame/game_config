@@ -15,6 +15,13 @@ function M:setPlayerBuyInfo(player, buyInfo)
     player:setBelt(buyInfo)
 end
 
+function M:onPlayerUseDefaultItem(player)
+    local str = player:cfg().belt_default
+    local fullName = string.gsub(str,'myplugin/','')
+    print("玩家 : "..tostring(player.name).." 切换默认腰带 ："..tostring(fullName))
+    player:exchangeEquip(str)
+end
+
 function M:onPlayerUseItem(player, item)
     local fullName = string.format("myplugin/%s",  item.itemName)
     print("玩家 : "..tostring(player.name).." 切换腰带 ："..tostring(fullName))

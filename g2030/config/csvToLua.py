@@ -4,7 +4,7 @@ import sys
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding="utf-8")
 
-fileName = "jump.csv"
+fileName = "Privilege.csv"
 
 def readCsv(csvName):
     result = {}
@@ -15,10 +15,10 @@ def readCsv(csvName):
     csvFile = open(csvName, "r", encoding="UTF-8")
     lines = csv.reader(csvFile, delimiter='\t')
     for line in lines:
-        if lines.line_num >= 3:
+        if lines.line_num >= 4:
             break
         for value in line:
-            if lines.line_num == 2:
+            if lines.line_num == 3:
                 result["col_name"].append(value)
             else:
                 result["col_info"].append(value)
