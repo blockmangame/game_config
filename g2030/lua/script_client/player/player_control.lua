@@ -46,6 +46,7 @@ local function doJumpStateChange(control, player)
         Skill.Cast(Me:cfg().glidingSkill)
     end
     player.isGliding = (not player.isGliding)
+    Lib.emitEvent("EVENT_PLAY_GLIDING_EFFECT", player.isGliding)
 end
 
 ---@param player EntityClientMainPlayer

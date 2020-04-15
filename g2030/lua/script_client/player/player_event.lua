@@ -25,9 +25,7 @@ function events:fallGround(fallDistance)
         Skill.Cast(playerCfg.fallSkill2)
     end
 
-    self:setValue("jumpCount", self:getMaxJumpCount())
     self:recoverJumpProp()
-    Blockman.instance.gameSettings:setEnableRadialBlur(false)
 end
 
 function events:jumpMoveEnd()
@@ -44,8 +42,6 @@ end
 
 function events:dead(dead)
     if dead then
-        self:setValue("jumpCount", self:getMaxJumpCount())
         self:recoverJumpProp()
-        Blockman.instance.gameSettings:setEnableRadialBlur(false)
     end
 end
