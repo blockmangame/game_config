@@ -28,7 +28,8 @@ local function roundUp(self, packet, from)
             local yaw = math.atan(d.z, d.x)
             player:setBodyYaw(math.deg(yaw) - 90)
             pTarget:setRotationYaw(math.deg(yaw) - 90)
-            pTarget.forceTargetPos = from:getPosition()
+            local pos = from:getPosition()
+            pTarget.forceTargetPos = Lib.tov3({x = pos.x + 0.5, y = pos.y, z = pos.z - 0.5})
             pTarget.forceTime = 5
 
             local RoundUpAttackData = {

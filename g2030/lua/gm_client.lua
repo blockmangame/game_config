@@ -94,7 +94,7 @@ GMItem["g2030技能/16号技能"] = function(self)
     Skill.Cast("myplugin/player_control_skill_16")
 end
 GMItem["g2030技能/17号技能"] = function(self)
-    Skill.Cast("myplugin/player_skill_triple_attack")
+    Skill.Cast("myplugin/player_control_skill_17")
 end
 GMItem["g2030技能/18号技能"] = function(self)
     Skill.Cast("myplugin/player_skill_self_recover_18")
@@ -104,5 +104,8 @@ GMItem["g2030技能/19号技能"] = function(self)
 end
 GMItem["g2030技能/20号技能"] = function(self)
     Skill.Cast("myplugin/player_skill_team_recover_20")
+end
+GMItem["g2030技能/眩晕技能"] = function(self)
+    Skill.Cast("myplugin/player_dizziness_skill")
 end
 return GMItem
