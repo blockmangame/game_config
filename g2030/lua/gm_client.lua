@@ -12,6 +12,9 @@ end
 GMItem["g2030/上腰带"] = function(self)
     self:exchangeEquip("myplugin/sash_simple")
 end
+GMItem["g2030/上腰带2"] = function(self)
+    self:exchangeEquip("myplugin/sash_simple1")
+end
 GMItem["g2030/上武器"] = function(self)
     self:exchangeEquip("myplugin/weapon_simple")
 end
