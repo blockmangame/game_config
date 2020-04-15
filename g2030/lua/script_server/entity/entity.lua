@@ -266,7 +266,7 @@ function Entity.EntityProp:perExp(value, add, buff)
 end
 
 function Entity.ValueFunc:curLevel(value)
-    Lib.emitEvent(Event.EVENT_LEVEL_CHANGE)
+   -- Lib.emitEvent(Event.EVENT_LEVEL_CHANGE)
 end
 
 
