@@ -66,3 +66,13 @@ end
 function handles:SyncItemShopInit(packet)
     Store.ItemShop:initAllItem(self)
 end
+
+function handles:ConfirmGauntlet(packet)
+    local entity = World.CurWorld:getObject(packet.objId)
+    if not entity then
+        return
+    end
+    if not Game.EntityJoinProcess(packet.key, entity) then
+        --失败提示
+    end
+end

@@ -38,6 +38,6 @@ Define.ProcessState = {
 }
 
 Define.ProcessType = {
-    Base = "ProcessBase",
-    Team = "ProcessTeam"
+    ProcessBase = require "script_server.process.process_base",
+    ProcessTeam = require "script_server.process.process_team"
 }
