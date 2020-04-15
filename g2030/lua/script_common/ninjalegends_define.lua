@@ -33,6 +33,10 @@ Define.TabType = {
     Equip = 1,
     Belt = 2,
     Advance = 3,
+    Prop  = 4,
+    Resource = 5,
+    Skin = 6,
+    Privilege = 7,
 }
 
 Define.BuyStatus = {

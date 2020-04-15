@@ -17,6 +17,7 @@ require "script_server.player.player_packet"
 require "script_server.player.player_pet_manager"
 
 require "script_server.shop.itemshop_manager"
+require "script_server.shop.payshop_manager"
 
 require "script_server.skill.skill_normal_atk"
 require "script_server.skill.skill_addExp"

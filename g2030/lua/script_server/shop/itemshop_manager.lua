@@ -28,7 +28,7 @@ function ItemShop:operationByType(player, tabId, itemId)
 end
 
 function ItemShop:BuyAll(player, tabId)
-    print(string.format("<ItemShop:operationByType> TypeId: %s", tostring(tabId)))
+    print(string.format("<ItemShop:BuyAll> TypeId: %s", tostring(tabId)))
     if tabId == TabType.Equip then
         Equip:BuyAll(player)
     elseif tabId == TabType.Belt then
@@ -39,10 +39,15 @@ function ItemShop:BuyAll(player, tabId)
 end
 
 function ItemShop:initAllItem(player)
+    print("=== ItemShop:initAllItem(player) ===")
+    --player:addCurrency("gold", 10000,"action")
+    --player:addCurrency("chi", 10000,"action")
+    --player:addCurrency("gem", 10000,"action")
+    --player:addCurrency("gold", 10000,"action")
     Equip:initItem(player)
     Belt:initItem(player)
     Advance:initItem(player)
-    self:itemShopRegion(player, true)
+    --self:itemShopRegion(player, false)
 end
 
 function ItemShop:upgradeIslandToUnlock(player)

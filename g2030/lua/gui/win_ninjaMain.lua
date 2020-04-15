@@ -34,7 +34,8 @@ end
 
 --预加载界面，用于在显示之前初始化数据
 function M:initExtraWnd()
-    UI:getWnd("itemShop")
+    UI:getWnd("itemShop"):initData()
+    UI:getWnd("payShop"):initData()
 end
 
 function M:initEvent()
@@ -107,7 +108,7 @@ end
 
 ---右侧技能按钮排版切换
 function M:openPayShop()
-    local itemShop = UI:getWnd("itemShop"):onShow(true)
+    UI:getWnd("itemShop"):onShow(true)
 end
 
 function M:onOpen()

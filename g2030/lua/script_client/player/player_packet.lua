@@ -9,8 +9,14 @@ local handles = T(Player, "PackageHandlers")
 function handles:itemShopRegion(packet)
     local itemShop = UI:getWnd("itemShop")
     if itemShop then
-        itemShop:isInitItemData()
         itemShop:onShow(packet.isShow)
+    end
+end
+
+function handles:payShopRegion(packet)
+    local payShop = UI:getWnd("payShop")
+    if payShop then
+        payShop:onShow(packet.isShow)
     end
 end
 
