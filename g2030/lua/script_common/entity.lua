@@ -27,6 +27,8 @@ ValueDef.teamId		= {false,	true,	true,	true,       0,		true}--阵营Id
 ValueDef.teamKills	= {false,	false,	false,	false,       0,		false}--个人阵营击杀数
 ValueDef.equip      = {false,	false,	true,	false,      {},		true}--道具商店购买的装备列表
 ValueDef.belt       = {false,	false,	true,	false,      {},		true}--道具商店购买的腰带列表
+ValueDef.studySkill = {false,	false,	true,	false,      {},		true}--道具商店购买的装备列表
+ValueDef.equipSkill = {false,	false,	true,	false,      {},		true}--道具商店购买的腰带列表
 ValueDef.prop       = {false,	false,	true,	false,      {},		true}--付费商店购买的道具列表
 ValueDef.resource   = {false,	false,	true,	false,      {},		true}--付费商店购买的资源列表
 ValueDef.skin       = {false,	false,	true,	false,      {},		true}--付费商店购买的皮肤列表
@@ -336,6 +338,26 @@ end
 ---设置已装备的阵营皮肤id
 function Entity:setTeamSkinId(id)
     self:setValue("teamSkinId", id)
+end
+
+---获取购买技能列表
+function Entity:getStudySkill()
+    return Lib.copy(self:getValue("studySkill"))
+end
+
+---设置购买技能列表
+function Entity:setStudySkill(data)
+    self:setValue("studySkill", data)
+end
+
+---获取装备技能列表
+function Entity:getEquipSkill()
+    return Lib.copy(self:getValue("equipSkill"))
+end
+
+---设置装备技能列表
+function Entity:setEquipSkill(data)
+    self:setValue("equipSkill", data)
 end
 
 --check entity whether be in the state of Dizziness or not

@@ -57,6 +57,9 @@ end
 function main:loadConfig()
     local teamShopConfig = T(Config, "teamShopConfig")
     teamShopConfig:initConfig()
+
+    local skillShopConfig = T(Config, "skillShopConfig")
+    skillShopConfig:initConfig()
 end
 
 main:init()

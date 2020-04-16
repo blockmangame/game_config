@@ -46,6 +46,12 @@ Define.BuyStatus = {
     Used = 4, --使用
 }
 
+Define.SkillStatus = {
+    NoStudy = 1,    --未学习
+    Study = 2,      --学习
+    Equip = 3,      --装备技能
+}
+
 Define.ProcessState = {
     Init = 0,
     Waiting = 1,

@@ -26,6 +26,8 @@ if World.isClient then
     Event.register("EVENT_ITEM_SHOP_UPDATE")
     Event.register("EVENT_PAY_SHOP_UPDATE")
     Event.register("EVENT_PLAY_GLIDING_EFFECT")
+    Event.register("EVENT_ITEM_SKILL_SHOP_UPDATE")
+    Event.register("EVENT_ITEM_SKILL_EQUIP_UPDATE")
 else
     --TODO
 end
