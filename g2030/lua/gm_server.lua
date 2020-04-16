@@ -34,6 +34,19 @@ end
 GMItem["g2030/添加回血buff"] = function(self)
     self:addBuff("myplugin/healing_s",40)
 end
+GMItem["g2030/自动售卖buff_1"] = function(self)
+    self:addBuff("myplugin/auto_sell",100)
+end
+GMItem["g2030/自动售卖buff_2"] = function(self)
+    self:addBuff("myplugin/auto_sell",200)
+end
+GMItem["g2030/自动普攻buff_1"] = function(self)
+    self:addBuff("myplugin/auto_normalatk",100)
+end
+GMItem["g2030/自动普攻buff_2"] = function(self)
+    self:addBuff("myplugin/auto_normalatk",200)
+end
+
 GMItem["g2030/添加回血加成buff"] = function(self)
     self:addBuff("myplugin/healing_plus",40)
 end
