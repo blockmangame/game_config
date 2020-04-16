@@ -80,6 +80,8 @@ GAME_INIT
     @GuideGift = 19
     --引导完成
     @GuideEnd = 20 --完成所有指引
+
+    StartTimer(rep = true, time = 20 * 30, event = "SYNC_WORLD_TIME")
 }
 --创建邮箱npc
 CREATE_EMAIL_NPC
@@ -1218,4 +1220,12 @@ GM_CLOSE_GUIDE(){
         guideWork = $obj1.guideWork,
         guideParty = $obj1.guideParty
     })
+}
+
+SYNC_WORLD_TIME
+{
+    Foreach(array = GetAllPlayers(), key = "player")
+    {
+        SyncWorldTime(player = $player)
+    }
 }
