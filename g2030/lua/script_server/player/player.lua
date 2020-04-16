@@ -135,14 +135,10 @@ function Player:resetHp()
 end
 function Player:setCurExp(val)
     self:setValue("curExp", val)
-    print("----------------bb-----------------------",self:getMaxHp())
-    print("----------------bb-----------------------",self:getCurHp())
     if self:getCurHp()>self:getMaxHp() then--改变锻炼值造成血量上限低于当前血量时直接强制重置血量（无血壳）
        
         self:resetHp()
     end
-    print("-------------------aa--------------------",self:getMaxHp())
-    print("-------------------aa--------------------",self:getCurHp())
 
 end
 function Player:addLevel()
