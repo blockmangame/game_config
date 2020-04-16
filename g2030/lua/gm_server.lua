@@ -23,10 +23,8 @@ GMItem["g2030/掙錢！"] = function(self)
     self:addCurrency("gold", BigInteger.Create(23,10), "test")
     self:addCurrency("chi",  3, "test")
 end
-GMItem["g2030/装备武器！"] = function(self)
-    self:addItem("myplugin/weapon_simple",1,nil,"test")
-    local item1 =  self:searchItem("fullName","myplugin/weapon_simple")
-    self:saveHandItem(item1,false)
+GMItem["g2030/自动锻炼buff"] = function(self)
+    self:addBuff("myplugin/autoExp_s",200)
 end
 GMItem["g2030/添加ExpMaxbuff"] = function(self)
     self:addBuff("myplugin/sash_buff_simple",200)
