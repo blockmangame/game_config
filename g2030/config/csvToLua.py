@@ -33,15 +33,15 @@ def genConfigString(col_name, col_info):
     prefix = col_name[0]
     colName = col_name[2:]
     if prefix == 'n':
-        return "        data." + colName + " = tonumber(vConfig." + col_name + ") or 0 --" + col_info + "\n"
+        return "        data." + colName + " = tonumber(vConfig." + col_info + ") or 0 --" + col_info + "\n"
     else:
-        return "        data." + colName + " = vConfig." + col_name + " or \"\" --" + col_info + "\n"
+        return "        data." + colName + " = vConfig." + col_info + " or \"\" --" + col_info + "\n"
 
 def genLuaFile(result):
     file = open(result["lua_name"], mode='w', encoding="utf-8")
 
     table_name = result["lua_name"][0 : len(result["lua_name"]) - 4]
-    file.write(table_name + " = {}\n")
+    file.write("local " + table_name + " = T(Config, \"" + table_name + "\")\n")
     file.write("\n")
     file.write("local " + table_name + ".settings = {}\n")
     file.write("\n")
