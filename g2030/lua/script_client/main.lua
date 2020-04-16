@@ -7,6 +7,8 @@ require "script_client.player.player"
 require "script_client.ui.ui_schedule"
 require "script_client.entity.entity"
 
+require "script_client.world.region"
+
 require "script_client.other.scene_indicator"
 require "script_client.other.recharge_cells_mgr"
 require "script_client.other.teleport_mgr"

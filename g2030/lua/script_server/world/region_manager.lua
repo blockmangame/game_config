@@ -14,9 +14,11 @@ function RegionManager.onRegionEnter(param)
     print("RegionManager.onRegionEnter " .. param.inRegionKey)
 
     local cfg = param.regionCfg
+    if not cfg.type then
+        return
+    end
 
-    local functionType = cfg.functionType
-    if functionType == Define.RegionFunctionType.SellArea then
+    if cfg.type == "sell" then
         param.player:sellExp()
     end
 end
