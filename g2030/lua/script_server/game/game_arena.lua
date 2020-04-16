@@ -8,11 +8,7 @@
 local ArenaMgr  = T(Game, "ArenaMgr")
 function ArenaMgr:init()
     self.state = "CLOSE"
-    Lib.subscribeEvent(Event.EVENT_LEVEL_CHANGE, function ()
-        if self.state == "CLOSE" and Me:getCurLevel()>1 then
-            self.state = "OPEN"
-        end
-    end)
+   
 end
 function ArenaMgr:checkIsOpen()
 end

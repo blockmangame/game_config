@@ -117,7 +117,9 @@ function Player:deltaHp(deltaVal)
     if deltaVal>0 and deltaVal<1 or deltaVal<0 and deltaVal>-1 then
         deltaVal =self:getMaxHp()*deltaVal
     end
-
+    if type(deltaVal) == 'number' then
+        deltaVal = math.floor(deltaVal)
+    end
     local curVal = math.min(math.max(self:getCurHp()+deltaVal,0),self:getMaxHp())
     if curVal ==self:getCurHp() then
         return
@@ -133,9 +135,14 @@ function Player:resetHp()
 end
 function Player:setCurExp(val)
     self:setValue("curExp", val)
+    print("----------------bb-----------------------",self:getMaxHp())
+    print("----------------bb-----------------------",self:getCurHp())
     if self:getCurHp()>self:getMaxHp() then--改变锻炼值造成血量上限低于当前血量时直接强制重置血量（无血壳）
+       
         self:resetHp()
     end
+    print("-------------------aa--------------------",self:getMaxHp())
+    print("-------------------aa--------------------",self:getCurHp())
 
 end
 function Player:addLevel()
@@ -149,7 +156,10 @@ function Player:addLevel()
     self:payCurrency("gold", 0,true,false, "level_up")
     
     self:resetExp()
-    AsyncProcess.ReportCurLevel()
+    print("--------------AsyncProcess-----------",Lib.v2s(AsyncProcess,3))
+    AsyncProcess.ReportCurLevel(self,function (response)
+        print("-------------------------",Lib.v2s(response,3))
+    end)
     
 end
 ---设置阵营

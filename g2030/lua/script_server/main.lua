@@ -4,7 +4,7 @@
 --- DateTime: 2020/3/21 22:39
 ---
 require "script_server.entity.entity"
-
+require "script_server.async_process.async_process"
 require "script_server.game.game"
 require "script_server.game.game_team"
 require "script_server.game.game_arena"
