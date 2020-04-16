@@ -83,6 +83,10 @@ end
 ---@param control PlayerControl
 ---@param player EntityClientMainPlayer
 local function checkJump(control, player)
+    if tonumber(player:getEntityProp("jumpSpeed")) <= 0 then
+        return
+    end
+
     local playerCfg = player:cfg()
     local worldCfg = World.cfg
     local nowTime = World.Now()
