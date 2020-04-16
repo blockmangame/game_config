@@ -22,6 +22,7 @@ require "script_common.config.privilege_config"
 require "script_common.config.skin_config"
 require "script_common.config.teamShopConfig"
 require "script_common.config.activity_config"
+require "script_common.config.skillShopConfig"
 
 if World.isClient then
     require "script_client.main"
