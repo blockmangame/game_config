@@ -43,6 +43,9 @@ end
 GMItem["g2030/濒死"] = function(self)
     self:setValue("curHp", 1)
 end
+GMItem["g2030/升阶"] = function(self)
+    self:addLevel()
+end
 
 -----------------------------------Pet Model Test----------------------------------
 local Entity

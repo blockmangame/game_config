@@ -54,8 +54,11 @@ end
 ---当玩家remove了回血
 ---
 function EntityServer:doHealing()
-
-    local healVal =math.floor(self:getMaxHp() *self:getHealingVal()* self:getHealingPlu())
+    
+    local healVal =self:getMaxHp() *self:getHealingVal()* self:getHealingPlu()
+    print("--------doHealing-----getMaxHp---------",self:getMaxHp())
+    print("--------doHealing-----getHealingVal---------",self:getHealingVal())
+    print("--------doHealing----- self:getHealingPlu()---------", self:getHealingPlu())
     -- print("=========doHealing==========",healVal)
     -- print("=========doHealing=spd=========",self:getHealingSpd())
 
@@ -63,6 +66,8 @@ function EntityServer:doHealing()
         return
     end
     if self:deltaHp(healVal) then
+        print("--------doHealing--------------",healVal)
+        print("--------doHealing--------------",Lib.v2s(healVal,3))
         self:ShowFlyNum(healVal)
     end
 
@@ -150,7 +155,8 @@ function EntityServer:ShowFlyNum(deltaHp)
             distance = 2,
             imgset = deltaHp<0 and "red_numbers" or "green_numbers",
             imageWidth = 40,
-            imageHeight = 40
+            imageHeight = 40,
+            isBigNum = true
         })
     end
 end
@@ -261,7 +267,7 @@ function Entity.EntityProp:perExp(value, add, buff)
 end
 
 function Entity.ValueFunc:curLevel(value)
-   -- Lib.emitEvent(Event.EVENT_LEVEL_CHANGE)
+    Lib.emitEvent(Event.EVENT_LEVEL_CHANGE,value)
 end
 
 
