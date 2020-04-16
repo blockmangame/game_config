@@ -4,7 +4,6 @@
 --- DateTime: 2020/4/16 16:51
 ---
 ---@class RegionManager
-Lib.declare("RegionManager", {})
 
 function RegionManager:init()
     --TODO

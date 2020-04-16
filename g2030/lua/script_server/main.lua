@@ -3,6 +3,8 @@
 --- Created by bell.
 --- DateTime: 2020/3/21 22:39
 ---
+Lib.declare("RegionManager", {})
+
 require "script_server.entity.entity"
 require "script_server.async_process.async_process"
 require "script_server.game.game"
