@@ -1,7 +1,6 @@
 -- 自动同步属性定义
 local ValueDef		= T(Entity, "ValueDef")
 local playerCfg = World.cfg
-print("======BigInteger==========:",Lib.v2s(BigInteger,3))
 -- key				= {isCpp,	client,	toSelf,	toOther,	init,	saveDB}
 ValueDef.jumpCount	= {false,	true,	false,	false,      1,		false}
 ValueDef.maxJumpCount={false,	false,	true,	false,      1,		false}
@@ -10,6 +9,7 @@ ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1,0),	true
 ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1,0),		false}--每次攻击锻炼值增加
 ValueDef.autoExp	= {false,	false,	true,	true,       0,		false}--自动锻炼间隔
 ValueDef.perExpPlu	= {false,	false,	true,	true,       1,		false}--锻炼值加成加成比例（付费特权。双倍）
+ValueDef.infiniteExp= {false,	false,	true,	true,       false,	false}--当前锻炼值
 ValueDef.curLevel	= {false,	false,	true,	true,       1,		true}--当前阶数
 ValueDef.curHp		= {false,	false,	true,	true,       BigInteger.Create(playerCfg.baseHp),		false}--当前血量
 ValueDef.gold2Plus	= {false,	false,	true,	true,       1,		true}--额外金币转换加成系数（付费特权）
@@ -99,6 +99,9 @@ end
 function Entity:getCurExpToCoin()
     return self:getCurExp()*playerCfg.baseExp2GoldVal*(1)*self:getValue("gold2Plus")--TODO 宠物加成
 end
+function Entity:getIsInfiniteExp()
+    return self:getValue("infiniteExp")
+end
 ---设置最大锻炼值变化
 function Entity:deltaExpMaxPlus(val)
   --  assert(tonumber(val), "invalid input:" .. val .. "is not a number")
@@ -106,7 +109,10 @@ function Entity:deltaExpMaxPlus(val)
 end
 ---锻炼值是否已满
 function Entity:isExpFull()
-    return false--self:getCurExp()>=self:getMaxExp()
+    if self:getIsInfiniteExp() then
+        return false
+    end
+    return  self:getCurExp()>=self:getMaxExp()
 end
 ---获取当前阶数
 function Entity:getCurLevel()

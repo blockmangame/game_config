@@ -53,7 +53,7 @@ end
 function EntityServer:doAutoExp()
     self:addExp()
     local nextTime = self:getAutoExp() *20;
-    if nextTime>=0 then
+    if nextTime>0 then
         self:timer(nextTime, function ()
             self:doAutoExp()
         end   )
@@ -69,17 +69,13 @@ function EntityServer:doHealing()
     
     local healVal =self:getMaxHp() *self:getHealingVal()* self:getHealingPlu()
 
-
-    if healVal <=0 then
-        return
-    end
-    if self:deltaHp(healVal) then
+    if healVal>0 and  self:deltaHp(healVal) then
         self:ShowFlyNum(healVal)
     end
 
 
     local nextTime = self:getHealingSpd() *20;
-    if nextTime>=0 then
+    if nextTime>0 then
         self:timer(nextTime, function ()
             self:doHealing()
         end   )
@@ -313,6 +309,10 @@ function Entity.EntityProp:autoExp(value, add, buff)
     end
     local val = add and value or 0
     self:setAutoExp(val)
+    if add then
+        self:doAutoExp()
+    end
+    
 end
 
 function Entity.ValueFunc:curLevel(value)

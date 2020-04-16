@@ -26,6 +26,12 @@ end
 GMItem["g2030/自动锻炼buff"] = function(self)
     self:addBuff("myplugin/autoExp_s",200)
 end
+GMItem["g2030/无上限特权"] = function(self)
+    self:setInfiniteExp()
+end
+GMItem["g2030/神圣攻击加成特权"] = function(self)
+    self:setOpenRealDmg()
+end
 GMItem["g2030/添加ExpMaxbuff"] = function(self)
     self:addBuff("myplugin/sash_buff_simple",200)
 end

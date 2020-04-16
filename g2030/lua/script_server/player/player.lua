@@ -53,7 +53,7 @@ end
 function Player:addExp()
     local newExp = self:getPerExpPlus()+self:getCurExp()
     local maxExp = self:getMaxExp()
-    if newExp>maxExp then
+    if self:isExpFull() and newExp>maxExp then
         newExp = maxExp
     end
     self:setCurExp(newExp)
@@ -87,11 +87,12 @@ function Player:setOpenRealDmg()
 end
 ---开启移速加成特权
 function Player:setMovePlus()
-    self:setValue("hpMaxPlus",playerCfg.hpMaxPlus)
+    --self:setValue("hpMaxPlus",playerCfg.hpMaxPlus)
 end
 ---开启锻炼值无上限特权
 function Player:setInfiniteExp()
-    self:setValue("hpMaxPlus",playerCfg.hpMaxPlus)
+    self:setValue("infiniteExp",true)
+    self:setCurExp(self:getCurExp())--触发一次exp改变回调，刷新经验条显示效果
 end
 
 ---
