@@ -22,6 +22,10 @@ Define.TabType = {
     Equip = 1,
     Belt = 2,
     Advance = 3,
+    Prop  = 4,
+    Resource = 5,
+    Skin = 6,
+    Privilege = 7,
 }
 
 Define.BuyStatus = {
@@ -29,6 +33,12 @@ Define.BuyStatus = {
     Unlock = 2, --解锁
     Buy = 3, --购买
     Used = 4, --使用
+}
+
+Define.SkillStatus = {
+    NoStudy = 1,    --未学习
+    Study = 2,      --学习
+    Equip = 3,      --装备技能
 }
 
 Define.ProcessState = {
@@ -43,4 +53,15 @@ Define.ProcessState = {
 Define.ProcessType = {
     ProcessBase = require "script_server.process.process_base",
     ProcessTeam = require "script_server.process.process_team"
+}
+
+Define.RegionType = {
+    Cube = 1, --立方体
+    Block = 2, --方块
+}
+
+Define.RegionFunctionType = {
+    ShopArea = 1, --器材售卖区
+    SellArea = 2, --肌肉售卖区
+    SafeArea = 3, --安全区
 }

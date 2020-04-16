@@ -43,6 +43,20 @@ function handles:teamShopBuyItem(packet)
     teamShop:onButtonClick(self, itemId, status)
 end
 
+function handles:skillShopBuyItem(packet)
+    local skillShop = require "script_server.skill.skillShop"
+    local itemId = packet.itemId
+    local status = packet.status
+    if status == 1 then
+        skillShop:onButtonClick(self, itemId, status)
+    else
+        local placeId = packet.placeId
+        print("============packet======".. tostring(placeId))
+        skillShop:onButtonClick(self, itemId, status, placeId)
+    end
+end
+
+
 function handles:SyncItemShopBuyAll(packet)
     Store.ItemShop:BuyAll(self, packet.tabId)
 end
@@ -65,6 +79,14 @@ end
 
 function handles:SyncItemShopInit(packet)
     Store.ItemShop:initAllItem(self)
+end
+
+function handles:SyncPayShopInit(packet)
+    Store.PayShop:initAllItem(self)
+end
+
+function handles:SyncPayShopOperation(packet)
+    Store.PayShop:operationByType(self, packet.tabId, packet.itemId)
 end
 
 function handles:ConfirmGauntlet(packet)

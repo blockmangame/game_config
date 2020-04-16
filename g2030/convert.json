@@ -91,5 +91,29 @@
         {
             "_name": "^Pet.*"
         }
+    },
+    "equipItem":{
+        "plugin": "myplugin",
+        "mod": "item",
+        "fields":
+        [
+            ["buff", "equip_buff"],
+            ["位置（1武器，2腰带）", "tray"],
+            ["默认", "icon"]
+        ],
+        "filter":
+        {
+            "_name": "^equip.*"
+        }
+    },
+    "equipBuff":{
+        "plugin": "myplugin",
+        "mod": "buff",
+        "fields":
+        [
+            ["手持物", "skin"],
+            ["最大锻炼值自然数加成", "expMax"],
+            ["单次攻击锻炼值自然数加成", "perExp"]
+        ]
     }
 }

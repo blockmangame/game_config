@@ -2,6 +2,38 @@
   "canAttack": true,
   "canBreak": false,
   "placeTestBlock": "myplugin/stone",
+  "region": {
+		"sell_area": {
+            "regionCfg": "myplugin/region_sell",
+            "box": {
+                "min": {
+                    "x": 207.5,
+                    "y": 99,
+                    "z": 121.5
+                },
+                "max": {
+                    "x": 213.5,
+                    "y": 100,
+                    "z": 134.5
+                }
+            }
+        },
+        "shop_area": {
+            "regionCfg": "myplugin/region_shop",
+            "box": {
+                "min": {
+                    "x": 207.5,
+                    "y": 99,
+                    "z": 160.5
+                },
+                "max": {
+                    "x": 213.5,
+                    "y": 100,
+                    "z": 173.5
+                }
+            }
+        }
+    },
   "entity": [
     {
       "cfg": "myplugin/island",

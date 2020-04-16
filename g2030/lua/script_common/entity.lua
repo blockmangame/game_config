@@ -6,8 +6,8 @@ print("======BigInteger==========:",Lib.v2s(BigInteger,3))
 ValueDef.jumpCount	= {false,	true,	false,	false,      1,		false}
 ValueDef.maxJumpCount={false,	false,	true,	false,      1,		false}
 ValueDef.curExp		= {false,	false,	true,	true,       BigInteger.Create(0),		true}--当前锻炼值
-ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1,8),	true}--最大锻炼值
-ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1,5),		false}--每次攻击锻炼值增加
+ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1,0),	true}--最大锻炼值
+ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1,0),		false}--每次攻击锻炼值增加
 ValueDef.perExpPlu	= {false,	false,	true,	true,       1,		false}--锻炼值加成加成比例（付费特权。双倍）
 ValueDef.curLevel	= {false,	false,	true,	true,       1,		true}--当前阶数
 ValueDef.curHp		= {false,	false,	true,	true,       BigInteger.Create(playerCfg.baseHp),		false}--当前血量
@@ -27,6 +27,12 @@ ValueDef.teamId		= {false,	true,	true,	true,       0,		true}--阵营Id
 ValueDef.teamKills	= {false,	false,	false,	false,       0,		false}--个人阵营击杀数
 ValueDef.equip      = {false,	false,	true,	false,      {},		true}--道具商店购买的装备列表
 ValueDef.belt       = {false,	false,	true,	false,      {},		true}--道具商店购买的腰带列表
+ValueDef.studySkill = {false,	false,	true,	false,      {},		true}--道具商店购买的装备列表
+ValueDef.equipSkill = {false,	false,	true,	false,      {},		true}--道具商店购买的腰带列表
+ValueDef.prop       = {false,	false,	true,	false,      {},		true}--付费商店购买的道具列表
+ValueDef.resource   = {false,	false,	true,	false,      {},		true}--付费商店购买的资源列表
+ValueDef.skin       = {false,	false,	true,	false,      {},		true}--付费商店购买的皮肤列表
+ValueDef.privilege  = {false,	false,	true,	false,      {},		true}--付费商店购买的特权列表
 ValueDef.islandLv   = {false,	false,	true,	false,       1,		true}--当前岛屿等级（商店临时解锁用）
 ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},     true }--已拥有的阵营皮肤
 ValueDef.teamSkinId = {false,   true,    true,  false,       0,     true }--已装备的阵营皮肤id
@@ -247,7 +253,7 @@ end
 
 ---获取购买装备列表
 function Entity:getEquip()
-    return Lib.copy(self:getValue("equip"))
+    return self:getValue("equip")
 end
 
 ---设置购买装备列表
@@ -257,12 +263,52 @@ end
 
 ---获取购买腰带列表
 function Entity:getBelt()
-    return Lib.copy(self:getValue("belt"))
+    return self:getValue("belt")
 end
 
 ---设置购买腰带列表
 function Entity:setBelt(data)
     self:setValue("belt", data)
+end
+
+---获取购买付费道具列表
+function Entity:getProp()
+    return self:getValue("prop")
+end
+
+---设置购买付费道具列表
+function Entity:setProp(data)
+    self:setValue("prop", data)
+end
+
+---获取购买付费资源列表
+function Entity:getResource()
+    return self:getValue("resource")
+end
+
+---设置购买付费资源列表
+function Entity:setResource(data)
+    self:setValue("resource", data)
+end
+
+---获取购买付费皮肤列表
+function Entity:getSkin()
+    return self:getValue("skin")
+end
+
+---设置购买付费皮肤列表
+function Entity:setSkin(data)
+    self:setValue("skin", data)
+end
+
+---获取购买付费特权列表
+function Entity:getPrivilege()
+    return self:getValue("privilege")
+end
+
+---设置购买付费特权列表
+function Entity:setPrivilege(data)
+    self:setValue("privilege", data)
 end
 
 ---获取已解锁岛屿等级
@@ -293,4 +339,42 @@ end
 ---设置已装备的阵营皮肤id
 function Entity:setTeamSkinId(id)
     self:setValue("teamSkinId", id)
+end
+
+---获取购买技能列表
+function Entity:getStudySkill()
+    return Lib.copy(self:getValue("studySkill"))
+end
+
+---设置购买技能列表
+function Entity:setStudySkill(data)
+    self:setValue("studySkill", data)
+end
+
+---获取装备技能列表
+function Entity:getEquipSkill()
+    return Lib.copy(self:getValue("equipSkill"))
+end
+
+---设置装备技能列表
+function Entity:setEquipSkill(data)
+    self:setValue("equipSkill", data)
+end
+
+--check entity whether be in the state of Dizziness or not
+function Entity:checkDizzinessState()
+if self:getTypeBuff("fullName", "myplugin/player_dizziness_skill_buff") then
+return true
+end
+
+return false
+end
+
+--check entity whether be in the state of grounded or not
+function Entity:checkGroundedState()
+    if self:getTypeBuff("fullName", "myplugin/player_grounded_skill_buff") then
+        return true
+    end
+
+    return false
 end

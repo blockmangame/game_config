@@ -39,7 +39,8 @@ end
 function EntityServer:doAttack(info)
     local attackProps,defenseProps = self:getDamageProps(info)
     --ocal damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
-    local damage = math.floor(math.max(attackProps.dmgBase* attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1))
+    local damage = math.max(attackProps.dmgBase* attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)
+            *attackProps.dmgRealPlu*defenseProps.hurtSub, 1)
     info.target:doDamage({
         from = self,
         damage = damage,
@@ -54,8 +55,11 @@ end
 ---当玩家remove了回血
 ---
 function EntityServer:doHealing()
-
-    local healVal =math.floor(self:getMaxHp() *self:getHealingVal()* self:getHealingPlu())
+    
+    local healVal =self:getMaxHp() *self:getHealingVal()* self:getHealingPlu()
+    print("--------doHealing-----getMaxHp---------",self:getMaxHp())
+    print("--------doHealing-----getHealingVal---------",self:getHealingVal())
+    print("--------doHealing----- self:getHealingPlu()---------", self:getHealingPlu())
     -- print("=========doHealing==========",healVal)
     -- print("=========doHealing=spd=========",self:getHealingSpd())
 
@@ -63,6 +67,8 @@ function EntityServer:doHealing()
         return
     end
     if self:deltaHp(healVal) then
+        print("--------doHealing--------------",healVal)
+        print("--------doHealing--------------",Lib.v2s(healVal,3))
         self:ShowFlyNum(healVal)
     end
 
@@ -150,11 +156,43 @@ function EntityServer:ShowFlyNum(deltaHp)
             distance = 2,
             imgset = deltaHp<0 and "red_numbers" or "green_numbers",
             imageWidth = 40,
-            imageHeight = 40
+            imageHeight = 40,
+            isBigNum = true
         })
     end
 end
 
+---
+---当玩家add了自动售卖buff
+---
+function EntityServer:doAutoSellExp(buff)
+    if buff.removed then	--可能被叠加规则、超时等情况清除掉了
+        return
+    end
+    self:timer(20, function ()
+        if Game.GetState() == "GAME_GO" and self.curHp>0 then
+            if self:isExpFull() then
+                self:sellExp()
+                self:doAutoSellExp(buff)
+            end
+        end
+    end   )
+end
+
+---
+---当玩家add了自动普攻buff
+---
+function EntityServer:doAutoNormalAtk(buff)
+    if buff.removed then	--可能被叠加规则、超时等情况清除掉了
+        return
+    end
+    self:timer(20, function ()
+        if Game.GetState() == "GAME_GO" and self.curHp>0 then
+            self:addExp()
+            self:doAutoNormalAtk(buff)
+        end
+    end   )
+end
 
 ---
 ---以下为添加EntityProp function类成员
@@ -261,7 +299,23 @@ function Entity.EntityProp:perExp(value, add, buff)
 end
 
 function Entity.ValueFunc:curLevel(value)
-   -- Lib.emitEvent(Event.EVENT_LEVEL_CHANGE)
+    Lib.emitEvent(Event.EVENT_LEVEL_CHANGE,value)
 end
 
+---
+---自动售卖
+---
+function Entity.EntityProp:autoSellExp(value, add, buff)
+    if add then
+        self:doAutoSellExp(buff)
+    end
+end
 
+---
+---自动普攻
+---
+function Entity.EntityProp:autoNormalAtk(value, add, buff)
+    if add then
+        self:doAutoNormalAtk(buff)
+    end
+end

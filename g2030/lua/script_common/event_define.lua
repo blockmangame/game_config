@@ -17,12 +17,17 @@ Event.register("EVENT_RECHARGE_SKILL_RESET")
 Event.register("EVENT_ALL_RECHARGE_SKILL_RESET")
 Event.register("EVENT_TELEPORT_SHADER_ENABLE")
 Event.register("EVENT_TELEPORT_SHADER_DISABLE")
+Event.register("EVENT_REGION_ENTER")
+Event.register("EVENT_REGION_LEAVE")
 
 if World.isClient then
     Event.register("EVENT_SHOW_BOTTOM_MESSAGE")
     Event.register("EVENT_TEAM_SHOP_REFRESH")
     Event.register("EVENT_ITEM_SHOP_UPDATE")
+    Event.register("EVENT_PAY_SHOP_UPDATE")
     Event.register("EVENT_PLAY_GLIDING_EFFECT")
+    Event.register("EVENT_ITEM_SKILL_SHOP_UPDATE")
+    Event.register("EVENT_ITEM_SKILL_EQUIP_UPDATE")
 else
     --TODO
 end

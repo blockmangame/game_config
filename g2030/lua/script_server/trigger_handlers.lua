@@ -19,6 +19,42 @@ function Handlers.SKILL_CAST(context)
     --print("Handlers.SKILL_CAST " .. Lib.inspect(context, { depth = 1 }))
 end
 
+function Handlers.REGION_ENTER(context)
+    --{obj1=entity, region=self, map=self.map, inRegionKey = self.key}
+
+    if not context.obj1.isPlayer then
+        return
+    end
+
+    Lib.emitEvent("EVENT_REGION_ENTER",
+            {
+                player = context.obj1,
+                inRegionKey = context.inRegionKey,
+                regionCfg = context.region.cfg,
+            })
+
+    --Lib.log(string.format("Handlers.REGION_ENTER objID:%s region:%s inRegionKey:%s", tostring(context.obj1.objID),
+    --        Lib.inspect(context.region.cfg, { depth = 1, }), tostring(context.inRegionKey)))
+end
+
+function Handlers.REGION_LEAVE(context)
+    --{obj1=entity, region=self, map=self.map, inRegionKey = self.key}
+
+    if not context.obj1.isPlayer then
+        return
+    end
+
+    Lib.emitEvent("EVENT_REGION_LEAVE",
+            {
+                player = context.obj1,
+                inRegionKey = context.inRegionKey,
+                regionCfg = context.region.cfg,
+            })
+
+    --Lib.log(string.format("Handlers.REGION_LEAVE objID:%s region:%s inRegionKey:%s", tostring(context.obj1.objID),
+    --        Lib.inspect(context.region.cfg, { depth = 1, }), tostring(context.inRegionKey)))
+end
+
 function Handlers.ENTITY_DIE(context)
     local target = context.obj1
     local from = context.obj2

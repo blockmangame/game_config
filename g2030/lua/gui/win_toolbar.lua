@@ -42,7 +42,7 @@ function M:init()
         --TODO
     end)
     self:subscribe(self.btnShop, UIEvent.EventButtonClick, function()
-        --TODO
+        self:openPayShop()
     end)
 
     Lib.subscribeEvent(Event.EVENT_CHANGE_CURRENCY, function()
@@ -408,6 +408,10 @@ function M:onReload(reloadArg)
         vars.var = vars.var * 20
         self:tipGameCountdown(keepTime, vars, _event, textArgs)
     end
+end
+
+function M:openPayShop()
+    UI:getWnd("PayShop"):onShow(true)
 end
 
 return M
