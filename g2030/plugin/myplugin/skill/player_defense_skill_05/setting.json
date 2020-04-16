@@ -1,16 +1,25 @@
 {
   "type": "Buff",
   "buffCfg": "myplugin/player_defense_skill_buff_05",
-  "buffTime": 440,
+  "buffTime": 100,
   "cdTime": 44,
   "target": "self",
   "castAction": "action_05",
-  "castActionTime": 220,
+  "castActionTime": -1,
   "range": 15,
   "startSound": {
     "volume": 4,
     "loop": false,
     "selfOnly": false,
     "sound": "/sound/dungeon_houjia.mp3"
+  },
+  "castEffect": {
+    "effect": "effect_05_02.effect",
+    "pos": {
+      "x": 0,
+      "y": 0.7,
+      "z": 0
+    },
+    "time": 3000
   }
 }

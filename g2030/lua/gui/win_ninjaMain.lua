@@ -36,6 +36,7 @@ end
 function M:initExtraWnd()
     UI:getWnd("itemShop"):initData()
     UI:getWnd("payShop"):initData()
+    UI:getWnd("skillControl")
 end
 
 function M:initEvent()
@@ -52,6 +53,11 @@ function M:initEvent()
     self:subscribe(self.btnPet, UIEvent.EventButtonClick, function()
         UI:getWnd("petPackage"):openPetPackage()
     end)
+
+    self:subscribe(self.btnTrade, UIEvent.EventButtonClick, function()
+        self:openSkillControl()
+    end)
+
 
     local LuaTimer = T(Lib, "LuaTimer") ---@type LuaTimer
     Lib.subscribeEvent("EVENT_SHOW_BOTTOM_MESSAGE", function(message, param)
@@ -78,6 +84,12 @@ function M:initEvent()
     Lib.subscribeEvent("EVENT_PLAY_GLIDING_EFFECT", function(isPlay)
         self.effect:SetVisible(isPlay)
     end)
+
+    -- Lib.subscribeEvent(Event.EVENT_ITEM_SKILL_EQUIP_UPDATE, function()
+    --     -- 技能装配监听
+    --     local EquipInfo = Me:getEquipSkill()
+    --     print("---------EquipInfo--------------1 ".. Lib.v2s(EquipInfo))
+    -- end)
 end
 
 ---右侧技能按钮排版切换
@@ -109,6 +121,10 @@ end
 ---右侧技能按钮排版切换
 function M:openPayShop()
     UI:getWnd("itemShop"):onShow(true)
+end
+
+function M:openSkillControl()
+    UI:getWnd("skillControl"):onShow(true)
 end
 
 function M:onOpen()

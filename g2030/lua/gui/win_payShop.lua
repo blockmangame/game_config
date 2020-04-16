@@ -255,6 +255,7 @@ function M:onClickSkinItem(itemId)
         print("M:onClickSkinItem(itemId) : is not exit :"..tonumber(itemId))
         return
     end
+    self.atTabModel:SetActor1(item.actor)
     self.selectItemId = itemId
     print("<onClickSkinItem:> itemId "..tostring(itemId))
     print("<onClickSkinItem:> equip.status "..tostring(item.status))

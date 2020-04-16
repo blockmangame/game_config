@@ -3,6 +3,10 @@
 --- Created by bell.
 --- DateTime: 2020/3/21 22:39
 ---
+Lib.declare("RegionManager", {})
+Lib.declare("RegionSell", {})
+Lib.declare("RegionShop", {})
+
 require "script_server.entity.entity"
 require "script_server.async_process.async_process"
 require "script_server.game.game"
@@ -18,6 +22,11 @@ require "script_server.player.player_pet_manager"
 
 require "script_server.shop.itemshop_manager"
 require "script_server.shop.payshop_manager"
+
+require "script_server.world.region.region_sell"
+require "script_server.world.region.region_shop"
+require "script_server.world.region"
+require "script_server.world.region_manager"
 
 require "script_server.skill.skill_normal_atk"
 require "script_server.skill.skill_addExp"
@@ -40,6 +49,9 @@ function main:init()
     Lib.log("main:init")
 
     self:loadConfig()
+
+    ---@type RegionManager
+    RegionManager:init()
 end
 
 function main:initLog()
@@ -49,6 +61,9 @@ end
 function main:loadConfig()
     local teamShopConfig = T(Config, "teamShopConfig")
     teamShopConfig:initConfig()
+
+    local skillShopConfig = T(Config, "skillShopConfig")
+    skillShopConfig:initConfig()
 end
 
 main:init()

@@ -6,8 +6,8 @@ print("======BigInteger==========:",Lib.v2s(BigInteger,3))
 ValueDef.jumpCount	= {false,	true,	false,	false,      1,		false}
 ValueDef.maxJumpCount={false,	false,	true,	false,      1,		false}
 ValueDef.curExp		= {false,	false,	true,	true,       BigInteger.Create(0),		true}--当前锻炼值
-ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1,8),	true}--最大锻炼值
-ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1,5),		false}--每次攻击锻炼值增加
+ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1,0),	true}--最大锻炼值
+ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1,0),		false}--每次攻击锻炼值增加
 ValueDef.autoExp	= {false,	false,	true,	true,       0,		false}--自动锻炼间隔
 ValueDef.perExpPlu	= {false,	false,	true,	true,       1,		false}--锻炼值加成加成比例（付费特权。双倍）
 ValueDef.curLevel	= {false,	false,	true,	true,       1,		true}--当前阶数
@@ -28,6 +28,8 @@ ValueDef.teamId		= {false,	true,	true,	true,       0,		true}--阵营Id
 ValueDef.teamKills	= {false,	false,	false,	false,       0,		false}--个人阵营击杀数
 ValueDef.equip      = {false,	false,	true,	false,      {},		true}--道具商店购买的装备列表
 ValueDef.belt       = {false,	false,	true,	false,      {},		true}--道具商店购买的腰带列表
+ValueDef.studySkill = {false,	false,	true,	false,      {},		true}--道具商店购买的装备列表
+ValueDef.equipSkill = {false,	false,	true,	false,      {},		true}--道具商店购买的腰带列表
 ValueDef.prop       = {false,	false,	true,	false,      {},		true}--付费商店购买的道具列表
 ValueDef.resource   = {false,	false,	true,	false,      {},		true}--付费商店购买的资源列表
 ValueDef.skin       = {false,	false,	true,	false,      {},		true}--付费商店购买的皮肤列表
@@ -351,4 +353,42 @@ end
 ---设置已装备的阵营皮肤id
 function Entity:setTeamSkinId(id)
     self:setValue("teamSkinId", id)
+end
+
+---获取购买技能列表
+function Entity:getStudySkill()
+    return Lib.copy(self:getValue("studySkill"))
+end
+
+---设置购买技能列表
+function Entity:setStudySkill(data)
+    self:setValue("studySkill", data)
+end
+
+---获取装备技能列表
+function Entity:getEquipSkill()
+    return Lib.copy(self:getValue("equipSkill"))
+end
+
+---设置装备技能列表
+function Entity:setEquipSkill(data)
+    self:setValue("equipSkill", data)
+end
+
+--check entity whether be in the state of Dizziness or not
+function Entity:checkDizzinessState()
+if self:getTypeBuff("fullName", "myplugin/player_dizziness_skill_buff") then
+return true
+end
+
+return false
+end
+
+--check entity whether be in the state of grounded or not
+function Entity:checkGroundedState()
+    if self:getTypeBuff("fullName", "myplugin/player_grounded_skill_buff") then
+        return true
+    end
+
+    return false
 end

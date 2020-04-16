@@ -39,8 +39,7 @@ end
 function EntityServer:doAttack(info)
     local attackProps,defenseProps = self:getDamageProps(info)
     --ocal damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
-    local damage =  math.max(attackProps.dmgBase+ attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1)
-    info.target:doDamage({
+    local damage =  math.max(attackProps.dmgBase+ attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1)info.target:doDamage({
         from = self,
         damage = damage,
         skillName = info.originalSkillName,
@@ -69,8 +68,7 @@ end
 function EntityServer:doHealing()
     
     local healVal =self:getMaxHp() *self:getHealingVal()* self:getHealingPlu()
-    -- print("=========doHealing==========",healVal)
-    -- print("=========doHealing=spd=========",self:getHealingSpd())
+
 
     if healVal <=0 then
         return
@@ -170,6 +168,37 @@ function EntityServer:ShowFlyNum(deltaHp)
     end
 end
 
+---
+---当玩家add了自动售卖buff
+---
+function EntityServer:doAutoSellExp(buff)
+    if buff.removed then	--可能被叠加规则、超时等情况清除掉了
+        return
+    end
+    self:timer(20, function ()
+        if Game.GetState() == "GAME_GO" and self.curHp>0 then
+            if self:isExpFull() then
+                self:sellExp()
+                self:doAutoSellExp(buff)
+            end
+        end
+    end   )
+end
+
+---
+---当玩家add了自动普攻buff
+---
+function EntityServer:doAutoNormalAtk(buff)
+    if buff.removed then	--可能被叠加规则、超时等情况清除掉了
+        return
+    end
+    self:timer(20, function ()
+        if Game.GetState() == "GAME_GO" and self.curHp>0 then
+            self:addExp()
+            self:doAutoNormalAtk(buff)
+        end
+    end   )
+end
 
 ---
 ---以下为添加EntityProp function类成员
@@ -290,4 +319,20 @@ function Entity.ValueFunc:curLevel(value)
     Lib.emitEvent(Event.EVENT_LEVEL_CHANGE,value)
 end
 
+---
+---自动售卖
+---
+function Entity.EntityProp:autoSellExp(value, add, buff)
+    if add then
+        self:doAutoSellExp(buff)
+    end
+end
 
+---
+---自动普攻
+---
+function Entity.EntityProp:autoNormalAtk(value, add, buff)
+    if add then
+        self:doAutoNormalAtk(buff)
+    end
+end
