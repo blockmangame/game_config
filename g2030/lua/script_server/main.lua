@@ -19,6 +19,9 @@ require "script_server.player.player_pet_manager"
 require "script_server.shop.itemshop_manager"
 require "script_server.shop.payshop_manager"
 
+require "script_server.world.region"
+require "script_server.world.region_manager"
+
 require "script_server.skill.skill_normal_atk"
 require "script_server.skill.skill_addExp"
 require "script_server.skill.multistage"
@@ -40,6 +43,9 @@ function main:init()
     Lib.log("main:init")
 
     self:loadConfig()
+
+    ---@type RegionManager
+    RegionManager:init()
 end
 
 function main:initLog()

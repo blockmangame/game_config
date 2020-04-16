@@ -17,6 +17,8 @@ Event.register("EVENT_RECHARGE_SKILL_RESET")
 Event.register("EVENT_ALL_RECHARGE_SKILL_RESET")
 Event.register("EVENT_TELEPORT_SHADER_ENABLE")
 Event.register("EVENT_TELEPORT_SHADER_DISABLE")
+Event.register("EVENT_REGION_ENTER")
+Event.register("EVENT_REGION_LEAVE")
 
 if World.isClient then
     Event.register("EVENT_SHOW_BOTTOM_MESSAGE")
