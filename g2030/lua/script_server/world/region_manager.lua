@@ -6,7 +6,16 @@
 ---@class RegionManager
 
 function RegionManager:init()
-    --TODO
+    Lib.subscribeEvent("EVENT_REGION_ENTER", self.onRegionEnter)
+    Lib.subscribeEvent("EVENT_REGION_LEAVE", self.onRegionLeave)
+end
+
+function RegionManager.onRegionEnter(param)
+    print("RegionManager.onRegionEnter")
+end
+
+function RegionManager.onRegionLeave(param)
+    print("RegionManager.onRegionLeave")
 end
 
 return RegionManager
