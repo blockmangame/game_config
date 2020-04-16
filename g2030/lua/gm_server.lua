@@ -50,7 +50,9 @@ GMItem["g2030Pet/发放宠物"] = function(self)
     self:getNewPet(1);
 end
 GMItem["g2030Pet/发放式神"] = function(self)
-    self:getNewPlusPet(1);
+    self:getNewPlusPet(1, 0)
+    self:getNewPlusPet(2, 1)
+    self:getNewPlusPet(4, 0)
 end
 GMItem["g2030Pet/装备宠物"] = function(self)
     self:callPet(1, 1);

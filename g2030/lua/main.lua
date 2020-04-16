@@ -9,6 +9,7 @@ require "script_common.ninjalegends_define"
 require "script_common.trigger"
 require "script_common.entity"
 require "script_common.config.jump_config"
+require "script_common.player_pet_manager"
 require "common.gm"
 
 require "script_common.config.equip_config"

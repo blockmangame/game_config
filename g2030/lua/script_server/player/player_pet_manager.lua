@@ -7,14 +7,15 @@
 local petType = T(Define, "petType");
 
 --[[相关数据(AllPetAttr)内容：
-{ID = 0,               --宠物or式神的pluginID
+{ID = 0,              --宠物or式神的pluginID
+ minorID = 0,         --式神的副ID
  petType = 0,         --是宠物还是式神
  level = 1,           --当前强化等级
  petCoinTransRage = 1,--该宠物Entity当前的金币增益
  petChiTransRate = 1, --该宠物Entity当前的气增益
  plusPetATKRate = 1}, --该式神Entity当前的攻击倍率增益
 --]]
-local function getPet(player, type, petID)
+local function getPet(player, type, petID, minorID)
     local allEntityNum = player:getValue("hadEntityNum") + 1;
     player:setValue("hadEntityNum", allEntityNum);
     local AllPetAttr = player:getValue("allPetAttr");
@@ -42,9 +43,11 @@ function Player:getNewPet(ID, coinTransRatio, chiTransRatio)
     self:setValue("allPetAttr", allAttribs);
 end
 
-function Player:getNewPlusPet(ID, plusPetATKRate)
-    local allAttribs, index = getPet(self, petType.plusPet, ID);
-    local cfg = Entity.GetCfg(Player.turnID2Plugin(petType.plusPet, ID));
+function Player:getNewPlusPet(ID, minorID, plusPetATKRate)
+    minorID = minorID or 0
+    local allAttribs, index = getPet(self, petType.plusPet, ID, minorID);
+    print(Player.turnID2Plugin(petType.plusPet, ID, minorID))
+    local cfg = Entity.GetCfg(Player.turnID2Plugin(petType.plusPet, ID, minorID));
     if plusPetATKRate then
         allAttribs[index].plusPetATKRate = plusPetATKRate;
     else
@@ -68,7 +71,7 @@ function Player:callPet(index, rideIndex)
     else
         self:setValue("plusPetEquippedIndex", index);
     end
-    self.equipPetList[createIndex] = index;
+    self.equipPetList[index] =createIndex;
 
     local petEntity = self:getPet(createIndex);
     petEntity:rideOn(self, false, rideIndex);
@@ -97,7 +100,7 @@ function Player:syncPet()
         list = list,
     }
     for index, entity in pairs(self.equipPetList) do
-        list[index] = { objID = entity.objID, petIndex = self.equipPetList[index] };
+        list[index] = entity
     end
     self:sendPacket(packet)
 end

@@ -22,7 +22,6 @@ end
 -----------------------------------Pet Model Test----------------------------------
 local Entity
 GMItem["g2030/创建一个跟随宠物"] = function(self)
-
     local entity = EntityServer.Create({cfgName = "myplugin/pet_1_1_1", pos = self:getPosition()})
     --table.insert(EntityList, entity)
     Entity = entity

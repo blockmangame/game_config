@@ -9,9 +9,15 @@ local curPetPageTable = {}
 local curPlusPetPageTable = {}
 local curPage = 1       --1 PetPage 2 PlusPetPage
 
+local curPlusPetItemTable = {}
+local curPlusPetSelItemIndex = -1
+local curPetItemTable = {}
 local plusPetFoldTable = {}
+local plusPetHadID = {} --记录当前玩家打开背包时所拥有的式神（主式神ID）
+
 local curPlusPetFold = 0--1 All 2 Atk 3 Def 4 Gain
 local plusPetFoldOpen = false
+local foldArea = {};
 
 local player = nil
 
@@ -26,6 +32,7 @@ function M:showPlusPetFoldSel(show)
         self:child("NinjaPetPackage-PlusPetFoldBtnUp"):SetVisible(true)
         self.plusPetLayout.plusPetFoldBg:SetVisible(true)
         self:child("NinjaPetPackage-PlusPetItemLayout"):SetBackgroundColor({0,0,0,0.3})
+
     else
         self:child("NinjaPetPackage-PlusPetFoldBtnDown"):SetVisible(true)
         self:child("NinjaPetPackage-PlusPetFoldBtnUp"):SetVisible(false)
@@ -44,7 +51,7 @@ function M:showPetInterface()
     self.mainLayout.petLayout:SetVisible(true)
     self.mainLayout.plusPetLayout:SetVisible(false)
     curPage = 1
-
+    self:setPetItem()
 end
 
 function M:showPlusPetInterface()
@@ -52,12 +59,12 @@ function M:showPlusPetInterface()
     self.selSwitchImage.petUnSel:SetVisible(true)
     self.selSwitchImage.pPetUnSel:SetVisible(false)
     self.selSwitchImage.pPetSel:SetVisible(true)
-
+    self:setPlusPetItem()
+    self:setPlusPetItemSel(1)
     self.mainLayout.petLayout:SetVisible(false)
     self.mainLayout.plusPetLayout:SetVisible(true)
 
     self:setPlusPetFoldCurFold(1)
-
     curPage = 2
 end
 
@@ -76,14 +83,133 @@ function M:setPlusPetFoldCurFold(index)
     curPlusPetFold = index
 end
 
+function M:setPlusPetDetail(index)
+    local tempData = curPlusPetItemTable[index]
+    local plusPetData;
+    if tempData.had == false then
+        plusPetData = Player.getPetCfg(petType.plusPet, tempData.index)
+        if not plusPetData then
+            print("================get plus pet data wrong!!! =================")
+            return
+        end
+        self.plusPetLayoutText.plusPetLevelNu:SetText("Lv.???")
+        self.plusPetLayoutText.plusPetDefNu:SetText("???")
+    else
+        if not plusPetData then
+            print("================get plus pet data wrong!!! =================")
+            return
+        end
+        plusPetData = Player:getPetAttr(tempData.index)
+        self.plusPetLayoutText.plusPetLevelNu:SetText("Lv." .. tostring(plusPetData.level))
+        self.plusPetLayoutText.plusPetDefNu:SetText(tostring(plusPetData * 100) .. "%")
+    end
+
+    self.plusPetLayout.plusPetActor:SetActor1(plusPetData.actorName)
+    self.plusPetLayoutText.plusPetName:SetText(plusPetData.multiLang)
+    self.plusPetLayout.plusPetQuality:SetImage("set:ninja_pet.json image:quality-" .. tostring(plusPetData.rank))
+    self.plusPetLayout.plusPetSkillTypeIcon:SetImage("set:ninja_pluspet.json image:skilltype-" .. tostring(plusPetData.skillType))
+    self.plusPetLayoutText.plusPetSkillInfo:SetText(plusPetData.skillInfo)
+end
+
+function M:setPlusPetItemSel(index)
+    if index == curPlusPetSelItemIndex then
+        return
+    end
+    if curPlusPetSelItemIndex ~= -1 then
+        print("===============Unsel Call ===================")
+        curPlusPetItemTable[curPlusPetSelItemIndex].item:invoke("unsel")
+    end
+    curPlusPetItemTable[index].item:invoke("sel")
+    curPlusPetSelItemIndex = index
+    self:setPlusPetDetail(index)
+end
+
+-- Todo 显示PlusPetPage时，在设置完item后检测装备情况
+
+function M:setPlusPetItemEquip(index)
+
+end
+
+function M:_setPlusPetItem(had, v)
+    local itemBroadInfo = {
+        width = (self.plusPetLayout.plusPetItem:GetPixelSize().x - 10) / 2
+    }
+    itemBroadInfo.height = itemBroadInfo.width
+    local plusPetIcon = UIMgr:new_widget("petPackagePlusPetItem")
+    plusPetIcon:SetArea({ 0, 0 }, { 0, 0 }, { 0, itemBroadInfo.width }, { 0, itemBroadInfo.height })
+    plusPetIcon:invoke("initShow", v.ID, v.rank, had, v.level)
+    table.insert(curPlusPetItemTable,{index = v.k, had = had, item = plusPetIcon})      -- index为式神index，和式神主id（当had为false时）
+    self.plusPetLayout.plusPetItem:AddItem(plusPetIcon)
+end
+
+function M:setUnlockPlusPetItem()
+    for k, v in pairs(curPlusPetPageTable) do
+        self:_setPlusPetItem(true, {ID = v.ID, rank = v.rank, level = v.level, k = k})
+    end
+end
+
+function M:setLockPlusPetItem()
+    for i = 1,Define.plusPetNu do
+        if plusPetHadID[i].had == false then
+            local cfg = Entity.GetCfg(Player.turnID2Plugin(Define.petType.plusPet, plusPetHadID[i].ID, 0))
+            self:_setPlusPetItem(false, {ID = plusPetHadID[i].ID, rank = cfg.rank, k = plusPetHadID[i].ID, })
+        end
+    end
+end
+
+function M:setPlusPetItem()
+    self.plusPetLayout.plusPetItem:SetMoveAble(true)
+    self.plusPetLayout.plusPetItem:RemoveAllItems()
+    self:setUnlockPlusPetItem()
+    self:setLockPlusPetItem()
+    for k, v in pairs(curPlusPetItemTable) do
+        self:subscribe(v.item, UIEvent.EventWindowClick, function()
+            self:setPlusPetItemSel(k)
+        end)
+    end
+end
+
+function M:setPetItem()
+
+end
+
+function M:setPetDetail(index)              --通过index拿到所有配置信息
+
+end
+
+function M:refreshPageInfo()
+
+end
+
 local function petListSort(itemA, itemB)
-    if itemA.rank > itemB.rank then
+    if itemA.rank > itemB.rank then             --品质越高的越靠前
+        return true
+    end
+    if itemA.rank < itemB.rank then
+        return false
+    end
+    if itemA.level > itemB.level then           --等级越高的越靠前
         return true
     end
     if itemA.level < itemB.level then
+        return false
+    end
+    if itemA.orderWeight > itemB.orderWeight then --顺序值越高的越靠前
         return true
     end
-    if itemA.sortWeight > itemB.sortWeight then
+    return false
+end
+
+local function plusPetLockSort(itemA, itemB)
+    local cfgA = Player.getPetCfg(petType.plusPet, itemA.ID)
+    local cfgB = Player.getPetCfg(petType.plusPet, itemB.ID)
+    if cfgA.rank > cfgB.rank then             --品质越高的越靠前
+        return true
+    end
+    if cfgA.rank < cfgB.rank then
+        return false
+    end
+    if cfgA.orderWeight > cfgB.orderWeight then --顺序值越高的越靠前
         return true
     end
     return false
@@ -92,19 +218,29 @@ end
 local function getPlayerInfo()
     curPlusPetPageTable = {}
     curPetPageTable = {}
+    plusPetHadID = {}
+    for i = 1, Define.plusPetNu do
+        table.insert(plusPetHadID, {ID = i, had = false})
+    end
 
     if player == nil then
         player = Player.CurPlayer
     end
-    for v, k in pairs(player:getValue("allPetAttr")) do
-        if k.petType == petType.pet then
-            table.insert(curPetPageTable, player:getPetAttr(v))
+    for k, v in pairs(player:getValue("allPetAttr")) do
+        local tempData = player:getPetAttr(k)
+        if v.petType == petType.pet then
+            table.insert(curPetPageTable, tempData)
         else
-            table.insert(curPlusPetPageTable, player:getPetAttr(v))
+            table.insert(curPlusPetPageTable, tempData)
+            if plusPetHadID[tempData.ID].had == false then
+                print("====================",tempData.ID, type(tempData.ID))
+                plusPetHadID[tempData.ID].had = true
+            end
         end
     end
     table.sort(curPetPageTable, petListSort)
     table.sort(curPlusPetPageTable, petListSort)
+    table.sort(plusPetHadID, plusPetLockSort)
 end
 
 function M:_openPetPackage()
@@ -275,12 +411,15 @@ function M:initWnd()
         petImage = self:child("NinjaPetPackage-PetDetailImg"),
         petQuality = self:child("NinjaPetPackage-PetDetailQuality")
     }
-
+    self.petLayout.petItems:InitConfig(20, 20, 4)       --item 110 * 110
     self.plusPetLayout = {
         plusPetFoldBg = self:child("NinjaPetPackage-PlusPetFoldSelBg"),
-        plusPetItem = self:child("NinjaPetPackage-PlusPetItemLayout"),
-        plusPetActor = self:child("NinjaPetPackage-PlusPetExhibition")
+        plusPetItem = self:child("NinjaPetPackage-PlusPetItemGrid"),
+        plusPetActor = self:child("NinjaPetPackage-PlusPetExhibition"),
+        plusPetSkillTypeIcon = self:child("NinjaPetPackage-PlusPetSkillTypeImg"),
+        plusPetQuality = self:child("NinjaPetPackage-PlusPetQuaImage")
     }
+    self.plusPetLayout.plusPetItem:InitConfig(10, 10, 2) --item 77 * 77
     plusPetFoldTable[1] = {
         text = self.plusPetLayoutText.plusPetFoldSelAll,
         bg = {
@@ -312,3 +451,5 @@ function M:initWnd()
     self:setPetAllText()
     self:initPetAllEvent()
 end
+
+return M;
