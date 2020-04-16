@@ -4,13 +4,13 @@ import sys
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding="utf-8")
 
-fileName = "Privilege.csv"
+fileName = "region.csv"
 
 def readCsv(csvName):
     result = {}
     result["col_name"] = []
     result["col_info"] = []
-    result["lua_name"] = csvName[0:len(csvName) - 4] + "Config.lua"
+    result["lua_name"] = csvName[0:len(csvName) - 4] + "_config.lua"
 
     csvFile = open(csvName, "r", encoding="UTF-8")
     lines = csv.reader(csvFile, delimiter='\t')
@@ -43,7 +43,7 @@ def genLuaFile(result):
     table_name = result["lua_name"][0 : len(result["lua_name"]) - 4]
     file.write(table_name + " = {}\n")
     file.write("\n")
-    file.write(table_name + ".settings = {}\n")
+    file.write("local " + table_name + ".settings = {}\n")
     file.write("\n")
     file.write("function " + table_name + ":init(config)\n")
     file.write("    for _, vConfig in pairs(config) do\n")
