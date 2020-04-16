@@ -11,11 +11,18 @@ function RegionManager:init()
 end
 
 function RegionManager.onRegionEnter(param)
-    print("RegionManager.onRegionEnter")
+    print("RegionManager.onRegionEnter " .. param.inRegionKey)
+
+    local cfg = param.regionCfg
+
+    local functionType = cfg.functionType
+    if functionType == Define.RegionFunctionType.SellArea then
+        param.player:sellExp()
+    end
 end
 
 function RegionManager.onRegionLeave(param)
-    print("RegionManager.onRegionLeave")
+    print("RegionManager.onRegionLeave " .. param.inRegionKey)
 end
 
 return RegionManager
