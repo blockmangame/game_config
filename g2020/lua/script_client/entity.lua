@@ -1,4 +1,4 @@
-
+﻿
 function Entity.EntityProp:hideActor(value, add, cfg, id)
 	self:setActorHide(add)
 end
@@ -79,4 +79,28 @@ function EntityClient:startAutoChangeSkin()
 		end
 	end
 
+end
+
+function EntityClient:updateMainPlayerRideOn()
+    local bm = Blockman.instance
+    local control = bm:control()
+    local player = Player.CurPlayer
+    local world = World.CurWorld
+    local target = world:getEntity(player.rideOnId)
+    if target and not player:isCameraMode() then
+        local pos = target:cfg().ridePos[player.rideOnIdx + 1]
+        control:attach(target)
+        control.enable = pos.ctrl
+        bm:setViewEntity(pos.view and target or player)
+		local distance = bm:viewerRenderDistance()
+		self:data("main").cameraDis = distance
+		self:changeCameraView(nil, nil, nil, target:cfg().cameraDis or 5, 1)
+    else
+        control:attach(player)
+        control.enable = true
+        bm:setViewEntity(player)
+		self:changeCameraView(nil, nil, nil,self:data("main").cameraDis or 5, 1)
+    end
+	Lib.emitEvent(Event.EVENT_RIDE, player, player:isCameraMode() and nil or target)
+    PlayerControl.UpdatePersonView()
 end
