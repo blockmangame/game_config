@@ -6,8 +6,8 @@ print("======BigInteger==========:",Lib.v2s(BigInteger,3))
 ValueDef.jumpCount	= {false,	true,	false,	false,      1,		false}
 ValueDef.maxJumpCount={false,	false,	true,	false,      1,		false}
 ValueDef.curExp		= {false,	false,	true,	true,       BigInteger.Create(0),		true}--当前锻炼值
-ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1,8),	true}--最大锻炼值
-ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1,5),		false}--每次攻击锻炼值增加
+ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1,0),	true}--最大锻炼值
+ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1,0),		false}--每次攻击锻炼值增加
 ValueDef.perExpPlu	= {false,	false,	true,	true,       1,		false}--锻炼值加成加成比例（付费特权。双倍）
 ValueDef.curLevel	= {false,	false,	true,	true,       1,		true}--当前阶数
 ValueDef.curHp		= {false,	false,	true,	true,       BigInteger.Create(playerCfg.baseHp),		false}--当前血量
