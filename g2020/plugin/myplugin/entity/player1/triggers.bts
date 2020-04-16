@@ -302,6 +302,7 @@ CHRONIC_KILL_SELF_BY_DAMAGE{
 
 FUNC_TOGGLE_BLOOM_AND_EMISSSION_COLOR_STRENGTH
 {
+    SyncWorldTime(player = $obj1)
     ToggleBloom(player = $obj1, bloomOpen = @bloomOpen)
     SetBlockEmissionColorStrength(player = $obj1, strength = @bloomOpen and @nightEmissionColorStrength or @dayEmissionColorStrength)
 }
