@@ -21,12 +21,14 @@ end
 
 function Handlers.REGION_ENTER(context)
     --{obj1=entity, region=self, map=self.map, inRegionKey = self.key}
-    Lib.log("Handlers.REGION_ENTER " .. context.obj1.objID)
+    Lib.log(string.format("Handlers.REGION_ENTER objID:%s region:%s inRegionKey:%s", tostring(context.obj1.objID),
+            Lib.inspect(context.region.cfg, { depth = 1, }), tostring(context.inRegionKey)))
 end
 
 function Handlers.REGION_LEAVE(context)
     --{obj1=entity, region=self, map=self.map, inRegionKey = self.key}
-    Lib.log("Handlers.REGION_LEAVE " .. context.obj1.objID)
+    Lib.log(string.format("Handlers.REGION_LEAVE objID:%s region:%s inRegionKey:%s", tostring(context.obj1.objID),
+            Lib.inspect(context.region.cfg, { depth = 1, }), tostring(context.inRegionKey)))
 end
 
 function Handlers.ENTITY_DIE(context)
