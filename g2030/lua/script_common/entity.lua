@@ -337,3 +337,21 @@ end
 function Entity:setTeamSkinId(id)
     self:setValue("teamSkinId", id)
 end
+
+--check entity whether be in the state of Dizziness or not
+function Entity:checkDizzinessState()
+if self:getTypeBuff("fullName", "myplugin/player_dizziness_skill_buff") then
+return true
+end
+
+return false
+end
+
+--check entity whether be in the state of grounded or not
+function Entity:checkGroundedState()
+    if self:getTypeBuff("fullName", "myplugin/player_grounded_skill_buff") then
+        return true
+    end
+
+    return false
+end
