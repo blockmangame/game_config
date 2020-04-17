@@ -307,9 +307,11 @@ function M:selectSkillInfo()
             PreviewUrl = value.url
             print("---previewUrl------".. Lib.v2s(value))
             if PreviewUrl == "" then
-                self.btnPreview:SetVisible(false)
+                self.btnPreview:SetEnabled(false)
+                self.btnPreview:SetTouchable(false)
             else
-                self.btnPreview:SetVisible(true)   
+                self.btnPreview:SetEnabled(true)
+                self.btnPreview:SetTouchable(true)
             end
 
             if value.moneyType == 0 then
