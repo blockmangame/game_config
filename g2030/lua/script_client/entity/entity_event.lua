@@ -34,11 +34,11 @@ function events:inBlockChanged(oldId, newId)
     local RegionConfig = T(Config, "RegionConfig") ---@type RegionConfig
     local leaveRegionConfig = RegionConfig:getRegionConfigByBlockId(oldId)
     if leaveRegionConfig then
-        RegionBlock:onEntityLeave(self, leaveRegionConfig)
+        RegionBlock:onEntityLeave(self, World.regionConfigs[leaveRegionConfig.plugin])
     end
 
     local enterRegionConfig = RegionConfig:getRegionConfigByBlockId(newId)
     if enterRegionConfig then
-        RegionBlock:onEntityEnter(self, enterRegionConfig)
+        RegionBlock:onEntityEnter(self, World.regionConfigs[enterRegionConfig.plugin])
     end
 end

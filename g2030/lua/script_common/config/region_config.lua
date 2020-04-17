@@ -12,6 +12,7 @@ function RegionConfig:init(config)
         data.regionType = tonumber(vConfig.n_regionType) or 0 --n_regionType
         data.regionFunctionType = tonumber(vConfig.n_regionFunctionType) or 0 --n_regionFunctionType
         data.blockId = tonumber(vConfig.n_blockId) or 0
+        data.plugin = vConfig.s_plugin or ""
         table.insert(settings, data)
     end
 end
