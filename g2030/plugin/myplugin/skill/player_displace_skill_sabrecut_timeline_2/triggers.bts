@@ -1,5 +1,8 @@
 SKILL_CAST{
     
 	Test("ola ola ola ola ola ola ola ola ola ola")
+	$yaw = V3AngleXZ(vector = ComputeV3(op = "sub", p2 = GetEntityPosition(entity = $obj1), p1 = $pos))
+	SetEntityYaw(entity = $obj1, yaw = $yaw)
+	SetBodyYaw(entity = $obj1, yaw = $yaw)
 
 }
