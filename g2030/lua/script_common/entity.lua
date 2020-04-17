@@ -1,14 +1,15 @@
 -- 自动同步属性定义
 local ValueDef		= T(Entity, "ValueDef")
 local playerCfg = World.cfg
-print("======BigInteger==========:",Lib.v2s(BigInteger,3))
 -- key				= {isCpp,	client,	toSelf,	toOther,	init,	saveDB}
 ValueDef.jumpCount	= {false,	true,	false,	false,      1,		false}
 ValueDef.maxJumpCount={false,	false,	true,	false,      1,		false}
 ValueDef.curExp		= {false,	false,	true,	true,       BigInteger.Create(0),		true}--当前锻炼值
 ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1,0),	true}--最大锻炼值
 ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1,0),		false}--每次攻击锻炼值增加
+ValueDef.autoExp	= {false,	false,	true,	true,       0,		false}--自动锻炼间隔
 ValueDef.perExpPlu	= {false,	false,	true,	true,       1,		false}--锻炼值加成加成比例（付费特权。双倍）
+ValueDef.infiniteExp= {false,	false,	true,	true,       false,	false}--当前锻炼值
 ValueDef.curLevel	= {false,	false,	true,	true,       1,		true}--当前阶数
 ValueDef.curHp		= {false,	false,	true,	true,       BigInteger.Create(playerCfg.baseHp),		false}--当前血量
 ValueDef.gold2Plus	= {false,	false,	true,	true,       1,		true}--额外金币转换加成系数（付费特权）
@@ -42,6 +43,7 @@ ValueDef.petEquippedList= {false,   false,  true,   true,       {},    true}--�
 ValueDef.plusPetEquippedIndex={false,false, true,   true,       0,      true}--当前角色式神装备表
 ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,      true}--当前角色获取过的宠物实体总数（不会减少）
 ValueDef.allPetAttr     = {false,   false,  true,   true,       {},    true}--宠物、式神相关数据
+
 --[[
 宠物、式神相关数据存储索引说明：索引为createPet后返回的index，通过索引插入的AllPetAttr，该表不为序列，期间可能会出现nil
 即强化（消耗）后相关索引项将置为nil
@@ -98,6 +100,9 @@ end
 function Entity:getCurExpToCoin()
     return self:getCurExp()*playerCfg.baseExp2GoldVal*(1)*self:getValue("gold2Plus")--TODO 宠物加成
 end
+function Entity:getIsInfiniteExp()
+    return self:getValue("infiniteExp")
+end
 ---设置最大锻炼值变化
 function Entity:deltaExpMaxPlus(val)
   --  assert(tonumber(val), "invalid input:" .. val .. "is not a number")
@@ -105,7 +110,10 @@ function Entity:deltaExpMaxPlus(val)
 end
 ---锻炼值是否已满
 function Entity:isExpFull()
-    return false--self:getCurExp()>=self:getMaxExp()
+    if self:getIsInfiniteExp() then
+        return false
+    end
+    return  self:getCurExp()>=self:getMaxExp()
 end
 ---获取当前阶数
 function Entity:getCurLevel()
@@ -113,7 +121,20 @@ function Entity:getCurLevel()
 end
 ---设置当前阶数
 function Entity:setCurLevel(lv)
-    return self:setValue("curLevel", lv)
+    self:setValue("curLevel", lv)
+end
+function Entity:getAutoExp()
+    return self:getValue("autoExp")
+end
+---设置自动锻炼间隔
+function Entity:setAutoExp(val)
+    assert(tonumber(val), "invalid input:" .. val .. "is not a number")
+    if val<0 then
+        print("auto exp time must > 0")
+        return
+    end
+    self:setValue("autoExp", val)
+    
 end
 
 
@@ -145,7 +166,7 @@ function Entity:getDmgPlu()
 end
 function Entity:deltaDmgPlu(val)
     assert(tonumber(val), "invalid input:" .. val .. "is not a number")
-    self:setValue("dmgRealPlu",self:getValue("dmgPlu")+val)
+    self:setValue("dmgPlu",self:getValue("dmgPlu")+val)
 end
 ---
 ---获取神圣伤害加成系数

@@ -39,15 +39,26 @@ end
 function EntityServer:doAttack(info)
     local attackProps,defenseProps = self:getDamageProps(info)
     --ocal damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
-    local damage = math.max(attackProps.dmgBase* attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)
-            *attackProps.dmgRealPlu*defenseProps.hurtSub, 1)
-    info.target:doDamage({
+    local damage =  math.max(attackProps.dmgBase+ attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1)info.target:doDamage({
         from = self,
         damage = damage,
         skillName = info.originalSkillName,
         damageIsCrit = false,
         cause = info.cause or "NORMAL_ATTACK",
     })
+end
+---
+---自动锻炼方法
+---
+function EntityServer:doAutoExp()
+    self:addExp()
+    local nextTime = self:getAutoExp() *20;
+    if nextTime>0 then
+        self:timer(nextTime, function ()
+            self:doAutoExp()
+        end   )
+    end
+    
 end
 ---
 ---治疗方法
@@ -57,30 +68,21 @@ end
 function EntityServer:doHealing()
     
     local healVal =self:getMaxHp() *self:getHealingVal()* self:getHealingPlu()
-    print("--------doHealing-----getMaxHp---------",self:getMaxHp())
-    print("--------doHealing-----getHealingVal---------",self:getHealingVal())
-    print("--------doHealing----- self:getHealingPlu()---------", self:getHealingPlu())
-    -- print("=========doHealing==========",healVal)
-    -- print("=========doHealing=spd=========",self:getHealingSpd())
 
-    if healVal <=0 then
-        return
-    end
-    if self:deltaHp(healVal) then
-        print("--------doHealing--------------",healVal)
-        print("--------doHealing--------------",Lib.v2s(healVal,3))
+    if healVal>0 and  self:deltaHp(healVal) then
         self:ShowFlyNum(healVal)
     end
 
 
     local nextTime = self:getHealingSpd() *20;
-    if nextTime>=0 then
+    if nextTime>0 then
         self:timer(nextTime, function ()
             self:doHealing()
         end   )
     end
 end
 function EntityServer:doDamage(info)
+    
     local damage, from, isRebound = info.damage, info.from, info.isRebound
     local damageCause = assert(info.cause, "must have a cause of doDamage")
 
@@ -98,9 +100,9 @@ function EntityServer:doDamage(info)
         end
         return
     end
-
     self:deltaHp(-damage)
 
+   
     self:ShowFlyNum(-damage)
     --function Actions.ShowNumberUIOnEntity(data, params, context)
     --
@@ -296,6 +298,21 @@ function Entity.EntityProp:perExp(value, add, buff)
     useVal.val =  (add and value.val or -value.val)--(rHpPct.pct or 0) + (add and value or -value)
     useVal.bit =  value.bit or 0
     self:deltaPerExpPlus(BigInteger.Create(useVal.val,useVal.bit))
+end
+---
+---自动锻炼buff，每间隔value秒加一次效率锻炼值
+---
+function Entity.EntityProp:autoExp(value, add, buff)
+    print(value, add)
+    if self.curHp <= 0 then
+        return
+    end
+    local val = add and value or 0
+    self:setAutoExp(val)
+    if add then
+        self:doAutoExp()
+    end
+    
 end
 
 function Entity.ValueFunc:curLevel(value)

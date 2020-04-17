@@ -14,6 +14,7 @@ local function showJumpCountMessage(jumpCount, maxJumpCount)
 end
 
 local function doJumpStateChange(control, player)
+    player:setEntityProp("gravity", tostring(player.EntityProp.gravity))
     if player.isGliding then
         player:setEntityProp("antiGravity", tostring(player.EntityProp.antiGravity))
         player:setEntityProp("moveAcc", tostring(player.EntityProp.moveAcc))
