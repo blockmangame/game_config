@@ -22,8 +22,10 @@ local function castSceneSkill(self)
 	if not self.isTouchPointMove then
 		return
 	end
+	local targetPos = self.targetPos
+	local imcV3 = Lib.v3cut(targetPos, Me:getPosition())
 	Skill.Cast(self.curSkillCfg.fullName, {isTouchPointMove = self.isTouchPointMove, 
-		startPos = self.targetPos, targetPos = self.targetPos, needPre = true})
+		startPos = targetPos, targetPos = targetPos, linePosValue = imcV3,needPre = true})
 end
 
 local function checkTouchInArea(touchPos,area)
