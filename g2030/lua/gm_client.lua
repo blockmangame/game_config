@@ -78,7 +78,7 @@ GMItem["g2030技能/11号技能"] = function(self)
     Skill.Cast("myplugin/palyer_range_skill_thunderclap_11")
 end
 GMItem["g2030技能/12号技能"] = function(self)
-    Skill.Cast("myplugin/player_skill_triple_attack")
+    Skill.Cast("myplugin/player_range_skill_indicator_sub_12")
 end
 GMItem["g2030技能/13号技能"] = function(self)
     Skill.Cast("myplugin/player_range_skill_magic_circle_13")
