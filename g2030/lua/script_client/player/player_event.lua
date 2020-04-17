@@ -31,6 +31,10 @@ end
 function events:beginFall()
     print("beginFall")
 
+    if self.isGliding then
+        return
+    end
+
     local jumpCount = self:getJumpCount()
     local maxJumpCount = self:getMaxJumpCount()
 
