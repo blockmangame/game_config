@@ -1,0 +1,61 @@
+{
+    "cdTime": 100,
+    "icon": "sceneSkillBase.png",
+
+    "enableCdMask": true,
+
+    "type": "SceneSkill",
+    "isSceneSkill": true,
+
+    "sceneSkillSlipSensitivity": 20,
+    "_sceneSkillSlipSensitivity": "判定是否滑动的敏感(范围)值(单位px)",
+
+    "sceneSkillSceneRatio": 0.2,
+    "_sceneSkillSceneRatio":  "该属性控制的是像素与场景pos的比例，比如我移动技能point时，此时，移动了多少像素，x像素和z像素增加/减少了多少，此时会根据这比例映射到场景中" ,
+    "_sceneSkillSceneRatio2": "以玩家为圆心，point点的角度为角度，xz的增量*比例进行场景渲染。",
+
+    "sceneSkillMap": {
+        "touchStaticSkill": "myplugin/player_range_skill_indicator_sub_12",
+        "touchMoveSkill": "myplugin/player_range_skill_indicator_sub_12"
+    },
+    "_sceneSkillMap": {
+        "touchStaticSkill": "未触发移动时使用的技能 / 4.2更新，该属性暂时弃用",
+        "touchMoveSkill": "触发移动时使用的技能"
+    },
+
+    "sceneSkillWndProp": {
+        "_cellPropExample": {"_tip": "image/size 可单配，可不配",
+                                "image": "xxxx", "size": {"x": 0, "y": 0}},
+        "touchBgProp": {"_tip": "这个 touchBgProp 不建议改，这个是场景技能的监测背景。如果要改也是可以改的，比如长按技能时你想有长按背景有个性一点....",
+                        "_log": "该属性控制的是长按的背景"},
+        "touchCellProp": {"_tip": "该prop下有个额外的 redMaskImage 属性，是范围圈变红的遮罩。",
+                          "_log": "该属性控制的是长按时的那个范围圈/ UI技能释放范围标识"},
+        "cancleCellProp": {"_log": "该属性控制的是取消释放技能的那个小图标"},
+        "touchPointProp": {"_log": "该属性控制的是手指长按的位置的那个小图标/ 大拇指当前滑动的位置"},
+        "showPointProp": {"_log": "该属性控制的是范围圈上的技能指示器的那个小图标/ 技能可释放的最远距离指示器"}
+    },
+    "_sceneSkillWndProp": "可以通过此处配置长按的UI组件的一些显示/或者直接挪用UI文件到自定义脚本里面修改（可有可无，没有则是默认",
+
+    "sceneIndicatorProp": {
+        "range": {
+            "indicatorRange": 1,
+            "indicatorPointRange": 1
+        },
+        "_range": "场景指示器的范围/大小(半径) 和 指示点的范围/大小(半径)",
+        "cfg": {
+            "indicatorEntityCfg": "myplugin/indicatorEntity",
+            "_indicatorEntityCfg": "指示器的entity",
+            "indicatorPointEntityCfg": "myplugin/indicatorEntity",
+            "_indicatorPointEntityCfg": "指示器的落点entity，不配则没有指示器落点"
+        },
+        "_cfg": "场景指示器是 entity 带上场景指示器特效做成的。entity一般是用一个透明actor的entity即可。",
+        "effect": {
+            "indicatorEffect_normal": "myplugin/sceneIndicator_blue_base_buff",
+            "indicatorPointEffect_normal": "myplugin/sceneIndicatorPoint_blue_base_buff",
+            "indicatorEffect_activation": "myplugin/sceneIndicator_red_base_buff",
+            "indicatorPointEffect_activation": "myplugin/sceneIndicatorPoint_red_base_buff"
+        },
+        "_effect": "场景指示器特效，包括正常状态下的指示器和落点以及特殊(激活)状态下的指示器和落点四个特效"
+    },
+    "_sceneIndicatorProp": "场景指示器的相关属性"
+}
