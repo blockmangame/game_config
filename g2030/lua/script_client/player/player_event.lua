@@ -36,7 +36,7 @@ function events:beginFall()
 
     ---@type JumpConfig
     local JumpConfig = T(Config, "JumpConfig")
-    if jumpCount > 0 then
+    if jumpCount >= 0 then
         local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount + 1)
         if config then
             self:setEntityProp("gravity", tostring(config.fallGravity))
