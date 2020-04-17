@@ -10,7 +10,7 @@ function skillShopConfig:initConfig()
             id = tonumber(config.n_index),
             skillId = tonumber(config.n_goodsId),
             tabId = tonumber(config.n_tabId),
-            type = tonumber(config.n_type),
+            url = tostring(config.n_url),
             muscle = tostring(config.n_muscle),
             camp = config.n_camp,
             name = tostring(config.s_name),

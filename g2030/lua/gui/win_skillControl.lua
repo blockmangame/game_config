@@ -15,6 +15,8 @@ local equipPaneData = {}
 
 local EquipCheckedId = 1
 
+local PreviewUrl = ""
+
 function M:init()
     WinBase.init(self, "skillControl.json",false)
     self.isInitData = false
@@ -138,6 +140,9 @@ function M:initEvent()
 
     self:subscribe(self.btnPreview, UIEvent.EventButtonClick, function()
         -- 技能展示
+        -- print("=======onWatchAudio========" .. tostring(PreviewUrl))
+
+        Interface.callAppDataFunction("onWatchAudio", {url = PreviewUrl})
     end)
 
     self:subscribe(self.btnBuySkill, UIEvent.EventButtonClick, function()
@@ -260,8 +265,6 @@ function M:onShow(isShow)
     if isShow and self.isInitData then
         if not UI:isOpen(self) then
             UI:openWnd("skillControl")
-            -- self:addSkillEquipItem(skills.attack)
-            -- self.btnEquipAttackSkill:SetSelected(true)
             else
                 self:onHide()
         end
@@ -300,6 +303,15 @@ function M:selectSkillInfo()
             self.stSkillItemName:SetText(value.name)
             self.stMuscleConsume:SetText("  ".. value.muscle.."K  Muscle")
             self.stSkillItemDesc:SetText(value.desc)
+
+            PreviewUrl = value.url
+            print("---previewUrl------".. Lib.v2s(value))
+            if PreviewUrl == "" then
+                self.btnPreview:SetVisible(false)
+            else
+                self.btnPreview:SetVisible(true)   
+            end
+
             if value.moneyType == 0 then
                 self.siCurrencyImg:SetImage("set:diamond.json image:Diamond-icon2.png") 
             else
