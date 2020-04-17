@@ -3,11 +3,11 @@
 --- Created by bell.
 --- DateTime: 2020/4/17 16:11
 ---
-function RegionBlock:onEntityEnter(entity, cfg)
+function RegionBlock:onEntityEnter(entity, cfg, config)
     print("RegionBlock:onEntityEnter " .. Lib.inspect(cfg))
 end
 
-function RegionBlock:onEntityLeave(entity, cfg)
+function RegionBlock:onEntityLeave(entity, cfg, config)
     print("RegionBlock:onEntityLeave " .. Lib.inspect(cfg))
 end
 
