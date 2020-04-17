@@ -42,10 +42,10 @@ function events:beginFall()
             self:setEntityProp("gravity", tostring(config.fallGravity))
         end
     else
-        local config = self.isGliding and JumpConfig:getGlidingConfig() or JumpConfig:getFreeFallConfig()
-        if config then
-            self:setEntityProp("gravity", tostring(config.fallGravity))
-        end
+        --local config = self.isGliding and JumpConfig:getGlidingConfig() or JumpConfig:getFreeFallConfig()
+        --if config then
+        --    self:setEntityProp("gravity", tostring(config.fallGravity))
+        --end
     end
 end
 
