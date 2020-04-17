@@ -11,6 +11,7 @@ function RegionConfig:init(config)
         data.regionName = vConfig.s_regionName or "" --s_regionName
         data.regionType = tonumber(vConfig.n_regionType) or 0 --n_regionType
         data.regionFunctionType = tonumber(vConfig.n_regionFunctionType) or 0 --n_regionFunctionType
+        data.blockId = tonumber(vConfig.n_blockId) or 0
         table.insert(settings, data)
     end
 end
@@ -18,6 +19,16 @@ end
 function RegionConfig:getRegionConfig(regionKey)
     for _, v in pairs(settings) do
         if v.regionKey == regionKey then
+            return v
+        end
+    end
+    return nil
+end
+
+function RegionConfig:getRegionConfigByBlockId(blockId)
+    for _, v in pairs(settings) do
+        if v.regionType == Define.RegionType.Block
+                and v.blockId == blockId then
             return v
         end
     end
