@@ -7,13 +7,6 @@ local RegionBase = require("world.region.region_base")
 local RegionShop = L("RegionShop", Lib.derive(RegionBase))
 local bm = Blockman.instance
 
-function RegionShop:isVaild(viewSetting, entity)
-    if not entity.isPlayer then
-        return false
-    end
-    return true
-end
-
 function RegionShop:onEntityEnter(entity, cfg)
     print("RegionShop:onEntityEnter")
 end

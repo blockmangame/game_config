@@ -6,6 +6,7 @@ local eventRegionMap = {
 	["camera"] = RegionCamera,
 	["shop"] = RegionShop,
 	["sell"] = nil,
+	["safe"] = nil,
 }
 
 function Region:findTargetTypeRegion()
