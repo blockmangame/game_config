@@ -57,8 +57,7 @@ function events:jumpMoveEnd()
         return
     end
 
-    self:setEntityProp("moveSpeed", tostring(0.0))
-    Skill.Cast(Me:cfg().freeFallSkill)
+    self:playFreeFallSkill()
 end
 
 function events:dead(dead)
