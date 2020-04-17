@@ -9,6 +9,11 @@ GMItem["g2030/减少跳跃次数"] = function(self)
     self:setValue("jumpCount", self:getValue("maxJumpCount") - 1);
 end
 
+GMItem["g2030/放置区域方块"] = function(self)
+    local pos = Lib.v3(self:getPosition().x, self:getPosition().y, self:getPosition().z):blockPos()
+    self.map:setBlockConfigId(pos, 2000)
+end
+
 GMItem["g2030/清空当前修炼值"] = function(self)
     self:resetExp()
 end
@@ -23,10 +28,14 @@ GMItem["g2030/掙錢！"] = function(self)
     self:addCurrency("gold", BigInteger.Create(23,10), "test")
     self:addCurrency("chi",  3, "test")
 end
-GMItem["g2030/装备武器！"] = function(self)
-    self:addItem("myplugin/weapon_simple",1,nil,"test")
-    local item1 =  self:searchItem("fullName","myplugin/weapon_simple")
-    self:saveHandItem(item1,false)
+GMItem["g2030/自动锻炼buff"] = function(self)
+    self:addBuff("myplugin/autoExp_s",200)
+end
+GMItem["g2030/无上限特权"] = function(self)
+    self:setInfiniteExp()
+end
+GMItem["g2030/神圣攻击加成特权"] = function(self)
+    self:setOpenRealDmg()
 end
 GMItem["g2030/添加ExpMaxbuff"] = function(self)
     self:addBuff("myplugin/sash_buff_simple",200)
@@ -34,6 +43,19 @@ end
 GMItem["g2030/添加回血buff"] = function(self)
     self:addBuff("myplugin/healing_s",40)
 end
+GMItem["g2030/自动售卖buff_1"] = function(self)
+    self:addBuff("myplugin/auto_sell",100)
+end
+GMItem["g2030/自动售卖buff_2"] = function(self)
+    self:addBuff("myplugin/auto_sell",200)
+end
+GMItem["g2030/自动普攻buff_1"] = function(self)
+    self:addBuff("myplugin/auto_normalatk",100)
+end
+GMItem["g2030/自动普攻buff_2"] = function(self)
+    self:addBuff("myplugin/auto_normalatk",200)
+end
+
 GMItem["g2030/添加回血加成buff"] = function(self)
     self:addBuff("myplugin/healing_plus",40)
 end
@@ -53,7 +75,9 @@ GMItem["g2030Pet/发放宠物"] = function(self)
     self:getNewPet(1);
 end
 GMItem["g2030Pet/发放式神"] = function(self)
-    self:getNewPlusPet(1);
+    self:getNewPlusPet(1, 0)
+    self:getNewPlusPet(2, 1)
+    self:getNewPlusPet(4, 0)
 end
 GMItem["g2030Pet/装备宠物"] = function(self)
     self:callPet(1, 1);

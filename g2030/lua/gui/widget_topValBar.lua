@@ -26,8 +26,14 @@ function M:initViewByType(type,pos,root)
                     "set:ninja_main.json image:bar_mp",
                     Event.EVENT_EXP_CHANGE,
                     function ()
-                        self.txtVal:SetText(Me:getCurExp().."/"..Me:getMaxExp())
-                        self.pgsVal:SetProgress(Me:getCurExp() / Me:getMaxExp())
+                        if Me:getIsInfiniteExp() then
+                            self.txtVal:SetText(Me:getCurExp().."limit")
+                            self.pgsVal:SetProgress(Me:getCurExp()>0 and 1 or 0)
+                        else
+                            self.txtVal:SetText(Me:getCurExp().."/"..Me:getMaxExp())
+                            self.pgsVal:SetProgress(Me:getCurExp() / Me:getMaxExp())
+                        end
+                     
                     end,
                     Me:getCurExp(),
                     Me:getMaxExp()
@@ -57,11 +63,6 @@ end
 ---cur 初始当前值
 ---max 初始最大值
 function M:initView(icon,barImg,event,func,cur,max)
-    local str = cur.."/"..max
-    print("-------------cur-------------",cur)
-    print("--------------max------------",max)
-    print("------------ret--------------",str)
-    print("------------ret-val-------------",cur/max)
     self.imgValType:SetImage(icon or "");
     self.pgsVal:SetProgressImage(barImg or "")
     self.txtVal:SetText(cur.."/"..max)

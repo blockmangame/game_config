@@ -1,26 +1,15 @@
 {
-    "cdTime": 10,
-    "type": "MeleeAttack",
-    "castAction": "magic_circle_13",
-    "castActionTime": 10,
-    "missileCfg": "myplugin/weapon_1_comboattack1_missile",
-    "missileCount": 1,
+    "type": "Buff",
+    "buffCfg": "myplugin/skill_buff_magic_circle_13_aura",
+    "buffTime": 200,
+    "cdTime": 300,
     "target": "self",
-    "startWait": [
-        6
-    ],
-    "startPos": [
-        {
-            "z": 2,
-            "x": 0,
-            "y": -1.5
-        }
-    ],
-    "castSound": {
-        "volume": 1.5,
-        "selfOnly": false,
+    "castAction": "action_13",
+    "range": 15,
+    "startSound": {
+        "volume": 4,
         "loop": false,
-        "sound": "/sound/attack1.mp3"
-    },
-    "targetType": "Self"
+        "selfOnly": false,
+        "sound": "/sound/dungeon_houjia.mp3"
+    }
 }

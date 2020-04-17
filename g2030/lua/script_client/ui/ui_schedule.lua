@@ -1,5 +1,9 @@
+local thisCancel = false
 Lib.subscribeEvent(Event.EVENT_EXP_CHANGE, function()
-    if not Me:isExpFull() then
+    if thisCancel and Me:getCurExp() == 0 then
+        thisCancel = false
+    end
+    if not Me:isExpFull() or thisCancel then
         return
     end
     ---content 内容
@@ -17,12 +21,12 @@ Lib.subscribeEvent(Event.EVENT_EXP_CHANGE, function()
                 hideClose = false,
                 leftTxt = Lang:toText("gui_no"),
                 rightTxt = Lang:toText("gui_go"),
-                leftCb = function() end,
+                leftCb = function() thisCancel = true end,
                 rightCb = function() Me:sellExp() end
 
     }
     )
-    end)
+end)
 
 Lib.subscribeEvent(Event.EVENT_NOT_ENOUGH_MONEY, function()
     print("EVENT_NOT_ENOUGH_MONEY")

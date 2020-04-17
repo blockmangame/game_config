@@ -28,16 +28,45 @@ function events:fallGround(fallDistance)
     self:recoverJumpProp()
 end
 
+function events:beginFall()
+    print("beginFall")
+
+    if self.isGliding then
+        return
+    end
+
+    local jumpCount = self:getJumpCount()
+    local maxJumpCount = self:getMaxJumpCount()
+
+    ---@type JumpConfig
+    local JumpConfig = T(Config, "JumpConfig")
+    if jumpCount >= 0 then
+        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount + 1)
+        if config then
+            self:setEntityProp("gravity", tostring(config.fallGravity))
+        end
+    else
+        --local config = self.isGliding and JumpConfig:getGlidingConfig() or JumpConfig:getFreeFallConfig()
+        --if config then
+        --    self:setEntityProp("gravity", tostring(config.fallGravity))
+        --end
+    end
+end
+
 function events:jumpMoveEnd()
-    print("jumpMoveEnd")
+    --print("jumpMoveEnd")
+
+    if self.isJumpMoveEnd then
+        return
+    end
+
     self.isJumpMoveEnd = true
 
     if self.isGliding then
         return
     end
 
-    self:setEntityProp("moveSpeed", tostring(0.0))
-    Skill.Cast(Me:cfg().freeFallSkill)
+    self:playFreeFallSkill()
 end
 
 function events:dead(dead)

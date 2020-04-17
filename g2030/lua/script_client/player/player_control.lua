@@ -14,16 +14,10 @@ local function showJumpCountMessage(jumpCount, maxJumpCount)
 end
 
 local function doJumpStateChange(control, player)
-    if player.isGliding then
-        player:setEntityProp("antiGravity", tostring(player.EntityProp.antiGravity))
-        player:setEntityProp("moveAcc", tostring(player.EntityProp.moveAcc))
-        player.motion = Lib.v3(0, 0, 0)
-        --player:setValue("isKeepAhead", false)
+    player:setEntityProp("gravity", tostring(player.EntityProp.gravity))
 
-        if player.isJumpMoveEnd then
-            player:setEntityProp("moveSpeed", tostring(0.0))
-        end
-        Skill.Cast(Me:cfg().freeFallSkill)
+    if player.isGliding then
+        player:playFreeFallSkill()
     else
         player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
         player:setEntityProp("moveAcc", tostring(0.0))

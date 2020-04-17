@@ -34,6 +34,14 @@ function Entity.ValueFunc:belt(value)
     Lib.emitEvent(Event.EVENT_ITEM_SHOP_UPDATE)
 end
 
+function Entity.ValueFunc:studySkill(value)
+    Lib.emitEvent(Event.EVENT_ITEM_SKILL_SHOP_UPDATE)
+end
+
+function Entity.ValueFunc:equipSkill(value)
+    Lib.emitEvent(Event.EVENT_ITEM_SKILL_EQUIP_UPDATE)
+end
+
 function Entity.ValueFunc:prop(value)
     Lib.emitEvent(Event.EVENT_PAY_SHOP_UPDATE, Define.TabType.Prop)
     print(" === Event.EVENT_PAY_SHOP_UPDATE == prop")

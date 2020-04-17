@@ -15,19 +15,8 @@ Define.petType = {
     plusPet = 2     --式神
 }
 
-Define.petQuality = {   --Todo质量支持为可配置的
-    SSR = 1,
-    SR = 2,
-    R = 3,
-    N = 4
-}
-
-Define.plusPetQuality = {
-    SSR = 1,
-    SR = 2,
-    R = 3,
-    N = 4
-}
+Define.petNu = 10           --Todo 这两个配置走yml读取
+Define.plusPetNu = 5
 
 Define.TabType = {
     Equip = 1,
@@ -44,6 +33,12 @@ Define.BuyStatus = {
     Unlock = 2, --解锁
     Buy = 3, --购买
     Used = 4, --使用
+}
+
+Define.SkillStatus = {
+    NoStudy = 1,    --未学习
+    Study = 2,      --学习
+    Equip = 3,      --装备技能
 }
 
 Define.ProcessState = {

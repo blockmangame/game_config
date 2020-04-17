@@ -39,7 +39,14 @@ end
 function EntityServer:doAttack(info)
     local attackProps,defenseProps = self:getDamageProps(info)
     --ocal damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
-    local damage = math.floor(math.max(attackProps.dmgBase* attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1))
+    print("---------doAttack------damage-1-----------------",attackProps.dmgBase)
+    print("---------doAttack------damage--2----------------",attackProps.dmgBaseRat)
+    print("---------doAttack------damage--3----------------",attackProps.dmgFactor)
+    print("---------doAttack------damage--4----------------",attackProps.atk)
+    print("---------doAttack------damage--5----------------",attackProps.dmgRealPlu)
+    print("---------doAttack------damage--6----------------",attackProps.hurtSub)
+    local damage =  math.max(attackProps.dmgBase+ attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1)
+    print("---------doAttack------damage------------------",damage)
     info.target:doDamage({
         from = self,
         damage = damage,
@@ -49,6 +56,19 @@ function EntityServer:doAttack(info)
     })
 end
 ---
+---自动锻炼方法
+---
+function EntityServer:doAutoExp()
+    self:addCurExp()
+    local nextTime = self:getAutoExp() *20;
+    if nextTime>0 then
+        self:timer(nextTime, function ()
+            self:doAutoExp()
+        end   )
+    end
+    
+end
+---
 ---治疗方法
 ---当玩家add了回血buff->HealingSpd变为正数->调用doHealing()->立即进行一次治疗->判断HealingSpd是否为0->开启计时器->loop
 ---当玩家remove了回血
@@ -56,30 +76,21 @@ end
 function EntityServer:doHealing()
     
     local healVal =self:getMaxHp() *self:getHealingVal()* self:getHealingPlu()
-    print("--------doHealing-----getMaxHp---------",self:getMaxHp())
-    print("--------doHealing-----getHealingVal---------",self:getHealingVal())
-    print("--------doHealing----- self:getHealingPlu()---------", self:getHealingPlu())
-    -- print("=========doHealing==========",healVal)
-    -- print("=========doHealing=spd=========",self:getHealingSpd())
 
-    if healVal <=0 then
-        return
-    end
-    if self:deltaHp(healVal) then
-        print("--------doHealing--------------",healVal)
-        print("--------doHealing--------------",Lib.v2s(healVal,3))
+    if healVal>0 and  self:deltaHp(healVal) then
         self:ShowFlyNum(healVal)
     end
 
 
     local nextTime = self:getHealingSpd() *20;
-    if nextTime>=0 then
+    if nextTime>0 then
         self:timer(nextTime, function ()
             self:doHealing()
         end   )
     end
 end
 function EntityServer:doDamage(info)
+    
     local damage, from, isRebound = info.damage, info.from, info.isRebound
     local damageCause = assert(info.cause, "must have a cause of doDamage")
 
@@ -97,9 +108,10 @@ function EntityServer:doDamage(info)
         end
         return
     end
-
+    print("---------deltaHp--------------",Lib.v2s(-damage))
     self:deltaHp(-damage)
 
+    print("---------ShowFlyNum--------------",Lib.v2s(-damage))
     self:ShowFlyNum(-damage)
     --function Actions.ShowNumberUIOnEntity(data, params, context)
     --
@@ -161,6 +173,37 @@ function EntityServer:ShowFlyNum(deltaHp)
     end
 end
 
+---
+---当玩家add了自动售卖buff
+---
+function EntityServer:doAutoSellExp(buff)
+    if buff.removed then	--可能被叠加规则、超时等情况清除掉了
+        return
+    end
+    self:timer(20, function ()
+        if Game.GetState() == "GAME_GO" and self.curHp>0 then
+            if self:isExpFull() then
+                self:sellExp()
+                self:doAutoSellExp(buff)
+            end
+        end
+    end   )
+end
+
+---
+---当玩家add了自动普攻buff
+---
+function EntityServer:doAutoNormalAtk(buff)
+    if buff.removed then	--可能被叠加规则、超时等情况清除掉了
+        return
+    end
+    self:timer(20, function ()
+        if Game.GetState() == "GAME_GO" and self.curHp>0 then
+            self:addCurExp()
+            self:doAutoNormalAtk(buff)
+        end
+    end   )
+end
 
 ---
 ---以下为添加EntityProp function类成员
@@ -183,6 +226,37 @@ function Entity.EntityProp:healingPct(value, add, buff)
         self:doHealing()
     end
 
+end
+---
+---重写持续伤害buff
+---
+function Entity.EntityProp:continueDamage(value, add, buff)
+    if add and self.curHp <= 0 then
+        return
+    end
+    local from = buff.from
+	local continueDamage = self:data("continueDamage")
+  --  continueDamage.damage = (continueDamage.damage or 0) + (add and value or -value)
+    continueDamage.dmgRat = value.dmgRat
+    continueDamage.dmgBase = BigInteger.Create(value.dmgBase[1],value.dmgBase[2])
+    continueDamage.spd =  (add and value.spd or 0)
+    if add then
+        if from and from.isPlayer then
+            from:doAttack({target = self, skill = {dmgRat = continueDamage.dmgRat,dmgBase = continueDamage.dmgBase}, originalSkillName = buff.fullName, cause = "ENGINE_PROP_CONTINUE_DAMAGE"})
+        end
+    end
+	if not continueDamage.timer then
+        continueDamage.timer = self:timer(continueDamage.spd*20, function()
+            if from and from.isPlayer then
+                from:doAttack({target = self, skill = {dmgRat = continueDamage.dmgRat,dmgBase = continueDamage.dmgBase}, originalSkillName = buff.fullName, cause = "ENGINE_PROP_CONTINUE_DAMAGE"})
+            end
+            if continueDamage.spd <= 0 then
+				continueDamage.timer = nil
+				return false
+			end
+			return true
+		end)
+	end
 end
 ---
 ---回复血量buff
@@ -265,9 +339,40 @@ function Entity.EntityProp:perExp(value, add, buff)
     useVal.bit =  value.bit or 0
     self:deltaPerExpPlus(BigInteger.Create(useVal.val,useVal.bit))
 end
+---
+---自动锻炼buff，每间隔value秒加一次效率锻炼值
+---
+function Entity.EntityProp:autoExp(value, add, buff)
+    print(value, add)
+    if self.curHp <= 0 then
+        return
+    end
+    local val = add and value or 0
+    self:setAutoExp(val)
+    if add then
+        self:doAutoExp()
+    end
+    
+end
 
 function Entity.ValueFunc:curLevel(value)
     Lib.emitEvent(Event.EVENT_LEVEL_CHANGE,value)
 end
 
+---
+---自动售卖
+---
+function Entity.EntityProp:autoSellExp(value, add, buff)
+    if add then
+        self:doAutoSellExp(buff)
+    end
+end
 
+---
+---自动普攻
+---
+function Entity.EntityProp:autoNormalAtk(value, add, buff)
+    if add then
+        self:doAutoNormalAtk(buff)
+    end
+end

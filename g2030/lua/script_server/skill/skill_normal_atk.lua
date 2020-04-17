@@ -12,6 +12,6 @@ function NormalAtk:cast(packet, from)
     --        doAtk(self,target,from)
     --    end
     --end
-    from:addExp()
+    from:addCurExp()
     SkillMissile.cast(self, packet, from)
 end

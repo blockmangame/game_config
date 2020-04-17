@@ -22,7 +22,8 @@ local function castSceneSkill(self)
 	if not self.isTouchPointMove then
 		return
 	end
-	Skill.Cast(self.curSkillCfg.fullName, {isTouchPointMove = self.isTouchPointMove, targetPos = self.targetPos})
+	Skill.Cast(self.curSkillCfg.fullName, {isTouchPointMove = self.isTouchPointMove, 
+		startPos = self.targetPos, targetPos = self.targetPos, needPre = true})
 end
 
 local function checkTouchInArea(touchPos,area)

@@ -22,7 +22,6 @@ end
 -----------------------------------Pet Model Test----------------------------------
 local Entity
 GMItem["g2030/创建一个跟随宠物"] = function(self)
-
     local entity = EntityServer.Create({cfgName = "myplugin/pet_1_1_1", pos = self:getPosition()})
     --table.insert(EntityList, entity)
     Entity = entity
@@ -79,13 +78,13 @@ GMItem["g2030技能/11号技能"] = function(self)
     Skill.Cast("myplugin/palyer_range_skill_thunderclap_11")
 end
 GMItem["g2030技能/12号技能"] = function(self)
-    Skill.Cast("myplugin/player_skill_triple_attack")
+    Skill.Cast("myplugin/player_range_skill_indicator_sub_12")
 end
 GMItem["g2030技能/13号技能"] = function(self)
     Skill.Cast("myplugin/player_range_skill_magic_circle_13")
 end
 GMItem["g2030技能/14号技能"] = function(self)
-    Skill.Cast("myplugin/player_skill_triple_attack")
+    Skill.Cast("myplugin/player_range_skill_dragon_wave_14")
 end
 GMItem["g2030技能/15号技能"] = function(self)
     Skill.Cast("myplugin/player_control_skill_15")

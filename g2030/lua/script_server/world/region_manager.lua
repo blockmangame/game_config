@@ -5,17 +5,46 @@
 ---
 ---@class RegionManager
 
+local eventRegionMap = {
+    ["shop"] = RegionShop,
+    ["sell"] = RegionSell,
+}
+
 function RegionManager:init()
     Lib.subscribeEvent("EVENT_REGION_ENTER", self.onRegionEnter)
     Lib.subscribeEvent("EVENT_REGION_LEAVE", self.onRegionLeave)
 end
 
 function RegionManager.onRegionEnter(param)
-    print("RegionManager.onRegionEnter")
+    --print("RegionManager.onRegionEnter " .. param.inRegionKey)
+
+    local cfg = param.regionCfg
+    if not cfg.type then
+        return
+    end
+
+    local class = eventRegionMap[cfg.type]
+    if not class then
+        return
+    end
+
+    class:onEntityEnter(param.player, cfg)
 end
 
 function RegionManager.onRegionLeave(param)
-    print("RegionManager.onRegionLeave")
+    --print("RegionManager.onRegionLeave " .. param.inRegionKey)
+
+    local cfg = param.regionCfg
+    if not cfg.type then
+        return
+    end
+
+    local class = eventRegionMap[cfg.type]
+    if not class then
+        return
+    end
+
+    class:onEntityLeave(param.player, cfg)
 end
 
 return RegionManager

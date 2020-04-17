@@ -50,10 +50,11 @@ local function castSetSkill(self,val)
     Skill.Cast(packet.name, packet, self)
 end
 ---增加一次锻炼值
-function Player:addExp()
+function Player:addCurExp()
+    print("---------addExp---------------------")
     local newExp = self:getPerExpPlus()+self:getCurExp()
     local maxExp = self:getMaxExp()
-    if newExp>maxExp then
+    if self:isExpFull() and newExp>maxExp then
         newExp = maxExp
     end
     self:setCurExp(newExp)
@@ -80,6 +81,19 @@ end
 ---开启最大血量加成特权
 function Player:openHpMaxPlus()
     self:setValue("hpMaxPlus",playerCfg.hpMaxPlus)
+end
+---开启神圣伤害加成特权
+function Player:setOpenRealDmg()
+    self:deltaDmgRealPlu(World.cfg.realDmgPlus-1)
+end
+---开启移速加成特权
+function Player:setMovePlus()
+    --self:setValue("hpMaxPlus",playerCfg.hpMaxPlus)
+end
+---开启锻炼值无上限特权
+function Player:setInfiniteExp()
+    self:setValue("infiniteExp",true)
+    self:setCurExp(self:getCurExp())--触发一次exp改变回调，刷新经验条显示效果
 end
 
 ---
@@ -134,6 +148,7 @@ function Player:resetHp()
     self:setValue("curHp", self:getMaxHp())
 end
 function Player:setCurExp(val)
+    print("---------setCurExp---------------------")
     self:setValue("curExp", val)
     if self:getCurHp()>self:getMaxHp() then--改变锻炼值造成血量上限低于当前血量时直接强制重置血量（无血壳）
        
@@ -157,6 +172,22 @@ function Player:addLevel()
         print("-------------------------",Lib.v2s(response,3))
     end)
     
+end
+function Player:enterArena()
+    AsyncProcess.takeGroupStart(self, "g2030", "", function(isSuccess, userIds)
+        if isSuccess then
+            return
+        end
+        ---请求服务器失败，玩家全部传送回去出生点
+        for _, userId in pairs(userIds) do
+            local player = PlayerManager:getPlayerByUserId(userId)
+            if player then
+                --传送走玩家
+                HostApi.resetPos(player.rakssid, GameConfig.initPos.x, GameConfig.initPos.y + 0.5, GameConfig.initPos.z)
+                ---TODO 添加提示
+            end
+        end
+    end)
 end
 ---设置阵营
 function Player:setTeam(id)
