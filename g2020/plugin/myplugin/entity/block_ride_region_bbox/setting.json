@@ -5,7 +5,19 @@
     "hideSelfName": true,
     "collision": true,
     "collisionCamp": 1,
-    
+    "boundingVolume": {
+        "type": "Composite",
+        "params": [
+            {
+                "type": "Box",
+                "params": [
+                    5,
+                    5,
+                    5
+                ]
+            }
+        ]
+    },
     "blockRideRegionCfg": "myplugin/block_ride_region_bbox_region",
     "blockRideRegionKey": "block_ride_region_bbox_region"
 }
