@@ -50,7 +50,12 @@ function events:beginFall()
 end
 
 function events:jumpMoveEnd()
-    print("jumpMoveEnd")
+    --print("jumpMoveEnd")
+
+    if self.isJumpMoveEnd then
+        return
+    end
+
     self.isJumpMoveEnd = true
 
     if self.isGliding then
