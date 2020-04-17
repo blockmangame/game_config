@@ -3,10 +3,10 @@
 --- Created by bell.
 --- DateTime: 2020/3/21 22:39
 ---
-require "script_client.player.player"
-require "script_client.ui.ui_schedule"
 require "script_client.entity.entity"
+require "script_client.entity.entity_event"
 
+require "script_client.ui.ui_schedule"
 require "script_client.world.region"
 
 require "script_client.other.scene_indicator"
