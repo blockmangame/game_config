@@ -21,6 +21,8 @@ function Player:initPlayer()
         mainData.actorName = "ninja_boy.actor"
     end
 
+    self.isArenaMode = false
+
     self:initCurrency()
     self:tickLifeSteal()
 end
@@ -94,6 +96,31 @@ end
 function Player:setInfiniteExp()
     self:setValue("infiniteExp",true)
     self:setCurExp(self:getCurExp())--触发一次exp改变回调，刷新经验条显示效果
+end
+---设置无敌
+function Player:setInvincible()
+    self:deltaHurtSub(1)
+end
+---设置取消无敌
+function Player:setUninvincible()
+    self:deltaHurtSub(-1)
+end
+---是否为竞技场模式
+function Player:IsArenaMode()
+    return self.isArenaMode
+end 
+---从竞技场返回世界
+function Player:backNormalWorld()
+    self.isArenaMode = false
+    --TODO
+end 
+---增加竞技场分数
+function Player:addArenaScore(val)
+    self:setValue("arenaScore",self:getArenaScore()+val)
+end
+---重置竞技场积分
+function Player:resetArenaScore()
+    self:setValue("arenaScore",0)
 end
 
 ---
@@ -176,17 +203,14 @@ end
 function Player:enterArena()
     AsyncProcess.takeGroupStart(self, "g2030", "", function(isSuccess, userIds)
         if isSuccess then
+            local map = "map_002"
+            if type(map) == "string" then
+                map = World.CurWorld:createDynamicMap(map, true)
+            end
+            self:setMapPos(map, params.pos or map.cfg.initPos, params.ry, params.rp)
             return
         end
-        ---请求服务器失败，玩家全部传送回去出生点
-        for _, userId in pairs(userIds) do
-            local player = PlayerManager:getPlayerByUserId(userId)
-            if player then
-                --传送走玩家
-                HostApi.resetPos(player.rakssid, GameConfig.initPos.x, GameConfig.initPos.y + 0.5, GameConfig.initPos.z)
-                ---TODO 添加提示
-            end
-        end
+        
     end)
 end
 ---设置阵营
