@@ -50,7 +50,8 @@ local function castSetSkill(self,val)
     Skill.Cast(packet.name, packet, self)
 end
 ---增加一次锻炼值
-function Player:addExp()
+function Player:addCurExp()
+    print("---------addExp---------------------")
     local newExp = self:getPerExpPlus()+self:getCurExp()
     local maxExp = self:getMaxExp()
     if self:isExpFull() and newExp>maxExp then
@@ -147,6 +148,7 @@ function Player:resetHp()
     self:setValue("curHp", self:getMaxHp())
 end
 function Player:setCurExp(val)
+    print("---------setCurExp---------------------")
     self:setValue("curExp", val)
     if self:getCurHp()>self:getMaxHp() then--改变锻炼值造成血量上限低于当前血量时直接强制重置血量（无血壳）
        
