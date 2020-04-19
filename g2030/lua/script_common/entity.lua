@@ -43,6 +43,7 @@ ValueDef.petEquippedList= {false,   false,  true,   true,       {},    true}--�
 ValueDef.plusPetEquippedIndex={false,false, true,   true,       0,      true}--当前角色式神装备表
 ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,      true}--当前角色获取过的宠物实体总数（不会减少）
 ValueDef.allPetAttr     = {false,   false,  true,   true,       {},    true}--宠物、式神相关数据
+ValueDef.petPageNu      = {false,   false,  false,  false,      2,     true}--当前玩家宠物背包页数量
 
 --[[
 宠物、式神相关数据存储索引说明：索引为createPet后返回的index，通过索引插入的AllPetAttr，该表不为序列，期间可能会出现nil
@@ -53,7 +54,7 @@ ValueDef.allPetAttr     = {false,   false,  true,   true,       {},    true}--�
  minorID = 0，        --式神副ID
  petType = 0,         --是宠物还是式神
  level = 1,           --当前强化等级
- petCoinTransRage = 1,--该宠物Entity当前的金币增益
+ petCoinTransRate = 1,--该宠物Entity当前的金币增益
  petChiTransRate = 1, --该宠物Entity当前的气增益
  plusPetATKRate = 1}, --该式神Entity当前的攻击倍率增益
 --]]

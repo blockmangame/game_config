@@ -11,7 +11,7 @@ local petType = T(Define, "petType");
  minorID = 0,         --式神的副ID
  petType = 0,         --是宠物还是式神
  level = 1,           --当前强化等级
- petCoinTransRage = 1,--该宠物Entity当前的金币增益
+ petCoinTransRate = 1,--该宠物Entity当前的金币增益
  petChiTransRate = 1, --该宠物Entity当前的气增益
  plusPetATKRate = 1}, --该式神Entity当前的攻击倍率增益
 --]]
@@ -31,9 +31,9 @@ function Player:getNewPet(ID, coinTransRatio, chiTransRatio)
     local allAttribs, index = getPet(self, petType.pet, ID);
     local cfg = Entity.GetCfg(Player.turnID2Plugin(petType.pet, ID));
     if coinTransRatio then
-        allAttribs[index].petCoinTransRage  = coinTransRatio;
+        allAttribs[index].petCoinTransRate  = coinTransRatio;
     else
-        allAttribs[index].petCoinTransRage = cfg.coinTransRatio;
+        allAttribs[index].petCoinTransRate = cfg.coinTransRatio;
     end
     if chiTransRatio then
         allAttribs[index].chiTransRatio = chiTransRatio;
@@ -60,7 +60,7 @@ function Player:callPet(index, rideIndex)
     local petSetting = self:getValue("allPetAttr")[index];
     local plugin = Player.turnID2Plugin(petSetting.petType, petSetting.ID);
     local createIndex = self:createPet(plugin, true);
-    if rideIndex > 2 or rideIndex < 1 then
+    if rideIndex > 3 or rideIndex < 1 then
         print("=======Wrong pet rideIndex :" .. rideIndex .. "=======");
         return;
     end
@@ -71,8 +71,8 @@ function Player:callPet(index, rideIndex)
     else
         self:setValue("plusPetEquippedIndex", index);
     end
-    self.equipPetList[index] =createIndex;
-
+    self.equipPetList[rideIndex] = {index = index, objID = createIndex}
+    self:syncPet()
     local petEntity = self:getPet(createIndex);
     petEntity:rideOn(self, false, rideIndex);
 end
@@ -90,25 +90,39 @@ function Player:addPet(entity, index)
     data[index] = entity
     entity:setValue("ownerId", self.objID)
     entity:setValue("petIndex", index)
-    self:syncPet()
     return index
 end
+
 function Player:syncPet()
     local list = {}
+    print(Lib.v2s(self.equipPetList))
+    for index, entity in pairs(self.equipPetList) do
+        list[index] = entity
+    end
     local packet = {
         pid = "PetList",
         list = list,
     }
-    for index, entity in pairs(self.equipPetList) do
-        list[index] = entity
-    end
     self:sendPacket(packet)
 end
 
 function Player:recallPet(index)
-    for entityIndex, i in pairs(self.equipPetList) do
-        if index == i then
-            self:removePet(entityIndex);
+    for ridePoint, V in pairs(self.equipPetList) do
+        if index == V.index then
+            self.equipPetList[ridePoint] = nil
+            if self:getValue("plusPetEquippedIndex") == index then
+                self:setValue("plusPetEquippedIndex", 0)
+            end
+            local tempPetEquipList = self:getValue("petEquippedList")
+            for k, v in pairs(tempPetEquipList) do
+                if v == index then
+                    tempPetEquipList[k] = nil
+                    self:setValue("petEquippedList", tempPetEquipList)
+                end
+            end
+            self:removePet(V.objID);
+            self:syncPet()
+            print(Lib.v2s( self.equipPetList))
             return;
         end
     end
@@ -116,5 +130,9 @@ function Player:recallPet(index)
 end
 
 function Player:deletePet(index)
-
+    if self:getPetAttr(index) then
+        local tempData = self:getValue("allPetAttr")
+        tempData[index] = nil
+        self:setValue("allPetAttr", tempData)
+    end
 end
