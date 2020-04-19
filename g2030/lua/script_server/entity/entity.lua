@@ -39,7 +39,15 @@ end
 function EntityServer:doAttack(info)
     local attackProps,defenseProps = self:getDamageProps(info)
     --ocal damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
-    local damage =  math.max(attackProps.dmgBase+ attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1)info.target:doDamage({
+    print("---------doAttack------damage-1-----------------",attackProps.dmgBase)
+    print("---------doAttack------damage--2----------------",attackProps.dmgBaseRat)
+    print("---------doAttack------damage--3----------------",attackProps.dmgFactor)
+    print("---------doAttack------damage--4----------------",attackProps.atk)
+    print("---------doAttack------damage--5----------------",attackProps.dmgRealPlu)
+    print("---------doAttack------damage--6----------------",attackProps.hurtSub)
+    local damage =  math.max(attackProps.dmgBase+ attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1)
+    print("---------doAttack------damage------------------",damage)
+    info.target:doDamage({
         from = self,
         damage = damage,
         skillName = info.originalSkillName,
@@ -51,7 +59,7 @@ end
 ---自动锻炼方法
 ---
 function EntityServer:doAutoExp()
-    self:addExp()
+    self:addCurExp()
     local nextTime = self:getAutoExp() *20;
     if nextTime>0 then
         self:timer(nextTime, function ()
@@ -101,8 +109,6 @@ function EntityServer:doDamage(info)
         return
     end
     self:deltaHp(-damage)
-
-   
     self:ShowFlyNum(-damage)
     --function Actions.ShowNumberUIOnEntity(data, params, context)
     --
@@ -190,7 +196,7 @@ function EntityServer:doAutoNormalAtk(buff)
     end
     self:timer(20, function ()
         if Game.GetState() == "GAME_GO" and self.curHp>0 then
-            self:addExp()
+            self:addCurExp()
             self:doAutoNormalAtk(buff)
         end
     end   )
@@ -217,6 +223,37 @@ function Entity.EntityProp:healingPct(value, add, buff)
         self:doHealing()
     end
 
+end
+---
+---重写持续伤害buff
+---
+function Entity.EntityProp:continueDamage(value, add, buff)
+    if add and self.curHp <= 0 then
+        return
+    end
+    local from = buff.from
+	local continueDamage = self:data("continueDamage")
+  --  continueDamage.damage = (continueDamage.damage or 0) + (add and value or -value)
+    continueDamage.dmgRat = value.dmgRat
+    continueDamage.dmgBase = BigInteger.Create(value.dmgBase[1],value.dmgBase[2])
+    continueDamage.spd =  (add and value.spd or 0)
+    if add then
+        if from and from.isPlayer then
+            from:doAttack({target = self, skill = {dmgRat = continueDamage.dmgRat,dmgBase = continueDamage.dmgBase}, originalSkillName = buff.fullName, cause = "ENGINE_PROP_CONTINUE_DAMAGE"})
+        end
+    end
+	if not continueDamage.timer then
+        continueDamage.timer = self:timer(continueDamage.spd*20, function()
+            if from and from.isPlayer then
+                from:doAttack({target = self, skill = {dmgRat = continueDamage.dmgRat,dmgBase = continueDamage.dmgBase}, originalSkillName = buff.fullName, cause = "ENGINE_PROP_CONTINUE_DAMAGE"})
+            end
+            if continueDamage.spd <= 0 then
+				continueDamage.timer = nil
+				return false
+			end
+			return true
+		end)
+	end
 end
 ---
 ---回复血量buff

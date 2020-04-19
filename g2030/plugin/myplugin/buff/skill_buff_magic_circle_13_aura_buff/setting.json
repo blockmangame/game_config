@@ -1,4 +1,12 @@
 {
-    "continueDamage":15,
+    "continueDamage":
+    {
+        "?spd":"间隔时间，s",
+        "spd":2,
+        "?dmgRat":"伤害加成部分",
+        "dmgRat":0.5,
+        "?dmgBase":"固定伤害，第1位是数字，第2位是后面几个0",
+        "dmgBase":[123,1]
+    },
 	"avoidBuff":["myplugin/skill_buff_magic_circle_13_aura_buff"]
 }

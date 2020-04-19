@@ -9,6 +9,11 @@ GMItem["g2030/减少跳跃次数"] = function(self)
     self:setValue("jumpCount", self:getValue("maxJumpCount") - 1);
 end
 
+GMItem["g2030/放置区域方块"] = function(self)
+    local pos = Lib.v3(self:getPosition().x, self:getPosition().y, self:getPosition().z):blockPos()
+    self.map:setBlockConfigId(pos, 2000)
+end
+
 GMItem["g2030/清空当前修炼值"] = function(self)
     self:resetExp()
 end

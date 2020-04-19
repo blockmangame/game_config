@@ -31,6 +31,25 @@ end
 --    --TODO
 --end
 
+function Player:playFreeFallSkill()
+    ---@type JumpConfig
+    local JumpConfig = T(Config, "JumpConfig")
+    local config = JumpConfig:getFreeFallConfig()
+    if config then
+        self:setEntityProp("gravity", tostring(config.fallGravity))
+    end
+
+    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
+    self:setEntityProp("moveAcc", tostring(self.EntityProp.moveAcc))
+    self.motion = Lib.v3(0, 0, 0)
+    --player:setValue("isKeepAhead", false)
+
+    if self.isJumpMoveEnd then
+        self:setEntityProp("moveSpeed", tostring(0.0))
+    end
+    Skill.Cast(self:cfg().freeFallSkill)
+end
+
 function Player:recoverJumpProp()
     self:setEntityProp("jumpSpeed", tostring(self.EntityProp.jumpSpeed))
     self:setEntityProp("gravity", tostring(self.EntityProp.gravity))

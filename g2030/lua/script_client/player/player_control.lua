@@ -15,16 +15,9 @@ end
 
 local function doJumpStateChange(control, player)
     player:setEntityProp("gravity", tostring(player.EntityProp.gravity))
-    if player.isGliding then
-        player:setEntityProp("antiGravity", tostring(player.EntityProp.antiGravity))
-        player:setEntityProp("moveAcc", tostring(player.EntityProp.moveAcc))
-        player.motion = Lib.v3(0, 0, 0)
-        --player:setValue("isKeepAhead", false)
 
-        if player.isJumpMoveEnd then
-            player:setEntityProp("moveSpeed", tostring(0.0))
-        end
-        Skill.Cast(Me:cfg().freeFallSkill)
+    if player.isGliding then
+        player:playFreeFallSkill()
     else
         player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
         player:setEntityProp("moveAcc", tostring(0.0))
@@ -87,6 +80,8 @@ local function checkJump(control, player)
     if tonumber(player:getEntityProp("jumpSpeed")) <= 0 then
         return
     end
+
+    --print("gravity " .. player:getEntityProp("gravity"))
 
     local playerCfg = player:cfg()
     local worldCfg = World.cfg

@@ -20,6 +20,10 @@ Event.register("EVENT_TELEPORT_SHADER_DISABLE")
 Event.register("EVENT_REGION_ENTER")
 Event.register("EVENT_REGION_LEAVE")
 
+Event.register("EVENT_ARENA_COUNTTIME")
+
+
+
 if World.isClient then
     Event.register("EVENT_SHOW_BOTTOM_MESSAGE")
     Event.register("EVENT_TEAM_SHOP_REFRESH")

@@ -38,6 +38,8 @@ ValueDef.islandLv   = {false,	false,	true,	false,       1,		true}--当前岛屿�
 ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},     true }--已拥有的阵营皮肤
 ValueDef.teamSkinId = {false,   true,    true,  false,       0,     true }--已装备的阵营皮肤id
 
+ValueDef.arenaScore = {false,   true,    true,  true,       0,     false }--竞技场分数
+
 --====================宠物、式神相关数据================
 ValueDef.petEquippedList= {false,   false,  true,   true,       {},    true}--当前角色宠物装备表
 ValueDef.plusPetEquippedIndex={false,false, true,   true,       0,      true}--当前角色式神装备表
@@ -236,12 +238,19 @@ function Entity:getHurtSub()
 end
 function Entity:deltaHurtSub(val)
     assert(tonumber(val), "invalid input:" .. val .. "is not a number")
-    if val >1 then
+    if val >=1 then
         Lib.log("HurtSub cannot exceed 1!")
         return
     end
     self:setValue("hurtSub",self:getValue("hurtSub")-val)
 end
+
+function Entity:getArenaScore()
+    return math.max(self:getValue("arenaScore"),0)
+end
+
+
+
 
 ---设置阵营Id
 function Entity:setTeamId(id)
