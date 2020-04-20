@@ -167,3 +167,7 @@ end
 function handles:ModSkin(packet)
 	self:changeSkin(packet.skin)
 end
+
+function handles:GMToggleRobotDance(packet)
+	self:setRobotRandomDanceToShow(packet.toDance)
+end

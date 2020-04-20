@@ -135,3 +135,7 @@ Lib.subscribeEvent(Event.EVENT_ANTI_ADDICTION_SYSTEM_EXIT, function()
         window:refreshUi(showFunc, 2)
     end
 end)
+
+Lib.subscribeEvent(Event.EVENT_TOGGLE_ROBOT_DANCE, function(packet)
+    Me:sendPacket(packet)
+end)

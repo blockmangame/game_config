@@ -1,5 +1,6 @@
 GAME_INIT 
 {
+    CallTrigger(event = "FUNC_CREATE_ROBOT")
     CallTrigger(event = "FUNC_BLOOM_TIMER")
     @BGMConfigs = ReadGameCsv(path = "bgm.csv")
     @CDReward = ReadGameCsv(path = "cd_reward.csv")
@@ -162,6 +163,14 @@ INIT_WORK_TASK_DATA(){    --打工配置表的读取
         }
         $mdict = NewDictionary($redict)
         DictionarySet(dict = @worlkMoeny, key = DictionaryGet(dict = $mdict, key = "index"), value = $mdict)
+    }
+}
+
+FUNC_CREATE_ROBOT
+{
+    @robots = []
+    ForLoop(from = 1, to = @robotSum, key = "id") {
+        ArrayAppend(array = @robots, value = CreateNpc(cfgName = GetGlobalVar(key = "robotCfg") or "myplugin/robot", map = "map002", pos = { x = 229, y = 16, z = 141}))
     }
 }
 

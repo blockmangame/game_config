@@ -1,0 +1,78 @@
+ENTITY_CLICK {}
+
+ENTITY_ENTER {
+    If(@robotHadHouse > 0) {
+        @robotHadHouse = @robotHadHouse - 1
+        CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
+    }
+    $isOdd = ( Random(min = 1, max = 10) % 2 ) == 1
+    $pos = $isOdd and { x = 182, y = 16, z = 247 } or { x = 229, y = 16, z = 141}
+    SetEntityPosition(entity = $obj1, map = $isOdd and "map001" or "map002", pos = $pos)
+}
+
+ENTITY_LEAVE {
+    If($obj1.house) {
+        CallTrigger(object = $obj1, event = "REMOVE_HOUSE_OUTSIDE")
+    }
+}
+
+REMOVE_HOUSE_OUTSIDE{
+    $house = GetObjectVar(obj = $obj1, key = "house")
+    $map = GetObjectVar(obj = $house, key = "houseInsideMap")
+    SetMapVar(map = $map, key = "isRemove", value = true)
+    $region = GetObjectVar(obj = $house, key = "region")
+    SetRegionOwner(region = $region, owner = nil)
+    KillEntity(entity = $house)
+}
+
+CREATE_OWNER_HOUSE{
+    $houseCfg = "myplugin/house1"
+    $obj1.houseVars = [
+            {
+                houseCfg = $houseCfg,
+                houseSelectColor = GetEntityCfg(fullName = $houseCfg, key = "defaultColor"),
+                houseInsideFurnishing = Copy(value = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultFurniture") or []),
+                houseInsideRegionColors = Copy(value = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultInsideMapColorTb") or {}),
+                isCurEquip = "enable",
+                houseName = GetEntityCfg(fullName = $houseCfg, key = "houseDefaultName") or "",
+                houseType = GetEntityCfg(fullName = $houseCfg, key = "houseType") or "",
+                houseId = Concat(p1 = GetTime(), p2 = GetGameTime(), p3 = Random(min = 0, max = 999999)),
+                houseInsideDoor = GetEntityCfg(fullName = $houseCfg, key = "insideDoor") or "myplugin/house_base_inside_door"
+            }
+    ]
+    $dict = NewDictionary(ArrayGet(array = $obj1.houseVars, index = 1))
+    ------------------------------------------ 获得当前地图上的空出的区域，创建房子 * 
+    $regions = GetAllRegion(map = GetEntityMap(entity = $obj1))
+    Foreach(array = $regions, key = "region"){
+        If(not GetRegionOwner(region = $region) and GetRegionConfig(region = $region, key = "isHouseRegion")){
+            CallTrigger(object = $obj1, event = "CREATE_HOUSE_OUTSIDE", region = $region, 
+                houseCfg = DictionaryGet(dict = $dict, key = "houseCfg"),
+                houseColor = DictionaryGet(dict = $dict, key = "houseSelectColor"))
+            Break()
+        }
+    }
+}
+
+CREATE_HOUSE_OUTSIDE{
+    $yaw = GetRegionConfig(region = $region, key = "regionHouseYaw")
+    $housePosOffset = GetEntityCfg(fullName = $houseCfg, key = "housePosOffset") or {x = 0, y = 0, z = 0}
+    $houseMap = $houseMap or GetEntityMap(entity = $obj1)
+    $housePos = $housePos or GetEntityPosition(entity = $obj1)
+    $house = CreateNpc(map = $houseMap, cfgName = $houseCfg, pos = $housePos)
+    $regionCenter = GetRegionCenter(region = $region)
+    $pos = {x = GetPosX(pos = $regionCenter), y = GetPosY(pos = GetRegionMin(region = $region)), z = GetPosZ(pos = $regionCenter)}
+    $pos = ComputeV3(p1 = V3ToBlockPos(v3 = $pos), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw))
+    $pos = ComputeV3(p1 = $pos, op = "add", p2 = Table(x = 0.5,y = 0,z = 0.5))
+    SetEntityPosition(entity = $house, pos = $pos, map = GetEntityMap(entity = $house))
+    SetEntityYaw(entity = $house, rotationYaw = $yaw)
+    SetBodyYaw(entity = $house, yaw = $yaw)
+
+    -- 改变房子外部颜色，通过加buff
+    AddEntityBuff(entity = $house, cfg = $houseColor)
+
+    SetRegionOwner(region = $region, owner = $house)
+    SetObjectVar(obj = $house, key = "owner", value = $obj1)
+
+    SetObjectVar(obj = $obj1, key = "house", value = $house)
+    SetObjectVar(obj = $house, key = "region", value = $region)
+}
