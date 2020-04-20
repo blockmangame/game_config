@@ -438,6 +438,14 @@
                 "key": "joinFamilyNum",
                 "value": 0,
                 "save": true
+            },
+            {
+                "key": "lottery",
+                "value": {
+                    "day" : 2020100,
+                    "num" : 10
+                },
+                "save": true
             }
         ]
     },
@@ -827,7 +835,7 @@
             0.7,
             2,
             0,
-            1,
+            0,
             0,
             0.4,
             1,
@@ -854,7 +862,7 @@
             0.4,
             1,
             1,
-            1,
+            0,
             0,
             0.43,
             1,
@@ -874,7 +882,9 @@
     },
     "worldTimeSpeed": 2,
     "autoChangSkinTime": 30,
-    "minViewRange": 250,
-    "midViewRange": 288,
-    "threadRespondEventMaxNum" : 10
+    "minViewRange": 256,
+    "midViewRange": 256,
+    "threadRespondEventMaxNum" : 30,
+    "limitBuyLotteryNum" : 10,
+    "isChina" : false
 }

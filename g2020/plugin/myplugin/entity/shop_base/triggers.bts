@@ -6,6 +6,15 @@ BUY_SHOP(){
    $hintImage = GetItemCfg(fullName = $itemCfgName, key = "hintImage")
    $hintDesc = GetItemCfg(fullName = $itemCfgName, key = "hintDesc")
    $obj2.buySessionSS = ($obj2.buySessionSS or 0 ) + 1
+
+   @canBuyShopItem = true
+
+   CallTrigger(event = "CHECK_PLAYER_BUY_LOTTERY_TIMES", object = $obj1, player = $obj2)
+   If(not @canBuyShopItem)
+   {
+       Return()
+   }
+
    If(not $price or $price == 0){ --不要钱不弹窗直接购买
       CallTrigger(event = "SURE_BUY", object = $obj2,  objID = GetObjectID(object = $obj1), checkId = $obj2.buySessionSS)
    }Else{
@@ -23,7 +32,7 @@ BUY_SHOP(){
         rightCoinId = $coinId,
         rightContent = $price
       }
-      
+
       $content = {
          msg = "gui_sure_buy_this",
          args = [$Name]
@@ -31,4 +40,27 @@ BUY_SHOP(){
       $tipType = 5
       ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj2, tipType = $tipType, event = "SURE_BUY", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $Context)
    }
+}
+
+CHECK_PLAYER_BUY_LOTTERY_TIMES
+{
+    If(not GetWorldVar(key = "isChina")) {
+        Return()
+    }
+
+    $buyGiftNum = GetWorldVar(key = "buyGiftNum")
+    $itemFullName = GetConfigVar(obj = $obj1, key = "sellItem")
+
+    $isLottery = GetConfigVar(obj = $obj1, key = "isLottery")
+    If(not $isLottery) {
+        Return()
+    }
+
+    If(not CheckCanBuyLotteryNum(player = $player))
+    {
+        $tipType = 0
+        @canBuyShopItem = false
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $player, p2 = "buy_lottery_limit", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        Return()
+    }
 }
