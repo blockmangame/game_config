@@ -309,6 +309,7 @@ FUNC_TOGGLE_BLOOM_AND_EMISSSION_COLOR_STRENGTH
 
 ENTITY_ENTER
 {
+    CallTrigger(object = $obj1, event = "OPEN_DANCE")
     CallTrigger(object = $obj1, event = "FUNC_TOGGLE_BLOOM_AND_EMISSSION_COLOR_STRENGTH")
     UpdateUIData(player = $obj1, ui = "mainExtension", data = {
         guideEnd = $obj1.guideStep == @GuideEnd,

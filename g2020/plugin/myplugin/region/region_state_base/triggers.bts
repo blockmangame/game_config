@@ -2,10 +2,10 @@ REGION_ENTER {
     If(IsPlayer(entity = $obj1))
     {
         $ride = GetRideOn(entity = $obj1)
-        If($inRegionKey == "dances" && (not $ride || IsPlayer(entity = $ride)))
-        {
-            CallTrigger(object = $obj1, event = "OPEN_DANCE")
-        }
+        -- If($inRegionKey == "dances" && (not $ride || IsPlayer(entity = $ride)))
+        -- {
+        --     CallTrigger(object = $obj1, event = "OPEN_DANCE")
+        -- } ---怕以后又要加舞蹈区域限制，先注释。
         CallTrigger(event = "FUNC_REGION_STATE_OPERATION", object = $obj1, isLeave = false, state = $inRegionKey)
     }
 }
@@ -13,10 +13,10 @@ REGION_ENTER {
 REGION_LEAVE {
     If(IsPlayer(entity = $obj1))
     {
-        If($inRegionKey == "dances")
-        {
-            CallTrigger(object = $obj1, event = "CLOSE_DANCE")
-        }
+        -- If($inRegionKey == "dances")
+        -- {
+        --     CallTrigger(object = $obj1, event = "CLOSE_DANCE")
+        -- } ---怕以后又要加舞蹈区域限制，先注释。
         CallTrigger(event = "FUNC_REGION_STATE_OPERATION", object = $obj1, isLeave = true, state = $inRegionKey)
     }
 }
