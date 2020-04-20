@@ -6,7 +6,7 @@
 local class = require"common.class"
 local ProcessTeam = class("ProcessTeam", require"script_server.process.process_base")
 local teamCountList = {}
-local teamPosList = {}
+local playerInfoList = {}
 local worldCfg = World.cfg
 local winner = Define.Team.Neutrality
 
@@ -26,7 +26,10 @@ function ProcessTeam:initProcess()
     end
     for _, info in pairs(worldCfg.team) do
         if info.id ~= Define.Team.Neutrality and not teamCountList[info.id] then
-            teamCountList[info.id] = 0
+            teamCountList[info.id] = {
+                playerCount = 0,
+                kills = 0
+            }
         end
     end
     --发送邀请提示
@@ -44,14 +47,66 @@ function ProcessTeam:onWaitingEnd()
     })
 end
 
+function ProcessTeam:processOver()
+    self:countTeamKills()
+    if self:doFinalJudge() then
+        self.processOverTick = self.curTick
+        self:setState(Define.ProcessState.ProcessOver)
+        self:onProcessOver()
+    end
+end
+
+function ProcessTeam:doFinalJudge()
+    local maxKill = 0
+    for id, info in pairs(teamCountList) do
+        if info.kills > maxKill then
+            winner = id
+        end
+    end
+    return true
+end
+
+function ProcessTeam:countTeamKills()
+    for objID, info in pairs(playerInfoList) do
+        if not info.isDead then
+            local player = World.CurWorld:getEntity(objID)
+            if not player then
+                return
+            end
+            info.kills = player:getTeamKills() - info.oldKills
+        end
+        teamCountList[info.team].kills = teamCountList[info.team].kills + info.kills
+    end
+end
+
+function ProcessTeam:onProcessOver()
+    table.sort(playerInfoList, function(a, b)
+        return a.kills > b.kills
+    end)
+    self:doReward()
+    Game.onActivityFinish(self.id)
+end
+
+function ProcessTeam:doReward()
+    for objID, v in pairs(playerInfoList) do
+        local player = World.CurWorld:getEntity(objID)
+        if player and not v.isDead then
+            if v.team == winner then
+                ---胜利动画
+            end
+            ---玩家奖励
+        end
+    end
+end
+
 function ProcessTeam:needKeepWaiting()
     return self.playerCount == Game.GetAllPlayersCount()
 end
 
 function ProcessTeam:doJudge()
     local surviveTeam = 0
-    for id, count in pairs(teamCountList) do
-        if count > 0 then
+    for id, info in pairs(teamCountList) do
+        if info.playerCount > 0 then
             surviveTeam = surviveTeam + 1
             winner = id
         end
@@ -68,9 +123,9 @@ function ProcessTeam:onEntityJoin(objID)
     end
     local teamId = player:getTeamId()
     if not teamCountList[teamId] then
-        teamCountList[teamId] = 0
+        return
     end
-    teamCountList[teamId] = teamCountList[teamId] + 1
+    teamCountList[teamId].playerCount = teamCountList[teamId].playerCount + 1
     self:transferIn(objID)
 end
 
@@ -80,30 +135,46 @@ function ProcessTeam:transferIn(objID)
         return
     end
     --传送，记录坐标
-    if not teamPosList[objID] then
-        teamPosList[objID] = worldCfg.initPos
+    if not playerInfoList[objID] then
+        playerInfoList[objID] =
+        {
+            map = worldCfg.defaultMap,
+            pos = worldCfg.initPos,
+            kills = 0,
+            isDead = false,
+            oldKills = 0,
+            team = 0
+        }
     end
-    teamPosList[objID] = player:getPosition()
+    playerInfoList[objID].map = player.map
+    playerInfoList[objID].pos = player:getPosition()
+    playerInfoList[objID].oldKills = player:getTeamKills()
+    playerInfoList[objID].team = player:getTeamId()
+    ---传送
 end
 
 function ProcessTeam:onEntityOut(objID)
-    local player = self.entityList[objID]
-    if not player then
+    if not playerInfoList[objID] then
         return
     end
-    local teamId = player:getTeamId()
-    teamCountList[teamId] = teamCountList[teamId] - 1
+    local teamId = playerInfoList[objID].team
+    teamCountList[teamId].playerCount = teamCountList[teamId].playerCount - 1
     self:transferOut(objID)
 end
 
 function ProcessTeam:transferOut(objID)
     local player = World.CurWorld:getEntity(objID)
-    local pos = teamPosList[objID] or worldCfg.initPos
-    teamPosList[objID] =  nil
+    local map = playerInfoList[objID].map
+    local pos = playerInfoList[objID].pos
+    playerInfoList[objID].isDead =  true
     if not player then
         return
     end
-    player:setPosition(pos)
+    if self:isProcessRunning() then
+        playerInfoList[objID].kills = player:getTeamKills() - playerInfoList[objID].oldKills
+        --doPlayerReward
+    end
+    player:setMapPos(map, pos, 0, 0, true)
 end
 
 return ProcessTeam

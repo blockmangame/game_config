@@ -139,7 +139,9 @@ function ProcessBase:closeServer()
 end
 
 function ProcessBase:onProcessOverEnd()
-
+    for _, entity in pairs(self.entityList) do
+        self:entityOut(entity)
+    end
 end
 
 function ProcessBase:waitCloseOnTick()
@@ -205,5 +207,10 @@ end
 function ProcessBase:doJudge()
 
 end
+
+function ProcessBase:isProcessRunning()
+    return self.curState == Define.ProcessState.ProcessStart
+end
+
 
 return ProcessBase
