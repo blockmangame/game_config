@@ -4734,6 +4734,10 @@ SURE_BUY {
                     ShowRewardItemEffect(fullName = $sellItem, count = 1, type = "Item", player = $obj1)
                 }
                 PayCurrency(entity = $obj1, coinName = $coinName, count = $price)
+
+                If(GetConfigVar(obj = $obj2, key = "isLottery")) {
+                    AddBuyLotteryNum(player = $obj1)
+                }
             }
          }Else{ --背包满了
             ShowTip(textKey = "gui_str_app_shop_inventory_is_full", tipType = 2, entity = $obj1, keepTime = 20)

@@ -350,3 +350,21 @@ function Actions.IsClimbing(data, params, context)
     local pos = Lib.tov3(params.entity:isClimbing())
     return not pos:isZero()
 end
+
+function Actions.CheckCanBuyLotteryNum(data, params, context)
+    local lotteryInfo = params.player.vars.lottery
+    local yearDay = Lib.getYearDayStr(os.time())
+    local limitNum = World.cfg.limitBuyLotteryNum or 30
+    return lotteryInfo.day ~= yearDay or lotteryInfo.num < limitNum
+end
+
+function Actions.AddBuyLotteryNum(data, params, context)
+    local lotteryInfo = params.player.vars.lottery
+    local yearDay = Lib.getYearDayStr(os.time())
+    if lotteryInfo.day ~= yearDay then
+        lotteryInfo.day = yearDay
+        lotteryInfo.num = 1
+    else
+        lotteryInfo.num = lotteryInfo.num + 1
+    end
+end
