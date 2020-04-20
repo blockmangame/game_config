@@ -1,9 +1,0 @@
-ENTITY_CLICK {
-	$store = GetConfigVar(key = "openStore", obj = $obj1)
-	ShowStore(player = $obj2, store = $store)
-}
-
-ENTITY_STORE_BUY_ITEM {
-    $store = GetConfigVar(key = "openStore", obj = $obj1)
-    ShowStore(player = $obj2, store = $store)
-}
