@@ -6,6 +6,7 @@ local eventRegionMap = {
 	["camera"] = RegionCamera,
 	["shop"] = RegionShop,
 	["sell"] = nil,
+	["safe"] = nil,
 }
 
 function Region:findTargetTypeRegion()
@@ -22,6 +23,15 @@ function Region:onEntityEnter(entity)
 	if not targetRegion then
 		return
 	end
+
+	if not entity.isPlayer then
+		return
+	end
+
+	if entity.objID ~= Me.objID then
+		return
+	end
+
 	targetRegion:onEntityEnter(entity, self.cfg)
 end
 
@@ -30,6 +40,15 @@ function Region:onEntityLeave(entity)
 	if not targetRegion then
 		return
 	end
+
+	if not entity.isPlayer then
+		return
+	end
+
+	if entity.objID ~= Me.objID then
+		return
+	end
+
 	local targetRegion = self:findTargetTypeRegion()
 	targetRegion:onEntityLeave(entity, self.cfg)
 end

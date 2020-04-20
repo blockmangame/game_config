@@ -1,0 +1,28 @@
+{
+     "cdTime": 40,
+    "enableCdMask": true,
+    "type": "Missile",
+    "castActionTime": 400,
+	"castAction": "action_02",
+    "missileCfg": "myplugin/player_displace_skill_sabrecut_indicator_sub_2_missile",
+    "missileCount": 1,
+    "startWait": [
+        5
+    ],
+    "startPos": [
+        {
+            "z": 0,
+            "x": 0,
+            "y": 0.1
+        }
+    ],
+    "castSound": {
+        "volume": 4,
+        "selfOnly": false,
+        "loop": false,
+        "sound": "/sound/player_attack_hit.mp3"
+    },
+    "targetType": "Self",
+    "icon": "/media/equip_default.png",
+    "consumeVp": 0
+}

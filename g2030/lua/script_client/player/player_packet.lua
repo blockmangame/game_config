@@ -25,13 +25,13 @@ function handles:exchangeWeapon(packet)
 end
 
 function handles:PetList(packet)
-    local list = {};
     self.equipPetList = {}
-    for index, IDAndAttachPoint in pairs(packet.list) do
-        list[index] = IDAndAttachPoint.objID;
-        self.equipPetList[index] = IDAndAttachPoint.petIndex;
+    for index, entityInfo in pairs(packet.list) do
+        self.equipPetList[index] = entityInfo;
     end
-    self:setData("pet", list)
+    if UI:getWnd("petPackage"):visible() then
+        UI:getWnd("petPackage"):refreshPetLeftDetailInfo()      --防止延迟造成的数据显示错误
+    end
 end
 
 function handles:ResetEntityRechargeSkill(packet)

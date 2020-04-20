@@ -6,8 +6,10 @@
 Lib.declare("RegionManager", {})
 Lib.declare("RegionSell", {})
 Lib.declare("RegionShop", {})
+Lib.declare("RegionBlock", {})
 
 require "script_server.entity.entity"
+require "script_server.entity.entity_event"
 require "script_server.async_process.async_process"
 require "script_server.game.game"
 require "script_server.game.game_team"
@@ -25,6 +27,7 @@ require "script_server.shop.payshop_manager"
 
 require "script_server.world.region.region_sell"
 require "script_server.world.region.region_shop"
+require "script_server.world.region.region_block"
 require "script_server.world.region"
 require "script_server.world.region_manager"
 
@@ -64,6 +67,9 @@ function main:loadConfig()
 
     local skillShopConfig = T(Config, "skillShopConfig")
     skillShopConfig:initConfig()
+
+    local RegionConfig = T(Config, "RegionConfig")
+    RegionConfig:init(Lib.readGameCsv("config/region.csv"))
 end
 
 main:init()

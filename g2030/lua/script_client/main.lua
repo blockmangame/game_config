@@ -8,6 +8,7 @@ require "script_client.entity.entity_event"
 
 require "script_client.ui.ui_schedule"
 require "script_client.world.region"
+require "script_client.world.region.region_block"
 
 require "script_client.other.scene_indicator"
 require "script_client.other.recharge_cells_mgr"
@@ -44,6 +45,9 @@ end
 function main:loadConfig()
     local JumpConfig = T(Config, "JumpConfig")
     JumpConfig:init(Lib.readGameCsv("config/jump.csv"))
+
+    local RegionConfig = T(Config, "RegionConfig")
+    RegionConfig:init(Lib.readGameCsv("config/region.csv"))
 
     local teamShopConfig = T(Config, "teamShopConfig")
     teamShopConfig:initConfig()

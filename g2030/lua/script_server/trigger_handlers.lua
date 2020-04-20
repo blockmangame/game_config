@@ -64,12 +64,27 @@ function Handlers.ENTITY_DIE(context)
     if not target.isPlayer or not from.isPlayer then
         return
     end
+    if arenaScoreCalc(from,target) then
+        return
+    end
+
     if target:getTeamId() ~= from:getTeamId() and
             target:getTeamId() > Define.Team.Neutrality and
             from:getTeamId() > Define.Team.Neutrality then
         from:addTeamKills()
         --上报阵营击杀、阵营材料奖励
     end
+end
+---
+---竞技场模式时的积分算法
+---非竞技场玩家死亡会返回false
+---
+local function arenaScoreCalc(killer,killed)
+    if not killer:IsArenaMode() or not killed:IsArenaMode() then
+        return false
+    end
+    killer:addArenaScore(killed:getCurLevel()*10)--TODO 竞技场积分公式 
+    return true
 end
 
 function Handlers.ENTITY_REBIRTH(context)

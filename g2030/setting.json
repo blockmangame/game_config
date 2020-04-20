@@ -2,9 +2,9 @@
   "playerCfg": "myplugin/player1",
   "defaultMap": "map001",
   "initPos": {
-    "x": 192,
-    "y": 100,
-    "z": 143
+    "x": 210,
+    "y": 25,
+    "z": 147
   },
   "fallAnimHeight": 10,
   "?do1": "基础游戏规则设置",
@@ -24,6 +24,10 @@
   "initSkillSlot": true,
   "teammateHurt": true,
   "?do3":"策划配置数值系数",
+  "?arenaBaseCnt":"竞技场最低人数",
+  "arenaBaseCnt":8,
+  "?arenaMaxCnt":"竞技场最大人数",
+  "arenaMaxCnt":16,
   "?perExpPlus":"锻炼增幅额外加成系数（vip付费特权）",
   "perExpPlus":2,
   "?goldExchangePlus":"金币转换率额外加成系数（vip付费特权）",
@@ -185,6 +189,64 @@
     }
   ],
   "_teleportProps": "传送的一些属性。可以不写有默认值。这里开出配置是满足一些特殊需求比如不同岛屿的传送时间和背景或者传送效果(比如不想要中心扩散要其他效果)可能会不同之类的。",
-  "teamMaterialReward": 1
+  "teamMaterialReward": 1,
+  "RankListUI": {
+    "map001": [
+      {
+        "name": "world_rank",
+        "key": "title1",
+        "args": 2,
+        "width": 17,
+        "height": 10,
+        "rotate": {
+          "x": 0,
+          "y": 90,
+          "z": 0
+        },
+        "position": {
+          "x": 217,
+          "y": 25,
+          "z": 147
+        }
+      }
+    ]
+  },
+  "ranks": [
+    {
+      "type": 1,
+      "subRanks": [
+        {
+          "size": 10,
+          "keyPrefix": "g2019-stage_1-1_Score",
+          "keySufType": "Hist",
+          "expireType": "Hist"
+        },
+        {
+          "size": 10,
+          "keyPrefix": "muscle",
+          "keySufType": "Hist",
+          "expireType": "Hist"
+        },
+        {
+          "size": 10,
+          "keyPrefix": "boss",
+          "keySufType": "Hist",
+          "expireType": "Hist"
+        },
+        {
+          "size": 10,
+          "keyPrefix": "white_team",
+          "keySufType": "Hist",
+          "expireType": "Hist"
+        },
+        {
+          "size": 10,
+          "keyPrefix": "black_team",
+          "keySufType": "Hist",
+          "expireType": "Hist"
+        }
+      ]
+    }
+  ]
 }
 

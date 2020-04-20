@@ -22,23 +22,19 @@ function M:initWnd()
     self.selectBroad:SetVisible(false)
     self.level = self:child("PlusPetItem-PlusPetLevelBg")
     self.levelText = self:child("PlusPetItem-PlusPetLevelText")
-    self.using = self:child("PlusPetItem-PlusPetUsingBg")
-    self.using:SetVisible(false)
+    self.usingBg = self:child("PlusPetItem-PlusPetUsingBg")
+    self.usingBg:SetVisible(false)
     self:child("PlusPetItem-PlusPetUsingText"):SetText(Lang:toText("PlusPetUsing"))
     self.lock = self:child("PlusPetItem-Lock")
     self.lock:SetVisible(false)
 end
 
-function M:onClick()
-    self.selectBroad:SetVisible(true)
-end
-
 function M:using()
-    self.using:SetVisible(true)
+    self.usingBg:SetVisible(true)
 end
 
 function M:unUsing()
-    self.using:SetVisible(false)
+    self.usingBg:SetVisible(false)
 end
 
 function M:sel()
@@ -47,10 +43,6 @@ end
 
 function M:unsel()
     self.selectBroad:SetVisible(false)
-end
-
-function M:unEquip()
-    self.using:SetVisible(false)
 end
 
 function M:initShow(id, quality, had, level)

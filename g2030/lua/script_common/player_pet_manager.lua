@@ -7,6 +7,7 @@
 local petType = T(Define, "petType");
 
 Player.equipPetList = {}; --该表是存储创建的pet的entityIndex，在装备的情况下，可以通过宠物自身的index和创建的entityIndex进行互换
+-- index该index可直接通过getPetAttr拿到所有需要的信息 objID该id可以直接操作相关的entity
 
 function Player.getPlusPetPluginFromID(id, minorID)
     if minorID == 0 then
@@ -47,12 +48,12 @@ function Player:getPetAttr(index)
         rank = targetEntityCfg.rank,                            --稀有度
         --==================以下为宠物或式神特有的，没有的即为nil=======================================
         minorID = targetPetInfo.minorID,                        --式神副ID
-        coinTransRatio = targetPetInfo.coinTransRatio,          --当前金币转换率
-        chiTransRatio = targetPetInfo.chiTransRatio,            --当前气转换率
+        coinTransRatio = targetPetInfo.petCoinTransRate,        --当前金币转换倍率
+        chiTransRatio = targetPetInfo.chiTransRatio,            --当前气转换倍率
         exerciseRatio = targetEntityCfg.exerciseRatio,          --宠物锻炼倍数
         chiIntensifyRange = targetEntityCfg.chiIntensifyRange,  --气转换区间
         coinIntensifyRange = targetEntityCfg.coinIntensifyRange,--金币转换区间
-        atkBuffNum = targetPetInfo.atkBuffNum,                  --当前攻击增益数值
+        atkBuffNum = targetPetInfo.plusPetATKRate,              --当前攻击增益数值
         reductionInjury = targetEntityCfg.reductionInjury,      --减伤数值
         intensifyATK = targetEntityCfg.intensifyATK,            --强化攻击倍率
         intensifyValue = targetEntityCfg.intensifyValue,        --强化权重
