@@ -5,6 +5,21 @@ RechargeSkill.isRechargeSkill = true
 RechargeSkill.maxRechargeCount = 1
 RechargeSkill.rechargeTime = 0
 
+local function calcRecharge(skillInfo)
+    local now = World.Now()
+    local beginRechargeTime = skillInfo.beginRechargeTime
+    local rechargeTime = skillInfo.rechargeTime
+    local curRechargeCount = skillInfo.curRechargeCount
+    local maxRechargeCount = skillInfo.maxRechargeCount
+    local addCount = (now - beginRechargeTime) // rechargeTime
+    if addCount > 0 and curRechargeCount < maxRechargeCount then
+        local lessTime = (now - beginRechargeTime) % rechargeTime
+        local tempCurRC = addCount + curRechargeCount
+        skillInfo.curRechargeCount = math.min(tempCurRC, maxRechargeCount)
+        skillInfo.beginRechargeTime = now - lessTime
+    end
+end
+
 function RechargeSkill:canCast(packet, from)
     local fullName = packet.name
     local cfg = Skill.Cfg(fullName)
@@ -16,39 +31,25 @@ function RechargeSkill:canCast(packet, from)
     end
     local skillInfo = rechargeInfo[fullName]
     if not skillInfo then
-        local now = World.Now()
         skillInfo = {
             curRechargeCount = maxRechargeCount,
             maxRechargeCount = maxRechargeCount,
             rechargeTime = cfg.rechargeTime or 1,
-            timer = nil
+            beginRechargeTime = World.Now()
         }
         rechargeInfo[fullName] = skillInfo
     end
+    calcRecharge(skillInfo)
     if skillInfo.curRechargeCount <= 0 then
         return false
     end
 	return SkillBase.canCast(self, packet, from)
 end
 
-local function recharge(skillInfo)
-    skillInfo.timer = World.Timer(skillInfo.rechargeTime, function()
-        skillInfo.curRechargeCount = skillInfo.curRechargeCount + 1
-        if skillInfo.curRechargeCount < skillInfo.maxRechargeCount then
-            recharge(skillInfo)
-        else
-            skillInfo.timer = nil
-        end
-    end)
-end
-
 function RechargeSkill:cast(packet, from)
     local rechargeInfo = from.rechargeInfo
     local skillInfo = rechargeInfo[packet.name]
     skillInfo.curRechargeCount = skillInfo.curRechargeCount - 1
-    if not skillInfo.timer then
-        recharge(skillInfo)
-    end
     packet.needPre = true
 
     SkillBase.cast(self, packet, from)
