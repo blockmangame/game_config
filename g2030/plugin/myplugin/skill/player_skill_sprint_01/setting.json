@@ -1,0 +1,27 @@
+{
+    "cdTime": 10,
+    "type": "Missile",
+    "castAction": "action_01",
+    "castActionTime": 10,
+    "missileCfg": "myplugin/player_skill_sprint_01_missile",
+    "missileCount": 1,
+    "target": "self",
+    "startWait": [
+        5
+    ],
+    "startPos": [
+        {
+            "z": 0,
+            "x": 0,
+            "y": -1.5
+        }
+    ],
+    "castSound": {
+        "volume": 1.5,
+        "selfOnly": false,
+        "loop": false,
+        "sound": "/sound/attack1.mp3"
+    },
+    "targetType": "Self",
+	"consumeVp": 0
+}
