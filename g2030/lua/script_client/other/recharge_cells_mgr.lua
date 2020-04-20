@@ -85,7 +85,7 @@ Lib.subscribeEvent(Event.EVENT_RECHARGE_SKILL_CAST, function(fullName)
         return
     end
     skillRCell.curRechargeCount = skillRCell.curRechargeCount - 1
-    skillRCell.cell:invoke("COUNT", skillRCell.curRechargeCount)
+    skillRCell.cell:invoke("COUNT", skillRCell.curRechargeCount > 0 and skillRCell.curRechargeCount or 0)
     if not skillRCell.rechargeTimer then
         local now = World.Now()
         skillRCell.startTimerTick = now

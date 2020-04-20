@@ -53,8 +53,6 @@ end
 function M:showPetInterface()
     curPetItemTable = {}
     curPetUsingItem = {}
-    curPlusPetSelItemIndex = -1
-    curPlusPetUsingItem = -1
     curPetSelItemIndex = -1
     self.selSwitchImage.petSel:SetVisible(true)
     self.selSwitchImage.petUnSel:SetVisible(false)
@@ -70,11 +68,9 @@ function M:showPetInterface()
 end
 
 function M:showPlusPetInterface(model)
-    curPetItemTable = {}
-    curPetUsingItem = {}
+    curPlusPetItemTable = {}
     curPlusPetSelItemIndex = -1
     curPlusPetUsingItem = -1
-    curPetSelItemIndex = -1
     curPlusPetFold = -1
     self.selSwitchImage.petSel:SetVisible(false)
     self.selSwitchImage.petUnSel:SetVisible(true)
@@ -119,7 +115,7 @@ function M:setPlusPetDetail(index, using)
         self:child("NinjaPetPackage-PlusPetInfoBtns"):SetVisible(false)
         self:child("NinjaPetPackage-PlusPetAccess"):SetVisible(true)
     else
-        plusPetData = Player.CurPlayer:getPetAttr(tempData.index)
+        plusPetData = Player.CurPlayer:getPetAttr(curPlusPetPageTable[tempData.index].index)
         if not plusPetData then
             print("================get plus pet data wrong!!! =================")
             return
@@ -202,7 +198,7 @@ function M:setPlusPetItemEquip()
     curPlusPetItemTable[curPlusPetSelItemIndex].item:invoke("using")
     Player.CurPlayer:callPet(index, 3)
     self.plusPetLayoutText.plusPetEquipBtn:SetText(Lang:toText("PlusPet-deEquip"))
-    end
+end
 
 function M:_setPlusPetItem(had, v, equipped)
     local itemBroadInfo = {
@@ -261,10 +257,6 @@ function M:refreshPetLeftDetailInfo()
     local totalCoinRate = 0
     local totalFuRate = 0
     local totalChiRate = 0
-    self.petLayoutText.slotsText:SetText(Lang:toText("PetPackage-Slots").. ":" .. tostring(slotsNu) .. "/" .. tostring(Player.CurPlayer:getValue("petPageNu")))
-    self.petLayoutText.petInfo.petTotalChi:SetText("")
-    self.petLayoutText.petInfo.petTotalCoin:SetText("")
-    self.petLayoutText.petInfo.petTotalFu:SetText("")
     for k,v in pairs(Player.CurPlayer.equipPetList) do
         if k == 3 then
             break

@@ -56,8 +56,8 @@ function M:upDataSKillPlace(placeId)
 end
 
 function M:onEquipBtnClick()
-    self.btnEquip:SetVisible(false)
-    self.btnUnEquip:SetVisible(true)
+    -- self.btnEquip:SetVisible(false)
+    -- self.btnUnEquip:SetVisible(true)
     -- print("-------initItem--------112 "..tostring( self.placeId))
     self.placeId = UI:getWnd("skillControl"):resetSkillEquipChecked()
 
@@ -71,8 +71,8 @@ function M:onEquipBtnClick()
 end
 
 function M:onUnEquipBtnClick()
-    self.btnEquip:SetVisible(true)
-    self.btnUnEquip:SetVisible(false)
+    -- self.btnEquip:SetVisible(true)
+    -- self.btnUnEquip:SetVisible(false)
     self.placeId = UI:getWnd("skillControl"):resetSkillEquipChecked()
 
     Me:sendPacket({

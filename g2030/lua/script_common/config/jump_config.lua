@@ -13,6 +13,7 @@ function JumpConfig:init(config)
         data.moveSpeed = tonumber(vConfig.n_moveSpeed) or 0 --移动速度
         data.rotationPitch = tonumber(vConfig.n_rotationPitch) or 0
         data.glidingSpeed = tonumber(vConfig.n_glidingSpeed) or 0
+        data.jumpMoveEndFallDistance = tonumber(vConfig.n_jumpMoveEndFallDistance) or 1
         table.insert(settings, data)
     end
     --Lib.log("JumpConfig:init " .. Lib.v2s(settings))
@@ -24,6 +25,7 @@ function JumpConfig:getJumpConfig(id)
             return setting
         end
     end
+    Lib.log(string.format("JumpConfig:getJumpConfig %s nil", tostring(id)))
     return nil
 end
 
