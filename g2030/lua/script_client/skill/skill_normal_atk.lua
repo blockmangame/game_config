@@ -30,7 +30,7 @@ local function doExp()
     --print("Event.EVENT_EXP_CHANGE send")
 end
 function NormalAtk:canCast(packet, from)
-	if not SkillMissile.canCast(self, packet, from) then
+	if not SkillMissile:canCast( packet, from) then
 		return false
 	end
 	return true

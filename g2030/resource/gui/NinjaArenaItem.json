@@ -19,13 +19,63 @@
                 {
                     "Name": "StretchType",
                     "Value": "NineGrid"
-                },
-                {
-                    "Name": "LayoutBackImage",
-                    "Value": "set:ninja_arena.json image:block_stage1_4"
                 }
             ],
             "Window": [
+                {
+                    "Type": "StaticImage",
+                    "Name": "NinjaArenaItem-Bg",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "StretchType",
+                            "Value": "NineGrid"
+                        },
+                        {
+                            "Name": "StretchOffset",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "ImageName",
+                            "Value": "set:ninja_arena.json image:block_stage1_4"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        }
+                    ]
+                },
                 {
                     "Type": "StaticText",
                     "Name": "NinjaArenaItem-Rank",
@@ -94,7 +144,7 @@
                         },
                         {
                             "Name": "Font",
-                            "Value": "NF18"
+                            "Value": "NF20"
                         },
                         {
                             "Name": "WndOpenSound",
