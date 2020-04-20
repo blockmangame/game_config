@@ -29,7 +29,9 @@ function handles:PetList(packet)
     for index, entityInfo in pairs(packet.list) do
         self.equipPetList[index] = entityInfo;
     end
-    print(Lib.v2s( self.equipPetList))
+    if UI:getWnd("petPackage"):visible() then
+        UI:getWnd("petPackage"):refreshPetLeftDetailInfo()      --防止延迟造成的数据显示错误
+    end
 end
 
 function handles:ResetEntityRechargeSkill(packet)

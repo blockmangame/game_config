@@ -49,5 +49,6 @@ function RechargeSkill:cast(packet, from)
     if not skillInfo.timer then
         recharge(skillInfo)
     end
+    packet.needPre = true
     SkillBase.cast(self, packet, from)
 end

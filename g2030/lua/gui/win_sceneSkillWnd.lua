@@ -150,7 +150,7 @@ local function updatePlayerTouch(self)
 		if not self.isTouchPointMove then
 			targetPos = mePos
 		else
-			local tempNorV3 = LposAroundYaw(imcNormalizeV3, Me:getRotationYaw())
+			local tempNorV3 = imcNormalizeV3 -- LposAroundYaw(imcNormalizeV3, Me:getRotationYaw())
 			local cV3X, cV3Z = tempNorV3.x * sceneRatio, tempNorV3.z * sceneRatio
 			local A, B, C = cV3Z, -cV3X, cV3X * mePos.z - cV3Z * mePos.x
 			local function getDis(pos)

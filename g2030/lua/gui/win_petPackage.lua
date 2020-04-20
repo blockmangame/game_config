@@ -21,10 +21,13 @@ local plusPetFoldTable = {}
 local plusPetHadID = {} --记录当前玩家打开背包时所拥有的式神（主式神ID）
 local curPlusPetItemTable = {}
 
-local curPlusPetFold = 0--1 All 2 Atk 3 Def 4 Gain
+local curPlusPetFold = -1--0 All 1 Atk 2 Def 3 Gain  Define.plusPetSkillType
 local plusPetFoldOpen = false
 
 local player = nil
+function M:visible()
+    return self.isVisible;
+end
 
 function M:init()
     WinBase.init(self, "NinjaPetPackage.json", false)
@@ -63,41 +66,43 @@ function M:showPetInterface()
     curPage = 1
     self:setPetItem()
     self:refreshPageInfo()
+    self:refreshPetLeftDetailInfo()
 end
 
-function M:showPlusPetInterface()
+function M:showPlusPetInterface(model)
     curPetItemTable = {}
-    curPlusPetItemTable = {}
     curPetUsingItem = {}
     curPlusPetSelItemIndex = -1
     curPlusPetUsingItem = -1
     curPetSelItemIndex = -1
+    curPlusPetFold = -1
     self.selSwitchImage.petSel:SetVisible(false)
     self.selSwitchImage.petUnSel:SetVisible(true)
     self.selSwitchImage.pPetUnSel:SetVisible(false)
     self.selSwitchImage.pPetSel:SetVisible(true)
-    self:setPlusPetItem()
-    self:setPlusPetItemSel(1)
+    self:setPlusPetFoldCurFold(0)
     self.mainLayout.petLayout:SetVisible(false)
     self.mainLayout.plusPetLayout:SetVisible(true)
 
-    self:setPlusPetFoldCurFold(1)
     curPage = 2
 end
 
 function M:setPlusPetFoldCurFold(index)
+    curPlusPetSelItemIndex = -1
     self:showPlusPetFoldSel(false)
     if index == curPlusPetFold then
         return
     end
     self.plusPetLayoutText.plusPetFoldCur:SetText(plusPetFoldTable[index].text:GetText())
-    if curPlusPetFold ~= 0 then
+    if curPlusPetFold ~= -1 then
         plusPetFoldTable[curPlusPetFold].bg.sel:SetVisible(false)
         plusPetFoldTable[curPlusPetFold].bg.unsel:SetVisible(true)
     end
     plusPetFoldTable[index].bg.sel:SetVisible(true)
     plusPetFoldTable[index].bg.unsel:SetVisible(false)
     curPlusPetFold = index
+    self:setPlusPetItem()
+    self:setPlusPetItemSel(1)
 end
 
 function M:setPlusPetDetail(index, using)
@@ -216,25 +221,30 @@ end
 
 function M:setUnlockPlusPetItem()
     for k, v in pairs(curPlusPetPageTable) do
-        if  Player.CurPlayer.equipPetList[3] and Player.CurPlayer.equipPetList[3].index == v.index then
-            self:_setPlusPetItem(true, {ID = v.data.ID, rank = v.data.rank, level = v.data.level, k = k}, true)
-            curPlusPetUsingItem = k
-        else
-            self:_setPlusPetItem(true, {ID = v.data.ID, rank = v.data.rank, level = v.data.level, k = k})
+        if curPlusPetFold == 0 or curPlusPetFold == v.data.skillType then
+            if  Player.CurPlayer.equipPetList[3] and Player.CurPlayer.equipPetList[3].index == v.index then
+                self:_setPlusPetItem(true, {ID = v.data.ID, rank = v.data.rank, level = v.data.level, k = k}, true)
+                curPlusPetUsingItem = k
+            else
+                self:_setPlusPetItem(true, {ID = v.data.ID, rank = v.data.rank, level = v.data.level, k = k})
+            end
         end
     end
 end
 
-function M:setLockPlusPetItem()
+function M:setLockPlusPetItem(model)
     for i = 1,Define.plusPetNu do
         if plusPetHadID[i].had == false then
             local cfg = Entity.GetCfg(Player.turnID2Plugin(Define.petType.plusPet, plusPetHadID[i].ID, 0))
-            self:_setPlusPetItem(false, {ID = plusPetHadID[i].ID, rank = cfg.rank, k = plusPetHadID[i].ID, })
+            if curPlusPetFold == 0 or curPlusPetFold == cfg.skillType then
+                self:_setPlusPetItem(false, {ID = plusPetHadID[i].ID, rank = cfg.rank, k = plusPetHadID[i].ID, })
+            end
         end
     end
 end
 
 function M:setPlusPetItem()
+    curPlusPetItemTable = {}
     self.plusPetLayout.plusPetItem:SetMoveAble(true)
     self.plusPetLayout.plusPetItem:RemoveAllItems()
     self:setUnlockPlusPetItem()
@@ -244,6 +254,36 @@ function M:setPlusPetItem()
             self:setPlusPetItemSel(k)
         end)
     end
+end
+
+function M:refreshPetLeftDetailInfo()
+    local slotsNu = 0
+    local totalCoinRate = 0
+    local totalFuRate = 0
+    local totalChiRate = 0
+    self.petLayoutText.slotsText:SetText(Lang:toText("PetPackage-Slots").. ":" .. tostring(slotsNu) .. "/" .. tostring(Player.CurPlayer:getValue("petPageNu")))
+    self.petLayoutText.petInfo.petTotalChi:SetText("")
+    self.petLayoutText.petInfo.petTotalCoin:SetText("")
+    self.petLayoutText.petInfo.petTotalFu:SetText("")
+    for k,v in pairs(Player.CurPlayer.equipPetList) do
+        if k == 3 then
+            break
+        end
+        slotsNu = slotsNu + 1
+        local tempData = Player.CurPlayer:getPetAttr(v.index)
+        if not tempData then
+            print("Set Pet Left Detail Page ERROR!! INFO: GET NIL PET DETAIL INFO INDEX:", v.index)
+            return
+        end
+        totalCoinRate = tempData.coinTransRatio + totalCoinRate
+        totalChiRate = tempData.exerciseRatio + totalChiRate
+        totalFuRate = tempData.chiTransRatio + totalFuRate
+    end
+
+    self.petLayoutText.slotsText:SetText(Lang:toText("PetPackage-Slots").. ":" .. tostring(slotsNu) .. "/" .. tostring(Player.CurPlayer:getValue("petPageNu")))
+    self.petLayoutText.petInfo.petTotalChi:SetText("x" .. tostring(totalChiRate))
+    self.petLayoutText.petInfo.petTotalCoin:SetText("x" .. tostring(totalCoinRate))
+    self.petLayoutText.petInfo.petTotalFu:SetText("x" .. tostring(totalFuRate))
 end
 
 function M:setPetPage(page)
@@ -312,6 +352,7 @@ function M:petPageDetailEmpty()
     self:child("NinjaPetPackage-PetUpGradeBtn"):SetVisible(false)
     self:child("NinjaPetPackage-PetSellBtn"):SetVisible(false)
     self:child("NinjaPetPackage-PetDetailEquip"):SetVisible(false)
+    self.petLayout.petQuality:SetVisible(false)
 
 end
 
@@ -367,10 +408,11 @@ function M:setPetDetail(index, equipped)              --通过index拿到所有�
         self.petLayoutText.petInfo.petEquipText:SetText("PlusPet-Equip")
     end
     self.petLayout.petImage:SetImage("set:ninja_pet.json image:" .. tostring(tempData.ID))
-
-    self.petLayoutText.petInfo.petAddChiText:SetText("X" .. tostring(tempData.exerciseRatio) .. Lang:toText("PetChiText"))
-    self.petLayoutText.petInfo.petAddCoinText:SetText("X" .. tostring(tempData.coinTransRatio) .. Lang:toText("PetCoinText"))
-    self.petLayoutText.petInfo.petAddFuText:SetText("X" .. tostring(tempData.chiTransRatio) .. Lang:toText("PetFuText"))
+    self.petLayout.petQuality:SetVisible(true)
+    self.petLayout.petQuality:SetImage("set:ninja_pet.json image:quality-" .. tostring(tempData.rank))
+    self.petLayoutText.petInfo.petAddChiText:SetText("x" .. tostring(tempData.exerciseRatio) .. Lang:toText("PetChiText"))
+    self.petLayoutText.petInfo.petAddCoinText:SetText("x" .. tostring(tempData.coinTransRatio) .. Lang:toText("PetCoinText"))
+    self.petLayoutText.petInfo.petAddFuText:SetText("x" .. tostring(tempData.chiTransRatio) .. Lang:toText("PetFuText"))
 
 end
 
@@ -489,6 +531,7 @@ end
 
 function M:openPetPackage()
     UI:openWnd("petPackage")
+    self.isVisible = true
     self:_openPetPackage()
 end
 
@@ -499,13 +542,11 @@ function M:setPetAllText()
     self.selSwitchText.plusPetSel:SetText(Lang:toText("PetPackage-PlusPet"))
     self.selSwitchText.plusPetUnSel:SetText(Lang:toText("PetPackage-PlusPet"))
 
-    self.petLayoutText.slotsText:SetText(Lang:toText("PetPackage-Slots"))
+    self.petLayoutText.petTittleText:SetText(Lang:toText("PetPackage-PetPageTittle"))
+    self.petLayoutText.petPageText:SetText(Lang:toText("PetPackage-PetPageInfo"))
     self.petLayoutText.addChiText:SetText(Lang:toText("PetPackage-Total"))
     self.petLayoutText.addCoinText:SetText(Lang:toText("PetPackage-Total"))
     self.petLayoutText.addFuText:SetText(Lang:toText("PetPackage-Total"))
-
-    self.petLayoutText.petTittleText:SetText(Lang:toText("PetPackage-PetPageTittle"))
-    self.petLayoutText.petPageText:SetText(Lang:toText("PetPackage-PetPageInfo"))
 
     self.petLayoutText.petInfo.petEvolutionText:SetText(Lang:toText("PetPackage-Evolution"))
     self.petLayoutText.petInfo.petSellText:SetText(Lang:toText("PetPackage-Sell"))
@@ -531,6 +572,7 @@ end
 function M:initPetAllEvent()
     self:subscribe(self.closeBtn, UIEvent.EventButtonClick, function()
         UI:closeWnd("petPackage")
+        self.isVisible = false
     end)
     self:subscribe(self.selSwitchBtn.petBtn, UIEvent.EventButtonClick, function()
         if curPage ~= 1 then
@@ -546,16 +588,16 @@ function M:initPetAllEvent()
         self:showPlusPetFoldSel(not plusPetFoldOpen)
     end)
     self:subscribe(self.plusPetBtn.plusPetFoldSelAll, UIEvent.EventButtonClick, function()
-        self:setPlusPetFoldCurFold(1)
+        self:setPlusPetFoldCurFold(0)
     end)
     self:subscribe(self.plusPetBtn.plusPetFoldSelAtk, UIEvent.EventButtonClick, function()
-        self:setPlusPetFoldCurFold(2)
+        self:setPlusPetFoldCurFold(Define.plusPetSkillType.atk)
     end)
     self:subscribe(self.plusPetBtn.plusPetFoldSelDef, UIEvent.EventButtonClick, function()
-        self:setPlusPetFoldCurFold(3)
+        self:setPlusPetFoldCurFold(Define.plusPetSkillType.def)
     end)
     self:subscribe(self.plusPetBtn.plusPetFoldSelGain, UIEvent.EventButtonClick, function()
-        self:setPlusPetFoldCurFold(4)
+        self:setPlusPetFoldCurFold(Define.plusPetSkillType.gain)
     end)
     self:subscribe(self.plusPetBtn.plusPetEquip, UIEvent.EventButtonClick, function()
         if Player.CurPlayer.equipPetList[3] and plusPetIndex2ItemIndex(Player.CurPlayer.equipPetList[3].index) == curPlusPetSelItemIndex then
@@ -633,7 +675,10 @@ function M:initWnd()
             petAddCoinText = self:child("NinjaPetPackage-PetDetailCoinText"),
             petAddFuText = self:child("NinjaPetPackage-PetDetailFuText"),
             petAddChiText = self:child("NinjaPetPackage-PetDetailChiText"),
-            petEquipText = self:child("NinjaPetPackage-PetDetailEquipText")
+            petEquipText = self:child("NinjaPetPackage-PetDetailEquipText"),
+            petTotalCoin = self:child("NinjaPetPackage-PetAddInfoCoinNu"),
+            petTotalChi = self:child("NinjaPetPackage-PetAddInfoChiNu"),
+            petTotalFu = self:child("NinjaPetPackage-PetAddInfoFuNu")
         }
     }
     self.plusPetLayoutText = {
@@ -689,28 +734,28 @@ function M:initWnd()
         plusPetQuality = self:child("NinjaPetPackage-PlusPetQuaImage")
     }
     self.plusPetLayout.plusPetItem:InitConfig(10, 10, 2) --item 77 * 77
-    plusPetFoldTable[1] = {
+    plusPetFoldTable[0] = {
         text = self.plusPetLayoutText.plusPetFoldSelAll,
         bg = {
             sel = self:child("NinjaPetPackage-PlusPetFoldAllSel"),
             unsel = self:child("NinjaPetPackage-PlusPetFoldAllUnSel")
         }
     }
-    plusPetFoldTable[3] = {
+    plusPetFoldTable[Define.plusPetSkillType.def] = {
         text = self.plusPetLayoutText.plusPetFoldSelDef,
         bg = {
             sel = self:child("NinjaPetPackage-PlusPetFoldDefSel"),
             unsel = self:child("NinjaPetPackage-PlusPetFoldDefUnSel")
         }
     }
-    plusPetFoldTable[2] = {
+    plusPetFoldTable[Define.plusPetSkillType.atk] = {
         text = self.plusPetLayoutText.plusPetFoldSelAtk,
         bg = {
             sel = self:child("NinjaPetPackage-PlusPetFoldAtkSel"),
             unsel = self:child("NinjaPetPackage-PlusPetFoldAtkUnSel")
         }
     }
-    plusPetFoldTable[4] = {
+    plusPetFoldTable[Define.plusPetSkillType.gain] = {
         text = self.plusPetLayoutText.plusPetFoldSelGain,
         bg = {
             sel = self:child("NinjaPetPackage-PlusPetFoldGainSel"),
