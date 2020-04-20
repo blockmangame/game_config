@@ -1,0 +1,19 @@
+GAME_INIT 
+{
+    Test("11111----SHOW_RANK---")
+    @Map001 = GetStaticMap(name = "map001", create = true)--load map001
+    CallTrigger(event = "SHOW_RANK")
+
+}
+
+--场景ui
+SHOW_RANK(){
+    $mapName = "map001"
+    $cfg = GetWorldVar(key = "RankListUI")
+    $Dict = NewDictionary($cfg or {})
+    requestRankData(player = $obj1, rankType = 1)
+    $array = DictionaryGet(dict = $Dict, key = $mapName)
+    Foreach(array = $array or {}, key = "data"){
+        AddSceneUI(map = @Map001, data = $data)
+    }
+}
