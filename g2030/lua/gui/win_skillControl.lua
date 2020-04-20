@@ -54,12 +54,12 @@ function M:initUI()
     self.stSkillItemDesc = self:child("skillControl-SkillItemDec")
     self.stBuyPrice = self:child("skillControl-BuyPrice")
 
-    
+
 
         --image
     self.siCurrencyImg = self:child("skillControl-CurrencyImg")
     self.siIsBuySkillImg = self:child("skillControl-IsBuySkillImg")
-    
+
         --btn
     self.btnClose = self:child("skillControl-close")
     self.btnPreview = self:child("skillControl-PreviewBtn")
@@ -140,8 +140,6 @@ function M:initEvent()
 
     self:subscribe(self.btnPreview, UIEvent.EventButtonClick, function()
         -- 技能展示
-        -- print("=======onWatchAudio========" .. tostring(PreviewUrl))
-
         Interface.callAppDataFunction("onWatchAudio", {url = PreviewUrl})
     end)
 
@@ -150,7 +148,6 @@ function M:initEvent()
         if not self:checkItemMoney() then
             return
         end 
-        -- print("============self.itemId======".. tostring(self.itemId))
         Me:sendPacket({
             pid = "skillShopBuyItem",
             itemId = self.itemId,
@@ -162,8 +159,7 @@ function M:initEvent()
     self:subscribe(self.btnSkillEquipPanel, UIEvent.EventRadioStateChanged, function(status)
         if status:IsSelected() then
             self:openSkillEquip()
-            self:upDataSkillEquipItems()
-            self:selectSeatGivEquip(1,false)
+            -- self:upDataSkillEquipItems()
         end
     end)
 
@@ -226,11 +222,12 @@ function M:initEvent()
     Lib.subscribeEvent(Event.EVENT_ITEM_SKILL_SHOP_UPDATE, function()
         -- print("---upDataSkillShopItems------")
         self:upDataSkillShopItems()
+        self:upDataSkillEquipItems()
     end)
 
     Lib.subscribeEvent(Event.EVENT_ITEM_SKILL_EQUIP_UPDATE, function()
-        -- print("---upDataSkillEquipItems------")
         self:selectSeatGivEquip(1,false)
+        self:upDataSkillEquipItems()
     end)
 
 end
@@ -251,7 +248,7 @@ function M:checkItemMoney()
             end
         end
         Lib.emitEvent(Event.EVENT_NOT_ENOUGH_MONEY)
-        print("checkItemMoney item.moneyType : "..tostring(Coin:coinNameByCoinId(item.moneyType)).." item.price: "..tostring(item.price))
+        -- print("checkItemMoney item.moneyType : "..tostring(Coin:coinNameByCoinId(item.moneyType)).." item.price: "..tostring(item.price))
         return false
     end
 end
@@ -305,7 +302,7 @@ function M:selectSkillInfo()
             self.stSkillItemDesc:SetText(value.desc)
 
             PreviewUrl = value.url
-            print("---previewUrl------".. Lib.v2s(value))
+            -- print("---previewUrl------".. Lib.v2s(value))
             if PreviewUrl == "" then
                 self.btnPreview:SetEnabled(false)
                 self.btnPreview:SetTouchable(false)
@@ -443,7 +440,16 @@ function M:resetEquipChecked(data)
         end
     end
     table.sort(data or {}, function(a, b)
-        return a.status > b.status
+        if a.status > b.status then
+            return true
+        elseif a.status == b.status then
+            if a.id < b.id then
+                return true
+            end
+            return false
+        elseif a.status < b.status then
+            return false
+        end
     end)
 
     return data
@@ -465,7 +471,7 @@ function M:upDataSkillEquipItems()
     elseif equipPanelNum == 5 then
         equipPaneData = skills.cure
     end
-    print("--------------------223 ".. tostring(equipPanelNum))
+    -- print("--------------------223 ".. tostring(equipPanelNum))
     equipPaneData= self:resetEquipChecked(equipPaneData)
     self:addSkillEquipItem(equipPaneData)
 end
@@ -553,3 +559,5 @@ function M:placeSkillIcon(data)
         end
     end
 end
+
+return M
