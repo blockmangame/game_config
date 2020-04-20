@@ -50,5 +50,11 @@ function RechargeSkill:cast(packet, from)
         recharge(skillInfo)
     end
     packet.needPre = true
+
     SkillBase.cast(self, packet, from)
+    
+    local skill = self.skillCfg
+    if skill ~= nil then
+        Skill.Cast(skill, packet, from)
+    end
 end
