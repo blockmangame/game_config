@@ -62,6 +62,7 @@ local function jump_impl(control, player)
         player:setEntityProp("jumpSpeed", tostring(config.jumpSpeed))
         player:setEntityProp("gravity", tostring(config.gravity))
         player:setEntityProp("moveSpeed", tostring(config.moveSpeed))
+        GlobalProperty.Instance():setIntProperty("JumpMoveEndFallDistance", config.jumpMoveEndFallDistance)
     end
 
     local playerCfg = player:cfg()
