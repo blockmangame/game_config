@@ -92,8 +92,10 @@ function EntityClient:updateMainPlayerRideOn()
         control:attach(target)
         control.enable = pos.ctrl
         bm:setViewEntity(pos.view and target or player)
-		local distance = bm:viewerRenderDistance()
-		self:data("main").cameraDis = distance
+		if not self:data("main").cameraDis then
+			local distance = bm:viewerRenderDistance()
+			self:data("main").cameraDis = distance
+		end
 		self:changeCameraView(nil, nil, nil, target:cfg().cameraDis or 5, 1)
     else
         control:attach(player)
