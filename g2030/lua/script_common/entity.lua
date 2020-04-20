@@ -38,11 +38,14 @@ ValueDef.islandLv   = {false,	false,	true,	false,       1,		true}--当前岛屿�
 ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},     true }--已拥有的阵营皮肤
 ValueDef.teamSkinId = {false,   true,    true,  false,       0,     true }--已装备的阵营皮肤id
 
+ValueDef.arenaScore = {false,   true,    true,  true,       0,     false }--竞技场分数
+
 --====================宠物、式神相关数据================
 ValueDef.petEquippedList= {false,   false,  true,   true,       {},    true}--当前角色宠物装备表
 ValueDef.plusPetEquippedIndex={false,false, true,   true,       0,      true}--当前角色式神装备表
 ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,      true}--当前角色获取过的宠物实体总数（不会减少）
 ValueDef.allPetAttr     = {false,   false,  true,   true,       {},    true}--宠物、式神相关数据
+ValueDef.petPageNu      = {false,   false,  false,  false,      2,     true}--当前玩家宠物背包页数量
 
 --[[
 宠物、式神相关数据存储索引说明：索引为createPet后返回的index，通过索引插入的AllPetAttr，该表不为序列，期间可能会出现nil
@@ -53,7 +56,7 @@ ValueDef.allPetAttr     = {false,   false,  true,   true,       {},    true}--�
  minorID = 0，        --式神副ID
  petType = 0,         --是宠物还是式神
  level = 1,           --当前强化等级
- petCoinTransRage = 1,--该宠物Entity当前的金币增益
+ petCoinTransRate = 1,--该宠物Entity当前的金币增益
  petChiTransRate = 1, --该宠物Entity当前的气增益
  plusPetATKRate = 1}, --该式神Entity当前的攻击倍率增益
 --]]
@@ -235,12 +238,19 @@ function Entity:getHurtSub()
 end
 function Entity:deltaHurtSub(val)
     assert(tonumber(val), "invalid input:" .. val .. "is not a number")
-    if val >1 then
+    if val >=1 then
         Lib.log("HurtSub cannot exceed 1!")
         return
     end
     self:setValue("hurtSub",self:getValue("hurtSub")-val)
 end
+
+function Entity:getArenaScore()
+    return math.max(self:getValue("arenaScore"),0)
+end
+
+
+
 
 ---设置阵营Id
 function Entity:setTeamId(id)

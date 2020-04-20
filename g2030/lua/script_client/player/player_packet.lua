@@ -25,13 +25,11 @@ function handles:exchangeWeapon(packet)
 end
 
 function handles:PetList(packet)
-    local list = {};
     self.equipPetList = {}
-    for index, IDAndAttachPoint in pairs(packet.list) do
-        list[index] = IDAndAttachPoint.objID;
-        self.equipPetList[index] = IDAndAttachPoint.petIndex;
+    for index, entityInfo in pairs(packet.list) do
+        self.equipPetList[index] = entityInfo;
     end
-    self:setData("pet", list)
+    print(Lib.v2s( self.equipPetList))
 end
 
 function handles:ResetEntityRechargeSkill(packet)

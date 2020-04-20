@@ -4,12 +4,19 @@
 --- DateTime: 2020/4/1 11:52
 ---
 
-Player.equipPetList = {};
-
-function Player:callPet(index)
-
+function Player:callPet(index, ridePoint)
+    local packet = {
+        pid = "callPet",
+        index = index,
+        ridePoint = ridePoint
+    }
+    self:sendPacket(packet)
 end
 
 function Player:recallPet(index)
-
+    local packet = {
+        pid = "recallPet",
+        index = index
+    }
+    self:sendPacket(packet)
 end

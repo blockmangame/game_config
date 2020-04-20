@@ -108,10 +108,7 @@ function EntityServer:doDamage(info)
         end
         return
     end
-    print("---------deltaHp--------------",Lib.v2s(-damage))
     self:deltaHp(-damage)
-
-    print("---------ShowFlyNum--------------",Lib.v2s(-damage))
     self:ShowFlyNum(-damage)
     --function Actions.ShowNumberUIOnEntity(data, params, context)
     --

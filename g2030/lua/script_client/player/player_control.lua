@@ -81,6 +81,8 @@ local function checkJump(control, player)
         return
     end
 
+    --print("gravity " .. player:getEntityProp("gravity"))
+
     local playerCfg = player:cfg()
     local worldCfg = World.cfg
     local nowTime = World.Now()
