@@ -25,6 +25,7 @@ function JumpConfig:getJumpConfig(id)
             return setting
         end
     end
+    Lib.log(string.format("JumpConfig:getJumpConfig %s nil", tostring(id)))
     return nil
 end
 
