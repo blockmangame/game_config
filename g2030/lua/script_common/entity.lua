@@ -1,5 +1,6 @@
 -- 自动同步属性定义
 local ValueDef		= T(Entity, "ValueDef")
+local AdvanceConfig = T(Config, "AdvanceConfig")
 local playerCfg = World.cfg
 -- key				= {isCpp,	client,	toSelf,	toOther,	init,	saveDB}
 ValueDef.jumpCount	= {false,	true,	false,	false,      1,		false}
@@ -87,8 +88,9 @@ end
 
 ---获取每次锻炼增幅
 function Entity:getPerExpPlus()
+    
     ---TODO exp up calc func
-    return self:getValue("perExp")*(self:getCurLevel())*self:getValue("perExpPlu")--TODO 宠物加成
+    return self:getValue("perExp")*(AdvanceConfig:getExpPlusByLv(self:getCurLevel())+0)*self:getValue("perExpPlu")--TODO 宠物加成
 end
 ---设置每次攻击锻炼增幅值变化
 function Entity:deltaPerExpPlus(val)
