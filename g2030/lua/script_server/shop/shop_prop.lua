@@ -41,7 +41,7 @@ end
 --
 function M:onBuy(player, itemId)
     local item = self.config:getItemById(itemId)
-    print("Equip:onBuy(player, itemId)"..tostring(item.id))
+    print("Prop:onBuy(player, itemId)"..tostring(item.id))
     if item then
         player:consumeDiamonds("gDiamonds", item.price, function(ret)
             if ret then
@@ -73,7 +73,8 @@ end
 
 function M:onPlayerUseItem(player, item)
     if item.bagCapacity then
-        print("onPlayerUseItem 玩家 : "..tostring(player.name).. "宠物扩容 item.bagCapacity "..tostring(item.bagCapacity))
+        --player:getValue("petPageNu") = player:getValue("petPageNu") + item.bagCapacity
+        print("onPlayerUseItem 玩家 : "..tostring(player.name).. "宠物扩容 item.bagCapacity "..tostring(item.bagCapacity).." item.id : "..tostring(item.id))
         return
     elseif item.petType then
         if item.petType == Define.petType.pet then

@@ -487,6 +487,7 @@ function M:onDetailButton()
 end
 
 function M:onBuyAll()
+    --UI:getWnd("payShop"):onBuyPropBagCapacity()
     self:senderBuyAll()
 end
 
