@@ -48,7 +48,7 @@ function Player:playFreeFallSkill()
         self:setEntityProp("gravity", tostring(config.fallGravity))
     end
 
-    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
+    self:setEntityProp("antiGravity", 0.0)
     self:setEntityProp("moveAcc", tostring(self.EntityProp.moveAcc))
     self.motion = Lib.v3(0, 0, 0)
     --player:setValue("isKeepAhead", false)
@@ -115,7 +115,7 @@ function Player:eventJumpEnd()
 
     self.jumpEnd = true
 
-    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
+    self:setEntityProp("antiGravity", 0.0)
     self.motion = Lib.v3(0, 0, 0)
     self:beginFall(self:curBlockPos().y)
 end
@@ -145,4 +145,8 @@ function Player:beginFall(beginFallHeight)
         --    self:setEntityProp("gravity", tostring(config.fallGravity))
         --end
     end
+end
+
+function Player:collisionEntity(objIDArray)
+    print("collisionEntity " .. Lib.inspect(objIDArray))
 end

@@ -80,11 +80,14 @@ local function jump_impl(control, player)
 end
 
 local function processJumpEvent(player)
-    Lib.log(string.format("gravity:%s player:curBlockPos().y:%s", tostring(player:getEntityProp("gravity")),
-            tostring(player:curBlockPos().y)))
+    --Lib.log(string.format("gravity:%s antiGravity:%s player:curBlockPos().y:%s lastJumpHeight:%s motion:%s %s %s",
+    --        tostring(player:getEntityProp("gravity")), tostring(player:getEntityProp("antiGravity")),
+    --        tostring(player:curBlockPos().y), tostring(player.lastJumpHeight),
+    --        tostring(player.motion.x), tostring(player.motion.y), tostring(player.motion.z)))
 
-    if not player.onGround and player.motion.y > 0
-            and player:curBlockPos().y - player.lastJumpHeight >= player.jumpHeight then
+    if (not player.onGround and player.motion.y > 0
+            and player:curBlockPos().y - player.lastJumpHeight >= player.jumpHeight)
+            or (not player.onGround and player.motion.y == 0) then
         player:eventJumpEnd()
     end
 
