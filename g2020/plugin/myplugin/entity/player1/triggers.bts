@@ -5474,11 +5474,6 @@ ENTER_MAP
     ShowWhiteScreen(player = $obj1)
     AddEntityBuff(entity = $obj1, cfg = "myplugin/freeze_buff", buffTime = 80)
     SyncWorldTime(player = $obj1)
-
-    $mapName = GetEntityName(entity = $map)
-    If($mapName == "map001" or $mapName == "map002") {
-        SetRobotRandomDanceToShow(player = $obj1)
-    }
 }
 
 LEAVE_MAP
@@ -5499,6 +5494,13 @@ LEAVE_MAP
         If($lastInteractionUiObjId){
             UpdateEntityEditContainer2(player = $obj1, entityId = $lastInteractionUiObjId, show = false)
             SetObjectVar(obj = $obj1, key = "lastInteractionUiObjId", value = nil)
+        }
+    }
+
+    $mapName = GetEntityName(entity = $map)
+    If(($mapName == "map001" or "map002") and @robotDancing) {
+        Foreach(array = $mapName == "map001" and @robotsAtMap001 or @robotsAtMap002, key = "robot") {
+            $robot.isDancing = false
         }
     }
 }

@@ -371,11 +371,11 @@ end
 
 function Actions.SetRobotRandomDanceToShow(data, params, context)
     local player = params.player
-    if not player then
+    if not player or not World.vars["robotDancing"] then
         return
     end
     World.Timer(100, function()
-        player:setRobotRandomDanceToShow(World.vars["robotDancing"])
+        player:setRobotRandomDanceToShow(true)
         return false
     end)
 end

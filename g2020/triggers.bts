@@ -169,6 +169,8 @@ INIT_WORK_TASK_DATA(){    --打工配置表的读取
 FUNC_CREATE_ROBOT
 {
     @robots = []
+    @robotsAtMap001 = []
+    @robotsAtMap002 = []
     ForLoop(from = 1, to = @robotSum, key = "id") {
         ArrayAppend(array = @robots, value = CreateNpc(cfgName = GetGlobalVar(key = "robotCfg") or "myplugin/robot", map = "map002", pos = { x = 229, y = 16, z = 141}))
     }
