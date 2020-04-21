@@ -1274,6 +1274,13 @@ HOUSE_LOCK{
         }Else{
             StartTimer(object =$obj1, obj1 =$obj1, house = $house, isLock = true, textKey = "house_lock", time = 2, event = "LOCK_HOUSE_CONTENT")
         }
+
+        $map = GetEntityMap(entity = $obj1)
+        $allPlayers = GetMapPlayer(map = $map)
+        Foreach(array = $allPlayers, key = "player")
+        {
+            CallTrigger(object = $house, event = "CLOSE_THE_DOOR", player = $player)
+        }
     }Else{ -- 上锁状态则重置为未上锁状态
         StartTimer(object =$obj1, obj1 =$obj1, house = $house, isLock = false, textKey = "house_unlock", time = 2, event = "LOCK_HOUSE_CONTENT")
     }
