@@ -98,3 +98,12 @@ function handles:ConfirmGauntlet(packet)
         --失败提示
     end
 end
+function handles:MatchArena(packet)
+    local entity = World.CurWorld:getObject(packet.objId)
+    if not entity then
+        return
+    end
+    if not Game.EntityJoinProcess(packet.key, entity) then
+        --失败提示
+    end
+end
