@@ -61,6 +61,7 @@ function Player:recoverJumpProp()
 
     self.isGliding = false
     self.isJumpMoveEnd = false
+    self.jumpEnd = false
 
     Lib.emitEvent("EVENT_PLAY_GLIDING_EFFECT", self.isGliding)
     Blockman.instance.gameSettings:setEnableRadialBlur(false)

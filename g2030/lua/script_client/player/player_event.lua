@@ -74,3 +74,16 @@ function events:dead(dead)
         self:recoverJumpProp()
     end
 end
+
+function events:jumpEnd()
+    print("jumpEnd")
+
+    if self.jumpEnd then
+        return
+    end
+
+    self.jumpEnd = true
+
+    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
+    self.motion.y = 0
+end
