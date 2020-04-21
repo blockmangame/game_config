@@ -80,6 +80,9 @@ local function jump_impl(control, player)
 end
 
 local function processJumpEvent(player)
+    Lib.log(string.format("gravity:%s player:curBlockPos().y:%s", tostring(player:getEntityProp("gravity")),
+            tostring(player:curBlockPos().y)))
+
     if not player.onGround and player.motion.y > 0
             and player:curBlockPos().y - player.lastJumpHeight >= player.jumpHeight then
         player:eventJumpEnd()
@@ -140,12 +143,12 @@ local function checkJump(control, player)
                 Lib.emitEvent(Event.EVENT_UPDATE_JUMP_PROGRESS, {jumpStart = true, jumpBeginTime = jumpBeginTime, jumpEndTime = jumpEndTime})
             end
         end
-        if worldCfg.enableTwiceJump and 0 == jumpEndTime and not player.twiceJump then -- twice jump
-            player.twiceJump = true
-            if playerCfg.twiceJumpSkill and (nowTime - jumpBeginTime >= (playerCfg.twiceJumpTouchTime or 0) ) then
-                Skill.Cast(playerCfg.twiceJumpSkill)
-            end
-        end
+        --if worldCfg.enableTwiceJump and 0 == jumpEndTime and not player.twiceJump then -- twice jump
+        --    player.twiceJump = true
+        --    if playerCfg.twiceJumpSkill and (nowTime - jumpBeginTime >= (playerCfg.twiceJumpTouchTime or 0) ) then
+        --        Skill.Cast(playerCfg.twiceJumpSkill)
+        --    end
+        --end
         if nowTime > jumpEndTime or nowTime < nextJumpTime then
             if slideJumpFlag then slideJumpFlag = false end
             return
