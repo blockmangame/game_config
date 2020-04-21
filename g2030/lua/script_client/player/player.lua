@@ -65,3 +65,10 @@ function Player:recoverJumpProp()
     Lib.emitEvent("EVENT_PLAY_GLIDING_EFFECT", self.isGliding)
     Blockman.instance.gameSettings:setEnableRadialBlur(false)
 end
+function Player:matchArena()
+    self:sendPacket({
+        pid = "MatchArena",
+        objId = Me.objID,
+        key = "ArenaCompetition"
+    })
+end

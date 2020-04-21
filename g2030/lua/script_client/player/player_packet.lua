@@ -75,3 +75,8 @@ function handles:ShowGauntlet(packet)
         UI:closeWnd("gauntlet")
     end
 end
+function handles:CommonNotice(packet)
+    if packet and packet.content then
+        Lib.emitEvent(Event.EVENT_COMMON_NOTICE,packet.content)
+    end
+end

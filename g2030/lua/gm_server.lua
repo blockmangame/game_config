@@ -34,6 +34,10 @@ end
 GMItem["g2030/无上限特权"] = function(self)
     self:setInfiniteExp()
 end
+GMItem["g2030/发送测试弹窗"] = function(self)
+    self:showCommonNotice("GM发送的测试提示信息，啦啦啦~")
+end
+
 GMItem["g2030/神圣攻击加成特权"] = function(self)
     self:setOpenRealDmg()
 end

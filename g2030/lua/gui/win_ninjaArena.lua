@@ -67,6 +67,7 @@ function M:initEvent()
         UI:closeWnd(self)
     end)
     self:subscribe(self.btnStart, UIEvent.EventButtonClick, function()
+        Me:matchArena()
         UI:closeWnd(self)
     end)
 end

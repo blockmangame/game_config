@@ -239,7 +239,7 @@ function Entity.EntityProp:continueDamage(value, add, buff)
     continueDamage.spd =  (add and value.spd or 0)
     if add then
         if from and from.isPlayer then
-            from:doAttack({target = self, skill = {dmgRat = continueDamage.dmgRat,dmgBase = continueDamage.dmgBase}, originalSkillName = buff.fullName, cause = "ENGINE_PROP_CONTINUE_DAMAGE"})
+            from:doAttack({target = self, skill = {dmgRat = continueDamage.dmgRat,dmgBase = continueDamage.dmgBase}, originalSkillName = buff.fullName, cause = continueDamage.spd==0 and "ENGINE_PROP_ONCE_DAMAGE" or "ENGINE_PROP_CONTINUE_DAMAGE"})
         end
     end
 	if not continueDamage.timer then
