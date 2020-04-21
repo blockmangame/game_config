@@ -3655,18 +3655,61 @@ REMOVE_BM_DRESS
 
 INIT_PLAYER_DRESS
 {
-    If(not $obj1.gameDress)
+    If(not $obj1.gameDress || $obj1.gameDress == "")
     {
+        $isNeedChangeSkin = true
+        $defDressDict = NewDictionary(GetPlayerDefDress())
+        ForeachDictionary(dict = $defDressDict, keyName = "skin", valueName = "value")
+        {
+            $userSkin = GetSkin(entity = $obj1, skinName = $skin)
+            If($userSkin && $userSkin ~= "" && ToString($userSkin) ~= $value)
+            {
+                $isNeedChangeSkin = false
+                Break()
+            }
+        }
+
+        If(not $isNeedChangeSkin) {
+            Return()
+        }
+
+        $index = 0
+        $sex = GetPlayerSex(player = $obj1)
+        If ($sex == 1)
+        {
+            $index = GetWorldVar(key = "boyDefaultDressArchiveIndex")
+        }
+        Else
+        {
+            $index = GetWorldVar(key = "girlDefaultDressArchiveIndex")
+        }
+
+
+        If($index <= ArraySize(array = $obj1.dressArchive) and $index > 0)
+        {
+            $archive = ArrayGet(array = $obj1.dressArchive, index = $index)
+            If($archive)
+            {
+                $data = GetObjectVar(obj = $archive, key = "data") or { vars = {} }
+                ForeachDictionary(dict = $defDressDict, keyName = "skin", valueName = "value")
+                {
+                    $targetValue = GetObjectVar(obj = $data, key = $skin)
+                    If($targetValue)
+                    {
+                        SetSkin(entity = $obj1, skinName = $skin, skinValue = $targetValue)
+                    }
+                }
+            }
+
+            CallTrigger(object = $obj1, event = "SAVE_PLAYER_DRESS")
+        }
         Return()
     }
 
-    If($obj1.gameDress ~= "")
+    $dressDict = NewDictionary($obj1.gameDress)
+    ForeachDictionary(dict = $dressDict, keyName = "skinName", valueName = "skinValue")
     {
-        $dressDict = NewDictionary($obj1.gameDress)
-        ForeachDictionary(dict = $dressDict, keyName = "skinName", valueName = "skinValue")
-        {
-            SetSkin(entity = $obj1, skinName = $skinName, skinValue = $skinValue)
-        }
+        SetSkin(entity = $obj1, skinName = $skinName, skinValue = $skinValue)
     }
 }
 
