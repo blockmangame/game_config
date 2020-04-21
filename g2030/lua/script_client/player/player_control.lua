@@ -65,6 +65,7 @@ local function jump_impl(control, player)
         player:setEntityProp("moveSpeed", tostring(config.moveSpeed))
         player.JumpMoveEndFallDistance = config.jumpMoveEndFallDistance
         player.jumpHeight = config.jumpHeight
+        player.jumpEnd = false
     end
 
     local playerCfg = player:cfg()
@@ -79,8 +80,6 @@ local function jump_impl(control, player)
 end
 
 local function processJumpEvent(player)
-    --print("player:curBlockPos().y " .. player:curBlockPos().y)
-
     if not player.onGround and player.motion.y > 0
             and player:curBlockPos().y - player.lastJumpHeight >= player.jumpHeight then
         player:eventJumpEnd()
