@@ -44,7 +44,7 @@ function EntityServer:doAttack(info)
     print("---------doAttack------damage--3----------------",attackProps.dmgFactor)
     print("---------doAttack------damage--4----------------",attackProps.atk)
     print("---------doAttack------damage--5----------------",attackProps.dmgRealPlu)
-    print("---------doAttack------damage--6----------------",attackProps.hurtSub)
+    print("---------doAttack------damage--6----------------",defenseProps.hurtSub)
     local damage =  math.max(attackProps.dmgBase+ attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1)
     print("---------doAttack------damage------------------",damage)
     info.target:doDamage({

@@ -25,11 +25,11 @@ GMItem["g2030/释放宠物技能"] = function(self)
 end
 -----------------------------------Pet Model Test End-------------------------------
 
-GMItem["g2030技能/1号技能"] = function(self)
-    Skill.Cast("myplugin/player_skill_triple_attack")
+GMItem["g2030技能/击退技能"] = function(self)
+    Skill.Cast("myplugin/player_control_skill_beatback")
 end
-GMItem["g2030技能/2号技能"] = function(self)
-    Skill.Cast("myplugin/player_skill_triple_attack")
+GMItem["g2030技能/击飞技能"] = function(self)
+    Skill.Cast("myplugin/player_control_skill_hitfly")
 end
 GMItem["g2030技能/3号技能"] = function(self)
     Skill.Cast("myplugin/player_skill_triple_attack")
