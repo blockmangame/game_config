@@ -495,9 +495,9 @@ function Player:getAllEquippedPet()
     for _, v in pairs(self.equipPetList) do
         local type = self:getPetAttr(v.index).petType
         if type == Define.petType.pet then
-            table.insert(v.index)
+            table.insert(v)
         elseif type == Define.petType.plusPet then
-            table.insert(plusPetList, v.index)
+            table.insert(plusPetList, v)
         end
     end
     return petList, plusPetList
