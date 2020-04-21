@@ -117,11 +117,11 @@ function Player:eventJumpEnd()
 
     self:setEntityProp("antiGravity", 0.0)
     self.motion = Lib.v3(0, 0, 0)
-    self:beginFall(self:curBlockPos().y)
+    self:eventBeginFall(self:curBlockPos().y)
 end
 
-function Player:beginFall(beginFallHeight)
-    print("beginFall " .. beginFallHeight)
+function Player:eventBeginFall(beginFallHeight)
+    --print("eventBeginFall " .. beginFallHeight)
 
     self.beginFallHeight = beginFallHeight
 
