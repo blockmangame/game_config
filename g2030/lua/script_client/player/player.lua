@@ -9,9 +9,11 @@ function Player:initPlayer()
     self.isGliding = false
     self.isJumpMoveEnd = false
     self.jumpEnd = false
-    
+
     self.lastJumpHeight = 0
+    self.JumpMoveEndFallDistance = 0
     self.jumpHeight = 0
+    self.beginFallHeight = 0
 
     self:initData()
     Blockman.Instance():setLockVisionState(World.cfg.lockVision and World.cfg.lockVision.open or false)
