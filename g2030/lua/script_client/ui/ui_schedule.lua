@@ -44,3 +44,13 @@ Lib.subscribeEvent(Event.EVENT_NOT_ENOUGH_MONEY, function()
             }
     )
 end)
+Lib.subscribeEvent(Event.EVENT_COMMON_NOTICE,function(content)
+    UI:openWnd("ninjaCommonDialog"):initView(
+            {
+                content = content,
+                contentCenter = true,
+                txtTitle = Lang:toText("gui_tip"),
+                hideClose = true,
+            }
+    )
+end)

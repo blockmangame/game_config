@@ -222,3 +222,16 @@ end
 function Player:getTeam()
     return Game.GetTeam(self:getTeamId())
 end
+
+
+----------------------------------------------common-----------------------
+---
+---向本客户端发送一个显示文字的普通提示弹窗
+---
+function Player:showCommonNotice(content)
+    local packet = {
+        pid = "CommonNotice",
+        content = content,
+    }
+    self:sendPacket(packet)
+end

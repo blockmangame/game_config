@@ -60,9 +60,11 @@ local function jump_impl(control, player)
     local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount + 1)
     if config then
         player:setEntityProp("jumpSpeed", tostring(config.jumpSpeed))
-        player:setEntityProp("gravity", tostring(config.gravity))
+        --player:setEntityProp("gravity", tostring(config.gravity))
+        player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
         player:setEntityProp("moveSpeed", tostring(config.moveSpeed))
-        GlobalProperty.Instance():setIntProperty("JumpMoveEndFallDistance", config.jumpMoveEndFallDistance)
+        player.JumpMoveEndFallDistance = config.jumpMoveEndFallDistance
+        player.jumpHeight = config.jumpHeight
     end
 
     local playerCfg = player:cfg()
@@ -70,9 +72,24 @@ local function jump_impl(control, player)
     packet.reset = (jumpCount == maxJumpCount)
     Skill.Cast(playerCfg.jumpSkill, packet)
 
+    player.lastJumpHeight = player:curBlockPos().y
     control:jump()
 
     player:decJumpCount()
+end
+
+local function processJumpEvent(player)
+    --print("gravity " .. player:getEntityProp("gravity"))
+
+    if not player.onGround and player.motion.y > 0
+            and player:curBlockPos().y - player.lastJumpHeight >= player.jumpHeight then
+        player_event(player, "jumpEnd")
+    end
+
+    if (not player.onGround and player.motion.y <= 0
+            and player.beginFallHeight - player:curBlockPos().y >= player.JumpMoveEndFallDistance) then
+        player_event(player, "jumpMoveEnd")
+    end
 end
 
 ---@param control PlayerControl
@@ -82,7 +99,7 @@ local function checkJump(control, player)
         return
     end
 
-    --print("gravity " .. player:getEntityProp("gravity"))
+    processJumpEvent(player)
 
     local playerCfg = player:cfg()
     local worldCfg = World.cfg

@@ -164,10 +164,15 @@ end
 function Entity:getCurHp()
     return self:getValue("curHp")
 end
+--[[
 function Entity:getCurDamage()
-  --  return 1+self:getCurExp()*5*self:getDmgPlu()*self:getDmgRealPlu()
-    return playerCfg.baseAtk+self:getCurExp()*playerCfg.baseExp2Atk
+    return BigInteger.Create(playerCfg.baseAtk)+self:getCurExp()*BigInteger.Create(playerCfg.baseExp2Atk)
 end
+]]
+function Entity:getCurDamage()
+    return BigInteger.Create(playerCfg.baseAtk)+self:getCurExp()*BigInteger.Create(playerCfg.baseExp2Atk)
+end
+
 ---
 ---获取伤害加成系数
 ---

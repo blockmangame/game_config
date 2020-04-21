@@ -6,6 +6,15 @@
 function Player:initPlayer()
     Lib.log("Player:initPlayer")
 
+    self.isGliding = false
+    self.isJumpMoveEnd = false
+    self.jumpEnd = false
+
+    self.lastJumpHeight = 0
+    self.JumpMoveEndFallDistance = 0
+    self.jumpHeight = 0
+    self.beginFallHeight = 0
+
     self:initData()
     Blockman.Instance():setLockVisionState(World.cfg.lockVision and World.cfg.lockVision.open or false)
 end
@@ -51,17 +60,31 @@ function Player:playFreeFallSkill()
 end
 
 function Player:recoverJumpProp()
-    self:setEntityProp("jumpSpeed", tostring(self.EntityProp.jumpSpeed))
-    self:setEntityProp("gravity", tostring(self.EntityProp.gravity))
-    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
-    self:setEntityProp("moveSpeed", tostring(self.EntityProp.moveSpeed))
-    self:setEntityProp("moveAcc", tostring(self.EntityProp.moveAcc))
+    self:recoverEntityProp("jumpSpeed")
+    self:recoverEntityProp("gravity")
+    self:recoverEntityProp("antiGravity")
+    self:recoverEntityProp("moveSpeed")
+    self:recoverEntityProp("moveAcc")
 
     self:setValue("jumpCount", self:getMaxJumpCount())
 
     self.isGliding = false
     self.isJumpMoveEnd = false
+    self.jumpEnd = false
 
     Lib.emitEvent("EVENT_PLAY_GLIDING_EFFECT", self.isGliding)
     Blockman.instance.gameSettings:setEnableRadialBlur(false)
+end
+function Player:matchArena()
+    self:sendPacket({
+        pid = "MatchArena",
+        objId = Me.objID,
+        key = "ArenaCompetition"
+    })
+end
+
+function Player:setEntityProp(prop, value)
+    self:recoverEntityProp(prop)
+    local curValue = tonumber(self:getEntityProp(prop))
+    self:deltaEntityProp(prop, -curValue + tonumber(value))
 end

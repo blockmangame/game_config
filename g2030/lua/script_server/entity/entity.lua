@@ -44,7 +44,7 @@ function EntityServer:doAttack(info)
     print("---------doAttack------damage--3----------------",attackProps.dmgFactor)
     print("---------doAttack------damage--4----------------",attackProps.atk)
     print("---------doAttack------damage--5----------------",attackProps.dmgRealPlu)
-    print("---------doAttack------damage--6----------------",attackProps.hurtSub)
+    print("---------doAttack------damage--6----------------",defenseProps.hurtSub)
     local damage =  math.max(attackProps.dmgBase+ attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1)
     print("---------doAttack------damage------------------",damage)
     info.target:doDamage({
@@ -89,11 +89,24 @@ function EntityServer:doHealing()
         end   )
     end
 end
+-- function EntityServer:doDropDamage(speed)
+--     print("------------drop------")
+-- 	self:doDamage({
+-- 		damage = self:getMaxHp(),
+-- 		cause = "ENGINE_DO_DROP_DAMAGE",
+-- 	})
+-- end
+function player_touchdown(entity)
+	entity:doDamage({
+		damage = entity:getMaxHp(),
+		cause = "ENGINE_TOUCHDOWN",
+	})
+end
 function EntityServer:doDamage(info)
     
     local damage, from, isRebound = info.damage, info.from, info.isRebound
     local damageCause = assert(info.cause, "must have a cause of doDamage")
-
+    print("--------------------------------",damageCause)
     if damage <= 0 then
         return
     elseif self.curHp <= 0 then
@@ -239,7 +252,7 @@ function Entity.EntityProp:continueDamage(value, add, buff)
     continueDamage.spd =  (add and value.spd or 0)
     if add then
         if from and from.isPlayer then
-            from:doAttack({target = self, skill = {dmgRat = continueDamage.dmgRat,dmgBase = continueDamage.dmgBase}, originalSkillName = buff.fullName, cause = "ENGINE_PROP_CONTINUE_DAMAGE"})
+            from:doAttack({target = self, skill = {dmgRat = continueDamage.dmgRat,dmgBase = continueDamage.dmgBase}, originalSkillName = buff.fullName, cause = continueDamage.spd==0 and "ENGINE_PROP_ONCE_DAMAGE" or "ENGINE_PROP_CONTINUE_DAMAGE"})
         end
     end
 	if not continueDamage.timer then
