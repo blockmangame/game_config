@@ -18,3 +18,8 @@ end
 function Actions.TeleportEnd(data, params, context)
     params.entity:sendPacket({pid = "TeleportEnd", type = params.type or 1})
 end
+
+function Actions.rewardActions(data, params, context)
+    local rewardManager = T(Game, "rewardManager")
+    rewardManager:doReward(params.type, params.object, params.player)
+end

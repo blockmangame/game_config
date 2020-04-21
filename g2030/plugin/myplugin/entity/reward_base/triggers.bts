@@ -1,0 +1,69 @@
+ENTITY_TOUCH_ALL{
+    If(not IsPlayer(entity = $obj2))
+    {
+        Return()
+    }
+    $type = GetConfigVar(obj = $obj1,key="type")
+    rewardActions(player = $obj2, object = $obj1, type = $type)
+    --AddEntitySceneUI(entity = $obj1, data = $data)
+}
+ENTITY_ENTER
+{
+        Test("     If(not $obj1) 000")
+    If(not $obj1)
+    {
+        Test("     If(not $obj1) 111")
+        Return()
+    }
+    --$typeOf3DUI = GetConfigVar(obj = $obj1, key = "typeOf3DUI")
+    --If(1)
+
+        $map = GetEntityMap(entity = $obj1)
+        $players = GetMapPlayer(map = $map)
+        $playerCount = ArraySize(array = $players)
+
+        $width = 20
+        $height = 30
+        $title = "123"
+        $textColor = [255, 255, 255]
+        $titleColor = [255, 255, 255]
+        $position = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+
+        $rotate = {
+            x = 0,
+            y = 0,
+            z = 0,
+        }
+                Test("     If(not $obj1) 2222")
+        $objID = GetObjectID(object = $obj1)
+        $position = GetConfigVar(obj = $obj1, key = "position") or $position
+        $width = GetConfigVar(obj = $obj1, key = "width") or $width
+        $height = GetConfigVar(obj = $obj1, key = "height") or $height
+        $textColor = GetConfigVar(obj = $obj1, key = "textColor") or $textColor
+        $title = GetConfigVar(obj = $obj1, key = "title") or $title
+        $titleColor = GetConfigVar(obj = $obj1, key = "titleColor") or $titleColor
+        $rotate = GetConfigVar(obj = $obj1, key = "rotate") or $rotate
+                Test("     If(not $obj1) 2121")
+        $data = {
+            key = ToString($objID),
+            name = "payShop",
+            width = $width,
+            height = $height,
+            position = $position,
+            rotate = $rotate,
+            args = {
+                text = $playerCount,
+                textColor = $textColor,
+                title = $title,
+                titleColor = $titleColor,
+            }
+        }
+
+        --AddEntitySceneUI(entity = $obj1, data = $data)
+                Test("     If(not $obj1) 333")
+
+}
