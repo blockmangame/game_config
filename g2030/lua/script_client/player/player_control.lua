@@ -63,8 +63,9 @@ local function jump_impl(control, player)
         --player:setEntityProp("gravity", tostring(config.gravity))
         player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
         player:setEntityProp("moveSpeed", tostring(config.moveSpeed))
-        GlobalProperty.Instance():setIntProperty("JumpMoveEndFallDistance", config.jumpMoveEndFallDistance)
+        player.JumpMoveEndFallDistance = config.jumpMoveEndFallDistance
         player.jumpHeight = config.jumpHeight
+        player.jumpEnd = false
     end
 
     local playerCfg = player:cfg()
@@ -79,11 +80,14 @@ local function jump_impl(control, player)
 end
 
 local function processJumpEvent(player)
-    --print("gravity " .. player:getEntityProp("gravity"))
-
     if not player.onGround and player.motion.y > 0
             and player:curBlockPos().y - player.lastJumpHeight >= player.jumpHeight then
-        player_event(player, "jumpEnd")
+        player:eventJumpEnd()
+    end
+
+    if (not player.onGround and player.motion.y <= 0
+            and player.beginFallHeight - player:curBlockPos().y >= player.JumpMoveEndFallDistance) then
+        player:eventJumpMoveEnd()
     end
 end
 
