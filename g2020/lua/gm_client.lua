@@ -33,16 +33,6 @@ GMItem["g2020/关闭引导"] = function()
     Lib.emitEvent(Event.EVENT_GUIDE_GM, packet)
 end
 
-local toDance = false
-GMItem["g2020/robot跳舞"] = function()
-    toDance = not toDance
-    local packet = {
-        pid = "GMToggleRobotDance",
-        toDance = toDance,
-    }
-    Lib.emitEvent(Event.EVENT_TOGGLE_ROBOT_DANCE, packet)
-end
-
 GMItem["g2020/重置引导"] = function()
     local packet = {
         pid = "GMGuide",

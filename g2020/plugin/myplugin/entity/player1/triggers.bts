@@ -5498,12 +5498,6 @@ LEAVE_MAP
         }
     }
 
-    $mapName = GetEntityName(entity = $map)
-    If(($mapName == "map001" or "map002") and @robotDancing) {
-        Foreach(array = $mapName == "map001" and @robotsAtMap001 or @robotsAtMap002, key = "robot") {
-            $robot.isDancing = false
-        }
-    }
 }
 
 CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY

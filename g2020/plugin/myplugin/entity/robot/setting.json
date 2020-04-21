@@ -13,13 +13,11 @@
     "followEntityDistanceWhenNotTarget": 5,
     "enableStateMachine": true,
 
-    "chaseDistance": 15,
+    "chaseDistance": 20,
     "maxVisualAngle": 360,
-    "autoAttack": false,
-    "skillList": [
-        {
-          "attackDis": 10,
-          "fullName": "myplugin/robot_dance"
-        }
-    ]
+    "autoAttack": true,
+    "chaseInterval": 200,
+    "chaseSkill": {
+      "fullName": "myplugin/robot_dance"
+    }
 }

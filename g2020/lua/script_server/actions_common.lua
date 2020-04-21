@@ -369,17 +369,6 @@ function Actions.AddBuyLotteryNum(data, params, context)
     end
 end
 
-function Actions.SetRobotRandomDanceToShow(data, params, context)
-    local player = params.player
-    if not player or not World.vars["robotDancing"] then
-        return
-    end
-    World.Timer(100, function()
-        player:setRobotRandomDanceToShow(true)
-        return false
-    end)
-end
-
 function Actions.GetPlayerSex(data, params, context)
     return params.player:data("main").sex
 end

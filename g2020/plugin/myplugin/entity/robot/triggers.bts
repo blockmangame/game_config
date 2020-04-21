@@ -9,7 +9,6 @@ ENTITY_ENTER {
     $isOdd = ( $random % 2 ) == 1
     $pos = $isOdd and { x = 182, y = 16, z = 247 } or { x = 229, y = 16, z = 141}
     SetEntityPosition(entity = $obj1, map = $isOdd and "map001" or "map002", pos = $pos)
-    ArrayAppend(array = $isOdd and @robotsAtMap001 or @robotsAtMap002, value = $obj1)
 }
 
 ENTITY_LEAVE {
@@ -77,18 +76,4 @@ CREATE_HOUSE_OUTSIDE{
 
     SetObjectVar(obj = $obj1, key = "house", value = $house)
     SetObjectVar(obj = $house, key = "region", value = $region)
-}
-
-AI_STATUS_CHANGE
-{
-    If($params1 and @robotDancing and not $obj1.isDancing) {
-        $obj1.isDancing = true
-        $random = Random(min = 1, max = 26)
-        $skill = Concat(p1 = "myplugin/dance_", p2 = $random)
-        $actionName = GetSkillVar(fullName = $skill, key = "castAction")
-        $actionTime = GetSkillVar(fullName = $skill, key = "castActionTime")
-        If($actionName) {
-            PlayAction(entity = $obj1, actionName = $actionName, actionTime = $actionTime or -1)
-        }
-    }
 }
