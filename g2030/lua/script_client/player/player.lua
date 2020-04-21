@@ -88,3 +88,33 @@ function Player:setEntityProp(prop, value)
     local curValue = tonumber(self:getEntityProp(prop))
     self:deltaEntityProp(prop, -curValue + tonumber(value))
 end
+
+
+function Player:eventJumpMoveEnd()
+    if self.isJumpMoveEnd then
+        return
+    end
+
+    print("jumpMoveEnd")
+
+    self.isJumpMoveEnd = true
+
+    if self.isGliding then
+        return
+    end
+
+    self:playFreeFallSkill()
+end
+
+function Player:eventJumpEnd()
+    if self.jumpEnd then
+        return
+    end
+
+    print("jumpEnd")
+
+    self.jumpEnd = true
+
+    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
+    self.motion = Lib.v3(0, 0, 0)
+end

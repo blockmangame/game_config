@@ -55,37 +55,8 @@ function events:beginFall(beginFallHeight)
     end
 end
 
-function events:jumpMoveEnd()
-    print("jumpMoveEnd")
-
-    if self.isJumpMoveEnd then
-        return
-    end
-
-    self.isJumpMoveEnd = true
-
-    if self.isGliding then
-        return
-    end
-
-    self:playFreeFallSkill()
-end
-
 function events:dead(dead)
     if dead then
         self:recoverJumpProp()
     end
-end
-
-function events:jumpEnd()
-    print("jumpEnd")
-
-    if self.jumpEnd then
-        return
-    end
-
-    self.jumpEnd = true
-
-    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
-    self.motion.y = 0
 end
