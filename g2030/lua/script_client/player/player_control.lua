@@ -79,16 +79,16 @@ local function jump_impl(control, player)
 end
 
 local function processJumpEvent(player)
-    --print("gravity " .. player:getEntityProp("gravity"))
+    print("player:curBlockPos().y " .. player:curBlockPos().y)
 
     if not player.onGround and player.motion.y > 0
             and player:curBlockPos().y - player.lastJumpHeight >= player.jumpHeight then
-        player_event(player, "jumpEnd")
+        player:eventJumpEnd()
     end
 
     if (not player.onGround and player.motion.y <= 0
             and player.beginFallHeight - player:curBlockPos().y >= player.JumpMoveEndFallDistance) then
-        player_event(player, "jumpMoveEnd")
+        player:eventJumpMoveEnd()
     end
 end
 
