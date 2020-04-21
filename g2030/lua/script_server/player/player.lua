@@ -147,33 +147,7 @@ function Player:exchangeEquip(fullName)
  --   self:switchItem(item1:tid(), item1:slot(),Define.TRAY_TYPE.EQUIP_1,1)
 
 end
----
----操作血量变化
----当deltaVal绝对值大于1是认为是自然数
----当deltaVal绝对值小于1是认为是倍数，将乘以最大血量以计算
----负数代表扣血
----正数代表回血
----
-function Player:deltaHp(deltaVal)
-    if deltaVal>0 and deltaVal<1 or deltaVal<0 and deltaVal>-1 then
-        deltaVal =self:getMaxHp()*deltaVal
-    end
-    if type(deltaVal) == 'number' then
-        deltaVal = math.floor(deltaVal)
-    end
-    local curVal = math.min(math.max(self:getCurHp()+deltaVal,0),self:getMaxHp())
-    if curVal ==self:getCurHp() then
-        return
-    end
-    self:setValue("curHp", curVal)
-    if curVal <=0  then
-        self.curHp = 0
-    end
-    return curVal
-end
-function Player:resetHp()
-    self:setValue("curHp", self:getMaxHp())
-end
+
 function Player:setCurExp(val)
     print("---------setCurExp---------------------")
     self:setValue("curExp", val)
@@ -221,4 +195,17 @@ end
 ---获取阵营
 function Player:getTeam()
     return Game.GetTeam(self:getTeamId())
+end
+
+
+----------------------------------------------common-----------------------
+---
+---向本客户端发送一个显示文字的普通提示弹窗
+---
+function Player:showCommonNotice(content)
+    local packet = {
+        pid = "CommonNotice",
+        content = content,
+    }
+    self:sendPacket(packet)
 end

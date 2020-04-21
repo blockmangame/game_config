@@ -6,6 +6,15 @@
 function Player:initPlayer()
     Lib.log("Player:initPlayer")
 
+    self.isGliding = false
+    self.isJumpMoveEnd = false
+    self.jumpEnd = false
+
+    self.lastJumpHeight = 0
+    self.JumpMoveEndFallDistance = 0
+    self.jumpHeight = 0
+    self.beginFallHeight = 0
+
     self:initData()
     Blockman.Instance():setLockVisionState(World.cfg.lockVision and World.cfg.lockVision.open or false)
 end
@@ -39,7 +48,7 @@ function Player:playFreeFallSkill()
         self:setEntityProp("gravity", tostring(config.fallGravity))
     end
 
-    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
+    self:setEntityProp("antiGravity", 0.0)
     self:setEntityProp("moveAcc", tostring(self.EntityProp.moveAcc))
     self.motion = Lib.v3(0, 0, 0)
     --player:setValue("isKeepAhead", false)
@@ -51,17 +60,93 @@ function Player:playFreeFallSkill()
 end
 
 function Player:recoverJumpProp()
-    self:setEntityProp("jumpSpeed", tostring(self.EntityProp.jumpSpeed))
-    self:setEntityProp("gravity", tostring(self.EntityProp.gravity))
-    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
-    self:setEntityProp("moveSpeed", tostring(self.EntityProp.moveSpeed))
-    self:setEntityProp("moveAcc", tostring(self.EntityProp.moveAcc))
+    self:recoverEntityProp("jumpSpeed")
+    self:recoverEntityProp("gravity")
+    self:recoverEntityProp("antiGravity")
+    self:recoverEntityProp("moveSpeed")
+    self:recoverEntityProp("moveAcc")
 
     self:setValue("jumpCount", self:getMaxJumpCount())
 
     self.isGliding = false
     self.isJumpMoveEnd = false
+    self.jumpEnd = false
 
     Lib.emitEvent("EVENT_PLAY_GLIDING_EFFECT", self.isGliding)
     Blockman.instance.gameSettings:setEnableRadialBlur(false)
+end
+function Player:matchArena()
+    self:sendPacket({
+        pid = "MatchArena",
+        objId = Me.objID,
+        key = "ArenaCompetition"
+    })
+end
+
+function Player:setEntityProp(prop, value)
+    self:recoverEntityProp(prop)
+    local curValue = tonumber(self:getEntityProp(prop))
+    self:deltaEntityProp(prop, -curValue + tonumber(value))
+end
+
+
+function Player:eventJumpMoveEnd()
+    if self.isJumpMoveEnd then
+        return
+    end
+
+    print(string.format("jumpMoveEnd beginFallHeight:%s", tostring(self.beginFallHeight)))
+
+    self.isJumpMoveEnd = true
+
+    if self.isGliding then
+        return
+    end
+
+    self:playFreeFallSkill()
+end
+
+function Player:eventJumpEnd()
+    if self.jumpEnd then
+        return
+    end
+
+    print("jumpEnd")
+
+    self.jumpEnd = true
+
+    self:setEntityProp("antiGravity", 0.0)
+    self.motion = Lib.v3(0, 0, 0)
+    self:eventBeginFall(self:curBlockPos().y)
+end
+
+function Player:eventBeginFall(beginFallHeight)
+    --print("eventBeginFall " .. beginFallHeight)
+
+    self.beginFallHeight = beginFallHeight
+
+    if self.isGliding then
+        return
+    end
+
+    local jumpCount = self:getJumpCount()
+    local maxJumpCount = self:getMaxJumpCount()
+
+    ---@type JumpConfig
+    local JumpConfig = T(Config, "JumpConfig")
+    if jumpCount >= 0 then
+        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
+        if config then
+            self:setEntityProp("gravity", tostring(config.fallGravity))
+        end
+    else
+        --local config = self.isGliding and JumpConfig:getGlidingConfig() or JumpConfig:getFreeFallConfig()
+        --if config then
+        --    self:setEntityProp("gravity", tostring(config.fallGravity))
+        --end
+    end
+end
+
+function Player:collisionEntity(objIDArray)
+    print("collisionEntity " .. Lib.inspect(objIDArray))
 end

@@ -8,6 +8,7 @@ function JumpConfig:init(config)
         local data = {}
         data.id = tonumber(vConfig.n_id) or 0 --id
         data.jumpSpeed = tonumber(vConfig.n_jumpSpeed) or 0 --跳跃速度
+        data.jumpHeight = tonumber(vConfig.n_jumpHeight) or 10 --跳跃高度
         data.gravity = tonumber(vConfig.n_gravity) or 0 --重力
         data.fallGravity = tonumber(vConfig.n_fallGravity) or 0
         data.moveSpeed = tonumber(vConfig.n_moveSpeed) or 0 --移动速度
@@ -26,7 +27,7 @@ function JumpConfig:getJumpConfig(id)
         end
     end
     Lib.log(string.format("JumpConfig:getJumpConfig %s nil", tostring(id)))
-    return nil
+    return settings[#settings]
 end
 
 function JumpConfig:getGlidingConfig()

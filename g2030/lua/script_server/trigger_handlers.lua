@@ -68,7 +68,7 @@ end
 function Handlers.ENTITY_DIE(context)
     local target = context.obj1
     local from = context.obj2
-    if not target or not from then
+    if not target or not from  then
         return
     end
     if not target.isPlayer or not from.isPlayer then
@@ -84,10 +84,19 @@ function Handlers.ENTITY_DIE(context)
         from:addTeamKills()
         --上报阵营击杀、阵营材料奖励
     end
+   
 end
 
 
 function Handlers.ENTITY_REBIRTH(context)
-    context.obj1:resetHp()
+    local player = context.obj1
+    if not player  then
+        return
+    end
+    if not player.isPlayer then
+        return
+    end
+    player:resetHp()
+    player:setMapPos(player.map,World.cfg.initPos)
 end
 

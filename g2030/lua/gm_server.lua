@@ -28,12 +28,20 @@ GMItem["g2030/掙錢！"] = function(self)
     self:addCurrency("gold", BigInteger.Create(23,10), "test")
     self:addCurrency("chi",  3, "test")
 end
+GMItem["g2030/搞个boss玩玩"] = function(self)
+    local entity = EntityServer.Create({cfgName = "myplugin/enemy_base", pos = World.cfg.initPos, map = "map001"})
+end
+
 GMItem["g2030/自动锻炼buff"] = function(self)
     self:addBuff("myplugin/autoExp_s",200)
 end
 GMItem["g2030/无上限特权"] = function(self)
     self:setInfiniteExp()
 end
+GMItem["g2030/发送测试弹窗"] = function(self)
+    self:showCommonNotice("GM发送的测试提示信息，啦啦啦~")
+end
+
 GMItem["g2030/神圣攻击加成特权"] = function(self)
     self:setOpenRealDmg()
 end
