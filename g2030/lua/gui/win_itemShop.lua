@@ -241,6 +241,13 @@ function M:onClickEquipItem(itemId)
     else
         self:showItemDetail()
     end
+
+    local fullName = string.format("myplugin/%s",  item.itemName)
+    local item1 = Item.CreateItem(fullName)
+    assert(item1:cfg(), "onClickEquipItem(itemId) : item:cfg() is not exit :"..tostring(itemId))
+    local Cfg = Entity.BuffCfg(item1:cfg().equip_buff)
+    assert(Cfg.perExp, "onClickEquipItem(itemId) : Cfg.perExp is not exit :"..tostring(itemId))
+
     local strItemPropertyNum1 = item.value1
     local payEquip = PayEquipConfig:getItemById(itemId)
     local strDetailDescribe = Lang:toText(item.desc)
@@ -268,13 +275,15 @@ function M:onClickEquipItem(itemId)
             end
         end
     else
-        strItemPropertyNum1 = Lang:toText(BigInteger.Create(item.efficiency))
+        strItemPropertyNum1 = Lang:toText(BigInteger.Create(Cfg.perExp.val, Cfg.perExp.bit))
         strDetailDescribe = string.format(strDetailDescribe,strItemPropertyNum1)
     end
     self.stDetailTitle:SetText(Lang:toText(tostring(item.name)))
     self.siDetailItemIcon:SetImage(item.icon)
     self.stDetailValueText[1]:SetText(Lang:toText(tostring("gui_equip_text1")))
-    self.stDetailValueNum[1]:SetText(tostring(strItemPropertyNum1))
+
+    self.stDetailValueNum[1]:SetText(tostring(BigInteger.Create(Cfg.perExp.val, Cfg.perExp.bit)))
+    --self.stDetailValueNum[1]:SetText(tostring(strItemPropertyNum1))
     self.siDetailValue[2]:SetVisible(false)
     self.siDetailValue[3]:SetVisible(false)
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 224 }, { 0, 258}, { 0, 152})
@@ -324,7 +333,13 @@ function M:onClickBeltItem(itemId)
     self.stDetailTitle:SetText(Lang:toText(tostring(item.name)))
     self.siDetailItemIcon:SetImage(item.icon)
     self.stDetailValueText[1]:SetText(Lang:toText(tostring("gui_belt_text1")))
-    self.stDetailValueNum[1]:SetText(tostring(BigInteger.Create(item.workoutUp)))
+
+    local fullName = string.format("myplugin/%s",  item.itemName)
+    local item1 = Item.CreateItem(fullName)
+    assert(item1:cfg(), "onClickBeltItem(itemId) : item:cfg() is not exit :"..tostring(itemId))
+    local Cfg = Entity.BuffCfg(item1:cfg().equip_buff)
+    assert(Cfg.expMax, "onClickBeltItem(itemId) : Cfg.expMax is not exit :"..tostring(itemId))
+    self.stDetailValueNum[1]:SetText(tostring(BigInteger.Create(Cfg.expMax.val, Cfg.expMax.bit)))
     self.siDetailValue[2]:SetVisible(false)
     self.siDetailValue[3]:SetVisible(false)
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 224 }, { 0, 258}, { 0, 152})
