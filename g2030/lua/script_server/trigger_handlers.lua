@@ -91,3 +91,14 @@ function Handlers.ENTITY_REBIRTH(context)
     context.obj1:resetHp()
 end
 
+function Handlers.ENTITY_DAMAGE(context)
+    local beHurt = context.obj1
+    if not beHurt.isPlayer then
+        local setting = beHurt:cfg()
+        if setting and setting.type == "WorldBoss" then
+            beHurt:setValue("curHp", beHurt:getCurHp() - setting.beHurt)
+            beHurt:ShowFlyNum(-setting.beHurt)
+        end
+    end
+end
+

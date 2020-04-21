@@ -64,15 +64,19 @@ function ProcessBase:initProcess()
 end
 
 function ProcessBase:waitPlayerOnTick()
+    if self.waitPlayerTime <= 0 then
+        self:waitingEnd()
+        return
+    end
+
     local seconds = (self.waitPlayerTime - self.curTick) % self.waitPlayerTime
     if seconds <= 0 or self:needKeepWaiting() then
         self:waitingEnd()
-        return
     end
 end
 
 function ProcessBase:needKeepWaiting()
-    return false
+    return self.playerCount >= self.startPlayers
 end
 
 function ProcessBase:waitingEnd()
