@@ -3,12 +3,10 @@ local Actions = BehaviorTree.Actions
 
 function Actions.ResetEntityRechargeSkill(data, params, context)
     local rechargeInfo = params.entity.rechargeInfo or {}
+    local now = World.Now()
     for _,skillInfo in pairs(rechargeInfo) do
-        if skillInfo.timer then
-            skillInfo.timer()
-            skillInfo.timer = nil
-        end
         skillInfo.curRechargeCount = skillInfo.maxRechargeCount
+        skillInfo.beginRechargeTime = now
     end
     params.entity:sendPacket({pid = "ResetEntityRechargeSkill"})
 end
@@ -19,4 +17,9 @@ end
 
 function Actions.TeleportEnd(data, params, context)
     params.entity:sendPacket({pid = "TeleportEnd", type = params.type or 1})
+end
+
+function Actions.rewardActions(data, params, context)
+    local rewardManager = T(Game, "rewardManager")
+    rewardManager:doReward(params.type, params.object, params.player)
 end

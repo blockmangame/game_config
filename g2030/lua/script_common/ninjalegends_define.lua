@@ -17,6 +17,11 @@ Define.petType = {
 
 Define.petNu = 10           --Todo 这两个配置走yml读取
 Define.plusPetNu = 5
+Define.plusPetSkillType = {
+    atk = 1,
+    def = 2,
+    gain = 3
+}
 
 Define.TabType = {
     Equip = 1,

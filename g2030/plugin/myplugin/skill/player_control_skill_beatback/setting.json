@@ -1,0 +1,28 @@
+{
+    "cdTime": 50,
+    "enableCdMask": true,
+    "type": "TimeLine",
+    "targetType": "None",
+    "timerLine": [
+		{
+            "time": 1,
+            "behavior": "Skill",
+            "value": "myplugin/player_control_skill_falldown"
+        },
+		{
+            "time": 5,
+            "behavior": "Skill",
+            "value": "myplugin/player_control_skill_getup"
+        },
+		{
+            "time": 5,
+            "behavior": "Pos",
+            "value": {
+                "x": 0,
+                "y": 0,
+                "z": -1
+            },
+            "range": 50
+        }		
+    ]
+}

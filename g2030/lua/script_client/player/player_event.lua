@@ -28,8 +28,10 @@ function events:fallGround(fallDistance)
     self:recoverJumpProp()
 end
 
-function events:beginFall()
+function events:beginFall(beginFallHeight)
     print("beginFall")
+
+    self.beginFallHeight = beginFallHeight
 
     if self.isGliding then
         return
@@ -41,7 +43,7 @@ function events:beginFall()
     ---@type JumpConfig
     local JumpConfig = T(Config, "JumpConfig")
     if jumpCount >= 0 then
-        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount + 1)
+        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
         if config then
             self:setEntityProp("gravity", tostring(config.fallGravity))
         end
@@ -51,22 +53,6 @@ function events:beginFall()
         --    self:setEntityProp("gravity", tostring(config.fallGravity))
         --end
     end
-end
-
-function events:jumpMoveEnd()
-    --print("jumpMoveEnd")
-
-    if self.isJumpMoveEnd then
-        return
-    end
-
-    self.isJumpMoveEnd = true
-
-    if self.isGliding then
-        return
-    end
-
-    self:playFreeFallSkill()
 end
 
 function events:dead(dead)

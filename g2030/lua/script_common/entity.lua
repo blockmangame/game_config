@@ -34,12 +34,16 @@ ValueDef.prop       = {false,	false,	true,	false,      {},		true}--付费商店�
 ValueDef.resource   = {false,	false,	true,	false,      {},		true}--付费商店购买的资源列表
 ValueDef.skin       = {false,	false,	true,	false,      {},		true}--付费商店购买的皮肤列表
 ValueDef.privilege  = {false,	false,	true,	false,      {},		true}--付费商店购买的特权列表
+ValueDef.boxData   = {false,	false,	true,	false,      {},		true}--箱子领取时间和状态
+ValueDef.autoSellTime   = {false,	false,	true,	false,   os.time(),		true}--限时自动锻炼有效时间戳
 ValueDef.islandLv   = {false,	false,	true,	false,       1,		true}--当前岛屿等级（商店临时解锁用）
 ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},     true }--已拥有的阵营皮肤
 ValueDef.teamSkinId = {false,   true,    true,  false,       0,     true }--已装备的阵营皮肤id
-
+--====================竞技场玩家相关数据================
 ValueDef.arenaScore = {false,   true,    true,  true,       0,     false }--竞技场分数
-
+--====================NPC相关数据================
+ValueDef.npcMaxHp = {false,   true,    true,  true,       BigInteger.Create(100000),     false }--npc最大血量
+ValueDef.npcDmg = {false,   true,    true,  true,       BigInteger.Create(100),     false }--npc基础伤害
 --====================宠物、式神相关数据================
 ValueDef.petEquippedList= {false,   false,  true,   true,       {},    true}--当前角色宠物装备表
 ValueDef.plusPetEquippedIndex={false,false, true,   true,       0,      true}--当前角色式神装备表
@@ -116,7 +120,12 @@ function Entity:isExpFull()
     if self:getIsInfiniteExp() then
         return false
     end
-    return  self:getCurExp()>=self:getMaxExp()
+    local isFull = self:getCurExp()>=self:getMaxExp()
+    if isFull and self:getAutoSellTime() >= os.time() then
+        self:sellExp()
+        return false
+    end
+    return isFull
 end
 ---获取当前阶数
 function Entity:getCurLevel()
@@ -145,11 +154,43 @@ end
 ---战斗属性相关
 ---
 ---
+---
+---操作血量变化
+---当deltaVal绝对值大于1是认为是自然数
+---当deltaVal绝对值小于1是认为是倍数，将乘以最大血量以计算
+---负数代表扣血
+---正数代表回血
+---
+function Entity:deltaHp(deltaVal)
+    if deltaVal>0 and deltaVal<1 or deltaVal<0 and deltaVal>-1 then
+        deltaVal =self:getMaxHp()*deltaVal
+    end
+    if type(deltaVal) == 'number' then
+        deltaVal = math.floor(deltaVal)
+    end
+    local curVal = math.min(math.max(self:getCurHp()+deltaVal,0),self:getMaxHp())
+    if curVal ==self:getCurHp() then
+        return
+    end
+    self:setValue("curHp", curVal)
+    if curVal <=0  then
+        self.curHp = 0
+    end
+    return curVal
+end
+function Entity:resetHp()
+    self:setValue("curHp", self:getMaxHp())
+end
 
 ---当前血量上限
 function Entity:getMaxHp()
     ---TODO hp limit calc func
-    return (playerCfg.baseHp+self:getCurExp()*playerCfg.baseExp2Hp)*self:getValue("hpMaxPlus")
+    if self.isPlayer then
+        return (playerCfg.baseHp+self:getCurExp()*tonumber(playerCfg.baseExp2Hp))*self:getValue("hpMaxPlus")
+    else
+        return self:getValue("npcMaxHp")
+    end
+    
 end
 ---
 ---当前血量
@@ -157,10 +198,28 @@ end
 function Entity:getCurHp()
     return self:getValue("curHp")
 end
+---
+---获取基础伤害值
+---
 function Entity:getCurDamage()
-  --  return 1+self:getCurExp()*5*self:getDmgPlu()*self:getDmgRealPlu()
-    return playerCfg.baseAtk+self:getCurExp()*playerCfg.baseExp2Atk
+    if self.isPlayer then
+        return BigInteger.Create(playerCfg.baseAtk)+self:getCurExp()*playerCfg.baseExp2Atk
+    else
+        return self:getValue("npcDmg")
+    end
+    
 end
+
+---初始化npc最大血量
+function Entity:setNPCMaxHp(val)
+    self:setValue("npcMaxHp",val)
+    self:setValue("curHp",val)
+end
+---初始化npc基础伤害
+function Entity:setNPCBaseDmg(val)
+    self:setValue("npcDmg",val)
+end
+
 ---
 ---获取伤害加成系数
 ---
@@ -340,6 +399,26 @@ end
 ---设置购买付费特权列表
 function Entity:setPrivilege(data)
     self:setValue("privilege", data)
+end
+
+---获取箱子领取时间和状态
+function Entity:getBoxData()
+    return self:getValue("boxData")
+end
+
+---设置箱子领取时间和状态
+function Entity:setBoxData(data)
+    self:setValue("boxData", data)
+end
+
+---获取限时自动售卖时间戳
+function Entity:getAutoSellTime()
+    return self:getValue("autoSellTime")
+end
+
+---设置限时自动售卖时间戳
+function Entity:setAutoSellTime(time)
+    self:setValue("autoSellTime", time)
 end
 
 ---获取已解锁岛屿等级
