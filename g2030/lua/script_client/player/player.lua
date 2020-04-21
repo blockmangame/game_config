@@ -116,5 +116,5 @@ function Player:eventJumpEnd()
     self.jumpEnd = true
 
     self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
-    self.motion.y = 0
+    self.motion = Lib.v3(0, 0, 0)
 end
