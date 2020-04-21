@@ -51,6 +51,25 @@ function PropConfig:getItemById(id)
     return nil
 end
 
+function PropConfig:getNextBagCapacityId()
+    local item = {}
+    for _, setting in pairs(settings) do
+        if setting.bagCapacity then
+            table.insert(item, setting)
+        end
+    end
+    table.sort(item, function(a, b)
+        return a.bagCapacity < b.bagCapacity
+    end)
+    --print(" getNextBagCapacityId ",Lib.v2s(item))
+    for i, v in pairs(item) do
+        if v.status ~= Define.BuyStatus.Buy and v.status ~= Define.BuyStatus.Used then
+            return v
+        end
+    end
+    return nil
+end
+
 function PropConfig:getSettings()
     return settings
 end
