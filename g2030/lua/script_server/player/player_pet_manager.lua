@@ -10,7 +10,7 @@ local petType = T(Define, "petType");
 {ID = 0,              --宠物or式神的pluginID
  minorID = 0,         --式神的副ID
  petType = 0,         --是宠物还是式神
- level = 1,           --当前强化等级
+ level = 0,           --当前强化等级
  petCoinTransRate = 1,--该宠物Entity当前的金币增益
  petChiTransRate = 1, --该宠物Entity当前的气增益
  plusPetATKRate = 1}, --该式神Entity当前的攻击倍率增益
@@ -22,12 +22,12 @@ local function getPet(player, type, petID, minorID)
     AllPetAttr[allEntityNum] = {
         ID = petID,
         petType = type,
-        level = 1
+        level = 0
     };
     return AllPetAttr, allEntityNum;
 end
 
-function Player:getNewPet(ID, coinTransRatio, chiTransRatio)
+function Player:getNewPet(ID, coinTransRatio, chiTransRatio, level)
     local allAttribs, index = getPet(self, petType.pet, ID);
     local cfg = Entity.GetCfg(Player.turnID2Plugin(petType.pet, ID));
     if coinTransRatio then
@@ -40,10 +40,13 @@ function Player:getNewPet(ID, coinTransRatio, chiTransRatio)
     else
         allAttribs[index].chiTransRatio = cfg.chiTransRatio;
     end
+    if level then
+        allAttribs[index].level = level
+    end
     self:setValue("allPetAttr", allAttribs);
 end
 
-function Player:getNewPlusPet(ID, minorID, plusPetATKRate)
+function Player:getNewPlusPet(ID, minorID, plusPetATKRate, level)
     minorID = minorID or 0
     local allAttribs, index = getPet(self, petType.plusPet, ID, minorID);
     print(Player.turnID2Plugin(petType.plusPet, ID, minorID))
@@ -52,6 +55,9 @@ function Player:getNewPlusPet(ID, minorID, plusPetATKRate)
         allAttribs[index].plusPetATKRate = plusPetATKRate;
     else
         allAttribs[index].plusPetATKRate = cfg.atkBuffNum;
+    end
+    if level then
+        allAttribs[index].level = level
     end
     self:setValue("allPetAttr", allAttribs);
 end

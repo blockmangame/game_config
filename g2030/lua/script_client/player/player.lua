@@ -48,7 +48,7 @@ function Player:playFreeFallSkill()
         self:setEntityProp("gravity", tostring(config.fallGravity))
     end
 
-    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
+    self:setEntityProp("antiGravity", 0.0)
     self:setEntityProp("moveAcc", tostring(self.EntityProp.moveAcc))
     self.motion = Lib.v3(0, 0, 0)
     --player:setValue("isKeepAhead", false)
@@ -95,7 +95,7 @@ function Player:eventJumpMoveEnd()
         return
     end
 
-    print("jumpMoveEnd")
+    print(string.format("jumpMoveEnd beginFallHeight:%s", tostring(self.beginFallHeight)))
 
     self.isJumpMoveEnd = true
 
@@ -115,6 +115,38 @@ function Player:eventJumpEnd()
 
     self.jumpEnd = true
 
-    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
+    self:setEntityProp("antiGravity", 0.0)
     self.motion = Lib.v3(0, 0, 0)
+    self:eventBeginFall(self:curBlockPos().y)
+end
+
+function Player:eventBeginFall(beginFallHeight)
+    --print("eventBeginFall " .. beginFallHeight)
+
+    self.beginFallHeight = beginFallHeight
+
+    if self.isGliding then
+        return
+    end
+
+    local jumpCount = self:getJumpCount()
+    local maxJumpCount = self:getMaxJumpCount()
+
+    ---@type JumpConfig
+    local JumpConfig = T(Config, "JumpConfig")
+    if jumpCount >= 0 then
+        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
+        if config then
+            self:setEntityProp("gravity", tostring(config.fallGravity))
+        end
+    else
+        --local config = self.isGliding and JumpConfig:getGlidingConfig() or JumpConfig:getFreeFallConfig()
+        --if config then
+        --    self:setEntityProp("gravity", tostring(config.fallGravity))
+        --end
+    end
+end
+
+function Player:collisionEntity(objIDArray)
+    print("collisionEntity " .. Lib.inspect(objIDArray))
 end
