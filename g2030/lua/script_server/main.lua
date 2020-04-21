@@ -42,6 +42,7 @@ require "script_server.trigger_handlers"
 
 require "script_server.actions_custom"
 require "script_server.actions_common"
+require "script_server.reward.reward_manager"
 
 local main = {}
 

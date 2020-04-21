@@ -29,9 +29,14 @@ function M:initWnd()
     self.lytListHead = self:child("NinjaArena-ListHead")
 
     self.txtStageKillVal = self:child("NinjaArena-stageKillVal")--本人杀人数
-    self.txtStageScoreVal = self:child("NinjaArena-stageScoreVal")--本人分数
+    self.txtStageScoreVal = self:child("NinjaArena-StageScoreVal")--本人分数
     self.txtStageNumber = self:child("NinjaArena-StageNumber")--本人阶数
     self.txtStageTitleNum = self:child("NinjaArena-StageTitleNum")--本人阶数标题
+
+    self.txtRankName = {}
+    self.txtRankKill = {}
+    self.txtRankScore = {}
+    self.txtRankLv = {}
 
     self.txtRankName[1] = self:child("NinjaArena-firstName")--第一名名称
     self.txtRankKill[1] = self:child("NinjaArena-firstKillVal")--第一名杀人数
@@ -49,7 +54,7 @@ function M:initWnd()
     self.txtRankLv[3] = self:child("NinjaArena-3thLvVal")--第3名阶数
 
 
-    self.grdList = self.child("NinjaArena-List")
+    self.grdList = self:child("NinjaArena-List")
 
 
     self:initEvent()
@@ -59,14 +64,14 @@ end
 
 function M:initEvent()
     self:subscribe(self.btnClose, UIEvent.EventButtonClick, function()
-        self:hide()
+        UI:closeWnd(self)
     end)
     self:subscribe(self.btnStart, UIEvent.EventButtonClick, function()
-        self:hide()
+        UI:closeWnd(self)
     end)
 end
 function M:initView()
-    local stageId = 2
+    local stageId = 1
     self.lytBg:SetBackImage("set:ninja_arena.json image:bg_stage"..stageId.."_1")
     self.imgInnerBg:SetImage("set:ninja_arena.json image:bg_stage"..stageId.."_2")
     self.lytStageContent:SetBackImage("set:ninja_arena.json image:block_stage"..stageId.."_1")
@@ -82,6 +87,11 @@ function M:initView()
     self.lytListHead:SetBackImage("set:ninja_arena.json image:block_stage"..stageId.."_3")
 
     self.btnStart:SetText(Lang:toText("gui_arena_start"))
+
+    self.txtStageKillVal:SetText(5)--杀人数
+    self.txtStageScoreVal:SetText(1232455)--本人分数
+    self.txtStageNumber:SetText(14)--本人阶数
+    self.txtStageTitleNum:SetText(Lang:toText("gui_arena_level_title")..14)--本人阶数标题
 
     self.grdList:InitConfig(0, 11, 1)
     self.grdList:SetMoveAble(true)
@@ -134,7 +144,7 @@ function M:initView()
         self.txtRankName[i]:SetText(self.testData[i].name)
         self.txtRankKill[i]:SetText(self.testData[i].kill)
         self.txtRankScore[i]:SetText(self.testData[i].score)
-        self.txtRankLv[i]:SetText(self.testData[i].lv)
+        self.txtRankLv[i]:SetText(self.testData[i].level)
     end
     local i = 1
     for _, data in pairs(self.testData) do
@@ -144,8 +154,8 @@ function M:initView()
         -- local itemWidth = (contentWidth - 172) / 4
         -- local itemHeight = (contentHeight - 44) / 2.2
      --   self.allItems[i] = item
-        item:invoke("setItemData",2, data.rank, data.name, data.kill, data.score,data.level)
-        self.llContentGrid:AddItem(item)
+        item:invoke("setItemData",stageId, data.rank, data.name, data.kill, data.score,data.level)
+        self.grdList:AddItem(item)
         i = i + 1
     end
 end
