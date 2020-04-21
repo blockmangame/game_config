@@ -19,9 +19,9 @@ function PrivilegeConfig:init()
         if vConfig.n_boxDuration ~= "#" then
             data.boxDuration = tonumber(vConfig.n_boxDuration) or 0 --月卡宝箱时长(天）
         end
-        if vConfig.n_autoWorkDuration ~= "#" then
-            data.autoWorkDuration = tonumber(vConfig.n_autoWorkDuration) or 0 --自动锻炼（分钟）
-        end
+        --if vConfig.n_autoWorkDuration ~= "#" then
+        --    data.autoWorkDuration = tonumber(vConfig.n_autoWorkDuration) or 0 --自动锻炼（分钟）
+        --end
         if vConfig.n_autoSellDuration ~= "#" then
             data.autoSellDuration = tonumber(vConfig.n_autoSellDuration) or 0 --自动售卖（分钟）
         end
@@ -49,6 +49,36 @@ function PrivilegeConfig:getItemById(id)
     end
     return nil
 end
+
+function PrivilegeConfig:getAllAutoSellId()
+    local item = {}
+    for _, setting in pairs(settings) do
+        if setting.autoSellDuration then
+            table.insert(item, setting.id)
+        end
+    end
+    return item
+end
+
+function PrivilegeConfig:getAllBoxCardId(boxId)
+    local item = {}
+    for _, setting in pairs(settings) do
+        if setting.boxCard and setting.boxDuration and setting.boxCard == boxId then
+            table.insert(item, setting.id)
+        end
+    end
+    return item
+end
+
+--function PrivilegeConfig:getItemIdBoxCard(boxId)
+--    local item = {}
+--    for _, setting in pairs(settings) do
+--        if setting.boxCard and setting.boxCard == boxId then
+--            return setting.id
+--        end
+--    end
+--    return nil
+--end
 
 function PrivilegeConfig:getSettings()
     return settings

@@ -1,0 +1,2386 @@
+{
+    "Dialog": {
+        "Window": {
+            "Type": "Layout",
+            "Name": "PetEvolution",
+            "Property": [
+                {
+                    "Name": "Area",
+                    "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                },
+                {
+                    "Name": "BackgroundColor",
+                    "Value": "0 0 0 0.705882"
+                },
+                {
+                    "Name": "WndOpenSound",
+                    "Value": "0"
+                },
+                {
+                    "Name": "WndCloseSound",
+                    "Value": "0"
+                }
+            ],
+            "Window": [
+                {
+                    "Type": "StaticImage",
+                    "Name": "PetEvolution-MainBg",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,0},{0,0},{0,1000},{0,585.5}}"
+                        },
+                        {
+                            "Name": "VerticalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "HorizontalAlignment",
+                            "Value": "Centre"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "StretchType",
+                            "Value": "NineGrid"
+                        },
+                        {
+                            "Name": "StretchOffset",
+                            "Value": "50 50 50 50"
+                        },
+                        {
+                            "Name": "ImageName",
+                            "Value": "set:ninja_petevolution.json image:buttom"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        }
+                    ],
+                    "Window": [
+                        {
+                            "Type": "Layout",
+                            "Name": "PetEvolution-MainLayout",
+                            "Property": [
+                                {
+                                    "Name": "Area",
+                                    "Value": "{{0,0},{-0.00511945,0},{0.922854,0},{0.856656,0}}"
+                                },
+                                {
+                                    "Name": "VerticalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "HorizontalAlignment",
+                                    "Value": "Centre"
+                                },
+                                {
+                                    "Name": "WndOpenSound",
+                                    "Value": "0"
+                                },
+                                {
+                                    "Name": "WndCloseSound",
+                                    "Value": "0"
+                                }
+                            ],
+                            "Window": [
+                                {
+                                    "Type": "StaticImage",
+                                    "Name": "PetEvolution-SleBackground",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,-9},{0,0},{0.20627,-5},{0.98,0}}"
+                                        },
+                                        {
+                                            "Name": "VerticalAlignment",
+                                            "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "HorizontalAlignment",
+                                            "Value": "Right"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "ImageName",
+                                            "Value": "set:ninja_petevolution.json image:selarea_buttom"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
+                                        }
+                                    ],
+                                    "Window": [
+                                        {
+                                            "Type": "Layout",
+                                            "Name": "NinjaPetPackage-PlusPetFold",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,0},{0,10},{0.9,0},{0,210}}"
+                                                },
+                                                {
+                                                    "Name": "HorizontalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "Touchable",
+                                                    "Value": "false"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                }
+                                            ],
+                                            "Window": [
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PlusPetFoldSelBg",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,-2},{0.97,0},{0,160}}"
+                                                        },
+                                                        {
+                                                            "Name": "VerticalAlignment",
+                                                            "Value": "Bottom"
+                                                        },
+                                                        {
+                                                            "Name": "HorizontalAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "Touchable",
+                                                            "Value": "false"
+                                                        },
+                                                        {
+                                                            "Name": "Visible",
+                                                            "Value": "false"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "StretchType",
+                                                            "Value": "NineGrid"
+                                                        },
+                                                        {
+                                                            "Name": "StretchOffset",
+                                                            "Value": "5 5 5 5"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:sel-unflod"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ],
+                                                    "Window": [
+                                                        {
+                                                            "Type": "Layout",
+                                                            "Name": "NinjaPetPackage-PlusPetFoldSelLayoutAll",
+                                                            "Property": [
+                                                                {
+                                                                    "Name": "Area",
+                                                                    "Value": "{{0,0},{0,8},{0.95,0},{0,43}}"
+                                                                },
+                                                                {
+                                                                    "Name": "HorizontalAlignment",
+                                                                    "Value": "Centre"
+                                                                },
+                                                                {
+                                                                    "Name": "WndOpenSound",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "WndCloseSound",
+                                                                    "Value": "0"
+                                                                }
+                                                            ],
+                                                            "Window": [
+                                                                {
+                                                                    "Type": "StaticImage",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldAllSel",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchType",
+                                                                            "Value": "NineGrid"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchOffset",
+                                                                            "Value": "2 2 2 2"
+                                                                        },
+                                                                        {
+                                                                            "Name": "ImageName",
+                                                                            "Value": "set:ninja_pet_package.json image:sel-flod-sel"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Type": "StaticImage",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldAllUnSel",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "Visible",
+                                                                            "Value": "false"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchType",
+                                                                            "Value": "NineGrid"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchOffset",
+                                                                            "Value": "2 2 2 2"
+                                                                        },
+                                                                        {
+                                                                            "Name": "ImageName",
+                                                                            "Value": "set:ninja_pet_package.json image:sel-flod-unsel"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Type": "StaticText",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldSelAllText",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "VerticalAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HorizontalAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "Text",
+                                                                            "Value": "text"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextHorzAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextVertAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextLineExtraSpace",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextAutoOmission",
+                                                                            "Value": "false"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Type": "Button",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldSelAllBtn",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "SoundName",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "Type": "Layout",
+                                                            "Name": "NinjaPetPackage-PlusPetFoldSelLayoutAtk",
+                                                            "Property": [
+                                                                {
+                                                                    "Name": "Area",
+                                                                    "Value": "{{0,0},{0,45},{0.95,0},{0,80}}"
+                                                                },
+                                                                {
+                                                                    "Name": "HorizontalAlignment",
+                                                                    "Value": "Centre"
+                                                                },
+                                                                {
+                                                                    "Name": "WndOpenSound",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "WndCloseSound",
+                                                                    "Value": "0"
+                                                                }
+                                                            ],
+                                                            "Window": [
+                                                                {
+                                                                    "Type": "StaticImage",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldAtkSel",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "Visible",
+                                                                            "Value": "false"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchType",
+                                                                            "Value": "NineGrid"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchOffset",
+                                                                            "Value": "2 2 2 2"
+                                                                        },
+                                                                        {
+                                                                            "Name": "ImageName",
+                                                                            "Value": "set:ninja_pet_package.json image:sel-flod-sel"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Type": "StaticImage",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldAtkUnSel",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchType",
+                                                                            "Value": "NineGrid"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchOffset",
+                                                                            "Value": "2 2 2 2"
+                                                                        },
+                                                                        {
+                                                                            "Name": "ImageName",
+                                                                            "Value": "set:ninja_pet_package.json image:sel-flod-unsel"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Type": "StaticText",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldSelAtkText",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "VerticalAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HorizontalAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "Text",
+                                                                            "Value": "text"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextHorzAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextVertAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextLineExtraSpace",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextAutoOmission",
+                                                                            "Value": "false"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Type": "Button",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldSelAtkBtn",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "SoundName",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "Type": "Layout",
+                                                            "Name": "NinjaPetPackage-PlusPetFoldSelLayoutDef",
+                                                            "Property": [
+                                                                {
+                                                                    "Name": "Area",
+                                                                    "Value": "{{0,0},{0,82},{0.95,0},{0,117}}"
+                                                                },
+                                                                {
+                                                                    "Name": "HorizontalAlignment",
+                                                                    "Value": "Centre"
+                                                                },
+                                                                {
+                                                                    "Name": "WndOpenSound",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "WndCloseSound",
+                                                                    "Value": "0"
+                                                                }
+                                                            ],
+                                                            "Window": [
+                                                                {
+                                                                    "Type": "StaticImage",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldDefSel",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "Visible",
+                                                                            "Value": "false"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchType",
+                                                                            "Value": "NineGrid"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchOffset",
+                                                                            "Value": "2 2 2 2"
+                                                                        },
+                                                                        {
+                                                                            "Name": "ImageName",
+                                                                            "Value": "set:ninja_pet_package.json image:sel-flod-sel"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Type": "StaticImage",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldDefUnSel",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchType",
+                                                                            "Value": "NineGrid"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchOffset",
+                                                                            "Value": "2 2 2 2"
+                                                                        },
+                                                                        {
+                                                                            "Name": "ImageName",
+                                                                            "Value": "set:ninja_pet_package.json image:sel-flod-unsel"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Type": "StaticText",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldSelDefText",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "VerticalAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HorizontalAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "Text",
+                                                                            "Value": "text"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextHorzAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextVertAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextLineExtraSpace",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextAutoOmission",
+                                                                            "Value": "false"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Type": "Button",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldSelDefBtn",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "SoundName",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "Type": "Layout",
+                                                            "Name": "NinjaPetPackage-PlusPetFoldSelLayoutGain",
+                                                            "Property": [
+                                                                {
+                                                                    "Name": "Area",
+                                                                    "Value": "{{0,0},{0,119},{0.95,0},{0,154}}"
+                                                                },
+                                                                {
+                                                                    "Name": "HorizontalAlignment",
+                                                                    "Value": "Centre"
+                                                                },
+                                                                {
+                                                                    "Name": "WndOpenSound",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "WndCloseSound",
+                                                                    "Value": "0"
+                                                                }
+                                                            ],
+                                                            "Window": [
+                                                                {
+                                                                    "Type": "StaticImage",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldGainSel",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "Visible",
+                                                                            "Value": "false"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchType",
+                                                                            "Value": "NineGrid"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchOffset",
+                                                                            "Value": "2 2 2 2"
+                                                                        },
+                                                                        {
+                                                                            "Name": "ImageName",
+                                                                            "Value": "set:ninja_pet_package.json image:sel-flod-sel"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Type": "StaticImage",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldGainUnSel",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchType",
+                                                                            "Value": "NineGrid"
+                                                                        },
+                                                                        {
+                                                                            "Name": "StretchOffset",
+                                                                            "Value": "2 2 2 2"
+                                                                        },
+                                                                        {
+                                                                            "Name": "ImageName",
+                                                                            "Value": "set:ninja_pet_package.json image:sel-flod-unsel"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Type": "StaticText",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldSelGainText",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "VerticalAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HorizontalAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "Text",
+                                                                            "Value": "text"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextHorzAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextVertAlignment",
+                                                                            "Value": "Centre"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextLineExtraSpace",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "TextAutoOmission",
+                                                                            "Value": "false"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Type": "Button",
+                                                                    "Name": "NinjaPetPackage-PlusPetFoldSelGainBtn",
+                                                                    "Property": [
+                                                                        {
+                                                                            "Name": "Area",
+                                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndOpenSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "WndCloseSound",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "SoundName",
+                                                                            "Value": "0"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonTopColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonSideColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerImage",
+                                                                            "Value": ""
+                                                                        },
+                                                                        {
+                                                                            "Name": "HexgonOverlayerColor",
+                                                                            "Value": "1 1 1 1"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "NinjaPetPackage-PlusPetFoldBg",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{1,0},{0,35}}"
+                                                        },
+                                                        {
+                                                            "Name": "HorizontalAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "StretchType",
+                                                            "Value": "NineGrid"
+                                                        },
+                                                        {
+                                                            "Name": "StretchOffset",
+                                                            "Value": "5 5 3 3"
+                                                        },
+                                                        {
+                                                            "Name": "ImageName",
+                                                            "Value": "set:ninja_pet_package.json image:sel-botton"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ],
+                                                    "Window": [
+                                                        {
+                                                            "Type": "StaticText",
+                                                            "Name": "NinjaPetPackage-PlusPetFoldAllText",
+                                                            "Property": [
+                                                                {
+                                                                    "Name": "Area",
+                                                                    "Value": "{{0,0},{0,0},{0.8,0},{1,0}}"
+                                                                },
+                                                                {
+                                                                    "Name": "VerticalAlignment",
+                                                                    "Value": "Centre"
+                                                                },
+                                                                {
+                                                                    "Name": "Text",
+                                                                    "Value": "text"
+                                                                },
+                                                                {
+                                                                    "Name": "WndOpenSound",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "WndCloseSound",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "TextHorzAlignment",
+                                                                    "Value": "Centre"
+                                                                },
+                                                                {
+                                                                    "Name": "TextVertAlignment",
+                                                                    "Value": "Centre"
+                                                                },
+                                                                {
+                                                                    "Name": "TextLineExtraSpace",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "TextAutoOmission",
+                                                                    "Value": "false"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "Type": "StaticImage",
+                                                            "Name": "NinjaPetPackage-PlusPetFoldBtnDown",
+                                                            "Property": [
+                                                                {
+                                                                    "Name": "Area",
+                                                                    "Value": "{{0,0},{0,0},{0.2,0},{1,0}}"
+                                                                },
+                                                                {
+                                                                    "Name": "HorizontalAlignment",
+                                                                    "Value": "Right"
+                                                                },
+                                                                {
+                                                                    "Name": "WndOpenSound",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "WndCloseSound",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "ImageName",
+                                                                    "Value": "set:ninja_pet_package.json image:sel-down"
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonTopImage",
+                                                                    "Value": ""
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonTopColor",
+                                                                    "Value": "1 1 1 1"
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonSideImage",
+                                                                    "Value": ""
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonSideColor",
+                                                                    "Value": "1 1 1 1"
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonOverlayerImage",
+                                                                    "Value": ""
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonOverlayerColor",
+                                                                    "Value": "1 1 1 1"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "Type": "StaticImage",
+                                                            "Name": "NinjaPetPackage-PlusPetFoldBtnUp",
+                                                            "Property": [
+                                                                {
+                                                                    "Name": "Area",
+                                                                    "Value": "{{0,0},{0,0},{0.2,0},{1,0}}"
+                                                                },
+                                                                {
+                                                                    "Name": "HorizontalAlignment",
+                                                                    "Value": "Right"
+                                                                },
+                                                                {
+                                                                    "Name": "Visible",
+                                                                    "Value": "false"
+                                                                },
+                                                                {
+                                                                    "Name": "WndOpenSound",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "WndCloseSound",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "ImageName",
+                                                                    "Value": "set:ninja_pet_package.json image:sel-up"
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonTopImage",
+                                                                    "Value": ""
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonTopColor",
+                                                                    "Value": "1 1 1 1"
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonSideImage",
+                                                                    "Value": ""
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonSideColor",
+                                                                    "Value": "1 1 1 1"
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonOverlayerImage",
+                                                                    "Value": ""
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonOverlayerColor",
+                                                                    "Value": "1 1 1 1"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "Type": "Button",
+                                                            "Name": "NinjaPetPackage-PlusPetFoldBtn",
+                                                            "Property": [
+                                                                {
+                                                                    "Name": "Area",
+                                                                    "Value": "{{0,0},{0,0},{0.2,0},{1,0}}"
+                                                                },
+                                                                {
+                                                                    "Name": "HorizontalAlignment",
+                                                                    "Value": "Right"
+                                                                },
+                                                                {
+                                                                    "Name": "WndOpenSound",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "WndCloseSound",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "SoundName",
+                                                                    "Value": "0"
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonTopImage",
+                                                                    "Value": ""
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonTopColor",
+                                                                    "Value": "1 1 1 1"
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonSideImage",
+                                                                    "Value": ""
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonSideColor",
+                                                                    "Value": "1 1 1 1"
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonOverlayerImage",
+                                                                    "Value": ""
+                                                                },
+                                                                {
+                                                                    "Name": "HexgonOverlayerColor",
+                                                                    "Value": "1 1 1 1"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "GridView",
+                                            "Name": "PetEvolution-PlusPetItemView",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,0},{0.040404,0},{0.85,0},{0.890404,0}}"
+                                                },
+                                                {
+                                                    "Name": "VerticalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "HorizontalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "ClipChild",
+                                                    "Value": "true"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "ItemAlignment",
+                                                    "Value": "Left"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Type": "DefaultWindow",
+                                    "Name": "PetEvolution-MainItemBg",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0,0},{0,0},{0.795193,-15},{1,0}}"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        }
+                                    ],
+                                    "Window": [
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "PetEvolution-Target",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,494},{0,149},{0,616.75},{0,271.75}}"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:ninja_petevolution.json image:cyc_target"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "PetEvolution-StrBg",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,0},{0,0},{0,718.5},{0,505.375}}"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "StretchType",
+                                                    "Value": "NineGrid"
+                                                },
+                                                {
+                                                    "Name": "StretchOffset",
+                                                    "Value": "-60 -60 0 0"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:ninja_petevolution.json image:plusPetStrBg"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ],
+                                            "Window": [
+                                                {
+                                                    "Type": "StaticText",
+                                                    "Name": "PetEvolution-AddNu",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,520},{0,275},{0,590},{0,325}}"
+                                                        },
+                                                        {
+                                                            "Name": "Text",
+                                                            "Value": "text"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "TextHorzAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "TextVertAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "TextLineExtraSpace",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "TextAutoOmission",
+                                                            "Value": "false"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticText",
+                                                    "Name": "PetEvolution-AddName",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,460},{0,325},{0,650},{0,375}}"
+                                                        },
+                                                        {
+                                                            "Name": "Text",
+                                                            "Value": "text"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "TextHorzAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "TextVertAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "TextLineExtraSpace",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "TextAutoOmission",
+                                                            "Value": "false"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "PetEvolution-StrBotton",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,0},{0,-15},{0,285},{0,62}}"
+                                                },
+                                                {
+                                                    "Name": "VerticalAlignment",
+                                                    "Value": "Bottom"
+                                                },
+                                                {
+                                                    "Name": "HorizontalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "StretchType",
+                                                    "Value": "NineGrid"
+                                                },
+                                                {
+                                                    "Name": "StretchOffset",
+                                                    "Value": "40 40 20 20"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:ninja_main.json image:btn_yellow"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ],
+                                            "Window": [
+                                                {
+                                                    "Type": "StaticText",
+                                                    "Name": "PetEvolution-StrongText",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "Text",
+                                                            "Value": "text"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "TextHorzAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "TextVertAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "TextLineExtraSpace",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "TextAutoOmission",
+                                                            "Value": "false"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "Button",
+                                                    "Name": "PetEvolution-Strong",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "VerticalAlignment",
+                                                            "Value": "Centre"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "SoundName",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "PetEvolution-Material1",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,138},{0,49},{0,226.75},{0,135.75}}"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:ninja_petevolution.json image:cyc_add"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ],
+                                            "Window": [
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "PetEvolution-Material1Img",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "PetEvolution-Material2",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,139},{0,166},{0,227.75},{0,252.75}}"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:ninja_petevolution.json image:cyc_add"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ],
+                                            "Window": [
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "PetEvolution-Material2Img",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "PetEvolution-Material3",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,139},{0,285},{0,227.75},{0,371.75}}"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:ninja_petevolution.json image:cyc_add"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ],
+                                            "Window": [
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "PetEvolution-Material3Img",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "PetEvolution-Material4",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,280},{0,104},{0,368.75},{0,190.75}}"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:ninja_petevolution.json image:cyc_add"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ],
+                                            "Window": [
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "PetEvolution-Material4Img",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "StaticImage",
+                                            "Name": "PetEvolution-Material5",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,280},{0,229},{0,368.75},{0,315.75}}"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "ImageName",
+                                                    "Value": "set:ninja_petevolution.json image:cyc_add"
+                                                },
+                                                {
+                                                    "Name": "HexgonTopImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonTopColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonSideImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonSideColor",
+                                                    "Value": "1 1 1 1"
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerImage",
+                                                    "Value": ""
+                                                },
+                                                {
+                                                    "Name": "HexgonOverlayerColor",
+                                                    "Value": "1 1 1 1"
+                                                }
+                                            ],
+                                            "Window": [
+                                                {
+                                                    "Type": "StaticImage",
+                                                    "Name": "PetEvolution-Material5Img",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonTopColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonSideColor",
+                                                            "Value": "1 1 1 1"
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerImage",
+                                                            "Value": ""
+                                                        },
+                                                        {
+                                                            "Name": "HexgonOverlayerColor",
+                                                            "Value": "1 1 1 1"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Type": "Button",
+                                    "Name": "PetEvolution-QABtn",
+                                    "Property": [
+                                        {
+                                            "Name": "Area",
+                                            "Value": "{{0.0125392,0},{0.0237624,0},{0.0585162,0},{0.110891,0}}"
+                                        },
+                                        {
+                                            "Name": "WndOpenSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "WndCloseSound",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "NormalImage",
+                                            "Value": "set:ninja_petevolution.json image:QABG"
+                                        },
+                                        {
+                                            "Name": "PushedImage",
+                                            "Value": "set:ninja_petevolution.json image:QABG"
+                                        },
+                                        {
+                                            "Name": "SoundName",
+                                            "Value": "0"
+                                        },
+                                        {
+                                            "Name": "HexgonTopImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonTopColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonSideImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonSideColor",
+                                            "Value": "1 1 1 1"
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerImage",
+                                            "Value": ""
+                                        },
+                                        {
+                                            "Name": "HexgonOverlayerColor",
+                                            "Value": "1 1 1 1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Type": "Button",
+                    "Name": "PetEvolution-close",
+                    "Property": [
+                        {
+                            "Name": "Area",
+                            "Value": "{{0,1179},{0,35},{0,1224.75},{0,77.125}}"
+                        },
+                        {
+                            "Name": "WndOpenSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "WndCloseSound",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "NormalImage",
+                            "Value": "set:ninja_main.json image:btn_close"
+                        },
+                        {
+                            "Name": "PushedImage",
+                            "Value": "set:ninja_main.json image:btn_close"
+                        },
+                        {
+                            "Name": "SoundName",
+                            "Value": "0"
+                        },
+                        {
+                            "Name": "HexgonTopImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonTopColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonSideImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonSideColor",
+                            "Value": "1 1 1 1"
+                        },
+                        {
+                            "Name": "HexgonOverlayerImage",
+                            "Value": ""
+                        },
+                        {
+                            "Name": "HexgonOverlayerColor",
+                            "Value": "1 1 1 1"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
