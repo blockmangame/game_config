@@ -51,11 +51,11 @@ function Player:playFreeFallSkill()
 end
 
 function Player:recoverJumpProp()
-    self:setEntityProp("jumpSpeed", tostring(self.EntityProp.jumpSpeed))
-    self:setEntityProp("gravity", tostring(self.EntityProp.gravity))
-    self:setEntityProp("antiGravity", tostring(self.EntityProp.antiGravity))
-    self:setEntityProp("moveSpeed", tostring(self.EntityProp.moveSpeed))
-    self:setEntityProp("moveAcc", tostring(self.EntityProp.moveAcc))
+    self:recoverEntityProp("jumpSpeed")
+    self:recoverEntityProp("gravity")
+    self:recoverEntityProp("antiGravity")
+    self:recoverEntityProp("moveSpeed")
+    self:recoverEntityProp("moveAcc")
 
     self:setValue("jumpCount", self:getMaxJumpCount())
 
@@ -64,4 +64,10 @@ function Player:recoverJumpProp()
 
     Lib.emitEvent("EVENT_PLAY_GLIDING_EFFECT", self.isGliding)
     Blockman.instance.gameSettings:setEnableRadialBlur(false)
+end
+
+function Player:setEntityProp(prop, value)
+    self:recoverEntityProp(prop)
+    local curValue = tonumber(self:getEntityProp(prop))
+    self:deltaEntityProp(prop, -curValue + tonumber(value))
 end
