@@ -3645,7 +3645,8 @@ USE_OPERATE_DRESS_ARCHIVE_DIALOG
         args = [$name]
     }
 
-    ShowDialogTip(entity = $obj1, tipType = 5, event = "USE_OPERATE_DRESS_ARCHIVE", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $context)
+    $tipType = 5 
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "USE_OPERATE_DRESS_ARCHIVE", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $context)
 }
 
 USE_OPERATE_DRESS_ARCHIVE
