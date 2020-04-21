@@ -14,6 +14,7 @@ function skillShopConfig:initConfig()
             muscle = tostring(config.n_muscle),
             camp = config.n_camp,
             name = tostring(config.s_name),
+            itemName = tostring(config.s_itemName),
             desc = tostring(config.s_desc),
             icon = tostring(config.s_icon),
             moneyType = tonumber(config.n_moneyType),

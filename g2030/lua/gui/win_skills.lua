@@ -27,6 +27,17 @@ local function removeHolders(arr)
     end
 end
 
+local function resetSkillJack(temp)
+    local EquipInfo = Me:getEquipSkill()
+    for _, item in pairs(EquipInfo or {}) do
+        for _, tb in ipairs(temp) do
+            if item.itemName == tb.name then
+                tb.jack = item.placeId
+            end
+        end
+    end
+end
+
 local function getSkillAreaAndNames(self,equipSkills) -- ��̬����װ�����ܵ���ʾλ��
     local equipSkillsNames = {} -- ��Ҫ����λ�õļ���
     for i, skill in pairs(equipSkills or {}) do
@@ -362,6 +373,7 @@ function M:init()
         local sectorJacks, equipSkillsNames = getSkillAreaAndNames(self, studySkillMap.equipSkills)
         removeHolders(self.sectorHolders)
         local temp = Lib.copy(sectorSkills)
+        resetSkillJack(temp)
         for i = 1, #self.sectorHolders do
             local image, jack
             for _, tb in ipairs(temp) do
@@ -377,7 +389,7 @@ function M:init()
             end
             image = image or self.sectorHolders[i]
             if sectorJacks[i] then
-                print(" sectorJacks[i] , sectorJacks[i]", Lib.v2s(sectorJacks[i]))
+                -- print(" sectorJacks[i] , sectorJacks[i]", Lib.v2s(sectorJacks[i]))
                 image:SetArea(table.unpack(sectorJacks[i]))
             end
             self._root:AddChildWindow(image)

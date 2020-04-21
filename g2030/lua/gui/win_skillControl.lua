@@ -48,14 +48,19 @@ function M:initUI()
     self.gvItemsGridView:SetArea({ 0, 0 }, { 0, 0 }, { 1, 0 }, { 1, 0 })
     self.gvItemsGridView:InitConfig(22, 12, 5)
 
+    self.llSkillItemDec = self:child("skillControl-SkillItemDecList")
+    self.gvSkillItemDec = GUIWindowManager.instance:CreateGUIWindow1("GridView", "skillControl-SkillItemDecGridView")
+    self.llSkillItemDec:AddChildWindow(self.gvSkillItemDec)
+    self.gvSkillItemDec:SetArea({ 0, 0 }, { 0, 0 }, { 1, 0 }, { 1, 0 })
+    self.gvSkillItemDec:InitConfig(0, 0, 1)
+
         --text
     self.stSkillItemName = self:child("skillControl-SkillItemName")
     self.stMuscleConsume = self:child("skillControl-MuscleConsumeText")
     self.stSkillItemDesc = self:child("skillControl-SkillItemDec")
     self.stBuyPrice = self:child("skillControl-BuyPrice")
 
-
-
+    self.gvSkillItemDec:AddItem(self.stSkillItemDesc)
         --image
     self.siCurrencyImg = self:child("skillControl-CurrencyImg")
     self.siIsBuySkillImg = self:child("skillControl-IsBuySkillImg")
@@ -228,6 +233,9 @@ function M:initEvent()
     Lib.subscribeEvent(Event.EVENT_ITEM_SKILL_EQUIP_UPDATE, function()
         self:selectSeatGivEquip(1,false)
         self:upDataSkillEquipItems()
+        Me:sendPacket({
+            pid = "syncSkillEquip"
+        })
     end)
 
 end
@@ -300,7 +308,12 @@ function M:selectSkillInfo()
             self.stSkillItemName:SetText(value.name)
             self.stMuscleConsume:SetText("  ".. value.muscle.."K  Muscle")
             self.stSkillItemDesc:SetText(value.desc)
-
+            -- print("-----------stSkillItemDesc--------------" .. Lib.v2s(self.stSkillItemDesc:GetHeight()))
+            if self.stSkillItemDesc:GetHeight()[2] > 136 then
+                self.gvSkillItemDec:SetMoveAble(true)
+            else
+                self.gvSkillItemDec:SetMoveAble(false)
+            end
             PreviewUrl = value.url
             -- print("---previewUrl------".. Lib.v2s(value))
             if PreviewUrl == "" then
