@@ -55,7 +55,7 @@ ValueDef.petPageNu      = {false,   false,  false,  false,      2,     true}--�
 {ID = 0,              --宠物or式神的pluginID
  minorID = 0，        --式神副ID
  petType = 0,         --是宠物还是式神
- level = 1,           --当前强化等级
+ level = 0,           --当前强化等级
  petCoinTransRate = 1,--该宠物Entity当前的金币增益
  petChiTransRate = 1, --该宠物Entity当前的气增益
  plusPetATKRate = 1}, --该式神Entity当前的攻击倍率增益
@@ -408,4 +408,58 @@ function Entity:checkGroundedState()
     end
 
     return false
+end
+
+--get equipping pets
+function Player:getAllEquippedPet()
+    local petList, plusPetList
+    for _, v in pairs(self.equipPetList) do
+        local type = self:getPetAttr(v.index).petType
+        if type == Define.petType.pet then
+            table.insert(v.index)
+        elseif type == Define.petType.plusPet then
+            table.insert(plusPetList, v.index)
+        end
+    end
+    return petList, plusPetList
+end
+
+function Entity:getPetEquippedList()
+    self:getValue("petEquippedList")
+end
+
+function Entity:setPetEquippedList(listTable)
+    self:setValue("petEquippedList", listTable)
+end
+
+function Entity:getPlusPetEquippedIndex()
+    self:getValue("plusPetEquippedIndex")
+end
+
+function Entity:setPlusPetEquippedIndex(index)
+    self:setValue("plusPetEquippedIndex", index)
+end
+
+function Entity:getHadEntityNum()
+    self:getValue("hadEntityNum")
+end
+
+function Entity:setHadEntityNum(allPetsNu)
+    self:setValue("hadEntityNum", allPetsNu)
+end
+
+function Entity:getAllPetAttr()
+    self:getValue("allPetAttr")
+end
+
+function Entity:setAllPetAttr(allAttr)
+    self:setValue("allPetAttr", allAttr)
+end
+
+function Entity:getPetPageNu()
+    self:getValue("petPageNu")
+end
+
+function Entity:setPetPageNu(nowPageNu)
+    self:setValue("petPageNu", nowPageNu)
 end
