@@ -89,11 +89,24 @@ function EntityServer:doHealing()
         end   )
     end
 end
+-- function EntityServer:doDropDamage(speed)
+--     print("------------drop------")
+-- 	self:doDamage({
+-- 		damage = self:getMaxHp(),
+-- 		cause = "ENGINE_DO_DROP_DAMAGE",
+-- 	})
+-- end
+function player_touchdown(entity)
+	entity:doDamage({
+		damage = entity:getMaxHp(),
+		cause = "ENGINE_TOUCHDOWN",
+	})
+end
 function EntityServer:doDamage(info)
     
     local damage, from, isRebound = info.damage, info.from, info.isRebound
     local damageCause = assert(info.cause, "must have a cause of doDamage")
-
+    print("--------------------------------",damageCause)
     if damage <= 0 then
         return
     elseif self.curHp <= 0 then
