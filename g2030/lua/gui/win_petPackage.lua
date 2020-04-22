@@ -69,7 +69,7 @@ end
 
 function M:showPlusPetInterface(model)
     curPlusPetItemTable = {}
-    curPlusPetSelItemIndex = -1
+    curPetSelItemIndex = -1
     curPlusPetUsingItem = -1
     curPlusPetFold = -1
     self.selSwitchImage.petSel:SetVisible(false)
@@ -178,6 +178,7 @@ function M:setPlusPetItemDeEquip(_index)
     local index = plusPetIndex2ItemIndex(_index)
     if not index then
         print("Get Index Fail", debug.getinfo(1).currentline)
+        print(Lib.v2s())
         return
     end
     curPlusPetItemTable[_index].item:invoke("unUsing")
@@ -279,7 +280,7 @@ function M:refreshPetLeftDetailInfo()
 end
 
 function M:setPetPage(page, curSelIndex)
-    print("SET PAGE !!!!:", page)
+    print("SET PAGE !!!!:", page, curSelIndex)
     curPetUsingItem = {}    --每次加载页面这个表就回被刷新，当页面不同时为空
     curPetItemTable = {}
     curPetSelItemIndex = -1
@@ -350,7 +351,7 @@ function M:petPageDetailEmpty()
 end
 
 function M:setPetItemSel(index)
-    if index == curPlusPetSelItemIndex then
+    if index == curPetSelItemIndex then
         return
     end
     if curPetSelItemIndex ~= -1 then

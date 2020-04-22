@@ -8,6 +8,9 @@ end
 
 local function playEffect(from, cfg, effect)
 	if effect and from and from.isEntity then
+		for _, eff in ipairs(effect) do
+			from:showEffect(eff, cfg)
+		end
 		from:showEffect(effect, cfg)
 	end
 end

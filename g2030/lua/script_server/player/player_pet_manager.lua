@@ -39,6 +39,8 @@ local function getPet(player, type, petID, minorID)
     return AllPetAttr, allEntityNum;
 end
 
+local PetEntity = {}
+
 function Player:getNewPet(ID, coinTransRatio, chiTransRatio, level, isNotSync)
     local allAttribs, index = getPet(self, petType.pet, ID);
     if not index then
@@ -58,7 +60,7 @@ function Player:getNewPet(ID, coinTransRatio, chiTransRatio, level, isNotSync)
     if level then
         allAttribs[index].level = level
     end
-    self:setValue("allPetAttr", allAttribs, isNotSync ~= true);         --当强化时不主动发送同步包而是手动合并发送和处理
+    self:setValue("allPetAttr", allAttribs, isNotSync);         --当强化时不主动发送同步包而是手动合并发送和处理（减少一次发包）
     return index
 end
 
@@ -75,7 +77,11 @@ function Player:getNewPlusPet(ID, minorID, plusPetATKRate, level, isNotSync)
     if level then
         allAttribs[index].level = level
     end
-    self:setValue("allPetAttr", allAttribs, isNotSync ~= true);
+    self:setValue("allPetAttr", allAttribs, isNotSync);
+end
+
+function Player:getPetEntity(index)
+    return PetEntity[index]
 end
 
 function Player:callPet(index, rideIndex)
@@ -95,8 +101,9 @@ function Player:callPet(index, rideIndex)
     end
     self.equipPetList[rideIndex] = {index = index, objID = createIndex}
 
-    local petEntity = self:getPet(createIndex);
+    local petEntity = self:getPetEntity(createIndex);
     petEntity:rideOn(self, false, rideIndex);
+    self:syncPet()
 end
 
 function Player:initPetInfo()
@@ -105,14 +112,14 @@ function Player:initPetInfo()
     end
 end
 
-function Player:addPet(entity, index)
-    self:syncPet()
-    return index
+function Player:addPet(entity)
+    PetEntity[entity.objID] = entity
+    return entity.objID
 end
 
 function Player:syncPet()
     local list = {}
-    print(Lib.v2s(self.equipPetList))
+    print("Show Pet List:", Lib.v2s(self.equipPetList))
     for index, entity in pairs(self.equipPetList) do
         list[index] = entity
     end
@@ -121,6 +128,12 @@ function Player:syncPet()
         list = list,
     }
     self:sendPacket(packet)
+end
+
+function Player:removePet(index)
+    local entity = self:getPetEntity(index)
+    entity:destroy()
+    PetEntity[index] = nil
 end
 
 function Player:recallPet(index)
@@ -201,3 +214,5 @@ function Player:petEvolution(package)
     end
     self:sendEvolutionPackage(index)
 end
+
+
