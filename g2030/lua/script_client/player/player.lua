@@ -107,6 +107,22 @@ function Player:eventJumpMoveEnd()
     self:playFreeFallSkill()
 end
 
+function Player:eventJumpFloatEnd()
+    print("eventJumpFloatEnd")
+
+    local jumpCount = self:getJumpCount()
+    local maxJumpCount = self:getMaxJumpCount()
+
+    ---@type JumpConfig
+    local JumpConfig = T(Config, "JumpConfig")
+    if jumpCount >= 0 then
+        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
+        if config then
+            self:setEntityProp("gravity", tostring(config.floatGravity))
+        end
+    end
+end
+
 function Player:eventJumpEnd()
     if self.jumpEnd then
         return
@@ -139,6 +155,14 @@ function Player:eventBeginFall(beginFallHeight)
         local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
         if config then
             self:setEntityProp("gravity", tostring(config.fallGravity))
+
+            ---滞空
+            ---@type LuaTimer
+            local LuaTimer = T(Lib, "LuaTimer")
+            LuaTimer:cancel(self.jumpFloatTimer)
+            self.jumpFloatTimer = LuaTimer:scheduleTimer(function()
+                self:eventJumpFloatEnd()
+            end, config.floatTime, 1)
         end
     else
         --local config = self.isGliding and JumpConfig:getGlidingConfig() or JumpConfig:getFreeFallConfig()

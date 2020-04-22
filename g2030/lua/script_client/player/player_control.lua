@@ -94,13 +94,15 @@ local function processJumpEvent(player)
     --    player:eventJumpEnd()
     --end
 
+    ---最高点
     if not player.onGround and player.lastMotionY > 0 and player.motion.y <= 0 then
         player:eventJumpEnd()
     end
     player.lastMotionY = player.motion.y
 
+    ---自由落体
     if (not player.onGround and player.motion.y <= 0
-            and player.beginFallHeight - player:curBlockPos().y >= player.JumpMoveEndFallDistance) then
+            and player:curBlockPos().y <= player.lastJumpHeight) then
         player:eventJumpMoveEnd()
     end
 end
