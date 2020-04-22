@@ -378,6 +378,9 @@ end
 function M:addSkillShopItem(data)
     self.gvItemsGridView:RemoveAllItems()
 
+    table.sort(data or {}, function(a, b)
+        return a.id < b.id 
+    end)
     -- self:upDataSkillShopItems()
 
     local payCount =  0
