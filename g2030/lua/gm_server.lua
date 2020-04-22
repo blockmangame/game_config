@@ -41,7 +41,17 @@ end
 GMItem["g2030/发送测试弹窗"] = function(self)
     self:showCommonNotice("GM发送的测试提示信息，啦啦啦~")
 end
-
+GMItem["g2030/开启移速特权"] = function(self)
+    self:setMovePlus()
+end
+GMItem["g2030/开关无敌"] = function(self)
+    if self:getHurtSub() <= 0 then
+        self:setUninvincible()
+    else
+        self:setInvincible()
+    end
+    
+end
 GMItem["g2030/神圣攻击加成特权"] = function(self)
     self:setOpenRealDmg()
 end
