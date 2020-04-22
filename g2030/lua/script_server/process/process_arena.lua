@@ -57,9 +57,9 @@ function ProcessArena:onEntityJoin(objID)
     end
     self.playerPosList[objID] = posList[1]
     table.remove(posList,1)
-    player:setMapPos(self.arenaMap, self.playerPosList[objID])
-    player:setInvincible()
-    player:resetArenaScore()
+    player:setMapPos(self.arenaMap, self.arenaMap.cfg.centerPos)
+
+    player:intoArenaWorld()
     if self.playerCount >= self.startPlayers and self.curState < Define.ProcessState.Waiting then 
         self:setState(Define.ProcessState.Waiting)
         WorldServer.BroadcastPacket({

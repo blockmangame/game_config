@@ -215,11 +215,11 @@ function Player:petEvolution(package)
     end
     local tempData = self:getPetAttr(target)
     math.randomseed(os.time() + target)                      --改变随机因子
-    local actualCoin
-        actualCoin = math.random(minCoin, maxCoin) + tempData.coinTransRatio
+    local actualCoin = math.random(minCoin, maxCoin) + tempData.coinTransRatio
+    local actualFu = math.random(minFu, maxFu) + tempData.chiTransRatio
 
-    local actualFu
-        actualFu = math.random(minFu, maxFu) + tempData.chiTransRatio
+    print("宠物强化金币数据区间及当前强化值: ", minCoin, maxCoin, actualCoin)
+    print("宠物强化气数据区间及当前强化值: ", minFu, maxFu, actualFu)
 
     if actualCoin < 0 then
         actualCoin = 0
@@ -247,7 +247,6 @@ function Player:petEvolution(package)
             self:recallPet(v)
         end
         self:deletePet(v)
-        print("=======================delete:", v)
     end
 
     local index = self:getNewPet(tempData.ID, actualCoin, actualFu, tempData.level + 1, true)
@@ -262,7 +261,7 @@ function Player:petEvolution(package)
         self:callPet(index, targetRidePos)
     end
 
-    print(" Evolute Result: \n Player:" ,self.userID, "\n Pet Info", index, actualCoin, actualFu, tempData.level + 1)
+    print(" Evolute Result: ", "\n Pet Info", index, actualCoin, actualFu, tempData.level + 1)
     self:sendEvolutionPackage(target, index)
 end
 
