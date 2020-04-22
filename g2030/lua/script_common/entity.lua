@@ -504,7 +504,7 @@ function Player:getAllEquippedPet()
 end
 
 function Entity:getPetEquippedList()
-    self:getValue("petEquippedList")
+    return self:getValue("petEquippedList")
 end
 
 function Entity:setPetEquippedList(listTable)
@@ -512,7 +512,7 @@ function Entity:setPetEquippedList(listTable)
 end
 
 function Entity:getPlusPetEquippedIndex()
-    self:getValue("plusPetEquippedIndex")
+    return self:getValue("plusPetEquippedIndex")
 end
 
 function Entity:setPlusPetEquippedIndex(index)
@@ -520,7 +520,7 @@ function Entity:setPlusPetEquippedIndex(index)
 end
 
 function Entity:getHadEntityNum()
-    self:getValue("hadEntityNum")
+    return self:getValue("hadEntityNum")
 end
 
 function Entity:setHadEntityNum(allPetsNu)
@@ -528,7 +528,7 @@ function Entity:setHadEntityNum(allPetsNu)
 end
 
 function Entity:getAllPetAttr()
-    self:getValue("allPetAttr")
+    return self:getValue("allPetAttr")
 end
 
 function Entity:setAllPetAttr(allAttr)
@@ -536,7 +536,7 @@ function Entity:setAllPetAttr(allAttr)
 end
 
 function Entity:getPetPageNu()
-    self:getValue("petPageNu")
+    return self:getValue("petPageNu")
 end
 
 function Entity:setPetPageNu(nowPageNu)

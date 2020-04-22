@@ -37,6 +37,7 @@ function M:initWnd()
         [3] = self:child("PetEvolution-Material3Img")
     }
     self.mainView:InitConfig(widthPadding, heightPadding, columnNu)
+    self.closeBtn = self:child("PetEvolution-close")
 end
 
 function M:showPetEvolution(_curPetPageTable, _targetIndex)
@@ -54,11 +55,14 @@ function M:showPetEvolution(_curPetPageTable, _targetIndex)
 end
 
 function M:closePetEvolution()
-
+    UI:closeWnd("petEvolution")
+    UI:getWnd("petPackage"):openPetPackage(targetIndex)
 end
 
 function M:initAllEvent()
-
+    self:subscribe(self.closeBtn, UIEvent.EventButtonClick, function()
+        self:closePetEvolution()
+    end)
 end
 
 function M:initAllText()
@@ -148,6 +152,10 @@ function M:setAllItems()
         [2] = {isSet = false, itemIndex = -1},
         [3] = {isSet = false, itemIndex = -1}
     }
+    self.mainView:RemoveAllItems()
+    for _, v in pairs(self.evolutionImg) do
+        v:SetImage("")
+    end
     local itemWith = (self.mainView:GetPixelSize().x - widthPadding) / columnNu
     for k, v in pairs(curPetPageTable) do
         if v.index ~= targetIndex then
