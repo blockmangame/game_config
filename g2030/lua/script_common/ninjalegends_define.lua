@@ -71,3 +71,9 @@ Define.RegionFunctionType = {
     SellArea = 2, --肌肉售卖区
     SafeArea = 3, --安全区
 }
+
+Define.RewardType = {
+    Gold = "gold",
+    Chi = "chi",
+    TeamStone = "teamStone"
+}

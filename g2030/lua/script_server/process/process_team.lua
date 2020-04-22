@@ -3,6 +3,7 @@
 --- Created by Administrator.
 --- DateTime: 2020/4/7 15:56
 ---
+local TeamRewardConfig = T(Config, "TeamRewardConfig")
 local class = require"common.class"
 local ProcessTeam = class("ProcessTeam", require"script_server.process.process_base")
 local teamCountList = {}
@@ -80,9 +81,6 @@ function ProcessTeam:countTeamKills()
 end
 
 function ProcessTeam:onProcessOver()
-    table.sort(playerInfoList, function(a, b)
-        return a.kills > b.kills
-    end)
     self:doReward()
     Game.onActivityFinish(self.id)
 end
@@ -94,7 +92,8 @@ function ProcessTeam:doReward()
             if v.team == winner then
                 ---胜利动画
             end
-            ---玩家奖励
+            local reward = TeamRewardConfig:getRewardByKills(v.kills)
+            player:doReward(reward)
         end
     end
 end

@@ -66,6 +66,14 @@ function Game.EntityLeaveProcess(key, entity)
     ProcessList[key]:entityOut(entity)
 end
 
+function Game.OnBossEntityHurt(objID, from, value)
+    for key, process in pairs(ProcessList) do
+        if process:isProcessBoss(objID) then
+            process:onBossHurt(from)
+        end
+    end
+end
+
 function ProcessManager:onTick()
     for key, process in pairs(ProcessList) do
         process:onTick()

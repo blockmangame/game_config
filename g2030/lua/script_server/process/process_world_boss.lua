@@ -4,11 +4,11 @@
 --- DateTime: 2020/4/20 10:15
 ---
 
---local entity = EntityServer.Create({cfgName = name, pos = self:getPosition(), map = self.map})
+local WorldBossRewardConfig = T(Config, "WorldBossRewardConfig")
 
 local class = require"common.class"
 local ProcessWorldBoss = class("ProcessWorldBoss", require"script_server.process.process_base")
-local playerKillList = {}
+local playerHitList = {}
 local worldCfg = World.cfg
 local boss = {}
 
@@ -20,26 +20,57 @@ function ProcessWorldBoss:ctor(config)
     end
     local setting = worldCfg.worldBossConfig
     local entity = EntityServer.Create({cfgName = setting.entity, pos = setting.pos, map = setting.map})
-
     if entity then
         boss = entity
-        local config = boss:cfg()
-        boss:setValue("maxExp", config.maxHp)
-        boss:setValue("curHp", config.maxHp)
     end
     return self
 end
 
-function ProcessWorldBoss:doJudge()
+function ProcessWorldBoss:isProcessBoss(objID)
+    return objID == boss.objID
+end
 
+function ProcessWorldBoss:onBossHurt(fromObjID, value)
+    local from = World.CurWorld:getEntity(fromObjID)
+    if from and from.isPlayer then
+        if not playerHitList[fromObjID] then
+            playerHitList[fromObjID] = 0
+        end
+        playerHitList[fromObjID] = playerHitList[fromObjID] + 1
+    end
+end
+
+function ProcessWorldBoss:doJudge()
+    if not boss or boss:getValue("curHp") <= 0 then
+       self:processOver()
+    end
 end
 
 function ProcessWorldBoss:needKeepWaiting()
     return false
 end
 
-function ProcessWorldBoss:processOnTick()
+function ProcessWorldBoss:onStart()
+    ---发通知
+end
 
+function ProcessWorldBoss:processOnTick()
+    self:doJudge()
+end
+
+function ProcessWorldBoss:onProcessOver()
+    self:doReward()
+    Game.onActivityFinish(self.id)
+end
+
+function ProcessWorldBoss:doReward()
+    for objID, hits in pairs(playerHitList) do
+        local player = World.CurWorld:getEntity(objID)
+        if player then
+            local rewards = WorldBossRewardConfig:getRewardByHits(hits)
+            player:doRewards(rewards)
+        end
+    end
 end
 
 return ProcessWorldBoss

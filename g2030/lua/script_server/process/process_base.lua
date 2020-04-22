@@ -216,5 +216,9 @@ function ProcessBase:isProcessRunning()
     return self.curState == Define.ProcessState.ProcessStart
 end
 
+function ProcessBase:isProcessBoss(objId)
+    return false
+end
+
 
 return ProcessBase
