@@ -75,12 +75,17 @@ local function jump_impl(control, player)
     Skill.Cast(playerCfg.jumpSkill, packet)
 
     player.lastJumpHeight = player:curBlockPos().y
+    player.isJumping = true
     control:jump()
 
     player:decJumpCount()
 end
 
 local function processJumpEvent(player)
+    if not player.isJumping then
+        return
+    end
+
     Lib.log(string.format("gravity:%s antiGravity:%s player:curBlockPos().y:%s lastJumpHeight:%s \
     motion:%s %s %s JumpMoveEndFallDistance:%s",
             tostring(player:getEntityProp("gravity")), tostring(player:getEntityProp("antiGravity")),
