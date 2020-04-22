@@ -163,6 +163,7 @@ local function clacPushOutWithBlock(self, object)
     return tempEntityPos
 end
 
+local editCd = false
 function M:initEvent()
     Lib.subscribeEvent(Event.EVENT_UI_EDIT_UPDATE_EDIT_CONTAINER_2, function(objID, show)
         if self.isMovingEntity then
@@ -170,7 +171,11 @@ function M:initEvent()
         end
         self.allCell[objID] = {}
         local object = curWorld:getObject(objID)
-        if show then    
+        if show and not editCd then    
+            editCd = true
+            World.Timer(5, function()
+                editCd = false
+            end)
             self:showInteractionUI(objID)
             self.localContext.objID = objID
             IS_OPEN = true
