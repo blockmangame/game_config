@@ -1,9 +1,8 @@
 {
     "cdTime": 10,
     "type": "Missile",
-    "castAction": "action_08",
-    "castActionTime": 10,
-    "missileCfg": "myplugin/player_remote_skill_shuriken_08_missile",
+    "castAction": "",
+    "missileCfg": "myplugin/player_remote_skill_shuriken_hit_08_missile",
     "missileCount": 1,
     "startWait": [
         5
@@ -12,7 +11,7 @@
         {
             "z": 0,
             "x": 0,
-            "y": -1.0
+            "y": 0
         }
     ],
     "castSound": {
@@ -21,8 +20,5 @@
         "loop": false,
         "sound": "/sound/attack1.mp3"
     },
-    "targetType": "FrontEntity",
-	"frontDistance": 10,
-	"frontRange": 10,
-	"frontHeight": 10
+    "targetType": "Self"
 }
