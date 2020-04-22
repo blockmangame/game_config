@@ -22,6 +22,16 @@ function M:initWnd()
     self.btnExchangeCtr = self:child("NinjaMain-Exchange")
     self.effect = self:child("NinjaMain-Effect")
     self.textBottomMessage = self:child("NinjaMain-BottomMessage")
+    ------竞技场状态显示------------
+    self.lytArenaRank = self:child("NinjaMain-ArenaRank")
+    self.grdRankList = self:child("NinjaMain-List")
+    self.lytArenaRank:SetVisible(false)
+    
+    self.lytArenaCountTime = self:child("NinjaMain-ArenaCountTime") 
+    self.txtCountTime = self:child("NinjaMain-CountTimeVal") 
+    self.lytArenaCountTime:SetVisible(false)
+
+
     self.textBottomMessage:SetText("")
 
     self:initEvent()
@@ -87,10 +97,7 @@ function M:initEvent()
     end)
 
     Lib.subscribeEvent(Event.EVENT_ARENA_UI_STATE, function()
-        self.btnVip:SetVisible(false)
-        self.btnTrade:SetVisible(false)
-        self.btnSell:SetVisible(false)
-        self.btnPet:SetVisible(false)
+        self:initArenaView()
     end)
 end
 
@@ -127,6 +134,74 @@ end
 
 function M:openSkillControl()
     UI:getWnd("skillControl"):onShow(true)
+end
+
+function M:initArenaView()
+    self.btnVip:SetVisible(false)
+    self.btnTrade:SetVisible(false)
+    self.btnSell:SetVisible(false)
+    self.btnPet:SetVisible(false)
+
+    self.lytArenaRank:SetVisible(true)
+    self.lytArenaCountTime:SetVisible(true)
+    self.testData = {
+        {
+            rank = 1,
+            name = "aaaaaa",
+            kill =1234,
+            score = 2234222,
+            level = 4
+        },
+        {
+            rank = 1,
+            name = "aaaaaa",
+            kill =1234,
+            score = 2234222,
+            level = 4
+        },
+        {
+            rank = 1,
+            name = "aaaaaa",
+            kill =1234,
+            score = 2234222,
+            level = 4
+        },
+        {
+            rank = 1,
+            name = "aaaaaa",
+            kill =1234,
+            score = 2234222,
+            level = 4
+        },
+        {
+            rank = 1,
+            name = "aaaaaa",
+            kill =1234,
+            score = 2234222,
+            level = 4
+        },
+        {
+            rank = 1,
+            name = "aaaaaa",
+            kill =1234,
+            score = 2234222,
+            level = 4
+        },
+    }
+    local i = 1
+    for _, data in pairs(self.testData) do
+        local item = UIMgr:new_widget("itemArenaRankMainUI")
+            -- local contentWidth = self.llContentGrid:GetPixelSize().x
+            -- local contentHeight = self.llContentGrid:GetPixelSize().y
+            -- local itemWidth = (contentWidth - 172) / 4
+            -- local itemHeight = (contentHeight - 44) / 2.2
+         --   self.allItems[i] = item
+        item:invoke("setItemData", data.rank, data.name, data.kill)
+        self.grdRankList:AddItem(item)
+        i = i + 1
+    end
+
+    self.txtCountTime:SetText(Lang:toText("arena_wait_more") )
 end
 
 function M:onOpen()
