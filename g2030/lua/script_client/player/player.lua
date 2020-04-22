@@ -117,7 +117,7 @@ function Player:eventJumpEnd()
     self.jumpEnd = true
 
     self:setEntityProp("antiGravity", 0.0)
-    self.motion = Lib.v3(0, 0, 0)
+    --self.motion = Lib.v3(0, 0, 0)
     self:eventBeginFall(self:curBlockPos().y)
 end
 
