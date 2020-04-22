@@ -28,6 +28,18 @@ function skillShop:onButtonClick(player, itemId, status, placeId)
     end
 end
 
+function skillShop:syncSkillMap(player)
+    local EquipSkills = self:getEquipSkillInfo(player)
+    local data = {}
+    for _, value in pairs(EquipSkills or {}) do
+        data[value.itemName] = value.placeId
+    end
+    player:data("skill").addSkill = data
+    player:syncSkillMap()
+    -- print("-----------itemName------------  ".. Lib.v2s(player:data("skill")))
+    -- Lib.emitEvent(Event.EVENT_SHOW_SKILL, {}, false)
+end
+
 ---卸载
 function skillShop:onSkillShopUnEquip(player, id, status)
     self:updateSkillShopEquip(player, id, status)
@@ -62,21 +74,21 @@ function skillShop:onSkillShopItemBuy(player, id, status)
             player:consumeDiamonds("gDiamonds", item.price, function(ret)
                 if ret then
                     -- self:onBuyItemSuccess(player, id, status)
-                    self:syncSkillMap(player,item,StudySkills)
+                    self:syncStudySkillMap(player,item,StudySkills)
                     return true
                 end
             end)
         else
             local checkMoney = player:payCurrency(Coin:coinNameByCoinId(item.moneyType), item.price, false, false, "skillControl")
             if checkMoney then
-                self:syncSkillMap(player,item,StudySkills)
+                self:syncStudySkillMap(player,item,StudySkills)
                 return true
             end
         end
     end
 end
 
-function skillShop:syncSkillMap(player,item,StudySkills)
+function skillShop:syncStudySkillMap(player,item,StudySkills)
     item.status = Define.SkillStatus.Study
     StudySkills[tostring(item.id)] = item
     -- print("----------------" .. tostring(item.status))
@@ -125,7 +137,8 @@ function skillShop:updateSkillShopEquip(player, id, status, placeId)
         end
         self:setEquipSkillInfo(player,EquipSkills)
     end
-
+    -- player:addSkill("myplugin/player_range_skill_indicator_12")
+    -- player:addSkill("myplugin/player_displace_skill_sabrecut_indicator_2")
 end
 
 return skillShop

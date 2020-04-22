@@ -20,8 +20,11 @@ GMItem["g2030/上武器"] = function(self)
 end
 
 -----------------------------------Pet Model Test----------------------------------
-GMItem["g2030/释放宠物技能"] = function(self)
-    Skill.Cast("myplugin/pet_1_1_1_attack", {targetID=self.objID}, Entity)
+GMItem["g2030Pet/检查是否存在宠物实体"] = function(self)
+    print("==============================================")
+    for k, v in pairs(Player.CurPlayer.equipPetList) do
+        print("ridePos:", k, "entity Info:", Player.CurPlayer:getPet(v.objID))
+    end
 end
 -----------------------------------Pet Model Test End-------------------------------
 

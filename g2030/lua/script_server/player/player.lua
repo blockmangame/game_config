@@ -4,6 +4,23 @@
 --- DateTime: 2020/3/23 10:35
 local LuaTimer = T(Lib, "LuaTimer") ---@type LuaTimer
 local playerCfg = {}
+
+local seri = require "seri"
+local misc = require "misc"
+
+local oldLoadDB = Player.loadDBData                            --解宠物历史遗留问题
+function Player:loadDBData(txt)
+    local data = nil
+    if txt and txt ~= "" then
+        data = seri.deseristring_string(misc.base64_decode(txt))
+    end
+    if data and data.pet then
+        data.pet = nil
+    end
+    txt = misc.base64_encode(seri.serialize_string(data))
+    oldLoadDB(self ,txt)
+end
+
 function Player:initPlayer()
     local attrInfo = self:getPlayerAttrInfo()
     playerCfg = self:cfg()
@@ -22,7 +39,7 @@ function Player:initPlayer()
     end
 
     self.isArenaMode = false
-
+    
     self:initCurrency()
     self:tickLifeSteal()
 end
@@ -90,7 +107,7 @@ function Player:setOpenRealDmg()
 end
 ---开启移速加成特权
 function Player:setMovePlus()
-    --self:setValue("hpMaxPlus",playerCfg.hpMaxPlus)
+    self:deltaMoveSpdRat(World.cfg.spdPlus-1)
 end
 ---开启锻炼值无上限特权
 function Player:setInfiniteExp()

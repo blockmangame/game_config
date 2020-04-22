@@ -88,6 +88,21 @@ end
 function AdvanceConfig:getSettings()
     return settings
 end
+function AdvanceConfig:getSpdPlusByLv(lv)
+    if settings[lv] and settings[lv].speed then
+        return settings[lv].attack
+    end
+end
+function AdvanceConfig:getExpPlusByLv(lv)
+    if settings[lv] and settings[lv].workout then
+        return settings[lv].attack
+    end
+end
+function AdvanceConfig:getAtkPlusByLv(lv)
+    if settings[lv] and settings[lv].attack then
+        return settings[lv].attack
+    end
+end
 
 local function init()
     AdvanceConfig:init()
