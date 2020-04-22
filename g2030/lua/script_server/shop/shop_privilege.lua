@@ -68,14 +68,12 @@ function M:onBuySuccess(player, item)
     buyInfo[tostring(item.id)] = BuyStatus.Used
     if item.autoSellDuration then
         local autoSellTime =  player:getAutoSellTime()
-        if os.time() > autoSellTime then
-            autoSellTime = os.time() + item.autoSellDuration
-        else
-            autoSellTime = autoSellTime + item.autoSellDuration
+        if os.time() >= autoSellTime then
+            autoSellTime = os.time()
         end
+        autoSellTime = autoSellTime + item.autoSellDuration
         player:setAutoSellTime(autoSellTime)
         print("onBuySuccess 玩家 : "..tostring(player.name).. "自动售卖 item.autoWorkDuration "..tostring(item.autoSellDuration))
-        --local time = 0
     end
     self:onPlayerUseItem(player, item)
     print("购买后 玩家 : "..tostring(player.name).. "self.type ：", tostring(self.type).."  ".. Lib.v2s(buyInfo, 3))
@@ -144,61 +142,17 @@ end
 
 function M:onPlayerUseBoxCard(player, item)
     print("onPlayerUseItem 玩家 : "..tostring(player.name).. "月卡 item.boxCard "..tostring(item.boxCard).. " item.boxDuration "..tostring(item.boxDuration))
-    local buyInfo = self:getPlayerBuyInfo(player)
     local allBox = player:getBoxData()
-    if not allBox[tostring(item.boxCard)] then
-        allBox[tostring(item.boxCard)] = {}
-    end
     local boxData = allBox[tostring(item.boxCard)]
-    local time = 0
-    local curTime = os.time()
-    if type(boxData.payTime) == "number" then
-        time = boxData.payTime - os.time()
-        print(" time 1："..tostring(time))
-        if time <= 0 then
-            --buyInfo[tostring(item.id)] = BuyStatus.Unlock
-            boxData.payTime = os.time()
-            time = 0
-        end
-            boxData.payTime = boxData.payTime + item.boxDuration*60
-            time = time + item.boxDuration*60
-    else
-        boxData.payTime = os.time() + item.boxDuration*60
-        time = time + item.boxDuration*60
-        print(" time 2："..tostring(time))
+    if not boxData or not boxData.payTime then
+        return
     end
-    print(" time 3："..tostring(time))
-    if time > 0 then
-        local function refreshLock()
-            local reTime = os.time() - boxData.payTime
-            print("reTime : "..tostring(reTime))
-            if reTime >= 0 then
-                local buyInfo1 = self:getPlayerBuyInfo(player)
-                local allBox1 = player:getBoxData()
-                print("player:getBoxData() 11", Lib.v2s(player:getBoxData()))
-                local boxData1 = allBox1[tostring(item.boxCard)]
-                print("buyInfo1 ", Lib.v2s(buyInfo1))
-                for _, id in pairs(self.config:getAllBoxCardId(item.boxCard)) do
-                    print("getAllBoxCardId v.id "..tostring(id))
-                    buyInfo1[tostring(id)] = BuyStatus.Unlock
-                    boxData1.payTime = os.time()
-                end
-                self:setPlayerBuyInfo(player, buyInfo1)
-                player:setBoxData(allBox1)
-                LuaTimer:cancel(player.allBox[item.boxCard])
-            end
-        end
-        player.allBox = player.allBox or {}
-        if player.allBox[item.boxCard] then
-            LuaTimer:cancel(player.allBox[item.boxCard])
-        end
-        player.allBox[item.boxCard] = LuaTimer:scheduleTimer(function()
-            refreshLock()
-        end, 1000, -1)
+    if boxData.payTime <= os.time() then
+        boxData.payTime = os.time()
     end
-    self:setPlayerBuyInfo(player,buyInfo)
+    boxData.payTime = boxData.payTime + item.boxDuration*86400--一天86400s
     player:setBoxData(allBox)
-    print("player:getBoxData() 00", Lib.v2s(player:getBoxData()))
+    player:refreshBoxCard(item.boxCard, boxData.payTime)
 end
 
 function M:onPlayerUseAutoSell(player, item)

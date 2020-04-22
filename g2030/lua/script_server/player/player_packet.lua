@@ -60,6 +60,11 @@ function handles:skillShopBuyItem(packet)
     end
 end
 
+function handles:syncSkillEquip(packet)
+    local skillShop = require "script_server.skill.skillShop"
+    skillShop:syncSkillMap(self)
+end
+
 
 function handles:SyncItemShopBuyAll(packet)
     Store.ItemShop:BuyAll(self, packet.tabId)

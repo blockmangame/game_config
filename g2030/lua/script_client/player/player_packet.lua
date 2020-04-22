@@ -34,6 +34,15 @@ function handles:PetList(packet)
     end
 end
 
+function handles:AttrValuePro(packet)
+    local entity = World.CurWorld:getEntity(packet.objID)
+    if packet.isBigInteger then
+        packet.value = BigInteger.Recover(packet.value)
+    end
+    entity:doSetValue(packet.key, packet.value)
+    UI:getWnd("petEvolution"):evoluteSuccess(packet.oldIndex, packet.newIndex)
+end
+
 function handles:ResetEntityRechargeSkill(packet)
     Lib.emitEvent(Event.EVENT_ALL_RECHARGE_SKILL_RESET)
 end

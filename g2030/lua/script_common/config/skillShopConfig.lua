@@ -14,9 +14,13 @@ function skillShopConfig:initConfig()
             muscle = tostring(config.n_muscle),
             camp = config.n_camp,
             name = tostring(config.s_name),
+            itemName = tostring(config.s_itemName),
             desc = tostring(config.s_desc),
+            detail = tostring(config.s_detail),
+            detailInfo = tostring(config.s_detailInfo),
             icon = tostring(config.s_icon),
             moneyType = tonumber(config.n_moneyType),
+            cd = tonumber(config.n_cd),
             price = tonumber(config.n_price) or 0,
             status = Define.SkillStatus.NoStudy
         }
