@@ -57,7 +57,8 @@ Define.ProcessState = {
 
 Define.ProcessType = {
     ProcessBase = require "script_server.process.process_base",
-    ProcessTeam = require "script_server.process.process_team"
+    ProcessTeam = require "script_server.process.process_team",
+    ProcessArena = require "script_server.process.process_arena",
 }
 
 Define.RegionType = {
