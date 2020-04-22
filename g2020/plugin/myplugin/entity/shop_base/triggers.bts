@@ -60,7 +60,7 @@ CHECK_PLAYER_BUY_LOTTERY_TIMES
     {
         $tipType = 0
         @canBuyShopItem = false
-        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $player, p2 = "buy_lottery_limit", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $player, p2 = "buy_lottery_limit", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
         Return()
     }
 }

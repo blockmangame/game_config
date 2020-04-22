@@ -3983,7 +3983,7 @@ SAVE_WORKS_TIP_CLICK_EVENT
         }
         Else
         {
-            --ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            --ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "ui_tip")
 
             CallTrigger(event = "SHOW_GOTO_APP_SHOP_UI", obj1 = $obj1)
             Return()
@@ -4020,7 +4020,7 @@ CHECK_WORKS_ARCHIVE_RESPONSE
         If($count >= $maxArchiveNum)
         {
             $tipType = 0
-            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_failure_archive_full", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_failure_archive_full", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
             Return()
         }
 
@@ -4038,11 +4038,11 @@ CHECK_WORKS_ARCHIVE_RESPONSE
         $tipType = 0
         If($isPublish)
         {
-            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
         }
         Else
         {
-            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
         }
     }
 }
@@ -4052,7 +4052,7 @@ SHOW_BYU_WORKS_ARCHIVE_UI_2--购买存档
     $price = GetWorldVar(key = "worksArchivePrice")
     $btnInfo = { leftCoinId = nil, leftContent = "gui.text.cancel", rightCoinId = 0, rightContent = $price }
     $tipType = 5
-    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "BUY_WORKS_ARCHIVE_2", p1 = "composition.tip.title", p2= "buy_works_archive", p3 = $btnInfo)
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "BUY_WORKS_ARCHIVE_2", p1 = "ui_tip", p2= "buy_works_archive", p3 = $btnInfo)
 }
 
 BUY_WORKS_ARCHIVE_2
@@ -4079,12 +4079,12 @@ BUY_WORKS_ARCHIVE_RESPONSE_2
         $obj1.worksArchiveNum = $obj1.worksArchiveNum + 1
         SetWorksArchiveNum(player = $obj1, num = $obj1.worksArchiveNum)
         UpdateUIData(player =$obj1, ui = "works_person", data = true)
-        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "buy_works_archive_succeed", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "buy_works_archive_succeed", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
     }
     Else
     {
         ShowRecharge(player = $obj1)
-        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "buy_works_archive_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "buy_works_archive_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
     }
 }
 
@@ -4110,7 +4110,7 @@ BUY_WORKS_ARCHIVE
         $price = GetWorldVar(key = "worksArchivePrice")
         If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
         {
-            --ShowDialogTip(entity = $obj1, p2 = "publish_works_buy_archive_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            --ShowDialogTip(entity = $obj1, p2 = "publish_works_buy_archive_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "ui_tip")
             CallTrigger(event = "SHOW_GOTO_RECHARGE_UI", obj1 = $obj1)
             Return()
         }
@@ -4139,7 +4139,7 @@ BUY_WORKS_ARCHIVE_RESPONSE
     {
         ShowRecharge(player = $obj1)
         $tipType = 0
-        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_buy_archive_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_buy_archive_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
     }
 }
 
@@ -4160,11 +4160,11 @@ GET_NEW_UN_PUBLISH_RESPONSE
      }
      ElseIf($code == 2047)
      {
-        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_coverage_new_works_failure_not_un_publish", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_coverage_new_works_failure_not_un_publish", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
      }
      Else
      {
-        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_coverage_new_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_coverage_new_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
      }
 }
 
@@ -4214,11 +4214,11 @@ UPDATE_WORKS_RESPONSE
         $tipType = 0
         If($isEdit)
         {
-            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_edit_new_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_edit_new_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
         }
         Else
         {
-            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_coverage_new_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_coverage_new_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
         }
      }
 }
@@ -4256,11 +4256,11 @@ CREATE_WORKS_RESPONSE
         $tipType = 0
         If($isPublish)
         {
-            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
         }
         Else
         {
-            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "works_save_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
         }
     }
 }
@@ -4282,7 +4282,7 @@ PUBLISH_WORKS
         $price = GetWorldVar(key = "publishWorksPrice")
         If(not CheckBalance(entity = $obj1, coinName = "green_currency", price = $price))
         {
-            --ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            --ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "ui_tip")
             CallTrigger(event = "SHOW_GOTO_APP_SHOP_UI", obj1 = $obj1)
             Return()
         }
@@ -4294,7 +4294,7 @@ PUBLISH_WORKS
         $price = GetWorldVar(key = "publishWorksCubePrice")
         If(not CheckBalance(entity = $obj1, coinName = "gDiamonds", price = $price))
         {
-            --ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+            --ShowDialogTip(entity = $obj1, p2 = "publish_works_not_enough_money", tipType = 0, p3 = "gui.text.sure", p1 = "ui_tip")
             CallTrigger(event = "SHOW_GOTO_RECHARGE_UI", obj1 = $obj1)
             Return()
         }
@@ -4311,7 +4311,7 @@ PUBLISH_WORKS_RESPONSE
     {
         $price = GetWorldVar(key = "publishWorksPrice")
         PayCurrency(entity = $obj1, coinName = "green_currency", count = $price)
-        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_succeed", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_succeed", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
         SetWorksArchiveNum(player = $obj1, num = $obj1.worksArchiveNum)
         UpdateUIData(player =$obj1, ui = "works_person", data = true)
         CallTrigger(event = "PLAYER_PUBLISH_WORKS", worksId = $worksId, player = $obj1)
@@ -4319,7 +4319,7 @@ PUBLISH_WORKS_RESPONSE
     Else
     {
         $tipType = 0
-        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip")
+        ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip")
     }
 }
 
@@ -4338,7 +4338,7 @@ PAY_PUBLISH_WORKS_BY_CUBE_RESPONSE
     {
         ShowRecharge(player = $obj1)
         $tipType = 0
-        ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip"
+        ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip"
             ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
     }
 }
@@ -4356,7 +4356,7 @@ PUBLISH_WORKS_BY_CUBE_RESPONSE
     Else
     {
         $tipType = 0
-        ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "gui_dialog_tip_title_tip"
+        ShowDialogTip(entity = $obj1, p2 = "publish_works_failure", tipType = $tipType, p3 = "gui.text.sure", p1 = "ui_tip"
             ,_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1))
     }
 }
@@ -6736,7 +6736,7 @@ SHOW_GOTO_RECHARGE_UI
     ShowRecharge(player = $obj1)
     --$def = false
     --$btnInfo = { leftCoinId = nil, leftContent = "gui.text.cancel", rightCoinId = nil, rightContent = "go_to_recharge" }
-    --ShowDialogTip(entity = $obj1, tipType = 5, event = "SHOW_GOTO_RECHARGE_UI_RESULT", p1 = "composition.tip.title", p2= "pay_failure_gDiamonds_insufficient", p3 = $btnInfo)
+    --ShowDialogTip(entity = $obj1, tipType = 5, event = "SHOW_GOTO_RECHARGE_UI_RESULT", p1 = "ui_tip", p2= "pay_failure_gDiamonds_insufficient", p3 = $btnInfo)
 }
 
 SHOW_GOTO_RECHARGE_UI_RESULT
@@ -6752,7 +6752,7 @@ SHOW_GOTO_APP_SHOP_UI
     ShowGoldShop(player = $obj1, show = true)
     --$def = false
     --$btnInfo = { leftCoinId = nil, leftContent = "gui.text.cancel", rightCoinId = nil, rightContent = "go_to_conversion" }
-    --ShowDialogTip(entity = $obj1, tipType = 5, event = "SHOW_GOTO_APP_SHOP_UI_RESULT", p1 = "composition.tip.title", p2= "pay_failure_game_money_insufficient", p3 = $btnInfo)
+    --ShowDialogTip(entity = $obj1, tipType = 5, event = "SHOW_GOTO_APP_SHOP_UI_RESULT", p1 = "ui_tip", p2= "pay_failure_game_money_insufficient", p3 = $btnInfo)
 }
 
 SHOW_GOTO_APP_SHOP_UI_RESULT
