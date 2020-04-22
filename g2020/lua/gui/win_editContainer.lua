@@ -165,6 +165,9 @@ end
 
 function M:initEvent()
     Lib.subscribeEvent(Event.EVENT_UI_EDIT_UPDATE_EDIT_CONTAINER_2, function(objID, show)
+        if self.isMovingEntity then
+            return
+        end
         self.allCell[objID] = {}
         local object = curWorld:getObject(objID)
         if show then    
