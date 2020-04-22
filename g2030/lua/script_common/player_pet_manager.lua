@@ -39,6 +39,11 @@ end
 
 function Player:getPetAttr(index)
     local targetPetInfo = self:getValue("allPetAttr")[index];
+    if not targetPetInfo then
+        print("Trying to find a not exist index: ", index)
+        print(debug.traceback())
+        return
+    end
     local targetEntityCfg = Entity.GetCfg(Player.turnID2Plugin(targetPetInfo.petType, targetPetInfo.ID, targetPetInfo.minorID or 0));
     return {
         petType = targetPetInfo.petType,                        --宠物类型
