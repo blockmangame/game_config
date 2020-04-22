@@ -752,7 +752,7 @@
                                                 },
                                                 {
                                                     "Name": "Font",
-                                                    "Value": "NF18"
+                                                    "Value": "NF22"
                                                 },
                                                 {
                                                     "Name": "WndOpenSound",
@@ -765,6 +765,10 @@
                                                 {
                                                     "Name": "TextAutoOmission",
                                                     "Value": "false"
+                                                },
+                                                {
+                                                    "Name": "TextColor",
+                                                    "Value": "0 1 1 1"
                                                 },
                                                 {
                                                     "Name": "TextHorzAlignment",
@@ -904,7 +908,7 @@
                                             "Property": [
                                                 {
                                                     "Name": "Area",
-                                                    "Value": "{{0,60},{0,244},{0,90},{0,274}}"
+                                                    "Value": "{{0,16},{0,244},{0,46},{0,274}}"
                                                 },
                                                 {
                                                     "Name": "WndOpenSound",
@@ -937,10 +941,6 @@
                                                 {
                                                     "Name": "HexgonTopImage",
                                                     "Value": ""
-                                                },
-                                                {
-                                                    "Name": "ImageName",
-                                                    "Value": "set:skillstore.json image:power"
                                                 }
                                             ],
                                             "Window": [
@@ -950,7 +950,7 @@
                                                     "Property": [
                                                         {
                                                             "Name": "Area",
-                                                            "Value": "{{0,35},{0,0},{0,230},{0,33}}"
+                                                            "Value": "{{0,0},{0,0},{0,195},{0,33}}"
                                                         },
                                                         {
                                                             "Name": "Text",
@@ -958,7 +958,7 @@
                                                         },
                                                         {
                                                             "Name": "Font",
-                                                            "Value": "NF18"
+                                                            "Value": "NF16"
                                                         },
                                                         {
                                                             "Name": "WndOpenSound",
@@ -971,6 +971,10 @@
                                                         {
                                                             "Name": "TextAutoOmission",
                                                             "Value": "false"
+                                                        },
+                                                        {
+                                                            "Name": "TextColor",
+                                                            "Value": "1 1 0 1"
                                                         },
                                                         {
                                                             "Name": "TextLineExtraSpace",
@@ -1025,6 +1029,52 @@
                                                         {
                                                             "Name": "TextAutoOmission",
                                                             "Value": "false"
+                                                        },
+                                                        {
+                                                            "Name": "TextLineExtraSpace",
+                                                            "Value": "1"
+                                                        },
+                                                        {
+                                                            "Name": "TextSelfAdaptHigh",
+                                                            "Value": "true"
+                                                        },
+                                                        {
+                                                            "Name": "TextWordWrap",
+                                                            "Value": "true"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "Type": "StaticText",
+                                                    "Name": "skillControl-SkillItemDecNum",
+                                                    "Property": [
+                                                        {
+                                                            "Name": "Area",
+                                                            "Value": "{{0,0},{0,67},{0,281},{0,131.208}}"
+                                                        },
+                                                        {
+                                                            "Name": "Text",
+                                                            "Value": "This is a very long descript of the word count."
+                                                        },
+                                                        {
+                                                            "Name": "Font",
+                                                            "Value": "NF18"
+                                                        },
+                                                        {
+                                                            "Name": "WndOpenSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "WndCloseSound",
+                                                            "Value": "0"
+                                                        },
+                                                        {
+                                                            "Name": "TextAutoOmission",
+                                                            "Value": "false"
+                                                        },
+                                                        {
+                                                            "Name": "TextColor",
+                                                            "Value": "0 1 0 1"
                                                         },
                                                         {
                                                             "Name": "TextLineExtraSpace",

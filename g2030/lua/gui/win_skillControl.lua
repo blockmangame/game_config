@@ -52,15 +52,19 @@ function M:initUI()
     self.gvSkillItemDec = GUIWindowManager.instance:CreateGUIWindow1("GridView", "skillControl-SkillItemDecGridView")
     self.llSkillItemDec:AddChildWindow(self.gvSkillItemDec)
     self.gvSkillItemDec:SetArea({ 0, 0 }, { 0, 0 }, { 1, 0 }, { 1, 0 })
-    self.gvSkillItemDec:InitConfig(0, 0, 1)
+    self.gvSkillItemDec:InitConfig(0, 5, 1)
 
         --text
     self.stSkillItemName = self:child("skillControl-SkillItemName")
     self.stMuscleConsume = self:child("skillControl-MuscleConsumeText")
     self.stSkillItemDesc = self:child("skillControl-SkillItemDec")
+    self.stSkillItemDescNum = self:child("skillControl-SkillItemDecNum")
     self.stBuyPrice = self:child("skillControl-BuyPrice")
+    self.stIsBuyText = self:child("skillControl-IsBuyText")
+    self.stIsBuyText:SetText(Lang:toText("gui_learn"))
 
     self.gvSkillItemDec:AddItem(self.stSkillItemDesc)
+    self.gvSkillItemDec:AddItem(self.stSkillItemDescNum)
         --image
     self.siCurrencyImg = self:child("skillControl-CurrencyImg")
     self.siIsBuySkillImg = self:child("skillControl-IsBuySkillImg")
@@ -99,9 +103,9 @@ function M:initUI()
     self.btnEquipDisplacementSkill = self:child("skillControl-tab_equipDisplacementSkillBtn")
     self.btnEquipControlSkill = self:child("skillControl-tab_equipControlSkillBtn")
     self.btnEquipRecoverSkill = self:child("skillControl-tab_equipRecoverSkillBtn")
-    
 
- 
+
+
     self:initEvent()
     --放初始分页的技能组
     self:addSkillShopItem(skills.attack)
@@ -294,6 +298,34 @@ function M:openSkillEquip()
     self.llEquipPanel:SetVisible(true)
 end
 
+function M:getSkillDecNumString(decStr,numStr)
+    function split(input, delimiter)
+        input = tostring(input)
+        delimiter = tostring(delimiter)
+        if (delimiter=='') then return false end
+        local pos,arr = 0, {}
+        for st,sp in function() return string.find(input, delimiter, pos, true) end do
+            table.insert(arr, string.sub(input, pos, st - 1))
+            pos = sp + 1
+        end
+        table.insert(arr, string.sub(input, pos))
+        return arr
+    end
+
+    local decArr = split(decStr, "/")
+    local numArr = split(numStr, "/")
+    print("----------------str1----------  "..Lib.v2s(decArr).."\n"..Lib.v2s(numArr))
+    local str = ""
+    for i = 1, #decArr do
+        if str == "" then
+            str = string.format(decArr[i],numArr[i])
+        else
+            str = str..", "..string.format(decArr[i],numArr[i])
+        end
+    end
+    return str
+end
+
 function M:selectSkillInfo()
     local buyInfo = Me:getStudySkill()
     -- print("---upDataSkillShopItems------".. Lib.v2s(buyInfo))
@@ -305,15 +337,16 @@ function M:selectSkillInfo()
     end
     for key, value in pairs(self.Items) do
         if self.itemId == value.id then
-            self.stSkillItemName:SetText(value.name)
-            self.stMuscleConsume:SetText("  ".. value.muscle.."K  Muscle")
-            self.stSkillItemDesc:SetText(value.desc)
-            -- print("-----------stSkillItemDesc--------------" .. Lib.v2s(self.stSkillItemDesc:GetHeight()))
-            if self.stSkillItemDesc:GetHeight()[2] > 136 then
+            self.stSkillItemName:SetText(Lang:toText(value.name))
+            self.stMuscleConsume:SetText(string.format(Lang:toText("skill_cd"),value.cd))
+            self.stSkillItemDesc:SetText(Lang:toText(value.desc))
+            self.stSkillItemDescNum:SetText(self:getSkillDecNumString(Lang:toText(value.detail),Lang:toText(value.detailInfo)))
+            if self.stSkillItemDesc:GetHeight()[2] + self.stSkillItemDescNum:GetHeight()[2] > 131 then
                 self.gvSkillItemDec:SetMoveAble(true)
             else
                 self.gvSkillItemDec:SetMoveAble(false)
             end
+            self.gvSkillItemDec:ResetPos()
             PreviewUrl = value.url
             -- print("---previewUrl------".. Lib.v2s(value))
             if PreviewUrl == "" then

@@ -389,7 +389,7 @@ function M:init()
             end
             image = image or self.sectorHolders[i]
             if sectorJacks[i] then
-                -- print(" sectorJacks[i] , sectorJacks[i]", Lib.v2s(sectorJacks[i]))
+                print(" sectorJacks[i] && sectorHolders[i]", Lib.v2s(sectorJacks[i]))
                 image:SetArea(table.unpack(sectorJacks[i]))
             end
             self._root:AddChildWindow(image)
