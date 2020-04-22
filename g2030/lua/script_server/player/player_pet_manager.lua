@@ -167,15 +167,16 @@ function Player:deletePet(index)
     end
 end
 
-function Player:sendEvolutionPackage(index)
+function Player:sendEvolutionPackage(oldIndex ,newIndex)
     local def = Entity.ValueDef["allPetAttr"]
     local packet = {
         pid = "AttrValuePro",
         key = "allPetAttr",
         value = self:getAllPetAttr(),
-        isBigInteger = type(value) == "table" and value.IsBigInteger,
+        isBigInteger = type(self:getAllPetAttr()) == "table" and self:getAllPetAttr().IsBigInteger,
         objID = self.objID,
-        newIndex = index
+        oldIndex = oldIndex,
+        newIndex = newIndex
     }
     local toSelf = def[3] and self.isPlayer
     if def[4] then
@@ -191,10 +192,15 @@ function Player:petEvolution(package)
     local evoCoinNu = {}
     local evoChiNu = {}
     local minCoin, maxCoin, minFu, maxFu = 0, 0, 0, 0
+    if #materials ~= 3 then
+        print("Bad Evolution Materials !!!! actual materials is ", #materials, "\n userID is ", self.userID)
+        print(Lib.v2s(materials))
+        return
+    end
     for _, v in pairs(materials) do
         local tempData = self:getPetAttr(v)
         if tempData.petType == petType.plusPet then
-            print("ERROR!!!!! WRONG PET TYPE!!!! Evolution terminate!!!!!!")
+            print("ERROR!!!!! WRONG PET TYPE!!!! Evolution terminate!!!!!!, Pet Index :", v)
             self:closePetEvolution()
             return
         end
@@ -208,11 +214,56 @@ function Player:petEvolution(package)
         table.insert(evoChiNu, tempData.chiTransRatio)
     end
     local tempData = self:getPetAttr(target)
-    local index = self:getNewPet(tempData.ID, tempData.coinTransRatio, tempData.chiTransRatio, tempData.level + 1, true)
+    math.randomseed(os.time() + target)                      --改变随机因子
+    local actualCoin
+        actualCoin = math.random(minCoin, maxCoin) + tempData.coinTransRatio
+
+    local actualFu
+        actualFu = math.random(minFu, maxFu) + tempData.chiTransRatio
+
+    if actualCoin < 0 then
+        actualCoin = 0
+    end
+    if actualFu < 0 then
+        actualFu = 0
+    end
+
+    local equip = self:getPetEquippedList()
+    local targetRidePos = 0
+    if equip and equip[1] == target then
+        targetRidePos = 1
+        self:recallPet(target)
+    end
+    if equip and equip[2] == target then
+        targetRidePos = 2
+        self:recallPet(target)
+    end
+
+    for _, v in pairs(materials) do
+        if equip and equip[1] == v then
+            self:recallPet(v)
+        end
+        if equip and equip[2] == v then
+            self:recallPet(v)
+        end
+        self:deletePet(v)
+        print("=======================delete:", v)
+    end
+
+    local index = self:getNewPet(tempData.ID, actualCoin, actualFu, tempData.level + 1, true)
     if not index then
         print("Error When Evolute Pet Cannot get correct index:", index)
+        return
     end
-    self:sendEvolutionPackage(index)
+
+    self:deletePet(target)
+
+    if targetRidePos ~= 0 then
+        self:callPet(index, targetRidePos)
+    end
+
+    print(" Evolute Result: \n Player:" ,self.userID, "\n Pet Info", index, actualCoin, actualFu, tempData.level + 1)
+    self:sendEvolutionPackage(target, index)
 end
 
 

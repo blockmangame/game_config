@@ -31,6 +31,7 @@ require "script_server.world.region.region_block"
 require "script_server.world.region"
 require "script_server.world.region_manager"
 
+require "script_server.skill.skill"
 require "script_server.skill.skill_normal_atk"
 require "script_server.skill.skill_addExp"
 require "script_server.skill.multistage"
