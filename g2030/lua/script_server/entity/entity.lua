@@ -1,5 +1,4 @@
 local function entityValueDefInit(entity,cfg)
-    print("-------------init def-----------")
     if cfg.entityMaxHp then
         entity:setNPCMaxHp(BigInteger.Create(cfg.entityMaxHp[1],cfg.entityMaxHp[2]))
     end

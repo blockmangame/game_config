@@ -39,7 +39,7 @@ function Player:initPlayer()
     end
 
     self.isArenaMode = false
-
+    
     self:initCurrency()
     self:tickLifeSteal()
 end
@@ -107,7 +107,7 @@ function Player:setOpenRealDmg()
 end
 ---开启移速加成特权
 function Player:setMovePlus()
-    --self:setValue("hpMaxPlus",playerCfg.hpMaxPlus)
+    self:deltaMoveSpdRat(World.cfg.spdPlus-1)
 end
 ---开启锻炼值无上限特权
 function Player:setInfiniteExp()

@@ -14,6 +14,7 @@ function Player:initPlayer()
     self.JumpMoveEndFallDistance = 0
     self.jumpHeight = 0
     self.beginFallHeight = 0
+    self.lastMotionY = 0
 
     self:initData()
     Blockman.Instance():setLockVisionState(World.cfg.lockVision and World.cfg.lockVision.open or false)
@@ -116,7 +117,7 @@ function Player:eventJumpEnd()
     self.jumpEnd = true
 
     self:setEntityProp("antiGravity", 0.0)
-    self.motion = Lib.v3(0, 0, 0)
+    --self.motion = Lib.v3(0, 0, 0)
     self:eventBeginFall(self:curBlockPos().y)
 end
 
