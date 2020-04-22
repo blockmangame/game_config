@@ -131,6 +131,11 @@ function Player:backNormalWorld()
     self.isArenaMode = false
     --TODO
 end 
+function Player:intoArenaWorld()
+    self:setInvincible()
+    self:resetArenaScore()
+    self:showArenaMainUI()
+end
 ---增加竞技场分数
 function Player:addArenaScore(val)
     self:setValue("arenaScore",self:getArenaScore()+val)
@@ -220,9 +225,16 @@ end
 ---向本客户端发送一个显示文字的普通提示弹窗
 ---
 function Player:showCommonNotice(content)
-    local packet = {
+    self:sendPacket({
         pid = "CommonNotice",
         content = content,
-    }
-    self:sendPacket(packet)
+    })
+end
+---
+---主UI展现竞技场状态
+---
+function Player:showArenaMainUI()
+    self:sendPacket( {
+        pid = "ShowArenaMainUI",
+    })
 end

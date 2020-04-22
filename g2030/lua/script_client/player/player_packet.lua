@@ -80,3 +80,8 @@ function handles:CommonNotice(packet)
         Lib.emitEvent(Event.EVENT_COMMON_NOTICE,packet.content)
     end
 end
+function handles:ShowArenaMainUI(packet)
+    if packet then
+        Lib.emitEvent(Event.EVENT_ARENA_UI_STATE)
+    end
+end

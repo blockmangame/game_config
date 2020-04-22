@@ -86,11 +86,12 @@ function M:initEvent()
         self.effect:SetVisible(isPlay)
     end)
 
-    -- Lib.subscribeEvent(Event.EVENT_ITEM_SKILL_EQUIP_UPDATE, function()
-    --     -- 技能装配监听
-    --     local EquipInfo = Me:getEquipSkill()
-    --     print("---------EquipInfo--------------1 ".. Lib.v2s(EquipInfo))
-    -- end)
+    Lib.subscribeEvent(Event.EVENT_ARENA_UI_STATE, function()
+        self.btnVip:SetVisible(false)
+        self.btnTrade:SetVisible(false)
+        self.btnSell:SetVisible(false)
+        self.btnPet:SetVisible(false)
+    end)
 end
 
 ---右侧技能按钮排版切换
