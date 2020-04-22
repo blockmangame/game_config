@@ -5221,13 +5221,6 @@ START_CAMERA_MODE
     {
         Return()
     }
-
-    $editBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/edit_house_buff")
-    If($editBuff){
-        ShowTip(entity = $obj1, tipType = 1, textKey = "disable_use_camera_mode_in_the_edit", keepTime = 30)
-        Return()
-    }
-
     
     If(not IsCameraMode(player = $obj1))
     {
@@ -7134,7 +7127,7 @@ GUIDE_CLICK_DRESS_HOUSE() --让玩家点击 装扮房子： 13
     $obj1.guideStep = @DressHouse
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
-STEP13_FINISH() -- 玩家点击装扮家后，None自由操作： 14
+STEP14_FINISH() -- 玩家点击装扮家后，None自由操作： 14
 {
     $obj1.guideStep = @NoneHouse
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
@@ -7174,7 +7167,7 @@ CALL_GO_TO_PLAYGROUND()-- 开始引导玩家去游乐场对话
 OPEN_PLAYGROUND_BUFF()--开起游乐场buff，
 {
     CallTrigger(object = $obj1, event = "FUNC_STATE_GENERATE", stateBase = "region", col = 3, skill = "myplugin/skill_state_region")
-    $obj1.guideStep = 15
+    $obj1.guideStep = @PlayGround
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
 STEP15_FINISH()--//废弃，客户端直接转下一步
@@ -7187,12 +7180,12 @@ STEP15_FINISH()--//废弃，客户端直接转下一步
     Foreach(array = $uiList ,key = "ui"){
         OperationWindows(win = $ui, isOpen = false, player = $obj1)
     }
-    $obj1.guideStep = 16
+    $obj1.guideStep = @PlayOpenGSP
     SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
 }
-STEP16_FINISH()--点击开始GPS:指引去游乐场
+STEP17_FINISH()--点击开始GPS:指引去游乐场
 {
-    If($obj1.guideStep == 15){
+    If($obj1.guideStep == @PlayGround){
         $obj1.guideStep = @PlayGoGround
         SetGuideStep(player = $obj1, step = Concat(p1 = "step", p2 = $obj1.guideStep),canBack = true)
     }

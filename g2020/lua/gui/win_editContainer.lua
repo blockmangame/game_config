@@ -163,11 +163,31 @@ local function clacPushOutWithBlock(self, object)
     return tempEntityPos
 end
 
+local editCd = false
 function M:initEvent()
     Lib.subscribeEvent(Event.EVENT_UI_EDIT_UPDATE_EDIT_CONTAINER_2, function(objID, show)
+        if self.isMovingEntity then
+            return
+        end
         self.allCell[objID] = {}
+        
+        for oid, closer in pairs(self.containerCloser or {}) do 
+            if closer then
+                closer()
+            end
+            self.containerCloser[oid] = nil
+            local ui = self.container[oid]
+            self.container[oid] = nil
+            clearMoveStatus(self)
+            stopTouchListener(self, oid)
+        end
+
         local object = curWorld:getObject(objID)
-        if show then    
+        if show and not editCd then    
+            editCd = true
+            World.Timer(2, function()
+                editCd = false
+            end)
             self:showInteractionUI(objID)
             self.localContext.objID = objID
             IS_OPEN = true
@@ -179,15 +199,11 @@ function M:initEvent()
             if closer then
                 closer()
             end
-
             local ui = self.container[objID]
             self.container[objID] = nil
-
             IS_OPEN = false
-
             clearMoveStatus(self)
             stopTouchListener(self, objID)
-
             local clacPos = clacPushOutWithBlock(self, object)
             if clacPos then
                 object:setPosition(clacPos)

@@ -71,16 +71,17 @@ GAME_INIT
     @DressDialog = 12 --装扮商店对话， 配置表None
     --存档2：装扮房子指引
     @DressHouse = 13 -- 指引玩家装扮房子。
-    @NoneHouse = 14 --让玩家自由操作， 配置None，
+    @ClcikDressHouse = 14 --
+    @NoneHouse = 15 --让玩家自由操作， 配置None，
     --存档3：指引玩家去游乐场
-    @PlayGround = 15 --开启游乐场状态，指引玩家点击游乐场按钮
-    @PlayOpenGSP = 16 --点击游乐场GPS
-    @PlayGoGround = 17 --去游乐场
-    @PlayEnd = 18 --存档3完成，
+    @PlayGround = 16 --开启游乐场状态，指引玩家点击游乐场按钮
+    @PlayOpenGSP = 17 --点击游乐场GPS
+    @PlayGoGround = 18 --去游乐场
+    @PlayEnd = 19 --存档3完成，
     --存档4
-    @GuideGift = 19
+    @GuideGift = 20
     --引导完成
-    @GuideEnd = 20 --完成所有指引
+    @GuideEnd = 21 --完成所有指引
 
     StartTimer(rep = true, time = 20 * 30, event = "SYNC_WORLD_TIME")
 }
