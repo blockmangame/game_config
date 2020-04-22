@@ -4,6 +4,10 @@
     },
     "clearGameBgmRegionCfg": "myplugin/clear_gamebgm_region_base",
     "clearGameBgmRegionKey": "clear_gamebgm_region_base",
+    "autoRotateColliderBox": true,
+    "rotateNearBoxAngle": true,
+    "posSyncDelay": 1,
+    "stopChangeYaw": 1,
     "clearGameBgmRegionAddArr": [
         {
             "x": 58,
@@ -38,7 +42,7 @@
         "type": "Composite",
         "params": [
             {
-                "type": "Box",
+                "type": "VerticalBox",
                 "params": [
                     0.7,
                     1,
