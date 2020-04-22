@@ -2,48 +2,26 @@
     "collisionBoxes": [
         {
             "max": {
-                "z": 1,
                 "x": 1,
-                "y": 0.1
+                "y": 1,
+                "z": 1
             },
             "min": {
-                "z": 0,
                 "x": 0,
-                "y": 0
+                "y": 0,
+                "z": 0.9
             }
         }
     ],
     "defaultTexture": "/block_texture/iron_trapdoor.png",
-    "clickChangeBlock": "myplugin/iron_trapdoor_open",
+    "clickChangeBlock": "myplugin/iron_trapdoor",
     "quads": [
         {
             "vertices": [
                 {
                     "position": {
-                        "x": 1,
-                        "z": 0,
-                        "y": 0.1
-                    },
-                    "textureCoord": {
-                        "x": 1,
-                        "y": 0.1
-                    }
-                },
-                {
-                    "position": {
-                        "x": 1,
-                        "z": 0,
-                        "y": 0
-                    },
-                    "textureCoord": {
-                        "x": 1,
-                        "y": 0
-                    }
-                },
-                {
-                    "position": {
+                        "z": 0.9,
                         "x": 0,
-                        "z": 0,
                         "y": 0
                     },
                     "textureCoord": {
@@ -53,13 +31,35 @@
                 },
                 {
                     "position": {
+                        "z": 1,
                         "x": 0,
-                        "z": 0,
-                        "y": 0.1
+                        "y": 0
                     },
                     "textureCoord": {
                         "x": 0,
                         "y": 0.1
+                    }
+                },
+                {
+                    "position": {
+                        "z": 1,
+                        "x": 0,
+                        "y": 1
+                    },
+                    "textureCoord": {
+                        "x": 1,
+                        "y": 0.1
+                    }
+                },
+                {
+                    "position": {
+                        "z": 0.9,
+                        "x": 0,
+                        "y": 1
+                    },
+                    "textureCoord": {
+                        "x": 1,
+                        "y": 0
                     }
                 }
             ]
@@ -68,31 +68,9 @@
             "vertices": [
                 {
                     "position": {
-                        "x": 0,
-                        "z": 1,
-                        "y": 0.1
-                    },
-                    "textureCoord": {
+                        "z": 0.9,
                         "x": 1,
-                        "y": 0.1
-                    }
-                },
-                {
-                    "position": {
-                        "x": 0,
-                        "z": 1,
-                        "y": 0
-                    },
-                    "textureCoord": {
-                        "x": 1,
-                        "y": 0
-                    }
-                },
-                {
-                    "position": {
-                        "x": 1,
-                        "z": 1,
-                        "y": 0
+                        "y": 1
                     },
                     "textureCoord": {
                         "x": 0,
@@ -101,13 +79,35 @@
                 },
                 {
                     "position": {
-                        "x": 1,
                         "z": 1,
-                        "y": 0.1
+                        "x": 1,
+                        "y": 1
                     },
                     "textureCoord": {
                         "x": 0,
                         "y": 0.1
+                    }
+                },
+                {
+                    "position": {
+                        "z": 1,
+                        "x": 1,
+                        "y": 0
+                    },
+                    "textureCoord": {
+                        "x": 1,
+                        "y": 0.1
+                    }
+                },
+                {
+                    "position": {
+                        "z": 0.9,
+                        "x": 1,
+                        "y": 0
+                    },
+                    "textureCoord": {
+                        "x": 1,
+                        "y": 0
                     }
                 }
             ]
@@ -116,31 +116,9 @@
             "vertices": [
                 {
                     "position": {
-                        "z": 1,
-                        "x": 1,
-                        "y": 0.1
-                    },
-                    "textureCoord": {
-                        "x": 1,
-                        "y": 0.1
-                    }
-                },
-                {
-                    "position": {
-                        "z": 1,
-                        "x": 1,
-                        "y": 0
-                    },
-                    "textureCoord": {
-                        "x": 1,
-                        "y": 0
-                    }
-                },
-                {
-                    "position": {
-                        "z": 0,
-                        "x": 1,
-                        "y": 0
+                        "z": 0.9,
+                        "y": 1,
+                        "x": 0
                     },
                     "textureCoord": {
                         "x": 0,
@@ -149,13 +127,35 @@
                 },
                 {
                     "position": {
-                        "z": 0,
-                        "x": 1,
-                        "y": 0.1
+                        "z": 1,
+                        "y": 1,
+                        "x": 0
                     },
                     "textureCoord": {
                         "x": 0,
                         "y": 0.1
+                    }
+                },
+                {
+                    "position": {
+                        "z": 1,
+                        "y": 1,
+                        "x": 1
+                    },
+                    "textureCoord": {
+                        "x": 1,
+                        "y": 0.1
+                    }
+                },
+                {
+                    "position": {
+                        "z": 0.9,
+                        "y": 1,
+                        "x": 1
+                    },
+                    "textureCoord": {
+                        "x": 1,
+                        "y": 0
                     }
                 }
             ]
@@ -164,31 +164,9 @@
             "vertices": [
                 {
                     "position": {
-                        "z": 0,
-                        "x": 0,
-                        "y": 0.1
-                    },
-                    "textureCoord": {
-                        "x": 1,
-                        "y": 0.1
-                    }
-                },
-                {
-                    "position": {
-                        "z": 0,
-                        "x": 0,
-                        "y": 0
-                    },
-                    "textureCoord": {
-                        "x": 1,
-                        "y": 0
-                    }
-                },
-                {
-                    "position": {
-                        "z": 1,
-                        "x": 0,
-                        "y": 0
+                        "z": 0.9,
+                        "y": 0,
+                        "x": 1
                     },
                     "textureCoord": {
                         "x": 0,
@@ -198,12 +176,34 @@
                 {
                     "position": {
                         "z": 1,
-                        "x": 0,
-                        "y": 0.1
+                        "y": 0,
+                        "x": 1
                     },
                     "textureCoord": {
                         "x": 0,
                         "y": 0.1
+                    }
+                },
+                {
+                    "position": {
+                        "z": 1,
+                        "y": 0,
+                        "x": 0
+                    },
+                    "textureCoord": {
+                        "x": 1,
+                        "y": 0.1
+                    }
+                },
+                {
+                    "position": {
+                        "z": 0.9,
+                        "y": 0,
+                        "x": 0
+                    },
+                    "textureCoord": {
+                        "x": 1,
+                        "y": 0
                     }
                 }
             ]
@@ -211,48 +211,48 @@
         {
             "pos": [
                 {
+                    "y": 0,
                     "x": 0,
-                    "z": 0,
-                    "y": 0
+                    "z": 0.9
                 },
                 {
-                    "x": 1,
-                    "z": 0,
-                    "y": 0
-                },
-                {
-                    "x": 1,
-                    "z": 1,
-                    "y": 0
-                },
-                {
+                    "y": 1,
                     "x": 0,
-                    "z": 1,
-                    "y": 0
+                    "z": 0.9
+                },
+                {
+                    "y": 1,
+                    "x": 1,
+                    "z": 0.9
+                },
+                {
+                    "y": 0,
+                    "x": 1,
+                    "z": 0.9
                 }
             ]
         },
         {
             "pos": [
                 {
+                    "y": 0,
                     "x": 0,
-                    "z": 0,
-                    "y": 0.1
+                    "z": 1
                 },
                 {
+                    "y": 0,
+                    "x": 1,
+                    "z": 1
+                },
+                {
+                    "y": 1,
+                    "x": 1,
+                    "z": 1
+                },
+                {
+                    "y": 1,
                     "x": 0,
-                    "z": 1,
-                    "y": 0.1
-                },
-                {
-                    "x": 1,
-                    "z": 1,
-                    "y": 0.1
-                },
-                {
-                    "x": 1,
-                    "z": 0,
-                    "y": 0.1
+                    "z": 1
                 }
             ]
         }
