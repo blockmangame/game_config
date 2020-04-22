@@ -29,7 +29,7 @@ function M:initWnd()
         fuInterval = self:child("PetEvolution-AddFuNu")
     }
     self.mainView = self:child("PetEvolution-PetList")
-    self.strBtn = self:child("PetEvolution-Button")
+    self.strBtn = self:child("PetEvolution-Strong")
     self.evolutionTargetImg = self:child("PetEvolution-TargetImg")         -- 强化目标不会被移去
     self.evolutionImg = {
         [1] = self:child("PetEvolution-Material1Img"),
@@ -44,6 +44,7 @@ function M:showPetEvolution(_curPetPageTable, _targetIndex)
     UI:openWnd("petEvolution")
     curPetPageTable = _curPetPageTable
     targetIndex = _targetIndex
+    self:child("PetEvolution-StrButton"):SetVisible(false)
     local tempData = Player.CurPlayer:getPetAttr(targetIndex)
     if tempData.petType == petType.plusPet then
         print("ERROR!!!!! WRONG PET TYPE!!!! Evolution terminate!!!!!!")        --Todo 改为弹出提示框
@@ -52,6 +53,34 @@ function M:showPetEvolution(_curPetPageTable, _targetIndex)
     end
     self.evolutionTargetImg:SetImage("set:ninja_pet.json image:" .. tostring(tempData.ID))
     self:setAllItems()
+    self:refreshInfo()
+end
+local function turnItemIndex2PetIndex(index)
+    if not curItemTable[index] then
+        print("Error when get \"Pet Index\" : Can not find item!!  petEvolution@gui", debug.getinfo(1).currentline)
+    end
+    return curPetPageTable[curItemTable[index].index].index
+end
+
+function M:doEvolute()
+    local packet = {
+        pid = "petEvolution",
+        target = targetIndex,
+        materials = {}
+    }
+    for _, v in pairs(curEvolutionIconStatus) do
+        table.insert(packet.materials, turnItemIndex2PetIndex(v.itemIndex))
+    end
+    Player.CurPlayer:sendPacket(packet)
+end
+
+function M:evoluteSuccess(oldIndex, newIndex)                                   --oldIndex用于数据校验
+    if oldIndex ~= targetIndex then
+        -- Todo 提示强化异常，并强行关闭当前窗口
+        UI:closeWnd("petEvolution")
+    end
+    local petTable = UI:getWnd("petPackage").refreshPlayerInfo().petTable
+    self:showPetEvolution(petTable, newIndex)        --调用refresh之后由于curPetPageTable为一个引用所以该表的值实际上也会变化
 end
 
 function M:closePetEvolution()
@@ -63,6 +92,9 @@ function M:initAllEvent()
     self:subscribe(self.closeBtn, UIEvent.EventButtonClick, function()
         self:closePetEvolution()
     end)
+    self:subscribe(self.strBtn, UIEvent.EventButtonClick, function()
+        self:doEvolute()
+    end)
 end
 
 function M:initAllText()
@@ -71,18 +103,12 @@ function M:initAllText()
     self.texts.fuInterval:SetText("")
 end
 
-local function turnItemIndex2PetIndex(index)
-    if not curItemTable[index] then
-        print("Error when get \"Pet Index\" : Can not find item!!  petEvolution@gui", debug.getinfo(1).currentline)
-    end
-    return curPetPageTable[curItemTable[index].index].index
-end
-
-function M:refreshText()
+function M:refreshInfo()
     local minCoin = 0
     local maxCoin = 0
     local minFu = 0
     local maxFu = 0
+    local materialNu = 0
     for _, v in pairs(curEvolutionIconStatus) do
         if v.isSet then
             local tempData = Player.CurPlayer:getPetAttr(turnItemIndex2PetIndex(v.itemIndex))
@@ -97,10 +123,17 @@ function M:refreshText()
             maxCoin = maxCoin + tonumber(coinIntensifyRange[2])
             minFu = minFu + tonumber(chiIntensifyRange[1])
             maxFu = maxFu + tonumber(chiIntensifyRange[2])
+            materialNu = materialNu + 1
         end
     end
     self.texts.coinInterval:SetText(tostring(minCoin) .. "%-" .. tostring(maxCoin) .. "%")
     self.texts.fuInterval:SetText(tostring(minFu) .. "%-" .. tostring(maxFu) .. "%")
+
+    if materialNu == 3 then
+        self:child("PetEvolution-StrButton"):SetVisible(true)
+    else
+        self:child("PetEvolution-StrButton"):SetVisible(false)
+    end
 end
 
 --[[
@@ -123,7 +156,7 @@ function M:itemOnSel(index)
             curEvolutionIconStatus[k].isSet = true
             curEvolutionIconStatus[k].itemIndex = index
             self:setPetIcon(_index, k)
-            self:refreshText()
+            self:refreshInfo()
             return
         end
     end
@@ -138,7 +171,7 @@ function M:itemUnSel(index)
             curItemTable[index].item:invoke("evoUnSel")
             curItemTable[index].isSet = false
             self.evolutionImg[k]:SetImage("")
-            self:refreshText()
+            self:refreshInfo()
             return
         end
     end

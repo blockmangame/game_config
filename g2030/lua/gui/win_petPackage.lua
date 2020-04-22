@@ -541,6 +541,11 @@ local function getPlayerInfo()
     table.sort(plusPetHadID, plusPetLockSort)
 end
 
+function M.refreshPlayerInfo()
+    getPlayerInfo()
+    return {petTable = curPetPageTable, plusPetTable = curPlusPetPageTable}
+end
+
 function M:_openPetPackage(index)
     getPlayerInfo()
     self:showPetInterface(index)
