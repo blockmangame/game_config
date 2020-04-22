@@ -2,7 +2,6 @@
     "followTarget": false,
     "collideBlock": 0,
     "hitInterval": 10,
-    "rotateSpeed": 0,
     "startEffect": {
         "yaw": 0,
         "pos": {
@@ -17,7 +16,7 @@
             0,
             0.2,
             0,
-			2
+			1
         ],
         "type": "Ball"
     },
@@ -26,5 +25,7 @@
     "gravity": 0,
     "hitEntitySkill": "myplugin/player_remote_skill_shuriken_hit_08",
     "moveAcc": 0,
+    "hitEntityCount": 1,
+    "vanishTime": 5,
     "collideEntity": 1
 }

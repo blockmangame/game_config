@@ -3,7 +3,11 @@ local JumpConfig = T(Config, "JumpConfig")
 
 local settings = {}
 
-function JumpConfig:init(config)
+function JumpConfig:init()
+    local config = Lib.readGameCsv("config/jump.csv")
+
+    settings = {}
+
     for _, vConfig in pairs(config) do
         local data = {}
         data.id = tonumber(vConfig.n_id) or 0 --id
@@ -18,6 +22,10 @@ function JumpConfig:init(config)
         table.insert(settings, data)
     end
     --Lib.log("JumpConfig:init " .. Lib.v2s(settings))
+end
+
+function JumpConfig:reload()
+    self:init()
 end
 
 function JumpConfig:getJumpConfig(id)
