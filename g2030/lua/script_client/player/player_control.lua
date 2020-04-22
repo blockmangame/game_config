@@ -60,9 +60,9 @@ local function jump_impl(control, player)
     local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount + 1)
     if config then
         player:setEntityProp("jumpSpeed", tostring(config.jumpSpeed))
-        --player:setEntityProp("gravity", tostring(config.gravity))
-        player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
-        player:setEntityProp("moveSpeed", tostring(config.moveSpeed*player:getMoveSpdRat()))
+        player:setEntityProp("gravity", tostring(config.gravity))
+        --player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
+        player:setEntityProp("moveSpeed", tostring(config.moveSpeed))
         player.JumpMoveEndFallDistance = config.jumpMoveEndFallDistance
         player.jumpHeight = config.jumpHeight
         player.jumpEnd = false
@@ -80,16 +80,23 @@ local function jump_impl(control, player)
 end
 
 local function processJumpEvent(player)
-    --Lib.log(string.format("gravity:%s antiGravity:%s player:curBlockPos().y:%s lastJumpHeight:%s motion:%s %s %s",
+    --Lib.log(string.format("gravity:%s antiGravity:%s player:curBlockPos().y:%s lastJumpHeight:%s \
+    --motion:%s %s %s JumpMoveEndFallDistance:%s",
     --        tostring(player:getEntityProp("gravity")), tostring(player:getEntityProp("antiGravity")),
     --        tostring(player:curBlockPos().y), tostring(player.lastJumpHeight),
-    --        tostring(player.motion.x), tostring(player.motion.y), tostring(player.motion.z)))
+    --        tostring(player.motion.x), tostring(player.motion.y), tostring(player.motion.z),
+    --        tostring(player.JumpMoveEndFallDistance)))
 
-    if (not player.onGround and player.motion.y > 0
-            and player:curBlockPos().y - player.lastJumpHeight >= player.jumpHeight)
-            or (not player.onGround and player.motion.y == 0) then
+    --if (not player.onGround and player.motion.y > 0
+    --        and player:curBlockPos().y - player.lastJumpHeight >= player.jumpHeight)
+    --        or (not player.onGround and player.motion.y == 0) then
+    --    player:eventJumpEnd()
+    --end
+
+    if not player.onGround and player.lastMotionY > 0 and player.motion.y <= 0 then
         player:eventJumpEnd()
     end
+    player.lastMotionY = player.motion.y
 
     if (not player.onGround and player.motion.y <= 0
             and player.beginFallHeight - player:curBlockPos().y >= player.JumpMoveEndFallDistance) then

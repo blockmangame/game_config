@@ -219,10 +219,10 @@ function M:setUnlockPlusPetItem()
     for k, v in pairs(curPlusPetPageTable) do
         if curPlusPetFold == 0 or curPlusPetFold == v.data.skillType then
             if  Player.CurPlayer.equipPetList[3] and Player.CurPlayer.equipPetList[3].index == v.index then
-                self:_setPlusPetItem(true, {ID = v.data.ID, type = v.data.petType, rank = v.data.rank, level = v.data.level, k = k}, true)
+                self:_setPlusPetItem(true, {ID = v.data.ID, petType = v.data.petType, rank = v.data.rank, level = v.data.level, k = k}, true)
                 curPlusPetUsingItem = k
             else
-                self:_setPlusPetItem(true, {ID = v.data.ID, type = v.data.petType, rank = v.data.rank, level = v.data.level, k = k})
+                self:_setPlusPetItem(true, {ID = v.data.ID, petType = v.data.petType, rank = v.data.rank, level = v.data.level, k = k})
             end
         end
     end
@@ -401,7 +401,7 @@ function M:setPetItem(index)
             print("Specify Index fail do default")
         else
             if curIndex > 12 then
-                curPage = math.floor(curIndex / 12)
+                curPage = math.floor(curIndex / 12) + 1
             else
                 curPage = 1
             end
@@ -585,10 +585,14 @@ function M:setPetAllText()
 
 end
 
+function M:closePetPackage()
+    UI:closeWnd("petPackage")
+    self.isVisible = false
+end
+
 function M:initPetAllEvent()
     self:subscribe(self.closeBtn, UIEvent.EventButtonClick, function()
-        UI:closeWnd("petPackage")
-        self.isVisible = false
+        self:closePetPackage()
     end)
     self:subscribe(self.selSwitchBtn.petBtn, UIEvent.EventButtonClick, function()
         if curPage ~= 1 then
@@ -652,6 +656,7 @@ function M:initPetAllEvent()
     end)
 
     self:subscribe(self.petBtn.petEvolution, UIEvent.EventButtonClick, function()
+        self:closePetPackage()
         UI:getWnd("petEvolution"):showPetEvolution(curPetPageTable, petItemIndex2Index(curPetSelItemIndex))
     end)
 end

@@ -16,19 +16,34 @@ local petType = T(Define, "petType");
  plusPetATKRate = 1}, --该式神Entity当前的攻击倍率增益
 --]]
 local function getPet(player, type, petID, minorID)
+    if type == petType.pet then                                 --检查页数是否满足
+        local curPetNu = 0;
+        for _, v in pairs(player:getAllPetAttr()) do
+            if v.petType == petType.pet then
+                curPetNu = curPetNu + 1
+            end
+        end
+        if (curPetNu + 1) > (player:getPetPageNu() * 12) then
+            return false
+        end
+    end
     local allEntityNum = player:getValue("hadEntityNum") + 1;
     player:setValue("hadEntityNum", allEntityNum);
     local AllPetAttr = player:getValue("allPetAttr");
     AllPetAttr[allEntityNum] = {
         ID = petID,
+        minorID = minorID,
         petType = type,
         level = 0
     };
     return AllPetAttr, allEntityNum;
 end
 
-function Player:getNewPet(ID, coinTransRatio, chiTransRatio, level)
+function Player:getNewPet(ID, coinTransRatio, chiTransRatio, level, isNotSync)
     local allAttribs, index = getPet(self, petType.pet, ID);
+    if not index then
+        return false                                                                --背包容量不足
+    end
     local cfg = Entity.GetCfg(Player.turnID2Plugin(petType.pet, ID));
     if coinTransRatio then
         allAttribs[index].petCoinTransRate  = coinTransRatio;
@@ -43,10 +58,11 @@ function Player:getNewPet(ID, coinTransRatio, chiTransRatio, level)
     if level then
         allAttribs[index].level = level
     end
-    self:setValue("allPetAttr", allAttribs);
+    self:setValue("allPetAttr", allAttribs, isNotSync ~= true);         --当强化时不主动发送同步包而是手动合并发送和处理
+    return index
 end
 
-function Player:getNewPlusPet(ID, minorID, plusPetATKRate, level)
+function Player:getNewPlusPet(ID, minorID, plusPetATKRate, level, isNotSync)
     minorID = minorID or 0
     local allAttribs, index = getPet(self, petType.plusPet, ID, minorID);
     print(Player.turnID2Plugin(petType.plusPet, ID, minorID))
@@ -59,7 +75,7 @@ function Player:getNewPlusPet(ID, minorID, plusPetATKRate, level)
     if level then
         allAttribs[index].level = level
     end
-    self:setValue("allPetAttr", allAttribs);
+    self:setValue("allPetAttr", allAttribs, isNotSync ~= true);
 end
 
 function Player:callPet(index, rideIndex)
@@ -78,7 +94,7 @@ function Player:callPet(index, rideIndex)
         self:setValue("plusPetEquippedIndex", index);
     end
     self.equipPetList[rideIndex] = {index = index, objID = createIndex}
-    self:syncPet()
+
     local petEntity = self:getPet(createIndex);
     petEntity:rideOn(self, false, rideIndex);
 end
@@ -90,12 +106,7 @@ function Player:initPetInfo()
 end
 
 function Player:addPet(entity, index)
-    assert(entity:getValue("ownerId")==0, entity.objID)
-    local data = self:data("pet")
-    index = index or #data + 1
-    data[index] = entity
-    entity:setValue("ownerId", self.objID)
-    entity:setValue("petIndex", index)
+    self:syncPet()
     return index
 end
 
@@ -141,4 +152,52 @@ function Player:deletePet(index)
         tempData[index] = nil
         self:setValue("allPetAttr", tempData)
     end
+end
+
+function Player:sendEvolutionPackage(index)
+    local def = Entity.ValueDef["allPetAttr"]
+    local packet = {
+        pid = "AttrValuePro",
+        key = "allPetAttr",
+        value = self:getAllPetAttr(),
+        isBigInteger = type(value) == "table" and value.IsBigInteger,
+        objID = self.objID,
+        newIndex = index
+    }
+    local toSelf = def[3] and self.isPlayer
+    if def[4] then
+        self:sendPacketToTracking(packet, toSelf)
+    elseif toSelf then
+        self:sendPacket(packet)
+    end
+end
+
+function Player:petEvolution(package)
+    local target = package.target
+    local materials = package.materials
+    local evoCoinNu = {}
+    local evoChiNu = {}
+    local minCoin, maxCoin, minFu, maxFu = 0, 0, 0, 0
+    for _, v in pairs(materials) do
+        local tempData = self:getPetAttr(v)
+        if tempData.petType == petType.plusPet then
+            print("ERROR!!!!! WRONG PET TYPE!!!! Evolution terminate!!!!!!")
+            self:closePetEvolution()
+            return
+        end
+        local coinIntensifyRange = Lib.split(tempData.coinIntensifyRange, "#")
+        local chiIntensifyRange = Lib.split(tempData.chiIntensifyRange, "#")
+        minCoin = minCoin + tonumber(coinIntensifyRange[1])
+        maxCoin = maxCoin + tonumber(coinIntensifyRange[2])
+        minFu = minFu + tonumber(chiIntensifyRange[1])
+        maxFu = maxFu + tonumber(chiIntensifyRange[2])
+        table.insert(evoCoinNu, tempData.coinTransRatio)
+        table.insert(evoChiNu, tempData.chiTransRatio)
+    end
+    local tempData = self:getPetAttr(target)
+    local index = self:getNewPet(tempData.ID, tempData.coinTransRatio, tempData.chiTransRatio, tempData.level + 1, true)
+    if not index then
+        print("Error When Evolute Pet Cannot get correct index:", index)
+    end
+    self:sendEvolutionPackage(index)
 end
