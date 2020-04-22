@@ -3674,7 +3674,7 @@ REMOVE_BM_DRESS
 
 INIT_PLAYER_DRESS
 {
-    If(not $obj1.gameDress || $obj1.gameDress == "")
+    If(IsEmptyTable(data = $obj1.gameDress))
     {
         $isNeedChangeSkin = true
         $defDressDict = NewDictionary(GetPlayerDefDress())
