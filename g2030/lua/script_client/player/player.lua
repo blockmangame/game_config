@@ -120,7 +120,7 @@ function Player:eventJumpFloatEnd()
     if jumpCount >= 0 then
         local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
         if config then
-            self:setEntityProp("gravity", tostring(config.floatGravity))
+            self:setEntityProp("gravity", tostring(config.fallGravity))
         end
     end
 end
@@ -156,7 +156,7 @@ function Player:eventBeginFall(beginFallHeight)
     if jumpCount >= 0 then
         local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
         if config then
-            self:setEntityProp("gravity", tostring(config.fallGravity))
+            self:setEntityProp("gravity", tostring(config.floatGravity))
 
             ---滞空
             ---@type LuaTimer

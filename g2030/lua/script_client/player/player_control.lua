@@ -86,18 +86,12 @@ local function processJumpEvent(player)
         return
     end
 
-    --Lib.log(string.format("gravity:%s antiGravity:%s player:curBlockPos().y:%s lastJumpHeight:%s \
-    --motion:%s %s %s JumpMoveEndFallDistance:%s",
-    --        tostring(player:getEntityProp("gravity")), tostring(player:getEntityProp("antiGravity")),
-    --        tostring(player:curBlockPos().y), tostring(player.lastJumpHeight),
-    --        tostring(player.motion.x), tostring(player.motion.y), tostring(player.motion.z),
-    --        tostring(player.JumpMoveEndFallDistance)))
-
-    --if (not player.onGround and player.motion.y > 0
-    --        and player:curBlockPos().y - player.lastJumpHeight >= player.jumpHeight)
-    --        or (not player.onGround and player.motion.y == 0) then
-    --    player:eventJumpEnd()
-    --end
+    Lib.log(string.format("gravity:%s antiGravity:%s player:curBlockPos().y:%s lastJumpHeight:%s \
+    motion:%s %s %s JumpMoveEndFallDistance:%s",
+            tostring(player:getEntityProp("gravity")), tostring(player:getEntityProp("antiGravity")),
+            tostring(player:curBlockPos().y), tostring(player.lastJumpHeight),
+            tostring(player.motion.x), tostring(player.motion.y), tostring(player.motion.z),
+            tostring(player.JumpMoveEndFallDistance)))
 
     ---最高点
     if not player.onGround and player.lastMotionY > 0 and player.motion.y <= 0 then
