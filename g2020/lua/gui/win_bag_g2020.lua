@@ -469,10 +469,6 @@ function M:canEquip(item)
         end
     end
 
-    if item:cfg().typeIndex == 3 and not Me.onGround then
-        return 5
-    end
-
 	return 0
 end
 
