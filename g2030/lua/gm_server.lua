@@ -109,9 +109,6 @@ GMItem["g2030Pet/clear"] = function(self)
     self:setValue("hadEntityNum", 0);
     self:setValue("allPetAttr", {});
 end
-GMItem["g2030Pet/移除"] = function(self)
-    self:recallPet(1);
-end
 GMItem["g2030Pet/查看当前角色宠物数据"] = function(self)
     print(self);
     print("开始打印宠物数据")
