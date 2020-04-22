@@ -21,5 +21,10 @@ end
 
 function Actions.rewardActions(data, params, context)
     local rewardManager = T(Game, "rewardManager")
-    rewardManager:doReward(params.type, params.object, params.player)
+    rewardManager:doRewardByType(params.type, params.object, params.player)
+end
+
+function Actions.remarkBoxActions(data, params, context)
+    local rewardManager = T(Game, "rewardManager")
+    rewardManager:remarkAllBox(params.object)
 end

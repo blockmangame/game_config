@@ -31,7 +31,7 @@ local function doJumpStateChange(control, player)
         local motionX = -(math.sin(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD))
         local motionZ = math.cos(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD)
         local motionY = -(math.sin(rotationPitch * DEG2RAD))
-        player:setEntityProp("moveSpeed", tostring(config.glidingSpeed*player:getMoveSpdRat()))
+        player:setEntityProp("moveSpeed", tostring(config.glidingSpeed))
         player.motion = Lib.v3(motionX * config.glidingSpeed,
                 motionY * config.glidingSpeed, motionZ * config.glidingSpeed)
         --print("player.motion ", motionX, motionY, motionZ)
@@ -75,32 +75,33 @@ local function jump_impl(control, player)
     Skill.Cast(playerCfg.jumpSkill, packet)
 
     player.lastJumpHeight = player:curBlockPos().y
+    player.isJumping = true
     control:jump()
 
     player:decJumpCount()
 end
 
 local function processJumpEvent(player)
-    --Lib.log(string.format("gravity:%s antiGravity:%s player:curBlockPos().y:%s lastJumpHeight:%s \
-    --motion:%s %s %s JumpMoveEndFallDistance:%s",
-    --        tostring(player:getEntityProp("gravity")), tostring(player:getEntityProp("antiGravity")),
-    --        tostring(player:curBlockPos().y), tostring(player.lastJumpHeight),
-    --        tostring(player.motion.x), tostring(player.motion.y), tostring(player.motion.z),
-    --        tostring(player.JumpMoveEndFallDistance)))
+    if not player.isJumping then
+        return
+    end
 
-    --if (not player.onGround and player.motion.y > 0
-    --        and player:curBlockPos().y - player.lastJumpHeight >= player.jumpHeight)
-    --        or (not player.onGround and player.motion.y == 0) then
-    --    player:eventJumpEnd()
-    --end
+    Lib.log(string.format("gravity:%s antiGravity:%s player:curBlockPos().y:%s lastJumpHeight:%s \
+    motion:%s %s %s JumpMoveEndFallDistance:%s",
+            tostring(player:getEntityProp("gravity")), tostring(player:getEntityProp("antiGravity")),
+            tostring(player:curBlockPos().y), tostring(player.lastJumpHeight),
+            tostring(player.motion.x), tostring(player.motion.y), tostring(player.motion.z),
+            tostring(player.JumpMoveEndFallDistance)))
 
+    ---最高点
     if not player.onGround and player.lastMotionY > 0 and player.motion.y <= 0 then
         player:eventJumpEnd()
     end
     player.lastMotionY = player.motion.y
 
+    ---自由落体
     if (not player.onGround and player.motion.y <= 0
-            and player.beginFallHeight - player:curBlockPos().y >= player.JumpMoveEndFallDistance) then
+            and player:curBlockPos().y <= player.lastJumpHeight) then
         player:eventJumpMoveEnd()
     end
 end

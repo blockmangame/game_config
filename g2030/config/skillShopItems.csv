@@ -1,23 +1,23 @@
-n_index	n_goodsId	n_tabId	n_url	n_muscle	n_camp	s_name	s_desc	s_icon	n_moneyType	n_price			
-索引	商品id	tab表Id	技能展示链接	消耗能量	所属阵营(1黑2.白)	名字	详情	图片	货币类型	价格			
-n_index	n_goodsId	n_tabId	n_url	n_muscle	n_camp	s_name	s_desc	s_icon	n_moneyType	n_price			
-1	1	1	https://www.youtube.com/embed/8l1V7_8NH3Q	150	1	技能 1	#	set:camp_store.json image:tag_skill_selected	3	100			
-2	2	1		200	1	技能 2	#	set:camp_store.json image:tag_skill_selected	0	120			n_tabId:1.攻击2.防御3.buff4.控制5.治疗
-3	3	1		180	1	技能 3	#	set:camp_store.json image:tag_skill_selected	0	130		 	n_url 没有时不写
-4	4	1		500	1	技能 4	#	set:camp_store.json image:tag_skill_selected	3	110			n_maoneyType 3.货币 0.金方块
-5	5	2		400	2	技能 5	#	set:camp_store.json image:tag_skill_selected	0	130			
-6	6	1	https://www.youtube.com/embed/8l1V7_8NH3Q	50	1	技能 6	#	set:camp_store.json image:tag_skill_selected	3	100			
-7	7	1		100	1	技能 7	#	set:camp_store.json image:tag_skill_selected	0	120			
-8	8	1		120	1	技能 8	#	set:camp_store.json image:tag_skill_selected	3	130			
-9	9	1		300	1	技能 9	#	set:camp_store.json image:tag_skill_selected	3	101			
-10	10	3	https://www.youtube.com/embed/8l1V7_8NH3Q	400	2	技能 10	#	set:camp_store.json image:tag_skill_selected	0	103			
-11	11	1		55	1	技能 11	#	set:camp_store.json image:tag_skill_selected	3	100			
-12	12	1		66	1	技能 12	#	set:camp_store.json image:tag_skill_selected	0	120			
-13	13	1		77	1	技能 13	#	set:camp_store.json image:tag_skill_selected	0	130			
-14	14	1		88	1	技能 14	#	set:camp_store.json image:tag_skill_selected	3	101			
-15	15	4	https://www.youtube.com/embed/8l1V7_8NH3Q	99	2	技能 15	#	set:camp_store.json image:tag_skill_selected	0	100			
-16	16	1		450	1	技能 16	#	set:camp_store.json image:tag_skill_selected	3	100			
-17	17	1		110	1	技能 17	#	set:camp_store.json image:tag_skill_selected	3	100			
-18	18	5		1000	1	技能 18	#	set:camp_store.json image:tag_skill_selected	0	120			
-19	19	1	https://www.youtube.com/embed/8l1V7_8NH3Q	600	1	技能 19	#	set:camp_store.json image:tag_skill_selected	3	103			
-20	20	1		88	1	技能 20	#	set:camp_store.json image:tag_skill_selected	3	101			
+n_index	n_goodsId	n_tabId	n_url	n_muscle	n_camp	s_name	s_itemName	s_desc	s_detail	s_detailInfo	n_cd	s_icon	n_moneyType	n_price
+索引	商品id	tab表Id	技能展示链接	消耗能量	所属阵营(1黑2.白)	名字	技能item名字	详情	技能详细	技能详情数值	技能cd	图片	货币类型	价格
+n_index	n_goodsId	n_tabId	n_url	n_muscle	n_camp	s_name	s_itemName	s_desc	s_detail	s_detailInfo	n_cd	s_icon	n_moneyType	n_price
+1	1	1	https://www.youtube.com/embed/8l1V7_8NH3Q	150	1	skill_name_01	myplugin/player_skill_triple_attack	skill_desc_01	skill_detail_01	n%	3	set:camp_store.json image:tag_skill_selected	3	100
+2	2	1		200	1	skill_name_02	myplugin/player_skill_triple_attack	skill_desc_02	skill_detail_02	n%	4	set:camp_store.json image:tag_skill_selected	0	120			n_tabId:1.攻击2.防御3.buff4.控制5.治疗
+3	3	1		180	1	skill_name_03	myplugin/player_skill_triple_attack	skill_desc_03	skill_detail_03	n%	5	set:camp_store.json image:tag_skill_selected	0	130		" "	n_url 没有时不写
+4	4	1		500	1	skill_name_04	myplugin/player_skill_triple_attack	skill_desc_04	skill_detail_04	n	6	set:camp_store.json image:tag_skill_selected	3	110			n_maoneyType 3.货币 0.金方块
+5	5	2		400	2	skill_name_05	myplugin/player_skill_triple_attack	skill_desc_05	skill_detail_05	n/n%	7	set:camp_store.json image:tag_skill_selected	0	130			s_detailInfo  / 为分割字符 有%号的需要带上
+6	6	1	https://www.youtube.com/embed/8l1V7_8NH3Q	50	1	skill_name_06	myplugin/player_skill_triple_attack	skill_desc_06	skill_detail_06	n/n%/n%	8	set:camp_store.json image:tag_skill_selected	3	100
+7	7	1		100	1	skill_name_07	myplugin/player_skill_triple_attack	skill_desc_07	skill_detail_07	n%	9	set:camp_store.json image:tag_skill_selected	0	120
+8	8	1		120	1	skill_name_08	myplugin/player_skill_triple_attack	skill_desc_08	skill_detail_08	n%	10	set:camp_store.json image:tag_skill_selected	3	130
+9	9	1		300	1	skill_name_09	myplugin/palyer_range_skill_bomb_09	skill_desc_09	skill_detail_09	n%	11	set:camp_store.json image:tag_skill_selected	3	101
+10	10	3	https://www.youtube.com/embed/8l1V7_8NH3Q	400	2	skill_name_10	myplugin/player_skill_triple_attack	skill_desc_10	skill_detail_10	n%	12	set:camp_store.json image:tag_skill_selected	0	103
+11	11	1		55	1	skill_name_11	myplugin/palyer_range_skill_thunderclap_11	skill_desc_11	skill_detail_11	n%	13	set:camp_store.json image:tag_skill_selected	3	100
+12	12	1		66	1	skill_name_12	myplugin/player_range_skill_indicator_12	skill_desc_12	skill_detail_12	n%	14	set:camp_store.json image:tag_skill_selected	0	120
+13	13	1		77	1	skill_name_13	myplugin/player_range_skill_indicator_12	skill_desc_13	skill_detail_13	n%	15	set:camp_store.json image:tag_skill_selected	0	130
+14	14	1		88	1	skill_name_14	myplugin/player_range_skill_dragon_wave_14	skill_desc_14	skill_detail_14	n/n%	16	set:camp_store.json image:tag_skill_selected	3	101
+15	15	4	https://www.youtube.com/embed/8l1V7_8NH3Q	99	2	skill_name_15	myplugin/player_control_skill_15	skill_desc_15	skill_detail_15	n	17	set:camp_store.json image:tag_skill_selected	0	100
+16	16	1		450	1	skill_name_16	myplugin/player_displace_skill_sabrecut_indicator_2	skill_desc_16	skill_detail_16		18	set:camp_store.json image:tag_skill_selected	3	100
+17	17	1		110	1	skill_name_17	myplugin/player_displace_skill_sabrecut_indicator_2	skill_desc_17	skill_detail_17	n	19	set:camp_store.json image:tag_skill_selected	3	100
+18	18	5		1000	1	skill_name_18	myplugin/player_skill_self_recover_18	skill_desc_18	skill_detail_18	n/n%	20	set:camp_store.json image:tag_skill_selected	0	120
+19	19	1	https://www.youtube.com/embed/8l1V7_8NH3Q	600	1	skill_name_19	myplugin/player_skill_team_recover_19	skill_desc_19	skill_detail_19	n/n%	21	set:camp_store.json image:tag_skill_selected	3	103
+20	20	1		88	1	skill_name_20	myplugin/player_skill_team_recover_20	skill_desc_20	skill_detail_20	n/n%	22	set:camp_store.json image:tag_skill_selected	3	101

@@ -18,6 +18,8 @@ function JumpConfig:init()
         data.moveSpeed = tonumber(vConfig.n_moveSpeed) or 0 --移动速度
         data.rotationPitch = tonumber(vConfig.n_rotationPitch) or 0
         data.glidingSpeed = tonumber(vConfig.n_glidingSpeed) or 0
+        data.floatGravity = tonumber(vConfig.n_floatGravity) or 0.01
+        data.floatTime = tonumber(vConfig.n_floatTime) or 500 --滞空时间
         data.jumpMoveEndFallDistance = tonumber(vConfig.n_jumpMoveEndFallDistance) or 1
         table.insert(settings, data)
     end

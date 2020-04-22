@@ -370,7 +370,7 @@ function M:updateItems(type, isReset)
         return
     end
     for _, item in pairs(itemConfig:getSettings()) do
-        item.status = buyInfo[tostring(item.id)]  or BuyStatus.Lock
+        item.status = buyInfo[tostring(item.id)]  or BuyStatus.Unlock
     end
     print("11111111111")
     self:addItemsGridView(isReset)
