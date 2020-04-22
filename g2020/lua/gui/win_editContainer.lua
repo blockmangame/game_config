@@ -167,13 +167,13 @@ function M:initEvent()
     Lib.subscribeEvent(Event.EVENT_UI_EDIT_UPDATE_EDIT_CONTAINER_2, function(objID, show)
         self.allCell[objID] = {}
         local object = curWorld:getObject(objID)
-        if show then    
+        if show and not IS_OPEN then    
             self:showInteractionUI(objID)
             self.localContext.objID = objID
             IS_OPEN = true
             startTouchListener(self, objID)
             sendEditObject(objID, "startEdit", {})
-        else
+        elseif IS_OPEN then
             local closer = self.containerCloser[objID]
             self.containerCloser[objID] = nil
             if closer then
