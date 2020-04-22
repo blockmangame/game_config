@@ -3674,7 +3674,7 @@ REMOVE_BM_DRESS
 
 INIT_PLAYER_DRESS
 {
-    If(not $obj1.gameDress || $obj1.gameDress == "")
+    If(IsEmptyTable(data = $obj1.gameDress))
     {
         $isNeedChangeSkin = true
         $defDressDict = NewDictionary(GetPlayerDefDress())
@@ -5219,6 +5219,12 @@ START_CAMERA_MODE
     --和状态查看界面互斥，只要 $obj1.showFuncId 有值就不执行下面的逻辑
     If($obj1.showFuncId)
     {
+        Return()
+    }
+
+    $editBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/edit_house_buff")
+    If($editBuff){
+        ShowTip(entity = $obj1, tipType = 1, textKey = "disable_use_camera_mode_in_the_edit", keepTime = 30)
         Return()
     }
     
