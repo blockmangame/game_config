@@ -301,7 +301,7 @@ function M:showDanceItemInfo()
 			else
 				btn:child("DanceItem-Item-Btn-Choose"):SetVisible(false)
 				if data.status >= 1 then
-					btn:SetText("equip")
+					btn:SetText(Lang:toText("dance_equip"))
 					btnImg = "set:dance.json image:equip_btn"
 					btn:child("DanceItem-Item-Money-Buy"):SetVisible(false)
 				else
