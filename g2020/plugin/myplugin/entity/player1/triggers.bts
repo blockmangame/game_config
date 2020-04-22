@@ -1270,7 +1270,7 @@ HOUSE_LOCK{
             }
             $tipType = 5
             ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "SURE_LOCK_HOUSE_AND_KICK_OTHERS", 
-                p1 = "ui_tip", p2 = $content, p3 = $btnInfo)
+                p1 = "ui_tip", p2 = "ui_tip_sure_lock_house_and_kick_some_one", p3 = $btnInfo)
         }Else{
             StartTimer(object =$obj1, obj1 =$obj1, house = $house, isLock = true, textKey = "house_lock", time = 2, event = "LOCK_HOUSE_CONTENT")
         }
@@ -5056,7 +5056,7 @@ EQUIP_CAR {
         Return()
     }
 
-    $obj1.createdCar = $car
+    $obj1.createdCar = GetObjectID(object = $car)
     RideOn(entity = $obj1, target = $car)
 }
 
@@ -5066,9 +5066,13 @@ DEBARK {
 
 TAKEOFF_EQUIP_CAR
 {
-    $car = $obj1.createdCar
-    $obj1.createdCar = nil
+    If(not $obj1.createdCar)
+    {
+        Return()
+    }
 
+    $car = GetObject(objID = $obj1.createdCar)
+    $obj1.createdCar = nil
     If(not $car)
     {
         Return()
@@ -5078,9 +5082,9 @@ TAKEOFF_EQUIP_CAR
     ForeachDictionary(dict = $passengers, keyName = "key", valueName = "val")
     {
         If(GetObject(objID = $val) ~= $obj1)
-    {
-        ShowTip(entity = GetObject(objID = $val), tipType = 2, textKey = "car_owner_already_remove_car", keepTime = 40)
-    }
+        {
+            ShowTip(entity = GetObject(objID = $val), tipType = 2, textKey = "car_owner_already_remove_car", keepTime = 40)
+        }
     }
     ClearRide(entity = $car)
     KillEntity(entity = $car)
