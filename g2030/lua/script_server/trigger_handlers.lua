@@ -97,6 +97,11 @@ function Handlers.ENTITY_REBIRTH(context)
         return
     end
     player:resetHp()
-    player:setMapPos(player.map,World.cfg.initPos)
+    if player:IsArenaMode() then
+        Game.GetProcess("ArenaCompetition"):resetPlayerPos(player)
+    else
+        player:setMapPos(player.map,World.cfg.initPos)
+    end
+   
 end
 

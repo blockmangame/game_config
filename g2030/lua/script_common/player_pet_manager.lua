@@ -31,7 +31,9 @@ function Player.turnID2Plugin(type, id, minorID)
 end
 
 function Player.getPetCfg(type, id, minorID)
-    return Entity.GetCfg(Player.turnID2Plugin(type, id, minorID))
+    local returnTable = Entity.GetCfg(Player.turnID2Plugin(type, id, minorID))
+    returnTable.petType = type
+    return returnTable
 end
 
 

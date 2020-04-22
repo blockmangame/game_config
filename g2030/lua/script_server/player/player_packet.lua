@@ -26,6 +26,10 @@ function handles:recallPet(packet)
     self:recallPet(packet.index);
 end
 
+function handles:petEvolution(packet)
+    self:petEvolution(packet)
+end
+
 function handles:SyncItemShopOperation(packet)
     Store.ItemShop:operationByType(self, packet.tabId, packet.itemId)
 end
@@ -100,7 +104,9 @@ function handles:ConfirmGauntlet(packet)
         return
     end
     if not Game.EntityJoinProcess(packet.key, entity) then
-        --失败提示
+        if entity.isPlayer then
+            self:showCommonNotice("加入阵营战失败")
+        end
     end
 end
 function handles:MatchArena(packet)
@@ -109,6 +115,15 @@ function handles:MatchArena(packet)
         return
     end
     if not Game.EntityJoinProcess(packet.key, entity) then
-        --失败提示
+        if entity.isPlayer then
+            self:showCommonNotice("进入竞技场失败")
+        end
     end
+end
+function handles:LeaveArena(packet)
+    local entity = World.CurWorld:getObject(packet.objId)
+    if not entity then
+        return
+    end
+    Game.EntityLeaveProcess(packet.key, entity)
 end

@@ -3,9 +3,10 @@
 --- Created by KH5C.
 --- DateTime: 2020/4/14 20:53
 ---
-
 local widget_base = require "ui.widget.widget_base"
 local M = Lib.derive(widget_base)
+local petType = T(Define, "petType");
+
 
 function M:init()
     widget_base.init(self, "NinjaPetPackagePetItem.json")
@@ -13,13 +14,20 @@ function M:init()
 end
 
 function M:initWnd()
-    self.image = self:child("PetPackageItem-PetImage")
+    self.image = self:child("PetItem-PlusPetImage")
     self.image:SetVisible(true)
-    self.selectBroad = self:child("PetPackageItem-Select")
+    self.quality = self:child("PetItem-PlusPetQuality")
+    self.quality:SetVisible(true)
+    self.selectBroad = self:child("PetItem-PlusPetSelect")
     self.selectBroad:SetVisible(false)
-    self.usingBg = self:child("PetPackageItem-UsingBg")
+    self.level = self:child("PetItem-PlusPetLevelBg")
+    self.levelText = self:child("PetItem-PlusPetLevelText")
+    self.usingBg = self:child("PetItem-PlusPetUsingBg")
     self.usingBg:SetVisible(false)
-    self:child("PetPackageItem-UsingText"):SetText(Lang:toText("PetUsing"))
+    self:child("PetItem-PetUsingText"):SetText(Lang:toText("PetUsing"))
+    self.lock = self:child("PetItem-Lock")
+    self.lock:SetVisible(false)
+    self:child("PetItem-EvoLayout"):SetVisible(false)
 end
 
 function M:using()
@@ -38,8 +46,35 @@ function M:unsel()
     self.selectBroad:SetVisible(false)
 end
 
-function M:initShow(id)
-    self.image:SetImage("set:ninja_pet.json image:" .. tostring(id))
+function M:evoSel()
+    self:child("PetItem-EvoLayout"):SetVisible(true)
 end
 
-return M
+function M:evoUnSel()
+    self:child("PetItem-EvoLayout"):SetVisible(false)
+end
+
+function M:initShow(id, type, quality, level, had)
+    if type == petType.plusPet then
+        self.image:SetImage("set:ninja_pluspet.json image:" .. tostring(id))
+        if not had then
+            self.lock:SetVisible(true)
+            self.level:SetVisible(false)
+        else
+            self.levelText:SetText("Lv." .. tostring(level))
+        end
+    else
+        self.image:SetImage("set:ninja_pet.json image:" .. tostring(id))
+        self.lock:SetVisible(false)
+    end
+    self.quality:SetImage("set:ninja_pluspet.json image:quality-" .. tostring(quality))
+    if level ~= 0 then
+        self.level:SetVisible(true)
+        self.levelText:SetText("Lv." .. tostring(level))
+    else
+        self.level:SetVisible(false)
+    end
+
+end
+
+return M;

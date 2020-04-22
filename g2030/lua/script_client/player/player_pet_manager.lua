@@ -13,6 +13,10 @@ function Player:callPet(index, ridePoint)
     self:sendPacket(packet)
 end
 
+function Player:getPet(index)
+    return self.world:getEntity(index)
+end
+
 function Player:recallPet(index)
     local packet = {
         pid = "recallPet",

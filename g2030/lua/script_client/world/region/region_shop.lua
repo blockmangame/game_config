@@ -7,12 +7,17 @@ local RegionBase = require("world.region.region_base")
 local RegionShop = L("RegionShop", Lib.derive(RegionBase))
 local bm = Blockman.instance
 
+local subType = {
+    Item = 1,
+    Skill = 2,
+}
+
 function RegionShop:onEntityEnter(entity, cfg)
-    print("RegionShop:onEntityEnter")
+    print("RegionShop:onEntityEnter " .. cfg.subType)
 end
 
 function RegionShop:onEntityLeave(entity, cfg)
-    print("RegionShop:onEntityLeave")
+    print("RegionShop:onEntityLeave " .. cfg.subType)
 end
 
 RETURN(RegionShop)

@@ -14,6 +14,8 @@ function Player:initPlayer()
     self.JumpMoveEndFallDistance = 0
     self.jumpHeight = 0
     self.beginFallHeight = 0
+    self.lastMotionY = 0
+    self.isJumping = false
 
     self:initData()
     Blockman.Instance():setLockVisionState(World.cfg.lockVision and World.cfg.lockVision.open or false)
@@ -50,7 +52,7 @@ function Player:playFreeFallSkill()
 
     self:setEntityProp("antiGravity", 0.0)
     self:setEntityProp("moveAcc", tostring(self.EntityProp.moveAcc))
-    self.motion = Lib.v3(0, 0, 0)
+    --self.motion = Lib.v3(0, 0, 0)
     --player:setValue("isKeepAhead", false)
 
     if self.isJumpMoveEnd then
@@ -71,6 +73,7 @@ function Player:recoverJumpProp()
     self.isGliding = false
     self.isJumpMoveEnd = false
     self.jumpEnd = false
+    self.isJumping = false
 
     Lib.emitEvent("EVENT_PLAY_GLIDING_EFFECT", self.isGliding)
     Blockman.instance.gameSettings:setEnableRadialBlur(false)
@@ -106,6 +109,22 @@ function Player:eventJumpMoveEnd()
     self:playFreeFallSkill()
 end
 
+function Player:eventJumpFloatEnd()
+    print("eventJumpFloatEnd")
+
+    local jumpCount = self:getJumpCount()
+    local maxJumpCount = self:getMaxJumpCount()
+
+    ---@type JumpConfig
+    local JumpConfig = T(Config, "JumpConfig")
+    if jumpCount >= 0 then
+        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
+        if config then
+            self:setEntityProp("gravity", tostring(config.fallGravity))
+        end
+    end
+end
+
 function Player:eventJumpEnd()
     if self.jumpEnd then
         return
@@ -116,12 +135,12 @@ function Player:eventJumpEnd()
     self.jumpEnd = true
 
     self:setEntityProp("antiGravity", 0.0)
-    self.motion = Lib.v3(0, 0, 0)
-    self:beginFall(self:curBlockPos().y)
+    --self.motion = Lib.v3(0, 0, 0)
+    self:eventBeginFall(self:curBlockPos().y)
 end
 
-function Player:beginFall(beginFallHeight)
-    print("beginFall " .. beginFallHeight)
+function Player:eventBeginFall(beginFallHeight)
+    --print("eventBeginFall " .. beginFallHeight)
 
     self.beginFallHeight = beginFallHeight
 
@@ -137,7 +156,15 @@ function Player:beginFall(beginFallHeight)
     if jumpCount >= 0 then
         local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
         if config then
-            self:setEntityProp("gravity", tostring(config.fallGravity))
+            self:setEntityProp("gravity", tostring(config.floatGravity))
+
+            ---滞空
+            ---@type LuaTimer
+            local LuaTimer = T(Lib, "LuaTimer")
+            LuaTimer:cancel(self.jumpFloatTimer)
+            self.jumpFloatTimer = LuaTimer:scheduleTimer(function()
+                self:eventJumpFloatEnd()
+            end, config.floatTime, 1)
         end
     else
         --local config = self.isGliding and JumpConfig:getGlidingConfig() or JumpConfig:getFreeFallConfig()
