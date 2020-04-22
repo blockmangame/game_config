@@ -51,7 +51,7 @@ function Player:playFreeFallSkill()
 
     self:setEntityProp("antiGravity", 0.0)
     self:setEntityProp("moveAcc", tostring(self.EntityProp.moveAcc))
-    self.motion = Lib.v3(0, 0, 0)
+    --self.motion = Lib.v3(0, 0, 0)
     --player:setValue("isKeepAhead", false)
 
     if self.isJumpMoveEnd then

@@ -65,19 +65,15 @@ function M:initWnd()
 end
 
 function M:initEvent()
-    print("111111111111111111111111111111111")
     self:subscribe(self.btnClose, UIEvent.EventButtonClick, function()
         UI:closeWnd(self)
     end)
-    print("11111111111112111111111111111")
     self:subscribe(self.btnLeft, UIEvent.EventButtonClick, function()
         self:doCallBack("left")
     end)
-    print("111111111111131111111111111")
     self:subscribe(self.btnRight, UIEvent.EventButtonClick, function()
         self:doCallBack("right")
     end)
-    print("11111111111111411111111111111")
 end
 function M:doCallBack(key)
     if key == "left" and self.leftCb then

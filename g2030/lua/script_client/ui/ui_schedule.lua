@@ -51,6 +51,8 @@ Lib.subscribeEvent(Event.EVENT_COMMON_NOTICE,function(content)
                 contentCenter = true,
                 txtTitle = Lang:toText("gui_tip"),
                 hideClose = true,
+                leftTxt = Lang:toText("gui_sure"),
+                leftCb = function() end,
             }
     )
 end)

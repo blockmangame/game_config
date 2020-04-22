@@ -65,6 +65,7 @@ local function jump_impl(control, player)
         player:setEntityProp("moveSpeed", tostring(config.moveSpeed))
         player.JumpMoveEndFallDistance = config.jumpMoveEndFallDistance
         player.jumpHeight = config.jumpHeight
+        player.isJumpMoveEnd = false
         player.jumpEnd = false
     end
 

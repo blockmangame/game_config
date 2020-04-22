@@ -44,7 +44,7 @@ end
 
 function main:loadConfig()
     local JumpConfig = T(Config, "JumpConfig")
-    JumpConfig:init(Lib.readGameCsv("config/jump.csv"))
+    JumpConfig:init()
 
     local RegionConfig = T(Config, "RegionConfig")
     RegionConfig:init(Lib.readGameCsv("config/region.csv"))
