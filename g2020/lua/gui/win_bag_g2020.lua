@@ -394,7 +394,10 @@ function M:fetchAllBagItem()
                     elseif canEquipStatus == 4 then
 						Client.ShowTip(1, Lang:toText("disable_create_baby_trolley_in_the_climbing"), 20)
 						return
-					end
+                    elseif canEquipStatus == 5 then
+                        Client.ShowTip(1, Lang:toText("disable_use_car_in_the_sky"), 20)
+                        return
+                    end
 					if self.equipUI then
 						self.equipUI:SetVisible(false)
 					end
@@ -465,6 +468,11 @@ function M:canEquip(item)
             return 4
         end
     end
+
+    if item:cfg().typeIndex == 3 and not Me.onGround then
+        return 5
+    end
+
 	return 0
 end
 
