@@ -6,7 +6,7 @@ function Actions.ResetEntityRechargeSkill(data, params, context)
     local now = World.Now()
     for _,skillInfo in pairs(rechargeInfo) do
         skillInfo.curRechargeCount = skillInfo.maxRechargeCount
-        skillInfo.beginRechargeTime = now
+        skillInfo.beginRechargeTime = -1
     end
     params.entity:sendPacket({pid = "ResetEntityRechargeSkill"})
 end
