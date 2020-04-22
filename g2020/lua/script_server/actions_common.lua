@@ -377,3 +377,7 @@ function Actions.GetPlayerDefDress()
     return {clothes_tops = "1", clothes_pants = "1", custom_face = "1", custom_shoes = "1", custom_hair = "1", custom_hat = "0",
             custom_glasses = "0", custom_scarf = "0", custom_wing = "0", custom_crown = "0", custom_tail = "0"}
 end
+
+function Actions.IsEmptyTable(data, params, context)
+    return not next(params.data or {})
+end
