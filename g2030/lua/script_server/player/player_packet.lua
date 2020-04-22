@@ -26,6 +26,10 @@ function handles:recallPet(packet)
     self:recallPet(packet.index);
 end
 
+function handles:petEvolution(packet)
+    self:petEvolution(packet)
+end
+
 function handles:SyncItemShopOperation(packet)
     Store.ItemShop:operationByType(self, packet.tabId, packet.itemId)
 end
