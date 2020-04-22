@@ -254,7 +254,7 @@ function M:onClickEquipItem(itemId)
     if item.isPay and payEquip then
         if item.status == BuyStatus.Buy or item.status == BuyStatus.Used then
             strDetailDescribe = Lang:toText(payEquip.efficiencyFixHugeDes) ----无限肌肉锻炼肌肉量固定值描述
-            local specialNum = string.format("%.0f", BigInteger.Create(payEquip.efficiencyFixHuge))----无限肌肉锻炼肌肉量固定值
+            local specialNum = string.format("%s", tostring(BigInteger.Create(payEquip.efficiencyFixHuge)))----无限肌肉锻炼肌肉量固定值
             strItemPropertyNum1 =  tostring(BigInteger.Create(payEquip.efficiencyFixHuge))----无限肌肉锻炼肌肉量固定值
             strDetailDescribe = string.format(strDetailDescribe,specialNum)
         elseif tonumber(Me:getCurLevel()) <= payEquip.unlockAdvancedLevel  then----解锁需要的进阶等级
@@ -265,7 +265,7 @@ function M:onClickEquipItem(itemId)
         elseif tonumber(Me:getCurLevel()) > payEquip.unlockAdvancedLevel then
             strDetailDescribe = Lang:toText(payEquip.efficiencyFixDes) ------锻炼肌肉量固定值描述
             if Me:getCurLevel() >= payEquip.invailedAdvancedLevel then ------失效的进阶等级
-                local specialNum = string.format("%.0f", tostring(BigInteger.Create(payEquip.efficiencyFix)))----锻炼肌肉量固定值
+                local specialNum = string.format("%s", tostring(BigInteger.Create(payEquip.efficiencyFix)))----锻炼肌肉量固定值
                 strItemPropertyNum1 = tostring(BigInteger.Create(payEquip.efficiencyFix))
                 strDetailDescribe = string.format(strDetailDescribe,specialNum)
             else
@@ -275,7 +275,7 @@ function M:onClickEquipItem(itemId)
             end
         end
     else
-        strItemPropertyNum1 = Lang:toText(BigInteger.Create(Cfg.perExp.val, Cfg.perExp.bit))
+        strItemPropertyNum1 = Lang:toText(tostring(BigInteger.Create(Cfg.perExp.val, Cfg.perExp.bit)))
         strDetailDescribe = string.format(strDetailDescribe,strItemPropertyNum1)
     end
     self.stDetailTitle:SetText(Lang:toText(tostring(item.name)))
@@ -293,7 +293,7 @@ function M:onClickEquipItem(itemId)
         self.stDetailText:SetTextColor({1, 1, 1, 1})
         local strMoneyIcon = getMoneyIconByMoneyType(item.moneyType)
         self.siDetailGold:SetImage(strMoneyIcon)
-        self.stDetailText:SetText(tostring(BigInteger.Create(item.price)))
+        self.stDetailText:SetText(tostring(item.price))
     end
     if item.status == BuyStatus.Buy then
         self.stDetailText:SetArea({ 0, 36 }, { 0, 0 }, { 0, 110}, { 0, 50})
@@ -347,7 +347,7 @@ function M:onClickBeltItem(itemId)
     if item.status == BuyStatus.Unlock then
         local strMoneyIcon = getMoneyIconByMoneyType(item.moneyType)
         self.siDetailGold:SetImage(strMoneyIcon)
-        self.stDetailText:SetText(tostring(BigInteger.Create(item.price)))
+        self.stDetailText:SetText(tostring(item.price))
     end
     if item.status == BuyStatus.Buy then
         self.stDetailText:SetArea({ 0, 36 }, { 0, 0 }, { 0, 110}, { 0, 50})
@@ -397,7 +397,7 @@ function M:onClickAdvancelItem(itemId)
     if item.status == BuyStatus.Unlock then
         local strMoneyIcon = getMoneyIconByMoneyType(item.moneyType)
         self.siDetailGold:SetImage(strMoneyIcon)
-        self.stDetailText:SetText(tostring(BigInteger.Create(item.price)))
+        self.stDetailText:SetText(tostring(item.price))
     end
     if item.status == BuyStatus.Buy then
         self.stDetailText:SetArea({ 0, 36 }, { 0, 0 }, { 0, 110}, { 0, 50})

@@ -50,7 +50,7 @@ function M:initItem(tabKind, Value)
     self.tabId = tabKind --不同类型大小等处理
     self.itemId = Value.id
     self.stItemTitle:SetText(Lang:toText(Value.name))
-    self.stItemMoneyNum:SetText(Value.price)
+    self.stItemMoneyNum:SetText(tostring(Value.price))
     local moneyIcon = getMoneyIconByMoneyType(Value.moneyType)
     self.siItemMoneyIcon:SetImage(moneyIcon)
     self.siItemIcon:SetImage(Value.icon)
