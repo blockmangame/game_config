@@ -5221,6 +5221,13 @@ START_CAMERA_MODE
     {
         Return()
     }
+
+    $editBuff = GetEntityTypeBuff(entity = $obj1, key = "fullName", value = "myplugin/edit_house_buff")
+    If($editBuff){
+        ShowTip(entity = $obj1, tipType = 1, textKey = "disable_use_camera_mode_in_the_edit", keepTime = 30)
+        Return()
+    }
+
     
     If(not IsCameraMode(player = $obj1))
     {
