@@ -5,8 +5,9 @@ ENTITY_ENTER {
         @robotHadHouse = @robotHadHouse - 1
         CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
     }
-    $isOdd = ( Random(min = 1, max = 10) % 2 ) == 1
-    $pos = $isOdd and { x = 182, y = 16, z = 247 } or { x = 229, y = 16, z = 141}
+    $random = Random(min = 1, max = 10)
+    $isOdd = ( $random % 2 ) == 1
+    $pos = $isOdd and { x = 182, y = 16, z = 175 } or { x = 229, y = 16, z = 141}
     SetEntityPosition(entity = $obj1, map = $isOdd and "map001" or "map002", pos = $pos)
 }
 

@@ -32,23 +32,3 @@ function Player:sendTip(tipType, textKey, keepTime, vars, event, ...)
         textArgs = {...},
     })
 end
-
-function Player:setRobotRandomDanceToShow(toDance)
-	for _, robot in pairs(World.vars["robots"]) do
-		local danceAction = "idle"
-		local actionTime = 1
-		if toDance then
-			local danceSkill = Skill.Cfg("myplugin/dance_"..math.random(1, 26))
-			if danceSkill then
-				danceAction = danceSkill["castAction"]
-				actionTime = danceSkill["castActionTime"] or -1
-			end
-		end
-		self:sendPacket({
-			pid = "EntityPlayAction",
-			objID = robot.objID,
-			action = danceAction,
-			time = actionTime
-		})
-	end
-end

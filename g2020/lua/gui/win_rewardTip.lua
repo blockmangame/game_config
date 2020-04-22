@@ -1,3 +1,4 @@
+M.NotDialogWnd = true
 function M:init()
     WinBase.init(self, "RewardTip.json", true)
     self:initName()

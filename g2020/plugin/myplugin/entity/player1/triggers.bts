@@ -870,6 +870,13 @@ SELL_HOUSE{
     If(not $curSelectDict){
         Return()
     }
+
+    $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
+    If(ArraySize(array = $houseVars) <= 1){ -- 最后一套房不能出售
+        ShowTip(entity = $obj1, tipType = 2, textKey = "ui_house_sell_cant_sell")
+        Return()
+    }
+    
     -- showImage
     $worldAllColor = GetWorldVar(key = "allColor")
     $curHouseColor = GetEntityCfg(fullName = DictionaryGet(dict = $curSelectDict, key = "houseCfg"), key = "allColor")
@@ -894,32 +901,36 @@ SELL_HOUSE{
             $sellMoney = GetEntityCfg(fullName = $cfg, key = "sellByDiscountMoney")
         }
         $sellHouseMoney = $sellHouseMoney + $sellMoney
-    }          
-    -- showTextTb
-    $showTextTb = {textWeightList = [
-        {keyText = "ui_house_sell_house_money", valueText = $sellHouseMoney},
-        {keyText = "ui_house_sell_house_type", valueText = DictionaryGet(dict = $curSelectDict, key = "houseType")}
-    ]}
-    ShowGenericListDisplayBox(entity = $obj1, infoTb = {
-        uiWin = "genericShowPage",
-        childInfoTb = {
-            upperLayerKey = $houseKey,
-            titleTb = {text = DictionaryGet(dict = $curSelectDict, key = "houseName"), event = "EDIT_HOUSE_NAME", 
-                context = {houseKey = DictionaryGet(dict = $curSelectDict, key = "houseId"), houseName = DictionaryGet(dict = $curSelectDict, key = "houseName")}},
-            showImage = $showImage,
-            showTextTb = $showTextTb,
-            btnInfo = {
-                btnType = 2,
-                btnList = [
-                        {text = "ui_sure", event = "SELL_HOUSE_SURE", context = { houseKey = $houseKey}},
-                        {text = "ui_cancel", event = "HOUSE_TAB_EVENT", context = { key = $houseKey}}
-                    ]
-            }
-        }
-    }, isOpenChild = true)
+    }
+
+    $btnInfo = {
+        leftCoinId = nil,
+        leftContent = "ui_cancel",
+        rightCoinId = nil,
+        rightContent = "ui_sure"
+    }
+    
+    $content = {
+        msg = "ui_house_sell_house_money",
+        args = [$sellHouseMoney]
+    }
+
+    $context = {
+        houseKey = DictionaryGet(dict = $curSelectDict, key = "houseId")
+    }
+    
+    -- 出售的二次确认弹窗
+    $tipType = 5
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), 
+    entity = $obj1, tipType = $tipType, event = "SELL_HOUSE_SURE", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $context)
 }
 
 SELL_HOUSE_SURE{
+    If($button == "left" or $button == "close")
+    {
+        Return()
+    }
+
     $houseVars = GetObjectVar(obj = $obj1, key = "houseVars")
     If(ArraySize(array = $houseVars) <= 1){ -- 最后一套房不能出售
         ShowTip(entity = $obj1, tipType = 2, textKey = "ui_house_sell_cant_sell")
@@ -3634,7 +3645,8 @@ USE_OPERATE_DRESS_ARCHIVE_DIALOG
         args = [$name]
     }
 
-    ShowDialogTip(entity = $obj1, tipType = 5, event = "USE_OPERATE_DRESS_ARCHIVE", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $context)
+    $tipType = 5 
+    ShowDialogTip(_dialogContinuedTime =  ArrayGet(array = ArrayGet(array = @ShowDialogTipTimeTable, index = $tipType  + 1), index = 1), entity = $obj1, tipType = $tipType, event = "USE_OPERATE_DRESS_ARCHIVE", p1 = "ui_tip", p2 = $content, p3 = $btnInfo, context = $context)
 }
 
 USE_OPERATE_DRESS_ARCHIVE
@@ -5467,11 +5479,6 @@ ENTER_MAP
     ShowWhiteScreen(player = $obj1)
     AddEntityBuff(entity = $obj1, cfg = "myplugin/freeze_buff", buffTime = 80)
     SyncWorldTime(player = $obj1)
-
-    $mapName = GetEntityName(entity = $map)
-    If($mapName == "map001" or $mapName == "map002") {
-        SetRobotRandomDanceToShow(player = $obj1)
-    }
 }
 
 LEAVE_MAP
@@ -5494,6 +5501,7 @@ LEAVE_MAP
             SetObjectVar(obj = $obj1, key = "lastInteractionUiObjId", value = nil)
         }
     }
+
 }
 
 CREATE_PLAYER_SINGLE_NUMBER_BOARD_ENTITY
