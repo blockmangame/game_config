@@ -15,6 +15,7 @@ function Player:initPlayer()
     self.jumpHeight = 0
     self.beginFallHeight = 0
     self.lastMotionY = 0
+    self.isJumping = false
 
     self:initData()
     Blockman.Instance():setLockVisionState(World.cfg.lockVision and World.cfg.lockVision.open or false)
@@ -72,6 +73,7 @@ function Player:recoverJumpProp()
     self.isGliding = false
     self.isJumpMoveEnd = false
     self.jumpEnd = false
+    self.isJumping = false
 
     Lib.emitEvent("EVENT_PLAY_GLIDING_EFFECT", self.isGliding)
     Blockman.instance.gameSettings:setEnableRadialBlur(false)
