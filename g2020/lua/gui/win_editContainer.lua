@@ -170,10 +170,22 @@ function M:initEvent()
             return
         end
         self.allCell[objID] = {}
+        
+        for oid, closer in pairs(self.containerCloser or {}) do 
+            if closer then
+                closer()
+            end
+            self.containerCloser[oid] = nil
+            local ui = self.container[oid]
+            self.container[oid] = nil
+            clearMoveStatus(self)
+            stopTouchListener(self, oid)
+        end
+
         local object = curWorld:getObject(objID)
         if show and not editCd then    
             editCd = true
-            World.Timer(5, function()
+            World.Timer(2, function()
                 editCd = false
             end)
             self:showInteractionUI(objID)
@@ -187,15 +199,11 @@ function M:initEvent()
             if closer then
                 closer()
             end
-
             local ui = self.container[objID]
             self.container[objID] = nil
-
             IS_OPEN = false
-
             clearMoveStatus(self)
             stopTouchListener(self, objID)
-
             local clacPos = clacPushOutWithBlock(self, object)
             if clacPos then
                 object:setPosition(clacPos)
