@@ -4,6 +4,23 @@
 --- DateTime: 2020/3/23 10:35
 
 local playerCfg = {}
+
+local seri = require "seri"
+local misc = require "misc"
+
+local oldLoadDB = Player.loadDBData                            --解宠物历史遗留问题
+function Player:loadDBData(txt)
+    local data = nil
+    if txt and txt ~= "" then
+        data = seri.deseristring_string(misc.base64_decode(txt))
+    end
+    if data and data.pet then
+        data.pet = nil
+    end
+    txt = misc.base64_encode(seri.serialize_string(data))
+    oldLoadDB(self ,txt)
+end
+
 function Player:initPlayer()
     local attrInfo = self:getPlayerAttrInfo()
     playerCfg = self:cfg()
