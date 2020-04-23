@@ -184,6 +184,12 @@ function ControlSkill:cast(packet, from)
         ControlSkill.groundedTimer = from:timer(1, grounded, self, from)
     end
 
+    local cdTime = self.cdTime
+    if self.cdKey then
+        packet.cdTime = cdTime
+        from:setCD(self.cdKey, cdTime)
+    end
+
     SkillBase.cast(self, packet, from)
 end
 
