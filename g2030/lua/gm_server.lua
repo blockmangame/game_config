@@ -88,7 +88,7 @@ GMItem["g2030/升阶"] = function(self)
 end
 
 GMItem["g2030/击退"] = function(self)
-    self:beHitBack({x = 0,y = 0,z = -2}, "falldown", "getup")
+    self:beHitBack({x = 0,y = 0,z = -2}, "falldown", 50, "getup")
 end
 
 -----------------------------------Pet Model Test----------------------------------

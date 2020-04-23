@@ -333,14 +333,14 @@ local function getTargetPos(position, from)
     return targrtpos
 end
 
-function Entity:beHitBack(backPos, falldowanAc, getupAc)
+function Entity:beHitBack(backPos, falldowanAc, falldownAcTime, getupAc)
     if not backPos then
         return
     end
+    local falldownTime = falldownAcTime
     local targetPos = getTargetPos(backPos, self)
-    local falldowanActime = 50
     if falldowanAc then
-        entityPlayAction(self, falldowanAc, falldowanActime, true)
+        entityPlayAction(self, falldowanAc, falldownTime, true)
     end
     if targetPos then
         self.forceTargetPos = targetPos
@@ -351,14 +351,14 @@ function Entity:beHitBack(backPos, falldowanAc, getupAc)
 
     local entity = self
     local fun = function(entity, Pos, ac)
-        falldowanActime = falldowanActime - 1
+        falldownTime = falldownTime - 1
         local distance = Lib.getPosDistance(entity:getPosition(), Pos)
         if distance <= 0.01 then
             entityPlayAction(entity, ac, -1, true)
             return false
         end
 
-        if falldowanActime <= 0 then
+        if falldownTime <= 0 then
             return false
         end
         return true
