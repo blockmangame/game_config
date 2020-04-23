@@ -39,7 +39,7 @@ if World.isClient then
     Event.register("EVENT_COMMON_NOTICE")
 
     Event.register("EVENT_PLAYER_PROCEED_RECHARGE")
-    
+    Event.register("EVENT_RANK_INFO_UPDATE")
 else
     --TODO
 end

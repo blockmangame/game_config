@@ -64,15 +64,19 @@ function ProcessBase:initProcess()
 end
 
 function ProcessBase:waitPlayerOnTick()
+    if self.waitPlayerTime <= 0 then
+        self:waitingEnd()
+        return
+    end
+
     local seconds = (self.waitPlayerTime - self.curTick) % self.waitPlayerTime
     if seconds <= 0 or self:needKeepWaiting() then
         self:waitingEnd()
-        return
     end
 end
 
 function ProcessBase:needKeepWaiting()
-    return false
+    return self.playerCount >= self.startPlayers
 end
 
 function ProcessBase:waitingEnd()
@@ -139,7 +143,9 @@ function ProcessBase:closeServer()
 end
 
 function ProcessBase:onProcessOverEnd()
-
+    for _, entity in pairs(self.entityList) do
+        self:entityOut(entity)
+    end
 end
 
 function ProcessBase:waitCloseOnTick()
@@ -205,5 +211,14 @@ end
 function ProcessBase:doJudge()
 
 end
+
+function ProcessBase:isProcessRunning()
+    return self.curState == Define.ProcessState.ProcessStart
+end
+
+function ProcessBase:isProcessBoss(objId)
+    return false
+end
+
 
 return ProcessBase

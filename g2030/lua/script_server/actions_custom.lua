@@ -28,3 +28,10 @@ function Actions.remarkBoxActions(data, params, context)
     local rewardManager = T(Game, "rewardManager")
     rewardManager:remarkAllBox(params.object)
 end
+
+function Actions.HitBack(data, params, context)
+    local entity = params.entity
+    if entity then
+        entity:beHitBack(params.targetPos, params.falldownAc, params.falldownAcTime, params.getupAc)
+    end
+end

@@ -1,0 +1,31 @@
+{
+    "followTarget": false,
+    "collideBlock": 0,
+    "hitInterval": 10,
+    "startEffect": {
+        "yaw": 0,
+        "pos": {
+            "x": 0,
+            "y": 0.01,
+            "z": 0
+        },
+        "effect": "effect_07_03.effect"
+    },
+    "boundingVolume": {
+        "params": [
+            0,
+            0.2,
+            0,
+			1
+        ],
+        "type": "Ball"
+    },
+    "lifeTime": 20,
+	"moveSpeed": 0.5,
+    "gravity": 0,
+    "hitEntitySkill": "myplugin/player_remote_skill_vortex_hit_07",
+    "moveAcc": 0,
+	"hitEntityCount": 1,
+    "vanishTime": 5,
+    "collideEntity": 1
+}
