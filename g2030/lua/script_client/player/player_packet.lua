@@ -96,6 +96,15 @@ function handles:ShowArenaMainUI(packet)
     end
 end
 
+function handles:EntityForceTargetPos(packet)
+    if packet then
+        local entity = World.CurWorld:getEntity(packet.objID)
+        if entity then
+            entity:entityForceTargetPos(packet.targetPos)
+        end
+    end
+end
+
 function handles:ShowBossBlood(packet)
     if packet.isShow then
         UI:openWnd("bloodBar", packet.objID)

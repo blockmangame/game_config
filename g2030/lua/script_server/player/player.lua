@@ -85,9 +85,14 @@ function Player:resetExp()
     --castSetSkill(self,0)
     self:setCurExp( 0)
 end
-function Player:sellExp()
-    self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
-    self:resetExp()
+function Player:sellExp(resetPos)
+ 
+    if resetPos then
+        self:setMapPos(self.map,self.map.cfg.sellPos)
+    else
+        self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
+        self:resetExp()
+    end
 end
 ---开启锻炼值贩卖加成特权
 function Player:openGold2Plus()

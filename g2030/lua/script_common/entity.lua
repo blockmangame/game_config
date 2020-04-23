@@ -6,8 +6,8 @@ local playerCfg = World.cfg
 ValueDef.jumpCount	= {false,	true,	false,	false,      1,                                   false}--跳跃数
 ValueDef.maxJumpCount={false,	false,	true,	false,      1,		                            false}--最大跳跃数
 ValueDef.curExp		= {false,	false,	true,	true,       BigInteger.Create(0),		        true}--当前锻炼值
-ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1,0),	            true}--最大锻炼值
-ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1,0),		        false}--每次攻击锻炼值增加
+ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1),	            true}--最大锻炼值
+ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1),		        false}--每次攻击锻炼值增加
 ValueDef.autoExp	= {false,	false,	true,	true,       0,		                            false}--自动锻炼间隔
 ValueDef.perExpPlu	= {false,	false,	true,	true,       1,		                            false}--锻炼值加成加成比例（付费特权。双倍）
 ValueDef.infiniteExp= {false,	false,	true,	true,       false,	                            false}--当前锻炼值
@@ -37,7 +37,7 @@ ValueDef.resource   = {false,	false,	true,	false,      {},                      
 ValueDef.skin       = {false,	false,	true,	false,      {},                                 true}--付费商店购买的皮肤列表
 ValueDef.privilege  = {false,	false,	true,	false,      {},                                 true}--付费商店购买的特权列表
 ValueDef.boxData   = {false,	false,	true,	false,      {},                                 true}--箱子领取时间和状态
-ValueDef.autoSellTime   = {false,	false,	true,	false,   os.time(),                          true}--限时自动锻炼有效时间戳
+ValueDef.autoSellTime= {false,	false,	true,	false,   os.time(),                             true}--限时自动锻炼有效时间戳
 ValueDef.islandLv   = {false,	false,	true,	false,       1,                                  true}--当前岛屿等级（商店临时解锁用）
 ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},                                  true}--已拥有的阵营皮肤
 ValueDef.teamSkinId = {false,   true,    true,  false,       0,                                  true}--已装备的阵营皮肤id
@@ -93,12 +93,9 @@ end
 function Entity:getPerExpPlus()
     local petPlus = 0
     local list = self:getPetEquippedList()
-    print("----------------getPetEquippedList-----------------",list)
     for a,pet in pairs(list) do
         petPlus = petPlus+ self:getPetAttr(pet).exerciseRatio
     end
-    print("-------------petPlus exp-----------",petPlus)
-    print("-------------lv exp-----------",AdvanceConfig:getExpPlusByLv(self:getCurLevel()))
     ---TODO exp up calc func
     return self:getValue("perExp")*(AdvanceConfig:getExpPlusByLv(self:getCurLevel())+petPlus)*self:getValue("perExpPlu")--TODO 宠物加成
 end
@@ -121,7 +118,6 @@ function Entity:getCurExpToCoin()
     for _,pet in pairs(self:getPetEquippedList()) do
         petPlus = petPlus+ self:getPetAttr(pet).coinTransRatio
     end
-    print("-------------petPlus coin-----------",petPlus)
     return self:getCurExp()*playerCfg.baseExp2GoldVal*(1+petPlus)*self:getValue("gold2Plus")--TODO 宠物加成
 end
 ---获取是否无锻炼值上限
