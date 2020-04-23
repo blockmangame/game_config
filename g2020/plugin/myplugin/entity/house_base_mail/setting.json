@@ -52,8 +52,6 @@
             "imageStretchOffset": "100 20 0 0"
         },
         "followParams": {
-            "followScenePos": true,
-            "showRange": 5,
             "resetWhenHide": true
         },
         "aroundBtns": [
@@ -73,31 +71,5 @@
                 "event": "LOCK_CUR_DOORS_HOUSE"
             }
         ]
-    },
-    "interactionUI_old": {
-        "cfgKey": "interactionUI",
-        "centerBtns": [
-            {
-                "text": "house_base_mail.text",
-                "image": "plugin/myplugin/image/fru_intUI/hand_click.png",
-                "event": "ENTITY_house_mail",
-                "checkCanShow": {
-                    "funcName": "checkOwnership"
-                },
-                "imageSize": {
-                    "width": "60",
-                    "height": "60"
-                },
-                "widgetFileName": "widget_button"
-            }
-        ],
-        "followParams": {
-            "followScenePos": false,
-            "offset": {
-                "x": 0,
-                "y": 0.5,
-                "z": 0
-            }
-        }
     }
 }
