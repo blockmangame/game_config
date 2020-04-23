@@ -88,9 +88,7 @@ GMItem["g2030/升阶"] = function(self)
 end
 
 GMItem["g2030/击退"] = function(self)
-    local pos = self:getPosition()
-    local targetPos = Lib.v3(0, 0, -2)
-    self:beHitBack(targetPos, "falldown", "getup")
+    self:beHitBack({x = 0,y = 0,z = -2}, "falldown", "getup")
 end
 
 -----------------------------------Pet Model Test----------------------------------

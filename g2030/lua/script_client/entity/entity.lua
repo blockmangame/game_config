@@ -113,8 +113,7 @@ end
 
 function EntityClient:entityForceTargetPos(targetPos)
     if targetPos then
-        local pos = self:getPosition()
-        self.forceTargetPos = Lib.tov3({x = pos.x + targetPos.x, y = pos.y + targetPos.y, z = pos.z + targetPos.z})
+        self.forceTargetPos = targetPos
         self.forceTime = 5
     end
 end

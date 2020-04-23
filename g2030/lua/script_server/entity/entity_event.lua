@@ -35,4 +35,5 @@ end
 
 function events:force_meet_collidable(blockPos, objID)
 	print("servers force_meet_collidable ")
+    self:stopHitBack()
 end
