@@ -1,3 +1,4 @@
+local interactionEventEngineHandler = interaction_event
 local handles = {}
 
 function handles:ButtonDisplay(objID, context)
@@ -76,11 +77,11 @@ function handles:ButtonSetClickAction(objID, context)
     context.callback = callback
 end
 
-function Player:interactionEventHandler(name, ...)
+function interaction_event(name, ...)
+    interactionEventEngineHandler(name, ...)
     local func = handles[name]
     if not func then
-        print("not definded handle: ", name)
         return
     end
-    func(self, ...)
+    func(Me, ...)
 end
