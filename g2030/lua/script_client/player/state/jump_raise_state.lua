@@ -9,7 +9,27 @@ local JumpState = require "script_client.player.state.jump_state"
 local JumpRaiseState = class("JumpRaiseState", JumpState)
 
 function JumpRaiseState:enter(owner)
-    --TODO
+    local jumpCount = owner:getJumpCount()
+    local maxJumpCount = owner:getMaxJumpCount()
+
+    ---@type JumpConfig
+    local JumpConfig = T(Config, "JumpConfig")
+    local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount + 1)
+    if config then
+        owner:setEntityProp("jumpSpeed", tostring(config.jumpSpeed))
+        owner:setEntityProp("gravity", tostring(config.gravity))
+        --owner:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
+        owner:setEntityProp("moveSpeed", tostring(config.moveSpeed))
+        owner.JumpMoveEndFallDistance = config.jumpMoveEndFallDistance
+        owner.jumpHeight = config.jumpHeight
+        owner.isJumpMoveEnd = false
+        owner.jumpEnd = false
+    end
+
+    local playerCfg = owner:cfg()
+    local packet = {}
+    packet.reset = (jumpCount == maxJumpCount)
+    Skill.Cast(playerCfg.jumpSkill, packet)
 end
 
 function JumpRaiseState:update(owner)

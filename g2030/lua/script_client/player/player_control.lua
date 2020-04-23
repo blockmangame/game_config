@@ -57,25 +57,6 @@ local function jump_impl(control, player)
 
     player:changeJumpState("JumpRaiseState")
 
-    ---@type JumpConfig
-    local JumpConfig = T(Config, "JumpConfig")
-    local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount + 1)
-    if config then
-        player:setEntityProp("jumpSpeed", tostring(config.jumpSpeed))
-        player:setEntityProp("gravity", tostring(config.gravity))
-        --player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
-        player:setEntityProp("moveSpeed", tostring(config.moveSpeed))
-        player.JumpMoveEndFallDistance = config.jumpMoveEndFallDistance
-        player.jumpHeight = config.jumpHeight
-        player.isJumpMoveEnd = false
-        player.jumpEnd = false
-    end
-
-    local playerCfg = player:cfg()
-    local packet = {}
-    packet.reset = (jumpCount == maxJumpCount)
-    Skill.Cast(playerCfg.jumpSkill, packet)
-
     player.lastJumpHeight = player:curBlockPos().y
     player.isJumping = true
     control:jump()
