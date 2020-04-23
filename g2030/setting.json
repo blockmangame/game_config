@@ -11,6 +11,7 @@
   "waitPlayerTime": 0,
   "?needSave":"功能快速演进期间请不要打开存储，如果有测试需求请在testacc文件中将test10或以后的账号优先级调到最高来测试",
   "needSave": true,
+  "savePlayerDataInterval":20,
   "waitStartTime": 0,
   "waitGoTime": 0,
   "playTime": -1,
@@ -193,20 +194,105 @@
   "RankListUI": {
     "map001": [
       {
-        "name": "world_rank",
-        "key": "title1",
+        "name": "NinjaRank",
+        "key": "kill",
+        "args": 1,
+        "width": 13,
+        "height": 10,
+        "rotate": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "position": {
+          "x": 122,
+          "y": 33,
+          "z": 163
+        }
+      },
+      {
+        "name": "NinjaRank",
+        "key": "muscle",
         "args": 2,
         "width": 17,
         "height": 10,
         "rotate": {
           "x": 0,
-          "y": 90,
+          "y": 0,
           "z": 0
         },
         "position": {
-          "x": 217,
-          "y": 25,
-          "z": 147
+          "x": 142,
+          "y": 33,
+          "z": 163
+        }
+      },
+      {
+        "name": "ninjaRankTitle",
+        "key": "kill-Title1",
+        "args": 2,
+        "width": 17,
+        "height": 9,
+        "rotate": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "position": {
+          "x": 118,
+          "y": 33,
+          "z": 163
+        }
+      },
+      {
+        "name": "ninjaRankTitle",
+        "key": "muscle-Title2",
+        "args": 1,
+        "width": 17,
+        "height": 9,
+        "rotate": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "position": {
+          "x": 135,
+          "y": 33,
+          "z": 163
+        }
+      },
+      {
+        "name": "ninjaRankCountDown",
+        "key": "CountDown1",
+        "args": 1,
+        "width": 17,
+        "height": 9,
+        "rotate": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "position": {
+          "x": 114,
+          "y": 33,
+          "z": 163
+        }
+      },
+      {
+        "name": "ninjaRankCountDown",
+        "key": "CountDown2",
+        "args": 2,
+        "width": 17,
+        "height": 9,
+        "rotate": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "position": {
+          "x": 142,
+          "y": 30,
+          "z": 163
         }
       }
     ]
@@ -217,13 +303,19 @@
       "subRanks": [
         {
           "size": 10,
-          "keyPrefix": "g2019-stage_1-1_Score",
+          "keyPrefix": "kill",
           "keySufType": "Hist",
           "expireType": "Hist"
         },
         {
           "size": 10,
           "keyPrefix": "muscle",
+          "keySufType": "Hist",
+          "expireType": "Hist"
+        },
+        {
+          "size": 10,
+          "keyPrefix": "integral",
           "keySufType": "Hist",
           "expireType": "Hist"
         },
@@ -258,6 +350,16 @@
         }
       ]
     }
-  ]
+  ],
+  "worldBossConfig":{
+    "entity": "myplugin/boss1",
+    "map": "map001",
+    "pos": {
+      "x": 138,
+      "y": 30,
+      "z": 141
+    }
+  },
+  "comboTime": 3
 }
 

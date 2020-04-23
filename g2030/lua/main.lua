@@ -25,6 +25,8 @@ require "script_common.config.skin_config"
 require "script_common.config.teamShopConfig"
 require "script_common.config.activity_config"
 require "script_common.config.skillShopConfig"
+require "script_common.config.teamReward_config"
+require "script_common.config.worldBossReward_config"
 
 if World.isClient then
     require "script_client.main"

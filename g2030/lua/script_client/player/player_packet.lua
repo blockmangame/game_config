@@ -84,6 +84,7 @@ function handles:ShowGauntlet(packet)
         UI:closeWnd("gauntlet")
     end
 end
+
 function handles:CommonNotice(packet)
     if packet and packet.content then
         Lib.emitEvent(Event.EVENT_COMMON_NOTICE,packet.content)
@@ -102,4 +103,21 @@ function handles:EntityForceTargetPos(packet)
             entity:entityForceTargetPos(packet.targetPos)
         end
     end
+end
+
+function handles:ShowBossBlood(packet)
+    if packet.isShow then
+        UI:openWnd("bloodBar", packet.objID)
+    else
+        UI:closeWnd("bloodBar")
+    end
+end
+
+function handles:UpdateBossBlood(packet)
+    UI:getWnd("bloodBar"):update(packet.from)
+end
+
+---排行榜接收请求到的数据
+function handles:getKill(packet)
+    Lib.emitEvent(Event.EVENT_RANK_INFO_UPDATE, packet.userId, packet.killNum, packet.muscle, packet.integral)
 end

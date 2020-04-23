@@ -47,6 +47,33 @@ function handles:teamShopBuyItem(packet)
     teamShop:onButtonClick(self, itemId, status)
 end
 
+---请求排行榜的数据库离线数据
+function handles:getKill(packet)
+    local DBHandler = require "dbhandler"
+    local userId = packet.userId
+    for i, userId in pairs(packet.userId) do
+        DBHandler:getDataByUserId(userId, 1, function(userId, txt)
+            local seri = require "seri"
+            local misc = require "misc"
+            local data = nil
+            if txt and txt ~= "" then
+                data = seri.deseristring_string(misc.base64_decode(txt))
+            end
+            local killNum = data.rankScoreRecord["kill.hist"]
+            local muscle = data.rankScoreRecord["muscle.hist"]
+            local integral = data.rankScoreRecord["integral.hist"]
+
+            self:sendPacket({
+                pid = "getKill",
+                userId = userId,
+                killNum = killNum,
+                muscle = muscle,
+                integral = integral
+            })
+        end)
+    end
+end
+
 function handles:skillShopBuyItem(packet)
     local skillShop = require "script_server.skill.skillShop"
     local itemId = packet.itemId

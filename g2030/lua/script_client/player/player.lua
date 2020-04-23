@@ -131,21 +131,21 @@ function Player:eventJumpMoveEnd()
     self:playFreeFallSkill()
 end
 
-function Player:eventJumpFloatEnd()
-    print("eventJumpFloatEnd")
-
-    local jumpCount = self:getJumpCount()
-    local maxJumpCount = self:getMaxJumpCount()
-
-    ---@type JumpConfig
-    local JumpConfig = T(Config, "JumpConfig")
-    if jumpCount >= 0 then
-        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
-        if config then
-            self:setEntityProp("gravity", tostring(config.fallGravity))
-        end
-    end
-end
+--function Player:eventJumpFloatEnd()
+--    print("eventJumpFloatEnd")
+--
+--    local jumpCount = self:getJumpCount()
+--    local maxJumpCount = self:getMaxJumpCount()
+--
+--    ---@type JumpConfig
+--    local JumpConfig = T(Config, "JumpConfig")
+--    if jumpCount >= 0 then
+--        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
+--        if config then
+--            self:setEntityProp("gravity", tostring(config.fallGravity))
+--        end
+--    end
+--end
 
 --function Player:eventJumpEnd()
 --    if self.jumpEnd then

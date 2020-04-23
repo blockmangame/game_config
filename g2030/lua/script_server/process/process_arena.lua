@@ -44,7 +44,7 @@ function ProcessArena:onEntityJoin(objID)
         return
     end
     if not self.arenaMap then
-        self.arenaMap = World.CurWorld:createDynamicMap("map002", true)  
+        self.arenaMap = World.CurWorld:createDynamicMap("map002", true)
         if not self.arenaMap then
             self:processOver()
             print("the map can be find!!!")
