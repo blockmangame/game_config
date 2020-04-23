@@ -55,6 +55,8 @@ function Player:getPetAttr(index)
         rank = targetEntityCfg.rank,                            --稀有度
         --==================以下为宠物或式神特有的，没有的即为nil=======================================
         minorID = targetPetInfo.minorID,                        --式神副ID
+        timeLimit = targetPetInfo.timeLimit,                    --时限（非永久宠物）
+        getTime = targetPetInfo.getTime,                        --获取时间（服务器时间为准）
         coinTransRatio = targetPetInfo.petCoinTransRate,        --当前金币转换倍率
         chiTransRatio = targetPetInfo.chiTransRatio,            --当前气转换倍率
         exerciseRatio = targetEntityCfg.exerciseRatio,          --宠物锻炼倍数
