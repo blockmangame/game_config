@@ -1,11 +1,12 @@
 {
-    "type": "ControlSkill",
-	"cdTime": 30,
-	"icon": "skill-15.png",
-	"castAction": "action_15",
-	"groundedCfg":{
-		"range": 5,
-		"buffTime": 400,
-		"buffCfg": "myplugin/player_grounded_skill_buff"
-		}
+  "type": "ControlSkill",
+  "cdTime": 60,
+  "castAction": "action_15",
+  "castActionTime": -1,
+  "strategy": 0.9,
+  "groundedCfg": {
+    "range": 5,
+    "buffTime": 400,
+    "buffCfg": "myplugin/player_grounded_skill_buff"
+  }
 }
