@@ -208,7 +208,7 @@ function M:initItem(player)
     --local isDefault = true
     for ids, status in pairs(buyInfo) do
         if status == BuyStatus.Used then
-            local item = self.config:getItemBySort(tonumber(ids))
+            local item = self.config:getItemById(tonumber(ids))
             if item then
                 self:onPlayerUseItem(player, item)
             end

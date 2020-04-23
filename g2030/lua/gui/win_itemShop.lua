@@ -144,19 +144,45 @@ function M:addItemsGridView(isResetPos)
 end
 
 function M:addViewByConfig(Config, isResetPos)
-    local items = Lib.copy(Config:getSettings())
-    if self.selectTab ~= TabType.Advance then
-        for i, Value in ipairs(items) do
-            if i % 4 == 0 and not Value.isPay then
-                local Value1 = {
-                    hide = true
-                }
-                table.insert(items, i, Value1)
+    local allItem = {}
+    if self.selectTab == TabType.Advance then
+        allItem = Config:getSettings()
+    else
+        local items = Lib.copy(Config:getAllItemByPay(false))
+        local items1 = Lib.copy(Config:getAllItemByPay(true))
+        local row = #items
+        local row1 = #items1
+        if row1 > row then
+            row = row1
+        end
+        local j = 0
+        local k = 0
+        for i = 1, row do
+            if i % 4 == 0 then
+                j = j + 1
+                if items1[j] then
+                    table.insert(allItem, i, items1[j])
+                else
+                    local Value1 = {
+                        hide = true
+                    }
+                    table.insert(allItem, i, Value1)
+                end
+            else
+                k = k + 1
+                if items[k] then
+                    table.insert(allItem, i, items[k])
+                else
+                    local Value1 = {
+                        hide = true
+                    }
+                    table.insert(allItem, i, Value1)
+                end
             end
         end
     end
     local clickItem
-    for i, Value in ipairs(items) do
+    for i, Value in ipairs(allItem) do
         if Value.hide then
             local shopItem = UIMgr:new_widget("itemShopItem")
             shopItem:invoke("hideGUIWindow")
