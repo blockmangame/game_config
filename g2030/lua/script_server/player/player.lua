@@ -85,9 +85,14 @@ function Player:resetExp()
     --castSetSkill(self,0)
     self:setCurExp( 0)
 end
-function Player:sellExp()
-    self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
-    self:resetExp()
+function Player:sellExp(resetPos)
+ 
+    if resetPos then
+        self:setMapPos(self.map,self.map.cfg.sellPos)
+    else
+        self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
+        self:resetExp()
+    end
 end
 ---开启锻炼值贩卖加成特权
 function Player:openGold2Plus()
@@ -131,6 +136,11 @@ function Player:backNormalWorld()
     self.isArenaMode = false
     --TODO
 end 
+function Player:intoArenaWorld()
+    self:setInvincible()
+    self:resetArenaScore()
+    self:showArenaMainUI()
+end
 ---增加竞技场分数
 function Player:addArenaScore(val)
     self:setValue("arenaScore",self:getArenaScore()+val)
@@ -280,9 +290,16 @@ end
 ---向本客户端发送一个显示文字的普通提示弹窗
 ---
 function Player:showCommonNotice(content)
-    local packet = {
+    self:sendPacket({
         pid = "CommonNotice",
         content = content,
-    }
-    self:sendPacket(packet)
+    })
+end
+---
+---主UI展现竞技场状态
+---
+function Player:showArenaMainUI()
+    self:sendPacket( {
+        pid = "ShowArenaMainUI",
+    })
 end

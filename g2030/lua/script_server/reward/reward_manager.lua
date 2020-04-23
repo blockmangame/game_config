@@ -142,6 +142,52 @@ function rewardManager:refreshBoxByUseTime(player, boxId, useTime)
     --end, 1000, 1)
 end
 
+
+function rewardManager.randomItemByWeight(num, pool, ifReduce)
+    if type(num) ~= "number"
+            or type(pool) ~= "table"
+            or type(ifReduce) ~= "boolean" then
+        return nil
+    end
+    local sumOfWeight = 0
+    for _, v in pairs(pool) do
+        sumOfWeight = sumOfWeight + v.weight
+    end
+    local result = {}
+    math.randomseed(os.time() - sumOfWeight)
+    local randomSeed = math.random(1, 100000000)
+    math.randomseed(os.time() + randomSeed)
+
+    local function randomItem()
+        if ifReduce then
+            sumOfWeight = 0
+            for _, v in pairs(pool) do
+                sumOfWeight = sumOfWeight + v.weight
+            end
+        end
+        local rs = math.random(0, sumOfWeight)
+        for index, item in pairs(pool) do
+            rs = rs - item.weight
+            local pItem = item
+            if rs < 0 then
+                return pItem, index
+            end
+        end
+    end
+
+    for i = 1, num do
+        local item, index = randomItem()
+        while item == nil do
+            item, index = randomItem()
+        end
+        table.insert(result, item)
+        if ifReduce then
+            table.remove(pool, index)
+        end
+    end
+    return result
+end
+
 return rewardManager
 
 

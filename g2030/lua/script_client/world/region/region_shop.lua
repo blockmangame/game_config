@@ -7,17 +7,29 @@ local RegionBase = require("world.region.region_base")
 local RegionShop = L("RegionShop", Lib.derive(RegionBase))
 local bm = Blockman.instance
 
-local subType = {
+local SubType = {
     Item = 1,
     Skill = 2,
 }
 
 function RegionShop:onEntityEnter(entity, cfg)
-    print("RegionShop:onEntityEnter " .. cfg.subType)
+    --print("RegionShop:onEntityEnter " .. cfg.subType)
+
+    if cfg.subType == SubType.Item then
+        UI:getWnd("itemShop"):onShow(true)
+    elseif cfg.subType == SubType.Skill then
+        UI:getWnd("skillControl"):onShow(true)
+    end
 end
 
 function RegionShop:onEntityLeave(entity, cfg)
-    print("RegionShop:onEntityLeave " .. cfg.subType)
+    --print("RegionShop:onEntityLeave " .. cfg.subType)
+
+    if cfg.subType == SubType.Item then
+        UI:getWnd("itemShop"):onShow(false)
+    elseif cfg.subType == SubType.Skill then
+        UI:getWnd("skillControl"):onShow(false)
+    end
 end
 
 RETURN(RegionShop)

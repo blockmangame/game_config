@@ -20,6 +20,9 @@ Event.register("EVENT_TELEPORT_SHADER_DISABLE")
 Event.register("EVENT_REGION_ENTER")
 Event.register("EVENT_REGION_LEAVE")
 
+
+Event.register("EVENT_ARENA_UI_STATE")--主界面切换为竞技场显示模式
+
 Event.register("EVENT_ARENA_COUNTTIME")
 
 

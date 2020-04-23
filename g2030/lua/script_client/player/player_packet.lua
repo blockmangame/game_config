@@ -89,3 +89,17 @@ function handles:CommonNotice(packet)
         Lib.emitEvent(Event.EVENT_COMMON_NOTICE,packet.content)
     end
 end
+function handles:ShowArenaMainUI(packet)
+    if packet then
+        Lib.emitEvent(Event.EVENT_ARENA_UI_STATE)
+    end
+end
+
+function handles:EntityForceTargetPos(packet)
+    if packet then
+        local entity = World.CurWorld:getEntity(packet.objID)
+        if entity then
+            entity:entityForceTargetPos(packet.targetPos)
+        end
+    end
+end

@@ -22,7 +22,7 @@ Lib.subscribeEvent(Event.EVENT_EXP_CHANGE, function()
                 leftTxt = Lang:toText("gui_no"),
                 rightTxt = Lang:toText("gui_go"),
                 leftCb = function() thisCancel = true end,
-                rightCb = function() Me:sellExp() end
+                rightCb = function() Me:sellExp(true) end
 
     }
     )
