@@ -9,7 +9,7 @@ local JumpState = require "script_client.player.state.jump_state"
 local JumpFreeFallState = class("JumpFreeFallState", JumpState)
 
 function JumpFreeFallState:enter(owner)
-    --TODO
+    owner:eventJumpMoveEnd()
 end
 
 function JumpFreeFallState:update(owner)

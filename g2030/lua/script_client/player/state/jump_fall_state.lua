@@ -25,7 +25,11 @@ function JumpFallState:enter(owner)
 end
 
 function JumpFallState:update(owner)
-    --TODO
+    ---自由落体
+    if (not owner.onGround and owner.motion.y <= 0
+            and owner:curBlockPos().y <= owner.lastJumpHeight) then
+        owner:changeJumpState("JumpFreeFallState")
+    end
 end
 
 function JumpFallState:leave(owner)
