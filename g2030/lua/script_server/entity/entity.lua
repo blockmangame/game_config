@@ -239,7 +239,7 @@ end
 ---
 function EntityServer:ShowFlyNum(deltaHp)
     if self and self.isPlayer then
-        WorldServer.BroadcastPacket({
+        self:sendPacketToTracking({
             pid = "ShowNumberUIOnEntity",
             beginOffsetPos =Lib.v3(0, 1, 0),
             FollowObjID = self.objID,
@@ -249,7 +249,8 @@ function EntityServer:ShowFlyNum(deltaHp)
             imageWidth = 40,
             imageHeight = 40,
             isBigNum = true
-        })
+        },true)
+  --      WorldServer.BroadcastPacket()
     end
 end
 
