@@ -34,7 +34,7 @@ function handles:SyncItemShopOperation(packet)
     Store.ItemShop:operationByType(self, packet.tabId, packet.itemId)
 end
 function handles:SellExp(packet)
-    self:sellExp()
+    self:sellExp(packet.resetPos)
 end
 function handles:ExchangeEquip(packet)
     self:exchangeEquip(packet.fullName)

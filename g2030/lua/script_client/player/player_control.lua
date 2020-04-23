@@ -51,7 +51,7 @@ local function jump_impl(control, player)
     showJumpCountMessage(jumpCount - 1, maxJumpCount)
 
     if jumpCount <= 0 then
-        doJumpStateChange(control, player)
+        --doJumpStateChange(control, player)
         return
     end
 

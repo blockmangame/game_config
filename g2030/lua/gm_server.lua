@@ -87,6 +87,12 @@ GMItem["g2030/升阶"] = function(self)
     self:addLevel()
 end
 
+GMItem["g2030/击退"] = function(self)
+    local pos = self:getPosition()
+    local targetPos = Lib.v3(0, 0, -2)
+    self:beHitBack(targetPos, "falldown", "getup")
+end
+
 -----------------------------------Pet Model Test----------------------------------
 local Entity
 GMItem["g2030Pet/发放宠物"] = function(self)
