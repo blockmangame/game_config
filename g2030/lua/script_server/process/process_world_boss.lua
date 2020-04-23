@@ -56,6 +56,10 @@ function ProcessWorldBoss:processOnTick()
 end
 
 function ProcessWorldBoss:onProcessOver()
+    WorldServer.BroadcastPacket({
+        pid = "ShowBossBlood",
+        isShow = false
+    })
     self:doReward()
     Game.onActivityFinish(self.id)
 end

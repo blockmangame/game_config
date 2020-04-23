@@ -104,12 +104,13 @@ function M:updateCombo()
         end
     end
 
-    local number = combo .. "h"
-    local beginOffsetPos = Lib.v3(0, 2, 0)
+    local number = combo .. "ht"
+    local beginOffsetPos = Lib.v3(0, 3, 0)
     local width = 50
     local height = 50
     local win = UILib.makeNumbersGrid("showComboUi", number, "combo_num")
     local len = string.len(tostring(number))
+    win:InitConfig(0, 1, len)
     win:SetArea({0, 0}, {0, 0}, {0, width * len}, {0, height})
     desktop:AddChildWindow(win)
     UILib.uiFollowObject(win, Me.objID, {offset = beginOffsetPos})
