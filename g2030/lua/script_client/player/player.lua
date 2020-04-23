@@ -3,6 +3,13 @@
 --- Created by wangpq.
 --- DateTime: 2020/3/23 10:35
 ---
+local JumpStateMap = {
+    ["JumpRaiseState"] = (require "script_client.player.state.jump_raise_state").new(),
+    ["JumpFloatState"] = (require "script_client.player.state.jump_float_state").new(),
+    ["JumpFallState"] = (require "script_client.player.state.jump_fall_state").new(),
+    ["JumpFreeFallState"] = (require "script_client.player.state.jump_freefall_state").new(),
+}
+
 function Player:initPlayer()
     Lib.log("Player:initPlayer")
 
@@ -16,9 +23,22 @@ function Player:initPlayer()
     self.beginFallHeight = 0
     self.lastMotionY = 0
     self.isJumping = false
+    self.curJumpState = nil
     
     self:initData()
     Blockman.Instance():setLockVisionState(World.cfg.lockVision and World.cfg.lockVision.open or false)
+end
+
+function Player:changeJumpState(new_state)
+    if self.curJumpState then
+        self.curJumpState:leave(self)
+    end
+
+    local class = JumpStateMap[new_state]
+    if class then
+        self.curJumpState = class
+        class:enter(self)
+    end
 end
 
 function Player:sellExp(resetPos)
@@ -75,6 +95,7 @@ function Player:recoverJumpProp()
     self.isJumpMoveEnd = false
     self.jumpEnd = false
     self.isJumping = false
+    self.curJumpState = nil
 
     Lib.emitEvent("EVENT_PLAY_GLIDING_EFFECT", self.isGliding)
     Blockman.instance.gameSettings:setEnableRadialBlur(false)

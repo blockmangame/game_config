@@ -52,6 +52,8 @@ ValueDef.plusPetEquippedIndex={false,false, true,   true,       0,              
 ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,                              true}--当前角色获取过的宠物实体总数（不会减少）
 ValueDef.allPetAttr     = {false,   false,  true,   true,       {},                             true}--宠物、式神相关数据
 ValueDef.petPageNu      = {false,   false,  false,  false,      4,                              true}--当前玩家宠物背包页数量
+--=======================================================充值相关数据=================================================================
+ValueDef.topUpCount     = {false,	false,	true,	true,       0,                              true}--充值数
 --====================世界boss相关数据================
 ValueDef.bossHits       = {false,   true,    true,  false,      0,                              false }--boss击打数
 ValueDef.combo          = {false,   true,    true,  false,      0,                              false }--boss连击数
@@ -65,6 +67,8 @@ ValueDef.combo          = {false,   true,    true,  false,      0,              
  minorID = 0，        --式神副ID
  petType = 0,         --是宠物还是式神
  level = 0,           --当前强化等级
+ timeLimit = -1,      --拥有的时限，-1为永久，否则按秒算
+ getTime = 0,         --得到的时间（强化时改值会被继承）
  petCoinTransRate = 1,--该宠物Entity当前的金币增益
  petChiTransRate = 1, --该宠物Entity当前的气增益
  plusPetATKRate = 1}, --该式神Entity当前的攻击倍率增益
@@ -344,7 +348,6 @@ function Entity:deltaMoveSpdRat(val)
     if self.isPlayer then
         self:setEntityProp("moveSpeed", tostring(self:getMoveSpdRat()))
     end
-
 end
 ---
 ---获取竞技场分数

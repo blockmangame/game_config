@@ -195,20 +195,29 @@ function M:initItem(player)
     local buyInfo = self:getPlayerBuyInfo(player)
     if not next(buyInfo) then
          print(" if not next(buyInfo) then self.type : "..tostring(self.type))
-        local item = self.config:getItemBySort(1)
-        if self.config:getItemBySort(1) then
-            buyInfo[tostring(item.id)] = BuyStatus.Unlock
+        local item1 = self.config:getItemBySort(1)
+        local item2 = self.config:getItemBySort(2)
+        if item1 then
+            buyInfo[tostring(item1.id)] = BuyStatus.Used
+            self:onPlayerUseItem(player, item1)
+        end
+        if item2 then
+            buyInfo[tostring(item2.id)] = BuyStatus.Unlock
         end
     end
-    local isDefault = true
+    --local isDefault = true
     for ids, status in pairs(buyInfo) do
         if status == BuyStatus.Used then
-            isDefault = false
+            local item = self.config:getItemById(tonumber(ids))
+            if item then
+                self:onPlayerUseItem(player, item)
+            end
+            --isDefault = false
         end
     end
-    if isDefault then
-        self:onPlayerUseDefaultItem(player)
-    end
+    --if isDefault then
+    --    self:onPlayerUseDefaultItem(player)
+    --end
     self:setPlayerBuyInfo(player, buyInfo)
     self:islandAndAdvanceToUnlockPay(player)
 end

@@ -1,16 +1,27 @@
 {
-    "type": "Buff",
-    "buffCfg": "myplugin/skill_buff_self_hp_recover_18",
-    "buffTime": 200,
-    "cdTime": 300,
-    "enableCdMask": true,
-    "icon": "skill-18.png",
-    "target": "self",
-    "castAction": "g1061_18",
-    "startSound": {
-        "volume": 4,
-        "loop": false,
-        "selfOnly": false,
-        "sound": "/sound/dungeon_houjia.mp3"
-    }
+  "type": "Buff",
+  "buffCfg": "myplugin/skill_buff_self_hp_recover_18",
+  "buffTime": 200,
+  "cdTime": 40,
+  "castActionTime": -1,
+  "strategy": 1.9,
+  "enableCdMask": true,
+  "icon": "skill-18.png",
+  "target": "self",
+  "castAction": "action_18",
+  "startSound": {
+    "volume": 4,
+    "loop": false,
+    "selfOnly": false,
+    "sound": "/sound/dungeon_houjia.mp3"
+  },
+  "castEffect": {
+    "effect": "effect_18.effect",
+    "pos": {
+      "x": 0,
+      "y": 0.1,
+      "z": 0
+    },
+    "time": 10000
+  }
 }

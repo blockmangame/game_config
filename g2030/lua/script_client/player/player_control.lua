@@ -13,35 +13,35 @@ local function showJumpCountMessage(jumpCount, maxJumpCount)
     Lib.emitEvent("EVENT_SHOW_BOTTOM_MESSAGE", message, { jumpCount = jumpCount })
 end
 
-local function doJumpStateChange(control, player)
-    player:setEntityProp("gravity", tostring(player.EntityProp.gravity))
-
-    if player.isGliding then
-        player:playFreeFallSkill()
-    else
-        player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
-        player:setEntityProp("moveAcc", tostring(0.0))
-
-        ---@type JumpConfig
-        local JumpConfig = T(Config, "JumpConfig")
-        local config = JumpConfig:getGlidingConfig()
-        local rotationYaw = player:getRotationYaw()
-        local rotationPitch = config.rotationPitch
-        local DEG2RAD = 0.01745329
-        local motionX = -(math.sin(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD))
-        local motionZ = math.cos(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD)
-        local motionY = -(math.sin(rotationPitch * DEG2RAD))
-        player:setEntityProp("moveSpeed", tostring(config.glidingSpeed))
-        player.motion = Lib.v3(motionX * config.glidingSpeed,
-                motionY * config.glidingSpeed, motionZ * config.glidingSpeed)
-        --print("player.motion ", motionX, motionY, motionZ)
-        --player:setValue("isKeepAhead", true)
-
-        Skill.Cast(Me:cfg().glidingSkill)
-    end
-    player.isGliding = (not player.isGliding)
-    Lib.emitEvent("EVENT_PLAY_GLIDING_EFFECT", player.isGliding)
-end
+--local function doJumpStateChange(control, player)
+--    player:setEntityProp("gravity", tostring(player.EntityProp.gravity))
+--
+--    if player.isGliding then
+--        player:playFreeFallSkill()
+--    else
+--        player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
+--        player:setEntityProp("moveAcc", tostring(0.0))
+--
+--        ---@type JumpConfig
+--        local JumpConfig = T(Config, "JumpConfig")
+--        local config = JumpConfig:getGlidingConfig()
+--        local rotationYaw = player:getRotationYaw()
+--        local rotationPitch = config.rotationPitch
+--        local DEG2RAD = 0.01745329
+--        local motionX = -(math.sin(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD))
+--        local motionZ = math.cos(rotationYaw * DEG2RAD) * math.cos(rotationPitch * DEG2RAD)
+--        local motionY = -(math.sin(rotationPitch * DEG2RAD))
+--        player:setEntityProp("moveSpeed", tostring(config.glidingSpeed))
+--        player.motion = Lib.v3(motionX * config.glidingSpeed,
+--                motionY * config.glidingSpeed, motionZ * config.glidingSpeed)
+--        --print("player.motion ", motionX, motionY, motionZ)
+--        --player:setValue("isKeepAhead", true)
+--
+--        Skill.Cast(Me:cfg().glidingSkill)
+--    end
+--    player.isGliding = (not player.isGliding)
+--    Lib.emitEvent("EVENT_PLAY_GLIDING_EFFECT", player.isGliding)
+--end
 
 ---@param player EntityClientMainPlayer
 local function jump_impl(control, player)
@@ -55,24 +55,7 @@ local function jump_impl(control, player)
         return
     end
 
-    ---@type JumpConfig
-    local JumpConfig = T(Config, "JumpConfig")
-    local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount + 1)
-    if config then
-        player:setEntityProp("jumpSpeed", tostring(config.jumpSpeed))
-        player:setEntityProp("gravity", tostring(config.gravity))
-        --player:setEntityProp("antiGravity", tostring(player:getEntityProp("gravity")))
-        player:setEntityProp("moveSpeed", tostring(config.moveSpeed))
-        player.JumpMoveEndFallDistance = config.jumpMoveEndFallDistance
-        player.jumpHeight = config.jumpHeight
-        player.isJumpMoveEnd = false
-        player.jumpEnd = false
-    end
-
-    local playerCfg = player:cfg()
-    local packet = {}
-    packet.reset = (jumpCount == maxJumpCount)
-    Skill.Cast(playerCfg.jumpSkill, packet)
+    player:changeJumpState("JumpRaiseState")
 
     player.lastJumpHeight = player:curBlockPos().y
     player.isJumping = true
@@ -86,12 +69,16 @@ local function processJumpEvent(player)
         return
     end
 
-    Lib.log(string.format("gravity:%s antiGravity:%s player:curBlockPos().y:%s lastJumpHeight:%s \
-    motion:%s %s %s JumpMoveEndFallDistance:%s",
-            tostring(player:getEntityProp("gravity")), tostring(player:getEntityProp("antiGravity")),
-            tostring(player:curBlockPos().y), tostring(player.lastJumpHeight),
-            tostring(player.motion.x), tostring(player.motion.y), tostring(player.motion.z),
-            tostring(player.JumpMoveEndFallDistance)))
+    --Lib.log(string.format("gravity:%s antiGravity:%s player:curBlockPos().y:%s lastJumpHeight:%s \
+    --motion:%s %s %s JumpMoveEndFallDistance:%s",
+    --        tostring(player:getEntityProp("gravity")), tostring(player:getEntityProp("antiGravity")),
+    --        tostring(player:curBlockPos().y), tostring(player.lastJumpHeight),
+    --        tostring(player.motion.x), tostring(player.motion.y), tostring(player.motion.z),
+    --        tostring(player.JumpMoveEndFallDistance)))
+
+    if player.curJumpState then
+        player.curJumpState:update(player)
+    end
 
     ---最高点
     if not player.onGround and player.lastMotionY > 0 and player.motion.y <= 0 then
