@@ -48,18 +48,27 @@ function M:initUI()
     self.gvItemsGridView:SetArea({ 0, 0 }, { 0, 0 }, { 1, 0 }, { 1, 0 })
     self.gvItemsGridView:InitConfig(22, 12, 5)
 
+    self.llSkillItemDec = self:child("skillControl-SkillItemDecList")
+    self.gvSkillItemDec = GUIWindowManager.instance:CreateGUIWindow1("GridView", "skillControl-SkillItemDecGridView")
+    self.llSkillItemDec:AddChildWindow(self.gvSkillItemDec)
+    self.gvSkillItemDec:SetArea({ 0, 0 }, { 0, 0 }, { 1, 0 }, { 1, 0 })
+    self.gvSkillItemDec:InitConfig(0, 5, 1)
+
         --text
     self.stSkillItemName = self:child("skillControl-SkillItemName")
     self.stMuscleConsume = self:child("skillControl-MuscleConsumeText")
     self.stSkillItemDesc = self:child("skillControl-SkillItemDec")
+    self.stSkillItemDescNum = self:child("skillControl-SkillItemDecNum")
     self.stBuyPrice = self:child("skillControl-BuyPrice")
+    self.stIsBuyText = self:child("skillControl-IsBuyText")
+    self.stIsBuyText:SetText(Lang:toText("gui_learn"))
 
-    
-
+    self.gvSkillItemDec:AddItem(self.stSkillItemDesc)
+    self.gvSkillItemDec:AddItem(self.stSkillItemDescNum)
         --image
     self.siCurrencyImg = self:child("skillControl-CurrencyImg")
     self.siIsBuySkillImg = self:child("skillControl-IsBuySkillImg")
-    
+
         --btn
     self.btnClose = self:child("skillControl-close")
     self.btnPreview = self:child("skillControl-PreviewBtn")
@@ -94,9 +103,9 @@ function M:initUI()
     self.btnEquipDisplacementSkill = self:child("skillControl-tab_equipDisplacementSkillBtn")
     self.btnEquipControlSkill = self:child("skillControl-tab_equipControlSkillBtn")
     self.btnEquipRecoverSkill = self:child("skillControl-tab_equipRecoverSkillBtn")
-    
 
- 
+
+
     self:initEvent()
     --放初始分页的技能组
     self:addSkillShopItem(skills.attack)
@@ -140,8 +149,6 @@ function M:initEvent()
 
     self:subscribe(self.btnPreview, UIEvent.EventButtonClick, function()
         -- 技能展示
-        -- print("=======onWatchAudio========" .. tostring(PreviewUrl))
-
         Interface.callAppDataFunction("onWatchAudio", {url = PreviewUrl})
     end)
 
@@ -150,7 +157,6 @@ function M:initEvent()
         if not self:checkItemMoney() then
             return
         end 
-        -- print("============self.itemId======".. tostring(self.itemId))
         Me:sendPacket({
             pid = "skillShopBuyItem",
             itemId = self.itemId,
@@ -162,8 +168,7 @@ function M:initEvent()
     self:subscribe(self.btnSkillEquipPanel, UIEvent.EventRadioStateChanged, function(status)
         if status:IsSelected() then
             self:openSkillEquip()
-            self:upDataSkillEquipItems()
-            self:selectSeatGivEquip(1,false)
+            -- self:upDataSkillEquipItems()
         end
     end)
 
@@ -226,11 +231,15 @@ function M:initEvent()
     Lib.subscribeEvent(Event.EVENT_ITEM_SKILL_SHOP_UPDATE, function()
         -- print("---upDataSkillShopItems------")
         self:upDataSkillShopItems()
+        self:upDataSkillEquipItems()
     end)
 
     Lib.subscribeEvent(Event.EVENT_ITEM_SKILL_EQUIP_UPDATE, function()
-        -- print("---upDataSkillEquipItems------")
         self:selectSeatGivEquip(1,false)
+        self:upDataSkillEquipItems()
+        Me:sendPacket({
+            pid = "syncSkillEquip"
+        })
     end)
 
 end
@@ -251,7 +260,7 @@ function M:checkItemMoney()
             end
         end
         Lib.emitEvent(Event.EVENT_NOT_ENOUGH_MONEY)
-        print("checkItemMoney item.moneyType : "..tostring(Coin:coinNameByCoinId(item.moneyType)).." item.price: "..tostring(item.price))
+        -- print("checkItemMoney item.moneyType : "..tostring(Coin:coinNameByCoinId(item.moneyType)).." item.price: "..tostring(item.price))
         return false
     end
 end
@@ -289,6 +298,34 @@ function M:openSkillEquip()
     self.llEquipPanel:SetVisible(true)
 end
 
+function M:getSkillDecNumString(decStr,numStr)
+    function split(input, delimiter)
+        input = tostring(input)
+        delimiter = tostring(delimiter)
+        if (delimiter=='') then return false end
+        local pos,arr = 0, {}
+        for st,sp in function() return string.find(input, delimiter, pos, true) end do
+            table.insert(arr, string.sub(input, pos, st - 1))
+            pos = sp + 1
+        end
+        table.insert(arr, string.sub(input, pos))
+        return arr
+    end
+
+    local decArr = split(decStr, "/")
+    local numArr = split(numStr, "/")
+    print("----------------str1----------  "..Lib.v2s(decArr).."\n"..Lib.v2s(numArr))
+    local str = ""
+    for i = 1, #decArr do
+        if str == "" then
+            str = string.format(decArr[i],numArr[i])
+        else
+            str = str..", "..string.format(decArr[i],numArr[i])
+        end
+    end
+    return str
+end
+
 function M:selectSkillInfo()
     local buyInfo = Me:getStudySkill()
     -- print("---upDataSkillShopItems------".. Lib.v2s(buyInfo))
@@ -300,12 +337,18 @@ function M:selectSkillInfo()
     end
     for key, value in pairs(self.Items) do
         if self.itemId == value.id then
-            self.stSkillItemName:SetText(value.name)
-            self.stMuscleConsume:SetText("  ".. value.muscle.."K  Muscle")
-            self.stSkillItemDesc:SetText(value.desc)
-
+            self.stSkillItemName:SetText(Lang:toText(value.name))
+            self.stMuscleConsume:SetText(string.format(Lang:toText("skill_cd"),value.cd))
+            self.stSkillItemDesc:SetText(Lang:toText(value.desc))
+            self.stSkillItemDescNum:SetText(self:getSkillDecNumString(Lang:toText(value.detail),Lang:toText(value.detailInfo)))
+            if self.stSkillItemDesc:GetHeight()[2] + self.stSkillItemDescNum:GetHeight()[2] > 131 then
+                self.gvSkillItemDec:SetMoveAble(true)
+            else
+                self.gvSkillItemDec:SetMoveAble(false)
+            end
+            self.gvSkillItemDec:ResetPos()
             PreviewUrl = value.url
-            print("---previewUrl------".. Lib.v2s(value))
+            -- print("---previewUrl------".. Lib.v2s(value))
             if PreviewUrl == "" then
                 self.btnPreview:SetEnabled(false)
                 self.btnPreview:SetTouchable(false)
@@ -335,6 +378,9 @@ end
 function M:addSkillShopItem(data)
     self.gvItemsGridView:RemoveAllItems()
 
+    table.sort(data or {}, function(a, b)
+        return a.id < b.id 
+    end)
     -- self:upDataSkillShopItems()
 
     local payCount =  0
@@ -443,7 +489,16 @@ function M:resetEquipChecked(data)
         end
     end
     table.sort(data or {}, function(a, b)
-        return a.status > b.status
+        if a.status > b.status then
+            return true
+        elseif a.status == b.status then
+            if a.id < b.id then
+                return true
+            end
+            return false
+        elseif a.status < b.status then
+            return false
+        end
     end)
 
     return data
@@ -465,7 +520,7 @@ function M:upDataSkillEquipItems()
     elseif equipPanelNum == 5 then
         equipPaneData = skills.cure
     end
-    print("--------------------223 ".. tostring(equipPanelNum))
+    -- print("--------------------223 ".. tostring(equipPanelNum))
     equipPaneData= self:resetEquipChecked(equipPaneData)
     self:addSkillEquipItem(equipPaneData)
 end
@@ -553,3 +608,5 @@ function M:placeSkillIcon(data)
         end
     end
 end
+
+return M

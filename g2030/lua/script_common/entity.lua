@@ -1,52 +1,59 @@
 -- 自动同步属性定义
 local ValueDef		= T(Entity, "ValueDef")
+local AdvanceConfig = T(Config, "AdvanceConfig")
 local playerCfg = World.cfg
--- key				= {isCpp,	client,	toSelf,	toOther,	init,	saveDB}
-ValueDef.jumpCount	= {false,	true,	false,	false,      1,		false}
-ValueDef.maxJumpCount={false,	false,	true,	false,      1,		false}
-ValueDef.curExp		= {false,	false,	true,	true,       BigInteger.Create(0),		true}--当前锻炼值
-ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1,0),	true}--最大锻炼值
-ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1,0),		false}--每次攻击锻炼值增加
-ValueDef.autoExp	= {false,	false,	true,	true,       0,		false}--自动锻炼间隔
-ValueDef.perExpPlu	= {false,	false,	true,	true,       1,		false}--锻炼值加成加成比例（付费特权。双倍）
-ValueDef.infiniteExp= {false,	false,	true,	true,       false,	false}--当前锻炼值
-ValueDef.curLevel	= {false,	false,	true,	true,       1,		true}--当前阶数
-ValueDef.curHp		= {false,	false,	true,	true,       BigInteger.Create(playerCfg.baseHp),		false}--当前血量
-ValueDef.gold2Plus	= {false,	false,	true,	true,       1,		true}--额外金币转换加成系数（付费特权）
-ValueDef.hpMaxPlus	= {false,	false,	true,	true,       1,		true}--生命上限加成系数（付费特权）
-ValueDef.suckBlood	= {false,	false,	true,	true,       0,		false}--吸血比例
-ValueDef.CDSub	    = {false,	false,	true,	true,       1,		false}--技能CD缩短比例
-ValueDef.hurtSub	= {false,	false,	true,	true,       1,		false}    --受伤减免比例
-ValueDef.dmgPlu	    = {false,	false,	true,	true,       1,		false}--伤害加成比例
-ValueDef.dmgRealPlu	= {false,	false,	true,	true,       1,		false}--神圣伤害加成比例（付费特权。双倍）
-ValueDef.healingVal	= {false,	false,	true,	true,       0,		false}--恢复量
-ValueDef.healingPlu	= {false,	false,	true,	true,       1,		false}--恢复量加成
-ValueDef.healingSpd	= {false,	false,	true,	true,       0,		false}--恢复速率（每隔多少s恢复一次）
-ValueDef.WeaponId   = {false,	false,	true,	true,       1,		true}--当前武器id
-ValueDef.SashId     = {false,	false,	true,	true,       10,		true}--当前腰带id
-ValueDef.teamId		= {false,	true,	true,	true,       0,		true}--阵营Id
-ValueDef.teamKills	= {false,	false,	false,	false,       0,		false}--个人阵营击杀数
-ValueDef.equip      = {false,	false,	true,	false,      {},		true}--道具商店购买的装备列表
-ValueDef.belt       = {false,	false,	true,	false,      {},		true}--道具商店购买的腰带列表
-ValueDef.studySkill = {false,	false,	true,	false,      {},		true}--道具商店购买的装备列表
-ValueDef.equipSkill = {false,	false,	true,	false,      {},		true}--道具商店购买的腰带列表
-ValueDef.prop       = {false,	false,	true,	false,      {},		true}--付费商店购买的道具列表
-ValueDef.resource   = {false,	false,	true,	false,      {},		true}--付费商店购买的资源列表
-ValueDef.skin       = {false,	false,	true,	false,      {},		true}--付费商店购买的皮肤列表
-ValueDef.privilege  = {false,	false,	true,	false,      {},		true}--付费商店购买的特权列表
-ValueDef.islandLv   = {false,	false,	true,	false,       1,		true}--当前岛屿等级（商店临时解锁用）
-ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},     true }--已拥有的阵营皮肤
-ValueDef.teamSkinId = {false,   true,    true,  false,       0,     true }--已装备的阵营皮肤id
-
-ValueDef.arenaScore = {false,   true,    true,  true,       0,     false }--竞技场分数
-
---====================宠物、式神相关数据================
-ValueDef.petEquippedList= {false,   false,  true,   true,       {},    true}--当前角色宠物装备表
-ValueDef.plusPetEquippedIndex={false,false, true,   true,       0,      true}--当前角色式神装备表
-ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,      true}--当前角色获取过的宠物实体总数（不会减少）
-ValueDef.allPetAttr     = {false,   false,  true,   true,       {},    true}--宠物、式神相关数据
-ValueDef.petPageNu      = {false,   false,  false,  false,      2,     true}--当前玩家宠物背包页数量
-
+-- key				= {isCpp,	client,	toSelf,	toOther,	init,	                            saveDB}
+ValueDef.jumpCount	= {false,	true,	false,	false,      1,                                   false}--跳跃数
+ValueDef.maxJumpCount={false,	false,	true,	false,      1,		                            false}--最大跳跃数
+ValueDef.curExp		= {false,	false,	true,	true,       BigInteger.Create(0),		        true}--当前锻炼值
+ValueDef.maxExp		= {false,	false,	true,	true,       BigInteger.Create(1),	            true}--最大锻炼值
+ValueDef.perExp 	= {false,	false,	true,	true,       BigInteger.Create(1),		        false}--每次攻击锻炼值增加
+ValueDef.autoExp	= {false,	false,	true,	true,       0,		                            false}--自动锻炼间隔
+ValueDef.perExpPlu	= {false,	false,	true,	true,       1,		                            false}--锻炼值加成加成比例（付费特权。双倍）
+ValueDef.infiniteExp= {false,	false,	true,	true,       false,	                            false}--当前锻炼值
+ValueDef.moveSpdRat = {false,	false,	true,	true,       1,  	                            false}--移动速度加成
+ValueDef.curLevel	= {false,	false,	true,	true,       1,		                            true}--当前阶数
+ValueDef.curHp		= {false,	false,	true,	true,       BigInteger.Create(playerCfg.baseHp),false}--当前血量
+ValueDef.gold2Plus	= {false,	false,	true,	true,       1,                                   true}--额外金币转换加成系数（付费特权）
+ValueDef.hpMaxPlus	= {false,	false,	true,	true,       1,                                   true}--生命上限加成系数（付费特权）
+ValueDef.suckBlood	= {false,	false,	true,	true,       0,                                   false}--吸血比例
+ValueDef.CDSub	    = {false,	false,	true,	true,       1,                                   false}--技能CD缩短比例
+ValueDef.hurtSub	= {false,	false,	true,	true,       1,                                   false}    --受伤减免比例
+ValueDef.dmgPlu	    = {false,	false,	true,	true,       1,                                   false}--伤害加成比例
+ValueDef.dmgRealPlu	= {false,	false,	true,	true,       1,                                   false}--神圣伤害加成比例（付费特权。双倍）
+ValueDef.healingVal	= {false,	false,	true,	true,       0,                                   false}--恢复量
+ValueDef.healingPlu	= {false,	false,	true,	true,       1,                                   false}--恢复量加成
+ValueDef.healingSpd	= {false,	false,	true,	true,       0,                                   false}--恢复速率（每隔多少s恢复一次）
+ValueDef.WeaponId   = {false,	false,	true,	true,       1,                                   true}--当前武器id
+ValueDef.SashId     = {false,	false,	true,	true,       10,                                  true}--当前腰带id
+ValueDef.teamId		= {false,	true,	true,	true,       0,                                   true}--阵营Id
+ValueDef.teamKills	= {false,	false,	false,	false,      0,                                  false}--个人阵营击杀数
+ValueDef.equip      = {false,	false,	true,	false,      {},                                 true}--道具商店购买的装备列表
+ValueDef.belt       = {false,	false,	true,	false,      {},                                 true}--道具商店购买的腰带列表
+ValueDef.studySkill = {false,	false,	true,	false,      {},                                 true}--道具商店购买的装备列表
+ValueDef.equipSkill = {false,	false,	true,	false,      {},                                 true}--道具商店购买的腰带列表
+ValueDef.prop       = {false,	false,	true,	false,      {},                                 true}--付费商店购买的道具列表
+ValueDef.resource   = {false,	false,	true,	false,      {},                                 true}--付费商店购买的资源列表
+ValueDef.skin       = {false,	false,	true,	false,      {},                                 true}--付费商店购买的皮肤列表
+ValueDef.privilege  = {false,	false,	true,	false,      {},                                 true}--付费商店购买的特权列表
+ValueDef.boxData   = {false,	false,	true,	false,      {},                                 true}--箱子领取时间和状态
+ValueDef.autoSellTime= {false,	false,	true,	false,   os.time(),                             true}--限时自动锻炼有效时间戳
+ValueDef.islandLv   = {false,	false,	true,	false,       1,                                  true}--当前岛屿等级（商店临时解锁用）
+ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},                                  true}--已拥有的阵营皮肤
+ValueDef.teamSkinId = {false,   true,    true,  false,       0,                                  true}--已装备的阵营皮肤id
+--=======================================================竞技场玩家相关数据=================================================================
+ValueDef.arenaScore = {false,   true,    true,  true,       0,                                  false}--竞技场分数
+--==============================================================NPC相关数据=================================================================
+ValueDef.npcMaxHp = {false,   true,    true,  true,       BigInteger.Create(100000),             false }--npc最大血量
+ValueDef.npcDmg = {false,   true,    true,  true,       BigInteger.Create(100),                 false }--npc基础伤害
+--=======================================================宠物、式神相关数据=================================================================
+ValueDef.petEquippedList= {false,   false,  true,   true,       {},                             true}--当前角色宠物装备表
+ValueDef.plusPetEquippedIndex={false,false, true,   true,       0,                              true}--当前角色式神装备表
+ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,                              true}--当前角色获取过的宠物实体总数（不会减少）
+ValueDef.allPetAttr     = {false,   false,  true,   true,       {},                             true}--宠物、式神相关数据
+ValueDef.petPageNu      = {false,   false,  false,  false,      4,                              true}--当前玩家宠物背包页数量
+--=======================================================充值相关数据=================================================================
+ValueDef.topUpCount     = {false,	false,	true,	true,       0,                              true}--充值数
 --[[
 宠物、式神相关数据存储索引说明：索引为createPet后返回的index，通过索引插入的AllPetAttr，该表不为序列，期间可能会出现nil
 即强化（消耗）后相关索引项将置为nil
@@ -55,7 +62,9 @@ ValueDef.petPageNu      = {false,   false,  false,  false,      2,     true}--�
 {ID = 0,              --宠物or式神的pluginID
  minorID = 0，        --式神副ID
  petType = 0,         --是宠物还是式神
- level = 1,           --当前强化等级
+ level = 0,           --当前强化等级
+ timeLimit = -1,      --拥有的时限，-1为永久，否则按秒算
+ getTime = 0,         --得到的时间（强化时改值会被继承）
  petCoinTransRate = 1,--该宠物Entity当前的金币增益
  petChiTransRate = 1, --该宠物Entity当前的气增益
  plusPetATKRate = 1}, --该式神Entity当前的攻击倍率增益
@@ -83,8 +92,13 @@ end
 
 ---获取每次锻炼增幅
 function Entity:getPerExpPlus()
+    local petPlus = 0
+    local list = self:getPetEquippedList()
+    for a,pet in pairs(list) do
+        petPlus = petPlus+ self:getPetAttr(pet).exerciseRatio
+    end
     ---TODO exp up calc func
-    return self:getValue("perExp")*(self:getCurLevel())*self:getValue("perExpPlu")--TODO 宠物加成
+    return self:getValue("perExp")*(AdvanceConfig:getExpPlusByLv(self:getCurLevel())+petPlus)*self:getValue("perExpPlu")--TODO 宠物加成
 end
 ---设置每次攻击锻炼增幅值变化
 function Entity:deltaPerExpPlus(val)
@@ -101,8 +115,13 @@ function Entity:getMaxExp()
 end
 ---当前锻炼值可兑换货币
 function Entity:getCurExpToCoin()
-    return self:getCurExp()*playerCfg.baseExp2GoldVal*(1)*self:getValue("gold2Plus")--TODO 宠物加成
+    local petPlus = 0
+    for _,pet in pairs(self:getPetEquippedList()) do
+        petPlus = petPlus+ self:getPetAttr(pet).coinTransRatio
+    end
+    return self:getCurExp()*playerCfg.baseExp2GoldVal*(1+petPlus)*self:getValue("gold2Plus")--TODO 宠物加成
 end
+---获取是否无锻炼值上限
 function Entity:getIsInfiniteExp()
     return self:getValue("infiniteExp")
 end
@@ -116,7 +135,12 @@ function Entity:isExpFull()
     if self:getIsInfiniteExp() then
         return false
     end
-    return  self:getCurExp()>=self:getMaxExp()
+    local isFull = self:getCurExp()>=self:getMaxExp()
+    if isFull and self:getAutoSellTime() >= os.time() then
+        self:sellExp()
+        return false
+    end
+    return isFull
 end
 ---获取当前阶数
 function Entity:getCurLevel()
@@ -126,6 +150,7 @@ end
 function Entity:setCurLevel(lv)
     self:setValue("curLevel", lv)
 end
+---获取自动经验间隔，0为无自动
 function Entity:getAutoExp()
     return self:getValue("autoExp")
 end
@@ -145,11 +170,44 @@ end
 ---战斗属性相关
 ---
 ---
+---
+---操作血量变化
+---当deltaVal绝对值大于1是认为是自然数
+---当deltaVal绝对值小于1是认为是倍数，将乘以最大血量以计算
+---负数代表扣血
+---正数代表回血
+---
+function Entity:deltaHp(deltaVal)
+    if deltaVal>0 and deltaVal<1 or deltaVal<0 and deltaVal>-1 then
+        deltaVal =self:getMaxHp()*deltaVal
+    end
+    if type(deltaVal) == 'number' then
+        deltaVal = math.floor(deltaVal)
+    end
+    local curVal = math.min(math.max(self:getCurHp()+deltaVal,0),self:getMaxHp())
+    if curVal ==self:getCurHp() then
+        return
+    end
+    self:setValue("curHp", curVal)
+    if curVal <=0  then
+        self.curHp = 0
+    end
+    return curVal
+end
+---满血
+function Entity:resetHp()
+    self:setValue("curHp", self:getMaxHp())
+end
 
 ---当前血量上限
 function Entity:getMaxHp()
     ---TODO hp limit calc func
-    return (playerCfg.baseHp+self:getCurExp()*playerCfg.baseExp2Hp)*self:getValue("hpMaxPlus")
+    if self.isPlayer then
+        return (playerCfg.baseHp+self:getCurExp()*tonumber(playerCfg.baseExp2Hp))*self:getValue("hpMaxPlus")
+    else
+        return self:getValue("npcMaxHp")
+    end
+    
 end
 ---
 ---当前血量
@@ -157,16 +215,43 @@ end
 function Entity:getCurHp()
     return self:getValue("curHp")
 end
+---
+---获取基础伤害值
+---
 function Entity:getCurDamage()
-  --  return 1+self:getCurExp()*5*self:getDmgPlu()*self:getDmgRealPlu()
-    return playerCfg.baseAtk+self:getCurExp()*playerCfg.baseExp2Atk
+    if self.isPlayer then
+ 
+        return BigInteger.Create(playerCfg.baseAtk)+self:getCurExp()*playerCfg.baseExp2Atk
+    else
+        return self:getValue("npcDmg")
+    end
+    
 end
+
+---初始化npc最大血量
+function Entity:setNPCMaxHp(val)
+    self:setValue("npcMaxHp",val)
+    self:setValue("curHp",val)
+end
+---初始化npc基础伤害
+function Entity:setNPCBaseDmg(val)
+    self:setValue("npcDmg",val)
+end
+
 ---
 ---获取伤害加成系数
 ---
 function Entity:getDmgPlu()
-    return math.max(self:getValue("dmgPlu"),0)
+    local petPlus = 0
+    local list = self:getPetEquippedList()
+    for _,pet in pairs(list) do
+        petPlus = petPlus+ self:getPetAttr(pet).plusPetATKRate
+    end
+    print("-------------petPlus dmg-----------",petPlus)
+    print("-------------lv dmg-----------",AdvanceConfig:getAtkPlusByLv(self:getCurLevel()))
+    return math.max(self:getValue("dmgPlu")+AdvanceConfig:getAtkPlusByLv(self:getCurLevel()+petPlus),0)
 end
+---变化伤害加成系数
 function Entity:deltaDmgPlu(val)
     assert(tonumber(val), "invalid input:" .. val .. "is not a number")
     self:setValue("dmgPlu",self:getValue("dmgPlu")+val)
@@ -206,7 +291,7 @@ function Entity:deltaCDSub(val)
     self:setValue("CDSub",self:getValue("CDSub")-val)
 end
 ---
----获取回复量
+---获取回复量加成系数
 ---
 function Entity:getHealingPlu()
     return math.max(self:getValue("healingPlu"),0)
@@ -215,13 +300,15 @@ function Entity:deltaHealingPlu(val)
     assert(tonumber(val), "invalid input:" .. val .. "is not a number")
     self:setValue("healingPlu",self:getValue("healingPlu")+val)
 end
-
+---获取单次回复比例
 function Entity:getHealingVal()
     return math.max(self:getValue("healingVal"),0)
 end
+---获取回复间隔时间
 function Entity:getHealingSpd()
     return math.max(self:getValue("healingSpd"),0)
 end
+---设置持续回血参数
 function Entity:setHealing(val,time)
     assert(tonumber(val), "invalid input:" .. val .. "is not a number")
     assert(tonumber(time), "invalid input:" .. val .. "is not a number")
@@ -244,7 +331,24 @@ function Entity:deltaHurtSub(val)
     end
     self:setValue("hurtSub",self:getValue("hurtSub")-val)
 end
-
+---
+---获取移速加成（衰减）比例
+---
+function Entity:getMoveSpdRat()
+    return  math.max(self:getValue("moveSpdRat")+AdvanceConfig:getSpdPlusByLv(self:getCurLevel()),0)
+end
+---设置移速加成（衰减）变化
+function Entity:deltaMoveSpdRat(val)
+    assert(tonumber(val), "invalid input:" .. val .. "is not a number")
+    self:setValue("moveSpdRat",self:getValue("moveSpdRat")+val)
+    if self.isPlayer then
+        self:setEntityProp("moveSpeed", tostring(self:getMoveSpdRat()))
+    end
+    
+end
+---
+---获取竞技场分数
+---
 function Entity:getArenaScore()
     return math.max(self:getValue("arenaScore"),0)
 end
@@ -342,6 +446,26 @@ function Entity:setPrivilege(data)
     self:setValue("privilege", data)
 end
 
+---获取箱子领取时间和状态
+function Entity:getBoxData()
+    return self:getValue("boxData")
+end
+
+---设置箱子领取时间和状态
+function Entity:setBoxData(data)
+    self:setValue("boxData", data)
+end
+
+---获取限时自动售卖时间戳
+function Entity:getAutoSellTime()
+    return self:getValue("autoSellTime")
+end
+
+---设置限时自动售卖时间戳
+function Entity:setAutoSellTime(time)
+    self:setValue("autoSellTime", time)
+end
+
 ---获取已解锁岛屿等级
 function Entity:getIslandLv()
     return self:getValue("islandLv")
@@ -408,4 +532,58 @@ function Entity:checkGroundedState()
     end
 
     return false
+end
+
+--get equipping pets
+function Player:getAllEquippedPet()
+    local petList, plusPetList
+    for _, v in pairs(self.equipPetList) do
+        local type = self:getPetAttr(v.index).petType
+        if type == Define.petType.pet then
+            table.insert(v)
+        elseif type == Define.petType.plusPet then
+            table.insert(plusPetList, v)
+        end
+    end
+    return petList, plusPetList
+end
+
+function Entity:getPetEquippedList()
+    return self:getValue("petEquippedList")
+end
+
+function Entity:setPetEquippedList(listTable)
+    self:setValue("petEquippedList", listTable)
+end
+
+function Entity:getPlusPetEquippedIndex()
+    return self:getValue("plusPetEquippedIndex")
+end
+
+function Entity:setPlusPetEquippedIndex(index)
+    self:setValue("plusPetEquippedIndex", index)
+end
+
+function Entity:getHadEntityNum()
+    return self:getValue("hadEntityNum")
+end
+
+function Entity:setHadEntityNum(allPetsNu)
+    self:setValue("hadEntityNum", allPetsNu)
+end
+
+function Entity:getAllPetAttr()
+    return self:getValue("allPetAttr")
+end
+
+function Entity:setAllPetAttr(allAttr)
+    self:setValue("allPetAttr", allAttr)
+end
+
+function Entity:getPetPageNu()
+    return self:getValue("petPageNu")
+end
+
+function Entity:setPetPageNu(nowPageNu)
+    self:setValue("petPageNu", nowPageNu)
 end

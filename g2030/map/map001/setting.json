@@ -2,895 +2,91 @@
   "canAttack": true,
   "canBreak": false,
   "placeTestBlock": "myplugin/stone",
+  "skyBox": [
+		{
+	"texture": [
+	"myplugin/sky/AM_right.png",
+	"myplugin/sky/AM_left.png",
+	"myplugin/sky/AM_top.png",
+	"myplugin/sky/AM_bottom.png",
+	"myplugin/sky/AM_back.png",
+	"myplugin/sky/AM_front.png"
+		],
+	"time": 0.001,
+	"transition": 0.1
+		},
+	  {
+	"texture": [
+	"myplugin/sky/PM_right.png",
+	"myplugin/sky/PM_left.png",
+	"myplugin/sky/PM_top.png",
+	"myplugin/sky/PM_bottom.png",
+	"myplugin/sky/PM_back.png",
+	"myplugin/sky/PM_front.png"
+		],
+	"time": 0.003,
+	"transition": 0.1
+		}
+  ],
+  "sellPos":{
+    "x": 129,
+    "y": 33,
+    "z": 132
+  },
   "region": {
 		"sell_area": {
             "regionCfg": "myplugin/region_sell",
             "box": {
                 "min": {
-                    "x": 207.5,
-                    "y": 99,
-                    "z": 121.5
+                    "x": 127.5,
+                    "y": 28,
+                    "z": 130.5
                 },
                 "max": {
-                    "x": 213.5,
-                    "y": 100,
-                    "z": 134.5
+                    "x": 132.5,
+                    "y": 32,
+                    "z": 135.5
                 }
             }
         },
-        "shop_area": {
-            "regionCfg": "myplugin/region_shop",
+        "item_shop_area": {
+            "regionCfg": "myplugin/region_item_shop",
             "box": {
                 "min": {
-                    "x": 207.5,
-                    "y": 99,
-                    "z": 160.5
+                    "x": 127.5,
+                    "y": 28,
+                    "z": 148.5
                 },
                 "max": {
-                    "x": 213.5,
-                    "y": 100,
-                    "z": 173.5
+                    "x": 132.5,
+                    "y": 32,
+                    "z": 153.5
+                }
+            }
+        },
+		"skill_shop_area": {
+            "regionCfg": "myplugin/region_skill_shop",
+            "box": {
+                "min": {
+                    "x": 136.5,
+                    "y": 28,
+                    "z": 139.5
+                },
+                "max": {
+                    "x": 141.5,
+                    "y": 32,
+                    "z": 144.5
                 }
             }
         }
     },
-  "entity": [
+    "entity": [
     {
         "cfg": "myplugin/island",
         "pitch": 0,
         "pos": {
-            "x": 175,
-            "y": 43,
-            "z": 156
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 177,
-            "y": 215,
-            "z": 147
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 178,
-            "y": 108,
-            "z": 142
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 178,
-            "y": 144,
-            "z": 142
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 178,
-            "y": 191,
-            "z": 142
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 179,
-            "y": 47,
-            "z": 171
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 182,
-            "y": 46,
-            "z": 123
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 182,
-            "y": 86,
-            "z": 154
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 182,
-            "y": 122,
-            "z": 154
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 182,
-            "y": 169,
-            "z": 154
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 183,
-            "y": 31,
-            "z": 170
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 185,
-            "y": 215,
-            "z": 163
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 186,
-            "y": 235,
-            "z": 144
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 188,
-            "y": 97,
-            "z": 124
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 188,
-            "y": 133,
-            "z": 124
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 188,
-            "y": 180,
-            "z": 124
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 189,
-            "y": 53,
-            "z": 134
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 189,
-            "y": 64,
-            "z": 151
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 189,
-            "y": 75,
-            "z": 135
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 189,
-            "y": 111,
-            "z": 135
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 189,
-            "y": 158,
-            "z": 135
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 189,
-            "y": 204,
-            "z": 132
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 189,
-            "y": 215,
-            "z": 140
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 190,
-            "y": 33,
-            "z": 124
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 190,
-            "y": 226,
-            "z": 162
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 191,
-            "y": 64,
-            "z": 118
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 192,
-            "y": 97,
-            "z": 147
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 192,
-            "y": 133,
-            "z": 147
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 192,
-            "y": 180,
-            "z": 147
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 193,
-            "y": 41,
-            "z": 180
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 193,
-            "y": 53,
-            "z": 164
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 193,
-            "y": 108,
-            "z": 167
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 193,
-            "y": 144,
-            "z": 167
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 193,
-            "y": 191,
-            "z": 167
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 195,
-            "y": 41,
-            "z": 106
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 197,
-            "y": 204,
-            "z": 153
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 197,
-            "y": 226,
-            "z": 126
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 198,
-            "y": 75,
-            "z": 163
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 198,
-            "y": 111,
-            "z": 163
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 198,
-            "y": 158,
-            "z": 163
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 199,
-            "y": 86,
-            "z": 113
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 199,
-            "y": 122,
-            "z": 113
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 199,
-            "y": 169,
-            "z": 113
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 201,
-            "y": 108,
-            "z": 120
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 201,
-            "y": 144,
-            "z": 120
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 201,
-            "y": 191,
-            "z": 120
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 201,
-            "y": 237,
-            "z": 163
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 204,
-            "y": 86,
-            "z": 144
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 204,
-            "y": 122,
-            "z": 144
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 204,
-            "y": 169,
-            "z": 144
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 206,
-            "y": 97,
-            "z": 167
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 206,
-            "y": 133,
-            "z": 167
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 206,
-            "y": 180,
-            "z": 167
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 208,
-            "y": 215,
-            "z": 166
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 210,
-            "y": 233,
-            "z": 125
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 211,
-            "y": 64,
-            "z": 175
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 213,
-            "y": 75,
-            "z": 128
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 213,
-            "y": 86,
-            "z": 171
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 213,
-            "y": 111,
-            "z": 128
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 213,
-            "y": 122,
-            "z": 171
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 213,
-            "y": 158,
-            "z": 128
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 213,
-            "y": 169,
-            "z": 171
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 214,
-            "y": 226,
-            "z": 110
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 215,
-            "y": 97,
-            "z": 125
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 215,
-            "y": 133,
-            "z": 125
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 215,
-            "y": 180,
-            "z": 125
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 217,
-            "y": 53,
-            "z": 117
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 218,
-            "y": 53,
-            "z": 157
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 221,
-            "y": 75,
-            "z": 155
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 221,
-            "y": 111,
-            "z": 155
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 221,
-            "y": 158,
-            "z": 155
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 222,
-            "y": 231,
-            "z": 148
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 224,
-            "y": 40,
-            "z": 181
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 225,
-            "y": 204,
-            "z": 146
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 226,
-            "y": 48,
-            "z": 107
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 229,
-            "y": 226,
-            "z": 165
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 230,
-            "y": 108,
-            "z": 167
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 230,
-            "y": 144,
-            "z": 167
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 230,
-            "y": 191,
-            "z": 167
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 230,
-            "y": 237,
-            "z": 160
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 232,
-            "y": 215,
-            "z": 120
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 233,
-            "y": 27,
-            "z": 124
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 234,
-            "y": 45,
-            "z": 168
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 234,
-            "y": 64,
-            "z": 122
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 234,
-            "y": 226,
-            "z": 134
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 235,
-            "y": 215,
+            "x": 103,
+            "y": 52,
             "z": 150
         },
         "ry": 0
@@ -899,9 +95,9 @@
         "cfg": "myplugin/island",
         "pitch": 0,
         "pos": {
-            "x": 236,
-            "y": 53,
-            "z": 144
+            "x": 105,
+            "y": 208,
+            "z": 141
         },
         "ry": 0
     },
@@ -909,9 +105,9 @@
         "cfg": "myplugin/island",
         "pitch": 0,
         "pos": {
-            "x": 236,
-            "y": 64,
-            "z": 159
+            "x": 106,
+            "y": 117,
+            "z": 136
         },
         "ry": 0
     },
@@ -919,8 +115,358 @@
         "cfg": "myplugin/island",
         "pitch": 0,
         "pos": {
-            "x": 237,
+            "x": 106,
+            "y": 165,
+            "z": 136
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 107,
+            "y": 56,
+            "z": 165
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 109,
+            "y": 180,
+            "z": 139
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 109,
+            "y": 180,
+            "z": 175
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 110,
+            "y": 55,
+            "z": 117
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 110,
+            "y": 95,
+            "z": 148
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 110,
+            "y": 143,
+            "z": 148
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 111,
+            "y": 40,
+            "z": 164
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 113,
+            "y": 208,
+            "z": 157
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 114,
+            "y": 228,
+            "z": 138
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 116,
+            "y": 106,
+            "z": 118
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 116,
+            "y": 154,
+            "z": 118
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 117,
+            "y": 62,
+            "z": 128
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 117,
+            "y": 73,
+            "z": 145
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 117,
+            "y": 84,
+            "z": 129
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 117,
+            "y": 132,
+            "z": 129
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 117,
+            "y": 197,
+            "z": 126
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 118,
             "y": 42,
+            "z": 118
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 118,
+            "y": 219,
+            "z": 156
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 120,
+            "y": 106,
+            "z": 141
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 120,
+            "y": 154,
+            "z": 141
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 121,
+            "y": 50,
+            "z": 174
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 121,
+            "y": 62,
+            "z": 158
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 121,
+            "y": 117,
+            "z": 161
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 121,
+            "y": 165,
+            "z": 161
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 125,
+            "y": 197,
+            "z": 147
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 126,
+            "y": 50,
+            "z": 100
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 126,
+            "y": 84,
+            "z": 157
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 126,
+            "y": 132,
+            "z": 157
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 127,
+            "y": 95,
+            "z": 107
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 127,
+            "y": 143,
+            "z": 107
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 129,
+            "y": 117,
+            "z": 114
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 129,
+            "y": 165,
+            "z": 114
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 129,
+            "y": 230,
+            "z": 157
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 132,
+            "y": 95,
+            "z": 138
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 132,
+            "y": 208,
             "z": 121
         },
         "ry": 0
@@ -929,9 +475,9 @@
         "cfg": "myplugin/island",
         "pitch": 0,
         "pos": {
-            "x": 237,
-            "y": 97,
-            "z": 148
+            "x": 134,
+            "y": 106,
+            "z": 161
         },
         "ry": 0
     },
@@ -939,19 +485,9 @@
         "cfg": "myplugin/island",
         "pitch": 0,
         "pos": {
-            "x": 237,
-            "y": 133,
-            "z": 148
-        },
-        "ry": 0
-    },
-    {
-        "cfg": "myplugin/island",
-        "pitch": 0,
-        "pos": {
-            "x": 237,
+            "x": 134,
             "y": 180,
-            "z": 148
+            "z": 124
         },
         "ry": 0
     },
@@ -959,9 +495,389 @@
         "cfg": "myplugin/island",
         "pitch": 0,
         "pos": {
-            "x": 246,
-            "y": 47,
-            "z": 139
+            "x": 136,
+            "y": 208,
+            "z": 160
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 137,
+            "y": 189,
+            "z": 165
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 139,
+            "y": 73,
+            "z": 169
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 141,
+            "y": 84,
+            "z": 122
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 141,
+            "y": 95,
+            "z": 165
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 141,
+            "y": 132,
+            "z": 122
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 141,
+            "y": 143,
+            "z": 165
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 142,
+            "y": 219,
+            "z": 104
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 143,
+            "y": 106,
+            "z": 119
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 143,
+            "y": 154,
+            "z": 119
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 144,
+            "y": 197,
+            "z": 115
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 145,
+            "y": 62,
+            "z": 111
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 146,
+            "y": 62,
+            "z": 151
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 146,
+            "y": 180,
+            "z": 178
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 149,
+            "y": 84,
+            "z": 149
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 149,
+            "y": 132,
+            "z": 149
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 152,
+            "y": 49,
+            "z": 175
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 153,
+            "y": 197,
+            "z": 140
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 154,
+            "y": 57,
+            "z": 101
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 156,
+            "y": 165,
+            "z": 161
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 156,
+            "y": 180,
+            "z": 147
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 158,
+            "y": 117,
+            "z": 161
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 158,
+            "y": 230,
+            "z": 154
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 160,
+            "y": 117,
+            "z": 123
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 160,
+            "y": 165,
+            "z": 124
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 160,
+            "y": 208,
+            "z": 114
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 161,
+            "y": 36,
+            "z": 118
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 161,
+            "y": 36,
+            "z": 162
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 162,
+            "y": 54,
+            "z": 162
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 162,
+            "y": 73,
+            "z": 116
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 163,
+            "y": 208,
+            "z": 144
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 163,
+            "y": 219,
+            "z": 128
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 164,
+            "y": 62,
+            "z": 138
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 164,
+            "y": 73,
+            "z": 153
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 165,
+            "y": 51,
+            "z": 115
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 165,
+            "y": 154,
+            "z": 142
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 166,
+            "y": 95,
+            "z": 138
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 166,
+            "y": 143,
+            "z": 138
+        },
+        "ry": 0
+    },
+    {
+        "cfg": "myplugin/island",
+        "pitch": 0,
+        "pos": {
+            "x": 174,
+            "y": 56,
+            "z": 133
         },
         "ry": 0
     },
@@ -984,6 +900,50 @@
         "x": 196,
         "y": 99,
         "z": 149
+      },
+      "ry": 0
+    },
+    {
+      "remake": "奖励01",
+      "cfg": "myplugin/reward01",
+      "pitch": 0,
+      "pos": {
+        "x": 224,
+        "y": 20,
+        "z": 144
+      },
+      "ry": 90
+    },
+    {
+      "remake": "奖励02",
+      "cfg": "myplugin/reward02",
+      "pitch": 0,
+      "pos": {
+        "x": 224,
+        "y": 20,
+        "z": 147
+      },
+      "ry": 0
+    },
+    {
+      "remake": "宝箱01",
+      "cfg": "myplugin/reward_box01",
+      "pitch": 0,
+      "pos": {
+        "x": 224,
+        "y": 20,
+        "z": 150
+      },
+      "ry": 90
+    },
+    {
+      "remake": "宝箱02",
+      "cfg": "myplugin/reward_box02",
+      "pitch": 0,
+      "pos": {
+        "x": 224,
+        "y": 20,
+        "z": 153
       },
       "ry": 0
     },

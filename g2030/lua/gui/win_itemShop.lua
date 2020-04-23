@@ -144,27 +144,72 @@ function M:addItemsGridView(isResetPos)
 end
 
 function M:addViewByConfig(Config, isResetPos)
-    local clickItem = nil
-    for i, Value in pairs(Config:getSettings()) do
-        local shopItem = UIMgr:new_widget("itemShopItem")
-        local contentWidth = self.gvItemsGridView:GetWidth()[2]
-        local contentHeight = self.gvItemsGridView:GetHeight()[2]
-        --local area = self.gvContentItemsGridView:GetArea()
-        --local Area = {r_x = area.min.x[1], r_y = area.min.y[1], r_width = area.max.x[1] - area.min.x[1], r_height = area.max.y[1] - area.min.y[1]}
-        local itemWidth = (contentWidth - 0.1) / 4
-        local itemHeight = (contentHeight - 0.1) / 3
-        local area = {x = { 0, 0 }, y = { 0, 0 }, w = { itemWidth, 0 }, h = { itemWidth, 0 }}
-        shopItem:invoke("initItem",self.selectTab, Value, area, self.islandLockId)
-        --self.gvContentItemsGridView:AddItem1(shopItem, 0, index)
-        if self.islandLockId == Value.id or Value.status ~= BuyStatus.Lock then
-            self:subscribe(shopItem, UIEvent.EventWindowClick, function()
-                self:onClickItem(Value.id, Value.status)
-            end)
+    local allItem = {}
+    if self.selectTab == TabType.Advance then
+        allItem = Config:getSettings()
+    else
+        local items = Lib.copy(Config:getAllItemByPay(false))
+        local items1 = Lib.copy(Config:getAllItemByPay(true))
+        local row = #items
+        local row1 = #items1
+        if row1 > row then
+            row = row1
         end
-        self.gvItemsGridView:AddItem(shopItem)
-        self.itemsGridView[i] = shopItem
-        if i == 1 then
-            clickItem = Value
+        local j = 0
+        local k = 0
+        for i = 1, row do
+            if i % 4 == 0 then
+                j = j + 1
+                if items1[j] then
+                    table.insert(allItem, i, items1[j])
+                else
+                    local Value1 = {
+                        hide = true
+                    }
+                    table.insert(allItem, i, Value1)
+                end
+            else
+                k = k + 1
+                if items[k] then
+                    table.insert(allItem, i, items[k])
+                else
+                    local Value1 = {
+                        hide = true
+                    }
+                    table.insert(allItem, i, Value1)
+                end
+            end
+        end
+    end
+    local clickItem
+    for i, Value in ipairs(allItem) do
+        if Value.hide then
+            local shopItem = UIMgr:new_widget("itemShopItem")
+            shopItem:invoke("hideGUIWindow")
+            --shopItem:root():SetAlpha(0)
+            self.gvItemsGridView:AddItem(shopItem)
+            self.itemsGridView[i] = shopItem
+        else
+            local shopItem = UIMgr:new_widget("itemShopItem")
+            local contentWidth = self.gvItemsGridView:GetWidth()[2]
+            local contentHeight = self.gvItemsGridView:GetHeight()[2]
+            --local area = self.gvContentItemsGridView:GetArea()
+            --local Area = {r_x = area.min.x[1], r_y = area.min.y[1], r_width = area.max.x[1] - area.min.x[1], r_height = area.max.y[1] - area.min.y[1]}
+            local itemWidth = (contentWidth - 0.1) / 4
+            local itemHeight = (contentHeight - 0.1) / 3
+            local area = {x = { 0, 0 }, y = { 0, 0 }, w = { itemWidth, 0 }, h = { itemWidth, 0 }}
+            shopItem:invoke("initItem",self.selectTab, Value, area, self.islandLockId)
+            --self.gvContentItemsGridView:AddItem1(shopItem, 0, index)
+            if self.islandLockId == Value.id or Value.status ~= BuyStatus.Lock then
+                self:subscribe(shopItem, UIEvent.EventWindowClick, function()
+                    self:onClickItem(Value.id, Value.status)
+                end)
+            end
+            self.gvItemsGridView:AddItem(shopItem)
+            self.itemsGridView[i] = shopItem
+            if i == 1 then
+                clickItem = Value
+            end
         end
     end
     if isResetPos and #self.itemsGridView >= 1 then
@@ -241,40 +286,49 @@ function M:onClickEquipItem(itemId)
     else
         self:showItemDetail()
     end
+
+    local fullName = string.format("myplugin/%s",  item.itemName)
+    local item1 = Item.CreateItem(fullName)
+    assert(item1:cfg(), "onClickEquipItem(itemId) : item:cfg() is not exit :"..tostring(itemId))
+    local Cfg = Entity.BuffCfg(item1:cfg().equip_buff)
+    assert(Cfg.perExp, "onClickEquipItem(itemId) : Cfg.perExp is not exit :"..tostring(itemId))
+
     local strItemPropertyNum1 = item.value1
     local payEquip = PayEquipConfig:getItemById(itemId)
     local strDetailDescribe = Lang:toText(item.desc)
     if item.isPay and payEquip then
         if item.status == BuyStatus.Buy or item.status == BuyStatus.Used then
-            strDetailDescribe = Lang:toText(payEquip.efficiencyFixHugeDes)
-            local specialNum = string.format("%.0f", payEquip.efficiencyFixHuge)
-            strItemPropertyNum1 =  tostring(payEquip.efficiencyFixHuge)
+            strDetailDescribe = Lang:toText(payEquip.efficiencyFixHugeDes) ----无限肌肉锻炼肌肉量固定值描述
+            local specialNum = string.format("%s", tostring(BigInteger.Create(payEquip.efficiencyFixHuge)))----无限肌肉锻炼肌肉量固定值
+            strItemPropertyNum1 =  tostring(BigInteger.Create(payEquip.efficiencyFixHuge))----无限肌肉锻炼肌肉量固定值
             strDetailDescribe = string.format(strDetailDescribe,specialNum)
-        elseif tonumber(Me:getCurLevel()) <= payEquip.unlockAdvancedLevel  then
+        elseif tonumber(Me:getCurLevel()) <= payEquip.unlockAdvancedLevel  then----解锁需要的进阶等级
             strDetailDescribe = Lang:toText(item.desc)
-            local specialStr = "+"..payEquip.efficiencyPercentage.."%"
+            local specialStr = "+"..payEquip.efficiencyPercentage.."%" ------锻炼肌肉量百分比
             strItemPropertyNum1 = payEquip.efficiencyPercentage.."%"
             strDetailDescribe = string.format(strDetailDescribe,specialStr)
         elseif tonumber(Me:getCurLevel()) > payEquip.unlockAdvancedLevel then
-            strDetailDescribe = Lang:toText(payEquip.efficiencyFixDes)
-            if Me:getCurLevel() >= payEquip.invailedAdvancedLevel then
-                local specialNum = string.format("%.0f", payEquip.efficiencyFix)
-                strItemPropertyNum1 = tostring(payEquip.efficiencyFix)
+            strDetailDescribe = Lang:toText(payEquip.efficiencyFixDes) ------锻炼肌肉量固定值描述
+            if Me:getCurLevel() >= payEquip.invailedAdvancedLevel then ------失效的进阶等级
+                local specialNum = string.format("%s", tostring(BigInteger.Create(payEquip.efficiencyFix)))----锻炼肌肉量固定值
+                strItemPropertyNum1 = tostring(BigInteger.Create(payEquip.efficiencyFix))
                 strDetailDescribe = string.format(strDetailDescribe,specialNum)
             else
-                local specialStr = "+"..payEquip.efficiencyPercentage.."%"
+                local specialStr = "+"..payEquip.efficiencyPercentage.."%"------锻炼肌肉量百分比
                 strItemPropertyNum1 = payEquip.efficiencyPercentage.."%"
                 strDetailDescribe = string.format(strDetailDescribe,specialStr)
             end
         end
     else
-        strItemPropertyNum1 = Lang:toText(item.efficiency)
+        strItemPropertyNum1 = Lang:toText(tostring(BigInteger.Create(Cfg.perExp.val, Cfg.perExp.bit)))
         strDetailDescribe = string.format(strDetailDescribe,strItemPropertyNum1)
     end
     self.stDetailTitle:SetText(Lang:toText(tostring(item.name)))
     self.siDetailItemIcon:SetImage(item.icon)
-    self.stDetailValueText[1]:SetText(Lang:toText(tostring("ValueText1")))
-    self.stDetailValueNum[1]:SetText(tostring(strItemPropertyNum1))
+    self.stDetailValueText[1]:SetText(Lang:toText(tostring("gui_equip_text1")))
+
+    self.stDetailValueNum[1]:SetText(tostring(BigInteger.Create(Cfg.perExp.val, Cfg.perExp.bit)))
+    --self.stDetailValueNum[1]:SetText(tostring(strItemPropertyNum1))
     self.siDetailValue[2]:SetVisible(false)
     self.siDetailValue[3]:SetVisible(false)
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 224 }, { 0, 258}, { 0, 152})
@@ -323,13 +377,21 @@ function M:onClickBeltItem(itemId)
     end
     self.stDetailTitle:SetText(Lang:toText(tostring(item.name)))
     self.siDetailItemIcon:SetImage(item.icon)
-    self.stDetailValueText[1]:SetText(Lang:toText(tostring("ValueText1")))
-    self.stDetailValueNum[1]:SetText(tonumber(item.workoutUp))
+    self.stDetailValueText[1]:SetText(Lang:toText(tostring("gui_belt_text1")))
+
+    local fullName = string.format("myplugin/%s",  item.itemName)
+    local item1 = Item.CreateItem(fullName)
+    assert(item1:cfg(), "onClickBeltItem(itemId) : item:cfg() is not exit :"..tostring(itemId))
+    local Cfg = Entity.BuffCfg(item1:cfg().equip_buff)
+    assert(Cfg.expMax, "onClickBeltItem(itemId) : Cfg.expMax is not exit :"..tostring(itemId))
+    self.stDetailValueNum[1]:SetText(tostring(BigInteger.Create(Cfg.expMax.val, Cfg.expMax.bit)))
     self.siDetailValue[2]:SetVisible(false)
     self.siDetailValue[3]:SetVisible(false)
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 224 }, { 0, 258}, { 0, 152})
     self.stDetailDescribe:SetText(Lang:toText(item.desc))
     if item.status == BuyStatus.Unlock then
+        self.stDetailText:SetArea({ 0, 70 }, { 0, 0 }, { 0, 110}, { 0, 50})
+        self.stDetailText:SetTextColor({1, 1, 1, 1})
         local strMoneyIcon = getMoneyIconByMoneyType(item.moneyType)
         self.siDetailGold:SetImage(strMoneyIcon)
         self.stDetailText:SetText(tostring(item.price))
@@ -371,15 +433,17 @@ function M:onClickAdvancelItem(itemId)
     end
     self.stDetailTitle:SetText(Lang:toText(tostring(item.name)))
     self.siDetailItemIcon:SetImage(item.icon)
-    self.stDetailValueText[1]:SetText(Lang:toText(tostring("ValueText1")))
-    self.stDetailValueNum[1]:SetText(tonumber(item.attack))
-    self.stDetailValueText[2]:SetText(Lang:toText(tostring("ValueText2")))
-    self.stDetailValueNum[2]:SetText(tonumber(item.speed))
-    self.stDetailValueText[3]:SetText(Lang:toText(tostring("ValueText3")))
-    self.stDetailValueNum[3]:SetText(tonumber(item.workout))
+    self.stDetailValueText[1]:SetText(Lang:toText(tostring("gui_advance_text1")))
+    self.stDetailValueNum[1]:SetText("x"..tostring(BigInteger.Create(item.attack)))
+    self.stDetailValueText[2]:SetText(Lang:toText(tostring("gui_advance_text2")))
+    self.stDetailValueNum[2]:SetText("x"..tostring(BigInteger.Create(item.speed)))
+    self.stDetailValueText[3]:SetText(Lang:toText(tostring("gui_advance_text3")))
+    self.stDetailValueNum[3]:SetText("x"..tostring(BigInteger.Create(item.workout)))
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 305 }, { 0, 258}, { 0, 71})
     self.stDetailDescribe:SetText(Lang:toText(item.desc))
     if item.status == BuyStatus.Unlock then
+        self.stDetailText:SetArea({ 0, 70 }, { 0, 0 }, { 0, 110}, { 0, 50})
+        self.stDetailText:SetTextColor({1, 1, 1, 1})
         local strMoneyIcon = getMoneyIconByMoneyType(item.moneyType)
         self.siDetailGold:SetImage(strMoneyIcon)
         self.stDetailText:SetText(tostring(item.price))
@@ -472,6 +536,7 @@ function M:onDetailButton()
 end
 
 function M:onBuyAll()
+    --UI:getWnd("payShop"):onBuyPropBagCapacity()
     self:senderBuyAll()
 end
 

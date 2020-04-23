@@ -12,7 +12,12 @@ function AdvanceConfig:init()
         data.name = vConfig.s_name or "" --s_name
         data.icon = vConfig.s_icon or "" --s_icon
         data.moneyType = tonumber(vConfig.n_moneyType) or 0 --n_moneyType
-        data.price = tonumber(vConfig.n_price) or 0 --n_price
+        local sprice = Lib.split(vConfig.s_price, ",")
+        if data.moneyType ~= 0 then
+            data.price = BigInteger.Create(tonumber(sprice[1]),tonumber(sprice[2])) or 0 --s_price
+        else
+            data.price = tonumber(sprice[1]) or 0 --n_price
+        end
         data.desc = vConfig.s_desc or "" --s_desc
         data.islandLv = tonumber(vConfig.n_islandLv) or 0 --n_islandLv
         data.islandIcon = vConfig.s_islandIcon or "" --s_islandIcon
@@ -87,6 +92,21 @@ end
 
 function AdvanceConfig:getSettings()
     return settings
+end
+function AdvanceConfig:getSpdPlusByLv(lv)
+    if settings[lv] and settings[lv].speed then
+        return settings[lv].attack
+    end
+end
+function AdvanceConfig:getExpPlusByLv(lv)
+    if settings[lv] and settings[lv].workout then
+        return settings[lv].attack
+    end
+end
+function AdvanceConfig:getAtkPlusByLv(lv)
+    if settings[lv] and settings[lv].attack then
+        return settings[lv].attack
+    end
 end
 
 local function init()

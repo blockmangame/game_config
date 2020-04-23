@@ -29,7 +29,18 @@ function handles:PetList(packet)
     for index, entityInfo in pairs(packet.list) do
         self.equipPetList[index] = entityInfo;
     end
-    print(Lib.v2s( self.equipPetList))
+    if UI:getWnd("petPackage"):visible() then
+        UI:getWnd("petPackage"):refreshPetLeftDetailInfo()      --防止延迟造成的数据显示错误
+    end
+end
+
+function handles:AttrValuePro(packet)
+    local entity = World.CurWorld:getEntity(packet.objID)
+    if packet.isBigInteger then
+        packet.value = BigInteger.Recover(packet.value)
+    end
+    entity:doSetValue(packet.key, packet.value)
+    UI:getWnd("petEvolution"):evoluteSuccess(packet.oldIndex, packet.newIndex)
 end
 
 function handles:ResetEntityRechargeSkill(packet)
@@ -71,6 +82,25 @@ function handles:ShowGauntlet(packet)
         UI:openWnd("gauntlet", packet.key)
     else
         UI:closeWnd("gauntlet")
+    end
+end
+function handles:CommonNotice(packet)
+    if packet and packet.content then
+        Lib.emitEvent(Event.EVENT_COMMON_NOTICE,packet.content)
+    end
+end
+function handles:ShowArenaMainUI(packet)
+    if packet then
+        Lib.emitEvent(Event.EVENT_ARENA_UI_STATE)
+    end
+end
+
+function handles:EntityForceTargetPos(packet)
+    if packet then
+        local entity = World.CurWorld:getEntity(packet.objID)
+        if entity then
+            entity:entityForceTargetPos(packet.targetPos)
+        end
     end
 end
 

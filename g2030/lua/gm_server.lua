@@ -28,11 +28,29 @@ GMItem["g2030/掙錢！"] = function(self)
     self:addCurrency("gold", BigInteger.Create(23,10), "test")
     self:addCurrency("chi",  3, "test")
 end
+GMItem["g2030/搞个boss玩玩"] = function(self)
+    local entity = EntityServer.Create({cfgName = "myplugin/enemy_base", pos = World.cfg.initPos, map = "map001"})
+end
+
 GMItem["g2030/自动锻炼buff"] = function(self)
     self:addBuff("myplugin/autoExp_s",200)
 end
 GMItem["g2030/无上限特权"] = function(self)
     self:setInfiniteExp()
+end
+GMItem["g2030/发送测试弹窗"] = function(self)
+    self:showCommonNotice("GM发送的测试提示信息，啦啦啦~")
+end
+GMItem["g2030/开启移速特权"] = function(self)
+    self:setMovePlus()
+end
+GMItem["g2030/开关无敌"] = function(self)
+    if self:getHurtSub() <= 0 then
+        self:setUninvincible()
+    else
+        self:setInvincible()
+    end
+    
 end
 GMItem["g2030/神圣攻击加成特权"] = function(self)
     self:setOpenRealDmg()
@@ -69,6 +87,10 @@ GMItem["g2030/升阶"] = function(self)
     self:addLevel()
 end
 
+GMItem["g2030/击退"] = function(self)
+    self:beHitBack({x = 0,y = 0,z = -2}, "falldown", 50, "getup")
+end
+
 -----------------------------------Pet Model Test----------------------------------
 local Entity
 GMItem["g2030Pet/发放宠物"] = function(self)
@@ -91,14 +113,15 @@ GMItem["g2030Pet/clear"] = function(self)
     self:setValue("hadEntityNum", 0);
     self:setValue("allPetAttr", {});
 end
-GMItem["g2030Pet/移除"] = function(self)
-    self:recallPet(1);
-end
 GMItem["g2030Pet/查看当前角色宠物数据"] = function(self)
     print(self);
     print("开始打印宠物数据")
     print("当前所获取过的宠物数量", self:getValue("hadEntityNum"))
-    print("当前背包内所有宠物式神信息：", Lib.v2s(self:getValue("allPetAttr")))
+    print("当前背包内所有宠物式神信息：")
+    for k,v in pairs(self:getAllPetAttr()) do
+        print ("\t", k)
+        print(Lib.v2s(v))
+    end
     print("当前装备的宠物信息：", Lib.v2s(self:getValue("petEquippedList")))
     print("当前装备的式神信息：", self:getValue(("plusPetEquippedIndex")))
     print("===End===")

@@ -16,12 +16,34 @@ end
 function M:initWnd()
     self.btnGodSkill = self:child("NinjaMain-GodSkill")
     self.btnVip = self:child("NinjaMain-VipBtn")
-    self.btnTrade = self:child("NinjaMain-TradeBtn")
+    self.btnSkill = self:child("NinjaMain-SkillBtn")
     self.btnSell = self:child("NinjaMain-SellBtn")
     self.btnPet = self:child("NinjaMain-PetBtn")
+    self.btnRecharge = self:child("NinjaMain-RechargeBtn")
+    self.btnArena = self:child("NinjaMain-ArenaBtn")
+    self.btnTitle = self:child("NinjaMain-NickBtn")
+    self:child("NinjaMain-Vip"):SetText(Lang:toText("vip"))
+    self:child("NinjaMain-Skill"):SetText(Lang:toText("skill"))
+    self:child("NinjaMain-Sell"):SetText(Lang:toText("sell")) 
+    self:child("NinjaMain-Pet"):SetText(Lang:toText("pet"))
+    self:child("NinjaMain-Recharge"):SetText(Lang:toText("recharge"))
+    self:child("NinjaMain-Arena"):SetText(Lang:toText("arena"))
+    self:child("NinjaMain-Nick"):SetText(Lang:toText("title"))
+
+
     self.btnExchangeCtr = self:child("NinjaMain-Exchange")
     self.effect = self:child("NinjaMain-Effect")
     self.textBottomMessage = self:child("NinjaMain-BottomMessage")
+    ------竞技场状态显示------------
+    self.lytArenaRank = self:child("NinjaMain-ArenaRank")
+    self.grdRankList = self:child("NinjaMain-List")
+    self.lytArenaRank:SetVisible(false)
+
+    self.lytArenaCountTime = self:child("NinjaMain-ArenaCountTime")
+    self.txtCountTime = self:child("NinjaMain-CountTimeVal")
+    self.lytArenaCountTime:SetVisible(false)
+
+
     self.textBottomMessage:SetText("")
 
     self:initEvent()
@@ -41,7 +63,8 @@ end
 
 function M:initEvent()
     self:subscribe(self.btnSell, UIEvent.EventButtonClick, function()
-        Me:sellExp()
+        Me:sellExp(true)
+        
     end)
     self:subscribe(self.btnExchangeCtr, UIEvent.EventButtonClick, function()
         self:exchangeABBtn()
@@ -54,8 +77,17 @@ function M:initEvent()
         UI:getWnd("petPackage"):openPetPackage()
     end)
 
-    self:subscribe(self.btnTrade, UIEvent.EventButtonClick, function()
+    self:subscribe(self.btnSkill, UIEvent.EventButtonClick, function()
         self:openSkillControl()
+    end)
+    self:subscribe(self.btnRecharge, UIEvent.EventButtonClick, function()
+        --TODO goto first recharge view
+    end)
+    self:subscribe(self.btnArena, UIEvent.EventButtonClick, function()
+        UI:openWnd("ninjaArena")
+    end)
+    self:subscribe(self.btnTitle, UIEvent.EventButtonClick, function()
+        --TODO goto title view
     end)
 
 
@@ -85,11 +117,9 @@ function M:initEvent()
         self.effect:SetVisible(isPlay)
     end)
 
-    -- Lib.subscribeEvent(Event.EVENT_ITEM_SKILL_EQUIP_UPDATE, function()
-    --     -- 技能装配监听
-    --     local EquipInfo = Me:getEquipSkill()
-    --     print("---------EquipInfo--------------1 ".. Lib.v2s(EquipInfo))
-    -- end)
+    Lib.subscribeEvent(Event.EVENT_ARENA_UI_STATE, function()
+        self:initArenaView()
+    end)
 end
 
 ---右侧技能按钮排版切换
@@ -125,6 +155,74 @@ end
 
 function M:openSkillControl()
     UI:getWnd("skillControl"):onShow(true)
+end
+
+function M:initArenaView()
+    self.btnVip:SetVisible(false)
+    self.btnTrade:SetVisible(false)
+    self.btnSell:SetVisible(false)
+    self.btnPet:SetVisible(false)
+
+    self.lytArenaRank:SetVisible(true)
+    self.lytArenaCountTime:SetVisible(true)
+    self.testData = {
+        {
+            rank = 1,
+            name = "aaaaaa",
+            kill =1234,
+            score = 2234222,
+            level = 4
+        },
+        {
+            rank = 1,
+            name = "aaaaaa",
+            kill =1234,
+            score = 2234222,
+            level = 4
+        },
+        {
+            rank = 1,
+            name = "aaaaaa",
+            kill =1234,
+            score = 2234222,
+            level = 4
+        },
+        {
+            rank = 1,
+            name = "aaaaaa",
+            kill =1234,
+            score = 2234222,
+            level = 4
+        },
+        {
+            rank = 1,
+            name = "aaaaaa",
+            kill =1234,
+            score = 2234222,
+            level = 4
+        },
+        {
+            rank = 1,
+            name = "aaaaaa",
+            kill =1234,
+            score = 2234222,
+            level = 4
+        },
+    }
+    local i = 1
+    for _, data in pairs(self.testData) do
+        local item = UIMgr:new_widget("itemArenaRankMainUI")
+            -- local contentWidth = self.llContentGrid:GetPixelSize().x
+            -- local contentHeight = self.llContentGrid:GetPixelSize().y
+            -- local itemWidth = (contentWidth - 172) / 4
+            -- local itemHeight = (contentHeight - 44) / 2.2
+         --   self.allItems[i] = item
+        item:invoke("setItemData", data.rank, data.name, data.kill)
+        self.grdRankList:AddItem(item)
+        i = i + 1
+    end
+
+    self.txtCountTime:SetText(Lang:toText("arena_wait_more") )
 end
 
 function M:onOpen()

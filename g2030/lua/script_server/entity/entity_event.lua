@@ -32,3 +32,8 @@ function events:inBlockChanged(oldId, newId)
         RegionBlock:onEntityEnter(self, World.regionConfigs[enterRegionConfig.plugin], enterRegionConfig)
     end
 end
+
+function events:force_meet_collidable(blockPos, objID)
+	print("servers force_meet_collidable ")
+    self:stopHitBack()
+end

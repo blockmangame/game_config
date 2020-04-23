@@ -101,4 +101,10 @@ function ControlSkill:cast(packet, from)
         player:data("main").RoundUpData = RoundUpData
         ControlSkill.timer = player:timer(1, roundUp, from)
     end
+
+    local cdTime = self.cdTime
+    if self.cdKey then
+        packet.cdTime = cdTime
+        from:setCD(self.cdKey, cdTime)
+    end
 end

@@ -10,6 +10,18 @@ function entity_event(entity, event, ...)
     end
 end
 
+function events:collisionEntity(objIDArray)
+    if not self.isPlayer then
+        return
+    end
+
+    if self.objID ~= Me.objID then
+        return
+    end
+
+    self:collisionEntity(objIDArray)
+end
+
 function events:onBlockChanged(oldId, newId)
     --print("onBlockChanged ", oldId, newId)
 end
@@ -41,4 +53,8 @@ function events:inBlockChanged(oldId, newId)
     if enterRegionConfig then
         RegionBlock:onEntityEnter(self, World.regionConfigs[enterRegionConfig.plugin], enterRegionConfig)
     end
+end
+
+function events:force_meet_collidable(blockPos, objID)
+	print("client force_meet_collidable ")
 end

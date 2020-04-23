@@ -1,0 +1,23 @@
+ENTITY_TOUCH_ALL{
+    If(not IsPlayer(entity = $obj2))
+    {
+        Return()
+    }
+    $type = GetConfigVar(obj = $obj1,key="type")
+    rewardActions(player = $obj2, object = $obj1, type = $type)
+    --AddEntitySceneUI(entity = $obj1, data = $data)
+}
+ENTITY_ENTER
+{
+    Test("     If(not $obj1) 000")
+    If(not $obj1)
+    {
+        Test("     If(not $obj1) 111")
+        Return()
+    }
+    $type = GetConfigVar(obj = $obj1,key="type")
+    If($type == 2)
+    {    Test("     If(not $obj1) 222")
+        remarkBoxActions(object = $obj1, type = $type)
+    }
+}

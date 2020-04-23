@@ -39,7 +39,7 @@ function M:initItem(tabKind, Value, area, islandLockId)
     self.kind = tabKind --不同类型大小等处理
     self.itemId = Value.id
     self.stItemTitle:SetText(Lang:toText(Value.name))
-    self.stItemMoneyNum:SetText(Value.price)
+    self.stItemMoneyNum:SetText(tostring(Value.price))
     local moneyIcon = getMoneyIconByMoneyType(Value.moneyType)
     self.siItemMoneyIcon:SetImage(moneyIcon)
     self.siItemIcon:SetImage(Value.icon)
@@ -118,6 +118,10 @@ function M:setItemStatus()
         self.stItemUsedText:SetTextColor({213/255, 205/255, 47/255, 1})
         self.stItemUsedText:SetText(Lang:toText("gui_using"))
     end
+end
+
+function M:hideGUIWindow()
+    self._root:SetAlpha(0)
 end
 
 function M:onInvoke(key, ...)

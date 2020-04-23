@@ -26,11 +26,15 @@ function handles:recallPet(packet)
     self:recallPet(packet.index);
 end
 
+function handles:petEvolution(packet)
+    self:petEvolution(packet)
+end
+
 function handles:SyncItemShopOperation(packet)
     Store.ItemShop:operationByType(self, packet.tabId, packet.itemId)
 end
 function handles:SellExp(packet)
-    self:sellExp()
+    self:sellExp(packet.resetPos)
 end
 function handles:ExchangeEquip(packet)
     self:exchangeEquip(packet.fullName)
@@ -83,6 +87,12 @@ function handles:skillShopBuyItem(packet)
     end
 end
 
+function handles:syncSkillEquip(packet)
+    local skillShop = require "script_server.skill.skillShop"
+    skillShop:syncSkillMap(self)
+end
+
+
 function handles:SyncItemShopBuyAll(packet)
     Store.ItemShop:BuyAll(self, packet.tabId)
 end
@@ -92,7 +102,7 @@ function handles:TeleportBeginFinsh(packet)
     if not entity then
         return
     end
-    Trigger.CheckTriggers(entity:cfg(), "TELEPORT_BEGIN_FINSH", { obj1 = entity })
+    Trigger.CheckTriggers(entity:cfg(), "TELEPORT_BEGIN_FINSH", {obj1=entity})
 end
 
 function handles:TeleportEndFinsh(packet)
@@ -100,7 +110,7 @@ function handles:TeleportEndFinsh(packet)
     if not entity then
         return
     end
-    Trigger.CheckTriggers(entity:cfg(), "TELEPORT_END_FINSH", { obj1 = entity })
+    Trigger.CheckTriggers(entity:cfg(), "TELEPORT_END_FINSH", {obj1=entity})
 end
 
 function handles:SyncItemShopInit(packet)
@@ -121,6 +131,26 @@ function handles:ConfirmGauntlet(packet)
         return
     end
     if not Game.EntityJoinProcess(packet.key, entity) then
-        --失败提示
+        if entity.isPlayer then
+            self:showCommonNotice("加入阵营战失败")
+        end
     end
+end
+function handles:MatchArena(packet)
+    local entity = World.CurWorld:getObject(packet.objId)
+    if not entity then
+        return
+    end
+    if not Game.EntityJoinProcess(packet.key, entity) then
+        if entity.isPlayer then
+            self:showCommonNotice("进入竞技场失败")
+        end
+    end
+end
+function handles:LeaveArena(packet)
+    local entity = World.CurWorld:getObject(packet.objId)
+    if not entity then
+        return
+    end
+    Game.EntityLeaveProcess(packet.key, entity)
 end

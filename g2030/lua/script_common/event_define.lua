@@ -20,6 +20,9 @@ Event.register("EVENT_TELEPORT_SHADER_DISABLE")
 Event.register("EVENT_REGION_ENTER")
 Event.register("EVENT_REGION_LEAVE")
 
+
+Event.register("EVENT_ARENA_UI_STATE")--主界面切换为竞技场显示模式
+
 Event.register("EVENT_ARENA_COUNTTIME")
 
 
@@ -32,8 +35,11 @@ if World.isClient then
     Event.register("EVENT_PLAY_GLIDING_EFFECT")
     Event.register("EVENT_ITEM_SKILL_SHOP_UPDATE")
     Event.register("EVENT_ITEM_SKILL_EQUIP_UPDATE")
-    Event.register("EVENT_RANK_INFO_UPDATE")
 
+    Event.register("EVENT_COMMON_NOTICE")
+
+    Event.register("EVENT_PLAYER_PROCEED_RECHARGE")
+    Event.register("EVENT_RANK_INFO_UPDATE")
 else
     --TODO
 end

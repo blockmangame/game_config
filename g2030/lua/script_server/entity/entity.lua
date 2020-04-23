@@ -1,3 +1,58 @@
+local function entityValueDefInit(entity,cfg)
+    if cfg.entityMaxHp then
+        entity:setNPCMaxHp(BigInteger.Create(cfg.entityMaxHp[1],cfg.entityMaxHp[2]))
+    end
+    if cfg.entityBaseDmg then
+        entity:setNPCBaseDmg(BigInteger.Create(cfg.entityMaxHp[1],cfg.entityMaxHp[2]))
+    end
+end
+---
+---重写创建Entity方法，加入npc血量和攻击力
+---
+function EntityServer.Create(params)
+    local cfg = Entity.GetCfg(params.cfgName)
+	if cfg == nil then return end
+    assert(cfg.id, params.cfgName)	-- 没填id_mapping？
+    local entity = EntityServer.CreateEntity(cfg.id)
+    if params.name then
+        entity.name = params.name
+    end
+	entity:invokeCfgPropsCallback()
+    entity:resetData()
+	if params.pos then
+		entity:setMapPos(params.map or params.pos.map, params.pos, params.ry, params.rp)
+	end
+	local mainData = entity:data("main")
+	if not entity.isPlayer or (cfg.reviveTime or -1) > 0 then
+		entity:setRebirthPos(params.pos)
+	end
+	if params.enableAI or params.aiData or cfg.enableAI then
+		mainData.enableAI = true
+		local enableStateMachine = params.enableAIStateMachine
+		if enableStateMachine == nil then
+			enableStateMachine = cfg.enableAIStateMachine
+		end
+		for key, value in pairs(params.aiData or {}) do
+			entity:setAiData(key, value)
+		end
+		entity:data("aiData").enableStateMachine = enableStateMachine ~= false
+		entity:startAI()	
+	end
+	if params.owner then
+		entity:setValue("ownerId", params.owner.objID)
+	end
+	entity:setValue("level", params.level or 1, true)
+	entity:setValue("camp", params.camp or cfg.clique or cfg.camp or 0, true)
+    local entityData = params.entityData or {}
+    for k, v in pairs(entityData.vars or params.vars or {}) do
+        entity.vars[k] = v
+    end
+	for key, value in pairs(cfg.passiveBuffs or {}) do
+		entity:addBuff(value.name, value.time)
+    end
+    entityValueDefInit(entity,cfg)
+    return entity
+end
 ---
 ---自定义伤害公式
 ---因为要用ValueDef的血量和伤害替换掉引擎自带的curHp和damage
@@ -36,17 +91,32 @@ function EntityServer:getDamageProps(info)
     })
     return attackProps,defenseProps
 end
+---
+---重写【是否可攻击】方法
+---
+function EntityServer:canAttack(target)
+	if not Entity.canAttack(self, target) then
+		return false
+    end
+    if target.isPlayer then
+        return true
+    end
+    if target:cfg().invincible then
+        return false
+    end
+	return true
+end
 function EntityServer:doAttack(info)
     local attackProps,defenseProps = self:getDamageProps(info)
     --ocal damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
-    print("---------doAttack------damage-1-----------------",attackProps.dmgBase)
-    print("---------doAttack------damage--2----------------",attackProps.dmgBaseRat)
-    print("---------doAttack------damage--3----------------",attackProps.dmgFactor)
-    print("---------doAttack------damage--4----------------",attackProps.atk)
-    print("---------doAttack------damage--5----------------",attackProps.dmgRealPlu)
-    print("---------doAttack------damage--6----------------",attackProps.hurtSub)
+    -- print("---------doAttack------damage-1-----------------",attackProps.dmgBase)
+    -- print("---------doAttack------damage--2----------------",attackProps.dmgBaseRat)
+    -- print("---------doAttack------damage--3----------------",attackProps.dmgFactor)
+    -- print("---------doAttack------damage--4----------------",attackProps.atk)
+    -- print("---------doAttack------damage--5----------------",attackProps.dmgRealPlu)
+    -- print("---------doAttack------damage--6----------------",defenseProps.hurtSub)
     local damage =  math.max(attackProps.dmgBase+ attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1)
-    print("---------doAttack------damage------------------",damage)
+    -- print("---------doAttack------damage------------------",damage)
     info.target:doDamage({
         from = self,
         damage = damage,
@@ -89,11 +159,24 @@ function EntityServer:doHealing()
         end   )
     end
 end
+-- function EntityServer:doDropDamage(speed)
+--     print("------------drop------")
+-- 	self:doDamage({
+-- 		damage = self:getMaxHp(),
+-- 		cause = "ENGINE_DO_DROP_DAMAGE",
+-- 	})
+-- end
+function player_touchdown(entity)
+	entity:doDamage({
+		damage = entity:getMaxHp(),
+		cause = "ENGINE_TOUCHDOWN",
+	})
+end
 function EntityServer:doDamage(info)
     
     local damage, from, isRebound = info.damage, info.from, info.isRebound
     local damageCause = assert(info.cause, "must have a cause of doDamage")
-
+    print("---------------damageCause-----------------",damageCause)
     if damage <= 0 then
         return
     elseif self.curHp <= 0 then
@@ -156,7 +239,7 @@ end
 ---
 function EntityServer:ShowFlyNum(deltaHp)
     if self and self.isPlayer then
-        WorldServer.BroadcastPacket({
+        self:sendPacketToTracking({
             pid = "ShowNumberUIOnEntity",
             beginOffsetPos =Lib.v3(0, 1, 0),
             FollowObjID = self.objID,
@@ -166,7 +249,8 @@ function EntityServer:ShowFlyNum(deltaHp)
             imageWidth = 40,
             imageHeight = 40,
             isBigNum = true
-        })
+        },true)
+  --      WorldServer.BroadcastPacket()
     end
 end
 
@@ -200,6 +284,93 @@ function EntityServer:doAutoNormalAtk(buff)
             self:doAutoNormalAtk(buff)
         end
     end   )
+end
+
+local function entityPlayAction(entity, actionName, actionTime, includeSelf)
+    if not entity or not actionName then
+        return false
+    end
+
+    local packet = {
+        pid = "EntityPlayAction",
+        objID = entity.objID,
+        action = actionName,
+        time = actionTime,
+    }
+    entity:sendPacketToTracking(packet, includeSelf)
+    return true
+end
+
+local function entityForceTargetPos(entity, targetPos, includeSelf)
+    if not entity then
+        return false
+    end
+
+    local packet = {
+        pid = "EntityForceTargetPos",
+        objID = entity.objID,
+        targetPos = targetPos,
+    }
+    entity:sendPacketToTracking(packet, includeSelf)
+    return true
+end
+
+local function getTargetPos(position, from)
+    local yaw = (360 - from:getRotationYaw() + 90) % 360
+    local pos = Lib.tov3(Lib.copy(position))
+    local new_off_x, new_off_y = pos.x, pos.z
+    local arc1 = math.atan(new_off_y, -new_off_x)
+    local deg1 = math.deg(arc1)
+    local deg2 = yaw - (360 - deg1 + 90) % 360
+    local arc2 = math.rad(deg2)
+    local len = (new_off_x ^ 2 + new_off_y ^ 2) ^ 0.5
+    local offx = len * math.cos(arc2)
+    local offy = len * math.sin(arc2)
+    pos.x = -offx
+    pos.z = offy
+
+    local targrtpos = from:getPosition() + pos
+    return targrtpos
+end
+
+function Entity:beHitBack(backPos, falldowanAc, falldownAcTime, getupAc)
+    if not backPos then
+        return
+    end
+    local falldownTime = falldownAcTime
+    local targetPos = getTargetPos(backPos, self)
+    if falldowanAc then
+        entityPlayAction(self, falldowanAc, falldownTime, true)
+    end
+    if targetPos then
+        self.forceTargetPos = targetPos
+        self.forceTime = 5
+
+        entityForceTargetPos(self, targetPos, true)
+    end
+
+    local entity = self
+    local fun = function(entity, Pos, ac)
+        falldownTime = falldownTime - 1
+        local distance = Lib.getPosDistance(entity:getPosition(), Pos)
+        if distance <= 0.01 then
+            entityPlayAction(entity, ac, -1, true)
+            return false
+        end
+
+        if falldownTime <= 0 then
+            return false
+        end
+        return true
+    end
+    self.hitBackTimer = World.Timer(2, fun, entity, targetPos, getupAc)
+end
+
+function EntityServer:stopHitBack()
+    if self.hitBackTimer then
+        self.hitBackTimer = nil
+        entityPlayAction(self, "getup", -1, true)
+    end
 end
 
 ---
@@ -239,7 +410,7 @@ function Entity.EntityProp:continueDamage(value, add, buff)
     continueDamage.spd =  (add and value.spd or 0)
     if add then
         if from and from.isPlayer then
-            from:doAttack({target = self, skill = {dmgRat = continueDamage.dmgRat,dmgBase = continueDamage.dmgBase}, originalSkillName = buff.fullName, cause = "ENGINE_PROP_CONTINUE_DAMAGE"})
+            from:doAttack({target = self, skill = {dmgRat = continueDamage.dmgRat,dmgBase = continueDamage.dmgBase}, originalSkillName = buff.fullName, cause = continueDamage.spd==0 and "ENGINE_PROP_ONCE_DAMAGE" or "ENGINE_PROP_CONTINUE_DAMAGE"})
         end
     end
 	if not continueDamage.timer then

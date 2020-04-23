@@ -300,7 +300,7 @@ function M:getCurrencyWindow(window, coinName, cfg, index)
         local addButton = wnd:GetChildByIndex(2)
         if addButton then
             self:subscribe(addButton, UIEvent.EventButtonClick, function()
-                Lib.emitEvent(Event[cfg.buttonEvent], table.unpack(cfg.eventArgs or {}))
+                self:openPayShop()
             end)
         end
     end

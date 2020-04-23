@@ -22,7 +22,7 @@ Lib.subscribeEvent(Event.EVENT_EXP_CHANGE, function()
                 leftTxt = Lang:toText("gui_no"),
                 rightTxt = Lang:toText("gui_go"),
                 leftCb = function() thisCancel = true end,
-                rightCb = function() Me:sellExp() end
+                rightCb = function() Me:sellExp(true) end
 
     }
     )
@@ -41,6 +41,18 @@ Lib.subscribeEvent(Event.EVENT_NOT_ENOUGH_MONEY, function()
                 leftCb = function() end,
                 rightCb = function() end
 
+            }
+    )
+end)
+Lib.subscribeEvent(Event.EVENT_COMMON_NOTICE,function(content)
+    UI:openWnd("ninjaCommonDialog"):initView(
+            {
+                content = content,
+                contentCenter = true,
+                txtTitle = Lang:toText("gui_tip"),
+                hideClose = true,
+                leftTxt = Lang:toText("gui_sure"),
+                leftCb = function() end,
             }
     )
 end)

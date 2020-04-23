@@ -20,35 +20,19 @@ GMItem["g2030/上武器"] = function(self)
 end
 
 -----------------------------------Pet Model Test----------------------------------
-local Entity
-GMItem["g2030/创建一个跟随宠物"] = function(self)
-    local entity = EntityServer.Create({cfgName = "myplugin/pet_1_1_1", pos = self:getPosition()})
-    --table.insert(EntityList, entity)
-    Entity = entity
-    local control = entity:getAIControl()
-    control:setFollowTarget(self)
-end
-
-GMItem["g2030/一个抽奖点"] = function(self)
-    local entity = EntityServer.Create({cfgName = "myplugin/roller1", pos = self:getPosition()})
-    table.insert(EntityList, entity)
-end
-
-GMItem["g2030/删除上一个宠物"] = function(self)
-    Entity:destroy()
-    --table.remove(EntityList,#EntityList)
-end
-
-GMItem["g2030/释放宠物技能"] = function(self)
-    Skill.Cast("myplugin/pet_1_1_1_attack", {targetID=self.objID}, Entity)
+GMItem["g2030Pet/检查是否存在宠物实体"] = function(self)
+    print("==============================================")
+    for k, v in pairs(Player.CurPlayer.equipPetList) do
+        print("ridePos:", k, "entity Info:", Player.CurPlayer:getPet(v.objID))
+    end
 end
 -----------------------------------Pet Model Test End-------------------------------
 
-GMItem["g2030技能/1号技能"] = function(self)
-    Skill.Cast("myplugin/player_skill_triple_attack")
+GMItem["g2030技能/击退技能"] = function(self)
+    Skill.Cast("myplugin/player_control_skill_beatback")
 end
-GMItem["g2030技能/2号技能"] = function(self)
-    Skill.Cast("myplugin/player_skill_triple_attack")
+GMItem["g2030技能/击飞技能"] = function(self)
+    Skill.Cast("myplugin/player_control_skill_hitfly")
 end
 GMItem["g2030技能/3号技能"] = function(self)
     Skill.Cast("myplugin/player_skill_triple_attack")
@@ -63,7 +47,7 @@ GMItem["g2030技能/6号技能"] = function(self)
     Skill.Cast("myplugin/player_defense_skill_06")
 end
 GMItem["g2030技能/7号技能"] = function(self)
-    Skill.Cast("myplugin/player_skill_triple_attack")
+    Skill.Cast("myplugin/player_remote_skill_vortex_07")
 end
 GMItem["g2030技能/8号技能"] = function(self)
     Skill.Cast("myplugin/player_remote_skill_shuriken_08")
