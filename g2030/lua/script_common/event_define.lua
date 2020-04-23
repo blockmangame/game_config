@@ -38,6 +38,7 @@ if World.isClient then
 
     Event.register("EVENT_COMMON_NOTICE")
 
+    Event.register("EVENT_PLAYER_PROCEED_RECHARGE")
     
 else
     --TODO

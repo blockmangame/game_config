@@ -42,6 +42,10 @@ function Entity.ValueFunc:equipSkill(value)
     Lib.emitEvent(Event.EVENT_ITEM_SKILL_EQUIP_UPDATE)
 end
 
+function Entity.ValueFunc:topUpCount(value) 
+    Lib.emitEvent(Event.EVENT_PLAYER_TOP_UP)
+end
+
 function Entity.ValueFunc:prop(value)
     Lib.emitEvent(Event.EVENT_PAY_SHOP_UPDATE, Define.TabType.Prop)
     print(" === Event.EVENT_PAY_SHOP_UPDATE == prop")
