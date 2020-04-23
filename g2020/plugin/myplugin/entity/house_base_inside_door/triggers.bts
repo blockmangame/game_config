@@ -65,6 +65,10 @@ INTER_WITH_DOOR{
         op = "add"
     )
 
+    $editBuff = GetEntityTypeBuff(entity = $obj2, key = "fullName", value = "myplugin/edit_house_buff")
+    If($editBuff){
+        RemoveEntityBuff(entity = $obj2, buff = $editBuff)
+    }
     CallTrigger(event = "FUNC_TRANSMIT_CARRIER", object = $obj2, toPos = $pos, toRy = $ry, toMap = $map)
     
     --从家里出来，进行指引
