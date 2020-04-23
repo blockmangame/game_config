@@ -79,18 +79,6 @@ local function processJumpEvent(player)
     if player.curJumpState then
         player.curJumpState:update(player)
     end
-
-    ---最高点
-    if not player.onGround and player.lastMotionY > 0 and player.motion.y <= 0 then
-        player:eventJumpEnd()
-    end
-    player.lastMotionY = player.motion.y
-
-    ---自由落体
-    if (not player.onGround and player.motion.y <= 0
-            and player:curBlockPos().y <= player.lastJumpHeight) then
-        player:eventJumpMoveEnd()
-    end
 end
 
 ---@param control PlayerControl

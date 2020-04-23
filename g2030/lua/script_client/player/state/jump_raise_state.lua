@@ -33,7 +33,11 @@ function JumpRaiseState:enter(owner)
 end
 
 function JumpRaiseState:update(owner)
-    --TODO
+    ---最高点
+    if not owner.onGround and owner.lastMotionY > 0 and owner.motion.y <= 0 then
+        owner:changeJumpState("JumpFloatState")
+    end
+    owner.lastMotionY = owner.motion.y
 end
 
 function JumpRaiseState:leave(owner)
