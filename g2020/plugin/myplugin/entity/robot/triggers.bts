@@ -4,11 +4,15 @@ ENTITY_ENTER {
     If(@robotHadHouse > 0) {
         @robotHadHouse = @robotHadHouse - 1
         CallTrigger(event = "CREATE_OWNER_HOUSE", object = $obj1)
+    } Else {
+        $isOdd = ( Random(min = 1, max = 10) % 2 ) == 1
+        $pos = $isOdd and GetRandomPosInArea(region = {
+            min = { x = 171, y = 16, z = 184 }, max = { x = 197, y = 16, z = 252}
+        }) or GetRandomPosInArea(region = {
+            min = { x = 218, y = 16, z = 115 }, max = { x = 245, y = 16, z = 141}
+        })
+        SetEntityPosition(entity = $obj1, map = $isOdd and "map001" or "map002", pos = $pos)
     }
-    $random = Random(min = 1, max = 10)
-    $isOdd = ( $random % 2 ) == 1
-    $pos = $isOdd and { x = 182, y = 16, z = 175 } or { x = 229, y = 16, z = 141}
-    SetEntityPosition(entity = $obj1, map = $isOdd and "map001" or "map002", pos = $pos)
 }
 
 ENTITY_LEAVE {
@@ -62,6 +66,15 @@ CREATE_HOUSE_OUTSIDE{
     $house = CreateNpc(map = $houseMap, cfgName = $houseCfg, pos = $housePos)
     $regionCenter = GetRegionCenter(region = $region)
     $pos = {x = GetPosX(pos = $regionCenter), y = GetPosY(pos = GetRegionMin(region = $region)), z = GetPosZ(pos = $regionCenter)}
+    $robotBirthPos = ComputeV3(
+        p1 = $pos,
+        p2 = V3RotationYaw(
+            vector = GetConfigVar(obj = $house, key = "entityTeleportToOutsidePosOffset") or Table(x = 0, y = 0.5, z = 3),
+            yaw = $yaw
+        ),
+        op = "add"
+    )
+    SetEntityPosition(entity = $obj1, map = "map002", pos = $robotBirthPos)
     $pos = ComputeV3(p1 = V3ToBlockPos(v3 = $pos), op = "add", p2 = V3RotationYaw(vector = $housePosOffset, yaw = $yaw))
     $pos = ComputeV3(p1 = $pos, op = "add", p2 = Table(x = 0.5,y = 0,z = 0.5))
     SetEntityPosition(entity = $house, pos = $pos, map = GetEntityMap(entity = $house))
