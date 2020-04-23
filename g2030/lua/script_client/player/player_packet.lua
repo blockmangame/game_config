@@ -73,3 +73,8 @@ function handles:ShowGauntlet(packet)
         UI:closeWnd("gauntlet")
     end
 end
+
+---排行榜接收请求到的数据
+function handles:getKill(packet)
+    Lib.emitEvent(Event.EVENT_RANK_INFO_UPDATE, packet.userId, packet.killNum, packet.muscle, packet.integral)
+end
