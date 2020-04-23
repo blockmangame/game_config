@@ -29,17 +29,15 @@ function Player:initPlayer()
     Blockman.Instance():setLockVisionState(World.cfg.lockVision and World.cfg.lockVision.open or false)
 end
 
-function Player:changeJumpState(old_state, new_state)
-    local class = JumpStateMap[old_state]
-    if class then
-        self.curJumpState = nil
-        class:leave()
+function Player:changeJumpState(new_state)
+    if self.curJumpState then
+        self.curJumpState:leave(self)
     end
 
-    class = JumpStateMap[new_state]
+    local class = JumpStateMap[new_state]
     if class then
         self.curJumpState = class
-        class:enter()
+        class:enter(self)
     end
 end
 

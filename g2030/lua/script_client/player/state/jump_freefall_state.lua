@@ -8,15 +8,15 @@ local class = require "common.class"
 local JumpState = require "script_client.player.state.jump_state"
 local JumpFreeFallState = class("JumpFreeFallState", JumpState)
 
-function JumpFreeFallState:enter()
+function JumpFreeFallState:enter(owner)
     --TODO
 end
 
-function JumpFreeFallState:update()
+function JumpFreeFallState:update(owner)
     --TODO
 end
 
-function JumpFreeFallState:leave()
+function JumpFreeFallState:leave(owner)
     --TODO
 end
 

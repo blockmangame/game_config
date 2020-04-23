@@ -55,7 +55,7 @@ local function jump_impl(control, player)
         return
     end
 
-    player:changeJumpState("", "JumpRaiseState")
+    player:changeJumpState("JumpRaiseState")
 
     ---@type JumpConfig
     local JumpConfig = T(Config, "JumpConfig")
@@ -88,15 +88,15 @@ local function processJumpEvent(player)
         return
     end
 
-    Lib.log(string.format("gravity:%s antiGravity:%s player:curBlockPos().y:%s lastJumpHeight:%s \
-    motion:%s %s %s JumpMoveEndFallDistance:%s",
-            tostring(player:getEntityProp("gravity")), tostring(player:getEntityProp("antiGravity")),
-            tostring(player:curBlockPos().y), tostring(player.lastJumpHeight),
-            tostring(player.motion.x), tostring(player.motion.y), tostring(player.motion.z),
-            tostring(player.JumpMoveEndFallDistance)))
+    --Lib.log(string.format("gravity:%s antiGravity:%s player:curBlockPos().y:%s lastJumpHeight:%s \
+    --motion:%s %s %s JumpMoveEndFallDistance:%s",
+    --        tostring(player:getEntityProp("gravity")), tostring(player:getEntityProp("antiGravity")),
+    --        tostring(player:curBlockPos().y), tostring(player.lastJumpHeight),
+    --        tostring(player.motion.x), tostring(player.motion.y), tostring(player.motion.z),
+    --        tostring(player.JumpMoveEndFallDistance)))
 
     if player.curJumpState then
-        player.curJumpState:update()
+        player.curJumpState:update(player)
     end
 
     ---最高点
