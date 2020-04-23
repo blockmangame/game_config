@@ -36,7 +36,7 @@ function JumpFloatState:enter(owner)
             local LuaTimer = T(Lib, "LuaTimer")
             LuaTimer:cancel(owner.jumpFloatTimer)
             owner.jumpFloatTimer = LuaTimer:scheduleTimer(function()
-                owner:eventJumpFloatEnd()
+                owner:changeJumpState("JumpFallState")
             end, config.floatTime, 1)
         end
     else

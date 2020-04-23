@@ -9,7 +9,19 @@ local JumpState = require "script_client.player.state.jump_state"
 local JumpFallState = class("JumpFallState", JumpState)
 
 function JumpFallState:enter(owner)
-    --TODO
+    print("eventJumpFloatEnd")
+
+    local jumpCount = owner:getJumpCount()
+    local maxJumpCount = owner:getMaxJumpCount()
+
+    ---@type JumpConfig
+    local JumpConfig = T(Config, "JumpConfig")
+    if jumpCount >= 0 then
+        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
+        if config then
+            owner:setEntityProp("gravity", tostring(config.fallGravity))
+        end
+    end
 end
 
 function JumpFallState:update(owner)
