@@ -105,3 +105,19 @@ function Handlers.ENTITY_REBIRTH(context)
    
 end
 
+function Handlers.ENTITY_DAMAGE(context)
+    local beHurt = context.obj1
+    local from = context.obj2
+    if not beHurt.isPlayer then
+        local setting = beHurt:cfg()
+        if setting and setting.type == "WorldBoss" then
+            from:addBossHits(1)
+            from:addCombo()
+            WorldServer.BroadcastPacket({
+                pid = "UpdateBossBlood",
+                from = from.objID
+            })
+        end
+    end
+end
+

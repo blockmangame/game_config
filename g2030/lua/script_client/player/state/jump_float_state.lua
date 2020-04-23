@@ -8,15 +8,47 @@ local class = require "common.class"
 local JumpState = require "script_client.player.state.jump_state"
 local JumpFloatState = class("JumpFloatState", JumpState)
 
-function JumpFloatState:enter()
+function JumpFloatState:enter(owner)
+    if owner.jumpEnd then
+        return
+    end
+
+    print("jumpEnd")
+
+    owner.jumpEnd = true
+
+    owner:setEntityProp("antiGravity", 0.0)
+
+    owner.beginFallHeight = owner:curBlockPos().y
+
+    local jumpCount = owner:getJumpCount()
+    local maxJumpCount = owner:getMaxJumpCount()
+
+    ---@type JumpConfig
+    local JumpConfig = T(Config, "JumpConfig")
+    if jumpCount >= 0 then
+        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
+        if config then
+            owner:setEntityProp("gravity", tostring(config.floatGravity))
+
+            ---滞空
+            ---@type LuaTimer
+            local LuaTimer = T(Lib, "LuaTimer")
+            LuaTimer:cancel(owner.jumpFloatTimer)
+            owner.jumpFloatTimer = LuaTimer:scheduleTimer(function()
+                owner:changeJumpState("JumpFallState")
+            end, config.floatTime, 1)
+        end
+    else
+        --TODO
+    end
+end
+
+function JumpFloatState:update(owner)
     --TODO
 end
 
-function JumpFloatState:update()
-    --TODO
-end
-
-function JumpFloatState:leave()
+function JumpFloatState:leave(owner)
     --TODO
 end
 

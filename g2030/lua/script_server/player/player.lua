@@ -39,7 +39,7 @@ function Player:initPlayer()
     end
 
     self.isArenaMode = false
-    
+
     self:initCurrency()
     self:tickLifeSteal()
 end
@@ -302,4 +302,28 @@ function Player:showArenaMainUI()
     self:sendPacket( {
         pid = "ShowArenaMainUI",
     })
+end
+
+---奖励
+---
+function Player:doRewards(rewards)
+    if not rewards then
+        return
+    end
+    for _, reward in pairs(rewards) do
+        self:doReward(reward)
+    end
+end
+
+function Player:doReward(reward)
+    if not reward then
+        return
+    end
+    if reward.rewardType == Define.RewardType.Chi then
+        self:addCurrency("chi",  reward.rewardNum, "PlayerReward")
+    elseif reward.rewardType == Define.RewardType.Gold then
+        self:addCurrency("gold",  reward.rewardNum, "PlayerReward")
+    elseif reward.rewardType == Define.RewardType.TeamStone then
+        self:addCurrency("team_stone",  reward.rewardNum, "PlayerReward")
+    end
 end

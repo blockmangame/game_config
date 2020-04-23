@@ -47,7 +47,7 @@ GMItem["g2030技能/6号技能"] = function(self)
     Skill.Cast("myplugin/player_defense_skill_06")
 end
 GMItem["g2030技能/7号技能"] = function(self)
-    Skill.Cast("myplugin/player_skill_triple_attack")
+    Skill.Cast("myplugin/player_remote_skill_vortex_07")
 end
 GMItem["g2030技能/8号技能"] = function(self)
     Skill.Cast("myplugin/player_remote_skill_shuriken_08")

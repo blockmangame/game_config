@@ -4,10 +4,10 @@
 --- DateTime: 2020/3/23 10:35
 ---
 local JumpStateMap = {
-    ["JumpRaiseState"] = (require "script_client.player.state.jump_raise_state").new(Me),
-    ["JumpFloatState"] = (require "script_client.player.state.jump_float_state").new(Me),
-    ["JumpFallState"] = (require "script_client.player.state.jump_fall_state").new(Me),
-    ["JumpFreeFallState"] = (require "script_client.player.state.jump_freefall_state").new(Me),
+    ["JumpRaiseState"] = (require "script_client.player.state.jump_raise_state").new(),
+    ["JumpFloatState"] = (require "script_client.player.state.jump_float_state").new(),
+    ["JumpFallState"] = (require "script_client.player.state.jump_fall_state").new(),
+    ["JumpFreeFallState"] = (require "script_client.player.state.jump_freefall_state").new(),
 }
 
 function Player:initPlayer()
@@ -29,17 +29,15 @@ function Player:initPlayer()
     Blockman.Instance():setLockVisionState(World.cfg.lockVision and World.cfg.lockVision.open or false)
 end
 
-function Player:changeJumpState(old_state, new_state)
-    local class = JumpStateMap[old_state]
-    if class then
-        self.curJumpState = nil
-        class:leave()
+function Player:changeJumpState(new_state)
+    if self.curJumpState then
+        self.curJumpState:leave(self)
     end
 
-    class = JumpStateMap[new_state]
+    local class = JumpStateMap[new_state]
     if class then
         self.curJumpState = class
-        class:enter()
+        class:enter(self)
     end
 end
 
@@ -133,70 +131,70 @@ function Player:eventJumpMoveEnd()
     self:playFreeFallSkill()
 end
 
-function Player:eventJumpFloatEnd()
-    print("eventJumpFloatEnd")
+--function Player:eventJumpFloatEnd()
+--    print("eventJumpFloatEnd")
+--
+--    local jumpCount = self:getJumpCount()
+--    local maxJumpCount = self:getMaxJumpCount()
+--
+--    ---@type JumpConfig
+--    local JumpConfig = T(Config, "JumpConfig")
+--    if jumpCount >= 0 then
+--        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
+--        if config then
+--            self:setEntityProp("gravity", tostring(config.fallGravity))
+--        end
+--    end
+--end
 
-    local jumpCount = self:getJumpCount()
-    local maxJumpCount = self:getMaxJumpCount()
+--function Player:eventJumpEnd()
+--    if self.jumpEnd then
+--        return
+--    end
+--
+--    print("jumpEnd")
+--
+--    self.jumpEnd = true
+--
+--    self:setEntityProp("antiGravity", 0.0)
+--    --self.motion = Lib.v3(0, 0, 0)
+--    self:eventBeginFall(self:curBlockPos().y)
+--end
 
-    ---@type JumpConfig
-    local JumpConfig = T(Config, "JumpConfig")
-    if jumpCount >= 0 then
-        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
-        if config then
-            self:setEntityProp("gravity", tostring(config.fallGravity))
-        end
-    end
-end
-
-function Player:eventJumpEnd()
-    if self.jumpEnd then
-        return
-    end
-
-    print("jumpEnd")
-
-    self.jumpEnd = true
-
-    self:setEntityProp("antiGravity", 0.0)
-    --self.motion = Lib.v3(0, 0, 0)
-    self:eventBeginFall(self:curBlockPos().y)
-end
-
-function Player:eventBeginFall(beginFallHeight)
-    --print("eventBeginFall " .. beginFallHeight)
-
-    self.beginFallHeight = beginFallHeight
-
-    if self.isGliding then
-        return
-    end
-
-    local jumpCount = self:getJumpCount()
-    local maxJumpCount = self:getMaxJumpCount()
-
-    ---@type JumpConfig
-    local JumpConfig = T(Config, "JumpConfig")
-    if jumpCount >= 0 then
-        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
-        if config then
-            self:setEntityProp("gravity", tostring(config.floatGravity))
-
-            ---滞空
-            ---@type LuaTimer
-            local LuaTimer = T(Lib, "LuaTimer")
-            LuaTimer:cancel(self.jumpFloatTimer)
-            self.jumpFloatTimer = LuaTimer:scheduleTimer(function()
-                self:eventJumpFloatEnd()
-            end, config.floatTime, 1)
-        end
-    else
-        --local config = self.isGliding and JumpConfig:getGlidingConfig() or JumpConfig:getFreeFallConfig()
-        --if config then
-        --    self:setEntityProp("gravity", tostring(config.fallGravity))
-        --end
-    end
-end
+--function Player:eventBeginFall(beginFallHeight)
+--    --print("eventBeginFall " .. beginFallHeight)
+--
+--    self.beginFallHeight = beginFallHeight
+--
+--    if self.isGliding then
+--        return
+--    end
+--
+--    local jumpCount = self:getJumpCount()
+--    local maxJumpCount = self:getMaxJumpCount()
+--
+--    ---@type JumpConfig
+--    local JumpConfig = T(Config, "JumpConfig")
+--    if jumpCount >= 0 then
+--        local config = JumpConfig:getJumpConfig(maxJumpCount - jumpCount)
+--        if config then
+--            self:setEntityProp("gravity", tostring(config.floatGravity))
+--
+--            ---滞空
+--            ---@type LuaTimer
+--            local LuaTimer = T(Lib, "LuaTimer")
+--            LuaTimer:cancel(self.jumpFloatTimer)
+--            self.jumpFloatTimer = LuaTimer:scheduleTimer(function()
+--                self:eventJumpFloatEnd()
+--            end, config.floatTime, 1)
+--        end
+--    else
+--        --local config = self.isGliding and JumpConfig:getGlidingConfig() or JumpConfig:getFreeFallConfig()
+--        --if config then
+--        --    self:setEntityProp("gravity", tostring(config.fallGravity))
+--        --end
+--    end
+--end
 
 function Player:collisionEntity(objIDArray)
     print("collisionEntity " .. Lib.inspect(objIDArray))

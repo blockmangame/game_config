@@ -7,19 +7,19 @@ local class = require "common.class"
 
 local JumpState = class("JumpState")
 
-function JumpState:ctor(owner)
-    self.owner = owner
+function JumpState:ctor()
+    --self.owner = owner
 end
 
-function JumpState:enter()
+function JumpState:enter(owner)
     --TODO
 end
 
-function JumpState:update()
+function JumpState:update(owner)
     --TODO
 end
 
-function JumpState:leave()
+function JumpState:leave(owner)
     --TODO
 end
 
