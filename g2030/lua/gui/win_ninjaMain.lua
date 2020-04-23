@@ -26,9 +26,9 @@ function M:initWnd()
     self.lytArenaRank = self:child("NinjaMain-ArenaRank")
     self.grdRankList = self:child("NinjaMain-List")
     self.lytArenaRank:SetVisible(false)
-    
-    self.lytArenaCountTime = self:child("NinjaMain-ArenaCountTime") 
-    self.txtCountTime = self:child("NinjaMain-CountTimeVal") 
+
+    self.lytArenaCountTime = self:child("NinjaMain-ArenaCountTime")
+    self.txtCountTime = self:child("NinjaMain-CountTimeVal")
     self.lytArenaCountTime:SetVisible(false)
 
 

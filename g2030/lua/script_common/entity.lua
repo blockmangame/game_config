@@ -52,7 +52,8 @@ ValueDef.plusPetEquippedIndex={false,false, true,   true,       0,              
 ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,                              true}--当前角色获取过的宠物实体总数（不会减少）
 ValueDef.allPetAttr     = {false,   false,  true,   true,       {},                             true}--宠物、式神相关数据
 ValueDef.petPageNu      = {false,   false,  false,  false,      4,                              true}--当前玩家宠物背包页数量
-
+--=======================================================充值相关数据=================================================================
+ValueDef.topUpCount     = {false,	false,	true,	true,       0,                              true}--充值数
 --[[
 宠物、式神相关数据存储索引说明：索引为createPet后返回的index，通过索引插入的AllPetAttr，该表不为序列，期间可能会出现nil
 即强化（消耗）后相关索引项将置为nil
