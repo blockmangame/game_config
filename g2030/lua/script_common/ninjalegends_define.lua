@@ -59,6 +59,7 @@ Define.ProcessType = {
     ProcessBase = require "script_server.process.process_base",
     ProcessTeam = require "script_server.process.process_team",
     ProcessArena = require "script_server.process.process_arena",
+    ProcessWorldBoss = require "script_server.process.process_world_boss",
 }
 
 Define.RegionType = {
@@ -70,4 +71,15 @@ Define.RegionFunctionType = {
     ShopArea = 1, --器材售卖区
     SellArea = 2, --肌肉售卖区
     SafeArea = 3, --安全区
+}
+
+Define.RewardType = {
+    Gold = "gold",
+    Chi = "chi",
+    TeamStone = "teamStone"
+}
+
+Define.BossType = {
+    WorldBoss = "WorldBoss",
+    IslandBoss = "IslandBoss"
 }

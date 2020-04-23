@@ -11,6 +11,7 @@ function ActivityConfig:init()
         data.key = vConfig.s_key
         data.freshTime = tonumber(vConfig.n_freshTime)
         data.config = {
+            id = tonumber(vConfig.n_id),
             waitPlayerTime = tonumber(vConfig.n_waitPlayerTime),
             prepareTime = tonumber(vConfig.n_prepareTime),
             gameTime = tonumber(vConfig.n_gameTime),

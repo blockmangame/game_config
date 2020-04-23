@@ -1,0 +1,53 @@
+{
+    "enableAI": true,
+    "type": "WorldBoss",
+    "icon": "",
+    "beHurt": 1,
+    "chaseDistance": 10,
+    "hurtTime": 0,
+    "maxVisualAngle": 360,
+    "damagePct": 1,
+    "hateWay": 1,
+    "actorName": "g2021_dungeon1_1.actor",
+    "canJump": true,
+    "skillList": [],
+    "autoAttack": true,
+    "goHomeAddCondition": "notEnemy",
+    "name": "boss1",
+    "hurtAction": {
+        "action": "hurt",
+        "time": 10
+    },
+    "disableShadow": true,
+    "patrolDistance": 0,
+    "textHeight": 1.5,
+    "moveSpeed": 0.5,
+    "headContentLimitMinSize": false,
+    "hurtResistantTime ": 5,
+    "defense": 0,
+    "collision": false,
+    "boundingVolume": {
+        "type": "Box",
+        "params": [
+            1,
+            1,
+            1
+        ]
+    },
+    "homeSize": 100,
+    "canClick": true,
+    "deadSound": {
+        "volume": 2,
+        "loop": false,
+        "sound": "/sound/dungeon_1_1_die.mp3"
+    },
+    "isAIGoHomePos": true,
+    "attackNpc": false,
+    "nextChaseInterval": 3,
+    "bodyTurnMax": 180,
+    "bodyTurnMin": 0,
+    "meetCollisionEmptyRun": true,
+    "canAttack": true,
+    "entityMaxHp":[1,1],
+    "entityBaseDmg":[1,2]
+}

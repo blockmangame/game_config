@@ -1,19 +1,13 @@
 {
-    "cdTime": 10,
-    "icon": "skill-09.png",
     "type": "Missile",
-    "castAction": "action_09",
-    "castActionTime": 100,
-    "missileCfg": "myplugin/palyer_range_skill_bomb_09_missile",
+    "castAction": "",
+    "missileCfg": "myplugin/palyer_range_skill_bomb_hit_09_missile",
     "missileCount": 1,
-    "startWait": [
-        5
-    ],
     "startPos": [
         {
             "z": 0,
             "x": 0,
-            "y": -1.0
+            "y": 0
         }
     ],
     "castSound": {
@@ -22,5 +16,5 @@
         "loop": false,
         "sound": "/sound/attack1.mp3"
     },
-    "targetType": "Self"
+    "targetType": "Entity"
 }
