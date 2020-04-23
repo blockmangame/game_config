@@ -191,6 +191,12 @@ function EntityServer:doDamage(info)
         end
         return
     end
+    if not self.isPlayer then
+        if self:cfg().beHurt and self:cfg().beHurt > 0 then
+            damage = self:cfg().beHurt
+        end
+    end
+
     self:deltaHp(-damage)
     self:ShowFlyNum(-damage)
     --function Actions.ShowNumberUIOnEntity(data, params, context)
@@ -238,7 +244,7 @@ end
 ---@TODO 后续可优化为视域范围内广播
 ---
 function EntityServer:ShowFlyNum(deltaHp)
-    if self and self.isPlayer then
+    if self then
         self:sendPacketToTracking({
             pid = "ShowNumberUIOnEntity",
             beginOffsetPos =Lib.v3(0, 1, 0),
