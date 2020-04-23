@@ -126,7 +126,7 @@ function M:updateRankItem(rankItem, data)
 
     local nameWdg = rankItem:child("NinjaRankItem-name")
     nameWdg:SetTextColor(nameColor)
-    nameWdg:SetText(data.userId)
+    nameWdg:SetText(data.name)
 
     local numberColor = { 180.0 / 255, 104.0 / 255, 15.0 / 255 }
 
