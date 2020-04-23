@@ -55,10 +55,12 @@ function M:hideRewards()
 end
 
 function M:updateHp()
-    --print("?????????" .. Lib.v2s(self.boss:getMaxHp()))
-    --local cur = self.boss:getCurHp()
-    --local max = self.boss:getMaxHp()
-    --self.pgsHp:SetProgress(cur / max)
+    local entity = World.CurWorld:getEntity(self.boss)
+    if not entity then
+        UI:closeWnd(self)
+        return
+    end
+    self.pgsHp:SetProgress(BigInteger.Recover(entity:getCurHp()) / BigInteger.Recover(entity:getMaxHp()))
 end
 
 function M:onOpen(objID)
@@ -67,9 +69,9 @@ function M:onOpen(objID)
         UI:closeWnd(self)
         return
     end
-    self.boss = entity
-    local icon = self.boss:cfg().icon
-    self.bossType = self.boss:cfg().type
+    self.boss = objID
+    local icon = entity:cfg().icon
+    self.bossType = entity:cfg().type
     if icon then
         self.icon:SetImage(icon)
     end
@@ -77,6 +79,9 @@ function M:onOpen(objID)
 end
 
 function M:update(from)
+    if not self:isvisible() then
+        return
+    end
     self:updateHp()
     if from and from == Me.objID then
         self:updateReward()
