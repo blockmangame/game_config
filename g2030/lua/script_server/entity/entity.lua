@@ -315,20 +315,35 @@ local function entityForceTargetPos(entity, targetPos, includeSelf)
     return true
 end
 
-function Entity:beHitBack(targetPos, falldowanAc, getupAc)
-    if not targetPos then
+local function getTargetPos(position, from)
+    local yaw = (360 - from:getRotationYaw() + 90) % 360
+    local pos = Lib.tov3(Lib.copy(position))
+    local new_off_x, new_off_y = pos.x, pos.z
+    local arc1 = math.atan(new_off_y, -new_off_x)
+    local deg1 = math.deg(arc1)
+    local deg2 = yaw - (360 - deg1 + 90) % 360
+    local arc2 = math.rad(deg2)
+    local len = (new_off_x ^ 2 + new_off_y ^ 2) ^ 0.5
+    local offx = len * math.cos(arc2)
+    local offy = len * math.sin(arc2)
+    pos.x = -offx
+    pos.z = offy
+
+    local targrtpos = from:getPosition() + pos
+    return targrtpos
+end
+
+function Entity:beHitBack(backPos, falldowanAc, getupAc)
+    if not backPos then
         return
     end
-    local falldowanActime = 100
+    local targetPos = getTargetPos(backPos, self)
+    local falldowanActime = 50
     if falldowanAc then
         entityPlayAction(self, falldowanAc, falldowanActime, true)
     end
-    local forceTargetPos = Lib.tov3({x = 0, y = 0, z = 0})
     if targetPos then
-        local pos = self:getPosition()
-        forceTargetPos = Lib.tov3({x = pos.x + targetPos.x, y = pos.y + targetPos.y, z = pos.z + targetPos.z})
-        local v = Lib.v3(0, 0, 0)
-        self.forceTargetPos = forceTargetPos
+        self.forceTargetPos = targetPos
         self.forceTime = 5
 
         entityForceTargetPos(self, targetPos, true)
@@ -337,10 +352,9 @@ function Entity:beHitBack(targetPos, falldowanAc, getupAc)
     local entity = self
     local fun = function(entity, Pos, ac)
         falldowanActime = falldowanActime - 1
-        local distance = Lib.getPosDistance(Pos, entity:getPosition())
-        if distance <= 0 then
+        local distance = Lib.getPosDistance(entity:getPosition(), Pos)
+        if distance <= 0.01 then
             entityPlayAction(entity, ac, -1, true)
-            self.motion = Lib.v3(0, 0, 0)
             return false
         end
 
@@ -349,7 +363,14 @@ function Entity:beHitBack(targetPos, falldowanAc, getupAc)
         end
         return true
     end
-    World.Timer(1, fun, entity, forceTargetPos, getupAc)
+    self.hitBackTimer = World.Timer(2, fun, entity, targetPos, getupAc)
+end
+
+function EntityServer:stopHitBack()
+    if self.hitBackTimer then
+        self.hitBackTimer = nil
+        entityPlayAction(self, "getup", -1, true)
+    end
 end
 
 ---
