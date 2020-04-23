@@ -119,8 +119,8 @@ function M:refreshInfo()
             end
             local coinIntensifyRange = Lib.split(tempData.coinIntensifyRange, "#")
             local chiIntensifyRange = Lib.split(tempData.chiIntensifyRange, "#")
-            minCoin = minCoin + tonumber(coinIntensifyRange[1])
-            maxCoin = maxCoin + tonumber(coinIntensifyRange[2])
+            minCoin = minCoin + tonumber(coinIntensifyRange[1]) * 100
+            maxCoin = maxCoin + tonumber(coinIntensifyRange[2]) * 100
             minFu = minFu + tonumber(chiIntensifyRange[1])
             maxFu = maxFu + tonumber(chiIntensifyRange[2])
             materialNu = materialNu + 1

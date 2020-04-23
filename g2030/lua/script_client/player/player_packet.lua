@@ -40,7 +40,12 @@ function handles:AttrValuePro(packet)
         packet.value = BigInteger.Recover(packet.value)
     end
     entity:doSetValue(packet.key, packet.value)
-    UI:getWnd("petEvolution"):evoluteSuccess(packet.oldIndex, packet.newIndex)
+    if packet.isPlusPet then
+        UI:getWnd("plusPetEvolution"):evoluteSuccess(packet.oldIndex)
+    else
+        UI:getWnd("petEvolution"):evoluteSuccess(packet.oldIndex, packet.newIndex)
+    end
+
 end
 
 function handles:ResetEntityRechargeSkill(packet)
