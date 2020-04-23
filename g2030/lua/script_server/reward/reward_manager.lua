@@ -167,6 +167,7 @@ function rewardManager.randomItemByWeight(num, pool, ifReduce)
         end
         local rs = math.random(0, sumOfWeight)
         for index, item in pairs(pool) do
+            print(item.weight)
             rs = rs - item.weight
             local pItem = item
             if rs < 0 then
