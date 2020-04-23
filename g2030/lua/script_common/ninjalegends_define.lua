@@ -77,3 +77,8 @@ Define.RewardType = {
     Chi = "chi",
     TeamStone = "teamStone"
 }
+
+Define.BossType = {
+    WorldBoss = "WorldBoss",
+    IslandBoss = "IslandBoss"
+}

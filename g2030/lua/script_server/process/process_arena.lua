@@ -79,7 +79,7 @@ end
 function ProcessBase:onWaitingEnd()
     sendReadyArena()
     --TODO 拉取所有用户到对应位置
-    self.entityList[objID]
+    --self.entityList[objID]
     for id, player in pairs(self.entityList) do
         player:setMapPos(arenaMap, playerPosList[id])
     end

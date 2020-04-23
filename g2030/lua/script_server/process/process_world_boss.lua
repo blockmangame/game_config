@@ -8,7 +8,6 @@ local WorldBossRewardConfig = T(Config, "WorldBossRewardConfig")
 
 local class = require"common.class"
 local ProcessWorldBoss = class("ProcessWorldBoss", require"script_server.process.process_base")
-local playerHitList = {}
 local worldCfg = World.cfg
 local boss = {}
 
@@ -30,16 +29,6 @@ function ProcessWorldBoss:isProcessBoss(objID)
     return objID == boss.objID
 end
 
-function ProcessWorldBoss:onBossHurt(fromObjID, value)
-    local from = World.CurWorld:getEntity(fromObjID)
-    if from and from.isPlayer then
-        if not playerHitList[fromObjID] then
-            playerHitList[fromObjID] = 0
-        end
-        playerHitList[fromObjID] = playerHitList[fromObjID] + 1
-    end
-end
-
 function ProcessWorldBoss:doJudge()
     if not boss or boss:getValue("curHp") <= 0 then
        self:processOver()
@@ -51,7 +40,15 @@ function ProcessWorldBoss:needKeepWaiting()
 end
 
 function ProcessWorldBoss:onStart()
-    ---发通知
+    local players = Game.GetAllPlayers()
+    for _, player in pairs (players) do
+        ---发通知
+    end
+    WorldServer.BroadcastPacket({
+        pid = "ShowBossBlood",
+        isShow = true,
+        objID = boss.objID
+    })
 end
 
 function ProcessWorldBoss:processOnTick()
@@ -64,12 +61,12 @@ function ProcessWorldBoss:onProcessOver()
 end
 
 function ProcessWorldBoss:doReward()
-    for objID, hits in pairs(playerHitList) do
-        local player = World.CurWorld:getEntity(objID)
-        if player then
-            local rewards = WorldBossRewardConfig:getRewardByHits(hits)
-            player:doRewards(rewards)
-        end
+    local players = Game.GetAllPlayers()
+    for _, player in pairs (players) do
+        local hits = player:getBossHits()
+        local rewards = WorldBossRewardConfig:getRewardByHits(hits)
+        player:doRewards(rewards)
+        player:clearBossHits()
     end
 end
 

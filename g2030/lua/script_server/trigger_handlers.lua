@@ -106,7 +106,11 @@ function Handlers.ENTITY_DAMAGE(context)
     if not beHurt.isPlayer then
         local setting = beHurt:cfg()
         if setting and setting.type == "WorldBoss" then
-            Game.OnBossEntityHurt(beHurt.objID, from.objID, context.damage)
+            from:addBossHits(1)
+            WorldServer.BroadcastPacket({
+                pid = "UpdateBossBlood",
+                from = from.objID
+            })
         end
     end
 end

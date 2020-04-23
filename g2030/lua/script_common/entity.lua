@@ -50,6 +50,8 @@ ValueDef.plusPetEquippedIndex={false,false, true,   true,       0,      true}--�
 ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,      true}--当前角色获取过的宠物实体总数（不会减少）
 ValueDef.allPetAttr     = {false,   false,  true,   true,       {},    true}--宠物、式神相关数据
 ValueDef.petPageNu      = {false,   false,  false,  false,      2,     true}--当前玩家宠物背包页数量
+--====================世界boss相关数据================
+ValueDef.bossHits = {false,   true,    true,  false,       0,     false }--boss击打数
 
 --[[
 宠物、式神相关数据存储索引说明：索引为createPet后返回的index，通过索引插入的AllPetAttr，该表不为序列，期间可能会出现nil
@@ -487,4 +489,20 @@ function Entity:checkGroundedState()
     end
 
     return false
+end
+
+---获取boss击打数
+function Entity:getBossHits()
+    return self:getValue("bossHits") or 0
+end
+
+---增加boss击打数
+function Entity:addBossHits(num)
+    local old = self:getBossHits()
+    self:setValue("bossHits", old + (num or 1))
+end
+
+---清空boss击打数
+function Entity:clearBossHits()
+    self:setValue("bossHits", 0)
 end
