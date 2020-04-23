@@ -112,6 +112,7 @@ function Handlers.ENTITY_DAMAGE(context)
         local setting = beHurt:cfg()
         if setting and setting.type == "WorldBoss" then
             from:addBossHits(1)
+            from:addCombo()
             WorldServer.BroadcastPacket({
                 pid = "UpdateBossBlood",
                 from = from.objID

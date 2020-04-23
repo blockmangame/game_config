@@ -114,5 +114,5 @@ function handles:ShowBossBlood(packet)
 end
 
 function handles:UpdateBossBlood(packet)
-    UI:getWnd("bloodBar"):update(packet.objID)
+    UI:getWnd("bloodBar"):update(packet.from)
 end

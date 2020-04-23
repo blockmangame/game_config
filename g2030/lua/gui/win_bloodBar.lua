@@ -4,9 +4,11 @@
 --- DateTime: 2020/4/22 16:52
 ---
 local WorldBossRewardConfig = T(Config, "WorldBossRewardConfig")
+local LuaTimer = T(Lib, "LuaTimer") ---@type LuaTimer
+local lastWin = nil
+local timer = nil
 
 local function getRewards(type)
-    print("@@@@@@@@@@@@@@" .. type)
     local rewards = {}
     if type == Define.BossType.WorldBoss then
         rewards = WorldBossRewardConfig:getRewardByHits(Me:getBossHits())
@@ -60,7 +62,7 @@ function M:updateHp()
         UI:closeWnd(self)
         return
     end
-    self.pgsHp:SetProgress(BigInteger.Recover(entity:getCurHp()) / BigInteger.Recover(entity:getMaxHp()))
+    self.pgsHp:SetProgress(entity:getCurHp() / entity:getMaxHp())
 end
 
 function M:onOpen(objID)
@@ -85,5 +87,39 @@ function M:update(from)
     self:updateHp()
     if from and from == Me.objID then
         self:updateReward()
+        self:updateCombo()
     end
+end
+
+function M:updateCombo()
+    local combo = Me:getCombo()
+    if combo <= 0 then
+        return
+    end
+    local desktop = GUISystem.instance:GetRootWindow()
+    if lastWin then
+        desktop:RemoveChildWindow1(lastWin)
+        if timer then
+            LuaTimer:cancel(timer)
+        end
+    end
+
+    local number = combo .. "h"
+    local beginOffsetPos = Lib.v3(0, 2, 0)
+    local width = 50
+    local height = 50
+    local win = UILib.makeNumbersGrid("showComboUi", number, "combo_num")
+    local len = string.len(tostring(number))
+    win:SetArea({0, 0}, {0, 0}, {0, width * len}, {0, height})
+    desktop:AddChildWindow(win)
+    UILib.uiFollowObject(win, Me.objID, {offset = beginOffsetPos})
+    local time = World.cfg.comboTime or 2
+    lastWin = win
+    timer = LuaTimer:schedule(function(objID)
+        desktop:RemoveChildWindow1(win)
+        local player = World.CurWorld:getEntity(objID)
+        if player and player.isPlayer then
+            player:clearCombo()
+        end
+    end, time * 1000, nil, Me.objID)
 end

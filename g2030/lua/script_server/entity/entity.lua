@@ -244,7 +244,7 @@ end
 ---@TODO 后续可优化为视域范围内广播
 ---
 function EntityServer:ShowFlyNum(deltaHp)
-    if self and self.isPlayer then
+    if self then
         self:sendPacketToTracking({
             pid = "ShowNumberUIOnEntity",
             beginOffsetPos =Lib.v3(0, 1, 0),
