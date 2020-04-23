@@ -4,10 +4,10 @@
 --- DateTime: 2020/3/23 10:35
 ---
 local JumpStateMap = {
-    ["JumpRaiseState"] = (require "script_client.player.state.jump_raise_state").new(Me),
-    ["JumpFloatState"] = (require "script_client.player.state.jump_float_state").new(Me),
-    ["JumpFallState"] = (require "script_client.player.state.jump_fall_state").new(Me),
-    ["JumpFreeFallState"] = (require "script_client.player.state.jump_freefall_state").new(Me),
+    ["JumpRaiseState"] = (require "script_client.player.state.jump_raise_state").new(),
+    ["JumpFloatState"] = (require "script_client.player.state.jump_float_state").new(),
+    ["JumpFallState"] = (require "script_client.player.state.jump_fall_state").new(),
+    ["JumpFreeFallState"] = (require "script_client.player.state.jump_freefall_state").new(),
 }
 
 function Player:initPlayer()
