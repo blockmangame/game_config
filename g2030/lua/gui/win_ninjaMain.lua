@@ -51,7 +51,7 @@ end
 
 function M:initEvent()
     self:subscribe(self.btnSell, UIEvent.EventButtonClick, function()
-        Me:sellExp()
+        Me:sellExp(true)
         UI:openWnd("ninjaArena")
     end)
     self:subscribe(self.btnExchangeCtr, UIEvent.EventButtonClick, function()
