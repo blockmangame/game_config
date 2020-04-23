@@ -144,27 +144,46 @@ function M:addItemsGridView(isResetPos)
 end
 
 function M:addViewByConfig(Config, isResetPos)
-    local clickItem = nil
-    for i, Value in pairs(Config:getSettings()) do
-        local shopItem = UIMgr:new_widget("itemShopItem")
-        local contentWidth = self.gvItemsGridView:GetWidth()[2]
-        local contentHeight = self.gvItemsGridView:GetHeight()[2]
-        --local area = self.gvContentItemsGridView:GetArea()
-        --local Area = {r_x = area.min.x[1], r_y = area.min.y[1], r_width = area.max.x[1] - area.min.x[1], r_height = area.max.y[1] - area.min.y[1]}
-        local itemWidth = (contentWidth - 0.1) / 4
-        local itemHeight = (contentHeight - 0.1) / 3
-        local area = {x = { 0, 0 }, y = { 0, 0 }, w = { itemWidth, 0 }, h = { itemWidth, 0 }}
-        shopItem:invoke("initItem",self.selectTab, Value, area, self.islandLockId)
-        --self.gvContentItemsGridView:AddItem1(shopItem, 0, index)
-        if self.islandLockId == Value.id or Value.status ~= BuyStatus.Lock then
-            self:subscribe(shopItem, UIEvent.EventWindowClick, function()
-                self:onClickItem(Value.id, Value.status)
-            end)
+    local items = Lib.copy(Config:getSettings())
+    if self.selectTab ~= TabType.Advance then
+        for i, Value in ipairs(items) do
+            if i % 4 == 0 and not Value.isPay then
+                local Value1 = {
+                    hide = true
+                }
+                table.insert(items, i, Value1)
+            end
         end
-        self.gvItemsGridView:AddItem(shopItem)
-        self.itemsGridView[i] = shopItem
-        if i == 1 then
-            clickItem = Value
+    end
+    local clickItem
+    for i, Value in ipairs(items) do
+        if Value.hide then
+            local shopItem = UIMgr:new_widget("itemShopItem")
+            shopItem:invoke("hideGUIWindow")
+            --shopItem:root():SetAlpha(0)
+            self.gvItemsGridView:AddItem(shopItem)
+            self.itemsGridView[i] = shopItem
+        else
+            local shopItem = UIMgr:new_widget("itemShopItem")
+            local contentWidth = self.gvItemsGridView:GetWidth()[2]
+            local contentHeight = self.gvItemsGridView:GetHeight()[2]
+            --local area = self.gvContentItemsGridView:GetArea()
+            --local Area = {r_x = area.min.x[1], r_y = area.min.y[1], r_width = area.max.x[1] - area.min.x[1], r_height = area.max.y[1] - area.min.y[1]}
+            local itemWidth = (contentWidth - 0.1) / 4
+            local itemHeight = (contentHeight - 0.1) / 3
+            local area = {x = { 0, 0 }, y = { 0, 0 }, w = { itemWidth, 0 }, h = { itemWidth, 0 }}
+            shopItem:invoke("initItem",self.selectTab, Value, area, self.islandLockId)
+            --self.gvContentItemsGridView:AddItem1(shopItem, 0, index)
+            if self.islandLockId == Value.id or Value.status ~= BuyStatus.Lock then
+                self:subscribe(shopItem, UIEvent.EventWindowClick, function()
+                    self:onClickItem(Value.id, Value.status)
+                end)
+            end
+            self.gvItemsGridView:AddItem(shopItem)
+            self.itemsGridView[i] = shopItem
+            if i == 1 then
+                clickItem = Value
+            end
         end
     end
     if isResetPos and #self.itemsGridView >= 1 then
@@ -345,6 +364,8 @@ function M:onClickBeltItem(itemId)
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 224 }, { 0, 258}, { 0, 152})
     self.stDetailDescribe:SetText(Lang:toText(item.desc))
     if item.status == BuyStatus.Unlock then
+        self.stDetailText:SetArea({ 0, 70 }, { 0, 0 }, { 0, 110}, { 0, 50})
+        self.stDetailText:SetTextColor({1, 1, 1, 1})
         local strMoneyIcon = getMoneyIconByMoneyType(item.moneyType)
         self.siDetailGold:SetImage(strMoneyIcon)
         self.stDetailText:SetText(tostring(item.price))
@@ -395,6 +416,8 @@ function M:onClickAdvancelItem(itemId)
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 305 }, { 0, 258}, { 0, 71})
     self.stDetailDescribe:SetText(Lang:toText(item.desc))
     if item.status == BuyStatus.Unlock then
+        self.stDetailText:SetArea({ 0, 70 }, { 0, 0 }, { 0, 110}, { 0, 50})
+        self.stDetailText:SetTextColor({1, 1, 1, 1})
         local strMoneyIcon = getMoneyIconByMoneyType(item.moneyType)
         self.siDetailGold:SetImage(strMoneyIcon)
         self.stDetailText:SetText(tostring(item.price))
