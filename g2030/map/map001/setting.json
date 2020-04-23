@@ -2,6 +2,37 @@
   "canAttack": true,
   "canBreak": false,
   "placeTestBlock": "myplugin/stone",
+  "skyBox": [
+		{
+	"texture": [
+	"myplugin/sky/AM_right.png",
+	"myplugin/sky/AM_left.png",
+	"myplugin/sky/AM_top.png",
+	"myplugin/sky/AM_bottom.png",
+	"myplugin/sky/AM_back.png",
+	"myplugin/sky/AM_front.png"
+		],
+	"time": 0.01,
+	"transition": 0.1
+		},
+	  {
+	"texture": [
+	"myplugin/sky/PM_right.png",
+	"myplugin/sky/PM_left.png",
+	"myplugin/sky/PM_top.png",
+	"myplugin/sky/PM_bottom.png",
+	"myplugin/sky/PM_back.png",
+	"myplugin/sky/PM_front.png"
+		],
+	"time": 0.03,
+	"transition": 0.1
+		}
+  ],
+  "sellPos":{
+    "x": 129,
+    "y": 33,
+    "z": 132
+  },
   "region": {
 		"sell_area": {
             "regionCfg": "myplugin/region_sell",

@@ -239,7 +239,7 @@ end
 ---
 function EntityServer:ShowFlyNum(deltaHp)
     if self and self.isPlayer then
-        WorldServer.BroadcastPacket({
+        self:sendPacketToTracking({
             pid = "ShowNumberUIOnEntity",
             beginOffsetPos =Lib.v3(0, 1, 0),
             FollowObjID = self.objID,
@@ -249,7 +249,8 @@ function EntityServer:ShowFlyNum(deltaHp)
             imageWidth = 40,
             imageHeight = 40,
             isBigNum = true
-        })
+        },true)
+  --      WorldServer.BroadcastPacket()
     end
 end
 
@@ -283,6 +284,93 @@ function EntityServer:doAutoNormalAtk(buff)
             self:doAutoNormalAtk(buff)
         end
     end   )
+end
+
+local function entityPlayAction(entity, actionName, actionTime, includeSelf)
+    if not entity or not actionName then
+        return false
+    end
+
+    local packet = {
+        pid = "EntityPlayAction",
+        objID = entity.objID,
+        action = actionName,
+        time = actionTime,
+    }
+    entity:sendPacketToTracking(packet, includeSelf)
+    return true
+end
+
+local function entityForceTargetPos(entity, targetPos, includeSelf)
+    if not entity then
+        return false
+    end
+
+    local packet = {
+        pid = "EntityForceTargetPos",
+        objID = entity.objID,
+        targetPos = targetPos,
+    }
+    entity:sendPacketToTracking(packet, includeSelf)
+    return true
+end
+
+local function getTargetPos(position, from)
+    local yaw = (360 - from:getRotationYaw() + 90) % 360
+    local pos = Lib.tov3(Lib.copy(position))
+    local new_off_x, new_off_y = pos.x, pos.z
+    local arc1 = math.atan(new_off_y, -new_off_x)
+    local deg1 = math.deg(arc1)
+    local deg2 = yaw - (360 - deg1 + 90) % 360
+    local arc2 = math.rad(deg2)
+    local len = (new_off_x ^ 2 + new_off_y ^ 2) ^ 0.5
+    local offx = len * math.cos(arc2)
+    local offy = len * math.sin(arc2)
+    pos.x = -offx
+    pos.z = offy
+
+    local targrtpos = from:getPosition() + pos
+    return targrtpos
+end
+
+function Entity:beHitBack(backPos, falldowanAc, getupAc)
+    if not backPos then
+        return
+    end
+    local targetPos = getTargetPos(backPos, self)
+    local falldowanActime = 50
+    if falldowanAc then
+        entityPlayAction(self, falldowanAc, falldowanActime, true)
+    end
+    if targetPos then
+        self.forceTargetPos = targetPos
+        self.forceTime = 5
+
+        entityForceTargetPos(self, targetPos, true)
+    end
+
+    local entity = self
+    local fun = function(entity, Pos, ac)
+        falldowanActime = falldowanActime - 1
+        local distance = Lib.getPosDistance(entity:getPosition(), Pos)
+        if distance <= 0.01 then
+            entityPlayAction(entity, ac, -1, true)
+            return false
+        end
+
+        if falldowanActime <= 0 then
+            return false
+        end
+        return true
+    end
+    self.hitBackTimer = World.Timer(2, fun, entity, targetPos, getupAc)
+end
+
+function EntityServer:stopHitBack()
+    if self.hitBackTimer then
+        self.hitBackTimer = nil
+        entityPlayAction(self, "getup", -1, true)
+    end
 end
 
 ---

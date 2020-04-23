@@ -42,6 +42,10 @@ function Entity.ValueFunc:equipSkill(value)
     Lib.emitEvent(Event.EVENT_ITEM_SKILL_EQUIP_UPDATE)
 end
 
+function Entity.ValueFunc:topUpCount(value) 
+    Lib.emitEvent(Event.EVENT_PLAYER_TOP_UP)
+end
+
 function Entity.ValueFunc:prop(value)
     Lib.emitEvent(Event.EVENT_PAY_SHOP_UPDATE, Define.TabType.Prop)
     print(" === Event.EVENT_PAY_SHOP_UPDATE == prop")
@@ -104,5 +108,12 @@ function EntityClient:removeTypeBuff(key, value)
         if buff.cfg[key] == value then
             self:removeClientBuff(buff)
         end
+    end
+end
+
+function EntityClient:entityForceTargetPos(targetPos)
+    if targetPos then
+        self.forceTargetPos = targetPos
+        self.forceTime = 5
     end
 end

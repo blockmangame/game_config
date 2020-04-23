@@ -87,6 +87,10 @@ GMItem["g2030/升阶"] = function(self)
     self:addLevel()
 end
 
+GMItem["g2030/击退"] = function(self)
+    self:beHitBack({x = 0,y = 0,z = -2}, "falldown", "getup")
+end
+
 -----------------------------------Pet Model Test----------------------------------
 local Entity
 GMItem["g2030Pet/发放宠物"] = function(self)
@@ -108,9 +112,6 @@ GMItem["g2030Pet/clear"] = function(self)
     self:setValue("plusPetEquippedIndex", 0);
     self:setValue("hadEntityNum", 0);
     self:setValue("allPetAttr", {});
-end
-GMItem["g2030Pet/移除"] = function(self)
-    self:recallPet(1);
 end
 GMItem["g2030Pet/查看当前角色宠物数据"] = function(self)
     print(self);

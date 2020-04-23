@@ -4,11 +4,26 @@
 --- DateTime: 2020/4/17 16:11
 ---
 function RegionBlock:onEntityEnter(entity, cfg, config)
-    print("RegionBlock:onEntityEnter " .. Lib.inspect(cfg))
+    --print("RegionBlock:onEntityEnter " .. Lib.inspect(cfg))
+
+    if not entity.isPlayer then
+        return
+    end
+
+    if entity.regionBuff then
+        entity:removeBuff(entity.regionBuff)
+    end
+    entity.regionBuff = entity:addBuff("myplugin/buff_invincible")
 end
 
 function RegionBlock:onEntityLeave(entity, cfg, config)
-    print("RegionBlock:onEntityLeave " .. Lib.inspect(cfg))
+    --print("RegionBlock:onEntityLeave " .. Lib.inspect(cfg))
+
+    if not entity.isPlayer then
+        return
+    end
+
+    entity:removeBuff(entity.regionBuff)
 end
 
 return RegionBlock
