@@ -1,5 +1,4 @@
 local function entityValueDefInit(entity,cfg)
-    print("-------------init def-----------")
     if cfg.entityMaxHp then
         entity:setNPCMaxHp(BigInteger.Create(cfg.entityMaxHp[1],cfg.entityMaxHp[2]))
     end
@@ -110,14 +109,14 @@ end
 function EntityServer:doAttack(info)
     local attackProps,defenseProps = self:getDamageProps(info)
     --ocal damage = math.max(attackProps.damage * attackProps.dmgFactor - defenseProps.defense, 0) * attackProps.damagePct
-    print("---------doAttack------damage-1-----------------",attackProps.dmgBase)
-    print("---------doAttack------damage--2----------------",attackProps.dmgBaseRat)
-    print("---------doAttack------damage--3----------------",attackProps.dmgFactor)
-    print("---------doAttack------damage--4----------------",attackProps.atk)
-    print("---------doAttack------damage--5----------------",attackProps.dmgRealPlu)
-    print("---------doAttack------damage--6----------------",defenseProps.hurtSub)
+    -- print("---------doAttack------damage-1-----------------",attackProps.dmgBase)
+    -- print("---------doAttack------damage--2----------------",attackProps.dmgBaseRat)
+    -- print("---------doAttack------damage--3----------------",attackProps.dmgFactor)
+    -- print("---------doAttack------damage--4----------------",attackProps.atk)
+    -- print("---------doAttack------damage--5----------------",attackProps.dmgRealPlu)
+    -- print("---------doAttack------damage--6----------------",defenseProps.hurtSub)
     local damage =  math.max(attackProps.dmgBase+ attackProps.atk*(attackProps.dmgFactor+ attackProps.dmgBaseRat)*attackProps.dmgRealPlu*defenseProps.hurtSub, 1)
-    print("---------doAttack------damage------------------",damage)
+    -- print("---------doAttack------damage------------------",damage)
     info.target:doDamage({
         from = self,
         damage = damage,

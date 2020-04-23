@@ -6,7 +6,7 @@ function Actions.ResetEntityRechargeSkill(data, params, context)
     local now = World.Now()
     for _,skillInfo in pairs(rechargeInfo) do
         skillInfo.curRechargeCount = skillInfo.maxRechargeCount
-        skillInfo.beginRechargeTime = now
+        skillInfo.beginRechargeTime = -1
     end
     params.entity:sendPacket({pid = "ResetEntityRechargeSkill"})
 end
@@ -21,5 +21,10 @@ end
 
 function Actions.rewardActions(data, params, context)
     local rewardManager = T(Game, "rewardManager")
-    rewardManager:doReward(params.type, params.object, params.player)
+    rewardManager:doRewardByType(params.type, params.object, params.player)
+end
+
+function Actions.remarkBoxActions(data, params, context)
+    local rewardManager = T(Game, "rewardManager")
+    rewardManager:remarkAllBox(params.object)
 end

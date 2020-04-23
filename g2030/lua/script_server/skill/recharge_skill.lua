@@ -5,18 +5,12 @@ RechargeSkill.isRechargeSkill = true
 RechargeSkill.maxRechargeCount = 1
 RechargeSkill.rechargeTime = 0
 
-local function calcRecharge(skillInfo)
-    local now = World.Now()
-    local beginRechargeTime = skillInfo.beginRechargeTime
-    local rechargeTime = skillInfo.rechargeTime
+local function calcRechargeCount(skillInfo)
+    local addCount = (World.Now() - skillInfo.beginRechargeTime) // skillInfo.rechargeTime
     local curRechargeCount = skillInfo.curRechargeCount
     local maxRechargeCount = skillInfo.maxRechargeCount
-    local addCount = (now - beginRechargeTime) // rechargeTime
     if addCount > 0 and curRechargeCount < maxRechargeCount then
-        local lessTime = (now - beginRechargeTime) % rechargeTime
-        local tempCurRC = addCount + curRechargeCount
-        skillInfo.curRechargeCount = math.min(tempCurRC, maxRechargeCount)
-        skillInfo.beginRechargeTime = now - lessTime
+        skillInfo.curRechargeCount = math.min(addCount + curRechargeCount, maxRechargeCount)
     end
 end
 
@@ -39,17 +33,29 @@ function RechargeSkill:canCast(packet, from)
         }
         rechargeInfo[fullName] = skillInfo
     end
-    calcRecharge(skillInfo)
+    calcRechargeCount(skillInfo)
     if skillInfo.curRechargeCount <= 0 then
         return false
     end
 	return SkillBase.canCast(self, packet, from)
 end
 
+local function calcBeginRechargeTime(skillInfo)
+    local now = World.Now()
+    local beginRechargeTime = skillInfo.beginRechargeTime
+    if beginRechargeTime == -1 then
+        skillInfo.beginRechargeTime = now
+    else
+        local lessTime = (now - beginRechargeTime) % skillInfo.rechargeTime
+        skillInfo.beginRechargeTime = now - lessTime
+    end
+end
+
 function RechargeSkill:cast(packet, from)
     local rechargeInfo = from.rechargeInfo
     local skillInfo = rechargeInfo[packet.name]
     skillInfo.curRechargeCount = skillInfo.curRechargeCount - 1
+    calcBeginRechargeTime(skillInfo)
     packet.needPre = true
 
     SkillBase.cast(self, packet, from)

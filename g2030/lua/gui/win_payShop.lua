@@ -237,6 +237,26 @@ function M:onClickPropItem(itemId)
     --self:senderClickItemBuy(tabId, itemId)
 end
 
+function M:onBuyPropBagCapacity()
+    local item = PropConfig:getNextBagCapacityId()
+    print("M:onBuyPropBagCapacity(itemId) : item.id : "..tostring(item.id))
+    if not item then
+        print("M:onBuyPropBagCapacity(itemId) : BagCapacity is Max :"..tostring(item.id))
+        return
+    end
+    if not self:checkItemMoney(item) then
+        return
+    end
+    self.selectTab = TabType.Prop
+    self.selectItemId = item.id
+    local packet = {
+        pid = "SyncPayShopOperation",
+        tabId =  self.selectTab,
+        itemId = self.selectItemId,
+    }
+    Me:sendPacket(packet)
+end
+
 function M:onClickResourceItem(itemId)
     local item = ResourceConfig:getItemById(itemId)
     --Lib.log_1(item, "onClickEquipItem")
@@ -350,7 +370,7 @@ function M:updateItems(type, isReset)
         return
     end
     for _, item in pairs(itemConfig:getSettings()) do
-        item.status = buyInfo[tostring(item.id)]  or BuyStatus.Lock
+        item.status = buyInfo[tostring(item.id)]  or BuyStatus.Unlock
     end
     print("11111111111")
     self:addItemsGridView(isReset)

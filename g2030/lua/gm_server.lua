@@ -41,7 +41,17 @@ end
 GMItem["g2030/发送测试弹窗"] = function(self)
     self:showCommonNotice("GM发送的测试提示信息，啦啦啦~")
 end
-
+GMItem["g2030/开启移速特权"] = function(self)
+    self:setMovePlus()
+end
+GMItem["g2030/开关无敌"] = function(self)
+    if self:getHurtSub() <= 0 then
+        self:setUninvincible()
+    else
+        self:setInvincible()
+    end
+    
+end
 GMItem["g2030/神圣攻击加成特权"] = function(self)
     self:setOpenRealDmg()
 end
@@ -99,14 +109,15 @@ GMItem["g2030Pet/clear"] = function(self)
     self:setValue("hadEntityNum", 0);
     self:setValue("allPetAttr", {});
 end
-GMItem["g2030Pet/移除"] = function(self)
-    self:recallPet(1);
-end
 GMItem["g2030Pet/查看当前角色宠物数据"] = function(self)
     print(self);
     print("开始打印宠物数据")
     print("当前所获取过的宠物数量", self:getValue("hadEntityNum"))
-    print("当前背包内所有宠物式神信息：", Lib.v2s(self:getValue("allPetAttr")))
+    print("当前背包内所有宠物式神信息：")
+    for k,v in pairs(self:getAllPetAttr()) do
+        print ("\t", k)
+        print(Lib.v2s(v))
+    end
     print("当前装备的宠物信息：", Lib.v2s(self:getValue("petEquippedList")))
     print("当前装备的式神信息：", self:getValue(("plusPetEquippedIndex")))
     print("===End===")

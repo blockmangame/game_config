@@ -10,6 +10,18 @@ function entity_event(entity, event, ...)
     end
 end
 
+function events:collisionEntity(objIDArray)
+    if not self.isPlayer then
+        return
+    end
+
+    if self.objID ~= Me.objID then
+        return
+    end
+
+    self:collisionEntity(objIDArray)
+end
+
 function events:onBlockChanged(oldId, newId)
     --print("onBlockChanged ", oldId, newId)
 end

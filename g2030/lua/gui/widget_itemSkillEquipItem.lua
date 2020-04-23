@@ -32,7 +32,7 @@ end
 
 function M:initItem(item)
     self.itemId = item.id
-    self.stSkillName:SetText("   "..item.name)
+    self.stSkillName:SetText(Lang:toText(item.name))
     self.sitSkillIcon:SetImage(item.icon)
     -- print("-------initItem--------"..tostring(item.status))
     if item.status == Define.SkillStatus.NoStudy then

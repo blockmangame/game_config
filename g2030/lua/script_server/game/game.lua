@@ -73,4 +73,6 @@ function Game.OnPlayerLogin(player)
     oldPlayerLogin(player);
 
     player:initPetInfo();
+    local rewardManager = T(Game, "rewardManager")
+    rewardManager:initAllBoxByPlayer(player)
 end
