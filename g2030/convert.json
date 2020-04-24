@@ -130,5 +130,16 @@
         "filter":{
           "_name": "^portal.*"
         }
+      },
+	  "test/region_island_unlock":{
+        "plugin": "myplugin",
+        "mod": "region",
+		"template": "region_island_unlock",
+        "fields":[
+          ["岛屿的名字","islandId"]
+        ],
+        "filter":{
+          "_name": "^region_island_unlock.*"
+        }
       }
 }
