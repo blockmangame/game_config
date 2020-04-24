@@ -166,12 +166,14 @@ function M:updateDressArchive()
 end
 
 function M:setArchiveItem(isAppDress, archive, index)
-	local item = GUIWindowManager.instance:CreateGUIWindow1("Layout", "listItem")
+	local item = GUIWindowManager.instance:CreateGUIWindow1("Button", "listItem")
 	item:SetArea({0, 10}, {0, 0}, {0.8, 0}, {0, 75})
-	item:SetBackImage("set:dress.json image:archive_item_bg")
+	item:SetNormalImage("set:dress.json image:archive_item_bg")
+	item:SetPushedImage("set:dress.json image:archive_item_bg")
 	if isAppDress then
 		item:SetArea({0, 10}, {0, 0}, {0.98, 0}, {0, 75})
-		item:SetBackImage("set:dress.json image:archive_item_bg2")
+		item:SetNormalImage("set:dress.json image:archive_item_bg2")
+		item:SetPushedImage("set:dress.json image:archive_item_bg2")
 	end
 	item:SetProperty("StretchType", "NineGrid")
 	item:SetProperty("StretchOffset", "25 25 25 25")
@@ -199,8 +201,8 @@ function M:setArchiveItem(isAppDress, archive, index)
 	
 	self.archiveItems:AddItem(item, false)
 
-	self:unsubscribe(item, UIEvent.EventWindowTouchDown)
-	self:subscribe(item, UIEvent.EventWindowTouchDown, function()
+	self:unsubscribe(item, UIEvent.EventButtonClick)
+	self:subscribe(item, UIEvent.EventButtonClick, function()
 		self:clickArchive(index)
 	end)
 
@@ -241,24 +243,28 @@ function M:onSelectArchive()
 	local archives = UI:getRemoterData("win_dressArchive") or {}
 	for i, item in pairs(self.itemPool) do
 		if self.selectArchiveIndex == i then
-			item.view:SetBackImage("set:dress.json image:archive_choose_item_bg")
+			item.view:SetNormalImage("set:dress.json image:archive_choose_item_bg")
+			item.view:SetPushedImage("set:dress.json image:archive_choose_item_bg")
 			item.view:child("itemName"):SetTextColor({ 204 / 255, 72 / 255, 0 / 255, 1 })
 			item.view:child("itemName"):SetTextBoader({ 251 / 255, 248 / 255, 130 / 255, 1 })
 			item.view:child("itemBtn"):SetNormalImage("set:dress.json image:archive_item_choose_set_bg")
 			item.view:child("itemBtn"):SetPushedImage("set:dress.json image:archive_item_choose_set_bg")
 
 			if i == #archives then
-				item.view:SetBackImage("set:dress.json image:archive_choose_item_bg2")
+				item.view:SetNormalImage("set:dress.json image:archive_choose_item_bg2")
+				item.view:SetPushedImage("set:dress.json image:archive_choose_item_bg2")
 			end
 		else
-			item.view:SetBackImage("set:dress.json image:archive_item_bg")
+			item.view:SetNormalImage("set:dress.json image:archive_item_bg")
+			item.view:SetPushedImage("set:dress.json image:archive_item_bg")
 			item.view:child("itemName"):SetTextColor({ 5 / 255, 67 / 255, 136 / 255, 1 })
 			item.view:child("itemName"):SetTextBoader({ 171 / 255, 237 / 255, 255 / 255, 1 })
 			item.view:child("itemBtn"):SetNormalImage("set:dress.json image:archive_item_set_bg")
 			item.view:child("itemBtn"):SetPushedImage("set:dress.json image:archive_item_set_bg")
 
 			if i == #archives then
-				item.view:SetBackImage("set:dress.json image:archive_item_bg2")
+				item.view:SetNormalImage("set:dress.json image:archive_item_bg2")
+				item.view:SetPushedImage("set:dress.json image:archive_item_bg2")
 			end
 		end
 	end
