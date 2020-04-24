@@ -148,7 +148,7 @@ function EntityServer:doHealing()
     local healVal =self:getMaxHp() *self:getHealingVal()* self:getHealingPlu()
 
     if healVal>0 and  self:deltaHp(healVal) then
-        self:ShowFlyNum(healVal)
+        self:ShowFlyNum(healVal, "HP", "HP")
     end
 
 
@@ -198,7 +198,7 @@ function EntityServer:doDamage(info)
     end
 
     self:deltaHp(-damage)
-    self:ShowFlyNum(-damage)
+    self:ShowFlyNum(-damage, "HP", "HP")
     --function Actions.ShowNumberUIOnEntity(data, params, context)
     --
     --end
@@ -240,23 +240,63 @@ function EntityServer:doDamage(info)
 end
 
 ---
----显示伤害飘字(全服广播)
----@TODO 后续可优化为视域范围内广播
+---数值变化显示飘字
 ---
-function EntityServer:ShowFlyNum(deltaHp)
+function EntityServer:ShowFlyNum(number, type, typeName)
+    local imgset = "";
+    local isBigNum = false
+    if type == "coin" then
+        imgset = "white_numbers"
+    elseif type == "HP" then
+        isBigNum = true
+        if number < 0 then
+            imgset = "red_numbers"
+        else
+            imgset = "green_numbers"
+        end
+    end
+    local textList = {}
+    --大数图标，正负号，大数转字符
+    if typeName and string.len(typeName) > 0 then
+        table.insert(textList, typeName)
+    end
+
+    local numStr
+    if isBigNum then
+        numStr = tostring(BigInteger.Recover(number))
+    else
+        if number > 0 then
+            table.insert(textList, "+")
+        else
+            table.insert(textList, "-")
+        end
+        numStr = tostring(number)
+    end
+    local len = string.len(numStr)
+    for i = 1, len do
+        local num = numStr:sub(i, i)
+        table.insert(textList, num)
+    end
+    if self then
+        self:ShowFlyText(textList, imgset)
+    end
+end
+
+function EntityServer:ShowFlyText(textList, imgset)
+    --for i = 1, #textList do
+    --    print(string.format("%d, %s", i, textList[i]))
+    --end
     if self then
         self:sendPacketToTracking({
-            pid = "ShowNumberUIOnEntity",
+            pid = "ShowTextUIOnEntity",
             beginOffsetPos =Lib.v3(0, 1, 0),
             FollowObjID = self.objID,
-            number = deltaHp,
+            textList = textList,
             distance = 2,
-            imgset = deltaHp<0 and "red_numbers" or "green_numbers",
+            imgset = imgset,
             imageWidth = 40,
             imageHeight = 40,
-            isBigNum = true
         },true)
-  --      WorldServer.BroadcastPacket()
     end
 end
 
