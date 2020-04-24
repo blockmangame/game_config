@@ -292,7 +292,7 @@ CHANGE_PLAYER_SCALE_ADULT
         $obj1.doOnceGuide = true
         CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
     }
-    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep >= @NoneHouse and $obj1.openCardShop){
+    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep > @NoneHouse and $obj1.openCardShop){
         CheckSignInShow(player = $obj1)
         $obj1.checkSignIn = true
     }
@@ -333,7 +333,7 @@ CHANGE_PLAYER_SCALE_CHILD
         $obj1.doOnceGuide = true
         CallTrigger(event = "CONTINUE_GUIDESTEP", object = $obj1)
     }
-    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep >= @NoneHouse and $obj1.openCardShop){
+    If(IsPlayer(entity = $obj1) and not $obj1.checkSignIn and $obj1.guideStep > @NoneHouse and $obj1.openCardShop){
         CheckSignInShow(player = $obj1)
         $obj1.checkSignIn = true
     }
