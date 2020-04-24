@@ -53,7 +53,8 @@ ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,              
 ValueDef.allPetAttr     = {false,   false,  true,   true,       {},                             true}--宠物、式神相关数据
 ValueDef.petPageNu      = {false,   false,  false,  false,      4,                              true}--当前玩家宠物背包页数量
 --=======================================================充值相关数据=================================================================
-ValueDef.topUpCount     = {false,	false,	true,	true,       0,                              true}--充值数
+ValueDef.rechargeSum           = {false,	true,	true,	false,     0,                          true}--充值数
+ValueDef.rechargeAwardStatus   = {false,	true,	true,	false,     0,                          true}--充值奖励状态 0未领 1领首充 2领超级首充
 --====================世界boss相关数据================
 ValueDef.bossHits       = {false,   true,    true,  false,      0,                              false }--boss击打数
 ValueDef.combo          = {false,   true,    true,  false,      0,                              false }--boss连击数
@@ -517,6 +518,26 @@ end
 ---设置装备技能列表
 function Entity:setEquipSkill(data)
     self:setValue("equipSkill", data)
+end
+
+---获取充值金额
+function Entity:getRechargeSum()
+    return math.max(self:getValue("rechargeSum"),0)
+end
+
+---记录充值金额
+function Entity:setRechargeSum(int)
+    self:setValue("rechargeSum",int)
+end
+
+---获取充值奖励状态
+function Entity:getRechargeAwardStatus()
+    return math.max(self:getValue("rechargeAwardStatus"),0)
+end
+
+---记录充值奖励状态
+function Entity:setRechargeAwardStatus(int)
+    self:setValue("rechargeAwardStatus",int)
 end
 
 --check entity whether be in the state of Dizziness or not

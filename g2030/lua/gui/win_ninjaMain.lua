@@ -59,7 +59,7 @@ function M:initExtraWnd()
     UI:getWnd("itemShop"):initData()
     UI:getWnd("payShop"):initData()
     UI:getWnd("skillControl")
-    UI:getWnd("topUpAward")
+    UI:getWnd("rechargeAward")
 end
 
 function M:initEvent()
@@ -82,7 +82,7 @@ function M:initEvent()
         self:openSkillControl()
     end)
     self:subscribe(self.btnRecharge, UIEvent.EventButtonClick, function()
-        --TODO goto first recharge view
+        UI:getWnd("rechargeAward"):onShow(true)
     end)
     self:subscribe(self.btnArena, UIEvent.EventButtonClick, function()
         UI:openWnd("ninjaArena")
@@ -120,6 +120,12 @@ function M:initEvent()
 
     Lib.subscribeEvent(Event.EVENT_ARENA_UI_STATE, function()
         self:initArenaView()
+    end)
+
+    Lib.subscribeEvent(Event.EVENT_PLAYER_RECHARGE_STATUS, function()
+        local awardStatus = Me:getRechargeAwardStatus()
+        print("-----------------awardStatus---------  "..awardStatus)
+        UI:getWnd("rechargeAward"):upDataWinInfo(awardStatus)
     end)
 end
 

@@ -40,8 +40,9 @@ if World.isClient then
 
     Event.register("EVENT_PLAYER_PROCEED_RECHARGE")
     Event.register("EVENT_RANK_INFO_UPDATE")
-    Event.register("EVENT_PLAYER_TOP_UP_INFO")
-
+    Event.register("EVENT_PLAYER_RECHARGE_SUM")
+    Event.register("EVENT_PLAYER_RECHARGE_STATUS")
+    
 else
     --TODO
 end

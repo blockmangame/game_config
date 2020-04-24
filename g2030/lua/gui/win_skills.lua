@@ -167,7 +167,10 @@ function M:init()
                     skillName = skill.castClickSkill
                 end
                 self:subscribe(image, UIEvent.EventWindowClick, function()
+                    local player = Player.CurPlayer
+                    if not player.onGround then return end
                     Skill.Cast(skillName)
+                    print("------------------------"..skillName)
                 end)
             end
 
