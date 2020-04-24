@@ -8,6 +8,7 @@ ENTITY_TOUCH_ALL{
     If(IsPlayer(entity = $obj2))
     {
     $targetPos = GetConfigVar(obj = $obj1,key="toPos")
-    PortalUIData(player = $obj2, pos=$targetPos)
+    $toIslandId = GetConfigVar(obj = $obj1,key="toIslandId")
+    PortalUIData(player = $obj2, pos=$targetPos,toIsland=$toIslandId)
     }
 }

@@ -62,21 +62,50 @@ end
 
 function handles:PortalUIData(packet)
     local pos = packet.pos
-    UI:openWnd("ninjaCommonDialog"):initView(
-            {
-                content = Lang:toText("gui_go_island_notice"),
-                contentCenter = true,
-                txtTitle = Lang:toText("gui_tip"),
-                hideClose = false,
-                leftTxt = Lang:toText("gui_cancel"),
-                rightTxt = Lang:toText("gui_sure"),
-                leftCb = function()
-                end,
-                rightCb = function()
-                    Me:setPosition(pos)
-                end
-            }
-    )
+    local islandId = packet.toIsland
+    print("---toIsland--" .. tonumber(islandId))
+    local isHave = false
+    local islands = Me:getUnLockedIsland()
+    if islands then
+        for i, v in pairs(islands) do
+            if v.id == islandId then
+                isHave = true
+            end
+        end
+    end
+    if isHave then
+        UI:openWnd("ninjaCommonDialog"):initView(
+                {
+                    content = Lang:toText("gui_go_island_notice"),
+                    contentCenter = true,
+                    txtTitle = Lang:toText("gui_tip"),
+                    hideClose = false,
+                    leftTxt = Lang:toText("gui_cancel"),
+                    rightTxt = Lang:toText("gui_sure"),
+                    leftCb = function()
+                    end,
+                    rightCb = function()
+                        Me:setPosition(pos)
+                    end
+                }
+        )
+    else
+        UI:openWnd("ninjaCommonDialog"):initView(
+                {
+                    content = Lang:toText("gui_island_lock"),
+                    contentCenter = true,
+                    txtTitle = Lang:toText("gui_tip"),
+                    hideClose = false,
+                    leftTxt = Lang:toText("gui_cancel"),
+                    rightTxt = Lang:toText("gui_sure"),
+                    leftCb = function()
+                    end,
+                    rightCb = function()
+                    end
+                }
+        )
+    end
+
 end
 
 function handles:TeleportBegin(packet)
@@ -100,7 +129,7 @@ end
 
 function handles:CommonNotice(packet)
     if packet and packet.content then
-        Lib.emitEvent(Event.EVENT_COMMON_NOTICE,packet.content)
+        Lib.emitEvent(Event.EVENT_COMMON_NOTICE, packet.content)
     end
 end
 function handles:ShowArenaMainUI(packet)

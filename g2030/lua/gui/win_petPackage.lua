@@ -189,6 +189,7 @@ end
 function M:setPlusPetItemEquip()
     local index = plusPetItemIndex2Index(curPlusPetSelItemIndex)
     if curPlusPetUsingItem ~= -1 then
+        print("De Equip!!!!!")
         self:setPlusPetItemDeEquip(curPlusPetUsingItem)
     end
     curPlusPetUsingItem = curPlusPetSelItemIndex

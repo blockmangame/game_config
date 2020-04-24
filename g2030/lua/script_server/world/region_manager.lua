@@ -8,6 +8,7 @@
 local eventRegionMap = {
     ["shop"] = RegionShop,
     ["sell"] = RegionSell,
+    ["island_unlock"] = RegionIsland,
 }
 
 function RegionManager:init()
