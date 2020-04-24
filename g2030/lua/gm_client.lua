@@ -19,6 +19,12 @@ GMItem["g2030/上武器"] = function(self)
     self:exchangeEquip("myplugin/weapon_simple")
 end
 
+GMItem["g2030/清空首充"] = function(self)
+    local player = Player.CurPlayer
+    player:setRechargeSum(0)
+    player:setRechargeAwardStatus(0)
+end
+
 -----------------------------------Pet Model Test----------------------------------
 GMItem["g2030Pet/检查是否存在宠物实体"] = function(self)
     print("==============================================")
