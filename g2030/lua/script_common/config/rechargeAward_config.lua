@@ -10,7 +10,9 @@ function rechargeAwardConfig:initConfig()
             id = tonumber(config.n_id),
             type = tonumber(config.n_type),
             goodsType = tonumber(config.n_goodsType),
+            goodsId = tonumber(config.n_goodsId),
             icon = tostring(config.s_icon),
+            specialName = tostring(config.s_specialName),
             count = tonumber(config.n_count),
             condition = tonumber(config.n_condition),
         }
@@ -34,11 +36,11 @@ function rechargeAwardConfig:getItems()
 end
 
 
-function rechargeAwardConfig:getRewardTypeItems(rewardType)
+function rechargeAwardConfig:getRewardTypeItems(awardType)
     local Items1 = {}
     local condition = nil
     for i, item in pairs(Items) do
-        if item.type == rewardType then
+        if item.type == awardType then
             table.insert(Items1, item)
             condition = item.condition
         end
