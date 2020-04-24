@@ -29,7 +29,8 @@ function RechargeSkill:canCast(packet, from)
             curRechargeCount = maxRechargeCount,
             maxRechargeCount = maxRechargeCount,
             rechargeTime = cfg.rechargeTime or 1,
-            beginRechargeTime = World.Now()
+            beginRechargeTime = World.Now(),
+            updateRechargeTime = World.Now()
         }
         rechargeInfo[fullName] = skillInfo
     end
@@ -45,9 +46,11 @@ local function calcBeginRechargeTime(skillInfo)
     local beginRechargeTime = skillInfo.beginRechargeTime
     if beginRechargeTime == -1 then
         skillInfo.beginRechargeTime = now
+        skillInfo.updateRechargeTime = now
     else
         local lessTime = (now - beginRechargeTime) % skillInfo.rechargeTime
         skillInfo.beginRechargeTime = now - lessTime
+        skillInfo.updateRechargeTime = now
     end
 end
 
@@ -57,6 +60,10 @@ function RechargeSkill:cast(packet, from)
     skillInfo.curRechargeCount = skillInfo.curRechargeCount - 1
     calcBeginRechargeTime(skillInfo)
     packet.needPre = true
+
+    packet.curRechargeCount = skillInfo.curRechargeCount
+    packet.beginRechargeTime = skillInfo.beginRechargeTime 
+    packet.updateRechargeTime = skillInfo.updateRechargeTime
 
     SkillBase.cast(self, packet, from)
     
