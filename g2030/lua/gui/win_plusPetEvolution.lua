@@ -212,7 +212,7 @@ end
 
 function M:initAllText()
     self.texts.strBtnText:SetText(Lang:toText("PetEvolution-BeginStr"))
-    self.texts.AtkText:SetText("PetEvolution-Atk")
+    self.texts.AtkText:SetText(Lang:toText("PetEvolution-Atk"))
     self.texts.atkIntensifyNu:SetText("")
     self.foldSelAll:SetText(Lang:toText("PetPackage-All"))
     self.foldSelAtk:SetText(Lang:toText("PetPackage-Atk"))

@@ -44,7 +44,7 @@ Lib.subscribeEvent(Event.EVENT_NOT_ENOUGH_MONEY, function()
             }
     )
 end)
-Lib.subscribeEvent(Event.EVENT_COMMON_NOTICE,function(content)
+Lib.subscribeEvent(Event.EVENT_COMMON_NOTICE,function(content, callL, callR)
     UI:openWnd("ninjaCommonDialog"):initView(
             {
                 content = content,
@@ -52,7 +52,9 @@ Lib.subscribeEvent(Event.EVENT_COMMON_NOTICE,function(content)
                 txtTitle = Lang:toText("gui_tip"),
                 hideClose = true,
                 leftTxt = Lang:toText("gui_sure"),
-                leftCb = function() end,
+                rightTxt = Lang:toText("gui_cancel"),
+                leftCb = function() if type(callL) == "function" then callL() end end,
+                rightCb = function() if type(callR) == "function" then callR() end end
             }
     )
 end)

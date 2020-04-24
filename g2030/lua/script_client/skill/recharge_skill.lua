@@ -14,7 +14,7 @@ end
 
 function RechargeSkill:cast(packet, from)
     if Me.objID == from.objID then
-        Lib.emitEvent(Event.EVENT_RECHARGE_SKILL_CAST, packet.name)
+        Lib.emitEvent(Event.EVENT_RECHARGE_SKILL_CAST, packet)
     end
     SkillBase.cast(self, packet, from)
 end
