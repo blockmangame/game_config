@@ -50,7 +50,9 @@ end
 ---请求排行榜的数据库离线数据
 function handles:getKill(packet)
     local DBHandler = require "dbhandler"
-    local userId = packet.userId
+    if not packet.userId then
+        return
+    end
     for i, userId in pairs(packet.userId) do
         DBHandler:getDataByUserId(userId, 1, function(userId, txt)
             local seri = require "seri"

@@ -55,7 +55,7 @@ function M:sendPacketRequestData(rankData)
         userId[#userId + 1] = id
     end
     ---得到所有的userid,
-    print("---mapid---" .. Lib.v2s(userId))
+    --print("---mapid---" .. Lib.v2s(userId))
     Me:sendPacket({
         pid = "getKill",
         userId = userId
@@ -78,7 +78,7 @@ function M:updateRankKill(userId, killNum, muscle, integral)
 end
 
 function M:refresh()
-    print("---refresh---")
+    --print("---refresh---")
     local rankType = self.showRankType
     local rankData = Rank.GetRankData(rankType)
     local typeData = rankData[rankType] or {}
