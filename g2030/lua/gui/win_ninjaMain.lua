@@ -3,6 +3,7 @@
 ---包含底部功能入口，操控切换键，式神技能键，血量，锻炼值，阵营货币，蓝量
 ---zhuyayi 20200325
 ---
+local LuaTimer = T(Lib, "LuaTimer") ---@type LuaTimer
 local EXP_VAL,SKILL_VAL = 0,0
 local HP_VAL, TEAM_VAL=1,1
 local A_Btn
@@ -59,7 +60,7 @@ function M:initExtraWnd()
     UI:getWnd("itemShop"):initData()
     UI:getWnd("payShop"):initData()
     UI:getWnd("skillControl")
-    UI:getWnd("topUpAward")
+    UI:getWnd("rechargeAward")
 end
 
 function M:initEvent()
@@ -82,7 +83,7 @@ function M:initEvent()
         self:openSkillControl()
     end)
     self:subscribe(self.btnRecharge, UIEvent.EventButtonClick, function()
-        --TODO goto first recharge view
+        UI:getWnd("rechargeAward"):onShow(true)
     end)
     self:subscribe(self.btnArena, UIEvent.EventButtonClick, function()
         UI:openWnd("ninjaArena")
@@ -92,7 +93,7 @@ function M:initEvent()
     end)
 
 
-    local LuaTimer = T(Lib, "LuaTimer") ---@type LuaTimer
+    
     Lib.subscribeEvent("EVENT_SHOW_BOTTOM_MESSAGE", function(message, param)
         self.textBottomMessage:SetVisible(true)
         self.textBottomMessage:SetText(message)
@@ -118,8 +119,25 @@ function M:initEvent()
         self.effect:SetVisible(isPlay)
     end)
 
-    Lib.subscribeEvent(Event.EVENT_ARENA_UI_STATE, function()
-        self:initArenaView()
+    Lib.subscribeEvent(Event.EVENT_ARENA_UI_STATE, function(state,time)
+        if state == Define.ProcessState.Init then
+            self:initArenaView()
+        elseif state == Define.ProcessState.Waiting then
+            self:initWaitTimeCount(time)
+        elseif state == Define.ProcessState.Prepare then
+            self:initReadyTimeCount(time)
+        elseif state == Define.ProcessState.ProcessStart then 
+            self:initGamingTimeCount(time)
+        elseif state == Define.ProcessState.ProcessOver then
+            self:initCloseTimeCount(time)
+        end
+        
+    end)
+
+    Lib.subscribeEvent(Event.EVENT_PLAYER_RECHARGE_STATUS, function()
+        local awardStatus = Me:getRechargeAwardStatus()
+        print("-----------------awardStatus---------  "..awardStatus)
+        UI:getWnd("rechargeAward"):upDataWinInfo(awardStatus)
     end)
 end
 
@@ -160,9 +178,12 @@ end
 
 function M:initArenaView()
     self.btnVip:SetVisible(false)
-    self.btnTrade:SetVisible(false)
     self.btnSell:SetVisible(false)
     self.btnPet:SetVisible(false)
+    self.btnPet:SetVisible(false)
+    self.btnRecharge:SetVisible(false)
+    self.btnArena:SetVisible(false)
+    self.btnTitle:SetVisible(false)
 
     self.lytArenaRank:SetVisible(true)
     self.lytArenaCountTime:SetVisible(true)
@@ -225,6 +246,39 @@ function M:initArenaView()
 
     self.txtCountTime:SetText(Lang:toText("arena_wait_more") )
 end
-
+function M:initWaitTimeCount(time)
+    
+    LuaTimer:cancel(self.arenaTimer)
+    self.timeMac = time
+    self.arenaTimer = LuaTimer:scheduleTimer(function()
+        self.txtCountTime:SetText(self.timeMac..Lang:toText("arena_wait_timer") )
+        self.timeMac = self.timeMac-1
+    end, 1000, time)
+end
+function M:initReadyTimeCount(time)
+    LuaTimer:cancel(self.arenaTimer)
+    self.timeMac = time
+    self.arenaTimer = LuaTimer:scheduleTimer(function()
+        self.txtCountTime:SetText(self.timeMac..Lang:toText("arena_ready_timer") )
+        self.timeMac = self.timeMac-1
+    end, 1000, time)
+end
+function M:initGamingTimeCount(time)
+    LuaTimer:cancel(self.arenaTimer)
+    self.timeMac = time
+    self.arenaTimer = LuaTimer:scheduleTimer(function()
+        self.txtCountTime:SetText(self.timeMac..Lang:toText("arena_gaming_timer") )
+        self.timeMac = self.timeMac-1
+    end, 1000, time)
+end
+function M:initCloseTimeCount(time)
+    LuaTimer:cancel(self.arenaTimer)
+    self.timeMac = time
+    self.arenaTimer = LuaTimer:scheduleTimer(function()
+        self.txtCountTime:SetText(self.timeMac..Lang:toText("arena_colse_timer") )
+        self.timeMac = self.timeMac-1
+    end, 1000, time)
+    --TODO open  this game rank
+end
 function M:onOpen()
 end

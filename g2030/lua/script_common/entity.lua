@@ -38,9 +38,10 @@ ValueDef.skin       = {false,	false,	true,	false,      {},                      
 ValueDef.privilege  = {false,	false,	true,	false,      {},                                 true}--付费商店购买的特权列表
 ValueDef.boxData   = {false,	false,	true,	false,      {},                                 true}--箱子领取时间和状态
 ValueDef.autoSellTime= {false,	false,	true,	false,   os.time(),                             true}--限时自动锻炼有效时间戳
-ValueDef.islandLv   = {false,	false,	true,	false,       1,                                  true}--当前岛屿等级（商店临时解锁用）
+ValueDef.islandLv   = {false,	true,	true,	false,       1,                                  true}--当前岛屿等级（商店临时解锁用）
 ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},                                  true}--已拥有的阵营皮肤
 ValueDef.teamSkinId = {false,   true,    true,  false,       0,                                  true}--已装备的阵营皮肤id
+ValueDef.unLockedIsland = { false, true, true, false,       {},                                  true }--已解锁的岛屿id
 --=======================================================竞技场玩家相关数据=================================================================
 ValueDef.arenaScore = {false,   true,    true,  true,       0,                                  false}--竞技场分数
 --==============================================================NPC相关数据=================================================================
@@ -53,7 +54,8 @@ ValueDef.hadEntityNum   = {false,   false,  true,   false,      0,              
 ValueDef.allPetAttr     = {false,   false,  true,   true,       {},                             true}--宠物、式神相关数据
 ValueDef.petPageNu      = {false,   false,  false,  false,      4,                              true}--当前玩家宠物背包页数量
 --=======================================================充值相关数据=================================================================
-ValueDef.topUpCount     = {false,	false,	true,	true,       0,                              true}--充值数
+ValueDef.rechargeSum           = {false,	true,	true,	false,     0,                          true}--充值数
+ValueDef.rechargeAwardStatus   = {false,	true,	true,	false,     0,                          true}--充值奖励状态 0未领 1领首充 2领超级首充
 --====================世界boss相关数据================
 ValueDef.bossHits       = {false,   true,    true,  false,      0,                              false }--boss击打数
 ValueDef.combo          = {false,   true,    true,  false,      0,                              false }--boss连击数
@@ -519,6 +521,26 @@ function Entity:setEquipSkill(data)
     self:setValue("equipSkill", data)
 end
 
+---获取充值金额
+function Entity:getRechargeSum()
+    return math.max(self:getValue("rechargeSum"),0)
+end
+
+---记录充值金额
+function Entity:setRechargeSum(int)
+    self:setValue("rechargeSum",int)
+end
+
+---获取充值奖励状态
+function Entity:getRechargeAwardStatus()
+    return math.max(self:getValue("rechargeAwardStatus"),0)
+end
+
+---记录充值奖励状态
+function Entity:setRechargeAwardStatus(int)
+    self:setValue("rechargeAwardStatus",int)
+end
+
 --check entity whether be in the state of Dizziness or not
 function Entity:checkDizzinessState()
 if self:getTypeBuff("fullName", "myplugin/player_dizziness_skill_buff") then
@@ -621,5 +643,15 @@ end
 ---清空combo数
 function Entity:clearCombo()
     self:setValue("combo", 0)
+end
+
+---获取已解锁的岛屿id
+function Entity:getUnLockedIsland()
+    return self:getValue("unLockedIsland") or {}
+end
+
+---保存已解锁的岛屿id
+function Entity:setUnLockedIsland(data)
+    self:setValue("unLockedIsland", data)
 end
 

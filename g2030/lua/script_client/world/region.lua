@@ -2,11 +2,13 @@
 local Region = World.Region
 local RegionCamera = require "world.region.region_camera"
 local RegionShop = require "script_client.world.region.region_shop"
+local RegionIsland = require "script_client.world.region.region_island"
 local eventRegionMap = {
 	["camera"] = RegionCamera,
 	["shop"] = RegionShop,
 	["sell"] = nil,
 	["safe"] = nil,
+	["island_unlock"] = RegionIsland,
 }
 
 function Region:findTargetTypeRegion()

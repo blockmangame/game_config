@@ -21,6 +21,8 @@ local STATIC_SLIP_SENSITIVITY_AREA = {min = {x = 0, y = 0}, max = {x = 0, y = 0}
 local STATIC_BASE_AREA = {min = {x = 0, y = 0}, max = {x = 0, y = 0}}
 
 local function castSceneSkill(self)
+	local player = Player.CurPlayer
+	if not player.onGround then return end
 	if not self.isTouchPointMove then
 		return
 	end

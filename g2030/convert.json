@@ -115,5 +115,31 @@
             ["最大锻炼值自然数加成", "expMax"],
             ["单次攻击锻炼值自然数加成", "perExp"]
         ]
-    }
+    },
+	"test/portal":{
+        "plugin": "myplugin",
+        "mod": "entity",
+		"template": "portal",
+        "fields":[
+          ["actor名字","actorName"],
+          ["传送门的名字","name"],
+          ["地图","toMap"],
+          ["传送到的岛屿","toIslandId"],
+          ["传送到的坐标","toPos"]
+        ],
+        "filter":{
+          "_name": "^portal.*"
+        }
+      },
+	  "test/region_island_unlock":{
+        "plugin": "myplugin",
+        "mod": "region",
+		"template": "region_island_unlock",
+        "fields":[
+          ["岛屿的名字","islandId"]
+        ],
+        "filter":{
+          "_name": "^region_island_unlock.*"
+        }
+      }
 }

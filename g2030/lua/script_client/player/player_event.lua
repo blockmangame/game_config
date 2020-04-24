@@ -18,11 +18,15 @@ function events:fallGround(fallDistance)
     print("fall " .. fallDistance)
 
     local playerCfg = Me:cfg()
-    local fallAnimHeight = World.cfg.fallAnimHeight or 0
-    if fallDistance >= fallAnimHeight and not self.isGliding then
-        Skill.Cast(playerCfg.fallSkill1)
-    else
-        Skill.Cast(playerCfg.fallSkill2)
+    local fallAnimHeight = World.cfg.fallAnimHeight or 10
+    local disableFallAnimHeight = World.cfg.disableFallAnimHeight or 2
+
+    if fallDistance > disableFallAnimHeight then
+        if fallDistance >= fallAnimHeight and not self.isGliding then
+            Skill.Cast(playerCfg.fallSkill1)
+        else
+            Skill.Cast(playerCfg.fallSkill2)
+        end
     end
 
     self:recoverJumpProp()

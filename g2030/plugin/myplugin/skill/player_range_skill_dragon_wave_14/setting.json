@@ -1,16 +1,38 @@
 {
-    "type": "Buff",
-    "buffCfg": "myplugin/skill_buff_dragon_wave_14_aura",
-    "buffTime": 200,
-    "cdTime": 300,
-    "icon": "skill-14.png",
-    "target": "self",
-    "castAction": "action_14",
-    "range": 15,
-    "startSound": {
-        "volume": 4,
-        "loop": false,
-        "selfOnly": false,
-        "sound": "/sound/dungeon_houjia.mp3"
+  "type": "Buff",
+  "buffCfg": "myplugin/skill_buff_dragon_wave_14_aura",
+  "buffTime": 200,
+  "cdTime": 30,
+  "icon": "skill-14.png",
+  "target": "self",
+  "castAction": "action_14",
+  "castActionTime": 36,
+  "strategy": 1.8,
+  "range": 15,
+  "startSound": {
+    "volume": 4,
+    "loop": false,
+    "selfOnly": false,
+    "sound": "/sound/dungeon_houjia.mp3"
+  },
+  "castEffect": [
+    {
+      "pos": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "effect": "effect_14_01(1)(1).effect",
+      "time": 8000
+    },
+    {
+      "pos": {
+        "x": 0,
+        "y": 0.3,
+        "z": 0
+      },
+      "effect": "effect_14_01(2)(1).effect",
+      "time": 8000
     }
+  ]
 }

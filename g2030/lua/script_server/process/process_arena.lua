@@ -3,6 +3,7 @@
 ---
 local class = require"common.class"
 local ProcessArena = class("ProcessArena", require"script_server.process.process_base")
+local LuaTimer = T(Lib, "LuaTimer") ---@type LuaTimer
 local posList = {}
 local playerPosList= {}
 -- local arenaMap = nil
@@ -59,23 +60,31 @@ function ProcessArena:onEntityJoin(objID)
     table.remove(posList,1)
     player:setMapPos(self.arenaMap, self.arenaMap.cfg.centerPos)
 
+    -- LuaTimer:schedule(function()
+    --     local allEntity = World.CurWorld:getAllEntity()
+    --     for _, ent in pairs(allEntity) do
+    --         if ent._cfg.delayMove then
+    --             local pos = ent:getPosition()
+    --             ent.forceTargetPos = Lib.tov3({x = pos.x+ent._cfg.delayMove.x , y = pos.y + ent._cfg.delayMove.y, z = pos.z+ent._cfg.delayMove.z })
+    --             ent.forceTime = 20*ent._cfg.delayMove.time
+    --             ent:entityForceTargetPos( {x=ent._cfg.delayMove.x,y=ent._cfg.delayMove.y,z=ent._cfg.delayMove.z }, true)
+    --         end
+    --     end
+    -- end, 10 * 1000, nil)
+
+
     player:intoArenaWorld()
-    if self.playerCount >= self.startPlayers and self.curState < Define.ProcessState.Waiting then 
+    if (self.playerCount >= self.startPlayers or true) and self.curState < Define.ProcessState.Waiting then --TEST
         self:setState(Define.ProcessState.Waiting)
-        WorldServer.BroadcastPacket({
-            pid = "ArenaTimeCount"
-        })
+        self:sendArenaStateChange(self.waitPlayerTime)
+        -- WorldServer.BroadcastPacket({
+        --     pid = "ArenaTimeCount",
+        --     time = self.waitPlayerTime
+        -- })
     end
     if self.playerCount == self.maxPlayers then
         self:waitingEnd()
     end
-
-    -- if self.playerCount >= self.startPlayers and not lastTimer then
-    --     lastTimer = LuaTimer:scheduleTimer(function()
-    --         sendReadyArena()
-    --     end, self.waitPlayerTime*1000, 1)
-    -- end
-    
     
 end
 function ProcessArena:onEntityOut(objID)
@@ -86,7 +95,8 @@ function ProcessArena:onEntityOut(objID)
     player:setMapPos(worldCfg.defaultMap,worldCfg.initPos)--TODO 判断当前服务器是否满人
 end
 function ProcessArena:onWaitingEnd()
-    sendReadyArena()
+    --sendReadyArena()
+    self:sendArenaStateChange(self.prepareTime)
     --TODO 拉取所有用户到对应位置
     -- self.entityList[objID]
     for id, player in pairs(self.entityList) do
@@ -95,15 +105,37 @@ function ProcessArena:onWaitingEnd()
     
 end
 local function sendReadyArena()
-    LuaTimer:cancel(lastTimer)
     WorldServer.BroadcastPacket({
-        pid = "ArenaReady"
+        pid = "ArenaReady",
+        time = self.prepareTime
     })
 end
+local function openAllDoor()
+    local allEntity = World.CurWorld:getAllEntity()
+        for _, ent in pairs(allEntity) do
+            if ent._cfg.delayMove then
+                local pos = ent:getPosition()
+                ent.forceTargetPos = Lib.tov3({x = pos.x+ent._cfg.delayMove.x , y = pos.y + ent._cfg.delayMove.y, z = pos.z+ent._cfg.delayMove.z })
+                ent.forceTime = 20*ent._cfg.delayMove.time
+                ent:entityForceTargetPos( {x=ent._cfg.delayMove.x,y=ent._cfg.delayMove.y,z=ent._cfg.delayMove.z }, true)
+            end
+        end
+end
+local function sendFightArena(self)
+    WorldServer.BroadcastPacket({--广播比赛倒计时到前端
+        pid = "ArenaFight",
+        time = self.gameTime
+    })
+    openAllDoor()--打开笼门
+end
 function ProcessArena:onStart()
-    for id, player in pairs(self.entityList) do
+    --sendFightArena(self)
+    self:sendArenaStateChange(self.prepareTime)
+    openAllDoor()
+    for id, player in pairs(self.entityList) do--解除无敌
         player:setUninvincible()
     end
+
 end
 function ProcessArena:doJudge()
     if self.playerCount<2 then
@@ -111,8 +143,25 @@ function ProcessArena:doJudge()
     end
 end
 function ProcessArena:onProcessOver()
+    self:sendArenaStateChange(self.gameOverTime)
+    -- WorldServer.BroadcastPacket({--广播竞技场关闭
+    --     pid = "ArenaWillClose",
+    --     time = self.gameOverTime
+    -- })
+    
+    
+end
+function ProcessArena:onProcessOverEnd()
     for id, player in pairs(self.entityList) do
         player:setMapPos(worldCfg.defaultMap,worldCfg.initPos)--TODO 判断此时
     end
+end
+
+function ProcessArena:sendArenaStateChange(time)
+    WorldServer.BroadcastPacket({--广播竞技场关闭
+        pid = "ArenaStateChange",
+        state = self.curState,
+        time = time
+    })
 end
 return ProcessArena

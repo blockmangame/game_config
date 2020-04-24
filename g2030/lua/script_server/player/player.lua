@@ -76,6 +76,13 @@ function Player:addCurExp()
     if self:isExpFull() and newExp>maxExp then
         newExp = maxExp
     end
+
+    --增加的锻炼值，飘字
+    local addExp = newExp - self:getCurExp()
+    if addExp > 0 then
+        self:ShowFlyNum(addExp, "coin", "duan")
+    end
+
     self:setCurExp(newExp)
    -- castSetSkill(self,newExp)
 end
@@ -90,7 +97,8 @@ function Player:sellExp(resetPos)
     if resetPos then
         self:setMapPos(self.map,self.map.cfg.sellPos)
     else
-        self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
+        --self:addCurrency("gold", self:getCurExpToCoin(), "sell_exp")
+        self:addCurrencyWithFlyNum("gold", self:getCurExpToCoin(), "sell_exp")
         self:resetExp()
     end
 end
@@ -250,7 +258,8 @@ end
 function Player:doReward(coinType, num, content)
     local contentText = content or "reward"
     local addNum = num + 0 --Todo 宠物加成
-    self:addCurrency(Coin:coinNameByCoinId(coinType), addNum, contentText)
+    --self:addCurrency(Coin:coinNameByCoinId(coinType), addNum, contentText)
+    self:addCurrencyWithFlyNum(Coin:coinNameByCoinId(coinType), addNum, contentText)
 end
 
 ---重置箱子月卡
@@ -285,6 +294,17 @@ function Player:refreshBoxCard(boxId, payTime)
     end, 1000, -1)
 end
 
+function Player:addCurrencyWithFlyNum(coinName, count, reason, related)
+    print(string.format("add currency, coinName:%s", coinName))
+    self:addCurrency(coinName, count,reason, related)
+    --飘字
+    -- 货币的图片通过配置找
+    if count > 0 then
+        if coinName == "chi" or coinName == "gold" then
+            self:ShowFlyNum(count, "coin", coinName)
+        end
+    end
+end
 ----------------------------------------------common-----------------------
 ---
 ---向本客户端发送一个显示文字的普通提示弹窗
@@ -320,11 +340,14 @@ function Player:doReward(reward)
         return
     end
     if reward.rewardType == Define.RewardType.Chi then
-        self:addCurrency("chi",  reward.rewardNum, "PlayerReward")
+        --self:addCurrency("chi",  reward.rewardNum, "PlayerReward")
+        self:addCurrencyWithFlyNum("chi",  reward.rewardNum, "PlayerReward")
     elseif reward.rewardType == Define.RewardType.Gold then
-        self:addCurrency("gold",  reward.rewardNum, "PlayerReward")
+        --self:addCurrency("gold",  reward.rewardNum, "PlayerReward")
+        self:addCurrencyWithFlyNum("gold",  reward.rewardNum, "PlayerReward")
     elseif reward.rewardType == Define.RewardType.TeamStone then
-        self:addCurrency("team_stone",  reward.rewardNum, "PlayerReward")
+        --self:addCurrency("team_stone",  reward.rewardNum, "PlayerReward")
+        self:addCurrencyWithFlyNum("team_stone",  reward.rewardNum, "PlayerReward")
     end
 end
 
