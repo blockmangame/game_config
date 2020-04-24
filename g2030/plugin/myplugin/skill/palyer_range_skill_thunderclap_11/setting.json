@@ -1,28 +1,29 @@
 {
-    "cdTime": 40,
-    "enableCdMask": true,
-    "type": "Missile",
-    "castAction": "action_11",
-    "castActionTime": 30,
-    "missileCfg": "myplugin/palyer_range_skill_thunderclap_11_missile",
-    "missileCount": 1,
-    "startWait": [
-        5
-    ],
-    "startPos": [
-        {
-            "z": 0,
-            "x": 0,
-            "y": -1.5
-        }
-    ],
-    "castSound": {
-        "volume": 4,
-        "selfOnly": false,
-        "loop": false,
-        "sound": "/sound/player_attack_hit.mp3"
-    },
-    "targetType": "Self",
-    "icon": "skill-11.png",
-    "consumeVp": 0
+  "cdTime": 40,
+  "enableCdMask": true,
+  "type": "Missile",
+  "castAction": "action_11",
+  "castActionTime": 20,
+  "missileCfg": "myplugin/palyer_range_skill_thunderclap_11_missile",
+  "missileCount": 1,
+  "strategy": 1,
+  "startWait": [
+    5
+  ],
+  "startPos": [
+    {
+      "z": 0,
+      "x": 0,
+      "y": -1.5
+    }
+  ],
+  "castSound": {
+    "volume": 4,
+    "selfOnly": false,
+    "loop": false,
+    "sound": "/sound/player_attack_hit.mp3"
+  },
+  "targetType": "Self",
+  "icon": "skill-11.png",
+  "consumeVp": 0
 }

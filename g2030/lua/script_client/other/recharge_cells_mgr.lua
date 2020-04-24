@@ -79,20 +79,22 @@ Lib.subscribeEvent(Event.EVENT_RECHARGE_SKILL_REMOVE, function(fullName)
     skillRCell.cell = nil
 end)
 
-Lib.subscribeEvent(Event.EVENT_RECHARGE_SKILL_CAST, function(fullName)
+Lib.subscribeEvent(Event.EVENT_RECHARGE_SKILL_CAST, function(params)
+    local fullName = params.name
+    local _curRechargeCount = params.curRechargeCount
+    local _beginRechargeTime = params.beginRechargeTime 
+    local _updateRechargeTime = params.updateRechargeTime
     local skillRCell = cellsMgr[fullName]
     if not skillRCell then
         return
     end
-    skillRCell.curRechargeCount = skillRCell.curRechargeCount - 1
+    skillRCell.curRechargeCount = _curRechargeCount
     skillRCell.cell:invoke("COUNT", skillRCell.curRechargeCount > 0 and skillRCell.curRechargeCount or 0)
-    if not skillRCell.rechargeTimer then
-        local now = World.Now()
-        skillRCell.startTimerTick = now
-        skillRCell.updateTimerTick = now
-        skillRCell.stopTimerTick = now + skillRCell.rechargeTime
-        cellRecharge(skillRCell)
-    end
+
+    skillRCell.startTimerTick = _beginRechargeTime
+    skillRCell.updateTimerTick = _updateRechargeTime
+    skillRCell.stopTimerTick = _beginRechargeTime + skillRCell.rechargeTime
+    cellRecharge(skillRCell)
 end)
 
 local function resetSkillRCell(skillRCell)
