@@ -21,7 +21,6 @@ function IslandConfig:init()
         data.subtitle = vConfig.s_UnlockSubtitle or ""
         table.insert(settings, data)
     end
-    print("----IslandConfig--config--" .. Lib.v2s(settings))
 end
 
 function IslandConfig:getIslandConfig(islandId)
