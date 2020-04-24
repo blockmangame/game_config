@@ -27,7 +27,7 @@ function M:refreshCountdown(key, time)
             local message1 = string.format("%02d:%02d", min, second)
             local message2 = string.format(Lang:toText(key),
                     message1)
-            print("----------------rank--------------------------",World.CurMap.id)
+      --      print("----------------rank--------------------------",World.CurMap.id)
             self.RankCountdown:SetText(message2)
         end
         if time <= 0 then
