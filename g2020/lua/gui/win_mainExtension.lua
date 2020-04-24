@@ -90,11 +90,15 @@ end
 
 function M:updateRedPoint()
     local data = UI:getRemoterData("mainExtension")
-    self.orderBtn:SetEnabled(data.guideEnd)
-    self.partyBtn:SetEnabled(data.guideEnd)
+    self:child("MainExtensionPanel-oderGuideBtn"):SetEnabled(data.guideEnd)
+    self:child("MainExtensionPanel-partyGuideBtn"):SetEnabled(data.guideEnd)
     if not data.guideEnd then
         return
     end
+    self.orderBtn:SetVisible(true)
+    self.partyBtn:SetVisible(true)
+    self:child("MainExtensionPanel-partyGuideBtn"):SetVisible(false)
+    self:child("MainExtensionPanel-oderGuideBtn"):SetVisible(false)
     self.orderRed = data.guideWork
     self.partyRed = data.guideParty
     self:child("MainExtensionPanel-OpenRedPoint"):SetVisible(self.orderRed or self.partyRed)
