@@ -13,6 +13,14 @@ function handles:itemShopRegion(packet)
     end
 end
 
+function handles:itemShopSelect(packet)
+    --print("itemShopSelect : "..tostring(packet.tabId).." id ："..tostring(packet.itemId))
+    local itemShop = UI:getWnd("itemShop")
+    if itemShop then
+        itemShop:onClickNextItem(packet.tabId, packet.itemId)
+    end
+end
+
 function handles:payShopRegion(packet)
     local payShop = UI:getWnd("payShop")
     if payShop then
@@ -40,7 +48,12 @@ function handles:AttrValuePro(packet)
         packet.value = BigInteger.Recover(packet.value)
     end
     entity:doSetValue(packet.key, packet.value)
-    UI:getWnd("petEvolution"):evoluteSuccess(packet.oldIndex, packet.newIndex)
+    if packet.isPlusPet then
+        UI:getWnd("plusPetEvolution"):evoluteSuccess(packet.oldIndex)
+    else
+        UI:getWnd("petEvolution"):evoluteSuccess(packet.oldIndex, packet.newIndex)
+    end
+
 end
 
 function handles:ResetEntityRechargeSkill(packet)
@@ -84,6 +97,7 @@ function handles:ShowGauntlet(packet)
         UI:closeWnd("gauntlet")
     end
 end
+
 function handles:CommonNotice(packet)
     if packet and packet.content then
         Lib.emitEvent(Event.EVENT_COMMON_NOTICE,packet.content)
@@ -129,4 +143,21 @@ function handles:EntityForceTargetPos(packet)
             entity:entityForceTargetPos(packet.targetPos)
         end
     end
+end
+
+function handles:ShowBossBlood(packet)
+    if packet.isShow then
+        UI:openWnd("bloodBar", packet.objID)
+    else
+        UI:closeWnd("bloodBar")
+    end
+end
+
+function handles:UpdateBossBlood(packet)
+    UI:getWnd("bloodBar"):update(packet.from)
+end
+
+---排行榜接收请求到的数据
+function handles:getKill(packet)
+    Lib.emitEvent(Event.EVENT_RANK_INFO_UPDATE, packet.userId, packet.killNum, packet.muscle, packet.integral)
 end

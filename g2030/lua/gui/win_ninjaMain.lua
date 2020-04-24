@@ -60,6 +60,7 @@ function M:initExtraWnd()
     UI:getWnd("itemShop"):initData()
     UI:getWnd("payShop"):initData()
     UI:getWnd("skillControl")
+    UI:getWnd("topUpAward")
 end
 
 function M:initEvent()

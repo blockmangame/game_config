@@ -54,6 +54,10 @@ ValueDef.allPetAttr     = {false,   false,  true,   true,       {},             
 ValueDef.petPageNu      = {false,   false,  false,  false,      4,                              true}--当前玩家宠物背包页数量
 --=======================================================充值相关数据=================================================================
 ValueDef.topUpCount     = {false,	false,	true,	true,       0,                              true}--充值数
+--====================世界boss相关数据================
+ValueDef.bossHits       = {false,   true,    true,  false,      0,                              false }--boss击打数
+ValueDef.combo          = {false,   true,    true,  false,      0,                              false }--boss连击数
+
 --[[
 宠物、式神相关数据存储索引说明：索引为createPet后返回的index，通过索引插入的AllPetAttr，该表不为序列，期间可能会出现nil
 即强化（消耗）后相关索引项将置为nil
@@ -220,7 +224,7 @@ end
 ---
 function Entity:getCurDamage()
     if self.isPlayer then
- 
+
         return BigInteger.Create(playerCfg.baseAtk)+self:getCurExp()*playerCfg.baseExp2Atk
     else
         return self:getValue("npcDmg")
@@ -344,7 +348,6 @@ function Entity:deltaMoveSpdRat(val)
     if self.isPlayer then
         self:setEntityProp("moveSpeed", tostring(self:getMoveSpdRat()))
     end
-    
 end
 ---
 ---获取竞技场分数
@@ -587,3 +590,36 @@ end
 function Entity:setPetPageNu(nowPageNu)
     self:setValue("petPageNu", nowPageNu)
 end
+
+---获取boss击打数
+function Entity:getBossHits()
+    return self:getValue("bossHits") or 0
+end
+
+---增加boss击打数
+function Entity:addBossHits(num)
+    local old = self:getBossHits()
+    self:setValue("bossHits", old + (num or 1))
+end
+
+---清空boss击打数
+function Entity:clearBossHits()
+    self:setValue("bossHits", 0)
+end
+
+---获取combo数
+function Entity:getCombo()
+    return self:getValue("combo") or 0
+end
+
+---增加combo数
+function Entity:addCombo()
+    local old = self:getCombo()
+    self:setValue("combo", old + 1)
+end
+
+---清空combo数
+function Entity:clearCombo()
+    self:setValue("combo", 0)
+end
+

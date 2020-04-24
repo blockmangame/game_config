@@ -120,6 +120,10 @@ function M:setItemStatus()
     end
 end
 
+function M:hideGUIWindow()
+    self._root:SetAlpha(0)
+end
+
 function M:onInvoke(key, ...)
     local fn = M[key]
     assert(type(fn) == "function", key)

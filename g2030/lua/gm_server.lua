@@ -88,11 +88,25 @@ GMItem["g2030/升阶"] = function(self)
 end
 
 GMItem["g2030/击退"] = function(self)
-    local pos = self:getPosition()
-    local targetPos = Lib.v3(0, 0, -2)
-    self:beHitBack(targetPos, "falldown", "getup")
+    self:beHitBack({x = 0,y = 0,z = -2}, "falldown", 50, "getup")
 end
 
+GMItem["g2030/宠物技能动作测试"] = function(self)
+	--  Test Code Begin : Test pet cast action when player cast skill
+	print(" Test Code : With Pet Skill Action .")
+	local pass = self:data("passengers") or {}
+	for _, id in pairs(pass) do
+		local entity = World.CurWorld:getObject(id)
+		local packet = {
+			pid = "EntityPlayAction",
+			objID = entity.objID,
+			action = "attack1",
+			time = -1,
+		}
+		entity:sendPacketToTracking(packet, false)
+    end
+end
+	--  Test Code End : Must Del When Pet Had Skill
 -----------------------------------Pet Model Test----------------------------------
 local Entity
 GMItem["g2030Pet/发放宠物"] = function(self)

@@ -68,6 +68,8 @@ function M:initUI()
     self.btnDetail:SetText(Lang:toText(""))
     self.stDetailText = self:child("NinjaLegendsItemShop-Detail-Text")
     self.btnBuyAll = self:child("NinjaLegendsItemShop-BuyAll")
+    self.stBuyAll = self:child("NinjaLegendsItemShop-BuyAll-Text")
+    self.stBuyAll:SetText(Lang:toText("gui_buy_all"))
 end
 
 function M:initEvent()
@@ -144,27 +146,79 @@ function M:addItemsGridView(isResetPos)
 end
 
 function M:addViewByConfig(Config, isResetPos)
-    local clickItem = nil
-    for i, Value in pairs(Config:getSettings()) do
-        local shopItem = UIMgr:new_widget("itemShopItem")
-        local contentWidth = self.gvItemsGridView:GetWidth()[2]
-        local contentHeight = self.gvItemsGridView:GetHeight()[2]
-        --local area = self.gvContentItemsGridView:GetArea()
-        --local Area = {r_x = area.min.x[1], r_y = area.min.y[1], r_width = area.max.x[1] - area.min.x[1], r_height = area.max.y[1] - area.min.y[1]}
-        local itemWidth = (contentWidth - 0.1) / 4
-        local itemHeight = (contentHeight - 0.1) / 3
-        local area = {x = { 0, 0 }, y = { 0, 0 }, w = { itemWidth, 0 }, h = { itemWidth, 0 }}
-        shopItem:invoke("initItem",self.selectTab, Value, area, self.islandLockId)
-        --self.gvContentItemsGridView:AddItem1(shopItem, 0, index)
-        if self.islandLockId == Value.id or Value.status ~= BuyStatus.Lock then
-            self:subscribe(shopItem, UIEvent.EventWindowClick, function()
-                self:onClickItem(Value.id, Value.status)
-            end)
+    local allItem = {}
+    if self.selectTab == TabType.Advance then
+        allItem = Config:getSettings()
+    else
+        local items = Lib.copy(Config:getAllItemByPay(false))
+        local items1 = Lib.copy(Config:getAllItemByPay(true))
+        local row = math.floor(#items/3)
+        local row1 = #items1
+        if row < 1 then
+            row = 1
         end
-        self.gvItemsGridView:AddItem(shopItem)
-        self.itemsGridView[i] = shopItem
-        if i == 1 then
-            clickItem = Value
+        if row1 > row then
+            row = row1
+        end
+        local j = 0
+        local k = 0
+        for i = 1, row*4 do
+            if i % 4 == 0 then
+                j = j + 1
+                if items1[j] then
+                    table.insert(allItem, i, items1[j])
+                else
+                    local Value1 = {
+                        hide = true
+                    }
+                    table.insert(allItem, i, Value1)
+                end
+            else
+                k = k + 1
+                if items[k] then
+                    table.insert(allItem, i, items[k])
+                else
+                    local Value1 = {
+                        hide = true
+                    }
+                    table.insert(allItem, i, Value1)
+                end
+            end
+        end
+    end
+    --Lib.log_1(allItem, "allItem")
+    --Lib.log_1(allItem, "allItem")
+    --print("#allItem : "..tostring(#allItem))
+    --Lib.log_1(allItem, "allItem")
+    local clickItem
+    for i, Value in ipairs(allItem) do
+        if Value.hide then
+            local shopItem = UIMgr:new_widget("itemShopItem")
+            shopItem:invoke("hideGUIWindow")
+            --shopItem:root():SetAlpha(0)
+            self.gvItemsGridView:AddItem(shopItem)
+            self.itemsGridView[i] = shopItem
+        else
+            local shopItem = UIMgr:new_widget("itemShopItem")
+            local contentWidth = self.gvItemsGridView:GetWidth()[2]
+            local contentHeight = self.gvItemsGridView:GetHeight()[2]
+            --local area = self.gvContentItemsGridView:GetArea()
+            --local Area = {r_x = area.min.x[1], r_y = area.min.y[1], r_width = area.max.x[1] - area.min.x[1], r_height = area.max.y[1] - area.min.y[1]}
+            local itemWidth = (contentWidth - 0.1) / 4
+            local itemHeight = (contentHeight - 0.1) / 3
+            local area = {x = { 0, 0 }, y = { 0, 0 }, w = { itemWidth, 0 }, h = { itemWidth, 0 }}
+            shopItem:invoke("initItem",self.selectTab, Value, area, self.islandLockId)
+            --self.gvContentItemsGridView:AddItem1(shopItem, 0, index)
+            if self.islandLockId == Value.id or Value.status ~= BuyStatus.Lock then
+                self:subscribe(shopItem, UIEvent.EventWindowClick, function()
+                    self:onClickItem(Value.id, Value.status)
+                end)
+            end
+            self.gvItemsGridView:AddItem(shopItem)
+            self.itemsGridView[i] = shopItem
+            if i == 1 then
+                clickItem = Value
+            end
         end
     end
     if isResetPos and #self.itemsGridView >= 1 then
@@ -345,6 +399,8 @@ function M:onClickBeltItem(itemId)
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 224 }, { 0, 258}, { 0, 152})
     self.stDetailDescribe:SetText(Lang:toText(item.desc))
     if item.status == BuyStatus.Unlock then
+        self.stDetailText:SetArea({ 0, 70 }, { 0, 0 }, { 0, 110}, { 0, 50})
+        self.stDetailText:SetTextColor({1, 1, 1, 1})
         local strMoneyIcon = getMoneyIconByMoneyType(item.moneyType)
         self.siDetailGold:SetImage(strMoneyIcon)
         self.stDetailText:SetText(tostring(item.price))
@@ -387,14 +443,16 @@ function M:onClickAdvancelItem(itemId)
     self.stDetailTitle:SetText(Lang:toText(tostring(item.name)))
     self.siDetailItemIcon:SetImage(item.icon)
     self.stDetailValueText[1]:SetText(Lang:toText(tostring("gui_advance_text1")))
-    self.stDetailValueNum[1]:SetText("x"..tostring(BigInteger.Create(item.attack)))
+    self.stDetailValueNum[1]:SetText("X"..tostring(BigInteger.Create(item.attack)))
     self.stDetailValueText[2]:SetText(Lang:toText(tostring("gui_advance_text2")))
-    self.stDetailValueNum[2]:SetText("x"..tostring(BigInteger.Create(item.speed)))
+    self.stDetailValueNum[2]:SetText("X"..tostring(BigInteger.Create(item.speed)))
     self.stDetailValueText[3]:SetText(Lang:toText(tostring("gui_advance_text3")))
-    self.stDetailValueNum[3]:SetText("x"..tostring(BigInteger.Create(item.workout)))
+    self.stDetailValueNum[3]:SetText("X"..tostring(BigInteger.Create(item.workout)))
     self.stDetailDescribe:SetArea({ 0, 0 }, { 0, 305 }, { 0, 258}, { 0, 71})
     self.stDetailDescribe:SetText(Lang:toText(item.desc))
     if item.status == BuyStatus.Unlock then
+        self.stDetailText:SetArea({ 0, 70 }, { 0, 0 }, { 0, 110}, { 0, 50})
+        self.stDetailText:SetTextColor({1, 1, 1, 1})
         local strMoneyIcon = getMoneyIconByMoneyType(item.moneyType)
         self.siDetailGold:SetImage(strMoneyIcon)
         self.stDetailText:SetText(tostring(item.price))
@@ -493,27 +551,41 @@ end
 
 function M:senderBuyAll()
     print(string.format("<M:senderBuyAll:> TypeId: %s  ItemId: %s", tostring(self.selectTab), tostring(self.selectItemId)))
-    if not self:checkCanSend(true) then
-        return
+    local function fun()
+        if not self:checkCanSend(true) then
+            return
+        end
+        local packet = {
+            pid = "SyncItemShopBuyAll",
+            tabId = self.selectTab,
+        }
+        Me:sendPacket(packet)
     end
-    local packet = {
-        pid = "SyncItemShopBuyAll",
-        tabId = self.selectTab,
-    }
-    Me:sendPacket(packet)
+    if self.selectTab == TabType.Advance then
+        Lib.emitEvent(Event.EVENT_COMMON_NOTICE,Lang:toText("gui_goto_reset"),function() end, fun)
+    else
+        fun()
+    end
 end
 
 function M:senderDetailButtonClick()
     print(string.format("<M:senderDetailButtonClick:> TypeId: %s  ItemId: %s", tostring(self.selectTab), tostring(self.selectItemId)))
-    if not self:checkCanSend(false) then
-        return
+    local function fun()
+            if not self:checkCanSend(false) then
+                return
+            end
+            local packet = {
+                pid = "SyncItemShopOperation",
+                tabId = self.selectTab,
+                itemId = self.selectItemId
+            }
+        Me:sendPacket(packet)
     end
-    local packet = {
-        pid = "SyncItemShopOperation",
-        tabId = self.selectTab,
-        itemId = self.selectItemId
-    }
-    Me:sendPacket(packet)
+    if self.selectTab == TabType.Advance then
+        Lib.emitEvent(Event.EVENT_COMMON_NOTICE,Lang:toText("gui_goto_reset"), fun)
+    else
+        fun()
+    end
 end
 
 function M:checkCanSend(notStatus)
@@ -528,14 +600,34 @@ function M:checkCanSend(notStatus)
     end
     local item = itemConfig:getItemById(self.selectItemId)
     if not item then
-        return
+        return false
     end
     if not isFlag then
-        if item.status == BuyStatus.Used then
+        if item.status == BuyStatus.Used or item.status == BuyStatus.Lock then
+            return false
+        elseif item.status == BuyStatus.Buy then
+            return true
+        end
+    else
+        local can = true
+        for i, v in pairs(itemConfig:getAllItemByPay(false)) do
+            if v.status == BuyStatus.Lock then
+                can = false
+                break
+            end
+        end
+        if can then
+            Lib.emitEvent(Event.EVENT_COMMON_NOTICE,Lang:toText("gui_not_can_buy"))
             return false
         end
     end
     return self:checkItemMoney(item)
+end
+
+function M:AdvanceNoticeReset()
+    if self.selectTab == TabType.Advance then
+        --Lib.emitEvent(Event.EVENT_COMMON_NOTICE,Lang:toText("gui_goto_reset"),function() end, )
+    end
 end
 
 function M:checkItemMoney(item)
@@ -562,16 +654,16 @@ function M:updateItems(isReset)
     local buyInfo = {}
     if self.selectTab == TabType.Equip then
         buyInfo = Me:getEquip()
-        print("updateItems self.selectTab : "..tostring(self.selectTab).." getEquip  1:", Lib.v2s(buyInfo, 3))
+        --print("updateItems self.selectTab : "..tostring(self.selectTab).." getEquip  1:", Lib.v2s(buyInfo))
         itemConfig = EquipConfig
     elseif self.selectTab == TabType.Belt then
         buyInfo = Me:getBelt()
-        print("updateItems self.selectTab : "..tostring(self.selectTab).." getBelt  1:", Lib.v2s(buyInfo, 3))
+        --print("updateItems self.selectTab : "..tostring(self.selectTab).." getBelt  1:", Lib.v2s(buyInfo))
         itemConfig = BeltConfig
     elseif self.selectTab == TabType.Advance then
         itemConfig = AdvanceConfig
         buyInfo = self:getAdvanceInfo()
-        print("updateItems self.selectTab : "..tostring(self.selectTab).." getAdvanceInfo  1:", Lib.v2s(buyInfo, 3))
+        --print("updateItems self.selectTab : "..tostring(self.selectTab).." getAdvanceInfo  1:", Lib.v2s(buyInfo))
     end
     for _, item in pairs(itemConfig:getSettings()) do
         item.status = buyInfo[tostring(item.id)]  or BuyStatus.Lock
@@ -579,21 +671,13 @@ function M:updateItems(isReset)
     self:onUpdateIslandLockId()
     print("islandLockId "..tostring(self.islandLockId))
     self:addItemsGridView(isReset)
-    self:onClickNextItem(itemConfig)
+    --self:onClickNextItem(itemConfig)
 end
 
-function M:onClickNextItem(itemConfig)
-    local curItem = itemConfig:getItemById(self.selectItemId)
-    if curItem then
-        local nextItem = itemConfig:getNextItemByPay(self.selectItemId, curItem.isPay)
-        if nextItem then
-            if nextItem.status ~= BuyStatus.Lock or self.islandLockId == nextItem.id then
-                self:onClickItem(nextItem.id)
-            else
-                self:onClickItem(curItem.id)
-            end
-            print(string.format("<onClickNextItem:> TypeId: %s  ItemId: %s self.selectItemId : %s", tostring(self.selectTab), tostring(self.selectItemId),tostring(nextItem.id)))
-        end
+function M:onClickNextItem(tab, id)
+    print("onClickNextItem : "..tostring(tab).." id ："..tostring(id))
+    if self.selectTab == tab then
+        self:onClickItem(id)
     end
 end
 
