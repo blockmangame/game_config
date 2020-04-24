@@ -152,14 +152,17 @@ function M:addViewByConfig(Config, isResetPos)
     else
         local items = Lib.copy(Config:getAllItemByPay(false))
         local items1 = Lib.copy(Config:getAllItemByPay(true))
-        local row = #items
+        local row = math.floor(#items/3)
         local row1 = #items1
+        if row < 1 then
+            row = 1
+        end
         if row1 > row then
             row = row1
         end
         local j = 0
         local k = 0
-        for i = 1, row do
+        for i = 1, row*4 do
             if i % 4 == 0 then
                 j = j + 1
                 if items1[j] then
@@ -183,6 +186,10 @@ function M:addViewByConfig(Config, isResetPos)
             end
         end
     end
+    --Lib.log_1(allItem, "allItem")
+    --Lib.log_1(allItem, "allItem")
+    --print("#allItem : "..tostring(#allItem))
+    --Lib.log_1(allItem, "allItem")
     local clickItem
     for i, Value in ipairs(allItem) do
         if Value.hide then
@@ -579,7 +586,7 @@ function M:checkCanSend(notStatus)
     end
     local item = itemConfig:getItemById(self.selectItemId)
     if not item then
-        return
+        return false
     end
     if not isFlag then
         if item.status == BuyStatus.Used then
@@ -613,16 +620,16 @@ function M:updateItems(isReset)
     local buyInfo = {}
     if self.selectTab == TabType.Equip then
         buyInfo = Me:getEquip()
-        print("updateItems self.selectTab : "..tostring(self.selectTab).." getEquip  1:", Lib.v2s(buyInfo, 3))
+        --print("updateItems self.selectTab : "..tostring(self.selectTab).." getEquip  1:", Lib.v2s(buyInfo))
         itemConfig = EquipConfig
     elseif self.selectTab == TabType.Belt then
         buyInfo = Me:getBelt()
-        print("updateItems self.selectTab : "..tostring(self.selectTab).." getBelt  1:", Lib.v2s(buyInfo, 3))
+        --print("updateItems self.selectTab : "..tostring(self.selectTab).." getBelt  1:", Lib.v2s(buyInfo))
         itemConfig = BeltConfig
     elseif self.selectTab == TabType.Advance then
         itemConfig = AdvanceConfig
         buyInfo = self:getAdvanceInfo()
-        print("updateItems self.selectTab : "..tostring(self.selectTab).." getAdvanceInfo  1:", Lib.v2s(buyInfo, 3))
+        --print("updateItems self.selectTab : "..tostring(self.selectTab).." getAdvanceInfo  1:", Lib.v2s(buyInfo))
     end
     for _, item in pairs(itemConfig:getSettings()) do
         item.status = buyInfo[tostring(item.id)]  or BuyStatus.Lock
@@ -630,21 +637,13 @@ function M:updateItems(isReset)
     self:onUpdateIslandLockId()
     print("islandLockId "..tostring(self.islandLockId))
     self:addItemsGridView(isReset)
-    self:onClickNextItem(itemConfig)
+    --self:onClickNextItem(itemConfig)
 end
 
-function M:onClickNextItem(itemConfig)
-    local curItem = itemConfig:getItemById(self.selectItemId)
-    if curItem then
-        local nextItem = itemConfig:getNextItemByPay(self.selectItemId, curItem.isPay)
-        if nextItem then
-            if nextItem.status ~= BuyStatus.Lock or self.islandLockId == nextItem.id then
-                self:onClickItem(nextItem.id)
-            else
-                self:onClickItem(curItem.id)
-            end
-            print(string.format("<onClickNextItem:> TypeId: %s  ItemId: %s self.selectItemId : %s", tostring(self.selectTab), tostring(self.selectItemId),tostring(nextItem.id)))
-        end
+function M:onClickNextItem(tab, id)
+    print("onClickNextItem : "..tostring(tab).." id ："..tostring(id))
+    if self.selectTab == tab then
+        self:onClickItem(id)
     end
 end
 

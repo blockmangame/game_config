@@ -64,7 +64,7 @@ end
 
 function M:onBuySuccess(player, item)
     local buyInfo = self:getPlayerBuyInfo(player)
-    print("购买前 玩家 : "..tostring(player.name).. "self.type ：", tostring(self.type).."  ".. Lib.v2s(buyInfo, 3))
+    print("购买前 玩家 : "..tostring(player.name).. "self.type ：", tostring(self.type).."  ".. Lib.v2s(buyInfo))
     buyInfo[tostring(item.id)] = BuyStatus.Used
     if item.autoSellDuration then
         local autoSellTime =  player:getAutoSellTime()
@@ -76,7 +76,7 @@ function M:onBuySuccess(player, item)
         print("onBuySuccess 玩家 : "..tostring(player.name).. "自动售卖 item.autoWorkDuration "..tostring(item.autoSellDuration))
     end
     self:onPlayerUseItem(player, item)
-    print("购买后 玩家 : "..tostring(player.name).. "self.type ：", tostring(self.type).."  ".. Lib.v2s(buyInfo, 3))
+    print("购买后 玩家 : "..tostring(player.name).. "self.type ：", tostring(self.type).."  ".. Lib.v2s(buyInfo))
     self:onExtraBuySuccess(player, item)
     self:setPlayerBuyInfo(player, buyInfo)
 end
