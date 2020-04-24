@@ -274,16 +274,16 @@ function EntityServer:ShowFlyNum(number, type, typeName)
         table.insert(textList, num)
     end
     if self then
-        self:ShowFlyText(textList, imgset)
+        self:ShowFlyText(textList, imgset, type)
     end
 end
 
-function EntityServer:ShowFlyText(textList, imgset)
+function EntityServer:ShowFlyText(textList, imgset, type)
     --for i = 1, #textList do
     --    print(string.format("%d, %s", i, textList[i]))
     --end
     if self then
-        self:sendPacketToTracking({
+        local packet = {
             pid = "ShowTextUIOnEntity",
             beginOffsetPos =Lib.v3(0, 1, 0),
             FollowObjID = self.objID,
@@ -292,7 +292,12 @@ function EntityServer:ShowFlyText(textList, imgset)
             imgset = imgset,
             imageWidth = 40,
             imageHeight = 40,
-        },true)
+        }
+        if type == "HP" then
+            self:sendPacketToTracking(packet,true)
+        else
+            self:sendPacket(packet, true)
+        end
     end
 end
 
