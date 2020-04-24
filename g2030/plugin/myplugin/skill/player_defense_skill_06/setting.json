@@ -6,7 +6,8 @@
   "icon": "skill-06.png",
   "target": "self",
   "castAction": "action_06",
-  "castActionTime": 220,
+  "castActionTime": 16,
+  "strategy": 0.8,
   "range": 15,
   "startSound": {
     "volume": 4,
@@ -14,14 +15,25 @@
     "selfOnly": false,
     "sound": "/sound/dungeon_houjia.mp3"
   },
-  "castEffect": {
-    "effect": "effect_06_02.effect",
-    "pos": {
-      "x": 0,
-      "y": 0.7,
-      "z": 0
+  "castEffect": [
+    {
+      "pos": {
+        "x": 0,
+        "y": 0.7,
+        "z": 0
+      },
+      "effect": "effect_06_02.effect",
+      "time": 5000
     },
-    "time": 3000
-  }
+    {
+      "pos": {
+        "x": 0,
+        "y": 0.7,
+        "z": 0
+      },
+      "effect": "effect_06_03.effect",
+      "time": 5000
+    }
+  ]
 }
 

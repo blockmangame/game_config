@@ -5,8 +5,8 @@
   "cdTime": 20,
   "target": "self",
   "castAction": "action_05",
-  "castActionTime": -1,
-  "strategy": 1.2,
+  "castActionTime": 16,
+  "strategy": 0.8,
   "range": 15,
   "startSound": {
     "volume": 4,
@@ -14,22 +14,24 @@
     "selfOnly": false,
     "sound": "/sound/dungeon_houjia.mp3"
   },
-  "effectEffect": [
+  "castEffect": [
     {
       "pos": {
         "x": 0,
-        "y": 0.2,
+        "y": 0.7,
         "z": 0
       },
-      "effect": "effect_05_02.effect"
+      "effect": "effect_05_02.effect",
+      "time": 5000
     },
     {
       "pos": {
         "x": 0,
-        "y": 0.2,
+        "y": 0.7,
         "z": 0
       },
-      "effect": "effect_05_03.effect"
+      "effect": "effect_05_03.effect",
+      "time": 5000
     }
   ]
 }
