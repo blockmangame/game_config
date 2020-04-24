@@ -2,9 +2,9 @@
 
 
 function M:init()
-    -- WinBase.init(self, "skillControl.json",false)
-    -- self.isInitData = false
-    -- self:onLoad()
+    WinBase.init(self, "topUpAward.json",false)
+    self.isInitData = false
+    self:onLoad()
 end
 
 function M:onLoad()
@@ -13,7 +13,8 @@ end
 
 function M:initUI()
 
-
+    self.btnClose = self:child("topUpAward-closeBtn")
+    
 
 
 
@@ -22,8 +23,14 @@ end
 
 function M:initEvent()
 
-    Lib.subscribeEvent(Event.EVENT_PLAYER_PROCEED_RECHARGE, function()
+    self:subscribe(self.btnClose, UIEvent.EventButtonClick, function()
+        self:onHide()
+    end)
 
+
+    Lib.subscribeEvent(Event.EVENT_PLAYER_TOP_UP_INFO, function()
+        self.isInitData = true
+        -- self:onShow(true)
     end)
 
 end

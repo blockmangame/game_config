@@ -56,9 +56,12 @@ function M:upDataSKillPlace(placeId)
 end
 
 function M:onEquipBtnClick()
-    -- self.btnEquip:SetVisible(false)
-    -- self.btnUnEquip:SetVisible(true)
-    -- print("-------initItem--------112 "..tostring( self.placeId))
+    local EquipInfo = Me:getEquipSkill()
+    local count = 0
+    for k,v in pairs(EquipInfo) do
+        count = count + 1
+    end
+    if count >= 4 then return end
     self.placeId = UI:getWnd("skillControl"):resetSkillEquipChecked()
 
     Me:sendPacket({

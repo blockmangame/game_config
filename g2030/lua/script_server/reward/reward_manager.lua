@@ -21,7 +21,7 @@ function rewardManager:remarkAllBox(object)
     if not allRewardBox[boxId] then
         allRewardBox[boxId] = object
     end
-    print("=== rewardManager:remarkAllBox : ", Lib.v2s(allRewardBox))
+    --print("=== rewardManager:remarkAllBox : ", Lib.v2s(allRewardBox))
     --local entity = World.CurWorld:getEntity(packet.objID)
     --assert(entity)
 end
@@ -30,7 +30,7 @@ function rewardManager:initAllBoxByPlayer(player)
     --local boxId = object:cfg().boxId
     --local isNotFree = object:cfg().isNotFree
     local allBox = player:getBoxData()
-    print("=== initAllBoxByPlayer[boxId] 111 allBox: ", Lib.v2s(allBox))
+    --print("=== initAllBoxByPlayer[boxId] 111 allBox: ", Lib.v2s(allBox))
     for nId, box in pairs(allRewardBox) do
         local isFind = false
         local reTime = 0
