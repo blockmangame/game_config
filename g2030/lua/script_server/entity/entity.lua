@@ -536,9 +536,12 @@ function Entity.EntityProp:expMax(value, add, buff)
         return
     end
     local useVal = {}
+    if type(value) ~= "string" then
+        return
+    end
     local sprice = Lib.split(value, ",")
-    useVal.val =  tonumber(add and sprice[1] or -sprice[1])--(rHpPct.pct or 0) + (add and value or -value)
-    useVal.bit =  tonumber(sprice[2] or 0)
+    useVal.val =  math.floor(tonumber(add and sprice[1] or -sprice[1]))--(rHpPct.pct or 0) + (add and value or -value)
+    useVal.bit =  math.floor(tonumber(sprice[2] or 0))
     self:deltaExpMaxPlus(BigInteger.Create(useVal.val,useVal.bit))
 end
 ---
@@ -550,9 +553,14 @@ function Entity.EntityProp:perExp(value, add, buff)
         return
     end
     local useVal = {}
+    if type(value) ~= "string" then
+        return
+    end
     local sprice = Lib.split(value, ",")
-    useVal.val =  tonumber(add and sprice[1] or -sprice[1])--(rHpPct.pct or 0) + (add and value or -value)
-    useVal.bit =  tonumber(sprice[2] or 0)
+    
+    useVal.val = math.floor(tonumber(add and sprice[1] or -sprice[1])) --(rHpPct.pct or 0) + (add and value or -value)
+    useVal.bit = math.floor( tonumber(sprice[2] or 0))
+    print("----------------------------",useVal.val)
     self:deltaPerExpPlus(BigInteger.Create(useVal.val,useVal.bit))
 end
 ---
