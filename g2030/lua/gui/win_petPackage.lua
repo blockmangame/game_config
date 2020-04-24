@@ -39,13 +39,13 @@ function M:showPlusPetFoldSel(show)
         self:child("NinjaPetPackage-PlusPetFoldBtnDown"):SetVisible(false)
         self:child("NinjaPetPackage-PlusPetFoldBtnUp"):SetVisible(true)
         self.plusPetLayout.plusPetFoldBg:SetVisible(true)
-        self:child("NinjaPetPackage-PlusPetItemLayout"):SetBackgroundColor({0,0,0,0.3})
+        self:child("NinjaPetPackage-PlusPetItemCover"):SetBackgroundColor({0,0,0,0.3})
 
     else
         self:child("NinjaPetPackage-PlusPetFoldBtnDown"):SetVisible(true)
         self:child("NinjaPetPackage-PlusPetFoldBtnUp"):SetVisible(false)
         self.plusPetLayout.plusPetFoldBg:SetVisible(false)
-        self:child("NinjaPetPackage-PlusPetItemLayout"):SetBackgroundColor({0,0,0,0})
+        self:child("NinjaPetPackage-PlusPetItemCover"):SetBackgroundColor({0,0,0,0})
     end
     plusPetFoldOpen = show
 end
@@ -125,9 +125,9 @@ function M:setPlusPetDetail(index, using)
         self:child("NinjaPetPackage-PlusPetInfoBtns"):SetVisible(true)
         self:child("NinjaPetPackage-PlusPetAccess"):SetVisible(false)
         if using then
-            self.plusPetLayoutText.plusPetEquipBtn:SetText("PetPackage-deEquip")
+            self.plusPetLayoutText.plusPetEquipBtn:SetText(Lang:toText("PetPackage-deEquip"))
         else
-            self.plusPetLayoutText.plusPetEquipBtn:SetText("PetPackage-Equip")
+            self.plusPetLayoutText.plusPetEquipBtn:SetText(Lang:toText("PetPackage-Equip"))
         end
     end
 
@@ -420,9 +420,9 @@ function M:setPetDetail(index, equipped)              --通过index拿到所有�
     self.petLayoutText.petInfo.petLevel:SetText(tostring(tempData.level))
     self.petLayoutText.petInfo.petName:SetText(Lang:toText(tempData.multiLang))
     if equipped then
-        self.petLayoutText.petInfo.petEquipText:SetText("PetPackage-deEquip")
+        self.petLayoutText.petInfo.petEquipText:SetText(Lang:toText("PetPackage-deEquip"))
     else
-        self.petLayoutText.petInfo.petEquipText:SetText("PetPackage-Equip")
+        self.petLayoutText.petInfo.petEquipText:SetText(Lang:toText("PetPackage-Equip"))
     end
     self.petLayout.petImage:SetImage("set:ninja_pet.json image:" .. tostring(tempData.ID))
     self.petLayout.petQuality:SetVisible(true)
@@ -445,7 +445,7 @@ function M:setPetDeEquip(index)
     end
     Player.CurPlayer:recallPet(tempIndex)
     curPetItemTable[index].item:invoke("unUsing")
-    self.petLayoutText.petInfo.petEquipText:SetText("PetPackage-Equip")
+    self.petLayoutText.petInfo.petEquipText:SetText(Lang:toText("PetPackage-Equip"))
     for k, v in pairs(curPetUsingItem) do
         if v == index then
             curPetUsingItem[k] = nil
@@ -475,7 +475,7 @@ function M:setPetEquip(index)
     end
     ::SetSuccess::
     curPetItemTable[index].item:invoke("using")
-    self.petLayoutText.petInfo.petEquipText:SetText("PetPackage-deEquip")
+    self.petLayoutText.petInfo.petEquipText:SetText(Lang:toText("PetPackage-deEquip"))
 end
 
 local function petListSort(_itemA, _itemB)

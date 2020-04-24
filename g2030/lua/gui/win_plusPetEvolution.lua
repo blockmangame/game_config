@@ -159,13 +159,13 @@ function M:showPlusPetFoldSel(show)
         self:child("NinjaPetPackage-PlusPetFoldBtnDown"):SetVisible(false)
         self:child("NinjaPetPackage-PlusPetFoldBtnUp"):SetVisible(true)
         self.foldBg:SetVisible(true)
-        self:child("NinjaPetPackage-PlusPetItemCover"):SetBackgroundColor({0,0,0,0.3})
+        self:child("PetEvolution-BlackView"):SetBackgroundColor({0,0,0,0.3})
 
     else
         self:child("NinjaPetPackage-PlusPetFoldBtnDown"):SetVisible(true)
         self:child("NinjaPetPackage-PlusPetFoldBtnUp"):SetVisible(false)
         self.foldBg:SetVisible(false)
-        self:child("NinjaPetPackage-PlusPetItemCover"):SetBackgroundColor({0,0,0,0})
+        self:child("PetEvolution-BlackView"):SetBackgroundColor({0,0,0,0})
     end
     plusPetFoldOpen = show
 end
@@ -231,7 +231,7 @@ function M:refreshInfo()
                 self:closePlusPetEvolution()
                 return
             end
-            atkNu = tempData.intensifyATK + atkNu
+            atkNu = tempData.intensifyATK * 100 + atkNu
             materialNu = materialNu + 1
         end
     end
