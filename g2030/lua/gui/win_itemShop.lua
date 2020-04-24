@@ -551,27 +551,41 @@ end
 
 function M:senderBuyAll()
     print(string.format("<M:senderBuyAll:> TypeId: %s  ItemId: %s", tostring(self.selectTab), tostring(self.selectItemId)))
-    if not self:checkCanSend(true) then
-        return
+    local function fun()
+        if not self:checkCanSend(true) then
+            return
+        end
+        local packet = {
+            pid = "SyncItemShopBuyAll",
+            tabId = self.selectTab,
+        }
+        Me:sendPacket(packet)
     end
-    local packet = {
-        pid = "SyncItemShopBuyAll",
-        tabId = self.selectTab,
-    }
-    Me:sendPacket(packet)
+    if self.selectTab == TabType.Advance then
+        Lib.emitEvent(Event.EVENT_COMMON_NOTICE,Lang:toText("gui_goto_reset"),function() end, fun)
+    else
+        fun()
+    end
 end
 
 function M:senderDetailButtonClick()
     print(string.format("<M:senderDetailButtonClick:> TypeId: %s  ItemId: %s", tostring(self.selectTab), tostring(self.selectItemId)))
-    if not self:checkCanSend(false) then
-        return
+    local function fun()
+            if not self:checkCanSend(false) then
+                return
+            end
+            local packet = {
+                pid = "SyncItemShopOperation",
+                tabId = self.selectTab,
+                itemId = self.selectItemId
+            }
+        Me:sendPacket(packet)
     end
-    local packet = {
-        pid = "SyncItemShopOperation",
-        tabId = self.selectTab,
-        itemId = self.selectItemId
-    }
-    Me:sendPacket(packet)
+    if self.selectTab == TabType.Advance then
+        Lib.emitEvent(Event.EVENT_COMMON_NOTICE,Lang:toText("gui_goto_reset"), fun)
+    else
+        fun()
+    end
 end
 
 function M:checkCanSend(notStatus)
@@ -589,11 +603,31 @@ function M:checkCanSend(notStatus)
         return false
     end
     if not isFlag then
-        if item.status == BuyStatus.Used then
+        if item.status == BuyStatus.Used or item.status == BuyStatus.Lock then
+            return false
+        elseif item.status == BuyStatus.Buy then
+            return true
+        end
+    else
+        local can = true
+        for i, v in pairs(itemConfig:getAllItemByPay(false)) do
+            if v.status == BuyStatus.Lock then
+                can = false
+                break
+            end
+        end
+        if can then
+            Lib.emitEvent(Event.EVENT_COMMON_NOTICE,Lang:toText("gui_not_can_buy"))
             return false
         end
     end
     return self:checkItemMoney(item)
+end
+
+function M:AdvanceNoticeReset()
+    if self.selectTab == TabType.Advance then
+        --Lib.emitEvent(Event.EVENT_COMMON_NOTICE,Lang:toText("gui_goto_reset"),function() end, )
+    end
 end
 
 function M:checkItemMoney(item)

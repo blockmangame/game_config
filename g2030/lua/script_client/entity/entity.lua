@@ -43,7 +43,7 @@ function Entity.ValueFunc:equipSkill(value)
 end
 
 function Entity.ValueFunc:topUpCount(value) 
-    Lib.emitEvent(Event.EVENT_PLAYER_TOP_UP)
+    Lib.emitEvent(Event.EVENT_PLAYER_TOP_UP_INFO)
 end
 
 function Entity.ValueFunc:prop(value)
