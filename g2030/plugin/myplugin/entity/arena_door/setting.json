@@ -1,0 +1,22 @@
+{
+    "actorName": "object_glass_door.actor",
+    "boundingVolume": {
+        "type": "VerticalBox",
+        "params": [
+            5,
+            5,
+            0.5
+        ]
+    },
+    "?autoRotateColliderBox":"entity旋转时碰撞盒跟着旋转",
+    "autoRotateColliderBox": true,
+    "?rotateCheckCollide": "不允许旋转的过程中穿墙",
+    "rotateCheckCollide": true  ,
+    "collision": true,
+    "delayMove": {
+        "x":0,
+        "y":10,
+        "z":0,
+        "time":5
+    }
+  }

@@ -301,17 +301,17 @@ local function entityPlayAction(entity, actionName, actionTime, includeSelf)
     return true
 end
 
-local function entityForceTargetPos(entity, targetPos, includeSelf)
-    if not entity then
+function Entity:entityForceTargetPos( targetPos, includeSelf)
+    if not self then
         return false
     end
 
     local packet = {
         pid = "EntityForceTargetPos",
-        objID = entity.objID,
+        objID = self.objID,
         targetPos = targetPos,
     }
-    entity:sendPacketToTracking(packet, includeSelf)
+    self:sendPacketToTracking(packet, includeSelf)
     return true
 end
 
@@ -331,7 +331,7 @@ function Entity:beHitBack(targetPos, falldowanAc, getupAc)
         self.forceTargetPos = forceTargetPos
         self.forceTime = 5
 
-        entityForceTargetPos(self, targetPos, true)
+        self:entityForceTargetPos( targetPos, true)
     end
 
     local entity = self

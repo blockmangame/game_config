@@ -10,7 +10,6 @@ function M:init()
     widget_base.init(self, "ArenaRankMainUIItem.json")
     self.lytBg = self:child("ArenaRankMainUIItem-Bg")
     self.txtRank = self:child("ArenaRankMainUIItem-Rank")
-                            --ArenaRankMainUIItem-Rank
     self.txtName = self:child("ArenaRankMainUIItem-Name")
     self.txtKill = self:child("ArenaRankMainUIItem-Kill")
     self.txtMuscle = self:child("ArenaRankMainUIItem-Muscle")

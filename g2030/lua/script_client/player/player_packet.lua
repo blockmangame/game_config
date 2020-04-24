@@ -91,9 +91,36 @@ function handles:CommonNotice(packet)
 end
 function handles:ShowArenaMainUI(packet)
     if packet then
-        Lib.emitEvent(Event.EVENT_ARENA_UI_STATE)
+        Lib.emitEvent(Event.EVENT_ARENA_UI_STATE,0)
     end
 end
+function handles:ArenaStateChange(packet)
+    if packet and packet.time then
+        Lib.emitEvent(Event.EVENT_ARENA_UI_STATE,packet.state,packet.time)
+    end
+end
+-- function handles:ArenaTimeCount(packet)
+--     if packet and packet.time then
+--         Lib.emitEvent(Event.EVENT_ARENA_UI_STATE,1,packet.time)
+--     end
+-- end
+-- function handles:ArenaReady(packet)
+--     if packet and packet.time then
+--         Lib.emitEvent(Event.EVENT_ARENA_UI_STATE,2,packet.time)
+--     end
+-- end
+-- function handles:ArenaFight(packet)
+--     if packet and packet.time then
+--         Lib.emitEvent(Event.EVENT_ARENA_UI_STATE,3,packet.time)
+--     end
+-- end
+-- function handles:ArenaWillClose(packet)
+--     if packet and packet.time then
+--         Lib.emitEvent(Event.EVENT_ARENA_UI_STATE,4,packet.time)
+--     end
+-- end
+
+
 
 function handles:EntityForceTargetPos(packet)
     if packet then
