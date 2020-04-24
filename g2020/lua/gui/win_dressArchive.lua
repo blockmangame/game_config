@@ -167,14 +167,17 @@ end
 
 function M:setArchiveItem(isAppDress, archive, index)
 	local item = GUIWindowManager.instance:CreateGUIWindow1("Layout", "listItem")
-	item:SetArea({0, 0}, {0, 0}, {0.966, 0}, {0, 75})
-	item:SetHorizontalAlignment(1)
+	item:SetArea({0, 10}, {0, 0}, {0.8, 0}, {0, 75})
 	item:SetBackImage("set:dress.json image:archive_item_bg")
+	if isAppDress then
+		item:SetArea({0, 10}, {0, 0}, {0.98, 0}, {0, 75})
+		item:SetBackImage("set:dress.json image:archive_item_bg2")
+	end
 	item:SetProperty("StretchType", "NineGrid")
-	item:SetProperty("StretchOffset", "10 10 10 10")
+	item:SetProperty("StretchOffset", "25 25 25 25")
 
 	local btn = GUIWindowManager.instance:CreateGUIWindow1("Button", "itemBtn")
-	btn:SetArea({-0.02, 0}, {0, 0}, {0.165, 0}, {0.6, 0})
+	btn:SetArea({0.23, 0}, {0, 0}, {0.3, 0}, {1, 0})
 	btn:SetNormalImage("set:dress.json image:archive_item_set_bg")
 	btn:SetPushedImage("set:dress.json image:archive_item_set_bg")
 	btn:SetHorizontalAlignment(2)
@@ -183,7 +186,7 @@ function M:setArchiveItem(isAppDress, archive, index)
 	item:AddChildWindow(btn)
 
 	local text = GUIWindowManager.instance:CreateGUIWindow1("StaticText", "itemName")
-	text:SetWidth({0.8, 0})
+	text:SetWidth({0.92, 0})
 	text:SetHeight({0.8, 0})
 	text:SetVerticalAlignment(1)
 	text:SetTextHorzAlign(1)
@@ -235,6 +238,7 @@ function M:updateActorDress(data)
 end
 
 function M:onSelectArchive()
+	local archives = UI:getRemoterData("win_dressArchive") or {}
 	for i, item in pairs(self.itemPool) do
 		if self.selectArchiveIndex == i then
 			item.view:SetBackImage("set:dress.json image:archive_choose_item_bg")
@@ -242,12 +246,20 @@ function M:onSelectArchive()
 			item.view:child("itemName"):SetTextBoader({ 251 / 255, 248 / 255, 130 / 255, 1 })
 			item.view:child("itemBtn"):SetNormalImage("set:dress.json image:archive_item_choose_set_bg")
 			item.view:child("itemBtn"):SetPushedImage("set:dress.json image:archive_item_choose_set_bg")
+
+			if i == #archives then
+				item.view:SetBackImage("set:dress.json image:archive_choose_item_bg2")
+			end
 		else
 			item.view:SetBackImage("set:dress.json image:archive_item_bg")
 			item.view:child("itemName"):SetTextColor({ 5 / 255, 67 / 255, 136 / 255, 1 })
 			item.view:child("itemName"):SetTextBoader({ 171 / 255, 237 / 255, 255 / 255, 1 })
 			item.view:child("itemBtn"):SetNormalImage("set:dress.json image:archive_item_set_bg")
 			item.view:child("itemBtn"):SetPushedImage("set:dress.json image:archive_item_set_bg")
+
+			if i == #archives then
+				item.view:SetBackImage("set:dress.json image:archive_item_bg2")
+			end
 		end
 	end
 end
