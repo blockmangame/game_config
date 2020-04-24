@@ -1,3 +1,4 @@
+local setting = require "common.setting"
 local BehaviorTree = require("common.behaviortree")
 local Actions = BehaviorTree.Actions
 
@@ -380,4 +381,9 @@ end
 
 function Actions.IsEmptyTable(data, params, context)
     return not next(params.data or {})
+end
+
+function Actions.GetConfigValues(data, params, context)
+    local cfg = setting:fetch(params.type, params.fullName)
+    return cfg
 end
