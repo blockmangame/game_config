@@ -47,6 +47,7 @@
     {
         "plugin": "myplugin",
         "mod": "entity",
+        "template": "PlusPet",
         "fields":
         [
             ["式神ID", "ID"],
@@ -57,9 +58,6 @@
             ["技能类型", "skillType"],
             ["技能名字", "skillName"],
             ["技能说明多语言", "skillInfo"],
-            ["顺序值", "orderWeight"],
-            ["出现权重", "probability"],
-            ["显示概率", "displayProbability"],
             ["攻击倍率", "atkBuffNum"],
             ["减伤倍率", "reductionInjury"],
             ["强化权重", "intensifyValue"],
@@ -75,14 +73,13 @@
     {
         "plugin": "myplugin",
         "mod": "entity",
+        "template": "Pet",
         "fields":
         [
             ["宠物ID", "ID"],
             ["稀有度", "rank"],
             ["多语言名称", "multiLang"],
             ["模型名称", "actorName"],
-            ["出现权重", "probability"],
-            ["显示概率", "displayProbability"],
             ["顺序值", "orderWeight"],
             ["金币强化区间", "coinIntensifyRange"],
             ["气强化区间", "chiIntensifyRange"],

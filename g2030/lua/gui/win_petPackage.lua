@@ -39,13 +39,13 @@ function M:showPlusPetFoldSel(show)
         self:child("NinjaPetPackage-PlusPetFoldBtnDown"):SetVisible(false)
         self:child("NinjaPetPackage-PlusPetFoldBtnUp"):SetVisible(true)
         self.plusPetLayout.plusPetFoldBg:SetVisible(true)
-        self:child("NinjaPetPackage-PlusPetItemLayout"):SetBackgroundColor({0,0,0,0.3})
+        self:child("NinjaPetPackage-PlusPetItemCover"):SetBackgroundColor({0,0,0,0.3})
 
     else
         self:child("NinjaPetPackage-PlusPetFoldBtnDown"):SetVisible(true)
         self:child("NinjaPetPackage-PlusPetFoldBtnUp"):SetVisible(false)
         self.plusPetLayout.plusPetFoldBg:SetVisible(false)
-        self:child("NinjaPetPackage-PlusPetItemLayout"):SetBackgroundColor({0,0,0,0})
+        self:child("NinjaPetPackage-PlusPetItemCover"):SetBackgroundColor({0,0,0,0})
     end
     plusPetFoldOpen = show
 end
@@ -67,7 +67,7 @@ function M:showPetInterface(index)
     self:refreshPetLeftDetailInfo()
 end
 
-function M:showPlusPetInterface(model)
+function M:showPlusPetInterface()
     curPlusPetItemTable = {}
     curPetSelItemIndex = -1
     curPlusPetUsingItem = -1
@@ -125,9 +125,9 @@ function M:setPlusPetDetail(index, using)
         self:child("NinjaPetPackage-PlusPetInfoBtns"):SetVisible(true)
         self:child("NinjaPetPackage-PlusPetAccess"):SetVisible(false)
         if using then
-            self.plusPetLayoutText.plusPetEquipBtn:SetText("PlusPet-deEquip")
+            self.plusPetLayoutText.plusPetEquipBtn:SetText(Lang:toText("PetPackage-deEquip"))
         else
-            self.plusPetLayoutText.plusPetEquipBtn:SetText("PlusPet-Equip")
+            self.plusPetLayoutText.plusPetEquipBtn:SetText(Lang:toText("PetPackage-Equip"))
         end
     end
 
@@ -189,6 +189,7 @@ end
 function M:setPlusPetItemEquip()
     local index = plusPetItemIndex2Index(curPlusPetSelItemIndex)
     if curPlusPetUsingItem ~= -1 then
+        print("De Equip!!!!!")
         self:setPlusPetItemDeEquip(curPlusPetUsingItem)
     end
     curPlusPetUsingItem = curPlusPetSelItemIndex
@@ -198,7 +199,7 @@ function M:setPlusPetItemEquip()
     end
     curPlusPetItemTable[curPlusPetSelItemIndex].item:invoke("using")
     Player.CurPlayer:callPet(index, 3)
-    self.plusPetLayoutText.plusPetEquipBtn:SetText(Lang:toText("PlusPet-deEquip"))
+    self.plusPetLayoutText.plusPetEquipBtn:SetText(Lang:toText("PetPackage-deEquip"))
 end
 
 function M:_setPlusPetItem(had, v, equipped)
@@ -273,7 +274,7 @@ function M:refreshPetLeftDetailInfo()
         totalFuRate = tempData.chiTransRatio + totalFuRate
     end
 
-    self.petLayoutText.slotsText:SetText(Lang:toText("PetPackage-Slots").. ":" .. tostring(slotsNu) .. "/" .. tostring(Player.CurPlayer:getValue("petPageNu")))
+    self.petLayoutText.slotsText:SetText(Lang:toText("PetPackage-Slots").. ":" .. tostring(slotsNu) .. "/" .. tostring(2))
     self.petLayoutText.petInfo.petTotalChi:SetText("x" .. tostring(totalChiRate))
     self.petLayoutText.petInfo.petTotalCoin:SetText("x" .. tostring(totalCoinRate))
     self.petLayoutText.petInfo.petTotalFu:SetText("x" .. tostring(totalFuRate))
@@ -420,9 +421,9 @@ function M:setPetDetail(index, equipped)              --通过index拿到所有�
     self.petLayoutText.petInfo.petLevel:SetText(tostring(tempData.level))
     self.petLayoutText.petInfo.petName:SetText(Lang:toText(tempData.multiLang))
     if equipped then
-        self.petLayoutText.petInfo.petEquipText:SetText("PlusPet-deEquip")
+        self.petLayoutText.petInfo.petEquipText:SetText(Lang:toText("PetPackage-deEquip"))
     else
-        self.petLayoutText.petInfo.petEquipText:SetText("PlusPet-Equip")
+        self.petLayoutText.petInfo.petEquipText:SetText(Lang:toText("PetPackage-Equip"))
     end
     self.petLayout.petImage:SetImage("set:ninja_pet.json image:" .. tostring(tempData.ID))
     self.petLayout.petQuality:SetVisible(true)
@@ -445,7 +446,7 @@ function M:setPetDeEquip(index)
     end
     Player.CurPlayer:recallPet(tempIndex)
     curPetItemTable[index].item:invoke("unUsing")
-    self.petLayoutText.petInfo.petEquipText:SetText("PlusPet-Equip")
+    self.petLayoutText.petInfo.petEquipText:SetText(Lang:toText("PetPackage-Equip"))
     for k, v in pairs(curPetUsingItem) do
         if v == index then
             curPetUsingItem[k] = nil
@@ -475,7 +476,7 @@ function M:setPetEquip(index)
     end
     ::SetSuccess::
     curPetItemTable[index].item:invoke("using")
-    self.petLayoutText.petInfo.petEquipText:SetText("PlusPet-deEquip")
+    self.petLayoutText.petInfo.petEquipText:SetText(Lang:toText("PetPackage-deEquip"))
 end
 
 local function petListSort(_itemA, _itemB)
@@ -546,15 +547,20 @@ function M.refreshPlayerInfo()
     return {petTable = curPetPageTable, plusPetTable = curPlusPetPageTable}
 end
 
-function M:_openPetPackage(index)
+function M:_openPetPackage(index, isPlusPet)
     getPlayerInfo()
-    self:showPetInterface(index)
+    if isPlusPet then
+        self:showPlusPetInterface()
+    else
+        self:showPetInterface(index)
+    end
+
 end
 
-function M:openPetPackage(index)
+function M:openPetPackage(index, isPlusPet)
     UI:openWnd("petPackage")
     self.isVisible = true
-    self:_openPetPackage(index)
+    self:_openPetPackage(index, isPlusPet)
 end
 
 
@@ -587,7 +593,7 @@ function M:setPetAllText()
     self.plusPetLayoutText.plusPetLevel:SetText(Lang:toText("PetPackage-PetLevel"))
     self.plusPetLayoutText.plusPetEquipBtn:SetText(Lang:toText("PetPackage-Equip"))
     self.plusPetLayoutText.plusPetStrBtn:SetText(Lang:toText("PetPackage-PlusStr"))
-    self.plusPetLayoutText.plusPetStrBtn:SetText(Lang:toText("PetPackage-PlusStr"))
+    --self.plusPetLayoutText.plusPetStrBtn:SetText(Lang:toText("PetPackage-PlusStr"))
 
 end
 
@@ -664,6 +670,11 @@ function M:initPetAllEvent()
     self:subscribe(self.petBtn.petEvolution, UIEvent.EventButtonClick, function()
         self:closePetPackage()
         UI:getWnd("petEvolution"):showPetEvolution(curPetPageTable, petItemIndex2Index(curPetSelItemIndex))
+    end)
+
+    self:subscribe(self.plusPetBtn.plusPetStr, UIEvent.EventButtonClick, function()
+        self:closePetPackage()
+        UI:getWnd("plusPetEvolution"):showPlusPetEvolution(curPlusPetPageTable, plusPetItemIndex2Index(curPlusPetSelItemIndex))
     end)
 end
 

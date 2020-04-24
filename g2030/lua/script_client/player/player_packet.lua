@@ -13,6 +13,14 @@ function handles:itemShopRegion(packet)
     end
 end
 
+function handles:itemShopSelect(packet)
+    --print("itemShopSelect : "..tostring(packet.tabId).." id ："..tostring(packet.itemId))
+    local itemShop = UI:getWnd("itemShop")
+    if itemShop then
+        itemShop:onClickNextItem(packet.tabId, packet.itemId)
+    end
+end
+
 function handles:payShopRegion(packet)
     local payShop = UI:getWnd("payShop")
     if payShop then
@@ -40,7 +48,12 @@ function handles:AttrValuePro(packet)
         packet.value = BigInteger.Recover(packet.value)
     end
     entity:doSetValue(packet.key, packet.value)
-    UI:getWnd("petEvolution"):evoluteSuccess(packet.oldIndex, packet.newIndex)
+    if packet.isPlusPet then
+        UI:getWnd("plusPetEvolution"):evoluteSuccess(packet.oldIndex)
+    else
+        UI:getWnd("petEvolution"):evoluteSuccess(packet.oldIndex, packet.newIndex)
+    end
+
 end
 
 function handles:ResetEntityRechargeSkill(packet)

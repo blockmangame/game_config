@@ -10,6 +10,7 @@ end
 function M:getPlayerBuyInfo(player)
     local buyInfo = {}--player:getCurLevel()
     local curLevel = player:getCurLevel()
+    --print("M:getPlayerBuyInfo(player) curLevel "..tostring(curLevel))
     local curId = 1
     local maxLevel = curLevel
     for _, value in ipairs((self.config:getSettings())) do
@@ -53,7 +54,7 @@ function M:setPlayerBuyInfo(player, buyInfo)
     --        --end
     --    end
     --end
-    print("setPlayerBuyInfo Advance  :", Lib.v2s(buyInfo, 3))
+    print("setPlayerBuyInfo Advance  :", Lib.v2s(buyInfo))
     --Lib.log_1(buyInfo, "setPlayerBuyInfo Advance 1 :"..tostring(player.name))
 end
 
@@ -66,6 +67,15 @@ function M:onPlayerUseItem(player, item)
         print("玩家 : "..tostring(player.name).." 进阶到 lv ："..tostring(item.level))
         player:setCurLevel(item.level)
     end
+end
+
+function M:sendNextItemId(player, nextId)
+    local packet = {
+        pid = "itemShopSelect",
+        tabId = self.type,
+        itemId = nextId
+    }
+    player:sendPacket(packet)
 end
 
 function M:onExtraBuySuccess(player)
@@ -86,6 +96,7 @@ end
 
 function M:initItem(player)
     local curLevel = player:getCurLevel()
+    print("M:initItem(player) curLevel "..tostring(curLevel))
     for _, value in pairs((self.config:getSettings())) do
         if curLevel >= value.level then
             curLevel = value.level

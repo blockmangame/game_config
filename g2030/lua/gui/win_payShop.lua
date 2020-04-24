@@ -24,7 +24,7 @@ end
 --local M = {}
 
 function M:init()
-    print("M:init() 77777777777777777777")
+    --print("M:init() 77777777777777777777")
     ----Lib.log_1(ItemShop.EquipConfig)
     WinBase.init(self, "NinjaLegendsPayShop.json",false)
     self.isInitData = false
@@ -372,9 +372,9 @@ function M:updateItems(type, isReset)
     for _, item in pairs(itemConfig:getSettings()) do
         item.status = buyInfo[tostring(item.id)]  or BuyStatus.Unlock
     end
-    print("11111111111")
+    --print("11111111111")
     self:addItemsGridView(isReset)
-    print("2222222222")
+    --print("2222222222")
 end
 
 function M:onChoseTabIcon(type ,isSelect)

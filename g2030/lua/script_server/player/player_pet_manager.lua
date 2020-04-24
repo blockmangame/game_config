@@ -34,7 +34,9 @@ local function getPet(player, type, petID, minorID)
         ID = petID,
         minorID = minorID,
         petType = type,
-        level = 0
+        level = 0,
+        getTime = os.time(),
+        timeLimit = -1
     };
     return AllPetAttr, allEntityNum;
 end
@@ -64,7 +66,7 @@ function Player:getNewPet(ID, coinTransRatio, chiTransRatio, level, isNotSync)
     return index
 end
 
-function Player:getNewPlusPet(ID, minorID, plusPetATKRate, level, isNotSync)
+function Player:getNewPlusPet(ID, minorID, timeLimit, plusPetATKRate, level, isNotSync)
     minorID = minorID or 0
     local allAttribs, index = getPet(self, petType.plusPet, ID, minorID);
     print(Player.turnID2Plugin(petType.plusPet, ID, minorID))
@@ -77,7 +79,11 @@ function Player:getNewPlusPet(ID, minorID, plusPetATKRate, level, isNotSync)
     if level then
         allAttribs[index].level = level
     end
+    if timeLimit then
+        allAttribs[index].timeLimit = timeLimit
+    end
     self:setValue("allPetAttr", allAttribs, isNotSync);
+    return index
 end
 
 function Player:getPetEntity(index)
@@ -107,6 +113,7 @@ function Player:callPet(index, rideIndex)
 end
 
 function Player:initPetInfo()
+    -- ToDo 检查式神过期情况
     for rideIndex, index in pairs(self:getValue("petEquippedList")) do
         self:callPet(index, rideIndex)
     end
@@ -167,7 +174,7 @@ function Player:deletePet(index)
     end
 end
 
-function Player:sendEvolutionPackage(oldIndex ,newIndex)
+function Player:sendEvolutionPackage(isPlusPet, oldIndex ,newIndex)
     local def = Entity.ValueDef["allPetAttr"]
     local packet = {
         pid = "AttrValuePro",
@@ -175,9 +182,14 @@ function Player:sendEvolutionPackage(oldIndex ,newIndex)
         value = self:getAllPetAttr(),
         isBigInteger = type(self:getAllPetAttr()) == "table" and self:getAllPetAttr().IsBigInteger,
         objID = self.objID,
-        oldIndex = oldIndex,
-        newIndex = newIndex
+        newIndex = newIndex,
+        isPlusPet = isPlusPet
     }
+    if not isPlusPet then
+        packet.oldIndex = oldIndex
+    else
+        packet.oldIndex = oldIndex
+    end
     local toSelf = def[3] and self.isPlayer
     if def[4] then
         self:sendPacketToTracking(packet, toSelf)
@@ -193,15 +205,14 @@ function Player:petEvolution(package)
     local evoChiNu = {}
     local minCoin, maxCoin, minFu, maxFu = 0, 0, 0, 0
     if #materials ~= 3 then
-        print("Bad Evolution Materials !!!! actual materials is ", #materials, "\n userID is ", self.userID)
+        print("Bad Evolution Materials !!!! actual materials is ", #materials)
         print(Lib.v2s(materials))
         return
     end
     for _, v in pairs(materials) do
         local tempData = self:getPetAttr(v)
-        if tempData.petType == petType.plusPet then
+        if tempData.petType ~= petType.pet then
             print("ERROR!!!!! WRONG PET TYPE!!!! Evolution terminate!!!!!!, Pet Index :", v)
-            self:closePetEvolution()
             return
         end
         local coinIntensifyRange = Lib.split(tempData.coinIntensifyRange, "#")
@@ -215,8 +226,8 @@ function Player:petEvolution(package)
     end
     local tempData = self:getPetAttr(target)
     math.randomseed(os.time() + target)                      --改变随机因子
-    local actualCoin = math.random(minCoin, maxCoin) + tempData.coinTransRatio
-    local actualFu = math.random(minFu, maxFu) + tempData.chiTransRatio
+    local actualCoin = math.random(math.floor(minCoin * 100), math.floor(maxCoin * 100)) / 100 + tempData.coinTransRatio
+    local actualFu = math.random(math.floor(minFu * 100), math.floor(maxFu * 100)) / 100 + tempData.chiTransRatio
 
     print("宠物强化金币数据区间及当前强化值: ", minCoin, maxCoin, actualCoin)
     print("宠物强化气数据区间及当前强化值: ", minFu, maxFu, actualFu)
@@ -262,7 +273,59 @@ function Player:petEvolution(package)
     end
 
     print(" Evolute Result: ", "\n Pet Info", index, actualCoin, actualFu, tempData.level + 1)
-    self:sendEvolutionPackage(target, index)
+    self:sendEvolutionPackage(false, target, index)
+end
+
+function Player:plusPetEvolution(packet)
+    local materials = packet.materials
+    local intensifyTable = {}
+    local evoAtkValue = 0
+    if #materials < 2 then
+        print("Bad Evolution Materials !!!! actual materials is ", #materials)
+        print(Lib.v2s(materials))
+        return
+    end
+    local curEquippingPlusPet = self:getPlusPetEquippedIndex()
+    for _, v in pairs(materials) do
+        local tempData = self:getPetAttr(v)
+        if tempData.petType ~= petType.plusPet then
+            print("ERROR!!!!! WRONG PET TYPE!!!! Evolution terminate!!!!!!, Pet Index :", v)
+            return
+        end
+        local tempValue = self:getPetAttr(v)
+        if tempValue then
+            table.insert(intensifyTable, {index = v, weight = tempValue.intensifyValue})
+        else
+            print("!!!!ERROR !!!!! CANNOT GET PlusPet Data in index: ", v)
+            return
+        end
+        evoAtkValue = evoAtkValue + tempValue.intensifyATK
+        if curEquippingPlusPet == v then
+            self:recallPet(v)
+        end
+    end
+    local target = Game.rewardManager.randomItemByWeight(1, intensifyTable, false)
+    if not target then
+        print("Evolution Plus Pet Fail : Cannot get target Pet!!!!")
+        return
+    end
+    local tempData = self:getPetAttr(target[1].index)
+    if not tempData then
+        print("Evolution Plus Pet Fail  : Cannot get target Pet Data !!!!")
+        return
+    end
+    local targetAtkBuffNu = tempData.atkBuffNum + evoAtkValue
+
+    for _, v in pairs(materials) do
+        self:deletePet(v)
+    end
+
+    local targetIndex = self:getNewPlusPet(tempData.ID, tempData.minorID, -1, targetAtkBuffNu, tempData.level + 1, true)
+    if not targetIndex then
+        print("Get Target Index Fail When Evolution Plus Pet!!!!")
+    end
+    self:sendEvolutionPackage(true, targetIndex)
+
 end
 
 

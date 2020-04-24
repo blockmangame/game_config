@@ -105,6 +105,10 @@
                             "Value": "Centre"
                         },
                         {
+                            "Name": "Visible",
+                            "Value": "false"
+                        },
+                        {
                             "Name": "WndOpenSound",
                             "Value": "0"
                         },
@@ -1923,6 +1927,10 @@
                                                     "Value": "true"
                                                 },
                                                 {
+                                                    "Name": "ClipChild",
+                                                    "Value": "true"
+                                                },
+                                                {
                                                     "Name": "WndOpenSound",
                                                     "Value": "0"
                                                 },
@@ -1935,7 +1943,7 @@
                                                     "Value": "Left"
                                                 },
                                                 {
-                                                    "Name": "ClipChild",
+                                                    "Name": "ScrollableAtNotFull",
                                                     "Value": "false"
                                                 }
                                             ]
@@ -2428,7 +2436,7 @@
                                                 },
                                                 {
                                                     "Name": "Area",
-                                                    "Value": "{{0,0},{0.0752688,0},{0.981818,0},{0.15914,0}}"
+                                                    "Value": "{{0,0},{0.176344,0},{0.981818,0},{0.260215,0}}"
                                                 },
                                                 {
                                                     "Name": "VerticalAlignment",
@@ -2580,7 +2588,7 @@
                                                 },
                                                 {
                                                     "Name": "Area",
-                                                    "Value": "{{0,0},{0.176344,0},{0.981818,0},{0.260215,0}}"
+                                                    "Value": "{{0,0},{0.277419,0},{0.981818,0},{0.36129,0}}"
                                                 },
                                                 {
                                                     "Name": "VerticalAlignment",
@@ -2732,7 +2740,7 @@
                                                 },
                                                 {
                                                     "Name": "Area",
-                                                    "Value": "{{0,0},{0.277419,0},{0.981818,0},{0.36129,0}}"
+                                                    "Value": "{{0,0},{0.0752688,0},{0.981818,0},{0.15914,0}}"
                                                 },
                                                 {
                                                     "Name": "VerticalAlignment",
@@ -3879,10 +3887,6 @@
                             "Value": "false"
                         },
                         {
-                            "Name": "Visible",
-                            "Value": "false"
-                        },
-                        {
                             "Name": "WndOpenSound",
                             "Value": "0"
                         },
@@ -3952,7 +3956,7 @@
                                     "Property": [
                                         {
                                             "Name": "Area",
-                                            "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                            "Value": "{{0,0},{0,27},{0,174},{0,432}}"
                                         },
                                         {
                                             "Name": "VerticalAlignment",
@@ -3961,6 +3965,10 @@
                                         {
                                             "Name": "HorizontalAlignment",
                                             "Value": "Centre"
+                                        },
+                                        {
+                                            "Name": "ClipChild",
+                                            "Value": "true"
                                         },
                                         {
                                             "Name": "WndOpenSound",
@@ -3978,19 +3986,15 @@
                                             "Property": [
                                                 {
                                                     "Name": "Area",
-                                                    "Value": "{{0,1},{0.0374532,-2},{0.85,1},{0.817453,-2}}"
+                                                    "Value": "{{0,0},{0,0},{1,0},{0.97,0}}"
                                                 },
                                                 {
                                                     "Name": "VerticalAlignment",
-                                                    "Value": "Centre"
+                                                    "Value": "Bottom"
                                                 },
                                                 {
                                                     "Name": "HorizontalAlignment",
                                                     "Value": "Centre"
-                                                },
-                                                {
-                                                    "Name": "ClipChild",
-                                                    "Value": "true"
                                                 },
                                                 {
                                                     "Name": "WndOpenSound",
@@ -4003,6 +4007,44 @@
                                                 {
                                                     "Name": "ItemAlignment",
                                                     "Value": "Left"
+                                                },
+                                                {
+                                                    "Name": "ScrollableAtNotFull",
+                                                    "Value": "false"
+                                                },
+                                                {
+                                                    "Name": "ClipChild",
+                                                    "Value": "false"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Type": "Layout",
+                                            "Name": "NinjaPetPackage-PlusPetItemCover",
+                                            "Property": [
+                                                {
+                                                    "Name": "Area",
+                                                    "Value": "{{0,0},{0,0},{1,0},{1,0}}"
+                                                },
+                                                {
+                                                    "Name": "VerticalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "HorizontalAlignment",
+                                                    "Value": "Centre"
+                                                },
+                                                {
+                                                    "Name": "Touchable",
+                                                    "Value": "false"
+                                                },
+                                                {
+                                                    "Name": "WndOpenSound",
+                                                    "Value": "0"
+                                                },
+                                                {
+                                                    "Name": "WndCloseSound",
+                                                    "Value": "0"
                                                 }
                                             ]
                                         }
@@ -7924,7 +7966,7 @@
                     "Property": [
                         {
                             "Name": "Area",
-                            "Value": "{{0,-50},{0,40},{0,-5},{0,85}}"
+                            "Value": "{{-0.046875,0},{0.0833333,0},{-0.0117187,0},{0.145833,0}}"
                         },
                         {
                             "Name": "HorizontalAlignment",

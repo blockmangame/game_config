@@ -29,6 +29,16 @@ function M:onPlayerUseItem(player, item)
     player:exchangeEquip(fullName)
 end
 
+function M:sendNextItemId(player, nextId)
+    print("onClickNextItem : "..tostring(self.type).." id ："..tostring(nextId))
+    local packet = {
+        pid = "itemShopSelect",
+        tabId = self.type,
+        itemId = nextId
+    }
+    player:sendPacket(packet)
+end
+
 local function init()
     M:init()
 end

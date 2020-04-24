@@ -236,7 +236,7 @@ function M:initEvent()
 
     Lib.subscribeEvent(Event.EVENT_ITEM_SKILL_EQUIP_UPDATE, function()
         self:selectSeatGivEquip(1,false)
-        self:upDataSkillEquipItems()
+        self:upDataSkillEquipItems(true)
         Me:sendPacket({
             pid = "syncSkillEquip"
         })
@@ -444,7 +444,7 @@ function M:addSkillShopItem(data)
     self.gvItemsGridView:ResetPos()
 end 
 
-function M:addSkillEquipItem(data)
+function M:addSkillEquipItem(data,notResetPos)
     self.gvEquipItemsView:RemoveAllItems()
     -- self:upDataSkillShopItems()
 
@@ -454,6 +454,9 @@ function M:addSkillEquipItem(data)
         skillItem:invoke("initItem",value)
 
         self.gvEquipItemsView:AddItem(skillItem)
+    end
+    if notResetPos then
+        return
     end
     self.gvEquipItemsView:ResetPos()
 end 
@@ -508,7 +511,7 @@ function M:upDataSkillShopItems()
     self:selectSkillInfo()
 end
 
-function M:upDataSkillEquipItems()
+function M:upDataSkillEquipItems(notResetPos)
     if equipPanelNum == 1 then
         equipPaneData = skills.attack
     elseif equipPanelNum == 2 then
@@ -522,7 +525,7 @@ function M:upDataSkillEquipItems()
     end
     -- print("--------------------223 ".. tostring(equipPanelNum))
     equipPaneData= self:resetEquipChecked(equipPaneData)
-    self:addSkillEquipItem(equipPaneData)
+    self:addSkillEquipItem(equipPaneData,notResetPos)
 end
 
 function M:initItemConfig()

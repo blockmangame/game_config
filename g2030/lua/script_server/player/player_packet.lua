@@ -30,6 +30,10 @@ function handles:petEvolution(packet)
     self:petEvolution(packet)
 end
 
+function handles:plusPetEvolution(packet)
+    self:plusPetEvolution(packet)
+end
+
 function handles:SyncItemShopOperation(packet)
     Store.ItemShop:operationByType(self, packet.tabId, packet.itemId)
 end

@@ -9,15 +9,15 @@ ENTITY_TOUCH_ALL{
 }
 ENTITY_ENTER
 {
-    Test("     If(not $obj1) 000")
+    --Test("     If(not $obj1) 000")
     If(not $obj1)
     {
-        Test("     If(not $obj1) 111")
+        --Test("     If(not $obj1) 111")
         Return()
     }
     $type = GetConfigVar(obj = $obj1,key="type")
     If($type == 2)
-    {    Test("     If(not $obj1) 222")
+    {    --Test("     If(not $obj1) 222")
         remarkBoxActions(object = $obj1, type = $type)
     }
 }
