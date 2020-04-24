@@ -8,5 +8,5 @@ local BehaviorTree = require("common.behaviortree")
 local Actions = BehaviorTree.Actions
 
 function Actions.PortalUIData(data, params, context)
-       params.player:sendPacket({ pid = "PortalUIData", pos = params.pos })
+    params.player:sendPacket({ pid = "PortalUIData", pos = params.pos, toIsland = params.toIsland })
 end
