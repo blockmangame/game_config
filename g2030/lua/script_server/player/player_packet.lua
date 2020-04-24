@@ -98,6 +98,10 @@ function handles:syncSkillEquip(packet)
     skillShop:syncSkillMap(self)
 end
 
+function handles:rechargeAward(packet)
+    local recharge_award = require "script_server.reward.recharge_award"
+    recharge_award:onButtonClick(self, packet.awardType)
+end
 
 function handles:SyncItemShopBuyAll(packet)
     Store.ItemShop:BuyAll(self, packet.tabId)
