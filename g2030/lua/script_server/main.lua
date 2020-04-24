@@ -71,6 +71,9 @@ function main:loadConfig()
     local skillShopConfig = T(Config, "skillShopConfig")
     skillShopConfig:initConfig()
 
+    local rechargeAwardConfig = T(Config, "rechargeAwardConfig")
+    rechargeAwardConfig:initConfig()
+
     local RegionConfig = T(Config, "RegionConfig")
     RegionConfig:init(Lib.readGameCsv("config/region.csv"))
 

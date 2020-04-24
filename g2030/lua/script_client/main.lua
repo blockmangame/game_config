@@ -56,6 +56,9 @@ function main:loadConfig()
     local skillShopConfig = T(Config, "skillShopConfig")
     skillShopConfig:initConfig()
 
+    local rechargeAwardConfig = T(Config, "rechargeAwardConfig")
+    rechargeAwardConfig:initConfig()
+
     local IslandConfig = T(Config, "IslandConfig")
     IslandConfig:init()
 end
