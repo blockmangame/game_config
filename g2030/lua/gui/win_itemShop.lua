@@ -589,8 +589,10 @@ function M:checkCanSend(notStatus)
         return false
     end
     if not isFlag then
-        if item.status == BuyStatus.Used then
+        if item.status == BuyStatus.Used or item.status == BuyStatus.Lock then
             return false
+        elseif item.status == BuyStatus.Buy then
+            return true
         end
     end
     return self:checkItemMoney(item)
