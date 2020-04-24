@@ -42,8 +42,12 @@ function Entity.ValueFunc:equipSkill(value)
     Lib.emitEvent(Event.EVENT_ITEM_SKILL_EQUIP_UPDATE)
 end
 
-function Entity.ValueFunc:topUpCount(value) 
-    Lib.emitEvent(Event.EVENT_PLAYER_TOP_UP_INFO)
+function Entity.ValueFunc:rechargeSum(value) 
+    Lib.emitEvent(Event.EVENT_PLAYER_RECHARGE_SUM)
+end
+
+function Entity.ValueFunc:rechargeAwardStatus(value) 
+    Lib.emitEvent(Event.EVENT_PLAYER_RECHARGE_STATUS)
 end
 
 function Entity.ValueFunc:prop(value)
