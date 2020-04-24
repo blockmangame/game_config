@@ -25,8 +25,10 @@ GMItem["g2030/花钱！"] = function(self)
     self:payCurrency("chi",  3,false,false, "test")
 end
 GMItem["g2030/掙錢！"] = function(self)
-    self:addCurrency("gold", BigInteger.Create(23,10), "test")
-    self:addCurrency("chi",  3, "test")
+    --self:addCurrency("gold", BigInteger.Create(23,10), "test")
+    self:addCurrencyWithFlyNum("gold", BigInteger.Create(23,10), "test")
+    --self:addCurrency("chi",  3, "test")
+    self:addCurrencyWithFlyNum("chi",  3, "test")
 end
 GMItem["g2030/搞个boss玩玩"] = function(self)
     local entity = EntityServer.Create({cfgName = "myplugin/enemy_base", pos = World.cfg.initPos, map = "map001"})
