@@ -15,13 +15,24 @@
     "selfOnly": false,
     "sound": "/sound/dungeon_houjia.mp3"
   },
-  "castEffect": {
-    "effect": "effect_14_02(5).effect",
-    "pos": {
-      "x": 0,
-      "y": 0.7,
-      "z": 0
+  "castEffect": [
+    {
+      "pos": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "effect": "effect_14_01(1)(1).effect",
+      "time": 8000
     },
-    "time": 10000
-  }
+    {
+      "pos": {
+        "x": 0,
+        "y": 0.3,
+        "z": 0
+      },
+      "effect": "effect_14_01(2)(1).effect",
+      "time": 8000
+    }
+  ]
 }
