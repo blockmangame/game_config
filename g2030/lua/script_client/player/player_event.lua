@@ -27,6 +27,8 @@ function events:fallGround(fallDistance)
         else
             Skill.Cast(playerCfg.fallSkill2)
         end
+    else
+        Skill.Cast(playerCfg.fallSkill)
     end
 
     self:recoverJumpProp()
