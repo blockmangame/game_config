@@ -29,16 +29,11 @@ function M:initMain()
         UI:closeWnd(self)
     end)
 
-    self:initTitle()
     self:initPrizeTitle()
     self:initItems()
 end
 
 
-function M:initTitle()
-    local ivIconBg = self:child("LotteryInfo-IconBg")
-
-end
 
 function M:initPrizeTitle()
     local tvPrizeNameText = self:child("LotteryInfo-PrizeNameText")
