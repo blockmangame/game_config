@@ -27,6 +27,7 @@ require "script_common.config.activity_config"
 require "script_common.config.skillShopConfig"
 require "script_common.config.teamReward_config"
 require "script_common.config.worldBossReward_config"
+require "script_common.config.Island_config"
 
 if World.isClient then
     require "script_client.main"

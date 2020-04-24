@@ -27,6 +27,7 @@ require "script_client.skill.scene_skill"
 require "script_client.skill.recharge_skill"
 require "script_client.skill.roundup_skill"
 require "script_client.skill.control_skill"
+require "script_client.world.region.region_island"
 
 local main = {}
 
@@ -54,6 +55,9 @@ function main:loadConfig()
 
     local skillShopConfig = T(Config, "skillShopConfig")
     skillShopConfig:initConfig()
+
+    local IslandConfig = T(Config, "IslandConfig")
+    IslandConfig:init()
 end
 
 main:init()

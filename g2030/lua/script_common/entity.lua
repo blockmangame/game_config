@@ -38,9 +38,10 @@ ValueDef.skin       = {false,	false,	true,	false,      {},                      
 ValueDef.privilege  = {false,	false,	true,	false,      {},                                 true}--付费商店购买的特权列表
 ValueDef.boxData   = {false,	false,	true,	false,      {},                                 true}--箱子领取时间和状态
 ValueDef.autoSellTime= {false,	false,	true,	false,   os.time(),                             true}--限时自动锻炼有效时间戳
-ValueDef.islandLv   = {false,	false,	true,	false,       1,                                  true}--当前岛屿等级（商店临时解锁用）
+ValueDef.islandLv   = {false,	true,	true,	false,       1,                                  true}--当前岛屿等级（商店临时解锁用）
 ValueDef.ownTeamSkin= {false,   true,    true,  false,      {},                                  true}--已拥有的阵营皮肤
 ValueDef.teamSkinId = {false,   true,    true,  false,       0,                                  true}--已装备的阵营皮肤id
+ValueDef.unLockedIsland = { false, true, true, false,       {},                                  true }--已解锁的岛屿id
 --=======================================================竞技场玩家相关数据=================================================================
 ValueDef.arenaScore = {false,   true,    true,  true,       0,                                  false}--竞技场分数
 --==============================================================NPC相关数据=================================================================
@@ -621,5 +622,15 @@ end
 ---清空combo数
 function Entity:clearCombo()
     self:setValue("combo", 0)
+end
+
+---获取已解锁的岛屿id
+function Entity:getUnLockedIsland()
+    return self:getValue("unLockedIsland") or {}
+end
+
+---保存已解锁的岛屿id
+function Entity:setUnLockedIsland(data)
+    self:setValue("unLockedIsland", data)
 end
 
