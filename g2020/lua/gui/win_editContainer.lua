@@ -93,6 +93,20 @@ local function clearMoveStatus(self)
     self.lastSideNormal = Lib.v3(0,0,0)
 end
 
+local function checkIsInRegion(region, pos)
+    local min = region.min
+    local max = region.max
+    return min.x <= pos.x and max.x >= (pos.x - 1) and  min.y <= pos.y and max.y >= (pos.y - 1) and min.z <= pos.z and max.z >= (pos.z - 1) or false 
+end
+
+local function getRegion(map, pos)
+    for _, re in pairs(map:getAllRegion()) do
+        if re.cfg.isInsideRegion and checkIsInRegion(re, pos) then
+            return re
+        end
+    end
+end
+
 local calcBoundingBoxTouchBlock
 local function clacPushOutWithBlock(self, object)
     if not object or not object:isValid() then
@@ -112,22 +126,11 @@ local function clacPushOutWithBlock(self, object)
     -- local playerRegion = object.map:getRegionValue(curPlayerPos) -- object.map:getRegionValue(entityPos)
     -- local region = not playerRegion and object.map:getRegionValue(entityPos) or playerRegion
     local map = object.map
-    local function checkIsInRegion(region, pos)
-        local min = region.min
-        local max = region.max
-        return min.x <= pos.x and max.x >= (pos.x - 1) and  min.y <= pos.y and max.y >= (pos.y - 1) and min.z <= pos.z and max.z >= (pos.z - 1) or false 
-    end
-    local function getRegion(map, pos)
-        for _, re in pairs(map:getAllRegion()) do
-            if re.cfg.isInsideRegion and checkIsInRegion(re, pos) then
-                return re
-            end
-        end
-    end
     local region = getRegion(map, entityPos) or getRegion(map, curPlayerPos)
     local vectorAxis = Lib.v3cut(region and Lib.getRegionCenter(region) or curPlayerPos, entityPos)
     -- vectorAxis = Lib.v3add(boundBoxSize, vectorAxis)
     local kSize = math.max(math.abs(vectorAxis.x / 0.01), math.abs(vectorAxis.y / 0.01), math.abs(vectorAxis.z / 0.01))
+    kSize = kSize > 100 and 100 or kSize
     local normalizeV3 = Lib.v3(
         vectorAxis.x / kSize,
         vectorAxis.y / kSize, 
@@ -480,29 +483,80 @@ local function displayMoveEvent(self, objID, cell, moveWidget, editUI)
             moveEntity:setRotation(yaw, pitch, roll)
             moveEntity:setBodyYaw(yaw)
             local pos = getEntityPos(mouseHit, objID) or moveEntity:getPosition()
+
+            -- 1
+            -- moveEntity:setPosition(pos)
+
+            -- 1-2
             local moveEntityLastSideNormal = moveEntity.lastSideNormal or {x = 0, y = 1, z = 0}
             local mouseHitSideNormal = mouseHit.sideNormal or moveEntityLastSideNormal
             local moveEntityLastPosition = moveEntity.lastPosition or pos
-            if Lib.tov3(mouseHitSideNormal) ~= Lib.tov3(moveEntityLastSideNormal) then
-                moveEntity:setPosition(pos)
-            else
-                local function calcMove(inPos)
-                    local newPos, isCanMoveTo = calcBoundingBoxTouchBlock(inPos, moveEntity, mouseHitSideNormal)
-                    if isCanMoveTo then
-                        moveEntity:setPosition(newPos or pos)
-                    end
-                end
-                if Lib.getPosDistance(moveEntityLastPosition, pos) >= kCollision then
-                    local dis = Lib.v3cut(pos, moveEntityLastPosition)
-                    local ratio = Lib.getPosDistance(moveEntityLastPosition, pos) / kCollision
-                    local addV3 = {x = dis.x / ratio, y = dis.y / ratio, z = dis.z / ratio}
-                    for i=1, ratio do
-                        calcMove(Lib.v3add(moveEntityLastPosition,{x = addV3.x * i, y = addV3.y * i, z = addV3.z * i}))
-                    end
-                else
-                    calcMove(pos)
-                end
+            moveEntity:setPosition(pos)
+            local clacPos = clacPushOutWithBlock(self, moveEntity)
+            if clacPos then
+                moveEntity:setPosition(clacPos)
             end
+
+            -- 2
+            -- local moveEntityLastSideNormal = moveEntity.lastSideNormal or {x = 0, y = 1, z = 0}
+            -- local mouseHitSideNormal = mouseHit.sideNormal or moveEntityLastSideNormal
+            -- local moveEntityLastPosition = moveEntity.lastPosition or pos
+            -- -- moveEntity:setPosition(pos)
+            -- if Lib.tov3(mouseHitSideNormal) ~= Lib.tov3(moveEntityLastSideNormal) then
+            --     local map = moveEntity.map
+            --     local curPlayerPos = Player.CurPlayer:getPosition()
+            --     local region = getRegion(map, pos) or getRegion(map, curPlayerPos)
+            --     local rCenter = region and Lib.getRegionCenter(region) or curPlayerPos
+            --     print(" rCenter ", Lib.v2s(rCenter))
+            --     local tempV3 = {
+            --                 x = mouseHitSideNormal.x == 0 and moveEntityLastPosition.x or rCenter.x,
+            --                 y = mouseHitSideNormal.y == 0 and moveEntityLastPosition.y or rCenter.y,
+            --                 z = mouseHitSideNormal.z == 0 and moveEntityLastPosition.z or rCenter.z
+            --     }
+            --     moveEntity:setPosition(rCenter)
+            -- end
+            -- moveEntity.forceTime = 2
+            -- moveEntity.forceTargetPos = pos
+            -- -- moveEntity:debusFromRide(pos)
+            
+
+            -- 3
+            -- local moveEntityLastSideNormal = moveEntity.lastSideNormal or {x = 0, y = 1, z = 0}
+            -- local mouseHitSideNormal = mouseHit.sideNormal or moveEntityLastSideNormal
+            -- local moveEntityLastPosition = moveEntity.lastPosition or pos
+            -- if Lib.tov3(mouseHitSideNormal) ~= Lib.tov3(moveEntityLastSideNormal) then
+            --     moveEntity:setPosition(pos)
+            --     moveEntity.lastCalcCanMoveTo = true
+            -- else
+            --     if not moveEntity.lastCalcCanMoveTo then
+            --         local map = moveEntity.map
+            --         local curPlayerPos = Player.CurPlayer:getPosition()
+            --         local region = getRegion(map, moveEntityLastPosition) or getRegion(map, curPlayerPos)
+            --         local vectorAxis = Lib.tov3(Lib.v3cut(region and Lib.getRegionCenter(region) or curPlayerPos, moveEntityLastPosition))
+            --         vectorAxis:normalize()
+            --         vectorAxis.x = mouseHitSideNormal.x == 0 and vectorAxis.x or 0
+            --         vectorAxis.y = mouseHitSideNormal.y == 0 and vectorAxis.y or 0
+            --         vectorAxis.z = mouseHitSideNormal.z == 0 and vectorAxis.z or 0
+            --         moveEntityLastPosition = Lib.v3add(moveEntityLastPosition, vectorAxis)
+            --     end
+            --     local function calcMove(inPos)
+            --         local newPos, isCanMoveTo = calcBoundingBoxTouchBlock(inPos, moveEntity, mouseHitSideNormal)
+            --         if isCanMoveTo then
+            --             moveEntity:setPosition(newPos or pos)
+            --         end
+            --         moveEntity.lastCalcCanMoveTo = isCanMoveTo
+            --     end
+            --     if Lib.getPosDistance(moveEntityLastPosition, pos) >= kCollision then
+            --         local dis = Lib.v3cut(pos, moveEntityLastPosition)
+            --         local ratio = Lib.getPosDistance(moveEntityLastPosition, pos) / kCollision
+            --         local addV3 = {x = dis.x / ratio, y = dis.y / ratio, z = dis.z / ratio}
+            --         for i=1, ratio do
+            --             calcMove(Lib.v3add(moveEntityLastPosition,{x = addV3.x * i, y = addV3.y * i, z = addV3.z * i}))
+            --         end
+            --     else
+            --         calcMove(pos)
+            --     end
+            -- end
             moveEntity.lastSideNormal = mouseHit.sideNormal or moveEntity.lastSideNormal
             moveEntity.lastPosition = moveEntity:getPosition()
             return true
